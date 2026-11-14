@@ -1,0 +1,341 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-14T12:48:17Z",
+  "windowKm": 20.0,
+  "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
+  "description": "Every extract covers the same ground area, so they can be shown side by side at one scale. Pixel size differs per dataset and is given per file; nothing is upsampled.",
+  "imageNote": "No Mars image was requested or built: image is null for Mars targets."
+ },
+ "items": [
+  {
+   "id": "id-kawah-ijen",
+   "name": "Kawah Ijen, East Java, Indonesia",
+   "body": "earth",
+   "lat": -8.058,
+   "lon": 114.242,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "elevation": {
+    "file": "extracts/id-kawah-ijen/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 250.9,
+    "max": 2794.5,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S09_00_E114_00_DEM",
+     "Copernicus_DSM_COG_10_S08_00_E114_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-kawah-ijen/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_49MHM_20250923_0_L2A",
+    "date": "2025-09-23",
+    "sceneCloudPct": 5.1,
+    "clearShareInWindow": 0.997,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "id-merapi",
+   "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+   "body": "earth",
+   "lat": -7.54,
+   "lon": 110.446,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "elevation": {
+    "file": "extracts/id-merapi/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 438.9,
+    "max": 3136.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S08_00_E110_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-merapi/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_49MDM_20250606_0_L2A",
+    "date": "2025-06-06",
+    "sceneCloudPct": 2.0,
+    "clearShareInWindow": 0.975,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "id-gua-lawa",
+   "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+   "body": "earth",
+   "lat": -7.2314,
+   "lon": 109.3175,
+   "matchedTargets": [],
+   "elevation": {
+    "file": "extracts/id-gua-lawa/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 93.7,
+    "max": 3014.2,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S08_00_E109_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-gua-lawa/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_49MCN_20250721_1_L2A",
+    "date": "2025-07-21",
+    "sceneCloudPct": 1.2,
+    "clearShareInWindow": 0.983,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "moon-malapert-massif",
+   "name": "Malapert Massif",
+   "body": "moon",
+   "lat": -85.98,
+   "lon": -1.67,
+   "elevation": {
+    "file": "extracts/moon-malapert-massif/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 250,
+    "pixelM": 80.0,
+    "min": 913.0,
+    "max": 5172.0,
+    "noDataShare": 0.0,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
+    "nativePixelM": 80,
+    "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
+    "badge": "Mission",
+    "note": "Heights above a sphere of radius 1737.4 km."
+   },
+   "image": {
+    "file": "extracts/moon-malapert-massif/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
+    "nativePixelM": 100,
+    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
+    "darkShare": 0.462
+   }
+  },
+  {
+   "id": "moon-mons-mouton",
+   "name": "Mons Mouton",
+   "body": "moon",
+   "lat": -84.6,
+   "lon": 31.0,
+   "elevation": {
+    "file": "extracts/moon-mons-mouton/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 250,
+    "pixelM": 80.0,
+    "min": 4594.0,
+    "max": 6402.0,
+    "noDataShare": 0.0,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
+    "nativePixelM": 80,
+    "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
+    "badge": "Mission",
+    "note": "Heights above a sphere of radius 1737.4 km."
+   },
+   "image": {
+    "file": "extracts/moon-mons-mouton/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
+    "nativePixelM": 100,
+    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
+    "darkShare": 0.147
+   }
+  },
+  {
+   "id": "moon-haworth",
+   "name": "Haworth",
+   "body": "moon",
+   "lat": -87.45,
+   "lon": -5.17,
+   "elevation": {
+    "file": "extracts/moon-haworth/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 250,
+    "pixelM": 80.0,
+    "min": -4021.0,
+    "max": -1698.5,
+    "noDataShare": 0.0,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
+    "nativePixelM": 80,
+    "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
+    "badge": "Mission",
+    "note": "Heights above a sphere of radius 1737.4 km."
+   },
+   "image": {
+    "file": "extracts/moon-haworth/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
+    "nativePixelM": 100,
+    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
+    "darkShare": 1.0
+   }
+  },
+  {
+   "id": "moon-shackleton-rim",
+   "name": "Shackleton rim",
+   "body": "moon",
+   "lat": -89.67,
+   "lon": 129.78,
+   "elevation": {
+    "file": "extracts/moon-shackleton-rim/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 250,
+    "pixelM": 80.0,
+    "min": -2868.5,
+    "max": 1736.5,
+    "noDataShare": 0.0,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
+    "nativePixelM": 80,
+    "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
+    "badge": "Mission",
+    "note": "Heights above a sphere of radius 1737.4 km."
+   },
+   "image": {
+    "file": "extracts/moon-shackleton-rim/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
+    "nativePixelM": 100,
+    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
+    "darkShare": 0.864
+   }
+  },
+  {
+   "id": "mars-jezero",
+   "name": "Jezero crater",
+   "body": "mars",
+   "lat": 18.44,
+   "lon": 77.45,
+   "elevation": {
+    "file": "extracts/mars-jezero/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 43,
+    "pixelM": 463.0,
+    "min": -2690.0,
+    "max": -1777.0,
+    "noDataShare": 0.0,
+    "product": "MGS MOLA MEGDR 128 pixels per degree, megt44n000hb.img",
+    "nativePixelM": 463,
+    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "badge": "Mission",
+    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+   },
+   "image": null
+  },
+  {
+   "id": "mars-gale",
+   "name": "Gale crater",
+   "body": "mars",
+   "lat": -4.6,
+   "lon": 137.4,
+   "elevation": {
+    "file": "extracts/mars-gale/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 43,
+    "pixelM": 463.0,
+    "min": -4534.0,
+    "max": -2462.0,
+    "noDataShare": 0.0,
+    "product": "MGS MOLA MEGDR 128 pixels per degree, megt00n090hb.img",
+    "nativePixelM": 463,
+    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "badge": "Mission",
+    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+   },
+   "image": null
+  },
+  {
+   "id": "mars-arcadia-planitia",
+   "name": "Arcadia Planitia (site AP-1)",
+   "body": "mars",
+   "lat": 39.8,
+   "lon": -157.9,
+   "elevation": {
+    "file": "extracts/mars-arcadia-planitia/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 43,
+    "pixelM": 463.0,
+    "min": -3960.0,
+    "max": -3914.0,
+    "noDataShare": 0.0,
+    "product": "MGS MOLA MEGDR 128 pixels per degree, megt44n180hb.img",
+    "nativePixelM": 463,
+    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "badge": "Mission",
+    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+   },
+   "image": null
+  }
+ ]
+}

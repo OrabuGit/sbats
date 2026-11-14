@@ -12,8 +12,9 @@ site in FOOTPRINTS below and written to the file.
                (about 31 m, keys slopeFine / roughnessFine) and on 463 m posts (keys
                slope / roughness, the spacing used for the grid and for the targets).
   Bare ground  Sentinel-2 L2A (ESA), 10 m, all of YEAR. NDVI per pixel from the red and
-               near-infrared bands; cloud, shadow, water and snow observations are removed
-               with the product's scene classification. Per pixel: mean of monthly means.
+               near-infrared bands; cloud, shadow and snow observations are removed with the
+               product's scene classification. Open water is taken from the Copernicus DEM
+               water body mask, because the scene classification labels dark lava as water. Per pixel: mean of monthly means.
                ndvi = mean over the footprint. bareFrac = share of non-water pixels whose
                annual NDVI is below BARE_NDVI.
   Rock type    Regional geologic map unit at the site from Macrostrat (only maps at
@@ -81,6 +82,13 @@ GVP_NUMBER = {
     "id-gua-lawa": 263180, "mauna-kea": 332030, "kilauea": 332010, "lanzarote-timanfaya": 383060,
 }
 
+# Rock type stated in a paper about the feature itself, used only where no regional map and no
+# volcano record exists. Each entry was checked against the paper's abstract (Crossref, 2026-11-14).
+LITERATURE_ROCK = {
+    "id-goa-pandan": ("basalt", "Sirait et al. 2023, Journal of Geoscience, Engineering, Environment, and Technology 8(2):112-122, "
+                                "doi:10.25299/jgeet.2023.8.2.12118 (abstract: basalt lava sequence forming Goa Pandan)"),
+}
+
 # GLiM first-level class for a rock name, by GLiM's own definitions (Hartmann & Moosdorf 2012):
 # basic, intermediate and acid volcanic and plutonic rocks, carbonate sedimentary rocks.
 # Only exact names listed here are mapped. Anything else gets no code.
@@ -142,19 +150,49 @@ def _read_window(url: str, w, s, e, n):
     return _retry(go)
 
 
+def dem_mosaic(w: float, s: float, e: float, n: float):
+    """Elevation and water mask (1 = water) covering the box, mosaicked from one to four GLO-30 tiles.
+
+    Tiles in one latitude band share one pixel grid, so the mosaic is a plain copy (nearest neighbour).
+    Returns (dem, water, transform, crs, tile names).
+    """
+    tiles = sorted({(math.floor(y), math.floor(x)) for y in (s, n) for x in (w, e)})
+    parts = []
+    for t in tiles:
+        name = glo30_name(*t)
+        base = f"https://copernicus-dem-30m.s3.amazonaws.com/{name}"
+        try:
+            dem, tr, crs = _read_window(f"{base}/{name}.tif", w, s, e, n)
+            wbm, wtr, _ = _read_window(f"{base}/AUXFILES/{name.replace('_DEM', '_WBM')}.tif", w, s, e, n)
+        except RuntimeError:
+            continue  # tile does not exist (all ocean)
+        if dem.size:
+            parts.append((name, dem.astype(np.float32), (wbm != 0).astype(np.float32), tr, crs))
+    if not parts:
+        raise RuntimeError("no DEM tile covers the footprint")
+    if len(parts) == 1:
+        name, dem, water, tr, crs = parts[0]
+        return dem, water, tr, crs, [name]
+    resx = {round(p[3].a, 12) for p in parts}
+    assert len(resx) == 1, "tiles with different pixel sizes"
+    px, py = parts[0][3].a, -parts[0][3].e
+    x0 = min(p[3].c for p in parts); y0 = max(p[3].f for p in parts)
+    x1 = max(p[3].c + p[1].shape[1] * px for p in parts); y1 = min(p[3].f - p[1].shape[0] * py for p in parts)
+    W, H = round((x1 - x0) / px), round((y0 - y1) / py)
+    dem = np.full((H, W), np.nan, np.float32); water = np.full((H, W), np.nan, np.float32)
+    for _, d, wa, tr, _crs in parts:
+        c = round((tr.c - x0) / px); r_ = round((y0 - tr.f) / py)
+        dem[r_:r_ + d.shape[0], c:c + d.shape[1]] = d
+        water[r_:r_ + d.shape[0], c:c + d.shape[1]] = wa
+    return dem, water, from_origin(x0, y0, px, py), parts[0][4], [p[0] for p in parts]
+
+
 def site_terrain(lat: float, lon: float, side_km: float) -> dict:
     w, s, e, n = bbox(lat, lon, side_km)
-    tiles = {(math.floor(s), math.floor(w)), (math.floor(n), math.floor(e)),
-             (math.floor(s), math.floor(e)), (math.floor(n), math.floor(w))}
-    if len(tiles) != 1:
-        return {"error": "footprint crosses a DEM tile edge"}
-    name = glo30_name(*tiles.pop())
-    base = f"https://copernicus-dem-30m.s3.amazonaws.com/{name}"
-    pad = 0.002  # about 200 m of margin so edge posts are fully covered
-    dem, tr, crs = _read_window(f"{base}/{name}.tif", w - pad, s - pad, e + pad, n + pad)
-    wbm, wtr, _ = _read_window(f"{base}/AUXFILES/{name.replace('_DEM', '_WBM')}.tif", w - pad, s - pad, e + pad, n + pad)
-    water = (wbm != 0).astype(np.float32)
-    out = {"tile": name}
+    pad = 0.006  # about 600 m of margin so edge posts are fully covered
+    dem, water, tr, crs, names = dem_mosaic(w - pad, s - pad, e + pad, n + pad)
+    wtr = tr
+    out = {"tile": ", ".join(names)}
     for label, post in (("fine", FINE_POST_M), ("grid", SPACING_M)):
         # k x k posts of exactly `post` metres, centred on the site. The window is therefore
         # k x post wide, the nearest whole number of posts to the stated footprint.
@@ -163,7 +201,7 @@ def site_terrain(lat: float, lon: float, side_km: float) -> dict:
         dtr = from_origin(ww, nn, (ee - ww) / k, (nn - ss) / k)
         z = np.full((k, k), np.nan, np.float32)
         wf = np.full((k, k), np.nan, np.float32)
-        reproject(dem.astype(np.float32), z, src_transform=tr, src_crs=crs, dst_transform=dtr, dst_crs=crs,
+        reproject(dem, z, src_transform=tr, src_crs=crs, dst_transform=dtr, dst_crs=crs,
                   resampling=Resampling.average, dst_nodata=np.nan)
         reproject(water, wf, src_transform=wtr, src_crs=crs, dst_transform=dtr, dst_crs=crs,
                   resampling=Resampling.average, dst_nodata=np.nan)
@@ -179,8 +217,10 @@ def site_terrain(lat: float, lon: float, side_km: float) -> dict:
 
 STAC = "https://earth-search.aws.element84.com/v1/search"
 # Scene classification (SCL) codes of Sentinel-2 L2A.
-SCL_CLEAR_LAND = (4, 5, 7)   # vegetation, not vegetated, unclassified
-SCL_WATER, SCL_SNOW = 6, 11
+# Class 6 (water) is treated as a clear observation: the classification labels dark lava as water
+# (86% of the Timanfaya footprint). Real open water comes from the Copernicus DEM water body mask.
+SCL_CLEAR_LAND = (4, 5, 6, 7)   # vegetation, not vegetated, water (see above), unclassified
+SCL_SNOW = 11
 
 
 def stac_items(lat: float, lon: float) -> list[dict]:
@@ -232,9 +272,10 @@ def _read_s2(item: dict, lat: float, lon: float, side_km: float):
             with rasterio.open("/vsicurl/" + item["red"]) as ds:
                 assert abs(ds.transform.a - 10) < 1e-6
                 red = ds.read(1, window=win10)
+                tr10, crs10 = ds.window_transform(win10), ds.crs
             with rasterio.open("/vsicurl/" + item["nir"]) as ds:
                 nir = ds.read(1, window=win10)
-        return red, nir, np.repeat(np.repeat(scl, 2, axis=0), 2, axis=1)
+        return red, nir, np.repeat(np.repeat(scl, 2, axis=0), 2, axis=1), tr10, crs10
     return _retry(go)
 
 
@@ -260,11 +301,18 @@ def site_vegetation(site_id: str, lat: float, lon: float, side_km: float) -> dic
         if len(by_month.setdefault(m, [])) < SCENES_PER_MONTH:
             by_month[m].append(it)
     picked = [it for m in sorted(by_month) for it in by_month[m]]
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(16) as ex:
         arrays = list(ex.map(lambda it: _read_s2(it, lat, lon, side_km), picked))
     shape = probe[0].shape
+    # Open water: the Copernicus DEM water body mask, put on the Sentinel-2 pixel grid.
+    w, s_, e, n = bbox(lat, lon, side_km)
+    _, wsrc, wtr, wcrs, _ = dem_mosaic(w - 0.006, s_ - 0.006, e + 0.006, n + 0.006)
+    wgrid = np.zeros(shape, np.float32)
+    reproject(np.nan_to_num(wsrc), wgrid, src_transform=wtr, src_crs=wcrs, dst_transform=probe[3], dst_crs=probe[4],
+              resampling=Resampling.nearest)
+    water = wgrid > 0.5
     ann_sum = np.zeros(shape); ann_n = np.zeros(shape, int)
-    water_n = np.zeros(shape, int); snow_n = np.zeros(shape, int); obs_n = np.zeros(shape, int)
+    snow_n = np.zeros(shape, int); obs_n = np.zeros(shape, int)
     used = []
     for m in sorted(by_month):
         msum = np.zeros(shape); mn = np.zeros(shape, int)
@@ -272,7 +320,7 @@ def site_vegetation(site_id: str, lat: float, lon: float, side_km: float) -> dic
             a = arrays[picked.index(it)]
             if a is None or a[0].shape != shape:
                 continue
-            red, nir, scl = a
+            red, nir, scl = a[:3]
             # Earth Search files flagged boa_offset_applied already have the baseline 04.00 offset removed,
             # so reflectance = DN x 0.0001 and NDVI can be taken from the DNs directly (checked: shadow
             # pixels at Kawah Ijen have DN 20 to 40, which would be negative reflectance otherwise).
@@ -281,15 +329,14 @@ def site_vegetation(site_id: str, lat: float, lon: float, side_km: float) -> dic
             clear = data & np.isin(scl, SCL_CLEAR_LAND)
             ndvi = np.where(clear, (nir - red) / np.where(data, nir + red, 1), 0.0)
             msum += ndvi; mn += clear
-            water_n += data & (scl == SCL_WATER); snow_n += data & (scl == SCL_SNOW)
-            obs_n += data & np.isin(scl, SCL_CLEAR_LAND + (SCL_WATER, SCL_SNOW))
+            snow_n += data & (scl == SCL_SNOW) & ~water
+            obs_n += data & np.isin(scl, SCL_CLEAR_LAND + (SCL_SNOW,)) & ~water
             used.append({"id": it["id"], "date": it["date"], "sceneCloudPct": round(it["cloud"], 1),
                          "clearLandShare": round(float(clear.mean()), 3)})
         has = mn > 0
         ann_sum += np.where(has, msum / np.maximum(mn, 1), 0.0)
         ann_n += has
-    seen = obs_n > 0
-    water = seen & (water_n > obs_n / 2)          # water in most of its clear observations
+    seen = (obs_n > 0) | water
     land = (ann_n > 0) & ~water
     if not land.any():
         return {"error": "no clear land observation in the footprint", "scenes": used}
@@ -297,7 +344,7 @@ def site_vegetation(site_id: str, lat: float, lon: float, side_km: float) -> dic
     return {
         "ndvi": float(px_ndvi.mean()),
         "bareFrac": float((px_ndvi < BARE_NDVI).mean()),
-        "waterFrac": float(water.sum() / max(1, seen.sum())),
+        "waterFrac": float(water.mean()),
         "snowObsShare": float(snow_n.sum() / max(1, obs_n.sum())),
         "pixels": int(land.sum()), "pixelsTotal": int(land.size),
         "pixelsNeverClear": int((~seen).sum()),
@@ -378,8 +425,8 @@ def build() -> dict:
         lat, lon = a["lat"], a["lon"]
         side, fnote = FOOTPRINTS[sid]
         print(f"[{sid}] {side} km")
-        t = cached(f"terrain_{sid}_{side}", lambda: site_terrain(lat, lon, side))
-        v = cached(f"s2_{sid}_{side}_{YEAR}", lambda: site_vegetation(sid, lat, lon, side))
+        t = cached(f"terrain2_{sid}_{side}", lambda: site_terrain(lat, lon, side))
+        v = cached(f"s2b_{sid}_{side}_{YEAR}", lambda: site_vegetation(sid, lat, lon, side))
         rk = site_rock(sid, lat, lon)
         i, j = cell_index(lat, lon)
         cell = cells.get((float(LATS[i]), float(LONS[j])))
@@ -396,7 +443,8 @@ def build() -> dict:
                       scenes=len(v.get("scenes", [])) or None),
             "bareFrac": V(r(v.get("bareFrac"), 3), "fraction of land pixels, 0 to 1", "site", S2_SRC,
                           note=f"Share of non-water 10 m pixels with annual NDVI below {BARE_NDVI}."),
-            "waterFrac": V(r(v.get("waterFrac"), 3), "fraction of footprint, 0 to 1", "site", S2_SRC),
+            "waterFrac": V(r(v.get("waterFrac"), 3), "fraction of footprint, 0 to 1", "site", DEM_SRC,
+                           note="Open water in the Copernicus DEM water body mask."),
             "snowObsShare": V(r(v.get("snowObsShare"), 3), "fraction of clear observations, 0 to 1", "site", S2_SRC,
                               note="Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."),
         }
@@ -413,14 +461,22 @@ def build() -> dict:
             vals["rockType"] = V(text, "", "volcano",
                                  f"Smithsonian Global Volcanism Program, Volcanoes of the World, volcano {gvp['Volcano_Number']} ({gvp['Volcano_Name']})",
                                  "Literature", note="Major rock type of the whole volcano, not mapped inside the footprint.")
+        elif sid in LITERATURE_ROCK:
+            text, ref = LITERATURE_ROCK[sid]
+            vals["rockType"] = V(text, "", "site", ref, "Literature", note="Stated in a paper about this feature, not read from a map.")
         else:
             text = None
-            vals["rockType"] = V(None, "", "site", None, note="No regional geologic map or volcano record was found for this site.")
+            vals["rockType"] = V(None, "", "site", None,
+                                 note="No regional geologic map, volcano record or retrievable paper abstract gives the rock type here.")
         code = ROCK_TO_GLIM.get(text) if text else None
-        vals["lithology"] = V(code, "class code", vals["rockType"]["scale"], vals["rockType"]["source"], "Literature",
+        code_from = vals["rockType"]
+        if code is None and reg and gvp and ROCK_TO_GLIM.get(gvp.get("Major_Rock_Type")):
+            code = ROCK_TO_GLIM[gvp["Major_Rock_Type"]]
+            code_from = {"scale": "volcano", "source": f"Smithsonian Global Volcanism Program, Volcanoes of the World, volcano {gvp['Volcano_Number']} ({gvp['Volcano_Name']})"}
+        vals["lithology"] = V(code, "class code", code_from["scale"], code_from["source"], "Literature",
                               label=classes.get(code),
-                              note=("GLiM class assigned from the rock type above by GLiM's class definitions."
-                                    if code else "The rock type above has no exact GLiM class in the mapping table, or is unknown."))
+                              note=("GLiM class assigned from the named rock type by GLiM's class definitions."
+                                    if code else "The rock type has no exact GLiM class in the mapping table, or is unknown."))
         if gvp and reg:
             vals["rockTypeVolcano"] = V(gvp.get("Major_Rock_Type"), "", "volcano",
                                         f"Smithsonian Global Volcanism Program, Volcanoes of the World, volcano {gvp['Volcano_Number']} ({gvp['Volcano_Name']})",
@@ -456,12 +512,14 @@ def build() -> dict:
                         "slope/roughness on 463 m posts, slopeFine/roughnessFine on 1 arc-second (about 31 m) posts."),
             "vegetation": (f"Sentinel-2 L2A, {YEAR}, up to {SCENES_PER_MONTH} least-cloudy scenes per month (scene cloud cover under "
                            f"{MAX_SCENE_CLOUD}%). Per 10 m pixel: NDVI from bands 4 and 8 for observations classed vegetation, "
-                           "not vegetated or unclassified; mean per month, then mean of months. ndvi is the footprint mean. "
+                           "not vegetated, water or unclassified (open water is removed with the Copernicus DEM water body mask "
+                           "instead, because the classification labels dark lava as water); mean per month, then mean of months. ndvi is the footprint mean. "
                            "Only scenes flagged as offset-corrected in the archive are used. "
                            f"bareFrac is the share of non-water pixels below {BARE_NDVI}."),
             "rock": ("Finest regional geologic map unit at the site coordinates from Macrostrat (large, medium or small scale "
                      "maps only). If there is none, the volcano's major rock type from the Smithsonian Global Volcanism "
-                     "Program. Otherwise null."),
+                     "Program. If there is neither, a rock type stated in the abstract of a paper about the feature. "
+                     "Otherwise null."),
             "climate": "Copied from the site's 0.5 degree cell in earth.json (scale: grid).",
         },
     }

@@ -39,6 +39,44 @@ uv run --project pipeline pipeline/build.py --assemble            # rewrite eart
 A stage that has not been run leaves its factors `null`. If terrain tiles fail to download,
 the stage stops with an error; run it again and it fetches only the missing tiles.
 
+## Other outputs
+
+`build.py` also writes `data/earth.bin`, a compact binary copy of `earth.json` for the browser
+(1.9 MB against 15.6 MB). The JSON is the source of truth: the build decodes the binary again and
+fails if any value differs. Layout in `compact.py`, browser decoder in `earth_bin_decoder.ts`.
+
+Three more scripts build the site-level files. They read `data/analogs.json` and
+`data/targets.json`, so run them after those exist. Each caches its downloads.
+
+```bash
+uv run --project pipeline pipeline/site_climate.py   # data/site_climate.json, under a minute
+uv run --project pipeline pipeline/sites.py          # data/sites.json, about 40 minutes cold
+uv run --project pipeline pipeline/extracts.py       # data/extracts/, about 15 minutes cold
+```
+
+| Script | Output | What it holds |
+| --- | --- | --- |
+| `site_climate.py` | `data/site_climate.json` | 12 monthly normals (NASA POWER, 2001-2020) of temperature, day-night range, precipitation and surface solar irradiance for every site in `analogs.json`. Grid-cell values, not site measurements |
+| `sites.py` | `data/sites.json` | Fine-scale values in a 2 to 5 km footprint for the candidate sites and five known analogs: terrain from Copernicus DEM GLO-30, NDVI and bare-ground share from Sentinel-2 at 10 m, rock type from regional geologic maps (Macrostrat), the Smithsonian volcano list or a cited paper. Climate is copied from the grid and labelled so |
+| `extracts.py` | `data/extracts/` | 20 km elevation and image extracts, all at one ground scale, for the featured Indonesian sites and every target: Copernicus DEM and Sentinel-2 for Earth, LOLA and LROC WAC for the Moon, MOLA for Mars |
+
+Limits of the site files:
+
+- Site footprints are centred on the coordinates in `analogs.json`. Where those are not the feature
+  itself (Goa Pandan, Kesaksak, Yungay), the footprint note in the file says so.
+- `slope` and `roughness` on 463 m posts use only 16 to 121 pixels in a footprint this small.
+  `slopeFine` and `roughnessFine` (31 m posts) describe the feature better but cannot be compared
+  with the targets.
+- Site NDVI is one year (2025). In cloudy months few or no pixels are clear; the months and scenes
+  used are listed per site.
+- Sentinel-2's own classification labels dark lava as water, so open water comes from the Copernicus
+  DEM water mask instead.
+- Rock type is `null` where no regional map, volcano record or retrievable paper states it
+  (Maros-Pangkep). The Macrostrat world map is not used: it was wrong at two Indonesian sites.
+- The Mars extracts are 43 x 43 pixels (463 m). The Shackleton image is almost all permanent shadow.
+- The lunar and Mars extracts use the same LOLA and MOLA products as the target terrain values in
+  `/validation`.
+
 ## What each stage does
 
 | Stage | File | Factors | Dataset | How the cell value is made |
