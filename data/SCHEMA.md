@@ -171,6 +171,60 @@ Additive rule: Session B may add other keys to `meta` (for example data date ran
 Consumers ignore keys they do not know. A finer Indonesia grid, if built, is a separate file with this same
 shape and its own `resolutionDeg`; add it to this document before another session reads it.
 
+## data/earth.bin
+
+Owner: Session B. Written by the same build step as `earth.json`, never edited by hand.
+
+A compact copy of `earth.json` for the browser (about 1.9 MB, 0.85 MB gzipped, against 15.6 MB).
+`earth.json` is the source of truth. The build decodes `earth.bin` again and fails if any cell value or
+any part of `meta` differs from `earth.json`, so the two files always hold the same data.
+
+Layout, little-endian:
+
+- bytes 0 to 3: ASCII `SBE1`
+- bytes 4 to 7: uint32, length of the header in bytes
+- from byte 8: header, UTF-8 JSON, space-padded
+- then one array per column, each `cellCount` values long, starting at its `byteOffset` from the start of
+  the file
+
+Header: `{ "format": "SBE1", "cellCount", "resolutionDeg", "meta", "columns": [ { "key", "dtype", "scale",
+"nullValue", "byteOffset" } ] }`. `meta` is the `meta` object of `earth.json`, unchanged.
+
+- Columns `row` and `col` (uint16): `lat = 90 - resolutionDeg * (row + 0.5)`,
+  `lon = -180 + resolutionDeg * (col + 0.5)`.
+- Every other column is a cell key of `earth.json`: `value = stored / scale`, or `null` when
+  `stored == nullValue`. `dtype` is `uint8`, `uint16` or `int16`.
+- Decode with the reference function in `pipeline/earth_bin_decoder.ts` (copy it into `/app`). It returns
+  the same `{ meta, cells }` object as parsing `earth.json`.
+
+## data/site_climate.json
+
+Owner: Session B. Built by `pipeline/site_climate.py`.
+
+Monthly climate normals (2001-2020, NASA POWER) for every site in `analogs.json`, for "best month to test"
+and for sunlight in the sandbox.
+
+```
+{
+  "meta": { "generatedAt", "description", "period", "powerVersion",
+            "fields": [ { "key", "label", "unit", "badge", "scale", "source", "note"? } ] },
+  "sites": [
+    { "id", "name", "kind", "lat", "lon",
+      "cells": { "merra2": { "lat", "lon" }, "syn1deg": { "lat", "lon" } },
+      "months": [ { "month": 1..12, "tempMean", "tempRange", "precip", "solar" } ]
+    }
+  ]
+}
+```
+
+- `id` matches `analogs.json`. `months` always has 12 entries, January first.
+- `tempMean` and `tempRange` in °C, `precip` in mm per month, `solar` in W/m2 (all-sky shortwave on a
+  horizontal surface, 24 hour mean). Units are authoritative in `meta.fields`.
+- Every value is that of the source grid cell containing the site (`cells` gives the cell centres):
+  0.5 x 0.625 degrees for temperature and precipitation, 1 x 1 degree for solar. It is not a measurement
+  at the site. A summit and the plain below it share one number. Label it as grid scale in the UI.
+- Unknown values are `null`.
+
 ## data/targets.json
 
 Owner: Session C. Hand-curated from cited sources.
