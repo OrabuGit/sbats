@@ -79,7 +79,8 @@ values only with values made the same way.
   `tempRange` is the mean daily maximum minus minimum.
 - NDVI is for one year, 2025. The climate is a 2001-2020 mean.
 - MOD13C2 has no data over Antarctica, so every cell south of 60 S has `ndvi: null`.
-  `ndvi` is not filled. Those cells are scored from `barrenFrac` instead (rule in `data/SCHEMA.md`).
+  `ndvi` is not filled. Those cells are scored from `barrenFrac` instead, and permanent ice lowers
+  Bare ground in every cell (rule in `data/SCHEMA.md`, "Bare ground and permanent ice").
   At 0.5 degrees the McMurdo Dry Valleys cells are 85% ice or more, so they score low.
 - North of about 60 N the winter months have no NDVI (polar night). The annual mean there
   covers the sunlit months only.
