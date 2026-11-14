@@ -138,7 +138,7 @@ def assemble() -> dict:
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "grid": {
             "cellCount": len(cells),
-            "landMask": ("Natural Earth 1:10m land polygons rasterised at 0.05 degrees; "
+            "landMask": ("Natural Earth 1:10m land polygons minus lake polygons, rasterised at 0.05 degrees; "
                          f"a cell is land when at least {landmask.LAND_MIN_FRACTION:.0%} of it is land"),
         },
         "provenance": provenance,
