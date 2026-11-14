@@ -225,6 +225,87 @@ and for sunlight in the sandbox.
   at the site. A summit and the plain below it share one number. Label it as grid scale in the UI.
 - Unknown values are `null`.
 
+## data/sites.json
+
+Owner: Session B. Built by `pipeline/sites.py`.
+
+Fine-scale values for the `candidate` sites of `analogs.json` and five well-known analogs (Mauna Kea,
+Kilauea, Atacama Yungay, Haughton, Lanzarote), measured inside a small square footprint centred on the
+site's coordinates instead of over the 0.5 degree cell.
+
+```
+{
+  "meta": { "generatedAt", "description", "year", "bareNdviThreshold", "methods": { ... } },
+  "sites": [
+    { "id", "name", "lat", "lon", "kind",
+      "footprintKm": number, "footprintNote": string,
+      "values": { "<key>": { "value", "unit", "scale", "source", "badge", ...extra } },
+      "gridCell": { "lat", "lon", "ndvi", "slope", "roughness", "lithology", "snowIceFrac", "barrenFrac" } | null,
+      "detail": { ... }
+    }
+  ]
+}
+```
+
+- `id`, `name`, `lat`, `lon`, `kind` are copied from `analogs.json`.
+- `footprintKm` is the side of the square in km (2 to 5). `footprintNote` says what it covers and what it
+  misses. Show both next to the values.
+- Every entry in `values` has `value` (number, string or `null`), `unit`, `scale`, `source` and `badge`.
+  `scale` says what the value describes:
+  - `"site"`: measured inside the footprint.
+  - `"volcano"`: a property of the whole volcano (rock type from the Smithsonian volcano database).
+  - `"grid"`: the 0.5 degree cell value from `earth.json`. Climate is always `"grid"`.
+  When `value` is `null`, `source` and `badge` are `null` too.
+- Keys in `values`:
+
+  | Key | Meaning | Unit |
+  | --- | --- | --- |
+  | `slope`, `roughness` | Same method and 463 m posts as `earth.json` and the targets, over the footprint. Comparable with them, but only a few dozen pixels (`pixels`, `windowKm`) | degrees, m |
+  | `slopeFine`, `roughnessFine` | Same function on about 31 m posts (Copernicus DEM GLO-30). Not comparable with 463 m values | degrees, m |
+  | `ndvi` | Footprint mean of annual NDVI from Sentinel-2 at 10 m, snow and water left out | unitless |
+  | `bareFrac` | Share of non-water pixels with annual NDVI below `meta.bareNdviThreshold` | fraction, 0 to 1 |
+  | `waterFrac` | Share of the footprint that is open water | fraction, 0 to 1 |
+  | `snowObsShare` | Share of clear observations classed as snow | fraction, 0 to 1 |
+  | `rockType` | Rock type as named by the source (text) | none |
+  | `lithology` | GLiM class code for `rockType` when the name maps exactly, otherwise `null` | class code |
+  | `rockTypeVolcano` | Only when both a map unit and a volcano record exist: the volcano's major rock type | none |
+  | `tempMean`, `tempRange`, `precip` | Copied from the grid cell, `scale: "grid"` | as `earth.json` |
+
+- `gridCell` holds the 0.5 degree cell's own values so the UI can show site against cell.
+- `detail` lists the DEM tile, the Sentinel-2 scenes used with their dates, other map units, and any errors.
+- These values are not used by the global score. They describe the featured sites.
+
+## data/extracts/
+
+Owner: Session B. Built by `pipeline/extracts.py`.
+
+Same-scale elevation and imagery for the split view and the 3D shot: the featured Indonesian sites and
+every target. `data/extracts/index.json`:
+
+```
+{
+  "meta": { "generatedAt", "windowKm", "projection", "description", "imageNote" },
+  "items": [
+    { "id", "name", "body": "earth" | "moon" | "mars", "lat", "lon", "matchedTargets"?: [ string ],
+      "elevation": { "file", "format", "unit", "size", "pixelM", "min", "max", "noDataShare",
+                     "product", "nativePixelM", "attribution", "badge", "note" } | null,
+      "image": { "file", "size", "pixelM", "bands", "product", "attribution", "badge", ... } | null
+    }
+  ]
+}
+```
+
+- `id` is the site id from `analogs.json` or the target id from `targets.json`.
+- Every item covers the same square of ground, `meta.windowKm` on a side, centred on the item, north up,
+  in a local orthographic projection. One kilometre is the same length in every extract.
+- `file` is relative to `/data`. `elevation` files are raw little-endian float32, `size` x `size` values,
+  row-major, north row first, in metres; NaN is no data. `image` files are JPEG, `size` x `size` pixels.
+- `pixelM` differs per dataset (30 m Earth, 80 m Moon, 463 m Mars). Nothing is upsampled: scale each
+  layer by `pixelM` when drawing. The Mars elevation is 43 x 43 pixels and will look coarse; say so.
+- Elevation datums differ per body (see each `note`). Compare relief, not absolute height.
+- `attribution` must be shown wherever the image or terrain is displayed.
+- `image` is `null` for Mars targets (no Mars image was requested).
+
 ## data/targets.json
 
 Owner: Session C. Hand-curated from cited sources.
