@@ -7,9 +7,13 @@ Code generated with AI assistance (Claude Code), directed and reviewed by the te
 
 ## Where things stand
 
-The numbers in `output/` are PROVISIONAL until two things have happened: slope and roughness are in
-`data/earth.json`, and the one tuning pass has been run and frozen. `output/report.json` carries a
-`status` field (`"provisional"` or `"final"`) and a `statusNote`. Show both wherever a number is shown.
+FINAL. The one tuning pass ran on 2026-11-14 and changed nothing: all 68 alternatives it tried were
+within noise, so every sigma and weight is frozen at the value set by rule beforehand. The record is in
+`tuning/FROZEN.md`. Hold-out results, Base preset: ROC AUC 0.979, 29.2% of known analogs in the top 10% of
+Earth cells, mean percentile 0.716. Moon targets do worse than Mars targets (mean percentile 0.617
+against 0.774). `output/report.json` carries `status: "final"`.
+
+The values are not tuned again. If `earth.json` is rebuilt, rerun `validate.ts` and report what comes out.
 
 ## The order of work
 

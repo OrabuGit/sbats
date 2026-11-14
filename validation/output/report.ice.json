@@ -1,0 +1,4286 @@
+{
+  "status": "final",
+  "statusNote": "Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.",
+  "generatedAt": "2026-11-14T12:03:33.236Z",
+  "preset": "ice",
+  "weights": {
+    "terrain": 0.15,
+    "bareGround": 0.15,
+    "dryness": 0.1,
+    "temperature": 0.3,
+    "sunlight": 0.05,
+    "rockType": 0.25
+  },
+  "earth": {
+    "generatedAt": "2026-11-14T11:56:02Z",
+    "resolutionDeg": 0.5,
+    "cells": 91894,
+    "terrain": {
+      "slopeShare": 0.9842862428450171,
+      "roughnessShare": 0.9999782357934142,
+      "landed": true
+    }
+  },
+  "frozenAt": "2026-11-14",
+  "split": {
+    "seed": 20261114,
+    "drawnAt": "2026-11-14T11:26:26Z",
+    "tuning": 24,
+    "holdout": 10,
+    "excludedCandidates": [
+      "id-goa-pandan",
+      "id-gua-lawa",
+      "id-kawah-ijen",
+      "id-kesaksak-lava-tube",
+      "id-maros-pangkep-karst",
+      "id-merapi"
+    ]
+  },
+  "headlineSet": "holdout",
+  "headline": {
+    "knownSites": 8,
+    "negativeSites": 2,
+    "positiveCases": 25,
+    "rocAuc": 0.979,
+    "rocAucScoredOnly": 0.979,
+    "top10Share": 0.167,
+    "casesInTop10": 3,
+    "knownSitesInTop10AnyTarget": 2,
+    "knownSitesUnscored": 0,
+    "casesUnscored": 0,
+    "meanPercentile": 0.678,
+    "meanScoreKnown": 5.3,
+    "meanScoreNegative": 0,
+    "limitingFactorShare": {
+      "bareGround": 0.25,
+      "temperature": 0.667,
+      "terrain": 0.083
+    },
+    "largestLimitingShare": 0.667
+  },
+  "sets": {
+    "tuning": {
+      "overall": {
+        "knownSites": 20,
+        "negativeSites": 4,
+        "positiveCases": 56,
+        "rocAuc": 0.881,
+        "rocAucScoredOnly": 0.881,
+        "top10Share": 0.175,
+        "casesInTop10": 8,
+        "knownSitesInTop10AnyTarget": 4,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.707,
+        "meanScoreKnown": 5.2,
+        "meanScoreNegative": 0.2,
+        "limitingFactorShare": {
+          "temperature": 0.75,
+          "terrain": 0.15,
+          "dryness": 0.05,
+          "bareGround": 0.05
+        },
+        "largestLimitingShare": 0.75
+      },
+      "moon": {
+        "knownSites": 7,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.804,
+        "rocAucScoredOnly": 0.804,
+        "top10Share": 0,
+        "casesInTop10": 0,
+        "knownSitesInTop10AnyTarget": 0,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.615,
+        "meanScoreKnown": 2.5,
+        "meanScoreNegative": 0.2,
+        "limitingFactorShare": {
+          "dryness": 0.143,
+          "temperature": 0.714,
+          "bareGround": 0.143
+        },
+        "largestLimitingShare": 0.714
+      },
+      "mars": {
+        "knownSites": 15,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.892,
+        "rocAucScoredOnly": 0.892,
+        "top10Share": 0.233,
+        "casesInTop10": 8,
+        "knownSitesInTop10AnyTarget": 4,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.721,
+        "meanScoreKnown": 5.9,
+        "meanScoreNegative": 0.3,
+        "limitingFactorShare": {
+          "temperature": 0.8,
+          "terrain": 0.2
+        },
+        "largestLimitingShare": 0.8
+      }
+    },
+    "holdout": {
+      "overall": {
+        "knownSites": 8,
+        "negativeSites": 2,
+        "positiveCases": 25,
+        "rocAuc": 0.979,
+        "rocAucScoredOnly": 0.979,
+        "top10Share": 0.167,
+        "casesInTop10": 3,
+        "knownSitesInTop10AnyTarget": 2,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.678,
+        "meanScoreKnown": 5.3,
+        "meanScoreNegative": 0,
+        "limitingFactorShare": {
+          "bareGround": 0.25,
+          "temperature": 0.667,
+          "terrain": 0.083
+        },
+        "largestLimitingShare": 0.667
+      },
+      "moon": {
+        "knownSites": 3,
+        "negativeSites": 2,
+        "positiveCases": 12,
+        "rocAuc": 1,
+        "rocAucScoredOnly": 1,
+        "top10Share": 0,
+        "casesInTop10": 0,
+        "knownSitesInTop10AnyTarget": 0,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.629,
+        "meanScoreKnown": 3.5,
+        "meanScoreNegative": 0,
+        "limitingFactorShare": {
+          "bareGround": 0.667,
+          "temperature": 0.333
+        },
+        "largestLimitingShare": 0.667
+      },
+      "mars": {
+        "knownSites": 6,
+        "negativeSites": 2,
+        "positiveCases": 13,
+        "rocAuc": 0.972,
+        "rocAucScoredOnly": 0.972,
+        "top10Share": 0.222,
+        "casesInTop10": 3,
+        "knownSitesInTop10AnyTarget": 2,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.725,
+        "meanScoreKnown": 6.5,
+        "meanScoreNegative": 0,
+        "limitingFactorShare": {
+          "temperature": 0.889,
+          "terrain": 0.111
+        },
+        "largestLimitingShare": 0.889
+      }
+    },
+    "all": {
+      "overall": {
+        "knownSites": 28,
+        "negativeSites": 6,
+        "positiveCases": 81,
+        "rocAuc": 0.901,
+        "rocAucScoredOnly": 0.901,
+        "top10Share": 0.173,
+        "casesInTop10": 11,
+        "knownSitesInTop10AnyTarget": 6,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.699,
+        "meanScoreKnown": 5.2,
+        "meanScoreNegative": 0.1,
+        "limitingFactorShare": {
+          "temperature": 0.726,
+          "terrain": 0.131,
+          "dryness": 0.036,
+          "bareGround": 0.107
+        },
+        "largestLimitingShare": 0.726
+      },
+      "moon": {
+        "knownSites": 10,
+        "negativeSites": 6,
+        "positiveCases": 40,
+        "rocAuc": 0.842,
+        "rocAucScoredOnly": 0.842,
+        "top10Share": 0,
+        "casesInTop10": 0,
+        "knownSitesInTop10AnyTarget": 0,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.62,
+        "meanScoreKnown": 2.8,
+        "meanScoreNegative": 0.1,
+        "limitingFactorShare": {
+          "dryness": 0.1,
+          "temperature": 0.6,
+          "bareGround": 0.3
+        },
+        "largestLimitingShare": 0.6
+      },
+      "mars": {
+        "knownSites": 21,
+        "negativeSites": 6,
+        "positiveCases": 41,
+        "rocAuc": 0.915,
+        "rocAucScoredOnly": 0.915,
+        "top10Share": 0.23,
+        "casesInTop10": 11,
+        "knownSitesInTop10AnyTarget": 6,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.722,
+        "meanScoreKnown": 6.1,
+        "meanScoreNegative": 0.2,
+        "limitingFactorShare": {
+          "temperature": 0.825,
+          "terrain": 0.175
+        },
+        "largestLimitingShare": 0.825
+      }
+    }
+  },
+  "scoredCellsPerTarget": {
+    "moon-malapert-massif": 91890,
+    "moon-mons-mouton": 91890,
+    "moon-haworth": 91890,
+    "moon-shackleton-rim": 91890,
+    "mars-jezero": 91894,
+    "mars-gale": 91894,
+    "mars-arcadia-planitia": 91894
+  },
+  "targetsMissingValues": {
+    "moon-malapert-massif": [
+      "tempRange"
+    ],
+    "moon-mons-mouton": [
+      "tempRange"
+    ],
+    "moon-haworth": [
+      "tempRange"
+    ],
+    "moon-shackleton-rim": [
+      "tempRange"
+    ],
+    "mars-jezero": [],
+    "mars-gale": [],
+    "mars-arcadia-planitia": [
+      "lithology"
+    ]
+  },
+  "definitions": {
+    "positiveCase": "One known analog site scored against one target listed in its analogFor. A site listed for several targets is split equally between them, so every site counts once in each number.",
+    "rocAuc": "Share of (positive case, negative control) pairs, both scored against the same target, in which the known analog has the higher score. Ties count half. A site with no score counts as below every scored site. 0.5 is chance, 1.0 is perfect.",
+    "rocAucScoredOnly": "The same, using only pairs where both sites have a score.",
+    "top10Share": "Share of known analogs whose cell is in the top 10% of all scored Earth cells for their matching target. Unscored cases count as not in the top 10%.",
+    "meanPercentile": "Mean share of scored Earth cells that a known analog beats or ties, over scored cases. 0.5 is chance. This compares known analogs with every land cell, a harder test than the negative controls.",
+    "snapping": "Each site is scored at the nearest earth.json cell centre. Sites more than 60 km from any cell are unscored.",
+    "candidates": "Indonesian candidate sites are never part of tuning or validation. Their scores are reported separately."
+  },
+  "notes": [],
+  "warnings": [],
+  "negativeControls": [
+    {
+      "id": "neg-kalimantan-betung-kerihun",
+      "name": "Betung Kerihun National Park, Kalimantan, Indonesia",
+      "set": "tuning",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0,
+        "shareAbove": 0.7107,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "dryness",
+        "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 3,762 mm/year wetter than the target. Low confidence: no data for rock class."
+      }
+    },
+    {
+      "id": "neg-amazon-jau",
+      "name": "Jau National Park, central Amazon, Brazil",
+      "set": "holdout",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0,
+        "shareAbove": 0.6696,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "bareGround",
+        "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Low confidence: no data for rock class."
+      }
+    },
+    {
+      "id": "neg-congo-salonga",
+      "name": "Salonga National Park, Congo basin, DR Congo",
+      "set": "tuning",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0,
+        "shareAbove": 0.6416,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "bareGround",
+        "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Low confidence: no data for rock class."
+      }
+    },
+    {
+      "id": "neg-jakarta",
+      "name": "Jakarta, Indonesia",
+      "set": "tuning",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0,
+        "shareAbove": 0.6113,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "dryness",
+        "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,223 mm/year wetter than the target. Low confidence: no data for rock class."
+      }
+    },
+    {
+      "id": "neg-singapore",
+      "name": "Singapore",
+      "set": "holdout",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0,
+        "shareAbove": 0.6451,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "dryness",
+        "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for rock class."
+      }
+    },
+    {
+      "id": "neg-paris",
+      "name": "Paris, France",
+      "set": "tuning",
+      "bestRank": {
+        "target": "mars-arcadia-planitia",
+        "score": 0.6,
+        "shareAbove": 0.3817,
+        "inTop10": false,
+        "coverage": 0.75,
+        "confidence": "low",
+        "unscoredReason": null,
+        "missing": [
+          "lithology"
+        ],
+        "limitingFactor": "temperature",
+        "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 65 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+      }
+    }
+  ],
+  "sites": [
+    {
+      "set": "tuning",
+      "id": "atacama-yungay",
+      "name": "Atacama Desert hyperarid core (Yungay), Chile",
+      "kind": "known",
+      "lat": -24,
+      "lon": -70,
+      "cell": {
+        "lat": -24.25,
+        "lon": -70.25,
+        "distanceKm": 37.6
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 6.8,
+          "shareAbove": 0.1595,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on dryness and bare ground. Held back by temperature: 71 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 7.1,
+          "shareAbove": 0.1544,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on dryness and bare ground. Held back by temperature: 71 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 6.8,
+          "shareAbove": 0.1587,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on dryness and bare ground. Held back by temperature: 71 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 7,
+          "shareAbove": 0.1546,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on dryness and bare ground. Held back by temperature: 71 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 6.7,
+          "shareAbove": 0.172,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on dryness and sunlight. Held back by temperature: 71 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 9.2,
+          "shareAbove": 0.1373,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on dryness and bare ground. Held back by temperature: 71 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.5519,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on dryness and bare ground. Held back by terrain: relief 463 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "haughton-crater",
+      "name": "Haughton impact structure, Devon Island, Canada",
+      "kind": "known",
+      "lat": 75.3833,
+      "lon": -89.6667,
+      "cell": {
+        "lat": 75.25,
+        "lon": -89.75,
+        "distanceKm": 15
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale",
+        "mars-arcadia-planitia"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 20.6,
+          "shareAbove": 0.015,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Malapert Massif: close on bare ground and sunlight. Held back by temperature: 40 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 20.6,
+          "shareAbove": 0.0156,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Mons Mouton: close on bare ground and sunlight. Held back by temperature: 40 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 20.6,
+          "shareAbove": 0.015,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Haworth: close on bare ground and sunlight. Held back by temperature: 40 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 20.5,
+          "shareAbove": 0.0157,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Shackleton rim: close on bare ground and sunlight. Held back by temperature: 40 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 11.9,
+          "shareAbove": 0.0266,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on bare ground. Held back by temperature: a day-night temperature swing 14 °C smaller than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 14.4,
+          "shareAbove": 0.0296,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on bare ground. Held back by temperature: a day-night temperature swing 14 °C smaller than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 14.3,
+          "shareAbove": 0.0119,
+          "inTop10": true,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground. Held back by temperature: a day-night temperature swing 14 °C smaller than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "beacon-valley",
+      "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+      "kind": "known",
+      "lat": -77.8167,
+      "lon": 160.65,
+      "cell": {
+        "lat": -77.75,
+        "lon": 160.75,
+        "distanceKm": 7.8
+      },
+      "analogFor": [
+        "mars-arcadia-planitia"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 26.7,
+          "shareAbove": 0.0017,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Malapert Massif: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 27.5,
+          "shareAbove": 0.0015,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Mons Mouton: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 26.9,
+          "shareAbove": 0.0016,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Haworth: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 27.5,
+          "shareAbove": 0.0015,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Shackleton rim: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 7.9,
+          "shareAbove": 0.1267,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on dryness. Held back by temperature: a day-night temperature swing 13 °C smaller than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 20.9,
+          "shareAbove": 0.0051,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Gale crater: close on rock type and dryness. Held back by temperature: a day-night temperature swing 13 °C smaller than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.2,
+          "shareAbove": 0.4632,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on dryness. Held back by terrain: slopes 7.9° steeper than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "don-juan-pond",
+      "name": "Don Juan Pond, Wright Valley, Antarctica",
+      "kind": "known",
+      "lat": -77.5644,
+      "lon": 161.1722,
+      "cell": {
+        "lat": -77.75,
+        "lon": 161.25,
+        "distanceKm": 20.7
+      },
+      "analogFor": [
+        "mars-arcadia-planitia"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 29.2,
+          "shareAbove": 0.0009,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Malapert Massif: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 29.8,
+          "shareAbove": 0.0008,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Mons Mouton: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 29.2,
+          "shareAbove": 0.0009,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Haworth: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 30.2,
+          "shareAbove": 0.0008,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "rockType",
+          "reason": "Weak match for Shackleton rim: close on dryness and sunlight. Held back by rock type: the rock class is unrelated to the target rock. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 4.5,
+          "shareAbove": 0.2794,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Jezero crater: close on dryness. Held back by terrain: slopes 7.5° steeper than the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 21.5,
+          "shareAbove": 0.0046,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Gale crater: close on rock type and dryness. Held back by temperature: a day-night temperature swing 13 °C smaller than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.5818,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on dryness. Held back by terrain: slopes 9.9° steeper than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "mauna-kea",
+      "name": "Mauna Kea, Hawaii, USA",
+      "kind": "known",
+      "lat": 19.8206,
+      "lon": -155.4681,
+      "cell": {
+        "lat": 19.75,
+        "lon": -155.25,
+        "distanceKm": 24.1
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.6276,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Malapert Massif. Held back by dryness: 1,831 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.6265,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Mons Mouton. Held back by dryness: 1,831 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.6273,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Haworth. Held back by dryness: 1,831 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.6268,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Shackleton rim. Held back by dryness: 1,831 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.6378,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by dryness: 1,831 mm/year wetter than the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.639,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Gale crater: close on sunlight and terrain. Held back by dryness: 1,831 mm/year wetter than the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.7084,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 902 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "kilauea",
+      "name": "Kilauea, Hawaii, USA",
+      "kind": "known",
+      "lat": 19.421,
+      "lon": -155.287,
+      "cell": {
+        "lat": 19.25,
+        "lon": -155.25,
+        "distanceKm": 19.4
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim",
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.6423,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.641,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.6421,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.641,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.6351,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.6424,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by temperature: 76 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6695,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 582 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "craters-of-the-moon",
+      "name": "Craters of the Moon, Idaho, USA",
+      "kind": "known",
+      "lat": 43.4617,
+      "lon": -113.5627,
+      "cell": {
+        "lat": 43.25,
+        "lon": -113.75,
+        "distanceKm": 28
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 7.8,
+          "shareAbove": 0.1414,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 62 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 8,
+          "shareAbove": 0.1403,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 62 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 7.9,
+          "shareAbove": 0.1412,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 62 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 8,
+          "shareAbove": 0.1405,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 62 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 15.4,
+          "shareAbove": 0.0073,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on rock type and terrain. Held back by temperature: 62 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 8,
+          "shareAbove": 0.1811,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 62 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 4.2,
+          "shareAbove": 0.1939,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 62 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "lanzarote-timanfaya",
+      "name": "Timanfaya, Lanzarote, Spain",
+      "kind": "known",
+      "lat": 28.9942,
+      "lon": -13.7933,
+      "cell": {
+        "lat": 28.75,
+        "lon": -13.75,
+        "distanceKm": 27.5
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim",
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 1.8,
+          "shareAbove": 0.3614,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 1.9,
+          "shareAbove": 0.3564,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 1.8,
+          "shareAbove": 0.36,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 1.8,
+          "shareAbove": 0.3581,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 2.4,
+          "shareAbove": 0.3758,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 2.1,
+          "shareAbove": 0.4254,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 1.4,
+          "shareAbove": 0.3243,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on dryness and bare ground. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "ries-crater",
+      "name": "Noerdlinger Ries impact crater, Germany",
+      "kind": "known",
+      "lat": 48.8833,
+      "lon": 10.5667,
+      "cell": {
+        "lat": 48.75,
+        "lon": 10.75,
+        "distanceKm": 20
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.3,
+          "shareAbove": 0.5142,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.3,
+          "shareAbove": 0.5141,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.3,
+          "shareAbove": 0.5141,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.3,
+          "shareAbove": 0.5144,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0.5,
+          "shareAbove": 0.5094,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Jezero crater. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0.8,
+          "shareAbove": 0.5082,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Gale crater: close on rock type. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.2,
+          "shareAbove": 0.4507,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.62) where the target is bare ground. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "askja",
+      "name": "Askja caldera, Iceland highlands",
+      "kind": "known",
+      "lat": 65.033,
+      "lon": -16.783,
+      "cell": {
+        "lat": 65.25,
+        "lon": -16.75,
+        "distanceKm": 24.2
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim",
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 9.8,
+          "shareAbove": 0.1153,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 10,
+          "shareAbove": 0.1125,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 9.8,
+          "shareAbove": 0.1147,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 10,
+          "shareAbove": 0.113,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 8.2,
+          "shareAbove": 0.1141,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on rock type and terrain. Held back by temperature: 53 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 4.3,
+          "shareAbove": 0.3385,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 1.3,
+          "shareAbove": 0.326,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground. Held back by temperature: 53 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "mdrs-utah",
+      "name": "Mars Desert Research Station, Hanksville, Utah, USA",
+      "kind": "known",
+      "lat": 38.4065,
+      "lon": -110.7919,
+      "cell": {
+        "lat": 38.25,
+        "lon": -110.75,
+        "distanceKm": 17.8
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 5.8,
+          "shareAbove": 0.1804,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 6,
+          "shareAbove": 0.1758,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 5.8,
+          "shareAbove": 0.1796,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 6,
+          "shareAbove": 0.1761,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 11.2,
+          "shareAbove": 0.036,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on terrain. Held back by temperature: 66 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 14.3,
+          "shareAbove": 0.0303,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 66 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.7,
+          "shareAbove": 0.3726,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by terrain: relief 331 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "rio-tinto",
+      "name": "Rio Tinto, Huelva, Spain",
+      "kind": "known",
+      "lat": 37.21,
+      "lon": -6.938,
+      "cell": {
+        "lat": 37.25,
+        "lon": -6.75,
+        "distanceKm": 17.2
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.8,
+          "shareAbove": 0.4465,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 73 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.8,
+          "shareAbove": 0.4467,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 73 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.8,
+          "shareAbove": 0.4465,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 73 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.8,
+          "shareAbove": 0.4468,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 73 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 1.6,
+          "shareAbove": 0.4219,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater. Held back by temperature: 73 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 2.4,
+          "shareAbove": 0.416,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on rock type. Held back by temperature: 73 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 1,
+          "shareAbove": 0.3511,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight and terrain. Held back by temperature: 73 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "dallol",
+      "name": "Dallol, Danakil Depression, Ethiopia",
+      "kind": "known",
+      "lat": 14.242,
+      "lon": 40.3,
+      "cell": {
+        "lat": 14.25,
+        "lon": 40.25,
+        "distanceKm": 5.5
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 1.5,
+          "shareAbove": 0.3896,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 1.6,
+          "shareAbove": 0.3849,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 1.5,
+          "shareAbove": 0.389,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 1.6,
+          "shareAbove": 0.3848,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 4.6,
+          "shareAbove": 0.2739,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on sunlight and terrain. Held back by temperature: 84 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 5.8,
+          "shareAbove": 0.2797,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on sunlight and bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.3,
+          "shareAbove": 0.43,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground. Held back by temperature: 84 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "sp-crater",
+      "name": "SP Crater, San Francisco Volcanic Field, Arizona, USA",
+      "kind": "known",
+      "lat": 35.5822,
+      "lon": -111.6318,
+      "cell": {
+        "lat": 35.75,
+        "lon": -111.75,
+        "distanceKm": 21.5
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 4,
+          "shareAbove": 0.2306,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 4.1,
+          "shareAbove": 0.2292,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 4,
+          "shareAbove": 0.2303,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 4.1,
+          "shareAbove": 0.2292,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 9.1,
+          "shareAbove": 0.0847,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on terrain. Held back by temperature: 66 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 7.7,
+          "shareAbove": 0.1943,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 66 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 3.4,
+          "shareAbove": 0.2252,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 66 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "meteor-crater",
+      "name": "Meteor Crater, Arizona, USA",
+      "kind": "known",
+      "lat": 35.0281,
+      "lon": -111.0233,
+      "cell": {
+        "lat": 35.25,
+        "lon": -111.25,
+        "distanceKm": 32.2
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 6.3,
+          "shareAbove": 0.1693,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 67 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 6.4,
+          "shareAbove": 0.1674,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 67 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 6.3,
+          "shareAbove": 0.1692,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 67 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 6.4,
+          "shareAbove": 0.1673,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 67 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 15.3,
+          "shareAbove": 0.0074,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on rock type. Held back by temperature: 67 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 8.1,
+          "shareAbove": 0.1803,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 67 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 3.8,
+          "shareAbove": 0.2115,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 67 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "death-valley-ubehebe",
+      "name": "Ubehebe Crater, Death Valley, California, USA",
+      "kind": "known",
+      "lat": 37.0097,
+      "lon": -117.4503,
+      "cell": {
+        "lat": 37.25,
+        "lon": -117.25,
+        "distanceKm": 32.1
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 5.4,
+          "shareAbove": 0.192,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 5.6,
+          "shareAbove": 0.1866,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 5.4,
+          "shareAbove": 0.191,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 5.6,
+          "shareAbove": 0.187,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 10.7,
+          "shareAbove": 0.0453,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 13.9,
+          "shareAbove": 0.0349,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on dryness. Held back by temperature: 69 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 1,
+          "shareAbove": 0.3459,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight and dryness. Held back by terrain: relief 282 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "pilbara-north-pole-dome",
+      "name": "North Pole Dome, Pilbara, Australia",
+      "kind": "known",
+      "lat": -21.0483,
+      "lon": 119.3931,
+      "cell": {
+        "lat": -21.25,
+        "lon": 119.25,
+        "distanceKm": 26.9
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 1.2,
+          "shareAbove": 0.4094,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 82 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 1.2,
+          "shareAbove": 0.4091,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 82 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 1.2,
+          "shareAbove": 0.4093,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 82 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 1.2,
+          "shareAbove": 0.4094,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 82 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 3.9,
+          "shareAbove": 0.3094,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by temperature: 82 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 5.7,
+          "shareAbove": 0.2836,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on rock type and sunlight. Held back by temperature: 82 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 2.6,
+          "shareAbove": 0.2597,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by temperature: 82 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "arkaroola",
+      "name": "Arkaroola, Flinders Ranges, Australia",
+      "kind": "known",
+      "lat": -30.3117,
+      "lon": 139.3361,
+      "cell": {
+        "lat": -30.25,
+        "lon": 139.25,
+        "distanceKm": 10.7
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 3,
+          "shareAbove": 0.2695,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 74 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 3.1,
+          "shareAbove": 0.2663,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 74 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 3.1,
+          "shareAbove": 0.2689,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 74 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 3.1,
+          "shareAbove": 0.2668,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 74 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 7.6,
+          "shareAbove": 0.1346,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on terrain and sunlight. Held back by temperature: 74 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 6.6,
+          "shareAbove": 0.2431,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 74 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 2.5,
+          "shareAbove": 0.2657,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 74 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "qaidam-basin",
+      "name": "Qaidam Basin, China",
+      "kind": "known",
+      "lat": 37.2667,
+      "lon": 94.45,
+      "cell": {
+        "lat": 37.25,
+        "lon": 94.25,
+        "distanceKm": 17.8
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 7.4,
+          "shareAbove": 0.1476,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 7.3,
+          "shareAbove": 0.15,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 7.4,
+          "shareAbove": 0.1479,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 7.3,
+          "shareAbove": 0.1501,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 12.5,
+          "shareAbove": 0.0205,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 17,
+          "shareAbove": 0.0118,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on bare ground and dryness. Held back by temperature: 61 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 17.4,
+          "shareAbove": 0.0021,
+          "inTop10": true,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground and terrain. Held back by temperature: 61 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "makhtesh-ramon",
+      "name": "Makhtesh Ramon, Negev, Israel",
+      "kind": "known",
+      "lat": 30.5786,
+      "lon": 34.8178,
+      "cell": {
+        "lat": 30.75,
+        "lon": 34.75,
+        "distanceKm": 20.1
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 3.4,
+          "shareAbove": 0.2513,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 3.5,
+          "shareAbove": 0.2492,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 3.5,
+          "shareAbove": 0.2509,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 3.5,
+          "shareAbove": 0.2497,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 8.4,
+          "shareAbove": 0.1071,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 10.3,
+          "shareAbove": 0.1044,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 3.5,
+          "shareAbove": 0.223,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground and dryness. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "lonar-crater",
+      "name": "Lonar crater, Maharashtra, India",
+      "kind": "known",
+      "lat": 19.975,
+      "lon": 76.5075,
+      "cell": {
+        "lat": 19.75,
+        "lon": 76.75,
+        "distanceKm": 35.6
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.3,
+          "shareAbove": 0.5096,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 81 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.3,
+          "shareAbove": 0.51,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 81 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.3,
+          "shareAbove": 0.5097,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 81 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.3,
+          "shareAbove": 0.51,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 81 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 1.1,
+          "shareAbove": 0.4538,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on rock type and sunlight. Held back by temperature: 81 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0.7,
+          "shareAbove": 0.518,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by temperature: 81 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.3,
+          "shareAbove": 0.4332,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by temperature: 81 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "ladakh-tso-kar",
+      "name": "Tso Kar, Ladakh, India",
+      "kind": "known",
+      "lat": 33.3,
+      "lon": 77.9833,
+      "cell": {
+        "lat": 33.25,
+        "lon": 77.75,
+        "distanceKm": 22.4
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale",
+        "mars-arcadia-planitia"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 13.7,
+          "shareAbove": 0.0632,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif: close on bare ground. Held back by temperature: 48 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 13.6,
+          "shareAbove": 0.0647,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on bare ground. Held back by temperature: 48 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 13.6,
+          "shareAbove": 0.0641,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth: close on bare ground. Held back by temperature: 48 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 13.9,
+          "shareAbove": 0.0612,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on bare ground. Held back by temperature: 48 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 2.5,
+          "shareAbove": 0.3748,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Jezero crater: close on bare ground. Held back by terrain: slopes 10.1° steeper than the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 24.9,
+          "shareAbove": 0.0027,
+          "inTop10": true,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Weak match for Gale crater: close on bare ground. Held back by temperature: 48 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6119,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on bare ground and sunlight. Held back by terrain: slopes 12.5° steeper than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "makgadikgadi-pans",
+      "name": "Makgadikgadi Pans, Botswana",
+      "kind": "known",
+      "lat": -20.8,
+      "lon": 25.3333,
+      "cell": {
+        "lat": -20.75,
+        "lon": 25.25,
+        "distanceKm": 10.3
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 1.6,
+          "shareAbove": 0.3868,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 78 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 1.5,
+          "shareAbove": 0.3885,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 78 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 1.5,
+          "shareAbove": 0.3872,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 78 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 1.5,
+          "shareAbove": 0.3885,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 78 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 4.1,
+          "shareAbove": 0.2986,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by temperature: 78 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 5.8,
+          "shareAbove": 0.2774,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by temperature: 78 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 3.8,
+          "shareAbove": 0.212,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by temperature: 78 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "teide",
+      "name": "Teide and Las Canadas, Tenerife, Spain",
+      "kind": "known",
+      "lat": 28.2731,
+      "lon": -16.6394,
+      "cell": {
+        "lat": 28.25,
+        "lon": -16.75,
+        "distanceKm": 11.1
+      },
+      "analogFor": [
+        "mars-jezero",
+        "mars-gale"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 2.7,
+          "shareAbove": 0.2892,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 2.8,
+          "shareAbove": 0.2822,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton: close on terrain. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 2.8,
+          "shareAbove": 0.2882,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 2.8,
+          "shareAbove": 0.2814,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim: close on terrain. Held back by temperature: 75 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0.8,
+          "shareAbove": 0.4824,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater: close on rock type and sunlight. Held back by temperature: 75 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 1.9,
+          "shareAbove": 0.4348,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 75 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6948,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 755 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "etna",
+      "name": "Mount Etna, Sicily, Italy",
+      "kind": "known",
+      "lat": 37.748,
+      "lon": 14.999,
+      "cell": {
+        "lat": 37.75,
+        "lon": 14.75,
+        "distanceKm": 21.9
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.4,
+          "shareAbove": 0.4861,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.55) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.4,
+          "shareAbove": 0.483,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.55) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.4,
+          "shareAbove": 0.4855,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.55) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.4,
+          "shareAbove": 0.4831,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.55) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0.7,
+          "shareAbove": 0.4965,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater. Held back by temperature: 71 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 1.2,
+          "shareAbove": 0.4715,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 71 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6167,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by terrain: relief 457 m rougher than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "sudbury",
+      "name": "Sudbury Basin, Ontario, Canada",
+      "kind": "known",
+      "lat": 46.6,
+      "lon": -81.1833,
+      "cell": {
+        "lat": 46.75,
+        "lon": -81.25,
+        "distanceKm": 17.4
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.6,
+          "shareAbove": 0.4624,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.6,
+          "shareAbove": 0.4624,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.6,
+          "shareAbove": 0.4624,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.6,
+          "shareAbove": 0.4627,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 1.2,
+          "shareAbove": 0.4464,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Jezero crater. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 1.1,
+          "shareAbove": 0.4813,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Gale crater. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.7,
+          "shareAbove": 0.3786,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.54) where the target is bare ground. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "kangerlussuaq",
+      "name": "Kangerlussuaq, Greenland",
+      "kind": "known",
+      "lat": 67.0086,
+      "lon": -50.6892,
+      "cell": {
+        "lat": 67.25,
+        "lon": -50.75,
+        "distanceKm": 27
+      },
+      "analogFor": [
+        "mars-arcadia-planitia"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 11.5,
+          "shareAbove": 0.0906,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 11.7,
+          "shareAbove": 0.087,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 11.5,
+          "shareAbove": 0.0896,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 11.6,
+          "shareAbove": 0.088,
+          "inTop10": true,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 7.7,
+          "shareAbove": 0.1318,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater. Held back by temperature: 49 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 8.3,
+          "shareAbove": 0.173,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 49 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 1.5,
+          "shareAbove": 0.3135,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "terrain",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: slopes 5.4° steeper than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "mistastin-crater",
+      "name": "Mistastin crater, Labrador, Canada",
+      "kind": "known",
+      "lat": 55.8833,
+      "lon": -63.3,
+      "cell": {
+        "lat": 55.75,
+        "lon": -63.25,
+        "distanceKm": 15.1
+      },
+      "analogFor": [
+        "moon-malapert-massif",
+        "moon-mons-mouton",
+        "moon-haworth",
+        "moon-shackleton-rim"
+      ],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 5,
+          "shareAbove": 0.2034,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Malapert Massif. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 5,
+          "shareAbove": 0.2038,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Mons Mouton. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 5,
+          "shareAbove": 0.2032,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Haworth. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 5,
+          "shareAbove": 0.2042,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Shackleton rim. Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 5.9,
+          "shareAbove": 0.2119,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater. Held back by temperature: 49 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 5.1,
+          "shareAbove": 0.3089,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 49 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 4.6,
+          "shareAbove": 0.177,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by temperature: 49 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "neg-kalimantan-betung-kerihun",
+      "name": "Betung Kerihun National Park, Kalimantan, Indonesia",
+      "kind": "negative",
+      "lat": 1.2208,
+      "lon": 113.3531,
+      "cell": {
+        "lat": 1.25,
+        "lon": 113.25,
+        "distanceKm": 11.9
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.7142,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Malapert Massif. Held back by dryness: 3,762 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.7141,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Mons Mouton. Held back by dryness: 3,762 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.7142,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Haworth. Held back by dryness: 3,762 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.7141,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Shackleton rim. Held back by dryness: 3,762 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.7147,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by dryness: 3,762 mm/year wetter than the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.7143,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by dryness: 3,762 mm/year wetter than the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.7107,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 3,762 mm/year wetter than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "neg-amazon-jau",
+      "name": "Jau National Park, central Amazon, Brazil",
+      "kind": "negative",
+      "lat": -2.3,
+      "lon": -63.05,
+      "cell": {
+        "lat": -2.25,
+        "lon": -63.25,
+        "distanceKm": 22.9
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.6968,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.6969,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.6968,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.6969,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.6943,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.696,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6696,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.84) where the target is bare ground. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "neg-congo-salonga",
+      "name": "Salonga National Park, Congo basin, DR Congo",
+      "kind": "negative",
+      "lat": -2,
+      "lon": 21,
+      "cell": {
+        "lat": -2.25,
+        "lon": 20.75,
+        "distanceKm": 39.3
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.6809,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.681,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.6809,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.681,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.6743,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.6774,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6416,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.83) where the target is bare ground. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "neg-jakarta",
+      "name": "Jakarta, Indonesia",
+      "kind": "negative",
+      "lat": -6.18,
+      "lon": 106.83,
+      "cell": {
+        "lat": -6.25,
+        "lon": 106.75,
+        "distanceKm": 11.8
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.6573,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Malapert Massif. Held back by dryness: 2,223 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.6574,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Mons Mouton. Held back by dryness: 2,223 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.6573,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Haworth. Held back by dryness: 2,223 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.6574,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Shackleton rim. Held back by dryness: 2,223 mm/year wetter than the target. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.6502,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by dryness: 2,223 mm/year wetter than the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.655,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by dryness: 2,223 mm/year wetter than the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6113,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,223 mm/year wetter than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "holdout",
+      "id": "neg-singapore",
+      "name": "Singapore",
+      "kind": "negative",
+      "lat": 1.2833,
+      "lon": 103.8333,
+      "cell": {
+        "lat": 1.25,
+        "lon": 103.75,
+        "distanceKm": 10
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0,
+          "shareAbove": 0.7056,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Malapert Massif. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0,
+          "shareAbove": 0.7057,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Mons Mouton. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0,
+          "shareAbove": 0.7057,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Haworth. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0,
+          "shareAbove": 0.7057,
+          "inTop10": false,
+          "coverage": 0.6,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange",
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Shackleton rim. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for day-night temperature swing and rock class."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 0,
+          "shareAbove": 0.7014,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Jezero crater: close on sunlight. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for rock class."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 0,
+          "shareAbove": 0.7046,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Gale crater: close on sunlight. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for rock class."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0,
+          "shareAbove": 0.6451,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "dryness",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,380 mm/year wetter than the target. Low confidence: no data for rock class."
+        }
+      }
+    },
+    {
+      "set": "tuning",
+      "id": "neg-paris",
+      "name": "Paris, France",
+      "kind": "negative",
+      "lat": 48.8567,
+      "lon": 2.3522,
+      "cell": {
+        "lat": 48.75,
+        "lon": 2.25,
+        "distanceKm": 14
+      },
+      "analogFor": [],
+      "results": {
+        "moon-malapert-massif": {
+          "target": "moon-malapert-massif",
+          "score": 0.6,
+          "shareAbove": 0.4607,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Malapert Massif. Held back by bare ground: vegetation cover (NDVI 0.52) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-mons-mouton": {
+          "target": "moon-mons-mouton",
+          "score": 0.6,
+          "shareAbove": 0.4608,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Mons Mouton. Held back by bare ground: vegetation cover (NDVI 0.52) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-haworth": {
+          "target": "moon-haworth",
+          "score": 0.6,
+          "shareAbove": 0.4606,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Haworth. Held back by bare ground: vegetation cover (NDVI 0.52) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "moon-shackleton-rim": {
+          "target": "moon-shackleton-rim",
+          "score": 0.6,
+          "shareAbove": 0.461,
+          "inTop10": false,
+          "coverage": 0.85,
+          "confidence": "medium",
+          "unscoredReason": null,
+          "missing": [
+            "tempRange"
+          ],
+          "limitingFactor": "bareGround",
+          "reason": "Poor match for Shackleton rim. Held back by bare ground: vegetation cover (NDVI 0.52) where the target is bare ground. Medium confidence: no data for day-night temperature swing."
+        },
+        "mars-jezero": {
+          "target": "mars-jezero",
+          "score": 1.2,
+          "shareAbove": 0.4515,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Jezero crater. Held back by temperature: 65 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-gale": {
+          "target": "mars-gale",
+          "score": 1.5,
+          "shareAbove": 0.4572,
+          "inTop10": false,
+          "coverage": 1,
+          "confidence": "high",
+          "unscoredReason": null,
+          "missing": [],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Gale crater. Held back by temperature: 65 °C warmer than the closest Earth gets to the target."
+        },
+        "mars-arcadia-planitia": {
+          "target": "mars-arcadia-planitia",
+          "score": 0.6,
+          "shareAbove": 0.3817,
+          "inTop10": false,
+          "coverage": 0.75,
+          "confidence": "low",
+          "unscoredReason": null,
+          "missing": [
+            "lithology"
+          ],
+          "limitingFactor": "temperature",
+          "reason": "Poor match for Arcadia Planitia (site AP-1): close on sunlight. Held back by temperature: 65 °C warmer than the closest Earth gets to the target. Low confidence: no data for rock class."
+        }
+      }
+    }
+  ]
+}

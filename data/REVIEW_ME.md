@@ -17,11 +17,12 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 
 1. Gale mean temperature. The climate model says -57.7 C; Curiosity's own record points to something warmer
    (midpoint of daily minimum and maximum -43.7 C). The model value is in the file. Keep it, or switch?
-2. The tolerances (sigma) and the three non-Base preset weights are first guesses, listed at the end. DESIGN.md
-   allows one tuning pass against the validation set before they are frozen. That pass has not been done.
-3. Temperature dominates the scores. Mars and the lunar poles are far colder than almost all of Earth, so with
-   a 15 C tolerance warm deserts lose most of their score on temperature alone. Widening it is a scoring
-   decision, so it was left alone.
+2. Closed. The tolerances (sigma) and preset weights went through the one tuning pass on 2026-11-14. It tried
+   68 alternatives on the tuning set and none beat noise, so all are frozen at the values listed at the end.
+   See validation/tuning/FROZEN.md. They are not tuned again.
+3. Temperature is still the most common limiting factor (about half of the known-analog cases). Mars and the
+   lunar poles are far colder than almost all of Earth. The tuning pass tried wider temperature tolerances
+   and they made no measurable difference, so this is a property of the targets, not of the tolerance.
 4. Lunar rock class. All four Moon targets are coded as GLiM 'Basic plutonic rocks' because the lunar highlands
    are anorthosite. Only Shackleton has a direct detection.
 5. Two target points are feature centres, not landing points: Haworth (crater centre, in permanent shadow) and
@@ -161,7 +162,8 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 
 ## Design parameters (not data)
 
-These are choices, not measurements. They were set by rule before any validation run and have not been tuned.
+These are choices, not measurements. They were set by rule before any validation run. The one tuning pass
+(2026-11-14) left every one unchanged, and they are now frozen: see validation/tuning/FROZEN.md.
 
 | Parameter | Value | Reason |
 | --- | --- | --- |
