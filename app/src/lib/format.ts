@@ -65,10 +65,14 @@ const list = (xs: string[]) =>
 
 export function unscoredText(e: CellScore, meta: MetaByKey): string {
   if (e.unscoredReason === 'required-factor-missing') {
-    const req = e.missing.filter((k) => k === 'ndvi' || k === 'precip').map((k) => keyLabel(k, meta).toLowerCase());
-    return `No score. ${list(req)} ${req.length > 1 ? 'are' : 'is'} missing for this cell or this target. Vegetation and precipitation are required because they carry the veto that rules out forests and wet regions.`;
+    const req = e.missing
+      .filter((k) => k === 'ndvi' || k === 'precip')
+      .map((k) => (k === 'ndvi' ? 'bare ground (NDVI or land cover)' : keyLabel(k, meta).toLowerCase()));
+    return `No score. ${list(req)} ${req.length > 1 ? 'are' : 'is'} missing for this cell or this target. Bare ground and precipitation are required because they carry the veto that rules out forests and wet regions.`;
   }
   if (e.unscoredReason === 'coverage-too-low')
     return `No score. The factors with data cover ${(e.coverage * 100).toFixed(0)}% of the mission weight. The minimum is 60%.`;
   return 'No score.';
 }
+
+export const formatShare = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : `${(v * 100).toFixed(v > 0 && v < 0.1 ? 1 : 0)}%`);

@@ -95,12 +95,14 @@ function Orbit({ data }: { data: DataBundle }) {
       ].filter(Boolean);
       return `All ${counts.scored.toLocaleString('en-US')} scored cells are low confidence${why.length > 0 ? `: ${why.join(', and ')}` : ''}. Tick "Include low confidence cells" to list them anyway.`;
     }
-    const requiredUnbuilt = unbuilt.filter((k) => k === 'ndvi' || k === 'precip').map((k) => keyLabel(k, meta));
+    // Bare ground can come from NDVI or, where NDVI is null, from the barren share of land cover.
+    const noBare = unbuilt.includes('ndvi') && earth.cells.every((c) => c.barrenFrac == null);
+    const requiredUnbuilt = unbuilt.filter((k) => (k === 'ndvi' && noBare) || k === 'precip').map((k) => keyLabel(k, meta));
     const requiredNoTarget = (['ndvi', 'precip'] as const).filter((k) => target.values[k]?.value == null).map((k) => keyLabel(k, meta));
     const parts = ['No cell can be scored yet.'];
     if (requiredUnbuilt.length > 0)
       parts.push(
-        `${requiredUnbuilt.join(' and ')} ${requiredUnbuilt.length > 1 ? 'have' : 'has'} no data in any cell of earth.json, and vegetation and precipitation are both required before a cell gets a score.`,
+        `${requiredUnbuilt.join(' and ')} ${requiredUnbuilt.length > 1 ? 'have' : 'has'} no data in any cell of earth.json, and bare ground and precipitation are both required before a cell gets a score.`,
       );
     if (requiredNoTarget.length > 0) parts.push(`${target.name} has no published value for ${requiredNoTarget.join(' and ')}, which is required.`);
     if (requiredUnbuilt.length === 0 && requiredNoTarget.length === 0)
@@ -307,6 +309,7 @@ function Orbit({ data }: { data: DataBundle }) {
               target={target}
               explained={explained}
               meta={meta}
+              landCover={earth.meta.landCover ?? null}
               named={named}
               isNew={isNewSite(selectedCell, analogs)}
               rank={rank}

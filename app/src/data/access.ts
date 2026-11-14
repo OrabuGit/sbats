@@ -65,6 +65,28 @@ function checkLithology(x: unknown): string | null {
   return null;
 }
 
+/**
+ * Compact form of earth.json: the same meta, and one array per key instead of one object per cell.
+ *   { "format": "columns-v1", "meta": { ... }, "count": n, "columns": { "lat": [...], "lon": [...], "<key>": [...] } }
+ * This is the shape the app accepts today (see decisions/A.md). It is turned back into the
+ * earth.json shape here, so nothing else in the app knows the difference.
+ */
+export const COMPACT_EARTH_FILE = 'earth.compact.json';
+
+function expandCompactEarth(x: unknown): unknown | undefined {
+  if (!isObj(x) || x.format !== 'columns-v1' || !isObj(x.meta) || !isObj(x.columns)) return undefined;
+  const cols = Object.entries(x.columns).filter((e): e is [string, (number | null)[]] => Array.isArray(e[1]));
+  const n = typeof x.count === 'number' ? x.count : (cols[0]?.[1].length ?? 0);
+  if (n === 0 || cols.some(([, v]) => v.length !== n)) return undefined;
+  const cells = new Array<Record<string, number | null>>(n);
+  for (let i = 0; i < n; i++) {
+    const c: Record<string, number | null> = {};
+    for (const [k, v] of cols) c[k] = v[i] ?? null;
+    cells[i] = c;
+  }
+  return { meta: x.meta, cells };
+}
+
 /** `?data=fixture` in the URL forces the fixtures, to check the UI against a fully populated set. */
 const forceFixtures = new URLSearchParams(window.location.search).get('data') === 'fixture';
 
@@ -90,7 +112,13 @@ function present(): Promise<Set<string>> {
 
 async function fetchReal(name: FileName): Promise<unknown | undefined> {
   if (forceFixtures) return undefined;
-  if (!(await present()).has(`${name}.json`)) return undefined;
+  const files = await present();
+  if (name === 'earth' && files.has(COMPACT_EARTH_FILE)) {
+    // Prefer the compact file. If it is missing a column or has another shape, use earth.json.
+    const compact = expandCompactEarth(await fetchJson(COMPACT_EARTH_FILE));
+    if (compact !== undefined && checkEarth(compact) === null) return compact;
+  }
+  if (!files.has(`${name}.json`)) return undefined;
   return fetchJson(`${name}.json`);
 }
 

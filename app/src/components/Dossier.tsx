@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
-import type { Analog, CellScore, ClampGap, EarthCell, FactorBreakdown, FactorKey, KeyBreakdown, Target } from '../types';
+import type { Analog, CellScore, ClampGap, EarthCell, FactorBreakdown, FactorKey, KeyBreakdown, LandCoverMeta, Target } from '../types';
 import { formatCoords, siteCode } from '../lib/geo';
-import { formatScore, formatSim, formatValue, isSunKey, keyLabel, unscoredText, type MetaByKey } from '../lib/format';
+import { formatScore, formatShare, formatSim, formatValue, isSunKey, keyLabel, unscoredText, type MetaByKey } from '../lib/format';
 import { NEW_DISTANCE_KM } from '../lib/rank';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { Radar } from './Radar';
@@ -11,6 +11,8 @@ interface Props {
   target: Target;
   explained: CellScore;
   meta: MetaByKey;
+  /** Land cover metadata from earth.json, for the badge on the ice and barren shares. */
+  landCover: LandCoverMeta | null;
   named: Analog | null;
   isNew: boolean;
   rank: number | null;
@@ -61,7 +63,47 @@ function ValueRow({ k, target, meta }: { k: KeyBreakdown; target: Target; meta: 
   );
 }
 
-function FactorBlock({ f, target, meta }: { f: FactorBreakdown; target: Target; meta: MetaByKey }) {
+/** Says which measurement gave the Bare ground similarity, with the land cover shares behind it. */
+function BareGroundNote({ k, landCover }: { k: KeyBreakdown; landCover: LandCoverMeta | null }) {
+  const b = k.bareGround;
+  if (!b) return null;
+  const badge = <SourceBadge badge="Measured" source={landCover?.source ?? 'MODIS MCD12C1 land cover'} />;
+  const ice = b.snowIceFrac ?? 0;
+  return (
+    <div className="mt-2 border-l border-line pl-3">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-[12px] text-text">Measured from</span>
+        <span className="num text-[11px] uppercase tracking-wider text-text">{b.source === 'ndvi' ? 'NDVI' : 'Land cover'}</span>
+      </div>
+      <dl className="mt-1 grid grid-cols-[1fr_auto] gap-x-2 gap-y-1">
+        <dt className="text-[12px] text-muted">Permanent snow and ice</dt>
+        <dd className="flex items-center justify-end gap-2">
+          <span className="num text-[12px] text-text">{formatShare(b.snowIceFrac)}</span>
+          {b.snowIceFrac !== null && badge}
+        </dd>
+        {(b.source === 'landCover' || b.barrenFrac !== null) && (
+          <>
+            <dt className="text-[12px] text-muted">Barren ground</dt>
+            <dd className="flex items-center justify-end gap-2">
+              <span className="num text-[12px] text-text">{formatShare(b.barrenFrac)}</span>
+              {b.barrenFrac !== null && badge}
+            </dd>
+          </>
+        )}
+      </dl>
+      <p className="mt-1.5 text-[11px] text-muted">
+        {b.source === 'ndvi'
+          ? ice > 0
+            ? `The NDVI match is multiplied by the ice-free share of the cell (${formatShare(1 - ice)}). Ice is not regolith.`
+            : 'The NDVI match is used as it is. No permanent ice in this cell.'
+          : 'The NDVI product has no data here. The barren share of the cell stands in for it and is used directly as the similarity.'}
+        {k.similarity === 0 ? ' The cell is all permanent ice, so the score is 0. It is scored, not missing.' : ''}
+      </p>
+    </div>
+  );
+}
+
+function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; target: Target; meta: MetaByKey; landCover: LandCoverMeta | null }) {
   const pct = f.similarity === null ? 0 : Math.max(0, Math.min(1, f.similarity)) * 100;
   const partial = f.weight > 0 && f.coveredWeight > 0 && f.coveredWeight < f.weight - 1e-9;
   const dropped = f.weight > 0 && f.coveredWeight === 0;
@@ -90,13 +132,16 @@ function FactorBlock({ f, target, meta }: { f: FactorBreakdown; target: Target; 
       {partial && <p className="mt-1 text-[11px] text-muted">One of two inputs is missing. This factor counts for half its weight.</p>}
       {dropped && <p className="mt-1 text-[11px] text-muted">Left out of the score. The other weights were rescaled.</p>}
       {f.keys.map((k) => (
-        <ValueRow key={k.key} k={k} target={target} meta={meta} />
+        <div key={k.key}>
+          <ValueRow k={k} target={target} meta={meta} />
+          <BareGroundNote k={k} landCover={landCover} />
+        </div>
       ))}
     </li>
   );
 }
 
-export function Dossier({ cell, target, explained: e, meta, named, isNew, rank, percentile, gaps, notes, onBack }: Props) {
+export function Dossier({ cell, target, explained: e, meta, landCover, named, isNew, rank, percentile, gaps, notes, onBack }: Props) {
   const scored = e.score !== null;
   const sources = new Map<string, string>();
   for (const f of e.breakdown)
@@ -211,7 +256,7 @@ export function Dossier({ cell, target, explained: e, meta, named, isNew, rank, 
         </h3>
         <ul>
           {e.breakdown.map((f) => (
-            <FactorBlock key={f.factor} f={f} target={target} meta={meta} />
+            <FactorBlock key={f.factor} f={f} target={target} meta={meta} landCover={landCover} />
           ))}
         </ul>
       </section>

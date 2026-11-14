@@ -27,13 +27,25 @@ export interface FactorMeta {
   classes?: LithologyClass[];
 }
 
-export type EarthCell = { lat: number; lon: number } & Record<FactorKey, number | null>;
+export type EarthCell = { lat: number; lon: number } & Record<FactorKey, number | null> & {
+  /** Share of the cell's land that is permanent snow and ice, 0 to 1. Used by the Bare ground rule. */
+  snowIceFrac?: number | null;
+  /** Share of the cell's land that is barren, 0 to 1. Stands in for NDVI where NDVI is null. */
+  barrenFrac?: number | null;
+};
+
+export interface LandCoverMeta {
+  source: string;
+  keys: { key: string; label: string; unit: string; badge: Badge }[];
+  method?: string;
+}
 
 export interface EarthFile {
   meta: {
     resolutionDeg: number;
     factors: FactorMeta[];
     generatedAt: string;
+    landCover?: LandCoverMeta;
     [extra: string]: unknown;
   };
   cells: EarthCell[];
@@ -92,6 +104,7 @@ export type {
   FactorId,
   KeyBreakdown,
   KeyStatus,
+  BareGroundSource,
   PreparedTarget,
   Preset,
   ScoreKey,
