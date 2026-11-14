@@ -94,3 +94,27 @@ export const loadReport = (preset: string) => loadExtra<ValidationReport>(`valid
 export const loadCandidates = () => loadExtra<CandidatesFile>('validation-candidates.json');
 export const loadFrozen = () => loadExtra<FrozenFile>('validation-frozen.json');
 export const loadSources = () => loadExtra<SourceTable[]>('sources.json');
+
+interface Group {
+  sites: number;
+  meanPercentile: number | null;
+  top10: number;
+  top25: number;
+}
+/** validation/output/purposes.json: do sites used for a purpose rank higher on that purpose's ranking? */
+export interface PurposesFile {
+  generatedAt: string;
+  caveat: string;
+  percentile: string;
+  byPurpose: {
+    purpose: string;
+    label: string;
+    sitesUsedForIt: string[];
+    onPurposeRanking: Group;
+    sameSitesOnAllRoundScore: Group;
+    otherKnownSitesOnPurposeRanking: Group;
+  }[];
+  byDimension: { dimension: string; label: string; sitesKnownForIt: Group; otherKnownSites: Group }[];
+  shareOfEarthCellsWithTheSameRockClassAsTheTarget: Record<string, number | null>;
+}
+export const loadPurposes = () => loadExtra<PurposesFile>('validation-purposes.json');

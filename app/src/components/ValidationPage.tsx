@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { EarthFile, Target } from '../types';
 import { FACTOR_LABELS, PRESETS } from '../lib/scoringAdapter';
 import { useAsync } from '../lib/useAsync';
-import { loadCandidates, loadFrozen, loadReport, type ReportSite, type SetStats, type SiteResult, type ValidationReport } from '../data/validation';
+import { loadCandidates, loadFrozen, loadPurposes, loadReport, type ReportSite, type SetStats, type SiteResult, type ValidationReport } from '../data/validation';
 import { ConfidenceBadge, Tag } from './Badges';
 import { Absent, DataTable, Loading, Prose, Section, Td } from './InfoParts';
 
@@ -80,6 +80,8 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
   const report = useAsync(() => loadReport(preset), preset);
   const candidates = useAsync(loadCandidates, 'candidates');
   const frozen = useAsync(loadFrozen, 'frozen');
+  const purposes = useAsync(loadPurposes, 'purposes');
+  const pv = purposes.status === 'ready' ? purposes.value : null;
   const targetName = (id: string) => targets.find((t) => t.id === id)?.name ?? id;
   const iceCells = earth.cells.filter((c) => c.ndvi === null && c.barrenFrac === 0).length;
 
@@ -362,6 +364,54 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
           </DataTable>
         )}
       </Section>
+
+      {pv && (
+        <Section id="v-purposes" title="Match by purpose: development numbers" wide>
+          <Prose>
+            <p>{pv.caveat}</p>
+            <p>
+              The question: do the sites that are actually used for a purpose rank higher on that purpose's ranking than on the all-round score,
+              and higher than the other known sites? Where the first column is not above the other two, the purpose ranking did not help.
+            </p>
+          </Prose>
+          <DataTable
+            caption="Purpose rankings against the all-round score"
+            headers={['Purpose', 'Sites used for it', 'On the purpose ranking', 'Same sites, all-round score', 'Other known sites, purpose ranking']}
+            numeric={[1, 2, 3, 4]}
+            minWidth={820}
+          >
+            {pv.byPurpose.map((p) => (
+              <tr key={p.purpose} className="border-b border-line">
+                <Td>{p.label}</Td>
+                <Td num>{p.sitesUsedForIt.length}</Td>
+                <Td num>{f3(p.onPurposeRanking.meanPercentile)}</Td>
+                <Td num>{f3(p.sameSitesOnAllRoundScore.meanPercentile)}</Td>
+                <Td num>{f3(p.otherKnownSitesOnPurposeRanking.meanPercentile)}</Td>
+              </tr>
+            ))}
+          </DataTable>
+          <DataTable caption="Dimensions" headers={['Dimension', 'Sites known for it', 'Their mean percentile', 'Other known sites']} numeric={[1, 2, 3]} minWidth={620}>
+            {pv.byDimension.map((d) => (
+              <tr key={d.dimension} className="border-b border-line">
+                <Td>{d.label}</Td>
+                <Td num>{d.sitesKnownForIt.sites}</Td>
+                <Td num>{f3(d.sitesKnownForIt.meanPercentile)}</Td>
+                <Td num>{f3(d.otherKnownSites.meanPercentile)}</Td>
+              </tr>
+            ))}
+          </DataTable>
+          <Prose>
+            <p className="text-[13px] text-muted">Mean percentile, 0.5 is chance. {pv.percentile}</p>
+            <p className="text-[13px] text-muted">
+              Share of Earth cells with the same rock class as the target:{' '}
+              {Object.entries(pv.shareOfEarthCellsWithTheSameRockClassAsTheTarget)
+                .map(([id, v]) => `${targetName(id)} ${v === null ? 'no data' : pct1(v)}`)
+                .join(', ')}
+              .
+            </p>
+          </Prose>
+        </Section>
+      )}
 
       <Section id="v-defs" title="How the measures are defined">
         <dl className="space-y-2">

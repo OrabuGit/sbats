@@ -215,7 +215,8 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
         </DataTable>
         <p className="max-w-[72ch] text-[13px] text-muted">
           Climate joins Temperature and Dryness. A profile has no veto, no required factor and no minimum coverage. Geology has three possible
-          values, so very many cells tie on it: the dossier shows the tied share. The purposes were written down after every known site had been
+          values, so very many cells tie on it. Percentiles count a tie as half, so an average cell sits at 50 whatever the ties, and the dossier
+          shows the tied share. The purposes were written down after every known site had been
           scored, so their rankings are development numbers. They show the view behaves sensibly. They do not prove it.
         </p>
       </Section>

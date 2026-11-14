@@ -260,7 +260,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
             Analog profile
           </h3>
           <p className="mt-1 text-[12px] text-muted">
-            What this cell is like the target in, one dimension at a time. No veto and no weights: it reports what is there.
+            What this cell is like the target in, one dimension at a time. No veto and no weights: it reports what is there. Percentile 50 is an average Earth cell, and ties count as half.
           </p>
           <ul className="mt-2 space-y-2.5">
             {profile.map((d) => (
@@ -284,10 +284,10 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
                 </div>
                 <p className="mt-1 flex flex-wrap items-center gap-x-2 text-[11px] text-muted">
                   <span>{d.measures}.</span>
-                  {d.percentile !== null && (
+                  {d.midPercentile !== null && (
                     <span className="num">
-                      Beats or ties {(d.percentile * 100).toFixed(0)}% of Earth cells
-                      {d.shareTied !== null && d.shareTied >= 0.05 ? `, tied with ${(d.shareTied * 100).toFixed(0)}%` : ''}
+                      Percentile {(d.midPercentile * 100).toFixed(0)} among Earth cells
+                      {d.shareTied !== null && d.shareTied >= 0.05 ? `, tied with ${(d.shareTied * 100).toFixed(0)}% of them` : ''}
                     </span>
                   )}
                   {d.similarity !== null && <ComputedBadge title="Computed in the browser from the factor similarities below, which come from the sourced values." />}
