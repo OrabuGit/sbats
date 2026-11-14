@@ -23,9 +23,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import CACHE, DATA, LATS, LONS, NLAT, NLON, RES, cell_index, load_grid  # noqa: E402
 import landmask  # noqa: E402
 
-STAGES = ["climate", "ndvi", "terrain", "lithology"]
+STAGES = ["climate", "ndvi", "terrain", "lithology", "landcover"]
+FACTOR_STAGES = STAGES[:4]
 FACTOR_ORDER = ["tempMean", "tempRange", "precip", "ndvi", "slope", "roughness", "lithology"]
-DECIMALS = {"tempMean": 2, "tempRange": 2, "precip": 1, "ndvi": 3, "slope": 2, "roughness": 1}
+# Measured land cover shares, extra cell keys (data/SCHEMA.md, "Land cover keys").
+EXTRA_KEYS = ["snowIceFrac", "barrenFrac"]
+DECIMALS = {"snowIceFrac": 3, "barrenFrac": 3, "tempMean": 2, "tempRange": 2, "precip": 1, "ndvi": 3, "slope": 2, "roughness": 1}
 
 # Static part of meta.factors. Each stage adds its real provenance to cache/meta_<stage>.json.
 FACTOR_META = {
@@ -53,6 +56,8 @@ CHECK_SITES = [
     ("Iceland highlands", 64.9, -18.0),
     ("Mauna Kea, Hawaii", 19.8, -155.5),
     ("McMurdo Dry Valleys", -77.5, 162.0),
+    ("Dry Valleys (Taylor)", -77.7, 162.6),
+    ("Antarctic Peninsula", -64.3, -57.5),
     ("Paris", 48.85, 2.35),
 ]
 
@@ -71,6 +76,9 @@ def run_stage(name: str) -> None:
     elif name == "lithology":
         import lithology
         info = lithology.build()
+    elif name == "landcover":
+        import landcover
+        info = landcover.build()
     else:
         raise ValueError(name)
     (CACHE / f"meta_{name}.json").write_text(json.dumps(info, indent=1))
@@ -83,7 +91,7 @@ def stage_meta(name: str) -> dict | None:
 
 def factor_entries() -> tuple[list, dict]:
     """meta.factors plus the extra provenance block."""
-    cm, nm, tm, lm = (stage_meta(s) for s in STAGES)
+    cm, nm, tm, lm = (stage_meta(s) for s in FACTOR_STAGES)
     src = {
         "tempMean": cm and f"NASA POWER climatology {cm['period']} (MERRA-2), parameter T2M",
         "tempRange": cm and f"NASA POWER climatology {cm['period']} (MERRA-2), parameter T2M_RANGE",
@@ -104,7 +112,7 @@ def factor_entries() -> tuple[list, dict]:
         if key == "lithology":
             e["classes"] = lm["classes"] if lm else []
         factors.append(e)
-    provenance = {s: m for s, m in zip(STAGES, (cm, nm, tm, lm)) if m}
+    provenance = {s: m for s in STAGES if (m := stage_meta(s))}
     return factors, provenance
 
 
@@ -117,12 +125,12 @@ def _num(v: float, nd: int):
 
 def assemble() -> dict:
     land = landmask.land_mask()
-    grids = {k: load_grid(k) for k in FACTOR_ORDER}
+    grids = {k: load_grid(k) for k in FACTOR_ORDER + EXTRA_KEYS}
     cells = []
     for i in range(NLAT):
         for j in np.nonzero(land[i])[0]:
             c = {"lat": float(LATS[i]), "lon": float(LONS[j])}
-            for k in FACTOR_ORDER:
+            for k in FACTOR_ORDER + EXTRA_KEYS:
                 g = grids[k]
                 if g is None or not np.isfinite(g[i, j]):
                     c[k] = None
@@ -143,6 +151,9 @@ def assemble() -> dict:
         },
         "provenance": provenance,
     }
+    lc = stage_meta("landcover")
+    if lc:
+        meta["landCover"] = {"source": lc["source"], "keys": lc["keys"], "method": lc["method"]}
     return {"meta": meta, "cells": cells}
 
 
@@ -162,30 +173,33 @@ def sanity(earth: dict) -> None:
     # Contract checks from data/SCHEMA.md.
     assert [f["key"] for f in earth["meta"]["factors"]] == FACTOR_ORDER
     assert all(f["badge"] == "Measured" for f in earth["meta"]["factors"])
-    want = {"lat", "lon", *FACTOR_ORDER}
+    want = {"lat", "lon", *FACTOR_ORDER, *EXTRA_KEYS}
     for c in cells:
         assert set(c) == want, c
         assert (c["lat"] * 4) % 2 == 1 and (c["lon"] * 4) % 2 == 1, c
         assert -90 < c["lat"] < 90 and -180 < c["lon"] < 180, c
+        fr = [c[k] for k in EXTRA_KEYS if c[k] is not None]
+        assert all(0 <= x <= 1 for x in fr) and sum(fr) <= 1.001, c
     codes = {k["code"] for f in earth["meta"]["factors"] if f["key"] == "lithology" for k in f["classes"]}
     assert all(c["lithology"] is None or c["lithology"] in codes for c in cells)
     print(f"\ncells: {n}")
-    print(f"{'factor':<10} {'n':>6} {'null':>6} {'min':>10} {'max':>10} {'mean':>10}")
-    for k in FACTOR_ORDER:
+    print(f"{'factor':<11} {'n':>6} {'null':>6} {'min':>10} {'max':>10} {'mean':>10}")
+    for k in FACTOR_ORDER + EXTRA_KEYS:
         v = np.array([c[k] for c in cells if c[k] is not None], dtype=float)
         if v.size == 0:
-            print(f"{k:<10} {0:>6} {n:>6} {'-':>10} {'-':>10} {'-':>10}")
+            print(f"{k:<11} {0:>6} {n:>6} {'-':>10} {'-':>10} {'-':>10}")
             continue
-        print(f"{k:<10} {v.size:>6} {n - v.size:>6} {v.min():>10.2f} {v.max():>10.2f} {v.mean():>10.2f}")
+        print(f"{k:<11} {v.size:>6} {n - v.size:>6} {v.min():>10.2f} {v.max():>10.2f} {v.mean():>10.2f}")
     by = {(c["lat"], c["lon"]): c for c in cells}
-    print(f"\n{'site':<26} {'cell':>16} " + " ".join(f"{k:>9}" for k in FACTOR_ORDER))
+    cols = FACTOR_ORDER + EXTRA_KEYS
+    print(f"\n{'site':<26} {'cell':>16} " + " ".join(f"{k[:9]:>9}" for k in cols))
     for name, lat, lon in CHECK_SITES:
         i, j = cell_index(lat, lon)
         c = by.get((float(LATS[i]), float(LONS[j])))
         if c is None:
             print(f"{name:<26} {'not a land cell':>16}")
             continue
-        vals = " ".join(f"{('null' if c[k] is None else c[k]):>9}" for k in FACTOR_ORDER)
+        vals = " ".join(f"{('null' if c[k] is None else c[k]):>9}" for k in cols)
         print(f"{name:<26} {c['lat']:>7.2f},{c['lon']:>8.2f} {vals}")
 
 

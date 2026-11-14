@@ -1,6 +1,6 @@
 # SBATS data pipeline
 
-Builds `data/earth.json`: seven factors for every land cell of a global 0.5 degree grid,
+Builds `data/earth.json`: seven factors and two land cover shares for every land cell of a global 0.5 degree grid,
 in the shape fixed by `data/SCHEMA.md`. Every value is computed from a dataset that the
 pipeline downloads. Nothing is typed in, and gaps are never filled: a value that the
 source does not have is `null`.
@@ -47,6 +47,7 @@ the stage stops with an error; run it again and it fetches only the missing tile
 | Climate | `climate.py` | `tempMean`, `tempRange`, `precip` | NASA POWER climatology 2001-2020 (MERRA-2): `T2M`, `T2M_RANGE`, `PRECTOTCORR` | Annual value, regridded from 0.5 x 0.625 degrees by area-weighted mean. Precipitation is mm/day x 365.25 |
 | Vegetation | `ndvi.py` | `ndvi` | MODIS/Terra MOD13C2 v061, 12 months of 2025 | Mean of monthly cell means over land pixels with reliability 0, 1 or 2 |
 | Terrain | `terrain.py`, `terrain_metrics.py` | `slope`, `roughness` | Copernicus DEM GLO-90 and its water body mask | Elevation block-averaged to 463 m posts, water left out. Mean Horn slope (degrees) and elevation standard deviation (m) over the cell |
+| Land cover | `landcover.py` | `snowIceFrac`, `barrenFrac` (extra keys, not factors) | MODIS MCD12C1 v061, 2025 | Share of the cell's land in IGBP class 15 (snow and ice) and 16 (barren) |
 | Rock type | `lithology.py` | `lithology` | GLiM v1.0, 0.5 degree grid | Class code as published. Water bodies and no data become `null` |
 
 `build.py` runs the stages, writes `data/earth.json` in one atomic step, and prints the
@@ -78,7 +79,8 @@ values only with values made the same way.
   `tempRange` is the mean daily maximum minus minimum.
 - NDVI is for one year, 2025. The climate is a 2001-2020 mean.
 - MOD13C2 has no data over Antarctica, so every cell south of 60 S has `ndvi: null`.
-  Under the scoring rule those cells get no score, including the McMurdo Dry Valleys.
+  `ndvi` is not filled. Those cells are scored from `barrenFrac` instead (rule in `data/SCHEMA.md`).
+  At 0.5 degrees the McMurdo Dry Valleys cells are 85% ice or more, so they score low.
 - North of about 60 N the winter months have no NDVI (polar night). The annual mean there
   covers the sunlit months only.
 - `roughness` over a 55 km window is closer to local relief than to surface texture.
