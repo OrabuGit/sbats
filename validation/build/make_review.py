@@ -26,7 +26,7 @@ MARS_FACTS = "https://science.nasa.gov/mars/facts/"
 
 # Coordinates: id -> (what the point is, link, check level, confidence)
 COORDS = {
-    "moon-malapert-massif": ("Centre of Mons Malapert, IAU Gazetteer feature 16338. The Artemis region centre in the LROC archive is 86.0 S, 0.3 E, about 6 km away.", GAZ + "16338", "A", "High"),
+    "moon-malapert-massif": ("Centre of Mons Malapert, IAU Gazetteer feature 16338. The Artemis region centre in the LROC archive is 86.0 S, 0.3 E, about 4 km away.", GAZ + "16338", "A", "High"),
     "moon-mons-mouton": ("Centre of Mons Mouton, IAU Gazetteer feature 16070.", GAZ + "16070", "A", "High"),
     "moon-haworth": ("Centre of Haworth crater, IAU Gazetteer feature 14502 (LOLA 2011 control network). NASA publishes no coordinates for the Artemis 'Haworth' region, which lies beside the crater.", GAZ + "14502", "A", "High for the crater, medium as a landing point"),
     "moon-shackleton-rim": ("Centre of Shackleton crater, IAU Gazetteer feature 5450, not a point on the rim. The rim is about 10 km away, well inside the 55.6 km window that every value is measured over.", GAZ + "5450", "A", "High for the crater, medium as a rim point"),

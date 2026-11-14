@@ -34,7 +34,7 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 
 | Target | lat | lon | What the point is | Link | Check | Confidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| Malapert Massif | -85.98 | -1.67 | Centre of Mons Malapert, IAU Gazetteer feature 16338. The Artemis region centre in the LROC archive is 86.0 S, 0.3 E, about 6 km away. | https://planetarynames.wr.usgs.gov/Feature/16338 | A | High |
+| Malapert Massif | -85.98 | -1.67 | Centre of Mons Malapert, IAU Gazetteer feature 16338. The Artemis region centre in the LROC archive is 86.0 S, 0.3 E, about 4 km away. | https://planetarynames.wr.usgs.gov/Feature/16338 | A | High |
 | Mons Mouton | -84.6 | 31.0 | Centre of Mons Mouton, IAU Gazetteer feature 16070. | https://planetarynames.wr.usgs.gov/Feature/16070 | A | High |
 | Haworth | -87.45 | -5.17 | Centre of Haworth crater, IAU Gazetteer feature 14502 (LOLA 2011 control network). NASA publishes no coordinates for the Artemis 'Haworth' region, which lies beside the crater. | https://planetarynames.wr.usgs.gov/Feature/14502 | A | High for the crater, medium as a landing point |
 | Shackleton rim | -89.67 | 129.78 | Centre of Shackleton crater, IAU Gazetteer feature 5450, not a point on the rim. The rim is about 10 km away, well inside the 55.6 km window that every value is measured over. | https://planetarynames.wr.usgs.gov/Feature/5450 | A | High for the crater, medium as a rim point |
