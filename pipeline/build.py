@@ -159,6 +159,16 @@ def sanity(earth: dict) -> None:
     cells = earth["cells"]
     n = len(cells)
     assert len({(c["lat"], c["lon"]) for c in cells}) == n, "duplicate cells"
+    # Contract checks from data/SCHEMA.md.
+    assert [f["key"] for f in earth["meta"]["factors"]] == FACTOR_ORDER
+    assert all(f["badge"] == "Measured" for f in earth["meta"]["factors"])
+    want = {"lat", "lon", *FACTOR_ORDER}
+    for c in cells:
+        assert set(c) == want, c
+        assert (c["lat"] * 4) % 2 == 1 and (c["lon"] * 4) % 2 == 1, c
+        assert -90 < c["lat"] < 90 and -180 < c["lon"] < 180, c
+    codes = {k["code"] for f in earth["meta"]["factors"] if f["key"] == "lithology" for k in f["classes"]}
+    assert all(c["lithology"] is None or c["lithology"] in codes for c in cells)
     print(f"\ncells: {n}")
     print(f"{'factor':<10} {'n':>6} {'null':>6} {'min':>10} {'max':>10} {'mean':>10}")
     for k in FACTOR_ORDER:
