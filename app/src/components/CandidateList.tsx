@@ -108,7 +108,10 @@ export function CandidateList(p: Props) {
                           </Tag>
                         )}
                       </span>
-                      <span className="num mt-0.5 block text-[11px] text-muted">{formatCoords(cell.lat, cell.lon)}</span>
+                      <span className="num mt-0.5 block text-[11px] text-muted">
+                        {named ? `${siteCode(cell)} · ` : ''}
+                        {formatCoords(cell.lat, cell.lon)}
+                      </span>
                       <span className="mt-1 block text-[12px] text-muted">{reasonLine(p.explain(c.index))}</span>
                     </span>
                     <ScoreBlock r={r} />
@@ -143,7 +146,10 @@ export function CandidateList(p: Props) {
                         >
                           <span className="min-w-0 flex-1">
                             <span className="block text-[13px] font-medium text-text">{analog.name}</span>
-                            <span className="num mt-0.5 block text-[11px] text-muted">{formatCoords(analog.lat, analog.lon)}</span>
+                            <span className="num mt-0.5 block text-[11px] text-muted">
+                              {index >= 0 ? `${siteCode(earth.cells[index])} · ` : ''}
+                              {formatCoords(analog.lat, analog.lon)}
+                            </span>
                             <span className="mt-1 block text-[12px] text-muted">
                               {index < 0
                                 ? 'No land cell near this site in the grid.'

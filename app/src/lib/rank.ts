@@ -37,8 +37,11 @@ export function isNewSite(cell: Pick<EarthCell, 'lat' | 'lon'>, analogs: Analog[
 }
 
 /** Minimum spacing between listed candidates, so one desert does not fill the whole list. */
+export const MIN_SEPARATION_KM = 250;
+/** On a coarse grid the spacing grows to this many cell widths, so neighbours never both list. */
+export const MIN_SEPARATION_CELLS = 2.5;
 export function separationKm(earth: EarthFile): number {
-  return Math.max(250, earth.meta.resolutionDeg * 111 * 2.5);
+  return Math.max(MIN_SEPARATION_KM, earth.meta.resolutionDeg * 111 * MIN_SEPARATION_CELLS);
 }
 
 /**

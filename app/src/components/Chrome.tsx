@@ -1,4 +1,4 @@
-import { Play, Square } from 'lucide-react';
+import { BookOpen, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
 
 export type Step = 1 | 2 | 3;
@@ -8,6 +8,9 @@ interface TopBarProps {
   onStep: (s: Step) => void;
   demoRunning: boolean;
   onDemo: () => void;
+  /** True while the Method page is open. */
+  methodOpen: boolean;
+  onMethod: () => void;
 }
 
 const STEPS: { n: Step; label: string }[] = [
@@ -16,7 +19,7 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 3, label: 'Build base' },
 ];
 
-export function TopBar({ step, onStep, demoRunning, onDemo }: TopBarProps) {
+export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod }: TopBarProps) {
   return (
     <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
       <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
@@ -27,7 +30,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo }: TopBarProps) {
         <ol className="flex items-stretch">
           {STEPS.map(({ n, label }) => {
             const locked = n === 3 && !flags.recon;
-            const active = step === n;
+            const active = step === n && !methodOpen;
             return (
               <li key={n} className="flex items-stretch border-r border-line">
                 <button
@@ -49,14 +52,29 @@ export function TopBar({ step, onStep, demoRunning, onDemo }: TopBarProps) {
           })}
         </ol>
       </nav>
+      {flags.methodPage && (
+        <button
+          type="button"
+          onClick={onMethod}
+          aria-pressed={methodOpen}
+          aria-label="Method"
+          className={`label flex min-w-11 items-center justify-center gap-2 border-l border-line px-3 sm:px-4 ${
+            methodOpen ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'
+          }`}
+        >
+          <BookOpen size={14} aria-hidden="true" />
+          <span className="hidden sm:inline">Method</span>
+        </button>
+      )}
       <button
         type="button"
         onClick={onDemo}
         aria-pressed={demoRunning}
-        className="label flex min-w-11 items-center gap-2 bg-accent px-3 font-semibold !text-bg hover:bg-text sm:px-4"
+        aria-label={demoRunning ? 'Stop demo' : 'Run demo'}
+        className="label flex min-w-11 items-center justify-center gap-2 bg-accent px-3 font-semibold !text-bg hover:bg-text sm:px-4"
       >
         {demoRunning ? <Square size={13} aria-hidden="true" /> : <Play size={13} aria-hidden="true" />}
-        <span className="whitespace-nowrap">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
+        <span className="hidden whitespace-nowrap sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
     </header>
   );
@@ -68,26 +86,21 @@ interface StatusProps {
   cells: number;
   resolutionDeg: number;
   fixtureFiles: string[];
-  scoringSource: 'library' | 'stub';
+  view: string;
   status: string;
 }
 
-export function StatusStrip({ coords, code, cells, resolutionDeg, fixtureFiles, scoringSource, status }: StatusProps) {
+export function StatusStrip({ coords, code, cells, resolutionDeg, fixtureFiles, view, status }: StatusProps) {
   const cellText = `${cells.toLocaleString('en-US')} cells at ${resolutionDeg}°`;
   return (
     <footer className="num flex min-h-8 shrink-0 flex-wrap items-center gap-x-5 gap-y-0.5 border-t border-line bg-panel px-3 py-1 text-[11px] uppercase tracking-wider text-muted sm:px-4">
-      <span>View Orbit</span>
+      <span>View {view}</span>
       <span className="text-text">{coords ?? 'No site selected'}</span>
       {code && <span className="text-text">{code}</span>}
       <span>{cellText}</span>
       {fixtureFiles.length > 0 && (
         <span className="text-accent" title="These files are synthetic fixtures from app/src/mocks, not real data.">
           Fixture data, not real: {fixtureFiles.join(', ')}
-        </span>
-      )}
-      {scoringSource === 'stub' && (
-        <span className="text-accent" title="The scoring library is not in place yet. A temporary stub is computing the scores.">
-          Scoring: temporary stub
         </span>
       )}
       <span className="ml-auto text-text" role="status" aria-live="polite">

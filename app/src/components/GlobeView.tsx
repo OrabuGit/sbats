@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
 import { CanvasTexture, MeshBasicMaterial, SRGBColorSpace } from 'three';
 import { feature } from 'topojson-client';
@@ -23,6 +23,11 @@ export const SCORE_CLASSES = [
   { min: 80, label: '80', color: mix(1) },
 ];
 const NO_DATA = '#2B333B';
+// Over the imagery the cells are slightly see-through, so relief and coastlines stay readable.
+// Cells below the first score step get only a thin dark veil.
+const CELL_ALPHA = 0.9;
+const LOW_ALPHA = 0.2;
+const NO_DATA_ALPHA = 0.8;
 const OCEAN = '#0F1418';
 const LAND_FILL = '#161B20';
 const LAND_LINE = '#39434D';
@@ -84,6 +89,28 @@ function drawBase(w: number, h: number): { canvas: HTMLCanvasElement; rings: { r
     }
   }
   return { canvas: cv, rings };
+}
+
+/**
+ * NASA Blue Marble (shaded relief and bathymetry), served from the app's own files so the globe
+ * never waits on a live service. Drawn slightly desaturated and darkened, so the one accent
+ * colour of the heatmap stays the brightest thing on the map.
+ */
+function drawImagery(base: HTMLCanvasElement, img: HTMLImageElement) {
+  const g = base.getContext('2d')!;
+  const { width: w, height: h } = base;
+  g.globalCompositeOperation = 'source-over';
+  g.globalAlpha = 1;
+  g.drawImage(img, 0, 0, w, h);
+  g.globalCompositeOperation = 'saturation';
+  g.globalAlpha = 0.6;
+  g.fillStyle = '#808080';
+  g.fillRect(0, 0, w, h);
+  g.globalCompositeOperation = 'source-over';
+  g.globalAlpha = 0.32;
+  g.fillStyle = '#0B0D0F';
+  g.fillRect(0, 0, w, h);
+  g.globalAlpha = 1;
 }
 
 function drawOutlines(g: CanvasRenderingContext2D, w: number, h: number, rings: { ring: Ring; wraps: boolean }[]) {
@@ -149,6 +176,9 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   onSelectRef.current = onSelect;
   indexRef.current = index;
 
+  // Bumped when the imagery has been drawn into the base canvas, to repaint the heatmap over it.
+  const [imagery, setImagery] = useState(0);
+
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
 
   // Create the globe once.
@@ -165,6 +195,16 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     texture.colorSpace = SRGBColorSpace;
     texture.anisotropy = 8;
     texRef.current = { canvas, texture, base, rings };
+
+    // The coastline base shows first. The imagery replaces it when it has loaded.
+    let alive = true;
+    const img = new Image();
+    img.onload = () => {
+      if (!alive) return;
+      drawImagery(base, img);
+      setImagery((n) => n + 1);
+    };
+    img.src = `${import.meta.env.BASE_URL}textures/blue-marble-${w}.jpg`;
 
     const globe = new Globe(el, { animateIn: false, waitForGlobeReady: false })
       .backgroundColor('#0B0D0F')
@@ -225,6 +265,8 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     });
     ro.observe(el);
     return () => {
+      alive = false;
+      img.onload = null;
       ro.disconnect();
       globe._destructor();
       texture.dispose();
@@ -249,12 +291,15 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     const pad = 0.35;
     earth.cells.forEach((c, i) => {
       const r = results[i];
-      g.fillStyle = !r || r.score === null ? NO_DATA : classColor(r.score);
+      const score = r ? r.score : null;
+      g.fillStyle = score === null ? NO_DATA : classColor(score);
+      g.globalAlpha = imagery === 0 ? 1 : score === null ? NO_DATA_ALPHA : score < SCORE_CLASSES[1].min ? LOW_ALPHA : CELL_ALPHA;
       g.fillRect(((c.lon - res / 2 + 180) / 360) * w - pad, ((90 - c.lat - res / 2) / 180) * h - pad, cw + pad * 2, ch + pad * 2);
     });
+    g.globalAlpha = 1;
     drawOutlines(g, w, h, rings);
     texture.needsUpdate = true;
-  }, [earth, results]);
+  }, [earth, results, imagery]);
 
   // Markers: ranked candidates, named sites, and the selected cell.
   useEffect(() => {

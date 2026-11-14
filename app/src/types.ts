@@ -80,89 +80,22 @@ export interface LithologySimilarity {
   }[];
 }
 
-// ---------------------------------------------------------------------------------------------
-// Scoring shapes. These mirror the public types of src/lib/scoring (Session C) so that the app,
-// the temporary stub and the real library all speak the same language. The app does not import
-// from src/lib/scoring directly: everything goes through src/lib/scoringAdapter.ts.
-// ---------------------------------------------------------------------------------------------
-
-export type Confidence = 'high' | 'medium' | 'low';
-export type UnscoredReason = 'required-factor-missing' | 'coverage-too-low';
-
-/** Result contract from data/SCHEMA.md, "Missing values and confidence". */
-export interface CellSummary {
-  score: number | null;
-  coverage: number;
-  missing: string[];
-  confidence: Confidence | null;
-  unscoredReason: UnscoredReason | null;
-}
-
-// The six scoring factors of DESIGN.md section 6.
-export const FACTOR_IDS = ['terrain', 'bareGround', 'dryness', 'temperature', 'sunlight', 'rockType'] as const;
-export type FactorId = (typeof FACTOR_IDS)[number];
-export type Weights = Record<FactorId, number>;
-
-export type SunKey = 'sunElevation' | 'sunSeason';
-export type ScoreKey = FactorKey | SunKey;
-
-export interface Preset {
-  id: string;
-  label: string;
-  description?: string;
-  weights: Weights;
-}
-
-export type KeyStatus = 'scored' | 'missing-earth' | 'missing-target' | 'zero-weight';
-
-export interface KeyBreakdown {
-  key: ScoreKey;
-  label: string;
-  unit: string;
-  earthValue: number | null;
-  /** Real target value, unclamped. */
-  targetValue: number | null;
-  /** Target value after clamping to Earth's observed range. */
-  targetClamped: number | null;
-  sigma: number | null;
-  similarity: number | null;
-  weight: number;
-  status: KeyStatus;
-}
-
-export interface FactorBreakdown {
-  factor: FactorId;
-  label: string;
-  /** Normalised weight of the factor (all six sum to 1). */
-  weight: number;
-  /** The part of `weight` that had data. */
-  coveredWeight: number;
-  effectiveWeight: number;
-  similarity: number | null;
-  keys: KeyBreakdown[];
-}
-
-export interface CellScore extends CellSummary {
-  breakdown: FactorBreakdown[];
-  limitingFactor: FactorId | null;
-  /** One plain-language sentence explaining the score. */
-  reason: string;
-}
-
-/** A target value outside anything Earth offers. Feeds "what Earth cannot copy". */
-export interface ClampGap {
-  key: string;
-  label: string;
-  unit: string;
-  targetValue: number;
-  clampedValue: number;
-  gap: number;
-  earthRange: { min: number; max: number };
-}
-
-export interface PreparedTarget {
-  target: Target;
-  missingTargetKeys: string[];
-  gaps: ClampGap[];
-  warnings: string[];
-}
+// Scoring shapes come straight from the scoring library, so the two cannot drift apart.
+// Components still call the library only through src/lib/scoringAdapter.ts.
+export { FACTOR_IDS } from './lib/scoring';
+export type {
+  CellScore,
+  CellSummary,
+  ClampGap,
+  Confidence,
+  FactorBreakdown,
+  FactorId,
+  KeyBreakdown,
+  KeyStatus,
+  PreparedTarget,
+  Preset,
+  ScoreKey,
+  SunKey,
+  UnscoredReason,
+  Weights,
+} from './lib/scoring';

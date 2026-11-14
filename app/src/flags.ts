@@ -4,6 +4,11 @@ export const flags = {
   recon: false,
   /** BOOTS 3D terrain shot (checkpoint 5). */
   boots: false,
-  /** Method and validation pages (checkpoint 2). */
-  methodPage: false,
+  /** Method page: the scoring formula and the ranking rules. */
+  methodPage: true,
+  /**
+   * "Best month to test" in the dossier. Off until the pipeline publishes monthly climate data:
+   * earth.json holds annual values only, and the app does not invent a month.
+   */
+  bestMonth: false,
 } as const;

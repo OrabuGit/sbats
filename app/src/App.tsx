@@ -1,15 +1,21 @@
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { loadData, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
-import { PRESETS, createScorer, scoringInfo } from './lib/scoringAdapter';
+import { PRESETS, createScorer } from './lib/scoringAdapter';
 import { buildIndex, formatCoords, siteCode } from './lib/geo';
 import { keyLabel, metaByKey } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { StatusStrip, TopBar, type Step } from './components/Chrome';
 import { LeftPanel } from './components/LeftPanel';
-import { GlobeView } from './components/GlobeView';
 import { CandidateList, type ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
+import { MethodPage } from './components/MethodPage';
+import { flags } from './flags';
+
+// The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
+// own chunk, starting now and in parallel with the data, so the panels never wait for it.
+const globeModule = import('./components/GlobeView');
+const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 
 const LIST_LIMIT = 15;
 const MAP_MARKERS = 10;
@@ -60,14 +66,14 @@ function Orbit({ data }: { data: DataBundle }) {
   const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [step, setStep] = useState<Step>(1);
+  const [view, setView] = useState<'orbit' | 'method'>('orbit');
 
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
   const index = useMemo(() => buildIndex(earth), [earth]);
-  const scorer = useMemo(() => createScorer(earth, lithology, targets[0]), [earth, lithology, targets]);
+  const scorer = useMemo(() => createScorer(earth, lithology), [earth, lithology]);
 
   const ts = useMemo(() => scorer.forTarget(target), [scorer, target]);
-  const scoring = scoringInfo();
 
   const liveWeights = useDeferredValue(weights);
   const results = useMemo(() => ts.scoreAll(liveWeights), [ts, liveWeights]);
@@ -119,6 +125,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const select = useCallback(
     (i: number, fly = true) => {
       if (i < 0) return;
+      setView('orbit');
       setSelected(i);
       setStep(2);
       setTab('results');
@@ -144,6 +151,7 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const runDemo = () => {
     if (demo) return stopDemo();
+    setView('orbit');
     const at = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
     setSelected(null);
     setMode('ranked');
@@ -176,6 +184,7 @@ function Orbit({ data }: { data: DataBundle }) {
   };
 
   const onStep = (s: Step) => {
+    setView('orbit');
     setStep(s);
     if (s === 1) {
       setSelected(null);
@@ -200,15 +209,27 @@ function Orbit({ data }: { data: DataBundle }) {
 
   return (
     <div className="flex min-h-full flex-col lg:h-full">
-      <TopBar step={step} onStep={onStep} demoRunning={demo !== null} onDemo={runDemo} />
+      <TopBar
+        step={step}
+        onStep={onStep}
+        demoRunning={demo !== null}
+        onDemo={runDemo}
+        methodOpen={view === 'method'}
+        onMethod={() => setView((v) => (v === 'method' ? 'orbit' : 'method'))}
+      />
 
-      {(data.warnings.length > 0 || scoring.problem) && (
+      {data.warnings.length > 0 && (
         <div className="border-b border-line bg-panel px-4 py-2 text-[12px] text-accent" role="alert">
-          {[...data.warnings, ...(scoring.problem ? [`${scoring.problem} Using the temporary stub.`] : [])].join(' ')}
+          {data.warnings.join(' ')}
         </div>
       )}
 
-      <div className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
+      {flags.methodPage && view === 'method' && (
+        <MethodPage earth={earth} lithology={lithology} listLimit={LIST_LIMIT} onBack={() => setView('orbit')} />
+      )}
+
+      {/* The globe stays mounted behind the Method page, so coming back is instant. */}
+      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${view === 'method' ? 'hidden' : 'flex lg:grid'}`}>
         <aside
           ref={leftRef}
           aria-label="Target and mission controls"
@@ -239,16 +260,26 @@ function Orbit({ data }: { data: DataBundle }) {
         </aside>
 
         <div className="h-[46vh] min-h-[280px] shrink-0 order-1 border-b border-line lg:order-2 lg:h-auto lg:min-h-0 lg:border-b-0">
-          <GlobeView
-            earth={earth}
-            results={results}
-            index={index}
-            selected={selected}
-            candidates={mapCandidates}
-            sites={mapSites}
-            onSelect={select}
-            focus={focus}
-          />
+          <Suspense
+            fallback={
+              <div className="flex h-full items-center justify-center bg-bg">
+                <p className="label" role="status">
+                  Loading globe
+                </p>
+              </div>
+            }
+          >
+            <GlobeView
+              earth={earth}
+              results={results}
+              index={index}
+              selected={selected}
+              candidates={mapCandidates}
+              sites={mapSites}
+              onSelect={select}
+              focus={focus}
+            />
+          </Suspense>
         </div>
 
         <div className="order-2 grid shrink-0 grid-cols-2 border-b border-line bg-panel lg:hidden" role="group" aria-label="Panel">
@@ -310,8 +341,8 @@ function Orbit({ data }: { data: DataBundle }) {
         cells={earth.cells.length}
         resolutionDeg={earth.meta.resolutionDeg}
         fixtureFiles={data.fixtureFiles.map((f) => `${f}.json`)}
-        scoringSource={scoring.source}
-        status={status}
+        view={view === 'method' ? 'Method' : 'Orbit'}
+        status={view === 'method' ? 'Method' : status}
       />
     </div>
   );

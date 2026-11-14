@@ -20,7 +20,7 @@ export function ComputedBadge() {
       className="num inline-block border border-dashed border-line px-1 text-[10px] uppercase leading-4 tracking-wider text-muted"
       title="Computed in the browser from latitude. Not read from a dataset."
     >
-      From latitude
+      Computed
     </span>
   );
 }

@@ -55,4 +55,17 @@ export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss(), sbatsData()],
   server: { port: 5173, strictPort: false },
+  build: {
+    rolldownOptions: {
+      output: {
+        // three.js on its own, apart from globe.gl and the app, so each part caches separately.
+        codeSplitting: {
+          groups: [
+            { name: 'three', test: /node_modules[\\/]three[\\/]/, priority: 2 },
+            { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 1 },
+          ],
+        },
+      },
+    },
+  },
 });

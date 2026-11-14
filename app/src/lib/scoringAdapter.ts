@@ -1,9 +1,5 @@
-// The app's only door to scoring.
-//
-// It uses the real library from ./scoring (Session C) when ./scoring/index.ts exists and exports
-// the functions below, and the clearly marked stub in ./scoringStub otherwise. The stub has the
-// same function signatures, so nothing else in the app changes when the library takes over.
-// `scoringInfo()` says which one is active so the UI can show it.
+// The app's only door to the scoring library in ./scoring. Components never import from
+// ./scoring directly, so its API can change in one place.
 //
 // Functions used from the library:
 //   PRESETS (record keyed by preset id), PRESET_IDS
@@ -12,6 +8,14 @@
 //   scoreCells(cells, prepared, weights) -> CellSummary[]
 //   scoreCell(cell, prepared, weights)   -> CellScore (breakdown, limitingFactor, reason)
 
+import {
+  PRESETS as LIB_PRESETS,
+  PRESET_IDS,
+  computeEarthRanges,
+  prepareTarget,
+  scoreCell,
+  scoreCells,
+} from './scoring';
 import type {
   CellScore,
   CellSummary,
@@ -24,56 +28,18 @@ import type {
   Target,
   Weights,
 } from '../types';
-import * as stub from './scoringStub';
 
-interface ScoringApi {
-  PRESETS: Record<string, Preset>;
-  PRESET_IDS?: readonly string[];
-  computeEarthRanges: (cells: readonly EarthCell[]) => unknown;
-  prepareTarget: (target: Target, ranges: never, table: LithologySimilarity | null) => PreparedTarget;
-  scoreCells: (cells: readonly EarthCell[], target: never, weights: Weights) => CellSummary[];
-  scoreCell: (cell: EarthCell, target: never, weights: Weights) => CellScore;
-}
+// The constants behind the rules, for the Method page.
+export {
+  FACTORS,
+  KEY_INFO,
+  REQUIRED_KEYS,
+  MIN_COVERAGE,
+  MEDIUM_CONFIDENCE_COVERAGE,
+  SUN_ELEVATION_SIGMA_DEG,
+} from './scoring';
 
-const found = import.meta.glob('./scoring/index.ts', { eager: true });
-const candidate = Object.values(found)[0] as Partial<ScoringApi> | undefined;
-
-function usable(m: Partial<ScoringApi> | undefined): m is ScoringApi {
-  return (
-    !!m &&
-    typeof m.PRESETS === 'object' &&
-    m.PRESETS !== null &&
-    Object.keys(m.PRESETS).length > 0 &&
-    typeof m.computeEarthRanges === 'function' &&
-    typeof m.prepareTarget === 'function' &&
-    typeof m.scoreCells === 'function' &&
-    typeof m.scoreCell === 'function'
-  );
-}
-
-const STUB = stub as unknown as ScoringApi;
-let api: ScoringApi = STUB;
-let source: 'library' | 'stub' = 'stub';
-let problem: string | null = null;
-
-if (candidate) {
-  if (usable(candidate)) {
-    api = candidate;
-    source = 'library';
-  } else {
-    problem = 'src/lib/scoring/index.ts does not export PRESETS, computeEarthRanges, prepareTarget, scoreCells and scoreCell.';
-  }
-}
-
-export function scoringInfo(): { source: 'library' | 'stub'; problem: string | null } {
-  return { source, problem };
-}
-
-function presetList(a: ScoringApi): Preset[] {
-  const ids = a.PRESET_IDS ?? Object.keys(a.PRESETS);
-  return ids.map((id) => a.PRESETS[id]).filter(Boolean);
-}
-export const PRESETS: Preset[] = presetList(api);
+export const PRESETS: Preset[] = PRESET_IDS.map((id) => LIB_PRESETS[id]);
 
 export const FACTOR_LABELS: Record<FactorId, string> = {
   terrain: 'Terrain',
@@ -97,23 +63,26 @@ export interface Scorer {
   forTarget: (target: Target) => TargetScorer;
 }
 
-function build(a: ScoringApi, earth: EarthFile, lithology: LithologySimilarity): Scorer {
-  const ranges = a.computeEarthRanges(earth.cells) as never;
+/** Builds the scorer for one dataset. Targets are prepared once and cached. */
+export function createScorer(earth: EarthFile, lithology: LithologySimilarity): Scorer {
+  const ranges = computeEarthRanges(earth.cells);
   const cache = new Map<string, TargetScorer>();
   return {
     forTarget(target) {
       const hit = cache.get(target.id);
       if (hit) return hit;
-      let prepared = a.prepareTarget(target, ranges, lithology);
+      let prepared = prepareTarget(target, ranges, lithology);
       const notes: string[] = [];
       // The library throws when a rock class pair is not in the similarity table (by design: a
       // missing pair is an error, not a silent default). That happens when earth.json and
       // lithology_similarity.json come from different builds. Leave Rock type out and say so,
       // rather than blank the screen.
+      // The trial run is kept, so the first screen does not score every cell twice.
+      let first: CellSummary[] | null = null;
       try {
-        a.scoreCells(earth.cells, prepared as never, presetList(a)[0].weights);
+        first = scoreCells(earth.cells, prepared, PRESETS[0].weights);
       } catch (e) {
-        prepared = a.prepareTarget(target, ranges, null);
+        prepared = prepareTarget(target, ranges, null);
         notes.push(
           `Rock type is left out for ${target.name}: the similarity table does not cover the rock classes in earth.json (${e instanceof Error ? e.message : String(e)}).`,
         );
@@ -121,35 +90,11 @@ function build(a: ScoringApi, earth: EarthFile, lithology: LithologySimilarity):
       const ts: TargetScorer = {
         prepared,
         notes,
-        scoreAll: (w) => a.scoreCells(earth.cells, prepared as never, w),
-        explain: (c, w) => a.scoreCell(c, prepared as never, w),
+        scoreAll: (w) => (first && w === PRESETS[0].weights ? first : scoreCells(earth.cells, prepared, w)),
+        explain: (c, w) => scoreCell(c, prepared, w),
       };
       cache.set(target.id, ts);
       return ts;
     },
   };
-}
-
-/**
- * Builds the scorer for one dataset. If the real library throws or returns the wrong shape on a
- * probe call, the stub takes over and the reason is recorded, so a half-finished library cannot
- * blank the screen.
- */
-export function createScorer(earth: EarthFile, lithology: LithologySimilarity, probeTarget: Target): Scorer {
-  if (source === 'library') {
-    try {
-      const s = build(api, earth, lithology);
-      const ts = s.forTarget(probeTarget);
-      const probe = ts.explain(earth.cells[0], presetList(api)[0].weights);
-      if (typeof probe.coverage !== 'number' || !Array.isArray(probe.missing) || !Array.isArray(probe.breakdown))
-        throw new Error('scoreCell result does not match the contract');
-      if (!Array.isArray(ts.prepared.gaps) || !Array.isArray(ts.prepared.missingTargetKeys))
-        throw new Error('prepareTarget result does not match the contract');
-      return s;
-    } catch (e) {
-      problem = `src/lib/scoring failed a probe call (${e instanceof Error ? e.message : String(e)}).`;
-      source = 'stub';
-    }
-  }
-  return build(STUB, earth, lithology);
 }

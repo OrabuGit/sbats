@@ -155,6 +155,7 @@ export function Dossier({ cell, target, explained: e, meta, named, isNew, rank, 
             </div>
           </div>
           <p className="mt-3 text-[14px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
+          {/* "Best month to test" goes here when flags.bestMonth is on. It needs monthly climate data, which earth.json does not have yet. */}
           {notes.map((n) => (
             <p key={n} className="mt-2 text-[12px] text-accent" role="note">
               {n}
