@@ -62,8 +62,8 @@ These seven keys are data fields, not the six scoring factors of DESIGN.md secti
   - same class as the target: 1.0
   - related class (for example basalt and andesite, both volcanic): 0.6
   - unrelated class: 0.15. Not zero, so rock type alone never vetoes a site.
-  - `null` lithology in the cell: the Rock type factor is left out for that cell, the remaining weights are
-    renormalised to sum to 1, and the score is flagged as lower confidence.
+  - `null` lithology in the cell: the Rock type factor is left out under the general rule in
+    "Missing values and confidence" below.
 
 ## data/earth.json
 
@@ -212,9 +212,54 @@ Owner: Session C. Hand-curated. It can only be written once Session B has publis
   - `source`: citation if the grouping comes from a reference, otherwise `null`.
 - Same class (a equals b) is always `levels.same` and is not listed.
 - Every pair must be listed. A missing pair is an error caught by a unit test, not a silent default.
-- A score computed without the Rock type factor carries a lower-confidence flag in the scoring library's
-  result. Session A shows that flag next to the score.
 - Session A renders the whole table, with justifications, on the Method page.
+
+## Missing values and confidence
+
+Approved by the team on 2026-11-14. Implemented in `/app/src/lib/scoring` (Session C), shown by Session A.
+
+A scoring factor that cannot be computed for a cell is left out, and the weights of the remaining factors
+are renormalised to sum to 1. Two limits apply:
+
+1. Required factors. `ndvi` (Bare ground) and `precip` (Dryness) must be present. They carry the veto that
+   rules out forests and wet regions. A cell missing either gets no score: it is shown as "no data" and is
+   never ranked.
+2. Minimum coverage. The present factors must add up to at least 0.6 of the total weight of the active
+   mission preset. Below that, no score.
+
+Coverage is measured with the preset's weights before renormalising, so it changes with the preset.
+Sunlight is computed from latitude and is always present.
+
+Result contract. For each cell the scoring library returns:
+
+```
+{
+  "score": number | null,
+  "coverage": number,
+  "missing": [ string ],
+  "confidence": "high" | "medium" | "low" | null,
+  "unscoredReason": "required-factor-missing" | "coverage-too-low" | null
+}
+```
+
+- `score`: 0 to 100, or `null` when the cell is not scored.
+- `coverage`: share of the preset's total weight that was present, 0 to 1.
+- `missing`: the factor keys (data keys, for example `"lithology"`) that were left out. Empty when nothing is missing.
+- `confidence`: `"high"` if coverage is 1, `"medium"` if coverage is at least 0.8, otherwise `"low"`.
+  `null` when the cell is not scored.
+- `unscoredReason`: why `score` is `null`, otherwise `null`. Added so the UI can say why a cell has no data.
+
+With the Base preset weights, a cell missing only Rock type (0.15) has coverage 0.85 and is medium.
+A cell missing only Terrain (0.25) has coverage 0.75 and is low.
+
+UI requirements (Session A):
+- Show the confidence badge next to every score.
+- List the missing factors in the dossier.
+- The top candidates list includes only high and medium confidence cells by default.
+- Document this rule on the Method page, exactly as coded.
+
+Tests (Session C): unit tests cover leave-out and renormalise, both required factors, the 0.6 coverage
+limit at the boundary, the three confidence levels at their boundaries, and the contents of `missing`.
 
 ## Ownership
 
@@ -244,11 +289,13 @@ Rules:
 
 ## Open points
 
-- Missing values in factors other than lithology. The leave-out-and-renormalise rule is approved for
-  lithology only. Whether a cell with a `null` in another factor is scored the same way or shown as
-  "no data" has not been decided. Until it is, Session C does not score such cells.
-- A target whose own lithology is `null`. Not covered by the approved rule. Until decided, Session C leaves
-  Rock type out for every cell of that target and flags all its scores as lower confidence.
+- Scoring factors built from two data keys (Terrain from `slope` and `roughness`, Temperature from `tempMean`
+  and `tempRange`) when only one key is `null`. The approved rule does not say. Until decided, Session C
+  treats the whole scoring factor as missing, counts its full weight as absent, and lists only the `null`
+  key in `missing`.
+- A `null` on the target side (for example a target with unknown lithology). Not stated in the approved rule.
+  Until decided, Session C treats that factor as missing for every cell of that target, under the same
+  limits and confidence levels.
 - `roughness` definition and unit, and the `slope` window: Session B picks one method that can be run on
   SRTM or Copernicus DEM, LOLA and MOLA alike, records it in `meta.factors`, and tells Session C before
   target terrain values are written.

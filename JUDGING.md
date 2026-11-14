@@ -34,7 +34,9 @@ Read this with DESIGN.md. If a feature does not help one of these, it waits.
   (Kalimantan rainforest, Amazon, Congo, Jakarta, Singapore, Paris) must rank low.
 - Report the actual numbers, including weak ones. A perfect score is a red flag, not a goal.
 - The pipeline is reproducible: one documented command rebuilds /data from sources.
-- Scoring code has unit tests for the formula, clamping and the veto behaviour.
+- Scoring code has unit tests for the formula, clamping, the veto behaviour, the lithology table and the
+  missing-factor rule (required factors, minimum coverage, confidence levels).
+- The missing-factor rule and the lithology table are documented on the Method page.
 
 ## Acceptance rules: RELEVANCE
 - The headline result is a named, specific, new candidate site, not a famous one.

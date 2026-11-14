@@ -35,8 +35,11 @@ Never start a later checkpoint while an earlier one is broken on the live link.
 ## Scoring (do not change without asking)
 - Per-factor similarity: Gaussian of (earth value minus target value) over a tolerance.
 - Exception: rock type (lithology) is categorical and uses the lookup table in `data/lithology_similarity.json`
-  (same 1.0, related 0.6, unrelated 0.15; missing lithology drops the factor, renormalises weights and flags
-  lower confidence). See `data/SCHEMA.md`.
+  (same 1.0, related 0.6, unrelated 0.15). See `data/SCHEMA.md`.
+- Missing factors are left out and the remaining weights renormalised. `ndvi` and `precip` are required, and
+  present factors must cover at least 0.6 of the preset's weight, otherwise the cell has no score ("no data").
+  Every score carries coverage, missing keys and a confidence level (high 1.0, medium at least 0.8, else low).
+  Full rule in `data/SCHEMA.md`.
 - Target values are clamped to Earth's observed range.
 - Overall score: 100 times the weighted geometric mean of factor similarities.
 - Gravity, vacuum and radiation are never part of the score. Show them as "what Earth cannot copy".
