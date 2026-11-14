@@ -1,0 +1,57 @@
+// SBATS scoring library. Pure TypeScript, no UI and no file or network access.
+// Implements DESIGN.md section 6 and the scoring rules of data/SCHEMA.md. See README.md in this folder.
+
+export { PRESETS, PRESET_IDS, DEFAULT_PRESET_ID, normaliseWeights } from './presets';
+export type { Preset, PresetId } from './presets';
+
+export { computeEarthRanges, prepareTarget, scoreCell, scoreCells, scoreCellSummary, nearestCell } from './score';
+
+export { buildReason, describeGap, formatValue, matchWord } from './explain';
+
+export { gaussianSimilarity, gaussianLogSimilarity, clampToRange, weightedGeometricMean } from './similarity';
+
+export { sunElevation, OBLIQUITY_DEG, SUN_ELEVATION_SIGMA_DEG } from './sunlight';
+
+export { lithologySimilarity, buildLithologyLookup, validateLithologyTable, LithologyPairError } from './lithology';
+
+export {
+  FACTORS,
+  KEY_INFO,
+  REQUIRED_KEYS,
+  MIN_COVERAGE,
+  MEDIUM_CONFIDENCE_COVERAGE,
+} from './factors';
+export type { FactorDef, KeyInfo } from './factors';
+
+export { FACTOR_IDS, FACTOR_KEYS, NUMERIC_KEYS, GAUSSIAN_KEYS } from './types';
+export type {
+  Badge,
+  Body,
+  CellScore,
+  CellSummary,
+  ClampGap,
+  Confidence,
+  EarthCell,
+  EarthRanges,
+  FactorBreakdown,
+  FactorId,
+  FactorKey,
+  GaussianKey,
+  KeyBreakdown,
+  KeyStatus,
+  LithologyClass,
+  LithologyLevels,
+  LithologyPair,
+  LithologyRelation,
+  LithologyTable,
+  NumericKey,
+  PreparedGaussian,
+  PreparedTarget,
+  Range,
+  ScoreKey,
+  SunKey,
+  Target,
+  TargetValue,
+  UnscoredReason,
+  Weights,
+} from './types';
