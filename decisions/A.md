@@ -28,3 +28,4 @@ Small choices made without asking, one line each with the reason. Newest at the 
 | 2026-11-14 | Earth sunlight in the sandbox uses the measured annual mean from `site_climate.json` for named sites (labelled grid scale) and the library's latitude upper bound elsewhere. | SCHEMA.md lists sandbox sunlight as a purpose of that file; `earth.json` has no surface sunlight. |
 | 2026-11-14 | The event toggle (lunar night or dust storm) applies to the target run only. | The library ignores an event on the wrong body; an Earth rehearsal has neither. |
 | 2026-11-14 | No launch cost is shown. | DESIGN.md: only with a cited cost per kg, and the data has none. |
+| 2026-11-14 | Run demo now runs 30 seconds: target, ranking, top candidate, an SBATS candidate site, then the sandbox (example base, deploy twice, the 30 days played through). If the sandbox is locked it stops after the dossier at 16 seconds. | DESIGN.md section 4 asks for the whole flow in 30 seconds. |

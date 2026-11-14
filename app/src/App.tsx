@@ -208,10 +208,37 @@ function Orbit({ data }: { data: DataBundle }) {
         select(featured);
       });
     }
-    at(16000, () => {
-      timers.current = [];
-      setDemo(null);
-    });
+    const site = featured ?? top;
+    if (reconReady && site !== null) {
+      // Step 3: the same site in the sandbox, an example base, deployed twice, then 30 days.
+      at(16000, () => {
+        setDemo('Demo: building a base at the site');
+        setSelected(site);
+        setStep(3);
+        setTab('results');
+        setView('recon');
+      });
+      at(17000, () => sandboxRef.current?.loadExample());
+      at(20000, () => {
+        setDemo(`Demo: deploying the same base on ${target.name}`);
+        sandboxRef.current?.deploy();
+      });
+      at(23500, () => {
+        setDemo('Demo: 30 days, day by day');
+        sandboxRef.current?.setDay(1);
+        document.getElementById('h-time')?.scrollIntoView({ block: 'start' });
+      });
+      for (let i = 1; i <= 10; i++) at(23500 + i * 450, () => sandboxRef.current?.setDay(i * 3));
+      at(30000, () => {
+        timers.current = [];
+        setDemo(null);
+      });
+    } else {
+      at(16000, () => {
+        timers.current = [];
+        setDemo(null);
+      });
+    }
   };
 
   const openRecon = useCallback(() => {
