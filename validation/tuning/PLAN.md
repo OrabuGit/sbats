@@ -42,7 +42,25 @@ seen once, on incomplete data, but have never influenced a sigma or a weight.
 - `lib.ts` never loads candidate sites for either tool, and the statistics function throws if one is
   passed in. Candidate scores come from `score_candidates.ts`, which refuses to run before the freeze.
 - `tune.ts` refuses to run before terrain is in `earth.json` (slope and roughness in at least 80% of
-  cells) and refuses to run once `frozen.json` exists.
+  cells) and refuses to run once `frozen.json` exists. See the addendum for two later preconditions.
+
+## Addendum, 2026-11-14: one void run, and two more preconditions
+
+Added after the plan was first committed. Nothing above or below this section was changed.
+
+- The pass was run once too early. The team's first instruction was to tune when terrain landed; a
+  second instruction, to wait for Session B's Antarctica fix as well, arrived while the run was in
+  progress. The run accepted no change (every value came out as it went in), touched no source file,
+  and scored neither the hold-out set nor the candidate sites. It is void. Its output is kept in
+  `void-run-2026-11-14/` with a full account.
+- The real pass therefore still lies ahead. It is the same procedure, with the same allowed values,
+  objective and acceptance tests. Having seen the void run cannot steer it: there are no choices left
+  to make.
+- `tune.ts` now also refuses to run unless at least 80% of the cells south of 60 S have NDVI, and
+  unless it is started with `--team-go`. The team starts the pass; no watcher does.
+- Approved by the team on 2026-11-14: the disclosed hold-out peek (keep it documented), the 0.03
+  threshold, and not searching the three other presets. After tuning, the weights table in DESIGN.md
+  section 6 may be updated; nothing else in that file.
 
 ## What may change
 

@@ -1,12 +1,13 @@
 // The one tuning pass for sigmas and Base weights. Read validation/tuning/PLAN.md first: this
 // script does exactly what that plan says, and the plan was committed before terrain data existed.
 //
-//     npx tsx validation/tune.ts
+//     npx tsx validation/tune.ts --team-go
 //
 // What it may and may not do:
 // - It sees the TUNING set only (validation/tuning/split.json). The hold-out sites are never
 //   scored here, and the Indonesian candidate sites are never loaded.
-// - It refuses to run until slope and roughness are in earth.json.
+// - It refuses to run until slope and roughness are in earth.json, until cells south of 60 S have
+//   NDVI (the Antarctica fix), and unless it is started with --team-go.
 // - It refuses to run a second time: once validation/tuning/frozen.json exists, tuning is over.
 // - It changes no source file. It writes frozen.json and tuning-log.json; the frozen values are then
 //   copied by hand into validation/build/make_targets.py, app/src/lib/scoring/presets.ts and
@@ -134,7 +135,20 @@ if (selftest) {
   data = { ...real, cells, ranges: computeEarthRanges(cells), terrain: { slopeShare: 1, roughnessShare: 1, landed: true } };
 } else {
   if (existsSync(frozenPath)) fail('validation/tuning/frozen.json exists. The one tuning pass has been done. There is no second pass.');
+  // The team starts the pass, nobody else: no watcher, no script.
+  if (!process.argv.includes('--team-go')) {
+    fail('the tuning pass runs only when the team says so. Start it with --team-go once they have confirmed that terrain and the Antarctica fix are both in earth.json.');
+  }
   data = loadData();
+  // Team rule of 2026-11-14: no tuning while Antarctica is unscored for lack of NDVI.
+  const south = data.cells.filter((c) => c.lat < -60);
+  const southWithNdvi = south.filter((c) => c.ndvi !== null).length;
+  if (south.length > 0 && southWithNdvi / south.length < 0.8) {
+    fail(
+      `the Antarctica fix has not landed: ${southWithNdvi} of ${south.length} cells south of 60 S have NDVI. ` +
+        'Tuning now would freeze the weights with a whole continent unscored.',
+    );
+  }
   if (!data.terrain.landed) {
     fail(
       `terrain has not landed: slope is in ${(data.terrain.slopeShare * 100).toFixed(0)}% of cells and roughness in ` +

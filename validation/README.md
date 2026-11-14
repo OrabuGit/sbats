@@ -16,7 +16,8 @@ The numbers in `output/` are PROVISIONAL until two things have happened: slope a
 1. `python3 validation/tuning/make_split.py` drew the tuning / hold-out split once (seed 20261114,
    20 + 8 known sites, 4 + 2 controls). It is in `tuning/split.json` and cannot be redrawn.
 2. `tuning/PLAN.md` says exactly what the tuning pass may change and how. It was written first.
-3. When terrain is in `earth.json`: `npx tsx validation/tune.ts`, once. It sees the tuning set only,
+3. When the team says that terrain and the Antarctica NDVI fix are both in `earth.json`:
+   `npx tsx validation/tune.ts --team-go`, once. It sees the tuning set only,
    writes `tuning/frozen.json` and `tuning/tuning-log.json`, and refuses to run again.
 4. Copy the frozen values into `build/make_targets.py`, `app/src/lib/scoring/presets.ts` and
    `sunlight.ts`. A unit test fails if they differ from `frozen.json`.

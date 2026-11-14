@@ -13,6 +13,7 @@ Space Apps requires teams to state where and how AI was used. Keep this current.
 | 2026-11-14 | Claude Code | Wrote the rock-class similarity table from the team's three approved levels: decided which GLiM class pairs count as related, with a justification each | data/lithology_similarity.json, validation/build/make_lithology.py |
 | 2026-11-14 | Claude Code | Wrote the validation script and its report. Numbers are reported as computed, with no tuning | validation/validate.ts, validation/output/, validation/README.md |
 | 2026-11-14 | Claude Code | Following the team's six tuning rules: drew the tuning / hold-out split (fixed seed), wrote the tuning plan and the one-pass tuning script before terrain data existed, and made the validation script keep the hold-out set unseen and the candidate sites out. The rules and the decision to tune are the team's | validation/tuning/, validation/tune.ts, validation/lib.ts, validation/validate.ts, validation/score_candidates.ts |
+| 2026-11-14 | Claude Code | Ran the tuning script once too early (on terrain landing, before reading the team's instruction to wait for the Antarctica fix). It accepted no change and touched no source file. Claude set the run aside as void, documented it, and made the script refuse to run without the team's go-ahead | validation/tuning/void-run-2026-11-14/, validation/tune.ts, validation/tuning/PLAN.md |
 
 Notes:
 - No AI-generated images or video are used unless listed here with a visible watermark.
