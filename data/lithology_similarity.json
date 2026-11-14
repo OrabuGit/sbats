@@ -1,0 +1,646 @@
+{
+  "levels": {
+    "same": 1.0,
+    "related": 0.6,
+    "unrelated": 0.15
+  },
+  "pairs": [
+    {
+      "a": 1,
+      "b": 2,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, basic volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "relation": "related",
+      "justification": "Same detrital grains (sand, silt, clay): one is loose, the other cemented into rock.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, basic plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 5,
+      "relation": "related",
+      "justification": "Both are largely detrital sediment; mixed units add carbonate beds and are consolidated.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 6,
+      "relation": "unrelated",
+      "justification": "Both are sedimentary, but unconsolidated sediments and carbonate sedimentary rocks are made of different material by different processes.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, acid volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with unconsolidated sediments.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, acid plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, intermediate volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, pyroclastics).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (unconsolidated sediments, intermediate plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Both are sedimentary, but unconsolidated sediments and evaporites are made of different material by different processes.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 1,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with unconsolidated sediments.",
+      "source": null
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic volcanic rocks, siliciclastic sedimentary rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 4,
+      "relation": "related",
+      "justification": "Same basic magma composition: basalt erupted at the surface, gabbro cooled at depth.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic volcanic rocks, mixed sedimentary rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 6,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic volcanic rocks, carbonate sedimentary rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Both are erupted lavas, but at opposite ends of the silica range (basalt and rhyolite): different minerals, chemistry and landforms.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with basic volcanic rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (basalt and granite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 10,
+      "relation": "related",
+      "justification": "Both are erupted lavas, next to each other in silica content (basalt and andesite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 12,
+      "relation": "related",
+      "justification": "Both come from volcanic eruptions: pyroclastics are the fragmented ash and tephra, basic volcanic rocks the lavas.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (basalt and diorite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic volcanic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 2,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with basic volcanic rocks.",
+      "source": null
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, basic plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "relation": "related",
+      "justification": "Mixed sedimentary units are interbedded siliciclastic and carbonate rock, so they share the siliciclastic part.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 6,
+      "relation": "unrelated",
+      "justification": "Both are sedimentary, but siliciclastic sedimentary rocks and carbonate sedimentary rocks are made of different material by different processes.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, acid volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with siliciclastic sedimentary rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, acid plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, intermediate volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, pyroclastics).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (siliciclastic sedimentary rocks, intermediate plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Both are sedimentary, but siliciclastic sedimentary rocks and evaporites are made of different material by different processes.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 3,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with siliciclastic sedimentary rocks.",
+      "source": null
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic plutonic rocks, mixed sedimentary rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic plutonic rocks, carbonate sedimentary rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (gabbro and rhyolite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with basic plutonic rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Both are intrusive rocks that cooled at depth, but at opposite ends of the silica range (gabbro and granite): different minerals, chemistry and landforms.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (gabbro and andesite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Pyroclastics are loose eruption deposits at the surface; basic plutonic rocks cooled slowly at depth as massive crystalline rock.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 13,
+      "relation": "related",
+      "justification": "Both are intrusive rocks that cooled at depth, next to each other in silica content (gabbro and diorite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (basic plutonic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 4,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with basic plutonic rocks.",
+      "source": null
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "relation": "related",
+      "justification": "Mixed sedimentary units are interbedded siliciclastic and carbonate rock, so they share the carbonate part.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (mixed sedimentary rocks, acid volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with mixed sedimentary rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (mixed sedimentary rocks, acid plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (mixed sedimentary rocks, intermediate volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (mixed sedimentary rocks, pyroclastics).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (mixed sedimentary rocks, intermediate plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Both are sedimentary, but mixed sedimentary rocks and evaporites are made of different material by different processes.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 5,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with mixed sedimentary rocks.",
+      "source": null
+    },
+    {
+      "a": 6,
+      "b": 7,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (carbonate sedimentary rocks, acid volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with carbonate sedimentary rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 9,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (carbonate sedimentary rocks, acid plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (carbonate sedimentary rocks, intermediate volcanic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (carbonate sedimentary rocks, pyroclastics).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (carbonate sedimentary rocks, intermediate plutonic rocks).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 6,
+      "b": 14,
+      "relation": "related",
+      "justification": "Both are precipitated from water rather than eroded from older rock, and often form in the same basins.",
+      "source": null
+    },
+    {
+      "a": 6,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with carbonate sedimentary rocks.",
+      "source": null
+    },
+    {
+      "a": 7,
+      "b": 8,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with acid volcanic rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 9,
+      "relation": "related",
+      "justification": "Same acid magma composition: rhyolite erupted at the surface, granite cooled at depth.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 10,
+      "relation": "related",
+      "justification": "Both are erupted lavas, next to each other in silica content (rhyolite and andesite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 12,
+      "relation": "related",
+      "justification": "Both come from volcanic eruptions: pyroclastics are the fragmented ash and tephra, acid volcanic rocks the lavas.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (rhyolite and diorite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (acid volcanic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 7,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with acid volcanic rocks.",
+      "source": null
+    },
+    {
+      "a": 8,
+      "b": 9,
+      "relation": "related",
+      "justification": "Gneiss and granite make up the same crystalline basement and share a quartz and feldspar make-up.",
+      "source": null
+    },
+    {
+      "a": 8,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with intermediate volcanic rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 8,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with pyroclastics.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 8,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with intermediate plutonic rocks.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 8,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Metamorphic rocks were recrystallised under heat and pressure; no shared origin or typical composition with evaporites.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 8,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with metamorphics.",
+      "source": null
+    },
+    {
+      "a": 9,
+      "b": 10,
+      "relation": "unrelated",
+      "justification": "Different emplacement (one erupted, one intrusive) and different silica class (granite and andesite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 9,
+      "b": 12,
+      "relation": "unrelated",
+      "justification": "Pyroclastics are loose eruption deposits at the surface; acid plutonic rocks cooled slowly at depth as massive crystalline rock.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 9,
+      "b": 13,
+      "relation": "related",
+      "justification": "Both are intrusive rocks that cooled at depth, next to each other in silica content (granite and diorite).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 9,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (acid plutonic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 9,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with acid plutonic rocks.",
+      "source": null
+    },
+    {
+      "a": 10,
+      "b": 12,
+      "relation": "related",
+      "justification": "Both come from volcanic eruptions: pyroclastics are the fragmented ash and tephra, intermediate volcanic rocks the lavas.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 10,
+      "b": 13,
+      "relation": "related",
+      "justification": "Same intermediate magma composition: andesite erupted at the surface, diorite cooled at depth.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 10,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (intermediate volcanic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 10,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with intermediate volcanic rocks.",
+      "source": null
+    },
+    {
+      "a": 12,
+      "b": 13,
+      "relation": "unrelated",
+      "justification": "Pyroclastics are loose eruption deposits at the surface; intermediate plutonic rocks cooled slowly at depth as massive crystalline rock.",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 12,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (pyroclastics, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 12,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with pyroclastics.",
+      "source": null
+    },
+    {
+      "a": 13,
+      "b": 14,
+      "relation": "unrelated",
+      "justification": "Different origin: one is laid down as sediment or precipitate, the other formed from magma (intermediate plutonic rocks, evaporites).",
+      "source": "Hartmann and Moosdorf 2012, GLiM class definitions, doi:10.1029/2012GC004370"
+    },
+    {
+      "a": 13,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with intermediate plutonic rocks.",
+      "source": null
+    },
+    {
+      "a": 14,
+      "b": 16,
+      "relation": "unrelated",
+      "justification": "Glacier ice is frozen water, not rock: it shares no origin or composition with evaporites.",
+      "source": null
+    }
+  ]
+}
