@@ -4,7 +4,7 @@
   "windowKm": 20.0,
   "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
   "description": "Every extract covers the same ground area, so they can be shown side by side at one scale. Pixel size differs per dataset and is given per file; nothing is upsampled.",
-  "imageNote": "No Mars image was requested or built: image is null for Mars targets."
+  "imageNote": "No Mars image was requested or built: image is null for Mars targets. A lunar image that is at least 95% near-black (permanent shadow) is null too."
  },
  "items": [
   {
@@ -221,18 +221,7 @@
     "badge": "Mission",
     "note": "Heights above a sphere of radius 1737.4 km."
    },
-   "image": {
-    "file": "extracts/moon-haworth/image.jpg",
-    "size": 200,
-    "pixelM": 100.0,
-    "bands": "grey",
-    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
-    "nativePixelM": 100,
-    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
-    "badge": "Mission",
-    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
-    "darkShare": 1.0
-   }
+   "image": null
   },
   {
    "id": "moon-shackleton-rim",

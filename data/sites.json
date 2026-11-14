@@ -1,0 +1,3704 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-14T13:02:12Z",
+  "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json and five well-known analogs. Every value carries its scale: site, volcano or grid.",
+  "year": 2025,
+  "bareNdviThreshold": 0.2,
+  "methods": {
+   "terrain": "Copernicus DEM GLO-30, water pixels left out with the product's water body mask. Same function as earth.json (pipeline/terrain_metrics.py): mean Horn 3x3 slope, standard deviation of elevation. slope/roughness on 463 m posts, slopeFine/roughnessFine on 1 arc-second (about 31 m) posts.",
+   "vegetation": "Sentinel-2 L2A, 2025, up to 3 least-cloudy scenes per month (scene cloud cover under 80%). Per 10 m pixel: NDVI from bands 4 and 8 for observations classed vegetation, not vegetated, water or unclassified (open water is removed with the Copernicus DEM water body mask instead, because the classification labels dark lava as water); mean per month, then mean of months. ndvi is the footprint mean. Only scenes flagged as offset-corrected in the archive are used. bareFrac is the share of non-water pixels below 0.2.",
+   "rock": "Finest regional geologic map unit at the site coordinates from Macrostrat (large, medium or small scale maps only). If there is none, the volcano's major rock type from the Smithsonian Global Volcanism Program. If there is neither, a rock type stated in the abstract of a paper about the feature. Otherwise null.",
+   "climate": "Copied from the site's 0.5 degree cell in earth.json (scale: grid)."
+  }
+ },
+ "sites": [
+  {
+   "id": "id-kawah-ijen",
+   "name": "Kawah Ijen, East Java, Indonesia",
+   "lat": -8.058,
+   "lon": 114.242,
+   "kind": "candidate",
+   "footprintKm": 3.0,
+   "footprintNote": "Crater, acid lake and rim of Kawah Ijen.",
+   "values": {
+    "slope": {
+     "value": 11.06,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 2.78,
+     "pixels": 34,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 146.7,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 2.78,
+     "pixels": 34
+    },
+    "slopeFine": {
+     "value": 23.43,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 8934,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 172.2,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 8934
+    },
+    "ndvi": {
+     "value": 0.622,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 87274,
+     "months": 11,
+     "scenes": 30
+    },
+    "bareFrac": {
+     "value": 0.091,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.049,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Andesite / Basaltic Andesite",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263350 (Ijen)",
+     "badge": "Literature",
+     "note": "Major rock type of the whole volcano, not mapped inside the footprint."
+    },
+    "lithology": {
+     "value": 10,
+     "unit": "class code",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263350 (Ijen)",
+     "badge": "Literature",
+     "label": "Intermediate volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 25.4,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 5.25,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 1655.3,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -8.25,
+    "lon": 114.25,
+    "ndvi": 0.761,
+    "slope": 4.63,
+    "roughness": 636.0,
+    "lithology": 1,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.001
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S09_00_E114_00_DEM",
+    "elevMinM": 1826.0,
+    "elevMaxM": 2761.0,
+    "sentinel2Tile": "MGRS-49MHM",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_49MHM_20250109_0_L2A",
+      "date": "2025-01-09",
+      "sceneCloudPct": 37.5,
+      "clearLandShare": 0.77
+     },
+     {
+      "id": "S2B_49MHM_20250129_0_L2A",
+      "date": "2025-01-29",
+      "sceneCloudPct": 60.1,
+      "clearLandShare": 0.007
+     },
+     {
+      "id": "S2B_49MHM_20250119_0_L2A",
+      "date": "2025-01-19",
+      "sceneCloudPct": 75.2,
+      "clearLandShare": 0.06
+     },
+     {
+      "id": "S2B_49MHM_20250320_0_L2A",
+      "date": "2025-03-20",
+      "sceneCloudPct": 56.7,
+      "clearLandShare": 0.854
+     },
+     {
+      "id": "S2C_49MHM_20250325_0_L2A",
+      "date": "2025-03-25",
+      "sceneCloudPct": 62.7,
+      "clearLandShare": 0.085
+     },
+     {
+      "id": "S2B_49MHM_20250429_0_L2A",
+      "date": "2025-04-29",
+      "sceneCloudPct": 1.5,
+      "clearLandShare": 0.882
+     },
+     {
+      "id": "S2C_49MHM_20250424_0_L2A",
+      "date": "2025-04-24",
+      "sceneCloudPct": 31.6,
+      "clearLandShare": 0.04
+     },
+     {
+      "id": "S2B_49MHM_20250409_0_L2A",
+      "date": "2025-04-09",
+      "sceneCloudPct": 60.0,
+      "clearLandShare": 0.064
+     },
+     {
+      "id": "S2B_49MHM_20250529_0_L2A",
+      "date": "2025-05-29",
+      "sceneCloudPct": 19.7,
+      "clearLandShare": 0.113
+     },
+     {
+      "id": "S2C_49MHM_20250524_0_L2A",
+      "date": "2025-05-24",
+      "sceneCloudPct": 34.9,
+      "clearLandShare": 0.013
+     },
+     {
+      "id": "S2C_49MHM_20250504_0_L2A",
+      "date": "2025-05-04",
+      "sceneCloudPct": 41.2,
+      "clearLandShare": 0.04
+     },
+     {
+      "id": "S2B_49MHM_20250618_0_L2A",
+      "date": "2025-06-18",
+      "sceneCloudPct": 10.6,
+      "clearLandShare": 0.766
+     },
+     {
+      "id": "S2C_49MHM_20250623_0_L2A",
+      "date": "2025-06-23",
+      "sceneCloudPct": 11.8,
+      "clearLandShare": 0.233
+     },
+     {
+      "id": "S2C_49MHM_20250603_0_L2A",
+      "date": "2025-06-03",
+      "sceneCloudPct": 35.2,
+      "clearLandShare": 0.311
+     },
+     {
+      "id": "S2B_49MHM_20250718_0_L2A",
+      "date": "2025-07-18",
+      "sceneCloudPct": 4.1,
+      "clearLandShare": 0.949
+     },
+     {
+      "id": "S2C_49MHM_20250713_0_L2A",
+      "date": "2025-07-13",
+      "sceneCloudPct": 9.1,
+      "clearLandShare": 0.499
+     },
+     {
+      "id": "S2A_49MHM_20250725_0_L2A",
+      "date": "2025-07-25",
+      "sceneCloudPct": 14.2,
+      "clearLandShare": 0.17
+     },
+     {
+      "id": "S2B_49MHM_20250807_0_L2A",
+      "date": "2025-08-07",
+      "sceneCloudPct": 2.5,
+      "clearLandShare": 0.948
+     },
+     {
+      "id": "S2C_49MHM_20250802_0_L2A",
+      "date": "2025-08-02",
+      "sceneCloudPct": 6.7,
+      "clearLandShare": 0.386
+     },
+     {
+      "id": "S2A_49MHM_20250814_0_L2A",
+      "date": "2025-08-14",
+      "sceneCloudPct": 6.8,
+      "clearLandShare": 0.896
+     },
+     {
+      "id": "S2A_49MHM_20250923_0_L2A",
+      "date": "2025-09-23",
+      "sceneCloudPct": 5.1,
+      "clearLandShare": 0.947
+     },
+     {
+      "id": "S2A_49MHM_20250903_0_L2A",
+      "date": "2025-09-03",
+      "sceneCloudPct": 10.3,
+      "clearLandShare": 0.975
+     },
+     {
+      "id": "S2B_49MHM_20250926_0_L2A",
+      "date": "2025-09-26",
+      "sceneCloudPct": 12.4,
+      "clearLandShare": 0.54
+     },
+     {
+      "id": "S2B_49MHM_20251016_0_L2A",
+      "date": "2025-10-16",
+      "sceneCloudPct": 17.5,
+      "clearLandShare": 0.427
+     },
+     {
+      "id": "S2C_49MHM_20251001_0_L2A",
+      "date": "2025-10-01",
+      "sceneCloudPct": 19.0,
+      "clearLandShare": 0.953
+     },
+     {
+      "id": "S2A_49MHM_20251013_0_L2A",
+      "date": "2025-10-13",
+      "sceneCloudPct": 19.9,
+      "clearLandShare": 0.266
+     },
+     {
+      "id": "S2B_49MHM_20251105_0_L2A",
+      "date": "2025-11-05",
+      "sceneCloudPct": 76.0,
+      "clearLandShare": 0.003
+     },
+     {
+      "id": "S2C_49MHM_20251210_0_L2A",
+      "date": "2025-12-10",
+      "sceneCloudPct": 29.7,
+      "clearLandShare": 0.711
+     },
+     {
+      "id": "S2B_49MHM_20251205_0_L2A",
+      "date": "2025-12-05",
+      "sceneCloudPct": 29.8,
+      "clearLandShare": 0.064
+     },
+     {
+      "id": "S2B_49MHM_20251225_0_L2A",
+      "date": "2025-12-25",
+      "sceneCloudPct": 34.2,
+      "clearLandShare": 0.024
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 9.0,
+    "sentinel2PixelsNeverClear": 40,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "id-merapi",
+   "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+   "lat": -7.54,
+   "lon": 110.446,
+   "kind": "candidate",
+   "footprintKm": 4.0,
+   "footprintNote": "Summit cone and upper flanks of Merapi. The Opak River deposits downstream are not inside it.",
+   "values": {
+    "slope": {
+     "value": 24.96,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 4.17,
+     "pixels": 81,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 301.6,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 4.17,
+     "pixels": 81
+    },
+    "slopeFine": {
+     "value": 30.64,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 16900,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 305.4,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 16900
+    },
+    "ndvi": {
+     "value": 0.442,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 161600,
+     "months": 11,
+     "scenes": 29
+    },
+    "bareFrac": {
+     "value": 0.35,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Andesite / Basaltic Andesite",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263250 (Merapi)",
+     "badge": "Literature",
+     "note": "Major rock type of the whole volcano, not mapped inside the footprint."
+    },
+    "lithology": {
+     "value": 10,
+     "unit": "class code",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263250 (Merapi)",
+     "badge": "Literature",
+     "label": "Intermediate volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 24.97,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 5.62,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 2338.3,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -7.75,
+    "lon": 110.25,
+    "ndvi": 0.734,
+    "slope": 3.06,
+    "roughness": 312.5,
+    "lithology": 10,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.001
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S08_00_E110_00_DEM",
+    "elevMinM": 1447.0,
+    "elevMaxM": 2908.0,
+    "sentinel2Tile": "MGRS-49MDM",
+    "sentinel2Scenes": [
+     {
+      "id": "S2A_49MDM_20250107_0_L2A",
+      "date": "2025-01-07",
+      "sceneCloudPct": 47.3,
+      "clearLandShare": 0.192
+     },
+     {
+      "id": "S2A_49MDM_20250117_0_L2A",
+      "date": "2025-01-17",
+      "sceneCloudPct": 69.8,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_49MDM_20250313_0_L2A",
+      "date": "2025-03-13",
+      "sceneCloudPct": 19.4,
+      "clearLandShare": 0.331
+     },
+     {
+      "id": "S2C_49MDM_20250407_0_L2A",
+      "date": "2025-04-07",
+      "sceneCloudPct": 15.8,
+      "clearLandShare": 0.271
+     },
+     {
+      "id": "S2A_49MDM_20250429_0_L2A",
+      "date": "2025-04-29",
+      "sceneCloudPct": 17.4,
+      "clearLandShare": 0.449
+     },
+     {
+      "id": "S2B_49MDM_20250402_0_L2A",
+      "date": "2025-04-02",
+      "sceneCloudPct": 44.0,
+      "clearLandShare": 0.049
+     },
+     {
+      "id": "S2C_49MDM_20250507_0_L2A",
+      "date": "2025-05-07",
+      "sceneCloudPct": 28.1,
+      "clearLandShare": 0.341
+     },
+     {
+      "id": "S2B_49MDM_20250512_0_L2A",
+      "date": "2025-05-12",
+      "sceneCloudPct": 32.1,
+      "clearLandShare": 0.066
+     },
+     {
+      "id": "S2A_49MDM_20250519_0_L2A",
+      "date": "2025-05-19",
+      "sceneCloudPct": 71.6,
+      "clearLandShare": 0.003
+     },
+     {
+      "id": "S2C_49MDM_20250606_0_L2A",
+      "date": "2025-06-06",
+      "sceneCloudPct": 2.0,
+      "clearLandShare": 0.675
+     },
+     {
+      "id": "S2B_49MDM_20250621_0_L2A",
+      "date": "2025-06-21",
+      "sceneCloudPct": 13.3,
+      "clearLandShare": 0.285
+     },
+     {
+      "id": "S2C_49MDM_20250626_0_L2A",
+      "date": "2025-06-26",
+      "sceneCloudPct": 18.6,
+      "clearLandShare": 0.661
+     },
+     {
+      "id": "S2B_49MDM_20250721_0_L2A",
+      "date": "2025-07-21",
+      "sceneCloudPct": 2.1,
+      "clearLandShare": 0.757
+     },
+     {
+      "id": "S2B_49MDM_20250711_0_L2A",
+      "date": "2025-07-11",
+      "sceneCloudPct": 15.1,
+      "clearLandShare": 0.832
+     },
+     {
+      "id": "S2B_49MDM_20250701_0_L2A",
+      "date": "2025-07-01",
+      "sceneCloudPct": 24.5,
+      "clearLandShare": 0.334
+     },
+     {
+      "id": "S2C_49MDM_20250815_0_L2A",
+      "date": "2025-08-15",
+      "sceneCloudPct": 30.8,
+      "clearLandShare": 0.78
+     },
+     {
+      "id": "S2A_49MDM_20250807_0_L2A",
+      "date": "2025-08-07",
+      "sceneCloudPct": 33.8,
+      "clearLandShare": 0.745
+     },
+     {
+      "id": "S2C_49MDM_20250805_0_L2A",
+      "date": "2025-08-05",
+      "sceneCloudPct": 37.1,
+      "clearLandShare": 0.225
+     },
+     {
+      "id": "S2C_49MDM_20250904_0_L2A",
+      "date": "2025-09-04",
+      "sceneCloudPct": 17.5,
+      "clearLandShare": 0.71
+     },
+     {
+      "id": "S2C_49MDM_20250924_0_L2A",
+      "date": "2025-09-24",
+      "sceneCloudPct": 25.9,
+      "clearLandShare": 0.612
+     },
+     {
+      "id": "S2C_49MDM_20250914_0_L2A",
+      "date": "2025-09-14",
+      "sceneCloudPct": 35.1,
+      "clearLandShare": 0.9
+     },
+     {
+      "id": "S2B_49MDM_20251009_0_L2A",
+      "date": "2025-10-09",
+      "sceneCloudPct": 8.3,
+      "clearLandShare": 0.994
+     },
+     {
+      "id": "S2A_49MDM_20251016_0_L2A",
+      "date": "2025-10-16",
+      "sceneCloudPct": 29.3,
+      "clearLandShare": 0.66
+     },
+     {
+      "id": "S2C_49MDM_20251014_0_L2A",
+      "date": "2025-10-14",
+      "sceneCloudPct": 35.8,
+      "clearLandShare": 0.519
+     },
+     {
+      "id": "S2B_49MDM_20251108_0_L2A",
+      "date": "2025-11-08",
+      "sceneCloudPct": 64.7,
+      "clearLandShare": 0.206
+     },
+     {
+      "id": "S2B_49MDM_20251128_0_L2A",
+      "date": "2025-11-28",
+      "sceneCloudPct": 70.4,
+      "clearLandShare": 0.369
+     },
+     {
+      "id": "S2C_49MDM_20251103_0_L2A",
+      "date": "2025-11-03",
+      "sceneCloudPct": 71.8,
+      "clearLandShare": 0.015
+     },
+     {
+      "id": "S2C_49MDM_20251223_0_L2A",
+      "date": "2025-12-23",
+      "sceneCloudPct": 49.4,
+      "clearLandShare": 0.439
+     },
+     {
+      "id": "S2B_49MDM_20251208_0_L2A",
+      "date": "2025-12-08",
+      "sceneCloudPct": 75.8,
+      "clearLandShare": 0.286
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 7.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "id-gua-lawa",
+   "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+   "lat": -7.2314,
+   "lon": 109.3175,
+   "kind": "candidate",
+   "footprintKm": 2.0,
+   "footprintNote": "Ground surface above and around the cave entrance. The cave interior is not measured.",
+   "values": {
+    "slope": {
+     "value": 7.11,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 1.85,
+     "pixels": 16,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 68.5,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 1.85,
+     "pixels": 16
+    },
+    "slopeFine": {
+     "value": 12.68,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 4225,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 82.3,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 4225
+    },
+    "ndvi": {
+     "value": 0.73,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 40804,
+     "months": 8,
+     "scenes": 25
+    },
+    "bareFrac": {
+     "value": 0.03,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Basalt / Picro-Basalt",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263180 (Slamet)",
+     "badge": "Literature",
+     "note": "Major rock type of the whole volcano, not mapped inside the footprint."
+    },
+    "lithology": {
+     "value": 2,
+     "unit": "class code",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263180 (Slamet)",
+     "badge": "Literature",
+     "label": "Basic volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 25.26,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 6.75,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 2403.3,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -7.25,
+    "lon": 109.25,
+    "ndvi": 0.739,
+    "slope": 4.7,
+    "roughness": 486.7,
+    "lithology": 10,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.0
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S08_00_E109_00_DEM",
+    "elevMinM": 670.0,
+    "elevMaxM": 1107.0,
+    "sentinel2Tile": "MGRS-49MCN",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_49MCN_20250326_0_L2A",
+      "date": "2025-03-26",
+      "sceneCloudPct": 79.7,
+      "clearLandShare": 0.499
+     },
+     {
+      "id": "S2C_49MCN_20250430_0_L2A",
+      "date": "2025-04-30",
+      "sceneCloudPct": 22.0,
+      "clearLandShare": 0.988
+     },
+     {
+      "id": "S2B_49MCN_20250425_0_L2A",
+      "date": "2025-04-25",
+      "sceneCloudPct": 61.5,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_49MCN_20250530_0_L2A",
+      "date": "2025-05-30",
+      "sceneCloudPct": 10.3,
+      "clearLandShare": 0.997
+     },
+     {
+      "id": "S2C_49MCN_20250510_0_L2A",
+      "date": "2025-05-10",
+      "sceneCloudPct": 16.1,
+      "clearLandShare": 0.479
+     },
+     {
+      "id": "S2B_49MCN_20250505_0_L2A",
+      "date": "2025-05-05",
+      "sceneCloudPct": 16.5,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_49MCN_20250604_0_L2A",
+      "date": "2025-06-04",
+      "sceneCloudPct": 8.0,
+      "clearLandShare": 0.965
+     },
+     {
+      "id": "S2B_49MCN_20250624_0_L2A",
+      "date": "2025-06-24",
+      "sceneCloudPct": 22.7,
+      "clearLandShare": 0.268
+     },
+     {
+      "id": "S2C_49MCN_20250629_0_L2A",
+      "date": "2025-06-29",
+      "sceneCloudPct": 42.2,
+      "clearLandShare": 0.135
+     },
+     {
+      "id": "S2A_49MCN_20250721_1_L2A",
+      "date": "2025-07-21",
+      "sceneCloudPct": 1.2,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_49MCN_20250724_0_L2A",
+      "date": "2025-07-24",
+      "sceneCloudPct": 8.0,
+      "clearLandShare": 0.038
+     },
+     {
+      "id": "S2C_49MCN_20250709_0_L2A",
+      "date": "2025-07-09",
+      "sceneCloudPct": 9.7,
+      "clearLandShare": 0.769
+     },
+     {
+      "id": "S2B_49MCN_20250803_0_L2A",
+      "date": "2025-08-03",
+      "sceneCloudPct": 12.0,
+      "clearLandShare": 0.092
+     },
+     {
+      "id": "S2B_49MCN_20250823_0_L2A",
+      "date": "2025-08-23",
+      "sceneCloudPct": 19.9,
+      "clearLandShare": 0.97
+     },
+     {
+      "id": "S2C_49MCN_20250808_0_L2A",
+      "date": "2025-08-08",
+      "sceneCloudPct": 35.1,
+      "clearLandShare": 0.36
+     },
+     {
+      "id": "S2B_49MCN_20250922_0_L2A",
+      "date": "2025-09-22",
+      "sceneCloudPct": 17.5,
+      "clearLandShare": 0.449
+     },
+     {
+      "id": "S2C_49MCN_20250927_0_L2A",
+      "date": "2025-09-27",
+      "sceneCloudPct": 21.9,
+      "clearLandShare": 0.555
+     },
+     {
+      "id": "S2C_49MCN_20250907_0_L2A",
+      "date": "2025-09-07",
+      "sceneCloudPct": 22.7,
+      "clearLandShare": 0.065
+     },
+     {
+      "id": "S2B_49MCN_20251012_0_L2A",
+      "date": "2025-10-12",
+      "sceneCloudPct": 27.4,
+      "clearLandShare": 0.883
+     },
+     {
+      "id": "S2C_49MCN_20251007_0_L2A",
+      "date": "2025-10-07",
+      "sceneCloudPct": 29.6,
+      "clearLandShare": 0.014
+     },
+     {
+      "id": "S2A_49MCN_20251009_1_L2A",
+      "date": "2025-10-09",
+      "sceneCloudPct": 36.4,
+      "clearLandShare": 0.673
+     },
+     {
+      "id": "S2A_49MCN_20251118_1_L2A",
+      "date": "2025-11-18",
+      "sceneCloudPct": 56.2,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2A_49MCN_20251228_1_L2A",
+      "date": "2025-12-28",
+      "sceneCloudPct": 54.5,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_49MCN_20251221_0_L2A",
+      "date": "2025-12-21",
+      "sceneCloudPct": 56.1,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_49MCN_20251211_0_L2A",
+      "date": "2025-12-11",
+      "sceneCloudPct": 77.6,
+      "clearLandShare": 0.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 7.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "id-goa-pandan",
+   "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+   "lat": -5.364,
+   "lon": 105.664,
+   "kind": "candidate",
+   "footprintKm": 3.0,
+   "footprintNote": "Centred on Giri Mulyo village, because the cave's own position is not published. The cave interior is not measured.",
+   "values": {
+    "slope": {
+     "value": 1.65,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 2.78,
+     "pixels": 36,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 18.0,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 2.78,
+     "pixels": 36
+    },
+    "slopeFine": {
+     "value": 4.39,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 9409,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 20.7,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 9409
+    },
+    "ndvi": {
+     "value": 0.68,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 90600,
+     "months": 11,
+     "scenes": 29
+    },
+    "bareFrac": {
+     "value": 0.003,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "basalt",
+     "unit": "",
+     "scale": "site",
+     "source": "Sirait et al. 2023, Journal of Geoscience, Engineering, Environment, and Technology 8(2):112-122, doi:10.25299/jgeet.2023.8.2.12118 (abstract: basalt lava sequence forming Goa Pandan)",
+     "badge": "Literature",
+     "note": "Stated in a paper about this feature, not read from a map."
+    },
+    "lithology": {
+     "value": 2,
+     "unit": "class code",
+     "scale": "site",
+     "source": "Sirait et al. 2023, Journal of Geoscience, Engineering, Environment, and Technology 8(2):112-122, doi:10.25299/jgeet.2023.8.2.12118 (abstract: basalt lava sequence forming Goa Pandan)",
+     "badge": "Literature",
+     "label": "Basic volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 27.2,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 4.31,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 2048.8,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -5.25,
+    "lon": 105.75,
+    "ndvi": 0.738,
+    "slope": 0.7,
+    "roughness": 31.6,
+    "lithology": 2,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.0
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S06_00_E105_00_DEM",
+    "elevMinM": 81.0,
+    "elevMaxM": 202.0,
+    "sentinel2Tile": "MGRS-48MWV",
+    "sentinel2Scenes": [
+     {
+      "id": "S2A_48MWV_20250113_1_L2A",
+      "date": "2025-01-13",
+      "sceneCloudPct": 66.7,
+      "clearLandShare": 0.71
+     },
+     {
+      "id": "S2B_48MWV_20250111_0_L2A",
+      "date": "2025-01-11",
+      "sceneCloudPct": 67.4,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_48MWV_20250108_0_L2A",
+      "date": "2025-01-08",
+      "sceneCloudPct": 79.3,
+      "clearLandShare": 0.732
+     },
+     {
+      "id": "S2C_48MWV_20250314_0_L2A",
+      "date": "2025-03-14",
+      "sceneCloudPct": 58.7,
+      "clearLandShare": 0.59
+     },
+     {
+      "id": "S2B_48MWV_20250408_0_L2A",
+      "date": "2025-04-08",
+      "sceneCloudPct": 35.9,
+      "clearLandShare": 0.763
+     },
+     {
+      "id": "S2C_48MWV_20250423_0_L2A",
+      "date": "2025-04-23",
+      "sceneCloudPct": 37.7,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_48MWV_20250428_0_L2A",
+      "date": "2025-04-28",
+      "sceneCloudPct": 40.4,
+      "clearLandShare": 0.248
+     },
+     {
+      "id": "S2B_48MWV_20250528_0_L2A",
+      "date": "2025-05-28",
+      "sceneCloudPct": 31.8,
+      "clearLandShare": 0.363
+     },
+     {
+      "id": "S2A_48MWV_20250505_0_L2A",
+      "date": "2025-05-05",
+      "sceneCloudPct": 58.5,
+      "clearLandShare": 0.096
+     },
+     {
+      "id": "S2C_48MWV_20250516_0_L2A",
+      "date": "2025-05-16",
+      "sceneCloudPct": 68.9,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_48MWV_20250620_0_L2A",
+      "date": "2025-06-20",
+      "sceneCloudPct": 41.3,
+      "clearLandShare": 0.711
+     },
+     {
+      "id": "S2C_48MWV_20250612_0_L2A",
+      "date": "2025-06-12",
+      "sceneCloudPct": 50.1,
+      "clearLandShare": 0.517
+     },
+     {
+      "id": "S2C_48MWV_20250622_0_L2A",
+      "date": "2025-06-22",
+      "sceneCloudPct": 52.9,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_48MWV_20250720_0_L2A",
+      "date": "2025-07-20",
+      "sceneCloudPct": 15.3,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2A_48MWV_20250724_0_L2A",
+      "date": "2025-07-24",
+      "sceneCloudPct": 25.3,
+      "clearLandShare": 0.769
+     },
+     {
+      "id": "S2C_48MWV_20250702_0_L2A",
+      "date": "2025-07-02",
+      "sceneCloudPct": 39.9,
+      "clearLandShare": 0.67
+     },
+     {
+      "id": "S2A_48MWV_20250806_1_L2A",
+      "date": "2025-08-06",
+      "sceneCloudPct": 36.4,
+      "clearLandShare": 0.125
+     },
+     {
+      "id": "S2B_48MWV_20250809_0_L2A",
+      "date": "2025-08-09",
+      "sceneCloudPct": 44.8,
+      "clearLandShare": 0.147
+     },
+     {
+      "id": "S2B_48MWV_20250826_0_L2A",
+      "date": "2025-08-26",
+      "sceneCloudPct": 48.5,
+      "clearLandShare": 0.308
+     },
+     {
+      "id": "S2B_48MWV_20250915_0_L2A",
+      "date": "2025-09-15",
+      "sceneCloudPct": 19.1,
+      "clearLandShare": 0.383
+     },
+     {
+      "id": "S2B_48MWV_20250925_0_L2A",
+      "date": "2025-09-25",
+      "sceneCloudPct": 25.1,
+      "clearLandShare": 0.657
+     },
+     {
+      "id": "S2A_48MWV_20250915_1_L2A",
+      "date": "2025-09-15",
+      "sceneCloudPct": 28.2,
+      "clearLandShare": 0.128
+     },
+     {
+      "id": "S2B_48MWV_20251005_0_L2A",
+      "date": "2025-10-05",
+      "sceneCloudPct": 48.0,
+      "clearLandShare": 0.897
+     },
+     {
+      "id": "S2B_48MWV_20251008_0_L2A",
+      "date": "2025-10-08",
+      "sceneCloudPct": 51.1,
+      "clearLandShare": 0.005
+     },
+     {
+      "id": "S2B_48MWV_20251015_0_L2A",
+      "date": "2025-10-15",
+      "sceneCloudPct": 59.9,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_48MWV_20251117_0_L2A",
+      "date": "2025-11-17",
+      "sceneCloudPct": 35.5,
+      "clearLandShare": 0.763
+     },
+     {
+      "id": "S2A_48MWV_20251124_1_L2A",
+      "date": "2025-11-24",
+      "sceneCloudPct": 39.5,
+      "clearLandShare": 0.559
+     },
+     {
+      "id": "S2B_48MWV_20251124_0_L2A",
+      "date": "2025-11-24",
+      "sceneCloudPct": 52.0,
+      "clearLandShare": 0.902
+     },
+     {
+      "id": "S2B_48MWV_20251207_0_L2A",
+      "date": "2025-12-07",
+      "sceneCloudPct": 43.9,
+      "clearLandShare": 0.007
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 8.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "id-kesaksak-lava-tube",
+   "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+   "lat": -8.2403,
+   "lon": 115.3775,
+   "kind": "candidate",
+   "footprintKm": 5.0,
+   "footprintNote": "Centred on Batur volcano, because the tube's position inside the caldera is not published.",
+   "values": {
+    "slope": {
+     "value": 9.61,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 119,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 118.0,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 119
+    },
+    "slopeFine": {
+     "value": 11.15,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 25848,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 122.4,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 25848
+    },
+    "ndvi": {
+     "value": 0.506,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 240242,
+     "months": 11,
+     "scenes": 30
+    },
+    "bareFrac": {
+     "value": 0.051,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.016,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Andesite / Basaltic Andesite",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 264010 (Batur)",
+     "badge": "Literature",
+     "note": "Major rock type of the whole volcano, not mapped inside the footprint."
+    },
+    "lithology": {
+     "value": 10,
+     "unit": "class code",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 264010 (Batur)",
+     "badge": "Literature",
+     "label": "Intermediate volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 26.62,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 3.13,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 1615.1,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -8.25,
+    "lon": 115.25,
+    "ndvi": 0.795,
+    "slope": 5.64,
+    "roughness": 431.9,
+    "lithology": 10,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.0
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S09_00_E115_00_DEM",
+    "elevMinM": 1031.0,
+    "elevMaxM": 1692.0,
+    "sentinel2Tile": "MGRS-50LLR",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_50LLR_20250205_0_L2A",
+      "date": "2025-02-05",
+      "sceneCloudPct": 29.0,
+      "clearLandShare": 0.463
+     },
+     {
+      "id": "S2C_50LLR_20250312_0_L2A",
+      "date": "2025-03-12",
+      "sceneCloudPct": 20.2,
+      "clearLandShare": 0.576
+     },
+     {
+      "id": "S2B_50LLR_20250317_0_L2A",
+      "date": "2025-03-17",
+      "sceneCloudPct": 69.3,
+      "clearLandShare": 0.001
+     },
+     {
+      "id": "S2A_50LLR_20250403_0_L2A",
+      "date": "2025-04-03",
+      "sceneCloudPct": 11.8,
+      "clearLandShare": 0.881
+     },
+     {
+      "id": "S2A_50LLR_20250423_0_L2A",
+      "date": "2025-04-23",
+      "sceneCloudPct": 15.6,
+      "clearLandShare": 0.921
+     },
+     {
+      "id": "S2B_50LLR_20250426_0_L2A",
+      "date": "2025-04-26",
+      "sceneCloudPct": 22.2,
+      "clearLandShare": 0.399
+     },
+     {
+      "id": "S2C_50LLR_20250511_0_L2A",
+      "date": "2025-05-11",
+      "sceneCloudPct": 15.0,
+      "clearLandShare": 0.258
+     },
+     {
+      "id": "S2B_50LLR_20250516_0_L2A",
+      "date": "2025-05-16",
+      "sceneCloudPct": 18.0,
+      "clearLandShare": 0.548
+     },
+     {
+      "id": "S2C_50LLR_20250501_0_L2A",
+      "date": "2025-05-01",
+      "sceneCloudPct": 18.6,
+      "clearLandShare": 0.75
+     },
+     {
+      "id": "S2B_50LLR_20250605_0_L2A",
+      "date": "2025-06-05",
+      "sceneCloudPct": 18.7,
+      "clearLandShare": 0.81
+     },
+     {
+      "id": "S2C_50LLR_20250630_0_L2A",
+      "date": "2025-06-30",
+      "sceneCloudPct": 20.5,
+      "clearLandShare": 0.337
+     },
+     {
+      "id": "S2A_50LLR_20250622_0_L2A",
+      "date": "2025-06-22",
+      "sceneCloudPct": 35.0,
+      "clearLandShare": 0.008
+     },
+     {
+      "id": "S2C_50LLR_20250720_0_L2A",
+      "date": "2025-07-20",
+      "sceneCloudPct": 10.1,
+      "clearLandShare": 0.917
+     },
+     {
+      "id": "S2C_50LLR_20250710_0_L2A",
+      "date": "2025-07-10",
+      "sceneCloudPct": 39.3,
+      "clearLandShare": 0.418
+     },
+     {
+      "id": "S2B_50LLR_20250715_0_L2A",
+      "date": "2025-07-15",
+      "sceneCloudPct": 50.2,
+      "clearLandShare": 0.277
+     },
+     {
+      "id": "S2B_50LLR_20250804_0_L2A",
+      "date": "2025-08-04",
+      "sceneCloudPct": 11.0,
+      "clearLandShare": 0.903
+     },
+     {
+      "id": "S2A_50LLR_20250821_0_L2A",
+      "date": "2025-08-21",
+      "sceneCloudPct": 16.4,
+      "clearLandShare": 0.781
+     },
+     {
+      "id": "S2B_50LLR_20250824_0_L2A",
+      "date": "2025-08-24",
+      "sceneCloudPct": 18.4,
+      "clearLandShare": 0.621
+     },
+     {
+      "id": "S2B_50LLR_20250923_0_L2A",
+      "date": "2025-09-23",
+      "sceneCloudPct": 7.4,
+      "clearLandShare": 0.93
+     },
+     {
+      "id": "S2B_50LLR_20250913_0_L2A",
+      "date": "2025-09-13",
+      "sceneCloudPct": 15.7,
+      "clearLandShare": 0.931
+     },
+     {
+      "id": "S2C_50LLR_20250928_0_L2A",
+      "date": "2025-09-28",
+      "sceneCloudPct": 18.4,
+      "clearLandShare": 0.934
+     },
+     {
+      "id": "S2C_50LLR_20251008_0_L2A",
+      "date": "2025-10-08",
+      "sceneCloudPct": 8.7,
+      "clearLandShare": 0.943
+     },
+     {
+      "id": "S2B_50LLR_20251003_0_L2A",
+      "date": "2025-10-03",
+      "sceneCloudPct": 11.8,
+      "clearLandShare": 0.936
+     },
+     {
+      "id": "S2B_50LLR_20251013_0_L2A",
+      "date": "2025-10-13",
+      "sceneCloudPct": 19.6,
+      "clearLandShare": 0.469
+     },
+     {
+      "id": "S2C_50LLR_20251107_0_L2A",
+      "date": "2025-11-07",
+      "sceneCloudPct": 32.5,
+      "clearLandShare": 0.395
+     },
+     {
+      "id": "S2C_50LLR_20251117_0_L2A",
+      "date": "2025-11-17",
+      "sceneCloudPct": 44.2,
+      "clearLandShare": 0.005
+     },
+     {
+      "id": "S2B_50LLR_20251102_0_L2A",
+      "date": "2025-11-02",
+      "sceneCloudPct": 45.4,
+      "clearLandShare": 0.034
+     },
+     {
+      "id": "S2B_50LLR_20251212_0_L2A",
+      "date": "2025-12-12",
+      "sceneCloudPct": 52.3,
+      "clearLandShare": 0.062
+     },
+     {
+      "id": "S2B_50LLR_20251222_0_L2A",
+      "date": "2025-12-22",
+      "sceneCloudPct": 56.4,
+      "clearLandShare": 0.005
+     },
+     {
+      "id": "S2C_50LLR_20251217_0_L2A",
+      "date": "2025-12-17",
+      "sceneCloudPct": 65.9,
+      "clearLandShare": 0.009
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 8.0,
+    "sentinel2PixelsNeverClear": 8724,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "id-maros-pangkep-karst",
+   "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+   "lat": -5.0031,
+   "lon": 119.6944,
+   "kind": "candidate",
+   "footprintKm": 5.0,
+   "footprintNote": "One 5 km sample of the karst at the listed coordinates, not the whole cave district.",
+   "values": {
+    "slope": {
+     "value": 4.37,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 83.2,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121
+    },
+    "slopeFine": {
+     "value": 14.62,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 85.9,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244
+    },
+    "ndvi": {
+     "value": 0.808,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 253000,
+     "months": 11,
+     "scenes": 29
+    },
+    "bareFrac": {
+     "value": 0.001,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": null,
+     "unit": "",
+     "scale": "site",
+     "source": null,
+     "badge": null,
+     "note": "No regional geologic map, volcano record or retrievable paper abstract gives the rock type here."
+    },
+    "lithology": {
+     "value": null,
+     "unit": "class code",
+     "scale": "site",
+     "source": null,
+     "badge": null,
+     "note": "The rock type has no exact GLiM class in the mapping table, or is unknown."
+    },
+    "tempMean": {
+     "value": 26.26,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 4.67,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 1939.2,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -5.25,
+    "lon": 119.75,
+    "ndvi": 0.759,
+    "slope": 6.83,
+    "roughness": 534.6,
+    "lithology": 10,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.0
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S06_00_E119_00_DEM, Copernicus_DSM_COG_10_S05_00_E119_00_DEM",
+    "elevMinM": 11.0,
+    "elevMaxM": 478.0,
+    "sentinel2Tile": "MGRS-50MQV",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_50MQV_20250123_0_L2A",
+      "date": "2025-01-23",
+      "sceneCloudPct": 73.0,
+      "clearLandShare": 0.791
+     },
+     {
+      "id": "S2A_50MQV_20250118_1_L2A",
+      "date": "2025-01-18",
+      "sceneCloudPct": 75.1,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_50MQV_20250103_0_L2A",
+      "date": "2025-01-03",
+      "sceneCloudPct": 78.1,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_50MQV_20250202_0_L2A",
+      "date": "2025-02-02",
+      "sceneCloudPct": 36.8,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_50MQV_20250212_0_L2A",
+      "date": "2025-02-12",
+      "sceneCloudPct": 78.9,
+      "clearLandShare": 0.002
+     },
+     {
+      "id": "S2B_50MQV_20250324_0_L2A",
+      "date": "2025-03-24",
+      "sceneCloudPct": 74.1,
+      "clearLandShare": 0.493
+     },
+     {
+      "id": "S2A_50MQV_20250420_0_L2A",
+      "date": "2025-04-20",
+      "sceneCloudPct": 4.0,
+      "clearLandShare": 0.969
+     },
+     {
+      "id": "S2B_50MQV_20250423_0_L2A",
+      "date": "2025-04-23",
+      "sceneCloudPct": 43.4,
+      "clearLandShare": 0.999
+     },
+     {
+      "id": "S2C_50MQV_20250418_0_L2A",
+      "date": "2025-04-18",
+      "sceneCloudPct": 64.9,
+      "clearLandShare": 0.457
+     },
+     {
+      "id": "S2C_50MQV_20250528_0_L2A",
+      "date": "2025-05-28",
+      "sceneCloudPct": 14.4,
+      "clearLandShare": 0.997
+     },
+     {
+      "id": "S2B_50MQV_20250513_0_L2A",
+      "date": "2025-05-13",
+      "sceneCloudPct": 15.9,
+      "clearLandShare": 0.824
+     },
+     {
+      "id": "S2A_50MQV_20250530_0_L2A",
+      "date": "2025-05-30",
+      "sceneCloudPct": 17.0,
+      "clearLandShare": 0.523
+     },
+     {
+      "id": "S2C_50MQV_20250617_0_L2A",
+      "date": "2025-06-17",
+      "sceneCloudPct": 7.4,
+      "clearLandShare": 0.989
+     },
+     {
+      "id": "S2A_50MQV_20250619_0_L2A",
+      "date": "2025-06-19",
+      "sceneCloudPct": 11.1,
+      "clearLandShare": 0.61
+     },
+     {
+      "id": "S2C_50MQV_20250607_0_L2A",
+      "date": "2025-06-07",
+      "sceneCloudPct": 74.6,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_50MQV_20250727_0_L2A",
+      "date": "2025-07-27",
+      "sceneCloudPct": 0.7,
+      "clearLandShare": 0.99
+     },
+     {
+      "id": "S2A_50MQV_20250729_0_L2A",
+      "date": "2025-07-29",
+      "sceneCloudPct": 3.2,
+      "clearLandShare": 0.965
+     },
+     {
+      "id": "S2B_50MQV_20250712_0_L2A",
+      "date": "2025-07-12",
+      "sceneCloudPct": 17.6,
+      "clearLandShare": 0.795
+     },
+     {
+      "id": "S2B_50MQV_20250821_0_L2A",
+      "date": "2025-08-21",
+      "sceneCloudPct": 15.6,
+      "clearLandShare": 0.953
+     },
+     {
+      "id": "S2B_50MQV_20250831_0_L2A",
+      "date": "2025-08-31",
+      "sceneCloudPct": 22.1,
+      "clearLandShare": 0.992
+     },
+     {
+      "id": "S2B_50MQV_20250801_0_L2A",
+      "date": "2025-08-01",
+      "sceneCloudPct": 28.5,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_50MQV_20250905_0_L2A",
+      "date": "2025-09-05",
+      "sceneCloudPct": 0.4,
+      "clearLandShare": 0.876
+     },
+     {
+      "id": "S2B_50MQV_20250920_0_L2A",
+      "date": "2025-09-20",
+      "sceneCloudPct": 5.7,
+      "clearLandShare": 0.701
+     },
+     {
+      "id": "S2A_50MQV_20250927_0_L2A",
+      "date": "2025-09-27",
+      "sceneCloudPct": 12.1,
+      "clearLandShare": 0.998
+     },
+     {
+      "id": "S2C_50MQV_20251015_0_L2A",
+      "date": "2025-10-15",
+      "sceneCloudPct": 3.5,
+      "clearLandShare": 0.928
+     },
+     {
+      "id": "S2A_50MQV_20251017_0_L2A",
+      "date": "2025-10-17",
+      "sceneCloudPct": 9.5,
+      "clearLandShare": 0.145
+     },
+     {
+      "id": "S2B_50MQV_20251030_0_L2A",
+      "date": "2025-10-30",
+      "sceneCloudPct": 23.5,
+      "clearLandShare": 0.908
+     },
+     {
+      "id": "S2B_50MQV_20251129_0_L2A",
+      "date": "2025-11-29",
+      "sceneCloudPct": 58.6,
+      "clearLandShare": 0.209
+     },
+     {
+      "id": "S2A_50MQV_20251106_0_L2A",
+      "date": "2025-11-06",
+      "sceneCloudPct": 78.2,
+      "clearLandShare": 0.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 9.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "mauna-kea",
+   "name": "Mauna Kea, Hawaii, USA",
+   "lat": 19.8206,
+   "lon": -155.4681,
+   "kind": "known",
+   "footprintKm": 4.0,
+   "footprintNote": "Summit area of Mauna Kea. The field-test sites on the flank are outside it.",
+   "values": {
+    "slope": {
+     "value": 7.93,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 4.17,
+     "pixels": 81,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 105.2,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 4.17,
+     "pixels": 81
+    },
+    "slopeFine": {
+     "value": 11.32,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 16900,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 106.3,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 16900
+    },
+    "ndvi": {
+     "value": 0.037,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 166460,
+     "months": 12,
+     "scenes": 34
+    },
+    "bareFrac": {
+     "value": 1.0,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.029,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Scoria cones",
+     "unit": "",
+     "scale": "site",
+     "source": "Geologic map of the State of Hawaiʻi (large-scale map) via Macrostrat: 2021 Sherrod, D.R., Sinton, J.M., Watkins, S.E., and Brunt, K.M., 2021, Geologic map of the State of Hawaiʻi: U.S. Geological Survey Scientific Investigations Map 3143, pamphlet 72 p., 5 sheets, scales 1:100,000 and 1:250,000, https://doi.org/10.3133/sim3143. https://doi.org/10.3133/sim3143",
+     "badge": "Literature",
+     "mapUnit": "Scoria cones",
+     "description": "Unit is mapped separately as:"
+    },
+    "lithology": {
+     "value": 2,
+     "unit": "class code",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 332030 (Mauna Kea)",
+     "badge": "Literature",
+     "label": "Basic volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "rockTypeVolcano": {
+     "value": "Basalt / Picro-Basalt",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 332030 (Mauna Kea)",
+     "badge": "Literature"
+    },
+    "tempMean": {
+     "value": 21.4,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 4.1,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 1830.8,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": 19.75,
+    "lon": -155.25,
+    "ndvi": 0.589,
+    "slope": 4.94,
+    "roughness": 918.5,
+    "lithology": 10,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.132
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_N19_00_W156_00_DEM",
+    "elevMinM": 3665.0,
+    "elevMaxM": 4204.0,
+    "sentinel2Tile": "MGRS-5QKB",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_5QKB_20250119_0_L2A",
+      "date": "2025-01-19",
+      "sceneCloudPct": 1.3,
+      "clearLandShare": 0.752
+     },
+     {
+      "id": "S2A_5QKB_20250101_0_L2A",
+      "date": "2025-01-01",
+      "sceneCloudPct": 6.5,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_5QKB_20250129_0_L2A",
+      "date": "2025-01-29",
+      "sceneCloudPct": 8.9,
+      "clearLandShare": 0.726
+     },
+     {
+      "id": "S2B_5QKB_20250205_0_L2A",
+      "date": "2025-02-05",
+      "sceneCloudPct": 20.1,
+      "clearLandShare": 0.249
+     },
+     {
+      "id": "S2C_5QKB_20250315_0_L2A",
+      "date": "2025-03-15",
+      "sceneCloudPct": 13.8,
+      "clearLandShare": 0.691
+     },
+     {
+      "id": "S2B_5QKB_20250327_0_L2A",
+      "date": "2025-03-27",
+      "sceneCloudPct": 25.3,
+      "clearLandShare": 0.939
+     },
+     {
+      "id": "S2C_5QKB_20250312_0_L2A",
+      "date": "2025-03-12",
+      "sceneCloudPct": 28.7,
+      "clearLandShare": 0.89
+     },
+     {
+      "id": "S2B_5QKB_20250406_0_L2A",
+      "date": "2025-04-06",
+      "sceneCloudPct": 12.6,
+      "clearLandShare": 0.953
+     },
+     {
+      "id": "S2C_5QKB_20250424_0_L2A",
+      "date": "2025-04-24",
+      "sceneCloudPct": 19.1,
+      "clearLandShare": 0.587
+     },
+     {
+      "id": "S2B_5QKB_20250426_0_L2A",
+      "date": "2025-04-26",
+      "sceneCloudPct": 20.3,
+      "clearLandShare": 0.968
+     },
+     {
+      "id": "S2B_5QKB_20250506_0_L2A",
+      "date": "2025-05-06",
+      "sceneCloudPct": 10.6,
+      "clearLandShare": 0.971
+     },
+     {
+      "id": "S2B_5QKB_20250529_0_L2A",
+      "date": "2025-05-29",
+      "sceneCloudPct": 24.5,
+      "clearLandShare": 0.806
+     },
+     {
+      "id": "S2B_5QKB_20250509_0_L2A",
+      "date": "2025-05-09",
+      "sceneCloudPct": 26.8,
+      "clearLandShare": 0.65
+     },
+     {
+      "id": "S2C_5QKB_20250613_0_L2A",
+      "date": "2025-06-13",
+      "sceneCloudPct": 22.6,
+      "clearLandShare": 0.813
+     },
+     {
+      "id": "S2C_5QKB_20250620_0_L2A",
+      "date": "2025-06-20",
+      "sceneCloudPct": 31.8,
+      "clearLandShare": 0.972
+     },
+     {
+      "id": "S2C_5QKB_20250603_0_L2A",
+      "date": "2025-06-03",
+      "sceneCloudPct": 37.2,
+      "clearLandShare": 0.67
+     },
+     {
+      "id": "S2C_5QKB_20250713_0_L2A",
+      "date": "2025-07-13",
+      "sceneCloudPct": 15.6,
+      "clearLandShare": 0.481
+     },
+     {
+      "id": "S2C_5QKB_20250710_0_L2A",
+      "date": "2025-07-10",
+      "sceneCloudPct": 18.9,
+      "clearLandShare": 0.968
+     },
+     {
+      "id": "S2B_5QKB_20250725_0_L2A",
+      "date": "2025-07-25",
+      "sceneCloudPct": 19.2,
+      "clearLandShare": 0.968
+     },
+     {
+      "id": "S2C_5QKB_20250802_0_L2A",
+      "date": "2025-08-02",
+      "sceneCloudPct": 8.0,
+      "clearLandShare": 0.73
+     },
+     {
+      "id": "S2B_5QKB_20250804_0_L2A",
+      "date": "2025-08-04",
+      "sceneCloudPct": 8.0,
+      "clearLandShare": 0.967
+     },
+     {
+      "id": "S2C_5QKB_20250829_0_L2A",
+      "date": "2025-08-29",
+      "sceneCloudPct": 14.4,
+      "clearLandShare": 0.961
+     },
+     {
+      "id": "S2B_5QKB_20250923_0_L2A",
+      "date": "2025-09-23",
+      "sceneCloudPct": 21.6,
+      "clearLandShare": 0.937
+     },
+     {
+      "id": "S2B_5QKB_20250906_0_L2A",
+      "date": "2025-09-06",
+      "sceneCloudPct": 25.4,
+      "clearLandShare": 0.808
+     },
+     {
+      "id": "S2B_5QKB_20250916_0_L2A",
+      "date": "2025-09-16",
+      "sceneCloudPct": 26.9,
+      "clearLandShare": 0.8
+     },
+     {
+      "id": "S2C_5QKB_20251031_0_L2A",
+      "date": "2025-10-31",
+      "sceneCloudPct": 20.3,
+      "clearLandShare": 0.531
+     },
+     {
+      "id": "S2B_5QKB_20251023_0_L2A",
+      "date": "2025-10-23",
+      "sceneCloudPct": 27.2,
+      "clearLandShare": 0.854
+     },
+     {
+      "id": "S2C_5QKB_20251008_0_L2A",
+      "date": "2025-10-08",
+      "sceneCloudPct": 36.3,
+      "clearLandShare": 0.904
+     },
+     {
+      "id": "S2B_5QKB_20251125_0_L2A",
+      "date": "2025-11-25",
+      "sceneCloudPct": 8.2,
+      "clearLandShare": 0.748
+     },
+     {
+      "id": "S2C_5QKB_20251130_0_L2A",
+      "date": "2025-11-30",
+      "sceneCloudPct": 13.9,
+      "clearLandShare": 0.471
+     },
+     {
+      "id": "S2B_5QKB_20251112_0_L2A",
+      "date": "2025-11-12",
+      "sceneCloudPct": 18.2,
+      "clearLandShare": 0.797
+     },
+     {
+      "id": "S2B_5QKB_20251212_0_L2A",
+      "date": "2025-12-12",
+      "sceneCloudPct": 3.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_5QKB_20251220_0_L2A",
+      "date": "2025-12-20",
+      "sceneCloudPct": 7.2,
+      "clearLandShare": 0.652
+     },
+     {
+      "id": "S2C_5QKB_20251217_0_L2A",
+      "date": "2025-12-17",
+      "sceneCloudPct": 11.3,
+      "clearLandShare": 1.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 11.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [
+     {
+      "map": "Hawaii",
+      "scale": "medium",
+      "unit": "Laupahoehoe Volcanics",
+      "lith": "Scoria cones; basaltic volcanic rocks"
+     }
+    ],
+    "errors": []
+   }
+  },
+  {
+   "id": "kilauea",
+   "name": "Kilauea, Hawaii, USA",
+   "lat": 19.421,
+   "lon": -155.287,
+   "kind": "known",
+   "footprintKm": 5.0,
+   "footprintNote": "Summit caldera of Kilauea.",
+   "values": {
+    "slope": {
+     "value": 2.81,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 58.7,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121
+    },
+    "slopeFine": {
+     "value": 3.95,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 60.4,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244
+    },
+    "ndvi": {
+     "value": 0.234,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 262824,
+     "months": 12,
+     "scenes": 34
+    },
+    "bareFrac": {
+     "value": 0.499,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "basalt",
+     "unit": "",
+     "scale": "site",
+     "source": "Geologic map of the State of Hawaiʻi (large-scale map) via Macrostrat: 2021 Sherrod, D.R., Sinton, J.M., Watkins, S.E., and Brunt, K.M., 2021, Geologic map of the State of Hawaiʻi: U.S. Geological Survey Scientific Investigations Map 3143, pamphlet 72 p., 5 sheets, scales 1:100,000 and 1:250,000, https://doi.org/10.3133/sim3143. https://doi.org/10.3133/sim3143",
+     "badge": "Literature",
+     "mapUnit": "Lava flows",
+     "description": "Lava flows aged 400–750 years before present of the Puna Basalt"
+    },
+    "lithology": {
+     "value": 2,
+     "unit": "class code",
+     "scale": "site",
+     "source": "Geologic map of the State of Hawaiʻi (large-scale map) via Macrostrat: 2021 Sherrod, D.R., Sinton, J.M., Watkins, S.E., and Brunt, K.M., 2021, Geologic map of the State of Hawaiʻi: U.S. Geological Survey Scientific Investigations Map 3143, pamphlet 72 p., 5 sheets, scales 1:100,000 and 1:250,000, https://doi.org/10.3133/sim3143. https://doi.org/10.3133/sim3143",
+     "badge": "Literature",
+     "label": "Basic volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "rockTypeVolcano": {
+     "value": "Basalt / Picro-Basalt",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 332010 (Kilauea)",
+     "badge": "Literature"
+    },
+    "tempMean": {
+     "value": 21.93,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 3.68,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 1553.5,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": 19.25,
+    "lon": -155.25,
+    "ndvi": 0.485,
+    "slope": 4.16,
+    "roughness": 598.4,
+    "lithology": null,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.314
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_N19_00_W156_00_DEM",
+    "elevMinM": 1022.0,
+    "elevMaxM": 1280.0,
+    "sentinel2Tile": "MGRS-4QHG",
+    "sentinel2Scenes": [
+     {
+      "id": "S2A_4QHG_20250101_0_L2A",
+      "date": "2025-01-01",
+      "sceneCloudPct": 4.1,
+      "clearLandShare": 0.963
+     },
+     {
+      "id": "S2B_4QHG_20250106_0_L2A",
+      "date": "2025-01-06",
+      "sceneCloudPct": 13.8,
+      "clearLandShare": 0.723
+     },
+     {
+      "id": "S2B_4QHG_20250126_0_L2A",
+      "date": "2025-01-26",
+      "sceneCloudPct": 35.9,
+      "clearLandShare": 0.326
+     },
+     {
+      "id": "S2B_4QHG_20250205_0_L2A",
+      "date": "2025-02-05",
+      "sceneCloudPct": 18.5,
+      "clearLandShare": 0.259
+     },
+     {
+      "id": "S2C_4QHG_20250312_0_L2A",
+      "date": "2025-03-12",
+      "sceneCloudPct": 25.2,
+      "clearLandShare": 0.859
+     },
+     {
+      "id": "S2B_4QHG_20250327_0_L2A",
+      "date": "2025-03-27",
+      "sceneCloudPct": 25.7,
+      "clearLandShare": 0.675
+     },
+     {
+      "id": "S2C_4QHG_20250322_0_L2A",
+      "date": "2025-03-22",
+      "sceneCloudPct": 35.3,
+      "clearLandShare": 0.618
+     },
+     {
+      "id": "S2B_4QHG_20250406_0_L2A",
+      "date": "2025-04-06",
+      "sceneCloudPct": 12.5,
+      "clearLandShare": 0.97
+     },
+     {
+      "id": "S2C_4QHG_20250401_0_L2A",
+      "date": "2025-04-01",
+      "sceneCloudPct": 23.0,
+      "clearLandShare": 0.447
+     },
+     {
+      "id": "S2B_4QHG_20250426_0_L2A",
+      "date": "2025-04-26",
+      "sceneCloudPct": 26.2,
+      "clearLandShare": 0.51
+     },
+     {
+      "id": "S2B_4QHG_20250506_0_L2A",
+      "date": "2025-05-06",
+      "sceneCloudPct": 10.3,
+      "clearLandShare": 0.952
+     },
+     {
+      "id": "S2C_4QHG_20250511_0_L2A",
+      "date": "2025-05-11",
+      "sceneCloudPct": 25.8,
+      "clearLandShare": 0.888
+     },
+     {
+      "id": "S2C_4QHG_20250531_0_L2A",
+      "date": "2025-05-31",
+      "sceneCloudPct": 30.1,
+      "clearLandShare": 0.79
+     },
+     {
+      "id": "S2C_4QHG_20250620_0_L2A",
+      "date": "2025-06-20",
+      "sceneCloudPct": 39.4,
+      "clearLandShare": 0.606
+     },
+     {
+      "id": "S2B_4QHG_20250615_0_L2A",
+      "date": "2025-06-15",
+      "sceneCloudPct": 48.7,
+      "clearLandShare": 0.145
+     },
+     {
+      "id": "S2C_4QHG_20250630_0_L2A",
+      "date": "2025-06-30",
+      "sceneCloudPct": 55.9,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_4QHG_20250715_0_L2A",
+      "date": "2025-07-15",
+      "sceneCloudPct": 8.6,
+      "clearLandShare": 0.957
+     },
+     {
+      "id": "S2C_4QHG_20250730_0_L2A",
+      "date": "2025-07-30",
+      "sceneCloudPct": 15.5,
+      "clearLandShare": 0.959
+     },
+     {
+      "id": "S2B_4QHG_20250725_0_L2A",
+      "date": "2025-07-25",
+      "sceneCloudPct": 19.4,
+      "clearLandShare": 0.958
+     },
+     {
+      "id": "S2B_4QHG_20250804_0_L2A",
+      "date": "2025-08-04",
+      "sceneCloudPct": 6.4,
+      "clearLandShare": 0.964
+     },
+     {
+      "id": "S2C_4QHG_20250829_0_L2A",
+      "date": "2025-08-29",
+      "sceneCloudPct": 16.5,
+      "clearLandShare": 0.965
+     },
+     {
+      "id": "S2B_4QHG_20250824_0_L2A",
+      "date": "2025-08-24",
+      "sceneCloudPct": 20.6,
+      "clearLandShare": 0.92
+     },
+     {
+      "id": "S2B_4QHG_20250923_0_L2A",
+      "date": "2025-09-23",
+      "sceneCloudPct": 25.4,
+      "clearLandShare": 0.963
+     },
+     {
+      "id": "S2B_4QHG_20250903_0_L2A",
+      "date": "2025-09-03",
+      "sceneCloudPct": 31.5,
+      "clearLandShare": 0.93
+     },
+     {
+      "id": "S2C_4QHG_20250928_0_L2A",
+      "date": "2025-09-28",
+      "sceneCloudPct": 37.1,
+      "clearLandShare": 0.891
+     },
+     {
+      "id": "S2B_4QHG_20251023_0_L2A",
+      "date": "2025-10-23",
+      "sceneCloudPct": 27.4,
+      "clearLandShare": 0.952
+     },
+     {
+      "id": "S2B_4QHG_20251003_0_L2A",
+      "date": "2025-10-03",
+      "sceneCloudPct": 35.4,
+      "clearLandShare": 0.404
+     },
+     {
+      "id": "S2C_4QHG_20251008_0_L2A",
+      "date": "2025-10-08",
+      "sceneCloudPct": 39.3,
+      "clearLandShare": 0.191
+     },
+     {
+      "id": "S2B_4QHG_20251112_0_L2A",
+      "date": "2025-11-12",
+      "sceneCloudPct": 12.7,
+      "clearLandShare": 0.978
+     },
+     {
+      "id": "S2C_4QHG_20251127_0_L2A",
+      "date": "2025-11-27",
+      "sceneCloudPct": 30.6,
+      "clearLandShare": 0.416
+     },
+     {
+      "id": "S2B_4QHG_20251122_0_L2A",
+      "date": "2025-11-22",
+      "sceneCloudPct": 44.1,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_4QHG_20251212_0_L2A",
+      "date": "2025-12-12",
+      "sceneCloudPct": 2.8,
+      "clearLandShare": 0.766
+     },
+     {
+      "id": "S2C_4QHG_20251217_0_L2A",
+      "date": "2025-12-17",
+      "sceneCloudPct": 9.1,
+      "clearLandShare": 0.57
+     },
+     {
+      "id": "S2B_4QHG_20251222_0_L2A",
+      "date": "2025-12-22",
+      "sceneCloudPct": 17.5,
+      "clearLandShare": 0.996
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 11.0,
+    "sentinel2PixelsNeverClear": 344,
+    "otherRegionalMapUnits": [
+     {
+      "map": "Hawaii",
+      "scale": "medium",
+      "unit": "Puna Basalt",
+      "lith": "Lava flows; basalt"
+     }
+    ],
+    "errors": []
+   }
+  },
+  {
+   "id": "atacama-yungay",
+   "name": "Atacama Desert hyperarid core (Yungay), Chile",
+   "lat": -24.0,
+   "lon": -70.0,
+   "kind": "known",
+   "footprintKm": 5.0,
+   "footprintNote": "Centred on the published approximate position (24 S, 70 W), not a surveyed station.",
+   "values": {
+    "slope": {
+     "value": 2.93,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 67.9,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121
+    },
+    "slopeFine": {
+     "value": 5.76,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 68.0,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244
+    },
+    "ndvi": {
+     "value": 0.089,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 254012,
+     "months": 12,
+     "scenes": 36
+    },
+    "bareFrac": {
+     "value": 1.0,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "Granite",
+     "unit": "",
+     "scale": "site",
+     "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+     "badge": "Literature",
+     "mapUnit": "Cretaceous Granitic"
+    },
+    "lithology": {
+     "value": 9,
+     "unit": "class code",
+     "scale": "site",
+     "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+     "badge": "Literature",
+     "label": "Acid plutonic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "tempMean": {
+     "value": 15.97,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 15.94,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 8.7,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": -24.25,
+    "lon": -69.75,
+    "ndvi": 0.081,
+    "slope": 2.45,
+    "roughness": 248.2,
+    "lithology": 1,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 1.0
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_S25_00_W071_00_DEM, Copernicus_DSM_COG_10_S25_00_W070_00_DEM, Copernicus_DSM_COG_10_S24_00_W071_00_DEM, Copernicus_DSM_COG_10_S24_00_W070_00_DEM",
+    "elevMinM": 1251.0,
+    "elevMaxM": 1569.0,
+    "sentinel2Tile": "MGRS-19KCP",
+    "sentinel2Scenes": [
+     {
+      "id": "S2A_19KCP_20250117_0_L2A",
+      "date": "2025-01-17",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250122_0_L2A",
+      "date": "2025-01-22",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250112_0_L2A",
+      "date": "2025-01-12",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250201_0_L2A",
+      "date": "2025-02-01",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250211_0_L2A",
+      "date": "2025-02-11",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250204_0_L2A",
+      "date": "2025-02-04",
+      "sceneCloudPct": 17.8,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2A_19KCP_20250320_0_L2A",
+      "date": "2025-03-20",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250323_0_L2A",
+      "date": "2025-03-23",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250313_0_L2A",
+      "date": "2025-03-13",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250412_0_L2A",
+      "date": "2025-04-12",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250427_0_L2A",
+      "date": "2025-04-27",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250407_0_L2A",
+      "date": "2025-04-07",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250522_0_L2A",
+      "date": "2025-05-22",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250502_0_L2A",
+      "date": "2025-05-02",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250527_0_L2A",
+      "date": "2025-05-27",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250626_0_L2A",
+      "date": "2025-06-26",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250614_0_L2A",
+      "date": "2025-06-14",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250611_0_L2A",
+      "date": "2025-06-11",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250701_0_L2A",
+      "date": "2025-07-01",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250706_0_L2A",
+      "date": "2025-07-06",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_19KCP_20250728_0_L2A",
+      "date": "2025-07-28",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_19KCP_20250817_0_L2A",
+      "date": "2025-08-17",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250820_0_L2A",
+      "date": "2025-08-20",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20250805_0_L2A",
+      "date": "2025-08-05",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_19KCP_20250906_0_L2A",
+      "date": "2025-09-06",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20250929_0_L2A",
+      "date": "2025-09-29",
+      "sceneCloudPct": 1.2,
+      "clearLandShare": 0.909
+     },
+     {
+      "id": "S2C_19KCP_20250917_0_L2A",
+      "date": "2025-09-17",
+      "sceneCloudPct": 17.3,
+      "clearLandShare": 0.081
+     },
+     {
+      "id": "S2A_19KCP_20251026_0_L2A",
+      "date": "2025-10-26",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20251029_0_L2A",
+      "date": "2025-10-29",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_19KCP_20251019_0_L2A",
+      "date": "2025-10-19",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 0.981
+     },
+     {
+      "id": "S2B_19KCP_20251118_0_L2A",
+      "date": "2025-11-18",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 0.999
+     },
+     {
+      "id": "S2C_19KCP_20251123_0_L2A",
+      "date": "2025-11-23",
+      "sceneCloudPct": 0.8,
+      "clearLandShare": 0.947
+     },
+     {
+      "id": "S2C_19KCP_20251103_0_L2A",
+      "date": "2025-11-03",
+      "sceneCloudPct": 7.8,
+      "clearLandShare": 0.614
+     },
+     {
+      "id": "S2B_19KCP_20251221_0_L2A",
+      "date": "2025-12-21",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_19KCP_20251225_0_L2A",
+      "date": "2025-12-25",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_19KCP_20251203_0_L2A",
+      "date": "2025-12-03",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 1.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 12.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "haughton-crater",
+   "name": "Haughton impact structure, Devon Island, Canada",
+   "lat": 75.3833,
+   "lon": -89.6667,
+   "kind": "known",
+   "footprintKm": 5.0,
+   "footprintNote": "Central part of the 23 km impact structure only.",
+   "values": {
+    "slope": {
+     "value": 1.19,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 16.0,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121
+    },
+    "slopeFine": {
+     "value": 4.41,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 18.2,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244
+    },
+    "ndvi": {
+     "value": 0.073,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 281960,
+     "months": 5,
+     "scenes": 24
+    },
+    "bareFrac": {
+     "value": 0.995,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.638,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "sedimentary",
+     "unit": "",
+     "scale": "site",
+     "source": "GMNA (small-scale map) via Macrostrat: Garrity, C.P., and Soller, D.R., 2009 Database of the Geologic Map of North America: adapted from the map by J.C. Reed, Jr. and others (2005) U.S. Geological Survey Data Series 424 ",
+     "badge": "Literature",
+     "mapUnit": "Neogene sedimentary"
+    },
+    "lithology": {
+     "value": null,
+     "unit": "class code",
+     "scale": "site",
+     "source": null,
+     "badge": null,
+     "note": "The rock type has no exact GLiM class in the mapping table, or is unknown."
+    },
+    "tempMean": {
+     "value": -14.69,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 4.85,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 342.2,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": 75.25,
+    "lon": -89.75,
+    "ndvi": 0.037,
+    "slope": 1.56,
+    "roughness": 69.1,
+    "lithology": 5,
+    "snowIceFrac": 0.016,
+    "barrenFrac": 0.815
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_N75_00_W090_00_DEM",
+    "elevMinM": 107.0,
+    "elevMaxM": 201.0,
+    "sentinel2Tile": "MGRS-15XWD",
+    "sentinel2Scenes": [
+     {
+      "id": "S2B_15XWD_20250324_0_L2A",
+      "date": "2025-03-24",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_15XWD_20250322_0_L2A",
+      "date": "2025-03-22",
+      "sceneCloudPct": 0.2,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_15XWD_20250326_1_L2A",
+      "date": "2025-03-26",
+      "sceneCloudPct": 0.3,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_15XWD_20250415_1_L2A",
+      "date": "2025-04-15",
+      "sceneCloudPct": 0.3,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_15XWD_20250402_1_L2A",
+      "date": "2025-04-02",
+      "sceneCloudPct": 2.4,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_15XWD_20250405_1_L2A",
+      "date": "2025-04-05",
+      "sceneCloudPct": 4.0,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_15XWD_20250519_0_L2A",
+      "date": "2025-05-19",
+      "sceneCloudPct": 2.5,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_15XWD_20250526_0_L2A",
+      "date": "2025-05-26",
+      "sceneCloudPct": 4.9,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_15XWD_20250520_0_L2A",
+      "date": "2025-05-20",
+      "sceneCloudPct": 7.7,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_15XWD_20250605_0_L2A",
+      "date": "2025-06-05",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 0.015
+     },
+     {
+      "id": "S2C_15XWD_20250620_0_L2A",
+      "date": "2025-06-20",
+      "sceneCloudPct": 0.3,
+      "clearLandShare": 0.596
+     },
+     {
+      "id": "S2C_15XWD_20250621_0_L2A",
+      "date": "2025-06-21",
+      "sceneCloudPct": 0.5,
+      "clearLandShare": 0.741
+     },
+     {
+      "id": "S2B_15XWD_20250719_0_L2A",
+      "date": "2025-07-19",
+      "sceneCloudPct": 1.6,
+      "clearLandShare": 0.978
+     },
+     {
+      "id": "S2C_15XWD_20250730_0_L2A",
+      "date": "2025-07-30",
+      "sceneCloudPct": 3.8,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_15XWD_20250715_0_L2A",
+      "date": "2025-07-15",
+      "sceneCloudPct": 6.5,
+      "clearLandShare": 0.689
+     },
+     {
+      "id": "S2B_15XWD_20250818_0_L2A",
+      "date": "2025-08-18",
+      "sceneCloudPct": 1.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2B_15XWD_20250831_0_L2A",
+      "date": "2025-08-31",
+      "sceneCloudPct": 5.9,
+      "clearLandShare": 0.77
+     },
+     {
+      "id": "S2C_15XWD_20250819_0_L2A",
+      "date": "2025-08-19",
+      "sceneCloudPct": 40.9,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_15XWD_20250915_0_L2A",
+      "date": "2025-09-15",
+      "sceneCloudPct": 0.5,
+      "clearLandShare": 0.042
+     },
+     {
+      "id": "S2B_15XWD_20250910_0_L2A",
+      "date": "2025-09-10",
+      "sceneCloudPct": 1.8,
+      "clearLandShare": 0.93
+     },
+     {
+      "id": "S2B_15XWD_20250917_0_L2A",
+      "date": "2025-09-17",
+      "sceneCloudPct": 6.8,
+      "clearLandShare": 0.07
+     },
+     {
+      "id": "S2C_15XWD_20251002_1_L2A",
+      "date": "2025-10-02",
+      "sceneCloudPct": 28.7,
+      "clearLandShare": 0.001
+     },
+     {
+      "id": "S2C_15XWD_20251005_0_L2A",
+      "date": "2025-10-05",
+      "sceneCloudPct": 72.0,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2B_15XWD_20251014_0_L2A",
+      "date": "2025-10-14",
+      "sceneCloudPct": 72.0,
+      "clearLandShare": 0.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 4.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [
+     {
+      "map": "Arctic",
+      "scale": "small",
+      "unit": "unclassified; Impact structure",
+      "lith": "impact breccia, impact melt rock, crater fill"
+     }
+    ],
+    "errors": []
+   }
+  },
+  {
+   "id": "lanzarote-timanfaya",
+   "name": "Timanfaya, Lanzarote, Spain",
+   "lat": 28.9942,
+   "lon": -13.7933,
+   "kind": "known",
+   "footprintKm": 5.0,
+   "footprintNote": "Timanfaya lava field at the listed coordinates.",
+   "values": {
+    "slope": {
+     "value": 2.63,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121,
+     "note": "463 m posts: comparable with earth.json and the targets. Few pixels in a footprint this small."
+    },
+    "roughness": {
+     "value": 58.3,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 463.0,
+     "windowKm": 5.09,
+     "pixels": 121
+    },
+    "slopeFine": {
+     "value": 4.93,
+     "unit": "degrees",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244,
+     "note": "About 31 m posts. Not comparable with slopes measured at 463 m."
+    },
+    "roughnessFine": {
+     "value": 58.8,
+     "unit": "m",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "postM": 30.9,
+     "pixels": 26244
+    },
+    "ndvi": {
+     "value": 0.019,
+     "unit": "",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "pixels": 257048,
+     "months": 11,
+     "scenes": 33
+    },
+    "bareFrac": {
+     "value": 1.0,
+     "unit": "fraction of land pixels, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of non-water 10 m pixels with annual NDVI below 0.2."
+    },
+    "waterFrac": {
+     "value": 0.0,
+     "unit": "fraction of footprint, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus DEM GLO-30 (ESA), elevation and water body mask",
+     "badge": "Measured",
+     "note": "Open water in the Copernicus DEM water body mask."
+    },
+    "snowObsShare": {
+     "value": 0.0,
+     "unit": "fraction of clear observations, 0 to 1",
+     "scale": "site",
+     "source": "Copernicus Sentinel-2 L2A, 2025 (ESA), read from the Earth Search open archive",
+     "badge": "Measured",
+     "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
+    },
+    "rockType": {
+     "value": "mafic volcanic rocks",
+     "unit": "",
+     "scale": "site",
+     "source": "Spain (medium-scale map) via Macrostrat: 1995 Mapa Geológico de la Península Ibérica, Baleares y Canarias a escala 1:1.000.000 Instituto Geológico y Minero de España",
+     "badge": "Literature",
+     "mapUnit": "",
+     "description": "Lavas and basaltic pyroclasts"
+    },
+    "lithology": {
+     "value": 2,
+     "unit": "class code",
+     "scale": "site",
+     "source": "Spain (medium-scale map) via Macrostrat: 1995 Mapa Geológico de la Península Ibérica, Baleares y Canarias a escala 1:1.000.000 Instituto Geológico y Minero de España",
+     "badge": "Literature",
+     "label": "Basic volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
+    },
+    "rockTypeVolcano": {
+     "value": "Basalt / Picro-Basalt",
+     "unit": "",
+     "scale": "volcano",
+     "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 383060 (Lanzarote)",
+     "badge": "Literature"
+    },
+    "tempMean": {
+     "value": 20.2,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "tempRange": {
+     "value": 2.42,
+     "unit": "°C",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter T2M_RANGE",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "precip": {
+     "value": 102.3,
+     "unit": "mm/year",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    }
+   },
+   "gridCell": {
+    "lat": 28.75,
+    "lon": -13.75,
+    "ndvi": 0.103,
+    "slope": 3.3,
+    "roughness": 115.0,
+    "lithology": null,
+    "snowIceFrac": 0.0,
+    "barrenFrac": 0.631
+   },
+   "detail": {
+    "demTile": "Copernicus_DSM_COG_10_N28_00_W014_00_DEM, Copernicus_DSM_COG_10_N29_00_W014_00_DEM",
+    "elevMinM": 25.0,
+    "elevMaxM": 371.0,
+    "sentinel2Tile": "MGRS-28RFT",
+    "sentinel2Scenes": [
+     {
+      "id": "S2A_28RFT_20250116_0_L2A",
+      "date": "2025-01-16",
+      "sceneCloudPct": 1.8,
+      "clearLandShare": 0.991
+     },
+     {
+      "id": "S2B_28RFT_20250111_0_L2A",
+      "date": "2025-01-11",
+      "sceneCloudPct": 2.6,
+      "clearLandShare": 0.991
+     },
+     {
+      "id": "S2B_28RFT_20250121_0_L2A",
+      "date": "2025-01-21",
+      "sceneCloudPct": 9.0,
+      "clearLandShare": 0.936
+     },
+     {
+      "id": "S2A_28RFT_20250329_0_L2A",
+      "date": "2025-03-29",
+      "sceneCloudPct": 5.3,
+      "clearLandShare": 0.941
+     },
+     {
+      "id": "S2A_28RFT_20250319_0_L2A",
+      "date": "2025-03-19",
+      "sceneCloudPct": 5.5,
+      "clearLandShare": 0.815
+     },
+     {
+      "id": "S2C_28RFT_20250327_0_L2A",
+      "date": "2025-03-27",
+      "sceneCloudPct": 38.6,
+      "clearLandShare": 0.855
+     },
+     {
+      "id": "S2A_28RFT_20250408_0_L2A",
+      "date": "2025-04-08",
+      "sceneCloudPct": 0.6,
+      "clearLandShare": 0.0
+     },
+     {
+      "id": "S2C_28RFT_20250406_0_L2A",
+      "date": "2025-04-06",
+      "sceneCloudPct": 3.8,
+      "clearLandShare": 0.876
+     },
+     {
+      "id": "S2B_28RFT_20250401_0_L2A",
+      "date": "2025-04-01",
+      "sceneCloudPct": 8.8,
+      "clearLandShare": 0.818
+     },
+     {
+      "id": "S2A_28RFT_20250518_0_L2A",
+      "date": "2025-05-18",
+      "sceneCloudPct": 1.3,
+      "clearLandShare": 0.925
+     },
+     {
+      "id": "S2B_28RFT_20250501_0_L2A",
+      "date": "2025-05-01",
+      "sceneCloudPct": 11.8,
+      "clearLandShare": 0.941
+     },
+     {
+      "id": "S2B_28RFT_20250521_0_L2A",
+      "date": "2025-05-21",
+      "sceneCloudPct": 12.4,
+      "clearLandShare": 0.594
+     },
+     {
+      "id": "S2B_28RFT_20250620_0_L2A",
+      "date": "2025-06-20",
+      "sceneCloudPct": 4.9,
+      "clearLandShare": 0.937
+     },
+     {
+      "id": "S2C_28RFT_20250625_0_L2A",
+      "date": "2025-06-25",
+      "sceneCloudPct": 5.9,
+      "clearLandShare": 0.763
+     },
+     {
+      "id": "S2C_28RFT_20250605_0_L2A",
+      "date": "2025-06-05",
+      "sceneCloudPct": 11.0,
+      "clearLandShare": 0.39
+     },
+     {
+      "id": "S2A_28RFT_20250717_0_L2A",
+      "date": "2025-07-17",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 0.968
+     },
+     {
+      "id": "S2C_28RFT_20250715_0_L2A",
+      "date": "2025-07-15",
+      "sceneCloudPct": 5.6,
+      "clearLandShare": 0.979
+     },
+     {
+      "id": "S2B_28RFT_20250720_0_L2A",
+      "date": "2025-07-20",
+      "sceneCloudPct": 16.2,
+      "clearLandShare": 0.47
+     },
+     {
+      "id": "S2B_28RFT_20250809_0_L2A",
+      "date": "2025-08-09",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 0.95
+     },
+     {
+      "id": "S2B_28RFT_20250819_0_L2A",
+      "date": "2025-08-19",
+      "sceneCloudPct": 3.4,
+      "clearLandShare": 0.96
+     },
+     {
+      "id": "S2B_28RFT_20250829_0_L2A",
+      "date": "2025-08-29",
+      "sceneCloudPct": 5.9,
+      "clearLandShare": 0.934
+     },
+     {
+      "id": "S2A_28RFT_20250915_0_L2A",
+      "date": "2025-09-15",
+      "sceneCloudPct": 0.1,
+      "clearLandShare": 0.942
+     },
+     {
+      "id": "S2B_28RFT_20250908_0_L2A",
+      "date": "2025-09-08",
+      "sceneCloudPct": 1.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_28RFT_20250905_0_L2A",
+      "date": "2025-09-05",
+      "sceneCloudPct": 5.3,
+      "clearLandShare": 0.898
+     },
+     {
+      "id": "S2C_28RFT_20251003_0_L2A",
+      "date": "2025-10-03",
+      "sceneCloudPct": 2.3,
+      "clearLandShare": 0.941
+     },
+     {
+      "id": "S2B_28RFT_20251028_0_L2A",
+      "date": "2025-10-28",
+      "sceneCloudPct": 11.5,
+      "clearLandShare": 0.942
+     },
+     {
+      "id": "S2B_28RFT_20251018_0_L2A",
+      "date": "2025-10-18",
+      "sceneCloudPct": 14.6,
+      "clearLandShare": 0.911
+     },
+     {
+      "id": "S2A_28RFT_20251124_0_L2A",
+      "date": "2025-11-24",
+      "sceneCloudPct": 0.0,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2A_28RFT_20251104_0_L2A",
+      "date": "2025-11-04",
+      "sceneCloudPct": 4.1,
+      "clearLandShare": 1.0
+     },
+     {
+      "id": "S2C_28RFT_20251122_0_L2A",
+      "date": "2025-11-22",
+      "sceneCloudPct": 7.7,
+      "clearLandShare": 0.93
+     },
+     {
+      "id": "S2C_28RFT_20251202_0_L2A",
+      "date": "2025-12-02",
+      "sceneCloudPct": 15.9,
+      "clearLandShare": 0.67
+     },
+     {
+      "id": "S2B_28RFT_20251207_0_L2A",
+      "date": "2025-12-07",
+      "sceneCloudPct": 19.5,
+      "clearLandShare": 0.827
+     },
+     {
+      "id": "S2A_28RFT_20251214_0_L2A",
+      "date": "2025-12-14",
+      "sceneCloudPct": 28.2,
+      "clearLandShare": 0.0
+     }
+    ],
+    "sentinel2MedianMonthsPerPixel": 11.0,
+    "sentinel2PixelsNeverClear": 0,
+    "otherRegionalMapUnits": [
+     {
+      "map": "EGDI 1:1 Million pan-european Surface Geology",
+      "scale": "medium",
+      "unit": "Pyroclastic material, Holocene",
+      "lith": "tephra"
+     },
+     {
+      "map": "Africa",
+      "scale": "small",
+      "unit": "",
+      "lith": "volcanic"
+     },
+     {
+      "map": "Europe 1:5M",
+      "scale": "small",
+      "unit": "Quaternary basalt",
+      "lith": "basalt"
+     }
+    ],
+    "errors": []
+   }
+  }
+ ]
+}

@@ -47,6 +47,7 @@ from common import CACHE, DATA, USER_AGENT  # noqa: E402
 import sites as S  # noqa: E402  (shared helpers: STAC search, GLO-30 names, GDAL settings)
 
 WINDOW_KM = 20.0
+DARK_NULL = 0.95   # a lunar image with this share of near-black pixels is written as null
 OUT = DATA / "extracts"
 XCACHE = CACHE / "extracts"
 XCACHE.mkdir(exist_ok=True)
@@ -216,8 +217,8 @@ def moon_image(lat: float, lon: float):
     with rasterio.Env(**S.GDAL_ENV), rasterio.open("/vsicurl/" + WAC_URL) as ds:
         with WarpedVRT(ds, crs=dst, transform=dtr, width=n, height=n, resampling=Resampling.bilinear) as vrt:
             img = S._retry(lambda: vrt.read(1))
-    if (img == 0).mean() > 0.5:
-        return None, px, None
+    if (img < 8).mean() >= DARK_NULL:
+        return None, px, None  # nothing to see: permanent shadow or no image. No image is honest, a black square is not.
     return img[None], px, {"product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)", "nativePixelM": 100,
                            "attribution": ATTR["wac"], "badge": "Mission",
                            "darkShare": round(float((img < 8).mean()), 3),
@@ -306,7 +307,8 @@ def build() -> dict:
             "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
             "description": ("Every extract covers the same ground area, so they can be shown side by side at one scale. "
                             "Pixel size differs per dataset and is given per file; nothing is upsampled."),
-            "imageNote": "No Mars image was requested or built: image is null for Mars targets.",
+            "imageNote": ("No Mars image was requested or built: image is null for Mars targets. A lunar image that is "
+                          f"at least {DARK_NULL:.0%} near-black (permanent shadow) is null too."),
         },
         "items": items,
     }

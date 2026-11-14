@@ -17,3 +17,10 @@ Small choices made without asking, one line each with the reason.
 | 2026-11-14 | Monthly site climate covers all 40 sites in analogs.json and takes the value of the POWER grid cell containing the site, no interpolation | "Never interpolate"; the file labels every field scale "grid" |
 | 2026-11-14 | Monthly precipitation is stored as mm/month (source mm/day times days in month, February 28.25) | A monthly total is what a "best month" chart needs; the conversion is stated in the file |
 | 2026-11-14 | Solar irradiance is POWER `ALLSKY_SFC_SW_DWN` in W/m2 (24 hour mean, horizontal surface, all sky), from the CERES SYN1deg 1 degree grid | It is the surface value the sandbox formula needs; W/m2 matches the Moon and Mars figures in DESIGN.md |
+| 2026-11-14 | Extracts are 20 km squares in a local orthographic projection, each dataset at its native pixel size (30 m, 80 m, 463 m) | One ground scale for the split view without upsampling coarse data to look finer than it is |
+| 2026-11-14 | Featured lava tube for the extracts is Gua Lawa | It is the only Indonesian tube whose own coordinates are published; the other two are centred on a village or a volcano |
+| 2026-11-14 | Extracts are built for all seven targets, not only Gale | Ijen and Merapi are matched to Gale only; the split view may show any target and the extracts are small |
+| 2026-11-14 | The Haworth LROC image is null (100% near-black); Shackleton's is kept with `darkShare` 0.86 | A black square is not an image; permanent shadow is recorded as a number instead |
+| 2026-11-14 | Open water in site footprints comes from the Copernicus DEM water mask, not Sentinel-2's classification | The classification labelled 86% of the Timanfaya lava field as water |
+| 2026-11-14 | Goa Pandan rock type "basalt" is taken from the abstract of Sirait et al. 2023; Maros-Pangkep rock type is null | Pandan's abstract was retrieved and states it; no retrievable source text was found for Maros-Pangkep |
+| 2026-11-14 | earth.bin stores scaled integers (uint8, uint16, int16) with the same decimals as earth.json | Exact round trip with the JSON, checked on every build, and 8 times smaller |
