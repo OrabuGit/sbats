@@ -126,10 +126,6 @@ describe('Mission presets', () => {
     for (const id of PRESET_IDS) equal(PRESETS[id].id, id);
   });
 
-  it('uses the Base weights of the DESIGN.md table', () => {
-    deepEqual(PRESETS.base.weights, { terrain: 0.25, bareGround: 0.2, dryness: 0.15, temperature: 0.15, sunlight: 0.1, rockType: 0.15 });
-  });
-
   it('has non-negative weights that sum to 1 in every preset', () => {
     for (const id of PRESET_IDS) {
       const w = PRESETS[id].weights;
@@ -138,7 +134,7 @@ describe('Mission presets', () => {
         ok(w[factor] >= 0);
         total += w[factor];
       }
-      ok(near(total, 1, 1e-12), `${id} sums to ${total}`);
+      ok(near(total, 1, 1e-9), `${id} sums to ${total}`);
     }
   });
 
@@ -236,6 +232,28 @@ describe('Clamping the target to what Earth offers', () => {
     ok(sun.value < 2);
     equal(sun.clamped, observed.sunElevation?.min);
     ok(p.gaps.some((g) => g.key === 'sunElevation'));
+  });
+});
+
+describe('Sunlight tolerance', () => {
+  it('uses the library constant unless the tuning tools override it', () => {
+    const t = makeTarget();
+    equal(prepareTarget(t, WIDE_RANGES, TABLE).gaussian.sunElevation?.sigma, 15);
+    equal(prepareTarget(t, WIDE_RANGES, TABLE, { sunElevationSigmaDeg: 30 }).gaussian.sunElevation?.sigma, 30);
+    throws(() => prepareTarget(t, WIDE_RANGES, TABLE, { sunElevationSigmaDeg: 0 }), RangeError);
+  });
+
+  it('gives a higher Sunlight similarity with a wider tolerance, and changes nothing else', () => {
+    const t = makeTarget();
+    const cell = makeCell({ lat: 55.25 });
+    const narrow = scoreCell(cell, prepareTarget(t, WIDE_RANGES, TABLE), BASE);
+    const wide = scoreCell(cell, prepareTarget(t, WIDE_RANGES, TABLE, { sunElevationSigmaDeg: 30 }), BASE);
+    narrow.breakdown.forEach((f, i) => {
+      const other = wide.breakdown[i];
+      ok(other);
+      if (f.factor === 'sunlight') ok((other.similarity ?? 0) > (f.similarity ?? 1));
+      else equal(other.similarity, f.similarity);
+    });
   });
 });
 

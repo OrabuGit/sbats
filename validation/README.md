@@ -5,22 +5,32 @@ the same scoring code the app runs, and holds the scripts that produced the meas
 
 Code generated with AI assistance (Claude Code), directed and reviewed by the team. See `AI_USE.md`.
 
-## Run it
+## Where things stand
 
-From the repository root:
+The numbers in `output/` are PROVISIONAL until two things have happened: slope and roughness are in
+`data/earth.json`, and the one tuning pass has been run and frozen. `output/report.json` carries a
+`status` field (`"provisional"` or `"final"`) and a `statusNote`. Show both wherever a number is shown.
 
-```bash
-npx tsx validation/validate.ts
-```
+## The order of work
 
-Add a preset name (`rover`, `ice`, `astrobiology`) to use other weights. It needs `data/earth.json`,
-`data/targets.json` and `data/analogs.json`, and uses `data/lithology_similarity.json` when it exists.
-It writes `validation/output/report.json` (for the Validation page) and `validation/output/REPORT.md`.
+1. `python3 validation/tuning/make_split.py` drew the tuning / hold-out split once (seed 20261114,
+   20 + 8 known sites, 4 + 2 controls). It is in `tuning/split.json` and cannot be redrawn.
+2. `tuning/PLAN.md` says exactly what the tuning pass may change and how. It was written first.
+3. When terrain is in `earth.json`: `npx tsx validation/tune.ts`, once. It sees the tuning set only,
+   writes `tuning/frozen.json` and `tuning/tuning-log.json`, and refuses to run again.
+4. Copy the frozen values into `build/make_targets.py`, `app/src/lib/scoring/presets.ts` and
+   `sunlight.ts`. A unit test fails if they differ from `frozen.json`.
+5. `npx tsx validation/validate.ts` (add `rover`, `ice` or `astrobiology` for the other presets).
+   After the freeze it scores the hold-out set as well and reports both sets side by side.
+6. `npx tsx validation/score_candidates.ts` scores the Indonesian candidate sites. They are never
+   part of tuning or validation, and this script refuses to run before the freeze.
 
-Rerun it every time `earth.json` changes. The numbers in `output/` are from the build named in the report.
+Before the freeze, `validate.ts` scores the tuning set only, so the hold-out set stays unseen.
+All commands run from the repository root. `SBATS_OUT_DIR=/some/folder` redirects the reports.
 
 ## What it reports
 
+- For the tuning set and the hold-out set, and for Moon targets and Mars targets separately:
 - ROC AUC: how often a known analog outranks a negative control, both scored against the same target.
   0.5 is chance, 1.0 is perfect. The strict version counts a site with no score as ranked last.
 - Share of known analogs in the top 10% of all scored Earth cells for their matching target.
@@ -33,8 +43,10 @@ Each known site counts once. A site listed for several targets is split equally 
 ## Rules for using the numbers
 
 - Report them as they come out, weak ones included (DESIGN.md section 9, JUDGING.md).
-- Do not tune sigmas or weights to make a failing number pass. DESIGN.md allows one tuning pass, done on
-  purpose and written down, after which the values are frozen.
+- There is one tuning pass, on the tuning set only, following `tuning/PLAN.md`. After it the values are
+  frozen. They are not tuned again, even if a later result looks worse.
+- The hold-out numbers are the ones to quote. Tuning-set numbers flatter the score.
+- Indonesian candidate sites never enter tuning or validation. They are the findings.
 - An AUC at or near 1.0 is printed with a warning: it means the test is too easy.
 - The positive set was chosen by strength of published evidence, one site per grid cell, before any score
   was computed. It includes sites that are analogs for geology only (impact craters in forest or farmland)
@@ -78,6 +90,8 @@ For Session A (app):
 - `describeGap(gap, prepared)` in the scoring library writes the "what Earth cannot copy" sentence for a
   clamped target value. `prepared.missingTargetKeys` lists the factors with no published value.
 - `validation/output/report.json` holds the headline numbers and the per-site table for the Validation page.
+  Read `status` and `statusNote` and show "provisional" next to every number while `status` is not `"final"`.
+  After the freeze, `headline` is the hold-out set and `sets.tuning`, `sets.holdout` and `sets.all` hold the rest.
 
 For Session B (pipeline):
 - Target terrain uses a 55.6 km square window. An Earth cell narrows east-west with cos(latitude); a

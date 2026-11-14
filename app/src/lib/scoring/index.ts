@@ -5,6 +5,7 @@ export { PRESETS, PRESET_IDS, DEFAULT_PRESET_ID, normaliseWeights } from './pres
 export type { Preset, PresetId } from './presets';
 
 export { computeEarthRanges, prepareTarget, scoreCell, scoreCells, scoreCellSummary, nearestCell } from './score';
+export type { PrepareOptions } from './score';
 
 export { buildReason, describeGap, formatValue, matchWord } from './explain';
 

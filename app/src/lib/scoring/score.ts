@@ -60,6 +60,12 @@ export function computeEarthRanges(cells: readonly EarthCell[]): EarthRanges {
   return ranges;
 }
 
+/** Options for prepareTarget. The app never passes any: they exist for the validation tools. */
+export interface PrepareOptions {
+  /** Overrides the Sunlight tolerance (SUN_ELEVATION_SIGMA_DEG). Used only by the one-off tuning script. */
+  sunElevationSigmaDeg?: number;
+}
+
 /**
  * Makes a target ready for scoring.
  *
@@ -78,6 +84,7 @@ export function prepareTarget(
   target: Target,
   ranges: EarthRanges,
   lithologyTable: LithologyTable | null,
+  options: PrepareOptions = {},
 ): PreparedTarget {
   const gaussian = {} as Record<GaussianKey, PreparedGaussian | null>;
   const missingTargetKeys: FactorKey[] = [];
@@ -120,7 +127,9 @@ export function prepareTarget(
     addGaussian(key, tv.value, tv.sigma);
   }
 
-  addGaussian('sunElevation', sunElevation(target.body, target.lat), SUN_ELEVATION_SIGMA_DEG);
+  const sunSigma = options.sunElevationSigmaDeg ?? SUN_ELEVATION_SIGMA_DEG;
+  if (!(sunSigma > 0)) throw new RangeError(`sunElevationSigmaDeg must be greater than 0, got ${String(sunSigma)}`);
+  addGaussian('sunElevation', sunElevation(target.body, target.lat), sunSigma);
 
   let lithology: PreparedTarget['lithology'] = null;
   const lv = values.lithology;

@@ -1,5 +1,7 @@
 # SBATS validation report
 
+**Status: PROVISIONAL.** Slope and roughness are not in earth.json yet, so Terrain is left out of every score. The one tuning pass has not been run and frozen, so sigmas and weights are first guesses. This run predates the tuning / hold-out split and covers all 28 known sites and 6 controls together.
+
 Generated 2026-11-14T11:14:31.309Z by `npx tsx validation/validate.ts base`. Preset: Base.
 Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-14T10:47:08Z.
 
@@ -136,10 +138,7 @@ How to read them:
 | Mistastin crater, Labrador, Canada | moon-haworth | 3.5 | top 41.0% | low | dryness |
 | Mistastin crater, Labrador, Canada | moon-shackleton-rim | 3.5 | top 41.0% | low | dryness |
 
-## Candidates (the headline sites, not part of the validation numbers)
+## Candidates
 
-| Site | Target | Score | Rank among Earth cells | Confidence | Limiting factor |
-| --- | --- | --- | --- | --- | --- |
-| Kawah Ijen, East Java, Indonesia | mars-gale | 0.0 | top 92.4% | low | bareGround |
-| Mount Merapi and the Opak River, Central Java, Indonesia | mars-gale | 0.0 | top 96.5% | low | dryness |
-
+Indonesian candidate sites are not part of validation. Their scores are written by
+`validation/score_candidates.ts` after the tuning pass is frozen.

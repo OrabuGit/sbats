@@ -1,0 +1,130 @@
+{
+  "drawnAt": "2026-11-14T11:26:26Z",
+  "seed": 20261114,
+  "holdoutShare": 0.3,
+  "method": "Stratified by group, ids sorted then shuffled with Python random.Random(seed); the first round(0.3 * n) of each group are the hold-out.",
+  "counts": {
+    "knownTuning": 20,
+    "knownHoldout": 8,
+    "negativeTuning": 4,
+    "negativeHoldout": 2
+  },
+  "tuning": [
+    "arkaroola",
+    "atacama-yungay",
+    "beacon-valley",
+    "craters-of-the-moon",
+    "death-valley-ubehebe",
+    "don-juan-pond",
+    "haughton-crater",
+    "kangerlussuaq",
+    "kilauea",
+    "lanzarote-timanfaya",
+    "makgadikgadi-pans",
+    "makhtesh-ramon",
+    "mauna-kea",
+    "meteor-crater",
+    "mistastin-crater",
+    "neg-congo-salonga",
+    "neg-jakarta",
+    "neg-kalimantan-betung-kerihun",
+    "neg-paris",
+    "qaidam-basin",
+    "rio-tinto",
+    "sp-crater",
+    "sudbury",
+    "teide"
+  ],
+  "holdout": [
+    "askja",
+    "dallol",
+    "etna",
+    "ladakh-tso-kar",
+    "lonar-crater",
+    "mdrs-utah",
+    "neg-amazon-jau",
+    "neg-singapore",
+    "pilbara-north-pole-dome",
+    "ries-crater"
+  ],
+  "groups": {
+    "known-mars": {
+      "sites": 18,
+      "holdout": [
+        "dallol",
+        "ladakh-tso-kar",
+        "lonar-crater",
+        "mdrs-utah",
+        "pilbara-north-pole-dome"
+      ],
+      "tuning": [
+        "arkaroola",
+        "atacama-yungay",
+        "beacon-valley",
+        "craters-of-the-moon",
+        "death-valley-ubehebe",
+        "don-juan-pond",
+        "haughton-crater",
+        "kangerlussuaq",
+        "makgadikgadi-pans",
+        "makhtesh-ramon",
+        "qaidam-basin",
+        "rio-tinto",
+        "teide"
+      ]
+    },
+    "known-mars+moon": {
+      "sites": 3,
+      "holdout": [
+        "askja"
+      ],
+      "tuning": [
+        "kilauea",
+        "lanzarote-timanfaya"
+      ]
+    },
+    "known-moon": {
+      "sites": 7,
+      "holdout": [
+        "etna",
+        "ries-crater"
+      ],
+      "tuning": [
+        "mauna-kea",
+        "meteor-crater",
+        "mistastin-crater",
+        "sp-crater",
+        "sudbury"
+      ]
+    },
+    "negative-city": {
+      "sites": 3,
+      "holdout": [
+        "neg-singapore"
+      ],
+      "tuning": [
+        "neg-jakarta",
+        "neg-paris"
+      ]
+    },
+    "negative-rainforest": {
+      "sites": 3,
+      "holdout": [
+        "neg-amazon-jau"
+      ],
+      "tuning": [
+        "neg-congo-salonga",
+        "neg-kalimantan-betung-kerihun"
+      ]
+    }
+  },
+  "excludedCandidates": [
+    "id-goa-pandan",
+    "id-gua-lawa",
+    "id-kawah-ijen",
+    "id-kesaksak-lava-tube",
+    "id-maros-pangkep-karst",
+    "id-merapi"
+  ],
+  "disclosure": "A provisional validation run on 2026-11-14, before this split existed and before terrain was in earth.json, scored all 28 known sites and 6 controls together. Its numbers are in git history (commit 3c71dad). The split was drawn afterwards with this fixed seed, in one draw, without reference to those scores. No sigma or weight was changed between that run and the split."
+}

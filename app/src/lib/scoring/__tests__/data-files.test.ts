@@ -6,10 +6,11 @@ import { deepEqual, equal, ok } from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { validateLithologyTable } from '../lithology';
-import { PRESETS } from '../presets';
+import { PRESET_IDS, PRESETS } from '../presets';
+import { SUN_ELEVATION_SIGMA_DEG } from '../sunlight';
 import { computeEarthRanges, prepareTarget, scoreCell, scoreCells } from '../score';
 import { FACTOR_KEYS } from '../types';
-import type { EarthCell, LithologyClass, LithologyTable, Target } from '../types';
+import type { EarthCell, LithologyClass, LithologyTable, Target, Weights } from '../types';
 
 const DATA = fileURLToPath(new URL('../../../../../data/', import.meta.url));
 
@@ -37,6 +38,14 @@ const analogs = load<Analog[]>('analogs.json');
 const table = load<LithologyTable>('lithology_similarity.json');
 const earth = load<EarthFile>('earth.json');
 const legend = earth?.meta.factors.find((f) => f.key === 'lithology')?.classes ?? [];
+
+interface FrozenFile {
+  frozenAt: string;
+  after: { tempMeanSigma: number; tempRangeSigma: number; precipSigma: number; ndviSigma: number; terrainFraction: number; sunSigma: number };
+  presets: Record<string, Weights>;
+}
+const frozenPath = fileURLToPath(new URL('../../../../../validation/tuning/frozen.json', import.meta.url));
+const frozen = existsSync(frozenPath) ? (JSON.parse(readFileSync(frozenPath, 'utf8')) as FrozenFile) : null;
 
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const BADGES = ['Measured', 'Mission', 'Literature'];
@@ -175,6 +184,37 @@ describe('Real data, end to end', () => {
       const first = earth.cells[0];
       ok(first);
       ok(scoreCell(first, prepared, PRESETS.base.weights).reason.length > 0);
+    }
+  });
+});
+
+describe('Sigmas and weights against the frozen tuning result', () => {
+  const DESIGN_BASE = { terrain: 0.25, bareGround: 0.2, dryness: 0.15, temperature: 0.15, sunlight: 0.1, rockType: 0.15 };
+
+  it('uses the Base weights of the DESIGN.md table until a tuning pass is frozen', () => {
+    if (frozen) return skip(`tuning was frozen on ${frozen.frozenAt}; the next checks apply instead`);
+    deepEqual(PRESETS.base.weights, DESIGN_BASE);
+    equal(SUN_ELEVATION_SIGMA_DEG, 15);
+  });
+
+  it('uses exactly the frozen preset weights and Sunlight tolerance', () => {
+    if (!frozen) return skip('validation/tuning/frozen.json does not exist yet');
+    for (const id of PRESET_IDS) deepEqual(PRESETS[id].weights, frozen.presets[id], `preset ${id} differs from frozen.json`);
+    equal(SUN_ELEVATION_SIGMA_DEG, frozen.after.sunSigma);
+  });
+
+  it('uses exactly the frozen tolerances in targets.json', () => {
+    if (!frozen) return skip('validation/tuning/frozen.json does not exist yet');
+    if (!targets) return skip('targets.json does not exist yet');
+    const f = frozen.after;
+    for (const t of targets) {
+      const v = t.values;
+      if (v.tempMean.value !== null) equal(v.tempMean.sigma, f.tempMeanSigma, `${t.id} tempMean`);
+      if (v.tempRange.value !== null) equal(v.tempRange.sigma, f.tempRangeSigma, `${t.id} tempRange`);
+      if (v.precip.value !== null) equal(v.precip.sigma, f.precipSigma, `${t.id} precip`);
+      if (v.ndvi.value !== null) equal(v.ndvi.sigma, f.ndviSigma, `${t.id} ndvi`);
+      if (v.slope.value !== null) ok(Math.abs((v.slope.sigma ?? 0) - Math.max(1, f.terrainFraction * v.slope.value)) <= 0.006, `${t.id} slope`);
+      if (v.roughness.value !== null) ok(Math.abs((v.roughness.sigma ?? 0) - Math.max(50, f.terrainFraction * v.roughness.value)) <= 0.06, `${t.id} roughness`);
     }
   });
 });
