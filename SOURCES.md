@@ -11,6 +11,15 @@ Add a row BEFORE a feature that uses the dataset is marked done.
 | Global Lithological Map Database GLiM v1.0, gridded to 0.5 degrees | Hartmann, J. and Moosdorf, N. (2012), published on PANGAEA | https://doi.org/10.1594/PANGAEA.788537 (paper: https://doi.org/10.1029/2012GC004370) | 2026-11-14 | CC BY 3.0 | `lithology` in `data/earth.json`: the class of the authors' 0.5 degree grid, taken as published. Water bodies and no-data cells are `null` | Measured |
 | Copernicus DEM GLO-90 (COP-DEM_GLO-90-DGED, 2021 release): elevation and Water Body Mask tiles | European Space Agency (ESA) / Copernicus, produced by Airbus; read from the AWS Open Data registry | https://doi.org/10.5270/ESA-c5d3d65 (files: https://registry.opendata.aws/copernicus-dem/) | 2026-11-14 | Free of charge for any use under the Copernicus DEM licence; required notice: "produced using Copernicus WorldDEM-90 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved" | `slope` and `roughness` in `data/earth.json`. Elevation block-averaged to 463 m posts (15 arc-seconds, the MOLA spacing), water pixels left out. Window: one 0.5 degree cell (55.6 km x 55.6 km x cos latitude). `slope` = mean Horn 3x3 slope in degrees, `roughness` = standard deviation of elevation in m | Measured |
 | Natural Earth 1:110m physical vectors, Land, as packaged in the `world-atlas` npm package v2.0.2 (`land-110m.json`) | Natural Earth, packaged by Mike Bostock | https://github.com/topojson/world-atlas | 2026-11-14 | Public domain (data), ISC (package) | Coastline drawing on the ORBIT globe only. Not used in any score | Measured |
+| LRO LOLA polar gridded DEM, LDEM_80S_80M (80 m per pixel, south pole) | NASA PDS Geosciences Node (LOLA team, NASA GSFC) | https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/ | 2026-11-14 | Public domain (NASA PDS) | `slope` and `roughness` of the four Moon targets in `data/targets.json`, measured with `pipeline/terrain_metrics.py` over a 55.6 km window (`validation/target_terrain.py`) | Mission |
+| MGS MOLA Mission Experiment Gridded Data Record (MEGDR), 128 pixels per degree | NASA PDS Geosciences Node (MOLA team, NASA GSFC) | https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/ | 2026-11-14 | Public domain (NASA PDS) | `slope` and `roughness` of the three Mars targets in `data/targets.json`, same method as the Moon and Earth (`validation/target_terrain.py`) | Mission |
+| LRO Diviner Polar Resource Product, south pole (LRO-L-DLRE-5-PRP-V2.0, DLRE_PRP_SOUTH.TAB) | NASA PDS Geosciences Node (Diviner team, UCLA; Paige et al. 2010, doi:10.1126/science.1187726) | https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/ | 2026-11-14 | Public domain (NASA PDS) | `tempMean` of the four Moon targets: mean of the product's annual average temperature (modelled at 2 cm depth) over a 55.6 km window (`validation/build/moon_temperature.py`) | Mission |
+| Mars Climate Database v6.2, web interface, climatology scenario | LMD (Laboratoire de Meteorologie Dynamique) with OU, IAA, ESA and CNES | https://www-mars.lmd.jussieu.fr/mcd_python/ | 2026-11-14 | Copyright LMD/OU/IAA/ESA/CNES, as printed in each output file. Public web interface. Reuse terms not checked: confirm before submission | `tempMean` of the three Mars targets and `tempRange` of Jezero and Arcadia Planitia: air temperature 2 m above the surface over 24 seasons and 24 local hours (`validation/build/mars_temperature.py`). A climate model, not a measurement | Literature |
+| Curiosity REMS daily weather feed (daily minimum and maximum air temperature, sols 10 to 4995) | NASA/JPL Mars Exploration Program, data by Centro de Astrobiologia (CSIC-INTA) | https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json | 2026-11-14 | Outreach product: its disclaimer says it is for outreach only and points to the PDS for science use | `tempRange` of Gale crater and a check of the climate model there (`validation/build/mars_temperature.py`) | Mission |
+| NSSDCA planetary fact sheets: Moon, Mars, Earth | NASA GSFC, NSSDCA (D. R. Williams) | https://nssdc.gsfc.nasa.gov/planetary/factsheet/ | 2026-11-14 | Public domain (NASA) | Gravity, surface pressure, day length and axial tilt quoted in `cannotCopy`; Earth and Mars axial tilt and Mars orbit eccentricity in the Sunlight factor and the Mars season weighting | Literature |
+| Gazetteer of Planetary Nomenclature (features 16338, 16070, 14502, 5450, 14300, 2071, 348) | IAU Working Group for Planetary System Nomenclature / USGS Astrogeology | https://planetarynames.wr.usgs.gov/ | 2026-11-14 | Public domain (USGS) | Coordinates of the four Moon targets; crater sizes quoted in target summaries | Literature |
+| Measuring Vegetation (NDVI and EVI) | NASA Earth Observatory | https://science.nasa.gov/earth/earth-observatory/measuring-vegetation-ndvi-evi | 2026-11-14 | Public domain (NASA) | `ndvi` target value 0.05 and tolerance 0.1: NDVI of 0.1 and below is barren rock, sand or snow | Literature |
+| Deserts: Geology and Resources (Walker 1992) | US Geological Survey | https://pubs.usgs.gov/gip/deserts/what/ | 2026-11-14 | Public domain (USGS) | `precip` tolerance of 250 mm/year: the arid limit in Meigs' classification | Literature |
 
 ## Software and libraries
 
@@ -27,12 +36,16 @@ Add a row BEFORE a feature that uses the dataset is marked done.
 | lucide-react | ISC | Icons |
 | Inter (via @fontsource/inter) | SIL Open Font License 1.1 | Sentence text |
 | IBM Plex Mono (via @fontsource/ibm-plex-mono) | SIL Open Font License 1.1 | Numbers, labels and codes |
+| tsx (run with `npx tsx`, not installed in the app) | MIT | Runs the scoring unit tests and `validation/validate.ts` under Node |
 
 ## Methods borrowed
 
 | Method | Where it comes from | Used for |
 | --- | --- | --- |
 | Weighted geometric mean (non-compensatory) scoring | Standard multi-criteria method, also used by other 2026 Space Apps teams | Overall match score |
+| ROC AUC and top-decile share for validation | Standard rank statistics | `validation/validate.ts`: do known analogs outrank negative controls |
+| Rock class relation rule (related when origin is shared and composition is adjacent, or composition is shared) | Project rule built on the GLiM class families (Hartmann and Moosdorf 2012) | `data/lithology_similarity.json`, generated by `validation/build/make_lithology.py` |
+| Annual mean noon Sun elevation from latitude and axial tilt | Standard solar geometry (declination = asin(sin tilt x sin solar longitude)) | Sunlight factor in `app/src/lib/scoring/sunlight.ts` |
 
 ## Site and target references (Session C)
 
@@ -74,3 +87,28 @@ Papers, agency pages and reference pages behind `data/targets.json`, `data/analo
 | Agastya et al. 2023, Jurnal Geominerba 8(1):44-61 | https://doi.org/10.58522/ppsdm22.v8i1.134 | 2026-11-14 | analogs.json: Kesaksak lava tube, Batur | Literature |
 | UNESCO Global Geoparks, Maros Pangkep | https://www.unesco.org/en/iggp/geoparks/maros-pangkep | 2026-11-14 | analogs.json: Maros-Pangkep karst cave system | Literature |
 | Wikidata items Q25153151 (Gua Lawa) and Q14629677 (Giri Mulyo) | https://www.wikidata.org/ | 2026-11-14 | analogs.json: coordinates of Gua Lawa and of the village nearest Goa Pandan | Literature |
+| Rodriguez-Manfredi et al. 2023, Nature Geoscience 16:19 | https://doi.org/10.1038/s41561-022-01084-0 | 2026-11-14 | targets.json: Perseverance landing coordinates | Mission |
+| UPV/EHU press release on Rodriguez-Manfredi et al. 2023 (phys.org, January 2023) | https://phys.org/news/2023-01-rich-meteorology-mars-perseverance-rover.html | 2026-11-14 | targets.json notes: MEDA mean air temperature and day-night difference at Jezero, used as a cross-check | Mission |
+| NASA Mars Science Laboratory fact sheet | https://solarsystem.nasa.gov/docs/MSL%20Fact%20Sheet%20REV-141119.pdf | 2026-11-14 | targets.json: Curiosity landing coordinates | Mission |
+| JPL Mars 2020 landing press kit, landing site page | https://www.jpl.nasa.gov/news/press_kits/mars_2020/landing/mission/landing_site/ | 2026-11-14 | targets.json: Jezero summary | Literature |
+| Golombek et al. 2021, 52nd LPSC, abstract 2420, 'SpaceX Starship landing sites on Mars' | https://www.hou.usra.edu/meetings/lpsc2021/pdf/2420.pdf | 2026-11-14 | targets.json: Arcadia Planitia site AP-1 coordinates and status | Literature |
+| Bramson et al. 2015, Geophysical Research Letters 42, 'Widespread excess ice in Arcadia Planitia, Mars' | https://doi.org/10.1002/2015GL064844 | 2026-11-14 | targets.json: Arcadia Planitia summary | Literature |
+| Martinez et al. 2016, Fisica de la Tierra 28:163 | https://doi.org/10.5209/rev_FITE.2016.v28.53902 | 2026-11-14 | Cross-check of the REMS day-night air temperature swing at Gale (about 45 to 75 K) | Mission |
+| LMD Mars calendar and solar longitude page | https://www-mars.lmd.jussieu.fr/mars/time/solar_longitude.html | 2026-11-14 | Mars perihelion at Ls 251, used to weight seasons by their length | Literature |
+| Farley et al. 2022, Science 377:eabo2196 | https://doi.org/10.1126/science.abo2196 | 2026-11-14 | targets.json: Jezero rock class (igneous crater floor) | Mission |
+| Grotzinger et al. 2014, Science 343:1242777 | https://doi.org/10.1126/science.1242777 | 2026-11-14 | targets.json: Gale summary and rock class (lake sediments) | Mission |
+| Vaniman et al. 2014, Science 343:1243480 | https://doi.org/10.1126/science.1243480 | 2026-11-14 | targets.json: Gale rock class (mudstone mineralogy) | Mission |
+| Tanaka et al. 2014, USGS Scientific Investigations Map 3292, Geologic map of Mars | https://doi.org/10.3133/sim3292 | 2026-11-14 | targets.json note: Arcadia Planitia geology (rock class left null) | Literature |
+| NASA Science, Mars Facts | https://science.nasa.gov/mars/facts/ | 2026-11-14 | targets.json: no liquid water on the surface of Mars (precip 0, cannotCopy) | Literature |
+| Southwest Research Institute release, 9 December 2013, on Hassler et al. 2014, Science 343:1244797 | https://swri.org/node/9079 | 2026-11-14 | targets.json: radiation dose on the surface of Mars | Mission |
+| Zhang et al. 2020, Science Advances 6(39):eaaz1334 | https://doi.org/10.1126/sciadv.aaz1334 | 2026-11-14 | targets.json: radiation dose on the lunar surface (Chang'e 4) | Mission |
+| NASA Photojournal PIA13720, South Pole Illumination Map | https://science.nasa.gov/photojournal/south-pole-illumination-map/ | 2026-11-14 | Moon spin axis tilt of 1.54 degrees (Sunlight factor, cannotCopy) | Literature |
+| Williams et al. 2019, JGR Planets 124:2505, 'Seasonal Polar Temperatures on the Moon' | https://doi.org/10.1029/2019JE006028 | 2026-11-14 | Moon spin axis tilt of 1.54 degrees (abstract) | Literature |
+| NASA release 24-136 (28 October 2024) and release 22-089 (19 August 2022), Artemis III candidate landing regions | https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/ | 2026-11-14 | targets.json: why each Moon site is a candidate | Literature |
+| Mazarico et al. 2011, Icarus 211:1066 | https://doi.org/10.1016/j.icarus.2010.10.030 | 2026-11-14 | targets.json: Shackleton rim illumination (240 days) | Mission |
+| Sefton-Nash et al. 2013, EPSC Abstracts 8, EPSC2013-864 | https://meetingorganizer.copernicus.org/EPSC2013/EPSC2013-864.pdf | 2026-11-14 | targets.json: Haworth permanent shadow temperature | Mission |
+| Haruyama et al. 2013, Geophysical Research Letters 40:3814 | https://doi.org/10.1002/grl.50753 | 2026-11-14 | targets.json: anorthosite at Shackleton (rock class) | Mission |
+| Flahaut et al. 2020, Planetary and Space Science 180:104750 | https://doi.org/10.1016/j.pss.2019.104750 | 2026-11-14 | targets.json: Malapert Massif rock class | Literature |
+| Wueller et al. 2025, JGR Planets 130(10):e2025JE009127 | https://doi.org/10.1029/2025JE009127 | 2026-11-14 | targets.json: Mons Mouton rock class | Literature |
+| Tye et al. 2015, Icarus 255:70 | https://doi.org/10.1016/j.icarus.2015.03.016 | 2026-11-14 | targets.json: Haworth age and rock class | Literature |
+| LROC featured image 1294, Malapert Massif (Robinson, 14 March 2023) | https://lroc.im-ldi.com/images/1294 | 2026-11-14 | targets.json: Malapert Massif summary | Literature |

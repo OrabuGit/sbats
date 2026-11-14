@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-11-14T11:11:51Z",
+  "source": "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0, DLRE_PRP_SOUTH.TAB",
+  "method": "Mean of temp_avg over triangles whose centre lies in a 55.6 km square centred on the target; every 2nd grid line read.",
+  "targets": {
+    "moon-malapert-massif": {
+      "triangles": 12210,
+      "gridLinesRead": 69,
+      "tempAvgMeanK": 113.7,
+      "tempAvgMeanC": -159.5,
+      "tempAvgMinK": 33.7,
+      "tempAvgMaxK": 195.6,
+      "tempAvgStdK": 38.3,
+      "tempMaxMeanK": 252.6,
+      "tempMaxHighestK": 340.8,
+      "shareOfWindowWithAnnualMaxBelow110K": 0.015
+    },
+    "moon-mons-mouton": {
+      "triangles": 12127,
+      "gridLinesRead": 69,
+      "tempAvgMeanK": 131.9,
+      "tempAvgMeanC": -141.3,
+      "tempAvgMinK": 40.9,
+      "tempAvgMaxK": 194.6,
+      "tempAvgStdK": 26.3,
+      "tempMaxMeanK": 248.9,
+      "tempMaxHighestK": 330.0,
+      "shareOfWindowWithAnnualMaxBelow110K": 0.005
+    },
+    "moon-haworth": {
+      "triangles": 12060,
+      "gridLinesRead": 69,
+      "tempAvgMeanK": 61.2,
+      "tempAvgMeanC": -211.9,
+      "tempAvgMinK": 26.2,
+      "tempAvgMaxK": 133.5,
+      "tempAvgStdK": 21.6,
+      "tempMaxMeanK": 178.8,
+      "tempMaxHighestK": 326.0,
+      "shareOfWindowWithAnnualMaxBelow110K": 0.354
+    },
+    "moon-shackleton-rim": {
+      "triangles": 11990,
+      "gridLinesRead": 69,
+      "tempAvgMeanK": 97.0,
+      "tempAvgMeanC": -176.2,
+      "tempAvgMinK": 27.6,
+      "tempAvgMaxK": 186.5,
+      "tempAvgStdK": 32.0,
+      "tempMaxMeanK": 219.7,
+      "tempMaxHighestK": 340.7,
+      "shareOfWindowWithAnnualMaxBelow110K": 0.111
+    }
+  }
+}
