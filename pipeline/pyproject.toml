@@ -13,4 +13,5 @@ dependencies = [
   "rasterio>=1.4",
   "pyshp>=2.3",
   "h5py>=3.12",
+  "pyhdf>=0.11.7",
 ]
