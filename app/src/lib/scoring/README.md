@@ -98,7 +98,7 @@ Session C. They need the team's sign-off, and may be tuned once against the vali
 
 ## Tests
 
-98 unit tests in `__tests__/`, run with Node's built-in test runner:
+108 tests in `__tests__/` (98 for the rules, 10 that check the real files in `/data`), run with Node's built-in test runner:
 
 ```bash
 npx tsx --test app/src/lib/scoring/__tests__/*.test.ts
