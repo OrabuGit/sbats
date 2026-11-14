@@ -16,11 +16,11 @@ describe('Module catalog', () => {
 
   it('rejects a value with no source, a null that still has a source, and a null with no reason', () => {
     const bad = makeFile();
-    bad.modules.solar.params.efficiency = { value: 0.3, unit: '', source: null, badge: null };
+    bad.modules.solar.params.ratedPowerKw = { value: 0.3, unit: '', source: null, badge: null };
     bad.modules.battery.params.capacityKwh = { value: null, unit: 'kWh', source: 'somewhere', badge: 'Literature', note: 'x' };
     bad.crew.foodKgPerDay = { value: null, unit: 'kg', source: null, badge: null };
     const problems = validateModulesFile(bad);
-    ok(problems.some((p) => p.startsWith('modules.solar.params.efficiency') && p.includes('needs a source')));
+    ok(problems.some((p) => p.startsWith('modules.solar.params.ratedPowerKw') && p.includes('needs a source')));
     ok(problems.some((p) => p.startsWith('modules.battery.params.capacityKwh') && p.includes('null source')));
     ok(problems.some((p) => p.startsWith('crew.foodKgPerDay') && p.includes('needs a note')));
   });
@@ -50,9 +50,9 @@ describe('Resource balances', () => {
     equal(e.crew, 8);
   });
 
-  it('computes solar power as irradiance x area x efficiency x lit fraction', () => {
+  it('computes solar power as rated power x (irradiance / rated irradiance) x lit fraction', () => {
     const e = evaluate(layoutOf({ solar: 3 }), earthSite(), file);
-    equal(e.power.perArrayKw, 8); // 800 x 100 x 0.2 x 0.5 / 1000
+    equal(e.power.perArrayKw, 8); // 20 kW x (800 / 1000) x 0.5
     equal(e.power.productionKw, 24);
     equal(evaluate(layoutOf({ solar: 3 }), marsSite(), file).power.perArrayKw, 5);
   });
@@ -185,19 +185,19 @@ describe('Readiness', () => {
 describe('Numbers with no source', () => {
   it('makes what depends on a null parameter unknown, never zero, and marks the module illustrative', () => {
     const partial = makeFile();
-    partial.modules.solar.params.efficiency = s(null);
+    partial.modules.solar.params.ratedPowerKw = s(null);
     const e = evaluate(layoutOf({ habitat: 1, solar: 4, battery: 1, landingPad: 1 }), earthSite(), partial);
     equal(e.power.perArrayKw, null);
     equal(e.power.productionKw, null);
     equal(e.resources.power.status, 'unknown');
     equal(e.illustrative, true);
-    deepEqual(e.illustrativeModules, [{ type: 'solar', missing: ['efficiency'] }]);
+    deepEqual(e.illustrativeModules, [{ type: 'solar', missing: ['ratedPowerKw'] }]);
     equal(e.readiness, null); // "no data", not GREEN and not RED
   });
 
   it('still says RED when something else has clearly run out', () => {
     const partial = makeFile();
-    partial.modules.solar.params.efficiency = s(null);
+    partial.modules.solar.params.ratedPowerKw = s(null);
     equal(evaluate(layoutOf({ habitat: 1, solar: 4 }, 9), earthSite(), partial).readiness, 'RED');
   });
 
@@ -225,6 +225,16 @@ describe('Numbers with no source', () => {
     const dark = evaluate(layoutOf({ habitat: 1, solar: 4, battery: 9 }, 0), marsSite({ longestDarkHours: null }), file);
     equal(dark.resources.power.status, 'unknown');
     equal(evaluate(layoutOf({ landingPad: 1 }), marsSite({ slopeDeg: null }), file).landingPossible, null);
+  });
+
+  it('leaves greenhouse water out, with a note, when no net figure is published', () => {
+    const partial = makeFile();
+    partial.modules.greenhouse.params.waterKgPerM2Day = s(null);
+    const e = evaluate(layoutOf({ habitat: 1, greenhouse: 2 }), marsSite(), partial);
+    equal(e.water.consumedKgDay, 12); // the crew only
+    ok(e.notes.some((n) => n.includes('Greenhouse water is left out')));
+    deepEqual(e.illustrativeModules, [{ type: 'greenhouse', missing: ['waterKgPerM2Day'] }]);
+    equal(e.resources.water.status, 'short'); // still computed: 12 kg a day with nothing delivered
   });
 
   it('gives no delivered mass when a placed module has no sourced mass', () => {
@@ -287,9 +297,10 @@ describe('Thirty-day simulation', () => {
   it('runs a lunar night: no sunlight for its duration, batteries drain, then the base goes dark', () => {
     // Moon: habitat draws 22 kW = 528 kWh a day. 6 batteries hold 600 kWh: one dark day, then nothing.
     const base = layoutOf({ habitat: 1, solar: 2, battery: 6 }, 0);
-    const calm = simulate(base, moonSite(), file);
+    const lowLatitude = moonSite({ longestDarkHours: 336 }); // a 14-day night
+    const calm = simulate(base, lowLatitude, file);
     equal(calm.firstDepletion, null);
-    const night = simulate(base, moonSite(), file, { events: [{ type: 'lunarNight', startDay: 5 }] });
+    const night = simulate(base, lowLatitude, file, { events: [{ type: 'lunarNight', startDay: 5 }] });
     equal(night.days[4]?.solarKw, 0);
     deepEqual(night.days[4]?.events, ['lunarNight']);
     equal(night.days[4]?.batteryKwh, 72); // 600 - 528
@@ -302,7 +313,7 @@ describe('Thirty-day simulation', () => {
   });
 
   it('survives the lunar night with enough batteries, on reserves', () => {
-    const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 80 }, 0), moonSite(), file, { events: [{ type: 'lunarNight', startDay: 5 }] });
+    const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 80 }, 0), moonSite({ longestDarkHours: 336 }), file, { events: [{ type: 'lunarNight', startDay: 5 }] });
     equal(sim.firstDepletion, null);
     equal(sim.days[17]?.batteryKwh, 608); // 8000 - 14 x 528
     equal(sim.readiness, 'AMBER');
@@ -321,6 +332,19 @@ describe('Thirty-day simulation', () => {
     equal(sim.readiness, 'RED');
   });
 
+  it('uses a site\'s own dust-storm factor and longest dark period when it has them', () => {
+    const base = layoutOf({ habitat: 1, solar: 8, battery: 5 }, 0);
+    // The site says sunlight falls to 50% in a storm, not the event's general 10%.
+    const storm = simulate(base, marsSite({ dustStormSolarFactor: 0.5 }), file, { events: [{ type: 'marsDustStorm', startDay: 2 }] });
+    equal(storm.days[1]?.solarKw, 20);
+    // The Moon fixture's longest dark period is 48 hours: the night lasts 2 days here, not 14.
+    const night = simulate(layoutOf({ habitat: 1, solar: 2, battery: 20 }, 0), moonSite(), file, { events: [{ type: 'lunarNight', startDay: 3 }] });
+    deepEqual(night.days.filter((d) => d.events.length > 0).map((d) => d.day), [3, 4]);
+    // With no site figure the event's own duration applies.
+    const long = simulate(layoutOf({ habitat: 1, solar: 2, battery: 20 }, 0), moonSite({ longestDarkHours: null }), file, { events: [{ type: 'lunarNight', startDay: 3 }] });
+    equal(long.days.filter((d) => d.events.length > 0).length, 14);
+  });
+
   it('ignores an event that belongs to another body, and says so', () => {
     const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 6 }, 0), moonSite(), file, { events: [{ type: 'marsDustStorm', startDay: 2 }] });
     ok(sim.notes.some((n) => n.includes('does not happen at Moon fixture')));
@@ -330,14 +354,14 @@ describe('Thirty-day simulation', () => {
   it('does not simulate an event whose duration or effect has no source', () => {
     const partial = makeFile();
     partial.events.lunarNight.params.durationDays = s(null);
-    const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 6 }, 0), moonSite(), partial, { events: [{ type: 'lunarNight', startDay: 2 }] });
+    const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 6 }, 0), moonSite({ longestDarkHours: null }), partial, { events: [{ type: 'lunarNight', startDay: 2 }] });
     ok(sim.notes.some((n) => n.includes('is not simulated')));
     equal(sim.firstDepletion, null);
   });
 
   it('simulates nothing when a number the run depends on has no source', () => {
     const partial = makeFile();
-    partial.modules.solar.params.areaM2 = s(null);
+    partial.modules.solar.params.ratedIrradianceWm2 = s(null);
     const sim = simulate(layoutOf({ habitat: 1, solar: 2, battery: 1 }), earthSite(), partial);
     equal(sim.days.length, 0);
     equal(sim.readiness, null);

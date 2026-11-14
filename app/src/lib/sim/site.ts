@@ -74,6 +74,7 @@ export function siteFromTarget(target: TargetLike, file: ModulesFile): SiteCondi
     litFraction: pick('litFraction', 'share of time in sunlight'),
     longestDarkHours: pick('longestDarkHours', 'longest dark period'),
     iceAvailability: pick('iceAvailability', 'ice availability'),
+    dustStormSolarFactor: entry?.dustStormSolarFactor ? sourcedValue(entry.dustStormSolarFactor) : null,
     tempMeanC: target.values.tempMean.value,
     slopeDeg: target.values.slope.value,
     cannotTest: target.cannotCopy ?? [],

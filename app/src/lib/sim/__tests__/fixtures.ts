@@ -16,7 +16,7 @@ export function makeFile(): ModulesFile {
     constants: { oxygenKgPerKgWater: s(0.8), solarConstantWm2: s(1000, 'W/m2') },
     modules: {
       habitat: { label: 'Habitat', description: 'fixture', params: { massKg: s(10000), crewCapacity: s(4), powerKw: s(5), heatingKwPerDegC: s(0.1), comfortTempC: s(20) } },
-      solar: { label: 'Solar array', description: 'fixture', params: { massKg: s(500), areaM2: s(100), efficiency: s(0.2) } },
+      solar: { label: 'Solar array', description: 'fixture', params: { massKg: s(500), ratedPowerKw: s(20), ratedIrradianceWm2: s(1000) } },
       battery: { label: 'Battery', description: 'fixture', params: { massKg: s(200), capacityKwh: s(100) } },
       greenhouse: {
         label: 'Greenhouse', description: 'fixture',
@@ -35,7 +35,7 @@ export function makeFile(): ModulesFile {
   };
 }
 
-/** Earth fixture site: each array gives 800 x 100 x 0.2 x 0.5 / 1000 = 8 kW; a habitat draws 5 + 0.1 x 10 = 6 kW. */
+/** Earth fixture site: each array gives 20 x (800 / 1000) x 0.5 = 8 kW; a habitat draws 5 + 0.1 x 10 = 6 kW. */
 export function earthSite(overrides: Partial<SiteConditions> = {}): SiteConditions {
   return { id: 'earth:fixture', name: 'Earth fixture', body: 'earth', irradianceWm2: 800, litFraction: 0.5, longestDarkHours: 12, tempMeanC: 10, slopeDeg: 2, iceAvailability: 0, notes: [], ...overrides };
 }
@@ -45,7 +45,7 @@ export function marsSite(overrides: Partial<SiteConditions> = {}): SiteCondition
   return { id: 'mars-fixture', name: 'Mars fixture', body: 'mars', irradianceWm2: 500, litFraction: 0.5, longestDarkHours: 12, tempMeanC: -60, slopeDeg: 2, iceAvailability: 1, notes: [], ...overrides };
 }
 
-/** Moon fixture site: each array gives 1000 x 100 x 0.2 x 0.8 / 1000 = 16 kW; a habitat draws 5 + 0.1 x 170 = 22 kW. */
+/** Moon fixture site: each array gives 20 x (1000 / 1000) x 0.8 = 16 kW; a habitat draws 5 + 0.1 x 170 = 22 kW. */
 export function moonSite(overrides: Partial<SiteConditions> = {}): SiteConditions {
   return { id: 'moon-fixture', name: 'Moon fixture', body: 'moon', irradianceWm2: 1000, litFraction: 0.8, longestDarkHours: 48, tempMeanC: -150, slopeDeg: 3, iceAvailability: 0.5, notes: [], ...overrides };
 }

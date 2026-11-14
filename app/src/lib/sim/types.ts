@@ -18,6 +18,8 @@ export interface Sourced {
   source: string | null;
   badge: Badge | null;
   note?: string;
+  /** True when the value is one multiplication or division of numbers printed in the source. The note shows the arithmetic. */
+  derived?: boolean;
 }
 
 export interface ModuleEntry {
@@ -39,6 +41,8 @@ export interface TargetSiteEntry {
   litFraction: Sourced;
   longestDarkHours: Sourced;
   iceAvailability: Sourced;
+  /** Mars targets only: sunlight in a planet-wide dust storm as a share of normal, 0 to 1. */
+  dustStormSolarFactor?: Sourced;
 }
 
 /** data/modules.json */
@@ -83,6 +87,8 @@ export interface SiteConditions {
   slopeDeg: number | null;
   /** Share of an ice miner's nominal output this site can give, 0 to 1. 0 means no accessible ice. */
   iceAvailability: number | null;
+  /** Sunlight in a dust storm at this site as a share of normal, when it is known. Overrides the event's own factor. */
+  dustStormSolarFactor?: number | null;
   /** True when irradianceWm2 is a top-of-atmosphere figure: an upper bound, with no air or cloud. */
   irradianceIsUpperBound?: boolean;
   /** Sentences on what Earth cannot reproduce here (targets.json `cannotCopy`). Used to end the gap report. */

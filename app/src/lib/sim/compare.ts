@@ -42,7 +42,7 @@ export function deployTwice(layout: Layout, earthSite: SiteConditions, targetSit
     const pe = earth.power.perArrayKw;
     const pt = target.power.perArrayKw;
     if (pe === null || pt === null) {
-      lines.push(`Solar power cannot be compared: ${pe === null ? E : T} has no sunlight figure, or the array has no sourced size or efficiency.`);
+      lines.push(`Solar power cannot be compared: ${pe === null ? E : T} has no published sunlight or lit-time figure, or the array has no sourced rating.`);
     } else {
       let line = `Each solar array gives ${n1(pe)} kW at ${E} and ${n1(pt)} kW at ${T}: ${ratioPhrase(pe, pt)}.`;
       if (earthSite.irradianceIsUpperBound) line += ` The ${E} figure is an upper bound: it ignores air and cloud.`;

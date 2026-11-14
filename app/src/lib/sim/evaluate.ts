@@ -73,7 +73,7 @@ export interface Flows {
  * The model, in one place (DESIGN.md section 8).
  *
  *   crew places   = habitats x crewCapacity
- *   solar power   = arrays x irradiance x area x efficiency x litFraction            (P = I A eff lit)
+ *   solar power   = arrays x ratedPowerKw x (irradiance / ratedIrradiance) x litFraction   (P = I A eff lit)
  *   habitat power = habitats x (powerKw + heatingKwPerDegC x max(0, comfortTempC - site temperature))
  *   greenhouse    = area x per-m2 rates for food, oxygen, water and power
  *   ice miner     = waterKgPerDay x site ice availability; idle, drawing nothing, where there is no ice
@@ -81,7 +81,8 @@ export interface Flows {
  *   crew needs    = crew x per-person oxygen, water and food
  *
  * A parameter with no source makes what depends on it unknown (null), never zero and never a guess.
- * The heating load is the one refinement that is simply left out, with a note, when it cannot be computed.
+ * Two refinements are simply left out, with a note, when they cannot be computed: the heating load and
+ * the greenhouses' net make-up water.
  */
 export function flows(layout: Layout, site: SiteConditions, file: ModulesFile, sw: Switches = {}): Flows {
   const counts = countModules(layout);
@@ -94,7 +95,12 @@ export function flows(layout: Layout, site: SiteConditions, file: ModulesFile, s
   const crew = Math.max(0, layout.crew ?? crewCapacity ?? 0);
 
   // Power
-  const perArrayKw = times(site.irradianceWm2, param(file, 'solar', 'areaM2'), param(file, 'solar', 'efficiency'), site.litFraction, 0.001);
+  // An array is rated at a reference sunlight. Its output scales with the sunlight the site gives:
+  // rated power x (site irradiance / rated irradiance) x lit fraction. This is P = I x A x efficiency x lit
+  // with A x efficiency written as rated power / rated irradiance, which is what array makers publish.
+  const rated = param(file, 'solar', 'ratedPowerKw');
+  const ratedAt = param(file, 'solar', 'ratedIrradianceWm2');
+  const perArrayKw = ratedAt === null || ratedAt <= 0 ? null : times(rated, site.irradianceWm2, 1 / ratedAt, site.litFraction);
   const solarKw = copies(counts.solar, times(perArrayKw, solarFactor));
 
   let heatingEach: number | null = null;
@@ -113,7 +119,11 @@ export function flows(layout: Layout, site: SiteConditions, file: ModulesFile, s
   const greenhouseKw = copies(greenhouses, times(area, param(file, 'greenhouse', 'powerKwPerM2')));
   const foodProduced = copies(greenhouses, times(area, param(file, 'greenhouse', 'foodKgPerM2Day')));
   const oxygenGreenhouse = copies(greenhouses, times(area, param(file, 'greenhouse', 'oxygenKgPerM2Day')));
-  const waterGreenhouse = copies(greenhouses, times(area, param(file, 'greenhouse', 'waterKgPerM2Day')));
+  // Net make-up water for crops. Plants take up a lot of water but transpire nearly all of it, and a closed
+  // chamber condenses it back. When no net figure is published it is left out, with a note.
+  const cropWater = param(file, 'greenhouse', 'waterKgPerM2Day');
+  if (counts.greenhouse > 0 && cropWater === null) notes.push('Greenhouse water is left out: crops transpire most of what they take up and no net make-up figure is published.');
+  const waterGreenhouse = cropWater === null ? 0 : copies(greenhouses, times(area, cropWater));
 
   // Ice miner. Where there is no accessible ice it cannot be exercised: it sits idle and draws nothing.
   let miners = minerOn ? counts.iceMiner : 0;

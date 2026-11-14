@@ -25,8 +25,12 @@ function resolveEvents(events: readonly SimEvent[], site: SiteConditions, file: 
       notes.push(`${entry.label} does not happen at ${site.name}: it was ignored.`);
       continue;
     }
-    const duration = sourcedValue(entry.params.durationDays);
-    const factor = sourcedValue(entry.params.solarFactor);
+    // A site's own figures come first: the longest dark period published for a lunar site, and the
+    // dust-storm sunlight computed for a Mars site. The event's general figures are the fallback.
+    let duration = sourcedValue(entry.params.durationDays);
+    let factor = sourcedValue(entry.params.solarFactor);
+    if (e.type === 'lunarNight' && site.longestDarkHours !== null) duration = site.longestDarkHours / 24;
+    if (e.type === 'marsDustStorm' && typeof site.dustStormSolarFactor === 'number') factor = site.dustStormSolarFactor;
     if (duration === null || factor === null) {
       notes.push(`${entry.label} is not simulated: its duration or its effect on sunlight has no source.`);
       continue;

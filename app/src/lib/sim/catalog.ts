@@ -4,7 +4,7 @@ import type { EventEntry, ModuleType, ModulesFile, Sourced } from './types';
 /** The parameters each module must list in data/modules.json. A value may be null; the key may not be absent. */
 export const MODULE_PARAMS: Record<ModuleType, readonly string[]> = {
   habitat: ['massKg', 'crewCapacity', 'powerKw', 'heatingKwPerDegC', 'comfortTempC'],
-  solar: ['massKg', 'areaM2', 'efficiency'],
+  solar: ['massKg', 'ratedPowerKw', 'ratedIrradianceWm2'],
   battery: ['massKg', 'capacityKwh'],
   greenhouse: ['massKg', 'growingAreaM2', 'foodKgPerM2Day', 'oxygenKgPerM2Day', 'waterKgPerM2Day', 'powerKwPerM2'],
   iceMiner: ['massKg', 'waterKgPerDay', 'powerKw', 'electrolysisKwhPerKgOxygen'],
@@ -83,6 +83,11 @@ export function validateModulesFile(file: ModulesFile): string[] {
     for (const key of ['litFraction', 'iceAvailability'] as const) {
       const v = site?.[key]?.value;
       if (isNumber(v) && (v < 0 || v > 1)) problems.push(`sites.${id}.${key}: must be between 0 and 1`);
+    }
+    if (site?.dustStormSolarFactor !== undefined) {
+      checkSourced(`sites.${id}.dustStormSolarFactor`, site.dustStormSolarFactor, problems);
+      const v = site.dustStormSolarFactor?.value;
+      if (isNumber(v) && (v < 0 || v > 1)) problems.push(`sites.${id}.dustStormSolarFactor: must be between 0 and 1`);
     }
   }
   return problems;
