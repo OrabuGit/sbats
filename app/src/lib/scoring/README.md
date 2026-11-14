@@ -37,7 +37,7 @@ Six scoring factors are built from seven data keys plus one computed quantity.
 | Factor | Keys | Similarity |
 | --- | --- | --- |
 | Terrain | `slope`, `roughness` | Gaussian per key |
-| Bare ground | `ndvi` | Gaussian |
+| Bare ground | `ndvi`, with `snowIceFrac` and `barrenFrac` | Gaussian times ice-free share, or barren share (step 3a) |
 | Dryness | `precip` | Gaussian |
 | Temperature | `tempMean`, `tempRange` | Gaussian per key |
 | Sunlight | `sunElevation` (computed) | Gaussian |
@@ -49,11 +49,21 @@ Six scoring factors are built from seven data keys plus one computed quantity.
    target and `sigma` the tolerance from `targets.json`.
 3. Rock type. Not Gaussian. Same class gives `levels.same`, otherwise `levels[relation]` of the pair in
    `lithology_similarity.json` (1.0, 0.6, 0.15). A pair that is not listed throws `LithologyPairError`.
+3a. Bare ground and permanent ice. One rule for every cell: the similarity is the share of the cell's
+   ground that is exposed and ice-free.
+   - `ndvi` present: `s = exp(-0.5 * ((ndvi - t) / sigma)^2) * (1 - snowIceFrac)`. A `null` `snowIceFrac`
+     counts as 0.
+   - `ndvi` is `null` (every cell south of 60 S): `s = barrenFrac`, used directly. No Gaussian and no
+     target value. It is not multiplied by `(1 - snowIceFrac)` again.
+   - both `null`: Bare ground is missing.
+   A cell that is all permanent ice gets `s = 0`, so its score is 0: scored and ranked, not "no data".
+   The result carries `bareGroundSource`: `"ndvi"`, `"landCover"` or `null`. `ndvi` is not listed in
+   `missing` when the barren share stood in for it.
 4. Weights. The preset weights are normalised to sum to 1. Each factor's weight is split equally over its
    keys, so in a two-key factor each key carries half.
 5. Missing keys. A key is missing when the cell value is `null` or the target value is `null`. Missing keys
    are left out. `coverage` is the sum of the weights of the keys that are present.
-6. Limits. If `ndvi` or `precip` is missing the cell has no score (`required-factor-missing`). If coverage
+6. Limits. If Bare ground (step 3a) or `precip` is missing the cell has no score (`required-factor-missing`). If coverage
    is below 0.6 the cell has no score (`coverage-too-low`). Coverage is rounded to 9 decimals before the
    comparison so that floating-point sums such as 0.2 + 0.15 + 0.15 + 0.1 count as 0.6.
 7. Score. `score = 100 * exp( sum(w_k * ln s_k) / sum(w_k) )` over the present keys `k`. This is 100 times
@@ -98,14 +108,15 @@ Session C. They need the team's sign-off, and may be tuned once against the vali
 
 ## Tests
 
-108 tests in `__tests__/` (98 for the rules, 10 that check the real files in `/data`), run with Node's built-in test runner:
+126 tests in `__tests__/` (112 for the rules, 14 that check the real files in `/data`), run with Node's built-in test runner:
 
 ```bash
 npx tsx --test app/src/lib/scoring/__tests__/*.test.ts
 ```
 
 Run from the repository root. They cover the Gaussian formula, clamping, the weighted geometric mean, the
-veto, the presets, the lithology table and its validation, leave-out and renormalise, both required
+veto, the presets, the bare-ground and permanent-ice rule (both branches and the all-ice case), the
+lithology table and its validation, leave-out and renormalise, both required
 factors, the 0.6 coverage limit at the boundary, the three confidence levels at their boundaries, the
 contents of `missing`, the half-weight rule for two-key factors, `null` target values, the limiting
 factor and the plain-language reason. `data-files.test.ts` checks the real files in `/data` against the

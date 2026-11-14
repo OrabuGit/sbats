@@ -188,6 +188,27 @@ describe('Real data, end to end', () => {
   });
 });
 
+describe('Antarctica in the real data', () => {
+  it('scores the cells south of 60 S from land cover, and gives all-ice cells 0', () => {
+    if (!targets || !earth) return skip('needs targets.json and earth.json');
+    const south = earth.cells.filter((c) => c.lat < -60);
+    if (south.length === 0 || !south.some((c) => typeof c.barrenFrac === 'number')) return skip('earth.json has no land cover shares south of 60 S yet');
+    const target = targets.find((t) => t.id === 'moon-shackleton-rim');
+    ok(target);
+    const prepared = prepareTarget(target, computeEarthRanges(earth.cells), null);
+    const results = scoreCells(south, prepared, PRESETS.base.weights);
+    const scored = results.filter((r) => r.score !== null);
+    ok(scored.length / south.length > 0.95, `only ${scored.length} of ${south.length} Antarctic cells are scored`);
+    ok(scored.every((r) => r.bareGroundSource === 'landCover'));
+    ok(scored.some((r) => (r.score ?? 0) > 0), 'no ice-free Antarctic cell scores above 0');
+    south.forEach((cell, i) => {
+      const r = results[i];
+      ok(r);
+      if (cell.barrenFrac === 0 && r.score !== null) equal(r.score, 0, `all-ice cell ${cell.lat}, ${cell.lon}`);
+    });
+  });
+});
+
 describe('Sigmas and weights against the frozen tuning result', () => {
   const DESIGN_BASE = { terrain: 0.25, bareGround: 0.2, dryness: 0.15, temperature: 0.15, sunlight: 0.1, rockType: 0.15 };
 

@@ -66,7 +66,14 @@ describe('Overall score (DESIGN.md section 6)', () => {
   });
 
   it('gives the same score from scoreCell, scoreCellSummary and scoreCells', () => {
-    const cells = [makeCell(), makeCell({ precip: 900 }), makeCell({ ndvi: null }), makeCell({ lithology: null })];
+    const cells = [
+      makeCell(),
+      makeCell({ precip: 900 }),
+      makeCell({ ndvi: null }),
+      makeCell({ lithology: null }),
+      makeCell({ ndvi: null, barrenFrac: 0.3, snowIceFrac: 0.7 }),
+      makeCell({ snowIceFrac: 0.4 }),
+    ];
     const all = scoreCells(cells, prepared, BASE);
     equal(all.length, cells.length);
     cells.forEach((cell, i) => {
@@ -78,6 +85,7 @@ describe('Overall score (DESIGN.md section 6)', () => {
         equal(other.coverage, full.coverage);
         equal(other.confidence, full.confidence);
         equal(other.unscoredReason, full.unscoredReason);
+        equal(other.bareGroundSource, full.bareGroundSource);
         deepEqual(other.missing, full.missing);
       }
     });
@@ -402,6 +410,124 @@ describe('Missing factors: required NDVI and precipitation', () => {
   });
 });
 
+describe('Bare ground and permanent ice (data/SCHEMA.md)', () => {
+  const bare = (cell: ReturnType<typeof makeCell>, weights: Weights = NO_SUN) => {
+    const result = scoreCell(cell, prepared, weights);
+    const factor = result.breakdown.find((f) => f.factor === 'bareGround');
+    ok(factor);
+    return { result, factor, key: factor.keys[0] };
+  };
+
+  it('with NDVI and no ice, is the plain Gaussian as before', () => {
+    const none = bare(makeCell({ ndvi: 0.15, snowIceFrac: 0 }));
+    ok(near(none.factor.similarity, Math.exp(-0.5))); // one sigma from the 0.05 target
+    equal(none.result.bareGroundSource, 'ndvi');
+    // A cell that does not carry the land cover keys at all behaves the same: the multiplier is 1.
+    const absent = bare(makeCell({ ndvi: 0.15 }));
+    equal(absent.factor.similarity, none.factor.similarity);
+    const nullIce = bare(makeCell({ ndvi: 0.15, snowIceFrac: null }));
+    equal(nullIce.factor.similarity, none.factor.similarity);
+  });
+
+  it('with NDVI, multiplies the Gaussian by the ice-free share', () => {
+    const half = bare(makeCell({ snowIceFrac: 0.5 }));
+    ok(near(half.factor.similarity, 0.5)); // perfect NDVI match, half the cell under ice
+    ok(near(half.result.score, 100 * 0.5 ** (0.2 / 0.9)));
+    const both = bare(makeCell({ ndvi: 0.15, snowIceFrac: 0.718 }));
+    ok(near(both.factor.similarity, Math.exp(-0.5) * (1 - 0.718)));
+    equal(both.result.bareGroundSource, 'ndvi');
+    deepEqual(both.key?.bareGround, { source: 'ndvi', snowIceFrac: 0.718, barrenFrac: null });
+  });
+
+  it('treats an ice sheet with near-zero NDVI as ice, not as bare ground', () => {
+    // Greenland-like: NDVI reads as bare, but the cell is 95% permanent ice.
+    const greenland = bare(makeCell({ ndvi: 0.02, snowIceFrac: 0.95, barrenFrac: 0.05 }));
+    ok((greenland.factor.similarity ?? 1) < 0.05);
+    equal(greenland.result.limitingFactor, 'bareGround');
+    ok(greenland.result.reason.includes('permanent ice covers 95% of the cell'));
+  });
+
+  it('without NDVI, uses the barren share directly as the similarity', () => {
+    const dryValleys = bare(makeCell({ ndvi: null, snowIceFrac: 0.847, barrenFrac: 0.148 }));
+    ok(near(dryValleys.factor.similarity, 0.148));
+    equal(dryValleys.result.bareGroundSource, 'landCover');
+    ok(near(dryValleys.result.score, 100 * 0.148 ** (0.2 / 0.9)));
+    deepEqual(dryValleys.key?.bareGround, { source: 'landCover', snowIceFrac: 0.847, barrenFrac: 0.148 });
+    equal(dryValleys.key?.status, 'scored');
+    equal(dryValleys.key?.earthValue, null); // NDVI itself is never filled with a stand-in number
+  });
+
+  it('does not multiply the barren share by the ice-free share a second time', () => {
+    const withIce = bare(makeCell({ ndvi: null, snowIceFrac: 0.6, barrenFrac: 0.4 }));
+    const noIceKey = bare(makeCell({ ndvi: null, barrenFrac: 0.4 }));
+    ok(near(withIce.factor.similarity, 0.4));
+    equal(withIce.factor.similarity, noIceKey.factor.similarity);
+  });
+
+  it('counts Bare ground as present with full weight when the barren share stands in', () => {
+    const result = scoreCell(makeCell({ ndvi: null, barrenFrac: 0.9 }), prepared, BASE);
+    equal(result.coverage, 1);
+    equal(result.confidence, 'high');
+    deepEqual(result.missing, []);
+    equal(result.unscoredReason, null);
+  });
+
+  it('gives an all-ice cell a score of exactly 0, scored and ranked, in both branches', () => {
+    const noNdvi = scoreCell(makeCell({ ndvi: null, snowIceFrac: 1, barrenFrac: 0 }), prepared, BASE);
+    equal(noNdvi.score, 0);
+    equal(noNdvi.unscoredReason, null);
+    equal(noNdvi.confidence, 'high');
+    equal(noNdvi.limitingFactor, 'bareGround');
+    equal(noNdvi.breakdown.find((f) => f.factor === 'bareGround')?.similarity, 0);
+    ok(noNdvi.reason.includes('only 0% of the cell is ice-free bare ground and 100% is permanent ice'));
+
+    const withNdvi = scoreCell(makeCell({ ndvi: 0.01, snowIceFrac: 1, barrenFrac: 0 }), prepared, BASE);
+    equal(withNdvi.score, 0);
+    equal(withNdvi.unscoredReason, null);
+    equal(withNdvi.limitingFactor, 'bareGround');
+  });
+
+  it('keeps the full similarity for an ice-free barren cell without NDVI', () => {
+    const result = scoreCell(makeCell({ ndvi: null, snowIceFrac: 0, barrenFrac: 1 }), prepared, NO_SUN);
+    ok(near(result.score, 100));
+  });
+
+  it('has no score when NDVI and the barren share are both missing', () => {
+    for (const cell of [makeCell({ ndvi: null }), makeCell({ ndvi: null, barrenFrac: null, snowIceFrac: 0.3 })]) {
+      const result = scoreCell(cell, prepared, BASE);
+      equal(result.score, null);
+      equal(result.unscoredReason, 'required-factor-missing');
+      equal(result.bareGroundSource, null);
+      deepEqual(result.missing, ['ndvi']);
+    }
+  });
+
+  it('reports the source in the fast path too', () => {
+    const cells = [makeCell(), makeCell({ ndvi: null, barrenFrac: 0.2 }), makeCell({ ndvi: null })];
+    deepEqual(scoreCells(cells, prepared, BASE).map((r) => r.bareGroundSource), ['ndvi', 'landCover', null]);
+    equal(scoreCellSummary(makeCell({ ndvi: null, barrenFrac: 0.2 }), prepared, BASE).bareGroundSource, 'landCover');
+  });
+
+  it('keeps shares inside 0 to 1 if the data ever stray', () => {
+    ok(near(bare(makeCell({ ndvi: null, barrenFrac: 1.2 })).factor.similarity, 1));
+    ok(near(bare(makeCell({ snowIceFrac: -0.1 })).factor.similarity, 1));
+  });
+
+  it('is missing for every cell when the target has no ndvi value, land cover or not', () => {
+    const p = prepareTarget(makeTarget({ ndvi: NULL_VALUE }), WIDE_RANGES, TABLE);
+    for (const cell of [makeCell(), makeCell({ ndvi: null, barrenFrac: 0.9 })]) {
+      const result = scoreCell(cell, p, BASE);
+      equal(result.score, null);
+      equal(result.unscoredReason, 'required-factor-missing');
+      equal(result.bareGroundSource, null);
+    }
+  });
+
+  it('still vetoes vegetation: a forest is near zero whatever its ice share', () => {
+    ok((scoreCell(makeCell({ ndvi: 0.85, snowIceFrac: 0 }), prepared, NO_SUN).score ?? 100) < 1);
+  });
+});
+
 describe('Missing factors: minimum coverage of 0.6', () => {
   it('scores a cell at exactly 0.6 (Base without Terrain and Rock type)', () => {
     const result = scoreCell(makeCell({ slope: null, roughness: null, lithology: null }), prepared, BASE);
@@ -602,7 +728,7 @@ describe('Per-cell outputs', () => {
   });
 
   it('explains why an unscored cell has no score', () => {
-    ok(scoreCell(makeCell({ ndvi: null }), prepared, BASE).reason.startsWith('No score: this cell has no vegetation (NDVI) data.'));
+    ok(scoreCell(makeCell({ ndvi: null }), prepared, BASE).reason.startsWith('No score: this cell has no vegetation (NDVI) or land cover data.'));
     const low = scoreCell(makeCell({ slope: null, roughness: null, lithology: null, tempRange: null }), prepared, BASE);
     ok(low.reason.startsWith('No score: only 53% of the weighted factors have data and 60% is needed.'));
   });

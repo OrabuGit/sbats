@@ -6,6 +6,7 @@ import { clampToRange, gaussianLogSimilarity, isNumber } from './similarity';
 import { SUN_ELEVATION_SIGMA_DEG, sunElevation } from './sunlight';
 import { NUMERIC_KEYS } from './types';
 import type {
+  BareGroundSource,
   CellScore,
   CellSummary,
   ClampGap,
@@ -151,11 +152,61 @@ export function prepareTarget(
 
 // One reusable record for the result of evaluating a key. Scoring a 0.5 degree grid evaluates
 // several hundred thousand keys per pass, so the hot path avoids allocating one object per key.
-const out: { earthValue: number | null; logSim: number; status: 'scored' | 'missing-earth' | 'missing-target' } = {
+const out: {
+  earthValue: number | null;
+  logSim: number;
+  status: 'scored' | 'missing-earth' | 'missing-target';
+  bareGroundSource: BareGroundSource | null;
+} = {
   earthValue: null,
   logSim: 0,
   status: 'scored',
+  bareGroundSource: null,
 };
+
+/** A land cover share as a number from 0 to 1, or null when the cell does not carry it. */
+function share(v: number | null | undefined): number | null {
+  if (!isNumber(v)) return null;
+  return v < 0 ? 0 : v > 1 ? 1 : v;
+}
+
+/**
+ * Bare ground (data/SCHEMA.md, "Bare ground and permanent ice"). One rule for every cell:
+ * the similarity is the share of the cell's ground that is exposed and ice-free.
+ *
+ * - `ndvi` present:  s = gaussian(ndvi, target, sigma) * (1 - snowIceFrac). A null snowIceFrac counts as 0.
+ * - `ndvi` null:     s = barrenFrac, used directly. No Gaussian. It is not multiplied by (1 - snowIceFrac)
+ *                    again, because barrenFrac is already the ice-free bare share.
+ * - both null:       Bare ground is missing, and since it is required the cell has no score.
+ *
+ * A cell that is all permanent ice gets a similarity of 0 either way, so its score is 0: scored, not "no data".
+ * A target with no ndvi value makes Bare ground missing for every cell, like any other null target value.
+ */
+function evaluateBareGround(cell: EarthCell, pt: PreparedTarget): void {
+  const v = cell.ndvi;
+  out.earthValue = isNumber(v) ? v : null;
+  out.bareGroundSource = null;
+  const t = pt.gaussian.ndvi;
+  if (!t) {
+    out.status = 'missing-target';
+    return;
+  }
+  if (out.earthValue !== null) {
+    const iceFree = 1 - (share(cell.snowIceFrac) ?? 0);
+    out.logSim = gaussianLogSimilarity(out.earthValue, t.clamped, t.sigma) + Math.log(iceFree);
+    out.status = 'scored';
+    out.bareGroundSource = 'ndvi';
+    return;
+  }
+  const barren = share(cell.barrenFrac);
+  if (barren === null) {
+    out.status = 'missing-earth';
+    return;
+  }
+  out.logSim = Math.log(barren);
+  out.status = 'scored';
+  out.bareGroundSource = 'landCover';
+}
 
 function evaluateKey(key: ScoreKey, cell: EarthCell, pt: PreparedTarget): void {
   if (key === 'lithology') {
@@ -171,6 +222,11 @@ function evaluateKey(key: ScoreKey, cell: EarthCell, pt: PreparedTarget): void {
       out.logSim = Math.log(sim);
       out.status = 'scored';
     }
+    return;
+  }
+
+  if (key === 'ndvi') {
+    evaluateBareGround(cell, pt);
     return;
   }
 
@@ -209,8 +265,8 @@ interface Core extends CellSummary {
  * The scoring rule, in one place. `nw` must already be normalised to sum to 1.
  *
  * Each factor's weight is split equally over its keys, so a two-key factor with one key missing
- * keeps half its weight. The present keys enter a weighted geometric mean, renormalised over the
- * weight that is present:
+ * keeps half its weight. Bare ground follows its own rule (see evaluateBareGround). The present keys
+ * enter a weighted geometric mean, renormalised over the weight that is present:
  *
  *     score = 100 * exp( sum(w_k * ln s_k) / sum(w_k) )      over the present keys k
  */
@@ -218,12 +274,14 @@ function core(cell: EarthCell, pt: PreparedTarget, nw: Weights, sink?: KeySink):
   let presentWeight = 0;
   let logSum = 0;
   let requiredMissing = false;
+  let bareGroundSource: BareGroundSource | null = null;
   const missing: FactorKey[] = [];
 
   for (const factor of FACTORS) {
     const keyWeight = nw[factor.id] / factor.keys.length;
     for (const key of factor.keys) {
       evaluateKey(key, cell, pt);
+      if (key === 'ndvi') bareGroundSource = out.bareGroundSource;
       if (out.status !== 'scored') {
         const required = REQUIRED.has(key);
         if (required) requiredMissing = true;
@@ -247,12 +305,12 @@ function core(cell: EarthCell, pt: PreparedTarget, nw: Weights, sink?: KeySink):
   else if (coverage < MIN_COVERAGE) unscoredReason = 'coverage-too-low';
 
   if (unscoredReason) {
-    return { score: null, coverage, missing, confidence: null, unscoredReason, presentWeight };
+    return { score: null, coverage, missing, confidence: null, unscoredReason, bareGroundSource, presentWeight };
   }
 
   const score = 100 * Math.exp(logSum / presentWeight);
   const confidence: Confidence = coverage >= 1 ? 'high' : coverage >= MEDIUM_CONFIDENCE_COVERAGE ? 'medium' : 'low';
-  return { score, coverage, missing, confidence, unscoredReason: null, presentWeight };
+  return { score, coverage, missing, confidence, unscoredReason: null, bareGroundSource, presentWeight };
 }
 
 function toSummary(c: Core): CellSummary {
@@ -262,6 +320,7 @@ function toSummary(c: Core): CellSummary {
     missing: c.missing,
     confidence: c.confidence,
     unscoredReason: c.unscoredReason,
+    bareGroundSource: c.bareGroundSource,
   };
 }
 
@@ -310,6 +369,13 @@ export function scoreCell(cell: EarthCell, target: PreparedTarget, weights: Weig
       weight: keyWeight,
       status,
     };
+    if (key === 'ndvi' && out.bareGroundSource) {
+      entry.bareGround = {
+        source: out.bareGroundSource,
+        snowIceFrac: isNumber(cell.snowIceFrac) ? cell.snowIceFrac : null,
+        barrenFrac: isNumber(cell.barrenFrac) ? cell.barrenFrac : null,
+      };
+    }
     const list = keysByFactor.get(factor);
     if (list) list.push(entry);
     else keysByFactor.set(factor, [entry]);

@@ -27,6 +27,7 @@ export type { FactorDef, KeyInfo } from './factors';
 export { FACTOR_IDS, FACTOR_KEYS, NUMERIC_KEYS, GAUSSIAN_KEYS } from './types';
 export type {
   Badge,
+  BareGroundSource,
   Body,
   CellScore,
   CellSummary,

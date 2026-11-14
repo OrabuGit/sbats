@@ -55,8 +55,10 @@ Each known site counts once. A site listed for several targets is split equally 
 
 ## Known limits of this test
 
-- Antarctic sites have no NDVI in `earth.json` (MODIS has no data there), so they cannot be scored at all.
-  They count as failures in the strict AUC.
+- Antarctic cells have no NDVI. They are scored from the measured barren share instead (data/SCHEMA.md,
+  "Bare ground and permanent ice"). At 0.5 degrees the Dry Valleys cell is 85% ice, so it scores low.
+- About 24,000 all-ice cells now sit in the ranking with a score of 0. They are real scored cells, but they
+  lift every other site's percentile and widen the top 10%. Compare numbers only within one earth.json build.
 - A 0.5 degree cell is about 55 km wide. A dry summit inside a wet cell (Mauna Kea, Teide) is scored with
   the cell's rainfall and vegetation.
 - `analogFor` was assigned by SBATS from each site's cited characteristic. The sources name the body
@@ -84,6 +86,9 @@ For Session A (app):
 - The scoring tests run with `npx tsx --test app/src/lib/scoring/__tests__/*.test.ts`. Nothing needs to
   be added to `app/package.json`.
 - Sunlight has one key, `sunElevation`. There is no `sunSeason`.
+- Every result now carries `bareGroundSource` (`"ndvi"`, `"landCover"` or `null`). In `scoreCell` results
+  the `ndvi` key entry also has `bareGround: { source, snowIceFrac, barrenFrac }` for the dossier.
+  Cells that are all permanent ice have a score of 0 and a confidence: they are scored, not "no data".
 - `targets.json` values and `analogs.json` entries may carry an optional `note` string. Show it where a
   value is `null` or flagged.
 - A `candidate` in `analogs.json` may have an empty `analogFor` (the lava tubes and the karst caves match

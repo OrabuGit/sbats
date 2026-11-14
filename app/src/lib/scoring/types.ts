@@ -37,7 +37,14 @@ export interface EarthCell {
   slope: number | null;
   roughness: number | null;
   lithology: number | null;
+  /** Share of the cell's land that is permanent snow and ice, 0 to 1. Not a factor key: used by the Bare ground rule. */
+  snowIceFrac?: number | null;
+  /** Share of the cell's land that is barren or sparsely vegetated, 0 to 1. Stands in for NDVI where NDVI is null. */
+  barrenFrac?: number | null;
 }
+
+/** Which measurement gave the Bare ground similarity. See data/SCHEMA.md, "Bare ground and permanent ice". */
+export type BareGroundSource = 'ndvi' | 'landCover';
 
 export interface LithologyClass {
   code: number;
@@ -113,6 +120,11 @@ export interface CellSummary {
   confidence: Confidence | null;
   /** Why `score` is null, otherwise null. */
   unscoredReason: UnscoredReason | null;
+  /**
+   * Where the Bare ground similarity came from: `"ndvi"` (NDVI, lowered by permanent ice) or `"landCover"`
+   * (the barren share, used where NDVI is null). null when Bare ground could not be computed.
+   */
+  bareGroundSource: BareGroundSource | null;
 }
 
 /**
@@ -139,6 +151,8 @@ export interface KeyBreakdown {
   /** This key's share of the normalised weights (factor weight divided by its number of keys). */
   weight: number;
   status: KeyStatus;
+  /** Only on the `ndvi` key: the land cover shares behind the Bare ground similarity. */
+  bareGround?: { source: BareGroundSource; snowIceFrac: number | null; barrenFrac: number | null };
 }
 
 export interface FactorBreakdown {

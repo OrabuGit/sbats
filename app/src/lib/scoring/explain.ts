@@ -60,6 +60,17 @@ function describeKeyGap(k: KeyBreakdown, pt: PreparedTarget): string {
       ? 'the rock class is related to the target rock but not the same'
       : 'the rock class is unrelated to the target rock';
   }
+  if (k.key === 'ndvi' && k.bareGround) {
+    const ice = k.bareGround.snowIceFrac ?? 0;
+    const percent = (v: number): string => `${formatValue(v * 100, 0)}%`;
+    if (k.bareGround.source === 'landCover') {
+      const bare = k.bareGround.barrenFrac ?? 0;
+      return `only ${percent(bare)} of the cell is ice-free bare ground and ${percent(ice)} is permanent ice`;
+    }
+    // With NDVI, the similarity is the vegetation match times the ice-free share. Name whichever costs more.
+    const vegetationMatch = ice < 1 && k.similarity !== null ? k.similarity / (1 - ice) : 1;
+    if (1 - ice < vegetationMatch) return `permanent ice covers ${percent(ice)} of the cell`;
+  }
   if (k.earthValue === null || k.targetClamped === null) return `no ${KEY_NOUN[k.key]} data`;
 
   const diff = k.earthValue - k.targetClamped;
@@ -105,9 +116,12 @@ export function buildReason(
     const fromTarget = required.filter((k) => k.status === 'missing-target').map((k) => KEY_NOUN[k.key]);
     const fromEarth = required.filter((k) => k.status === 'missing-earth').map((k) => KEY_NOUN[k.key]);
     const parts: string[] = [];
-    if (fromEarth.length > 0) parts.push(`this cell has no ${joinList(fromEarth)} data`);
+    if (fromEarth.length > 0) {
+      const names = fromEarth.map((n) => (n === KEY_NOUN.ndvi ? 'vegetation (NDVI) or land cover' : n));
+      parts.push(`this cell has no ${joinList(names)} data`);
+    }
     if (fromTarget.length > 0) parts.push(`the target has no published ${joinList(fromTarget)} value`);
-    return `No score: ${joinList(parts)}. Vegetation and precipitation are required.`;
+    return `No score: ${joinList(parts)}. Bare ground and precipitation are required.`;
   }
 
   if (result.unscoredReason === 'coverage-too-low') {
