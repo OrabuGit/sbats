@@ -1,4 +1,8 @@
-# REVIEW_ME: target values to check by hand
+# REVIEW_ME: values to check by hand
+
+Part 1 covers `data/targets.json`. Part 2, further down, covers `data/modules.json`.
+
+# Part 1: target values (`data/targets.json`)
 
 Every value in `data/targets.json`, where it came from, and how far to trust it. Written by Claude Code
 (Session C) on 2026-11-14 for a human reviewer. Please check the rows marked Medium or lower first.
@@ -187,3 +191,126 @@ These are choices, not measurements. They were set by rule before any validation
 - Any temperature for Arcadia Planitia other than the climate model.
 - The geologic map unit at Arcadia site AP-1.
 - A day-night temperature swing for the lunar polar sites.
+
+# Part 2: base simulation numbers (`data/modules.json`)
+
+Every number the base simulation uses. Regenerate the file with `python3 validation/build/make_modules.py`.
+The same check levels apply: A = read in the source text, or computed from the source data, in the main
+working session; B = reported by a research sub-agent from a fetched page or abstract, not opened again.
+
+## Decisions a human should make
+
+1. Seven values are derived, not printed in the source (one multiplication or division each). They are
+   listed below. If the team wants only printed numbers, set them to null: the module becomes illustrative.
+2. The modules are sized on real hardware or studies, but for other settings: the habitat is a Mars
+   design, the solar array and battery are International Space Station units, the ice miner is a lunar
+   study and the cargo figure is a lunar lander. They are used at every target. Is that acceptable?
+3. Greenhouse power is 2.6 kW per m2, NASA's figure for high-pressure sodium lamps. BVAD itself says it has
+   not been updated for LEDs. It makes one greenhouse draw 130 kW, ten times a habitat. It is NASA's
+   published number, so it stands, but it will dominate any layout with a greenhouse.
+4. Lit fraction on the Moon uses the upper end of a published range (Shackleton 87%, Malapert 82%), on the
+   assumption that arrays go at the best-lit spot. Mons Mouton and Haworth have no figure and stay null.
+5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero and Gale (inferred from latitude), and null at
+   every lunar site. So any lunar layout with an ice miner shows "no data". That is honest but limiting.
+6. The Mars sunlight, night length and dust-storm figures are from a climate model (Mars Climate Database),
+   not from landers.
+7. Crew water is drinking, food preparation and exercise only (3.217 kg). Hygiene water and recycling are
+   not modelled.
+8. Earth sites use top-of-atmosphere sunlight, an upper bound, because `earth.json` has no surface
+   sunlight. Adding NASA POWER surface sunlight to `earth.json` would fix it (Session B's file).
+
+## Values with no source (null): these make a module illustrative
+
+| Value | What was looked for and not found |
+| --- | --- |
+| `modules.habitat.heatingKwPerDegC` | No published heat-loss figure per degree was found for a surface habitat. The heating load is not modelled. |
+| `modules.habitat.comfortTempC` | Only needed for the heating load, which is not modelled. |
+| `modules.greenhouse.waterKgPerM2Day` | Wheat takes up 11.79 kg per m2 per day (BVAD Rev 2, Table 4-91), but transpires nearly all of it, and a closed chamber recovers it. No net make-up figure was found, so greenhouse water is left out. |
+| `modules.landingPad.massKg` | No published mass for a prepared lunar or Martian landing pad was found. |
+| `events.marsDustStorm.solarFactor` | No single figure: each Mars site carries its own in sites.<id>.dustStormSolarFactor, from the Mars Climate Database. |
+| `sites.moon-shackleton-rim.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 11.1% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
+| `sites.moon-malapert-massif.longestDarkHours` | No published longest dark period for this site was found. |
+| `sites.moon-malapert-massif.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 1.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
+| `sites.moon-mons-mouton.litFraction` | No published share of time in sunlight for this site was found. |
+| `sites.moon-mons-mouton.longestDarkHours` | No published longest dark period for this site was found. |
+| `sites.moon-mons-mouton.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 0.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
+| `sites.moon-haworth.litFraction` | The crater floor is in permanent shadow. No published figure for the landing region beside it was found. |
+| `sites.moon-haworth.longestDarkHours` | No published longest dark period for the landing region was found. |
+| `sites.moon-haworth.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 35.4% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
+
+## Derived values
+
+| Value | Number | Unit | Arithmetic | Source | Check |
+| --- | --- | --- | --- | --- | --- |
+| `constants.oxygenKgPerKgWater` | 0.867 | kg oxygen per kg water | Derived: 13 t of oxygen from 15 t of water in the study's baseline case (13 / 15). | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
+| `modules.solar.massKg` | 325 | kg | Derived: 16.25 kg per kW (the table's estimate for the ISS roll-out array producing 20 kW, arrays only) x 20 kW. | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 3-16 | A |
+| `modules.battery.massKg` | 197.3 | kg | Derived: specification weight 435 lb x 0.45359 kg per lb. | Dalton et al. 2016, International Space Station Lithium-Ion Battery, NASA Aerospace Battery Workshop (NASA NTRS 20170004112) | A |
+| `modules.greenhouse.massKg` | 5075 | kg | Derived: 101.5 kg per m2 of growing area x 50 m2. | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 4-88 | A |
+| `modules.iceMiner.waterKgPerDay` | 66.7 | kg per day | Derived: 15 t of water collected and processed in 225 days (15,000 / 225). The study assumes 5% ice by mass and 75% extraction. | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
+| `modules.iceMiner.electrolysisKwhPerKgOxygen` | 8.31 | kWh per kg oxygen | Derived: the electrolysis subsystem draws approximately 20 kW and makes 13 t of oxygen in 225 days (20 kW x 24 h / 57.8 kg per day). | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
+| `events.marsDustStorm.durationDays` | 54 | days | Derived: the 2018 storm was first detected on 30 May and by 23 July more dust was falling out than being raised (54 days). Dust took until mid-September to clear. | NASA Scientific Visualization Studio 30983 and JPL Opportunity status, 2018 global dust storm | A |
+
+## Published values
+
+| Value | Number | Unit | Source | Check | Note |
+| --- | --- | --- | --- | --- | --- |
+| `crew.oxygenKgPerDay` | 0.895 | kg per person per day | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 3-31 | A |  |
+| `crew.waterKgPerDay` | 3.217 | kg per person per day | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 3-31 | A | Potable water: 2.00 kg drinking, 0.5 kg food preparation, 0.717 kg extra for exercise. Hygiene water and water recycling are not modelled. |
+| `crew.foodKgPerDay` | 0.8 | kg dry mass per person per day | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 3-31 | A | Food solids without packaging. |
+| `constants.solarConstantWm2` | 1361.0 | W/m2 | NASA NSSDCA Earth Fact Sheet | A | Sunlight at Earth's distance, above the atmosphere. |
+| `modules.habitat.massKg` | 21500 | kg | Drake, Hoffman and Beaty 2010, Human Exploration of Mars, Design Reference Architecture 5.0, IEEE Aerospace Conference (NASA NTRS 20090040343) | A | 'approximately 21.5 t'. |
+| `modules.habitat.crewCapacity` | 6 | people | Drake, Hoffman and Beaty 2010, Human Exploration of Mars, Design Reference Architecture 5.0, IEEE Aerospace Conference (NASA NTRS 20090040343) | A | The architecture sends six crew members, housed in one habitat. |
+| `modules.habitat.powerKw` | 12.1 | kW | Drake, Hoffman and Beaty 2010, Human Exploration of Mars, Design Reference Architecture 5.0, IEEE Aerospace Conference (NASA NTRS 20090040343) | A | 'using 12.1 kWe of electrical power'. Whatever thermal control that figure includes is not broken out. |
+| `modules.solar.ratedPowerKw` | 20 | kW | NASA 2021, New Solar Arrays to Power NASA's International Space Station Research, nasa.gov | A | 'Each new solar array will produce more than 20 kilowatts'. Dust and heat on a planet's surface are not modelled. |
+| `modules.solar.ratedIrradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Earth Fact Sheet | A | The sunlight the rated power refers to: Earth's distance, above the atmosphere. |
+| `modules.battery.capacityKwh` | 15 | kWh | Dalton et al. 2016, International Space Station Lithium-Ion Battery, NASA Aerospace Battery Workshop (NASA NTRS 20170004112) | A | 'Li-Ion ~15 kWh'. Depth-of-discharge limits are not modelled. |
+| `modules.greenhouse.growingAreaM2` | 50 | m2 | Wheeler 2020, Bioregenerative Life Support for Humans in Space (NASA NTRS 20205008786) | B | The size chosen for one module: 'about 50 m2' of crops supplies one person's food calories. |
+| `modules.greenhouse.foodKgPerM2Day` | 0.02 | kg dry edible mass per m2 per day | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 4-90 | A | Wheat: 20.00 g dry weight per m2 per day. |
+| `modules.greenhouse.oxygenKgPerM2Day` | 0.056 | kg per m2 per day | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 4-91 | A | Wheat: 56.00 g per m2 per day. |
+| `modules.greenhouse.powerKwPerM2` | 2.6 | kW per m2 | NASA Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV2 (2022), Table 4-88 | A | Lamps, ballasts, root zone and fans. Based on high-pressure sodium lamps; BVAD says it has not been updated for LED lighting, which would lower it. |
+| `modules.iceMiner.massKg` | 4900 | kg | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A | 'Total Mass 4.9 tons' for the whole plant (ridge system, mine system, two water tankers), without its power system. |
+| `modules.iceMiner.powerKw` | 20 | kW | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A | 'approximately 20 kW' for the water extractor subsystem. |
+| `modules.landingPad.cargoKgPerDelivery` | 12000 | kg | NASA 2024, Work Underway on Large Cargo Landers for NASA's Artemis Moon Missions, nasa.gov | A | 'approximately 26,000 - 33,000 pounds (12 to 15 metric tons) of payload'. The lower figure is used. A lunar lander; no Mars figure was looked for. |
+| `modules.landingPad.maxSlopeDeg` | 10 | degrees | Dwyer Cianciolo 2024, Artemis Human Landing System Update, NASA EDL Summer Seminar (NASA NTRS 20240009596) | A | 'Surface slope for landing (100m): <10 deg', from a seminar slide of Artemis III requirements, not the requirements document. The site slopes it is compared with are means over a 55 km window at 463 m spacing. |
+| `events.lunarNight.durationDays` | 14 | days | NASA LRO lithograph LG-2013-11-084-GSFC, Temperature Variation on the Moon | A | 'a lunar night lasts 14 Earth days'. |
+| `events.lunarNight.solarFactor` | 0 | fraction of normal sunlight | NASA LRO lithograph LG-2013-11-084-GSFC, Temperature Variation on the Moon | A | Night: the Sun is below the horizon. |
+| `sites.moon-shackleton-rim.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-shackleton-rim.litFraction` | 0.87 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | A | Upper end of the published range for the Shackleton rim (50% to 87% of the time): assumes the arrays stand at the best-lit spot. |
+| `sites.moon-shackleton-rim.longestDarkHours` | 36 | hours | Mazarico et al. 2011, Icarus 211:1066, doi:10.1016/j.icarus.2010.10.030 | B | 'longest total darkness about 1.5 days' at the best-lit rim location (1.5 x 24 hours). From the paper's abstract. |
+| `sites.moon-malapert-massif.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-malapert-massif.litFraction` | 0.82 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | A | Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot. |
+| `sites.moon-mons-mouton.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-haworth.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.mars-jezero.irradianceWm2` | 295.2 | W/m2 | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up. |
+| `sites.mars-jezero.litFraction` | 0.501 | fraction | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight. |
+| `sites.mars-jezero.longestDarkHours` | 13.4 | hours | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Longest night of the Mars year, from hourly model output: good to about an hour. |
+| `sites.mars-jezero.iceAvailability` | 0 | fraction of nominal miner output | Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947 | B | Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Jezero is at 18 N. |
+| `sites.mars-jezero.dustStormSolarFactor` | 0.17 | fraction of normal sunlight | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model. |
+| `sites.mars-gale.irradianceWm2` | 318.7 | W/m2 | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up. |
+| `sites.mars-gale.litFraction` | 0.492 | fraction | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight. |
+| `sites.mars-gale.longestDarkHours` | 13.4 | hours | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Longest night of the Mars year, from hourly model output: good to about an hour. |
+| `sites.mars-gale.iceAvailability` | 0 | fraction of nominal miner output | Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947 | B | Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Gale is at 5 S. |
+| `sites.mars-gale.dustStormSolarFactor` | 0.219 | fraction of normal sunlight | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model. |
+| `sites.mars-arcadia-planitia.irradianceWm2` | 240.7 | W/m2 | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up. |
+| `sites.mars-arcadia-planitia.litFraction` | 0.509 | fraction | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight. |
+| `sites.mars-arcadia-planitia.longestDarkHours` | 15.4 | hours | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Longest night of the Mars year, from hourly model output: good to about an hour. |
+| `sites.mars-arcadia-planitia.iceAvailability` | 1 | fraction of nominal miner output | Bramson et al. 2015, Geophysical Research Letters 42, doi:10.1002/2015GL064844; Golombek et al. 2021, LPSC abstract 2420 | A | A widespread layer of excess water ice tens of metres thick, and the site was chosen for its ice. 1 means the miner works at its rated output; the rating itself is a lunar figure. |
+| `sites.mars-arcadia-planitia.dustStormSolarFactor` | 0.102 | fraction of normal sunlight | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model. |
+
+## Source links
+
+- NASA BVAD Rev 2: https://ntrs.nasa.gov/api/citations/20210024855/downloads/BVAD_2.15.22-final.pdf
+- DRA 5.0 (Drake et al. 2010): https://ntrs.nasa.gov/api/citations/20090040343/downloads/20090040343.pdf
+- Kleinhenz and Paz 2020: https://ntrs.nasa.gov/citations/20205007966
+- ISS lithium-ion battery (Dalton et al. 2016): https://ntrs.nasa.gov/api/citations/20170004112/downloads/20170004112.pdf
+- ISS roll-out solar arrays (NASA 2021): https://www.nasa.gov/missions/station/new-solar-arrays-to-power-nasas-international-space-station-research/
+- Artemis HLS update (Dwyer Cianciolo 2024): https://ntrs.nasa.gov/citations/20240009596
+- Artemis cargo landers (NASA 2024): https://www.nasa.gov/humans-in-space/work-underway-on-large-cargo-landers-for-nasas-artemis-moon-missions/
+- LRO lithograph, lunar temperature: https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf
+- Wheeler 2020: https://ntrs.nasa.gov/citations/20205008786
+- Mars Climate Database: https://www-mars.lmd.jussieu.fr/mcd_python/
+- Leone et al. 2023: https://doi.org/10.1016/j.isci.2023.107853
+- Mazarico et al. 2011: https://doi.org/10.1016/j.icarus.2010.10.030
+- Piqueux et al. 2019: https://doi.org/10.1029/2019GL083947
+- 2018 dust storm (NASA SVS): https://svs.gsfc.nasa.gov/30983
+- NSSDCA fact sheets: https://nssdc.gsfc.nasa.gov/planetary/factsheet/

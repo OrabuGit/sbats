@@ -75,6 +75,8 @@ Each known site counts once. A site listed for several targets is split equally 
 | `target_terrain.py` | `slope` and `roughness` of every target from LOLA and MOLA, using `pipeline/terrain_metrics.py` | `pipeline/.venv/bin/python validation/target_terrain.py` |
 | `build/moon_temperature.py` | `tempMean` of the Moon targets from the Diviner Polar Resource Product | `python3 validation/build/moon_temperature.py` |
 | `build/mars_temperature.py` | `tempMean` and `tempRange` of the Mars targets from the Mars Climate Database, and the REMS check at Gale | `python3 validation/build/mars_temperature.py` |
+| `build/mars_sunlight.py` | Sunlight, night length and dust-storm factor at the Mars targets, from the Mars Climate Database, for `data/modules.json` | `python3 validation/build/mars_sunlight.py` |
+| `build/make_modules.py` | `data/modules.json` from hand-entered, sourced values | `python3 validation/build/make_modules.py` |
 | `build/make_targets.py` | `data/targets.json` from hand-entered values | `python3 validation/build/make_targets.py` |
 | `build/make_analogs.py` | `data/analogs.json` | `python3 validation/build/make_analogs.py` |
 | `build/make_lithology.py` | `data/lithology_similarity.json` | `python3 validation/build/make_lithology.py` |
@@ -99,6 +101,10 @@ For Session A (app):
   no listed target). `known` sites always have at least one.
 - `describeGap(gap, prepared)` in the scoring library writes the "what Earth cannot copy" sentence for a
   clamped target value. `prepared.missingTargetKeys` lists the factors with no published value.
+- The base simulation is in `app/src/lib/sim` with its own README: `evaluate`, `simulate`, `deployTwice`,
+  `encodeLayout`. Label modules listed in `illustrativeModules` as illustrative, and show `readiness: null`
+  as "no data".
+- The analog profile and purpose rankings are documented in `app/src/lib/scoring/README.md`.
 - `validation/output/report.json` holds the headline numbers and the per-site table for the Validation page.
   Read `status` and `statusNote` and show "provisional" next to every number while `status` is not `"final"`.
   After the freeze, `headline` is the hold-out set and `sets.tuning`, `sets.holdout` and `sets.all` hold the rest.
@@ -106,4 +112,7 @@ For Session A (app):
 For Session B (pipeline):
 - Target terrain uses a 55.6 km square window. An Earth cell narrows east-west with cos(latitude); a
   target window cannot, because it would shrink to nothing at the lunar pole. Say so on the Method page.
-- Once `slope` and `roughness` are in `earth.json`, rerun `npx tsx validation/validate.ts`.
+- Request: add NASA POWER surface sunlight (`ALLSKY_SFC_SW_DWN`, kWh/m2/day) to each `earth.json` cell as
+  `insolationKwhM2Day`. The base simulation uses it when present. Without it, Earth solar power is a
+  top-of-atmosphere upper bound and the gap report has to say so.
+- If `earth.json` is rebuilt, rerun `npx tsx validation/validate.ts`. The frozen values are not retuned.

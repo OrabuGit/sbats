@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-11-14T12:46:02Z",
+  "variable": "fluxsurf_dn_sw: Incident solar flux on horizontal surface (W/m2)",
+  "solHours": 24.6597,
+  "targets": {
+    "mars-jezero": {
+      "meanFluxWm2": 147.9,
+      "litFraction": 0.501,
+      "irradianceWm2": 295.2,
+      "longestDarkHours": 13.4,
+      "dustStormFactor": 0.17,
+      "dustStormFactorBySeason": {
+        "210": 0.2,
+        "240": 0.162,
+        "270": 0.138,
+        "300": 0.151,
+        "330": 0.185
+      },
+      "scenarios": [
+        "MCD_v6.2 with climatology average solar scenario.",
+        "MCD_v6.2 with dust storm average solar scenario."
+      ]
+    },
+    "mars-gale": {
+      "meanFluxWm2": 156.8,
+      "litFraction": 0.492,
+      "irradianceWm2": 318.7,
+      "longestDarkHours": 13.4,
+      "dustStormFactor": 0.219,
+      "dustStormFactorBySeason": {
+        "210": 0.246,
+        "240": 0.214,
+        "270": 0.194,
+        "300": 0.205,
+        "330": 0.231
+      },
+      "scenarios": [
+        "MCD_v6.2 with climatology average solar scenario.",
+        "MCD_v6.2 with dust storm average solar scenario."
+      ]
+    },
+    "mars-arcadia-planitia": {
+      "meanFluxWm2": 122.4,
+      "litFraction": 0.509,
+      "irradianceWm2": 240.7,
+      "longestDarkHours": 15.4,
+      "dustStormFactor": 0.102,
+      "dustStormFactorBySeason": {
+        "210": 0.114,
+        "240": 0.095,
+        "270": 0.084,
+        "300": 0.09,
+        "330": 0.109
+      },
+      "scenarios": [
+        "MCD_v6.2 with climatology average solar scenario.",
+        "MCD_v6.2 with dust storm average solar scenario."
+      ]
+    }
+  }
+}

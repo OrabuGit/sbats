@@ -8,7 +8,10 @@ Run from the repository root:  python3 validation/build/make_review.py
 Code generated with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.
 """
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -124,6 +127,87 @@ DESIGN = [
 ]
 
 
+def modules_section(w) -> None:
+    """Every number in data/modules.json, read from the generator so it cannot drift from the file."""
+    import make_modules
+
+    make_modules.build()
+    rows = make_modules.REVIEW_ROWS
+    fmt = lambda v: "null" if v is None else str(v)  # noqa: E731
+    w("# Part 2: base simulation numbers (`data/modules.json`)")
+    w("")
+    w("Every number the base simulation uses. Regenerate the file with `python3 validation/build/make_modules.py`.")
+    w("The same check levels apply: A = read in the source text, or computed from the source data, in the main")
+    w("working session; B = reported by a research sub-agent from a fetched page or abstract, not opened again.")
+    w("")
+    w("## Decisions a human should make")
+    w("")
+    w("1. Seven values are derived, not printed in the source (one multiplication or division each). They are")
+    w("   listed below. If the team wants only printed numbers, set them to null: the module becomes illustrative.")
+    w("2. The modules are sized on real hardware or studies, but for other settings: the habitat is a Mars")
+    w("   design, the solar array and battery are International Space Station units, the ice miner is a lunar")
+    w("   study and the cargo figure is a lunar lander. They are used at every target. Is that acceptable?")
+    w("3. Greenhouse power is 2.6 kW per m2, NASA's figure for high-pressure sodium lamps. BVAD itself says it has")
+    w("   not been updated for LEDs. It makes one greenhouse draw 130 kW, ten times a habitat. It is NASA's")
+    w("   published number, so it stands, but it will dominate any layout with a greenhouse.")
+    w("4. Lit fraction on the Moon uses the upper end of a published range (Shackleton 87%, Malapert 82%), on the")
+    w("   assumption that arrays go at the best-lit spot. Mons Mouton and Haworth have no figure and stay null.")
+    w("5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero and Gale (inferred from latitude), and null at")
+    w("   every lunar site. So any lunar layout with an ice miner shows \"no data\". That is honest but limiting.")
+    w("6. The Mars sunlight, night length and dust-storm figures are from a climate model (Mars Climate Database),")
+    w("   not from landers.")
+    w("7. Crew water is drinking, food preparation and exercise only (3.217 kg). Hygiene water and recycling are")
+    w("   not modelled.")
+    w("8. Earth sites use top-of-atmosphere sunlight, an upper bound, because `earth.json` has no surface")
+    w("   sunlight. Adding NASA POWER surface sunlight to `earth.json` would fix it (Session B's file).")
+    w("")
+    w("## Values with no source (null): these make a module illustrative")
+    w("")
+    w("| Value | What was looked for and not found |")
+    w("| --- | --- |")
+    for path, value, unit, source, check, kind, note in rows:
+        if kind == "null":
+            w(f"| `{path}` | {note} |")
+    w("")
+    w("## Derived values")
+    w("")
+    w("| Value | Number | Unit | Arithmetic | Source | Check |")
+    w("| --- | --- | --- | --- | --- | --- |")
+    for path, value, unit, source, check, kind, note in rows:
+        if kind == "derived":
+            w(f"| `{path}` | {fmt(value)} | {unit} | {note} | {source} | {check} |")
+    w("")
+    w("## Published values")
+    w("")
+    w("| Value | Number | Unit | Source | Check | Note |")
+    w("| --- | --- | --- | --- | --- | --- |")
+    for path, value, unit, source, check, kind, note in rows:
+        if kind == "published":
+            w(f"| `{path}` | {fmt(value)} | {unit} | {source} | {check} | {note} |")
+    w("")
+    w("## Source links")
+    w("")
+    for name, url in [
+        ("NASA BVAD Rev 2", "https://ntrs.nasa.gov/api/citations/20210024855/downloads/BVAD_2.15.22-final.pdf"),
+        ("DRA 5.0 (Drake et al. 2010)", "https://ntrs.nasa.gov/api/citations/20090040343/downloads/20090040343.pdf"),
+        ("Kleinhenz and Paz 2020", "https://ntrs.nasa.gov/citations/20205007966"),
+        ("ISS lithium-ion battery (Dalton et al. 2016)", "https://ntrs.nasa.gov/api/citations/20170004112/downloads/20170004112.pdf"),
+        ("ISS roll-out solar arrays (NASA 2021)", "https://www.nasa.gov/missions/station/new-solar-arrays-to-power-nasas-international-space-station-research/"),
+        ("Artemis HLS update (Dwyer Cianciolo 2024)", "https://ntrs.nasa.gov/citations/20240009596"),
+        ("Artemis cargo landers (NASA 2024)", "https://www.nasa.gov/humans-in-space/work-underway-on-large-cargo-landers-for-nasas-artemis-moon-missions/"),
+        ("LRO lithograph, lunar temperature", "https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf"),
+        ("Wheeler 2020", "https://ntrs.nasa.gov/citations/20205008786"),
+        ("Mars Climate Database", "https://www-mars.lmd.jussieu.fr/mcd_python/"),
+        ("Leone et al. 2023", "https://doi.org/10.1016/j.isci.2023.107853"),
+        ("Mazarico et al. 2011", "https://doi.org/10.1016/j.icarus.2010.10.030"),
+        ("Piqueux et al. 2019", "https://doi.org/10.1029/2019GL083947"),
+        ("2018 dust storm (NASA SVS)", "https://svs.gsfc.nasa.gov/30983"),
+        ("NSSDCA fact sheets", "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"),
+    ]:
+        w(f"- {name}: {url}")
+    w("")
+
+
 def pick(table: dict, target: dict):
     return table.get(target["id"]) or table.get(f"*{target['body']}") or table.get("*")
 
@@ -132,7 +216,11 @@ def main() -> None:
     targets = json.loads((ROOT / "data" / "targets.json").read_text())
     out: list[str] = []
     w = out.append
-    w("# REVIEW_ME: target values to check by hand")
+    w("# REVIEW_ME: values to check by hand")
+    w("")
+    w("Part 1 covers `data/targets.json`. Part 2, further down, covers `data/modules.json`.")
+    w("")
+    w("# Part 1: target values (`data/targets.json`)")
     w("")
     w("Every value in `data/targets.json`, where it came from, and how far to trust it. Written by Claude Code")
     w("(Session C) on 2026-11-14 for a human reviewer. Please check the rows marked Medium or lower first.")
@@ -223,6 +311,7 @@ def main() -> None:
     w("- The geologic map unit at Arcadia site AP-1.")
     w("- A day-night temperature swing for the lunar polar sites.")
     w("")
+    modules_section(w)
     (ROOT / "data" / "REVIEW_ME.md").write_text("\n".join(out))
     print("wrote data/REVIEW_ME.md")
 
