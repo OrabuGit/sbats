@@ -1,0 +1,496 @@
+[
+  {
+    "id": "atacama-yungay",
+    "name": "Atacama Desert hyperarid core (Yungay), Chile",
+    "lat": -24.0,
+    "lon": -70.0,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Navarro-Gonzalez et al. 2003, Science 302:1018, doi:10.1126/science.1089143 (Mars-like soils)",
+    "note": "Coordinates are the published 'roughly 24 S, 70 W' (Glass et al. 2023, Astrobiology), not a surveyed station position."
+  },
+  {
+    "id": "haughton-crater",
+    "name": "Haughton impact structure, Devon Island, Canada",
+    "lat": 75.3833,
+    "lon": -89.6667,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale",
+      "mars-arcadia-planitia"
+    ],
+    "source": "Lee and Osinski 2005, Meteoritics and Planetary Science 40:1755, doi:10.1111/j.1945-5100.2005.tb00144.x"
+  },
+  {
+    "id": "beacon-valley",
+    "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+    "lat": -77.8167,
+    "lon": 160.65,
+    "kind": "known",
+    "analogFor": [
+      "mars-arcadia-planitia"
+    ],
+    "source": "Heldmann et al. 2013, Planetary and Space Science 85:53, doi:10.1016/j.pss.2013.05.019; Wikipedia 'Beacon Valley'",
+    "note": "The analog statement was read on Wikipedia; only the title of the paper was checked."
+  },
+  {
+    "id": "don-juan-pond",
+    "name": "Don Juan Pond, Wright Valley, Antarctica",
+    "lat": -77.5644,
+    "lon": 161.1722,
+    "kind": "known",
+    "analogFor": [
+      "mars-arcadia-planitia"
+    ],
+    "source": "Dickson et al. 2013, Scientific Reports 3:1166, doi:10.1038/srep01166"
+  },
+  {
+    "id": "mauna-kea",
+    "name": "Mauna Kea, Hawaii, USA",
+    "lat": 19.8206,
+    "lon": -155.4681,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "ten Kate et al. 2013, Journal of Aerospace Engineering 26(1):183, doi:10.1061/(ASCE)AS.1943-5525.0000200",
+    "note": "Summit coordinates. The field-test site on the flank was not located."
+  },
+  {
+    "id": "kilauea",
+    "name": "Kilauea, Hawaii, USA",
+    "lat": 19.421,
+    "lon": -155.287,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim",
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Hughes et al. 2019, Astrobiology 19(3):260, doi:10.1089/ast.2018.1847; Smithsonian GVP volcano 332010"
+  },
+  {
+    "id": "craters-of-the-moon",
+    "name": "Craters of the Moon, Idaho, USA",
+    "lat": 43.4617,
+    "lon": -113.5627,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Hughes et al. 2019, Astrobiology 19(3):260, doi:10.1089/ast.2018.1847"
+  },
+  {
+    "id": "lanzarote-timanfaya",
+    "name": "Timanfaya, Lanzarote, Spain",
+    "lat": 28.9942,
+    "lon": -13.7933,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim",
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "ESA PANGAEA course, 'What is Pangaea?', esa.int",
+    "note": "ESA names Lanzarote's volcanic terrains, not a single feature. Timanfaya coordinates used."
+  },
+  {
+    "id": "ries-crater",
+    "name": "Noerdlinger Ries impact crater, Germany",
+    "lat": 48.8833,
+    "lon": 10.5667,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "ESA PANGAEA course, 'What is Pangaea?', esa.int (lunar geology and impact cratering)"
+  },
+  {
+    "id": "askja",
+    "name": "Askja caldera, Iceland highlands",
+    "lat": 65.033,
+    "lon": -16.783,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim",
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Wikipedia 'Askja' (Apollo training); Europlanet TA1 Iceland field sites, europlanet.org; Smithsonian GVP volcano 373060",
+    "note": "Analog use was read on Wikipedia and the Europlanet page, not in a paper."
+  },
+  {
+    "id": "mdrs-utah",
+    "name": "Mars Desert Research Station, Hanksville, Utah, USA",
+    "lat": 38.4065,
+    "lon": -110.7919,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Wikipedia 'Mars Desert Research Station' (Mars Society station)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "rio-tinto",
+    "name": "Rio Tinto, Huelva, Spain",
+    "lat": 37.21,
+    "lon": -6.938,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Amils et al. 2014, Life 4(3):511, doi:10.3390/life4030511"
+  },
+  {
+    "id": "dallol",
+    "name": "Dallol, Danakil Depression, Ethiopia",
+    "lat": 14.242,
+    "lon": 40.3,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Cavalazzi et al. 2019, Astrobiology 19(4):553, doi:10.1089/ast.2018.1926; Smithsonian GVP volcano 221041"
+  },
+  {
+    "id": "sp-crater",
+    "name": "SP Crater, San Francisco Volcanic Field, Arizona, USA",
+    "lat": 35.5822,
+    "lon": -111.6318,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "Wikipedia 'S P Crater' (astronaut training)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "meteor-crater",
+    "name": "Meteor Crater, Arizona, USA",
+    "lat": 35.0281,
+    "lon": -111.0233,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "Wikipedia 'Meteor Crater' (Apollo astronaut training)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "death-valley-ubehebe",
+    "name": "Ubehebe Crater, Death Valley, California, USA",
+    "lat": 37.0097,
+    "lon": -117.4503,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "US National Park Service news release, 24 Feb 2012, nps.gov/deva/learn/news/mars-and-mojave.htm"
+  },
+  {
+    "id": "pilbara-north-pole-dome",
+    "name": "North Pole Dome, Pilbara, Australia",
+    "lat": -21.0483,
+    "lon": 119.3931,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Brown, Walter and Cudahy 2005, Australian Journal of Earth Sciences 52:353, doi:10.1080/08120090500134530"
+  },
+  {
+    "id": "arkaroola",
+    "name": "Arkaroola, Flinders Ranges, Australia",
+    "lat": -30.3117,
+    "lon": 139.3361,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Thomas et al. 2012, Episodes 35(1):226, doi:10.18814/epiiugs/2012/v35i1/022"
+  },
+  {
+    "id": "qaidam-basin",
+    "name": "Qaidam Basin, China",
+    "lat": 37.2667,
+    "lon": 94.45,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Angles and Li 2017, JGR Planets 122:856, doi:10.1002/2017JE005293",
+    "note": "Basin centroid. The paper studies the western basin."
+  },
+  {
+    "id": "makhtesh-ramon",
+    "name": "Makhtesh Ramon, Negev, Israel",
+    "lat": 30.5786,
+    "lon": 34.8178,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Wikipedia 'D-MARS' (Desert Mars Analog Ramon Station)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "lonar-crater",
+    "name": "Lonar crater, Maharashtra, India",
+    "lat": 19.975,
+    "lon": 76.5075,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Kumar et al. 2014, JGR Planets 119:2029, doi:10.1002/2013JE004543"
+  },
+  {
+    "id": "ladakh-tso-kar",
+    "name": "Tso Kar, Ladakh, India",
+    "lat": 33.3,
+    "lon": 77.9833,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale",
+      "mars-arcadia-planitia"
+    ],
+    "source": "Pandey et al. 2020, International Journal of Astrobiology 19(1):78, doi:10.1017/S1473550419000119"
+  },
+  {
+    "id": "makgadikgadi-pans",
+    "name": "Makgadikgadi Pans, Botswana",
+    "lat": -20.8,
+    "lon": 25.3333,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Pineau et al. 2024, EPSC2024-991, doi:10.5194/epsc2024-991",
+    "note": "Conference abstract."
+  },
+  {
+    "id": "teide",
+    "name": "Teide and Las Canadas, Tenerife, Spain",
+    "lat": 28.2731,
+    "lon": -16.6394,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "Wikipedia 'Teide'; Smithsonian GVP volcano 383030",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "etna",
+    "name": "Mount Etna, Sicily, Italy",
+    "lat": 37.748,
+    "lon": 14.999,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "Wedler et al. 2021, Philosophical Transactions of the Royal Society A 379:20190574, doi:10.1098/rsta.2019.0574; Smithsonian GVP volcano 211060"
+  },
+  {
+    "id": "sudbury",
+    "name": "Sudbury Basin, Ontario, Canada",
+    "lat": 46.6,
+    "lon": -81.1833,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "Wikipedia 'Sudbury Basin' (Apollo astronaut training)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "kangerlussuaq",
+    "name": "Kangerlussuaq, Greenland",
+    "lat": 67.0086,
+    "lon": -50.6892,
+    "kind": "known",
+    "analogFor": [
+      "mars-arcadia-planitia"
+    ],
+    "source": "Grau Galofre and Noblet 2024, EPSC2024-1039, doi:10.5194/epsc2024-1039",
+    "note": "Conference abstract."
+  },
+  {
+    "id": "mistastin-crater",
+    "name": "Mistastin crater, Labrador, Canada",
+    "lat": 55.8833,
+    "lon": -63.3,
+    "kind": "known",
+    "analogFor": [
+      "moon-malapert-massif",
+      "moon-mons-mouton",
+      "moon-haworth",
+      "moon-shackleton-rim"
+    ],
+    "source": "Wikipedia 'Mistastin crater' (CSA and NASA astronaut field geology training)",
+    "note": "Analog use was read on Wikipedia."
+  },
+  {
+    "id": "neg-kalimantan-betung-kerihun",
+    "name": "Betung Kerihun National Park, Kalimantan, Indonesia",
+    "lat": 1.2208,
+    "lon": 113.3531,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Betung Kerihun National Park': Borneo montane and lowland rain forest"
+  },
+  {
+    "id": "neg-amazon-jau",
+    "name": "Jau National Park, central Amazon, Brazil",
+    "lat": -2.3,
+    "lon": -63.05,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Jau National Park': dense rainforest, average annual rainfall over 2500 mm"
+  },
+  {
+    "id": "neg-congo-salonga",
+    "name": "Salonga National Park, Congo basin, DR Congo",
+    "lat": -2.0,
+    "lon": 21.0,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Salonga National Park': Africa's largest tropical rainforest reserve"
+  },
+  {
+    "id": "neg-jakarta",
+    "name": "Jakarta, Indonesia",
+    "lat": -6.18,
+    "lon": 106.83,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Jakarta': dense tropical city, annual precipitation about 1,933 mm (1991-2020 normals)"
+  },
+  {
+    "id": "neg-singapore",
+    "name": "Singapore",
+    "lat": 1.2833,
+    "lon": 103.8333,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Geography of Singapore': dense tropical city, average annual rainfall around 2,340 mm"
+  },
+  {
+    "id": "neg-paris",
+    "name": "Paris, France",
+    "lat": 48.8567,
+    "lon": 2.3522,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "Wikipedia 'Paris': dense temperate city, average annual precipitation 641 mm"
+  },
+  {
+    "id": "id-kawah-ijen",
+    "name": "Kawah Ijen, East Java, Indonesia",
+    "lat": -8.058,
+    "lon": 114.242,
+    "kind": "candidate",
+    "analogFor": [
+      "mars-gale"
+    ],
+    "source": "Smithsonian GVP volcano 263350; Loehr et al. 2005, Environmental Science and Pollution Research 12(2):89, doi:10.1065/espr2004.09.118 (crater lake pH below 0.3); Rodriguez and van Bergen 2016, Netherlands Journal of Geosciences 95(2):153, doi:10.1017/njg.2015.12 (hyperacid volcanic lakes as analogues of Martian sulphate-rich terrains, with Kawah Ijen as an example)",
+    "note": "No paper found states in so many words that Kawah Ijen is a Mars analog. Rodriguez and van Bergen name it as an example of the lake type; their own fieldwork is at Poas and Copahue."
+  },
+  {
+    "id": "id-merapi",
+    "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+    "lat": -7.54,
+    "lon": 110.446,
+    "kind": "candidate",
+    "analogFor": [
+      "mars-gale"
+    ],
+    "source": "Smithsonian GVP volcano 263250; Argadestya et al. 2022, Earth and Space Science 9(11), doi:10.1029/2022EA002279 (Merapi volcaniclastic sediments compared with Gale crater rocks)",
+    "note": "A mineral-sorting process study. It does not call Merapi a Mars analog site. Its abstract names Gale crater only."
+  },
+  {
+    "id": "id-gua-lawa",
+    "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+    "lat": -7.2314,
+    "lon": 109.3175,
+    "kind": "candidate",
+    "analogFor": [],
+    "source": "Widagdo and Setijadi 2007, Dinamika Rekayasa 3(2):57-60 (formed by lava flow); Siswandi et al. 2024, Proceedings ICMA-SURE, doi:10.20884/2.procicma.2024.3.1.10237 (basalt, SiO2 50.5 to 51.4 percent)",
+    "note": "Lava tube on the flank of Mount Slamet. Coordinates from Wikidata Q25153151, not from a survey. No source links it to planetary research: the analog idea is SBATS's own. Not matched to a listed target, so analogFor is empty."
+  },
+  {
+    "id": "id-goa-pandan",
+    "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+    "lat": -5.364,
+    "lon": 105.664,
+    "kind": "candidate",
+    "analogFor": [],
+    "source": "Al Farishi et al. 2024, JGEET 9(2):188-194, doi:10.25299/jgeet.2024.9.2.16848; Sirait et al. 2023, JGEET 8(2):112-122, doi:10.25299/jgeet.2023.8.2.12118",
+    "note": "Coordinates are those of Giri Mulyo village (Wikidata Q14629677), not the cave entrance. No source links it to planetary research. analogFor is empty."
+  },
+  {
+    "id": "id-kesaksak-lava-tube",
+    "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+    "lat": -8.2403,
+    "lon": 115.3775,
+    "kind": "candidate",
+    "analogFor": [],
+    "source": "Agastya et al. 2023, Jurnal Geominerba 8(1):44-61, doi:10.58522/ppsdm22.v8i1.134 (tube in the 1888 basaltic lava flow); Smithsonian GVP volcano 264010",
+    "note": "Coordinates are those of Batur volcano (GVP). The position of the tube inside the caldera is not published. No source links it to planetary research. analogFor is empty."
+  },
+  {
+    "id": "id-maros-pangkep-karst",
+    "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+    "lat": -5.0031,
+    "lon": 119.6944,
+    "kind": "candidate",
+    "analogFor": [],
+    "source": "UNESCO Global Geoparks, 'Maros Pangkep', unesco.org/en/iggp/geoparks/maros-pangkep (572 caves)",
+    "note": "Limestone karst, not a lava tube. Listed as a verified cave system only. No source links it to planetary research. analogFor is empty."
+  }
+]
