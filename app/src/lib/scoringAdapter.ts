@@ -11,11 +11,16 @@
 import {
   PRESETS as LIB_PRESETS,
   PRESET_IDS,
+  PURPOSES,
+  analogProfile,
+  buildProfileIndex,
   computeEarthRanges,
+  purposeWeights as libPurposeWeights,
   prepareTarget,
   scoreCell,
   scoreCells,
 } from './scoring';
+import type { DimensionProfile, ProfileIndex, PurposeId } from './scoring';
 import type {
   CellScore,
   CellSummary,
@@ -39,6 +44,13 @@ export {
   SUN_ELEVATION_SIGMA_DEG,
 } from './scoring';
 
+export { DIMENSIONS, PURPOSES } from './scoring';
+export type { DimensionProfile, PurposeDef, PurposeId } from './scoring';
+
+/** Weights of each purpose ranking, built once so the same object is reused between renders. */
+const PURPOSE_WEIGHTS = Object.fromEntries(PURPOSES.map((p) => [p.id, libPurposeWeights(p.id)])) as Record<PurposeId, Weights>;
+export const purposeWeights = (id: PurposeId): Weights => PURPOSE_WEIGHTS[id];
+
 export const PRESETS: Preset[] = PRESET_IDS.map((id) => LIB_PRESETS[id]);
 
 export const FACTOR_LABELS: Record<FactorId, string> = {
@@ -57,6 +69,10 @@ export interface TargetScorer {
   notes: string[];
   scoreAll: (weights: Weights) => CellSummary[];
   explain: (cell: EarthCell, weights: Weights) => CellScore;
+  /** Similarity per dimension and its standing among all Earth cells. The index is built on first use. */
+  profile: (cell: EarthCell) => DimensionProfile[];
+  /** The score of one cell under every purpose, in the order of PURPOSES. */
+  purposeScores: (cell: EarthCell) => { id: PurposeId; result: CellScore }[];
 }
 
 export interface Scorer {
@@ -87,9 +103,15 @@ export function createScorer(earth: EarthFile, lithology: LithologySimilarity): 
           `Rock type is left out for ${target.name}: the similarity table does not cover the rock classes in earth.json (${e instanceof Error ? e.message : String(e)}).`,
         );
       }
+      let profileIndex: ProfileIndex | null = null;
       const ts: TargetScorer = {
         prepared,
         notes,
+        profile: (c) => {
+          profileIndex ??= buildProfileIndex(earth.cells, prepared);
+          return analogProfile(c, prepared, profileIndex);
+        },
+        purposeScores: (c) => PURPOSES.map((p) => ({ id: p.id, result: scoreCell(c, prepared, PURPOSE_WEIGHTS[p.id]) })),
         scoreAll: (w) => (first && w === PRESETS[0].weights ? first : scoreCells(earth.cells, prepared, w)),
         explain: (c, w) => scoreCell(c, prepared, w),
       };

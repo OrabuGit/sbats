@@ -1,6 +1,6 @@
 import { RotateCcw } from 'lucide-react';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Preset, type Target, type Weights } from '../types';
-import { FACTOR_LABELS } from '../lib/scoringAdapter';
+import { DIMENSIONS, FACTOR_LABELS, PURPOSES, type PurposeId } from '../lib/scoringAdapter';
 import { formatLat, formatLon } from '../lib/geo';
 import { formatValue, keyLabel, type MetaByKey } from '../lib/format';
 import { SourceBadge } from './Badges';
@@ -15,18 +15,55 @@ interface Props {
   weights: Weights;
   onWeight: (id: FactorId, value: number) => void;
   meta: MetaByKey;
+  /** "all" ranks by the all-round score, "purpose" by what a site would be used for. */
+  mode: MatchMode;
+  onMode: (m: MatchMode) => void;
+  purposeId: PurposeId;
+  onPurpose: (id: PurposeId) => void;
 }
+
+export type MatchMode = 'all' | 'purpose';
+const MODES: { id: MatchMode; label: string }[] = [
+  { id: 'all', label: 'All-round match' },
+  { id: 'purpose', label: 'Match by purpose' },
+];
+const dimensionLabel = (id: string) => DIMENSIONS.find((d) => d.id === id)?.label ?? id;
 
 const BODY_LABEL = { moon: 'Moon', mars: 'Mars' } as const;
 
-export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPreset, weights, onWeight, meta }: Props) {
+export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose }: Props) {
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const total = FACTOR_IDS.reduce((a, id) => a + weights[id], 0) || 1;
   const unpublished = FACTOR_KEYS.filter((k) => target.values[k]?.value === null || target.values[k]?.value === undefined);
   const activePreset = presets.find((p) => p.id === presetId);
+  const purpose = PURPOSES.find((p) => p.id === purposeId) ?? PURPOSES[0];
 
   return (
     <div className="flex flex-col">
+      <section className="border-b border-line p-4" aria-labelledby="h-mode">
+        <h2 id="h-mode" className="label mb-3">
+          Ranking
+        </h2>
+        <div className="grid grid-cols-2 gap-px border border-line bg-line" role="group" aria-label="Ranking">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              aria-pressed={mode === m.id}
+              onClick={() => onMode(m.id)}
+              className={`min-h-11 px-3 text-left text-[13px] font-medium ${mode === m.id ? 'bg-accent text-bg' : 'bg-panel text-text hover:bg-bg'}`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-[12px] text-muted">
+          {mode === 'all'
+            ? 'Could a whole base be rehearsed here? Every factor counts, and one bad factor pulls the score down.'
+            : 'What is this place like the target in, and what is that good for? Only the factors the purpose depends on count.'}
+        </p>
+      </section>
+
       <section className="border-b border-line p-4" aria-labelledby="h-target">
         <h2 id="h-target" className="label mb-3">
           01 Target site
@@ -89,6 +126,51 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
         </div>
       </section>
 
+      {mode === 'purpose' && (
+        <section className="p-4" aria-labelledby="h-purpose" id="purpose-section">
+          <fieldset>
+            <legend id="h-purpose" className="label mb-3">
+              Purpose
+            </legend>
+            <div className="border border-line">
+              {PURPOSES.map((p) => {
+                const on = p.id === purpose.id;
+                return (
+                  <label
+                    key={p.id}
+                    className={`flex min-h-11 cursor-pointer items-center gap-3 border-b border-line px-3 py-2 last:border-b-0 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:-outline-offset-2 has-[:focus-visible]:outline-accent ${
+                      on ? 'bg-bg text-accent' : 'text-text hover:bg-bg'
+                    }`}
+                  >
+                    <input type="radio" name="purpose" value={p.id} checked={on} onChange={() => onPurpose(p.id)} className="sr-only" />
+                    <span className={`block h-2.5 w-2.5 shrink-0 border ${on ? 'border-accent bg-accent' : 'border-muted'}`} aria-hidden="true" />
+                    <span className="flex-1">
+                      <span className="block text-[13px] font-medium">{p.label}</span>
+                      <span className="num block text-[10px] uppercase tracking-wider text-muted">{p.dimensions.map(dimensionLabel).join(' · ')}</span>
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+          <p className="mt-3 text-[13px] text-text">{purpose.why}</p>
+          <dl className="mt-3 grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 border-t border-line pt-3">
+            {FACTOR_IDS.map((id) => (
+              <div key={id} className="col-span-2 grid grid-cols-subgrid">
+                <dt className={`text-[12px] ${weights[id] > 0 ? 'text-text' : 'text-muted'}`}>{FACTOR_LABELS[id]}</dt>
+                <dd className={`num text-[12px] ${weights[id] > 0 ? 'text-text' : 'text-muted'}`}>{weights[id] > 0 ? (weights[id] / total).toFixed(2) : 'not used'}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-[12px] text-muted">
+            A purpose score is the same formula with only these factors, at their frozen Base weights. Nothing is tuned for it. The purposes were
+            defined after the validation results had been seen, so read these rankings as a second view, not as proof.
+          </p>
+        </section>
+      )}
+
+      {mode === 'all' && (
+      <>
       <section className="border-b border-line p-4" aria-labelledby="h-mission">
         <h2 id="h-mission" className="label mb-3">
           Mission preset
@@ -157,6 +239,8 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
           Shown as shares of 1. Gravity, vacuum and radiation are never part of the score.
         </p>
       </section>
+      </>
+      )}
     </div>
   );
 }

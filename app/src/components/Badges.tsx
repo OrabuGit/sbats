@@ -14,11 +14,11 @@ export function SourceBadge({ badge, source }: { badge: Badge | null; source?: s
 }
 
 /** For the one value computed in the browser from latitude rather than read from a data file. */
-export function ComputedBadge() {
+export function ComputedBadge({ title = 'Computed in the browser from latitude. Not read from a dataset.' }: { title?: string }) {
   return (
     <span
       className="num inline-block border border-dashed border-line px-1 text-[10px] uppercase leading-4 tracking-wider text-muted"
-      title="Computed in the browser from latitude. Not read from a dataset."
+      title={title}
     >
       Computed
     </span>

@@ -2,6 +2,7 @@ import type { Analog, CellScore, CellSummary, EarthFile, Target } from '../types
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, reasonLine } from '../lib/format';
 import { NEW_DISTANCE_KM, type Candidate, type Tally } from '../lib/rank';
+import type { PurposeDef } from '../lib/scoringAdapter';
 import { ConfidenceBadge, Tag } from './Badges';
 
 export type ListMode = 'ranked' | 'sites';
@@ -9,6 +10,8 @@ export type ListMode = 'ranked' | 'sites';
 interface Props {
   earth: EarthFile;
   target: Target;
+  /** The purpose being ranked for, or null for the all-round score. */
+  purpose: PurposeDef | null;
   results: CellSummary[];
   candidates: Candidate[];
   explain: (index: number) => CellScore;
@@ -45,13 +48,18 @@ function ScoreBlock({ r }: { r: CellSummary | undefined }) {
 
 export function CandidateList(p: Props) {
   const { earth, target, results, candidates, sites, tally: t } = p;
+  // A purpose with few factors gives few distinct scores (rock class has three levels), so many cells tie.
+  const topScore = candidates[0] ? results[candidates[0].index].score : null;
+  const tied = topScore === null ? 0 : results.reduce((n, r) => n + (r.score === topScore ? 1 : 0), 0);
   return (
     <div className="flex min-h-0 flex-col">
       <header className="border-b border-line p-4">
         <h2 className="label mb-1">02 Analog candidates</h2>
         <p className="text-[13px] text-text">
-          Earth cells ranked against <span className="font-semibold">{target.name}</span>.
+          Earth cells ranked {p.purpose ? <>for <span className="font-semibold">{p.purpose.label.toLowerCase()}</span> </> : ''}against{' '}
+          <span className="font-semibold">{target.name}</span>.
         </p>
+        <p className="num mt-1 text-[11px] uppercase tracking-wider text-accent">{p.purpose ? 'Match by purpose' : 'All-round match'}</p>
         <p className="num mt-2 text-[11px] uppercase tracking-wider text-muted">
           {t.scored.toLocaleString('en-US')} scored · {t.low.toLocaleString('en-US')} low confidence · {t.noData.toLocaleString('en-US')} no data
         </p>
@@ -91,6 +99,12 @@ export function CandidateList(p: Props) {
           </div>
         ) : (
           <ol>
+            {tied > candidates.length && (
+              <li className="border-b border-line px-4 py-3 text-[12px] text-text" role="note">
+                <span className="num">{tied.toLocaleString('en-US')}</span> cells tie at the top score of{' '}
+                <span className="num">{formatScore(topScore)}</span>. The list shows a spaced sample of them, in no order of merit.
+              </li>
+            )}
             {candidates.map((c) => {
               const cell = earth.cells[c.index];
               const r = results[c.index];

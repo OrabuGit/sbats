@@ -1,12 +1,12 @@
 import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { loadData, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
-import { PRESETS, createScorer } from './lib/scoringAdapter';
+import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
 import { buildIndex, formatCoords, siteCode } from './lib/geo';
 import { keyLabel, metaByKey } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { StatusStrip, TopBar, type Step } from './components/Chrome';
-import { LeftPanel } from './components/LeftPanel';
+import { LeftPanel, type MatchMode } from './components/LeftPanel';
 import { CandidateList, type ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
 import { MethodPage } from './components/MethodPage';
@@ -60,7 +60,12 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const [targetId, setTargetId] = useState(targets[0].id);
   const [presetId, setPresetId] = useState<string | null>(PRESETS[0].id);
-  const [weights, setWeights] = useState<Weights>(PRESETS[0].weights);
+  const [sliderWeights, setWeights] = useState<Weights>(PRESETS[0].weights);
+  const [matchMode, setMatchMode] = useState<MatchMode>('all');
+  const [purposeId, setPurposeId] = useState<PurposeId>(PURPOSES[0].id);
+  // In purpose mode the weights are fixed by the purpose. The sliders keep their own values for the way back.
+  const weights = matchMode === 'purpose' ? purposeWeights(purposeId) : sliderWeights;
+  const purpose = matchMode === 'purpose' ? (PURPOSES.find((p) => p.id === purposeId) ?? null) : null;
   const [selected, setSelected] = useState<number | null>(null);
   const [includeLow, setIncludeLow] = useState(false);
   const [mode, setMode] = useState<ListMode>('ranked');
@@ -172,6 +177,7 @@ function Orbit({ data }: { data: DataBundle }) {
     setMode('ranked');
     setPresetId(PRESETS[0].id);
     setWeights(PRESETS[0].weights);
+    setMatchMode('all');
     setTab('setup');
     setStep(1);
     setDemo(`Demo: target ${target.name}`);
@@ -213,6 +219,8 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const selectedCell = selected !== null ? earth.cells[selected] : null;
   const explained = useMemo(() => (selected !== null ? explain(selected) : null), [selected, explain]);
+  const profile = useMemo(() => (selected !== null ? ts.profile(earth.cells[selected]) : null), [selected, ts, earth]);
+  const purposeScores = useMemo(() => (selected !== null ? ts.purposeScores(earth.cells[selected]) : null), [selected, ts, earth]);
   const named = selected !== null ? (sites.find((s) => s.index === selected)?.analog ?? null) : null;
   const rank = selected !== null ? (candidates.find((c) => c.index === selected)?.rank ?? null) : null;
   const pct = useMemo(
@@ -277,10 +285,18 @@ function Orbit({ data }: { data: DataBundle }) {
               setPresetId(id);
               setWeights(p.weights);
             }}
+            mode={matchMode}
+            onMode={(m) => {
+              setMatchMode(m);
+              // The purpose list sits below the target card: bring it into view when it appears.
+              if (m === 'purpose') window.setTimeout(() => document.getElementById('purpose-section')?.scrollIntoView({ block: 'nearest' }), 0);
+            }}
+            purposeId={purposeId}
+            onPurpose={setPurposeId}
             weights={weights}
             onWeight={(id: FactorId, v: number) => {
               // The library needs at least one weight above zero, so the last one cannot reach 0.
-              const next = { ...weights, [id]: v };
+              const next = { ...sliderWeights, [id]: v };
               if (FACTOR_IDS.reduce((a, k) => a + next[k], 0) <= 0) return;
               setPresetId(null);
               setWeights(next);
@@ -338,6 +354,13 @@ function Orbit({ data }: { data: DataBundle }) {
               explained={explained}
               meta={meta}
               landCover={earth.meta.landCover ?? null}
+              purpose={purpose}
+              profile={profile}
+              purposeScores={purposeScores}
+              onPurpose={(id) => {
+                setPurposeId(id);
+                setMatchMode('purpose');
+              }}
               named={named}
               isNew={isNewSite(selectedCell, analogs)}
               rank={rank}
@@ -350,6 +373,7 @@ function Orbit({ data }: { data: DataBundle }) {
             <CandidateList
               earth={earth}
               target={target}
+              purpose={purpose}
               results={results}
               candidates={candidates}
               explain={explain}

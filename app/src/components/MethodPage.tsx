@@ -2,8 +2,10 @@ import type { EarthFile, LithologySimilarity, Target } from '../types';
 import {
   FACTORS,
   MEDIUM_CONFIDENCE_COVERAGE,
+  DIMENSIONS,
   MIN_COVERAGE,
   PRESETS,
+  PURPOSES,
   SUN_ELEVATION_SIGMA_DEG,
 } from '../lib/scoringAdapter';
 import { MIN_SEPARATION_CELLS, MIN_SEPARATION_KM, NEW_DISTANCE_KM, separationKm } from '../lib/rank';
@@ -191,6 +193,31 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
             Anything lower is low confidence, and is left out of the candidates list unless you ask for it.
           </Rule>
         </div>
+      </Section>
+
+      <Section id="m-purpose" title="Analog profile and match by purpose" wide>
+        <p className="max-w-[72ch]">
+          The all-round score asks whether a whole base could be rehearsed at a place. Many real analog sites are used for one thing only: a
+          crater in farmland is a geology site, whatever its climate. The second view reports each cell on five dimensions, and ranks by what a
+          site would be used for. It adds no tuned number: every value is one of the factor similarities above, combined with the frozen Base
+          weights.
+        </p>
+        <DataTable caption="Purposes and the dimensions they use" headers={['Purpose', 'Depends on', 'Why']} minWidth={720}>
+          {PURPOSES.map((p) => (
+            <tr key={p.id} className="border-b border-line">
+              <th scope="row" className="py-2 pr-4 align-top font-medium text-text">
+                {p.label}
+              </th>
+              <Td>{p.dimensions.map((d) => DIMENSIONS.find((x) => x.id === d)?.label ?? d).join(', ')}</Td>
+              <Td muted>{p.why}</Td>
+            </tr>
+          ))}
+        </DataTable>
+        <p className="max-w-[72ch] text-[13px] text-muted">
+          Climate joins Temperature and Dryness. A profile has no veto, no required factor and no minimum coverage. Geology has three possible
+          values, so very many cells tie on it: the dossier shows the tied share. The purposes were written down after every known site had been
+          scored, so their rankings are development numbers. They show the view behaves sensibly. They do not prove it.
+        </p>
       </Section>
 
       <Section id="m-ranking" title="Candidates list rules">

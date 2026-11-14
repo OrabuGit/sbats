@@ -3,6 +3,7 @@ import type { Analog, CellScore, ClampGap, EarthCell, FactorBreakdown, FactorKey
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatShare, formatSim, formatValue, isSunKey, keyLabel, unscoredText, type MetaByKey } from '../lib/format';
 import { NEW_DISTANCE_KM } from '../lib/rank';
+import { PURPOSES, type DimensionProfile, type PurposeDef, type PurposeId } from '../lib/scoringAdapter';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { Radar } from './Radar';
 
@@ -13,6 +14,11 @@ interface Props {
   meta: MetaByKey;
   /** Land cover metadata from earth.json, for the badge on the ice and barren shares. */
   landCover: LandCoverMeta | null;
+  /** The purpose the headline score is for, or null for the all-round score. */
+  purpose: PurposeDef | null;
+  profile: DimensionProfile[] | null;
+  purposeScores: { id: PurposeId; result: CellScore }[] | null;
+  onPurpose: (id: PurposeId) => void;
   named: Analog | null;
   isNew: boolean;
   rank: number | null;
@@ -141,7 +147,7 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
   );
 }
 
-export function Dossier({ cell, target, explained: e, meta, landCover, named, isNew, rank, percentile, gaps, notes, onBack }: Props) {
+export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack }: Props) {
   const scored = e.score !== null;
   const sources = new Map<string, string>();
   for (const f of e.breakdown)
@@ -187,7 +193,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, named, is
 
           <div className="mt-4 flex items-end justify-between gap-4 border border-line bg-bg p-3">
             <div>
-              <p className="label">Match to {target.name}</p>
+              <p className="label">{purpose ? `${purpose.label}: match to ${target.name}` : `All-round match to ${target.name}`}</p>
               <p className={`num mt-1 text-[44px] font-semibold leading-none ${scored ? 'text-accent' : 'text-muted'}`}>
                 {scored ? formatScore(e.score) : 'NO DATA'}
                 {scored && <span className="ml-1 text-[14px] font-normal text-muted">/ 100</span>}
@@ -240,6 +246,91 @@ export function Dossier({ cell, target, explained: e, meta, landCover, named, is
           )}
         </div>
       </section>
+
+      {profile && (
+        <section className="border-b border-line px-4 py-3" aria-labelledby="h-profile">
+          <h3 id="h-profile" className="label">
+            Analog profile
+          </h3>
+          <p className="mt-1 text-[12px] text-muted">
+            What this cell is like the target in, one dimension at a time. No veto and no weights: it reports what is there.
+          </p>
+          <ul className="mt-2 space-y-2.5">
+            {profile.map((d) => (
+              <li key={d.id}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-[13px] font-medium text-text">{d.label}</span>
+                  <span className={`num text-[13px] font-semibold ${d.similarity === null ? 'text-muted' : 'text-text'}`}>
+                    {d.similarity === null ? 'no data' : formatSim(d.similarity)}
+                  </span>
+                </div>
+                <div
+                  className="mt-1 h-2 border border-line bg-bg"
+                  role="meter"
+                  aria-label={`${d.label} similarity`}
+                  aria-valuemin={0}
+                  aria-valuemax={1}
+                  aria-valuenow={d.similarity ?? 0}
+                  aria-valuetext={d.similarity === null ? 'no data' : d.similarity.toFixed(2)}
+                >
+                  <div className="h-full bg-accent" style={{ width: `${(d.similarity ?? 0) * 100}%` }} />
+                </div>
+                <p className="mt-1 flex flex-wrap items-center gap-x-2 text-[11px] text-muted">
+                  <span>{d.measures}.</span>
+                  {d.percentile !== null && (
+                    <span className="num">
+                      Beats or ties {(d.percentile * 100).toFixed(0)}% of Earth cells
+                      {d.shareTied !== null && d.shareTied >= 0.05 ? `, tied with ${(d.shareTied * 100).toFixed(0)}%` : ''}
+                    </span>
+                  )}
+                  {d.similarity !== null && <ComputedBadge title="Computed in the browser from the factor similarities below, which come from the sourced values." />}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {purposeScores && (
+        <section className="border-b border-line" aria-labelledby="h-purposes">
+          <div className="px-4 pt-3">
+            <h3 id="h-purposes" className="label">
+              Match by purpose
+            </h3>
+            <p className="mt-1 text-[12px] text-muted">
+              The same formula with only the factors each use depends on. Pick one to rank the whole Earth by it.
+            </p>
+          </div>
+          <ul className="mt-2 border-t border-line">
+            {purposeScores.map(({ id, result }) => {
+              const def = PURPOSES.find((x) => x.id === id);
+              if (!def) return null;
+              const on = purpose?.id === id;
+              return (
+                <li key={id} className="border-b border-line last:border-b-0">
+                  <button
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => onPurpose(id)}
+                    className={`flex min-h-11 w-full items-center gap-3 px-4 py-2 text-left hover:bg-bg ${on ? 'bg-bg' : ''}`}
+                  >
+                    <span className={`block h-2.5 w-2.5 shrink-0 border ${on ? 'border-accent bg-accent' : 'border-muted'}`} aria-hidden="true" />
+                    <span className={`flex-1 text-[13px] ${on ? 'text-accent' : 'text-text'}`}>{def.label}</span>
+                    <ConfidenceBadge confidence={result.confidence} coverage={result.coverage} />
+                    <span className={`num w-9 text-right text-[15px] font-semibold ${result.score === null ? 'text-muted' : 'text-text'}`}>
+                      {formatScore(result.score)}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="border-t border-line px-4 py-2 text-[11px] text-muted">
+            Full base rehearsal is the all-round score with the Base weights. The purposes were defined after validation results had been seen:
+            a second view, not proof.
+          </p>
+        </section>
+      )}
 
       <section className="border-b border-line" aria-labelledby="h-radar">
         <h3 id="h-radar" className="label px-4 pt-3">
