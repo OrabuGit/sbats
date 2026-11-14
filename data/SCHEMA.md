@@ -57,7 +57,13 @@ These seven keys are data fields, not the six scoring factors of DESIGN.md secti
   `classes: [{ code, label }]`. Session B defines it from the source lithology dataset. Do not invent classes.
 - Targets use the same codes in `values.lithology.value`.
 - Codes are labels, not quantities: the distance between two codes means nothing.
-  How lithology similarity is computed is a scoring decision and is still open (see "Open points").
+  Lithology is therefore the one factor that does not use the Gaussian rule. Its similarity is looked up in
+  `data/lithology_similarity.json` (approved by the team on 2026-11-14):
+  - same class as the target: 1.0
+  - related class (for example basalt and andesite, both volcanic): 0.6
+  - unrelated class: 0.15. Not zero, so rock type alone never vetoes a site.
+  - `null` lithology in the cell: the Rock type factor is left out for that cell, the remaining weights are
+    renormalised to sum to 1, and the score is flagged as lower confidence.
 
 ## data/earth.json
 
@@ -148,6 +154,7 @@ Owner: Session C. Hand-curated from cited sources.
     Clamping to Earth's observed range happens in the scoring library at run time, so the true gap can be
     shown under "what Earth cannot copy".
   - `sigma`: the tolerance in the Gaussian similarity, same unit as `value`, greater than 0.
+    `null` for `lithology`, which uses the similarity table instead.
   - `source`, `badge`: where `value` comes from. `"Mission"` or `"Literature"` for almost every target value.
   - If the value is unknown, set `value`, `sigma`, `source` and `badge` to `null`. The scoring library must
     handle a `null` target value without crashing.
@@ -182,13 +189,40 @@ Owner: Session C. The validation set and the headline candidates.
   or for the evidence behind the candidate (`"candidate"`).
 - `lat`, `lon`: the site itself. Consumers snap to the nearest `earth.json` cell.
 
+## data/lithology_similarity.json
+
+Owner: Session C. Hand-curated. It can only be written once Session B has published the lithology
+`classes` legend in `earth.json`, because it is keyed by those codes.
+
+```
+{
+  "levels": { "same": 1.0, "related": 0.6, "unrelated": 0.15 },
+  "pairs": [
+    { "a": integer, "b": integer, "relation": "related" | "unrelated", "justification": string, "source": string | null }
+  ]
+}
+```
+
+- `levels`: the three similarity values. The scoring library reads them from here and does not hard-code them.
+- `pairs`: one entry for every unordered pair of two different class codes from the legend, with `a` < `b`.
+  The table is symmetric: (a, b) and (b, a) are the same pairing.
+  - `relation`: which level applies. The similarity is `levels[relation]`. There are no per-pair numbers.
+  - `justification`: one short sentence on why the two classes are related or unrelated
+    (shared origin, composition or process).
+  - `source`: citation if the grouping comes from a reference, otherwise `null`.
+- Same class (a equals b) is always `levels.same` and is not listed.
+- Every pair must be listed. A missing pair is an error caught by a unit test, not a silent default.
+- A score computed without the Rock type factor carries a lower-confidence flag in the scoring library's
+  result. Session A shows that flag next to the score.
+- Session A renders the whole table, with justifications, on the Method page.
+
 ## Ownership
 
 | Session | Owns | Does not touch |
 | --- | --- | --- |
 | A | `/app`, except `/app/src/lib/scoring` | `/pipeline`, `/data`, `/validation`, `/app/src/lib/scoring` |
-| B | `/pipeline`, `data/earth.json` | `/app`, `/validation`, `data/targets.json`, `data/analogs.json` |
-| C | `data/targets.json`, `data/analogs.json`, `/app/src/lib/scoring`, `/validation` | the rest of `/app`, `/pipeline`, `data/earth.json` |
+| B | `/pipeline`, `data/earth.json` | `/app`, `/validation`, `data/targets.json`, `data/analogs.json`, `data/lithology_similarity.json` |
+| C | `data/targets.json`, `data/analogs.json`, `data/lithology_similarity.json`, `/app/src/lib/scoring`, `/validation` | the rest of `/app`, `/pipeline`, `data/earth.json` |
 
 Rules:
 - Edit only what you own. If you need a change in another session's area, write it down for that session
@@ -210,9 +244,11 @@ Rules:
 
 ## Open points
 
-- Lithology similarity. The scoring rule is a Gaussian of (Earth value minus target value) over a tolerance,
-  which has no meaning for class codes. Any other rule for this one factor is a change to the scoring formula
-  and needs the user's approval. Until then Session C treats lithology as not scored and says so.
+- Missing values in factors other than lithology. The leave-out-and-renormalise rule is approved for
+  lithology only. Whether a cell with a `null` in another factor is scored the same way or shown as
+  "no data" has not been decided. Until it is, Session C does not score such cells.
+- A target whose own lithology is `null`. Not covered by the approved rule. Until decided, Session C leaves
+  Rock type out for every cell of that target and flags all its scores as lower confidence.
 - `roughness` definition and unit, and the `slope` window: Session B picks one method that can be run on
   SRTM or Copernicus DEM, LOLA and MOLA alike, records it in `meta.factors`, and tells Session C before
   target terrain values are written.

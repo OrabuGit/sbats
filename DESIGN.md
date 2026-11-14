@@ -139,6 +139,7 @@ Overall score, a weighted geometric mean with weights summing to 1:
 
     S = 100 * product over i of ( s_i ^ w_i )
 
+- Rock type exception (decided 2026-11-14): rock classes are categories, so this factor uses a lookup table instead of the Gaussian. Same class 1.0, related class 0.6, unrelated class 0.15 (never zero, so rock type alone cannot veto a site). If a cell has no lithology, the factor is left out, the other weights are renormalised, and the score is flagged as lower confidence. The table lives in data/lithology_similarity.json with a justification per pairing and is shown on the Method page. See data/SCHEMA.md.
 - Veto: dense vegetation or permanent ice sets that factor near zero, which drags the whole score down.
 - Clamping: lunar polar cold has no Earth equal, so the target is clamped to Earth's extreme and the gap is shown under "what Earth cannot copy".
 - Mission presets only change weights. Rover raises Terrain, Ice raises Temperature and Rock type, Astrobiology raises Dryness and Rock type.
