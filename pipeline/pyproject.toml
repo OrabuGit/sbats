@@ -1,0 +1,16 @@
+[project]
+name = "sbats-pipeline"
+version = "0.1.0"
+description = "Builds data/earth.json for SBATS from open datasets. Code written with AI assistance (Claude Code), see AI_USE.md."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy>=2.0",
+  "requests>=2.32",
+  "xarray>=2024.9",
+  "zarr>=3.0",
+  "fsspec>=2024.9",
+  "aiohttp>=3.10",
+  "rasterio>=1.4",
+  "pyshp>=2.3",
+  "h5py>=3.12",
+]
