@@ -89,3 +89,5 @@ values only with values made the same way.
   sea included. NDVI and terrain use the land pixels only.
 - Lithology is `null` for cells that the GLiM grid marks as sea, water or no data. This is
   mostly coast and small islands.
+- The two rows of cells nearest the South Pole (south of 89 S) are under 1 km wide, too narrow for a
+  3 x 3 slope window at 463 m posts, so their `slope` is `null`.
