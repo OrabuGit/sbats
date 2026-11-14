@@ -61,8 +61,12 @@ const EXTRA: Record<string, () => string | null> = {
 };
 
 /** The built data files that exist right now. The app asks for this list before fetching anything. */
+let production = false;
 function listData(): string[] {
-  const data = fs.existsSync(DATA_DIR) ? fs.readdirSync(DATA_DIR).filter((f) => f.endsWith('.json') && f !== 'manifest.json') : [];
+  const all = fs.existsSync(DATA_DIR) ? fs.readdirSync(DATA_DIR).filter((f) => (f.endsWith('.json') || f.endsWith('.bin')) && f !== 'manifest.json') : [];
+  // earth.bin holds the same data as earth.json in an eighth of the size (the pipeline checks they
+  // are identical), so a production build ships only the compact file.
+  const data = production && all.includes('earth.bin') ? all.filter((f) => f !== 'earth.json') : all;
   const extra = Object.keys(EXTRA).filter((k) => EXTRA[k]() !== null);
   return [...data, ...extra].sort();
 }
@@ -70,10 +74,13 @@ function listData(): string[] {
 function sbatsData(): Plugin {
   return {
     name: 'sbats-data',
+    configResolved(config) {
+      production = config.command === 'build';
+    },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = (req.url ?? '').split('?')[0];
-        const m = url.match(/\/data\/([A-Za-z0-9_.-]+\.json)$/);
+        const m = url.match(/\/data\/([A-Za-z0-9_.-]+\.(?:json|bin))$/);
         if (!m) return next();
         const json = (body: string) => {
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -91,7 +98,7 @@ function sbatsData(): Plugin {
           res.end('not found');
           return;
         }
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('Content-Type', m[1].endsWith('.bin') ? 'application/octet-stream' : 'application/json; charset=utf-8');
         res.setHeader('Cache-Control', 'no-cache');
         fs.createReadStream(file).pipe(res);
       });
