@@ -33,7 +33,7 @@ are always in the same unit and computed the same way.
 | `precip` | Annual precipitation | mm/year | Moon and Mars targets use 0 |
 | `ndvi` | Annual mean NDVI | unitless, -1 to 1 | Moon and Mars targets are bare ground |
 | `slope` | Mean slope within the cell | degrees | Same window and formula on Earth, Moon and Mars |
-| `roughness` | Terrain roughness within the cell | set by Session B in `meta.factors` | Same window and formula on Earth, Moon and Mars |
+| `roughness` | Standard deviation of elevation within the cell | m | Same window and formula on Earth, Moon and Mars |
 | `lithology` | Dominant rock class | integer class code | Categorical. See "Lithology" below |
 
 The unit in `earth.json` `meta.factors[].unit` is authoritative. Session C writes target values in that unit.
@@ -228,6 +228,7 @@ are renormalised to sum to 1. Two limits apply:
    mission preset. Below that, no score.
 
 Coverage is measured with the preset's weights before renormalising, so it changes with the preset.
+A two-key factor with one key missing counts for half its weight (see "Settled details").
 Sunlight is computed from latitude and is always present.
 
 Result contract. For each cell the scoring library returns:
@@ -250,16 +251,19 @@ Result contract. For each cell the scoring library returns:
 - `unscoredReason`: why `score` is `null`, otherwise `null`. Added so the UI can say why a cell has no data.
 
 With the Base preset weights, a cell missing only Rock type (0.15) has coverage 0.85 and is medium.
-A cell missing only Terrain (0.25) has coverage 0.75 and is low.
+A cell missing only Terrain (0.25) has coverage 0.75 and is low. A cell missing only `roughness` has
+coverage 0.875 and is medium.
 
 UI requirements (Session A):
 - Show the confidence badge next to every score.
 - List the missing factors in the dossier.
+- Show a note on each target listing the factors that have no published value.
 - The top candidates list includes only high and medium confidence cells by default.
 - Document this rule on the Method page, exactly as coded.
 
 Tests (Session C): unit tests cover leave-out and renormalise, both required factors, the 0.6 coverage
-limit at the boundary, the three confidence levels at their boundaries, and the contents of `missing`.
+limit at the boundary, the three confidence levels at their boundaries, the contents of `missing`,
+the half-weight case for two-key factors, and a `null` target value.
 
 ## Ownership
 
@@ -287,15 +291,23 @@ Rules:
 2. Then change the producer, then the consumers.
 3. Adding an optional key is fine. Renaming or removing a key, or changing a unit, needs the user's approval.
 
-## Open points
+## Settled details
 
-- Scoring factors built from two data keys (Terrain from `slope` and `roughness`, Temperature from `tempMean`
-  and `tempRange`) when only one key is `null`. The approved rule does not say. Until decided, Session C
-  treats the whole scoring factor as missing, counts its full weight as absent, and lists only the `null`
-  key in `missing`.
-- A `null` on the target side (for example a target with unknown lithology). Not stated in the approved rule.
-  Until decided, Session C treats that factor as missing for every cell of that target, under the same
-  limits and confidence levels.
-- `roughness` definition and unit, and the `slope` window: Session B picks one method that can be run on
-  SRTM or Copernicus DEM, LOLA and MOLA alike, records it in `meta.factors`, and tells Session C before
-  target terrain values are written.
+The contract is settled as of 2026-11-14. These choices close the last gaps. They are decisions, not
+questions: build against them.
+
+- Two-key factors. Terrain uses `slope` and `roughness`. Temperature uses `tempMean` and `tempRange`.
+  Each key carries half of its factor's weight. With both keys present, the factor similarity is the
+  geometric mean of the two key similarities.
+  - One key missing: the factor is scored from the key that is present, only half of the factor's weight
+    counts as covered, and the absent key is listed in `missing`. The factor enters the renormalised mean
+    with that half weight.
+  - Both keys missing: the whole factor is dropped and both keys are listed in `missing`.
+- Missing target value. A factor with a `null` target value is treated as missing for every cell of that
+  target, under the same limits and confidence levels. Session A shows a note on the target itself listing
+  the factors that have no published value, taken from the `null` entries in `values`.
+- Terrain method. All three elevation models are resampled to the same ground spacing, the coarsest of the
+  three, before any metric is computed. `slope` is the mean slope in degrees. `roughness` is the standard
+  deviation of elevation in metres. The window is one grid cell on Earth and the same ground area centred
+  on the target on the Moon and Mars. Session B records the spacing and window in `meta.factors` labels
+  and in `SOURCES.md`.
