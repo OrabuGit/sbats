@@ -114,3 +114,4 @@ Papers, agency pages and reference pages behind `data/targets.json`, `data/analo
 | Wueller et al. 2025, JGR Planets 130(10):e2025JE009127 | https://doi.org/10.1029/2025JE009127 | 2026-11-14 | targets.json: Mons Mouton rock class | Literature |
 | Tye et al. 2015, Icarus 255:70 | https://doi.org/10.1016/j.icarus.2015.03.016 | 2026-11-14 | targets.json: Haworth age and rock class | Literature |
 | LROC featured image 1294, Malapert Massif (Robinson, 14 March 2023) | https://lroc.im-ldi.com/images/1294 | 2026-11-14 | targets.json: Malapert Massif summary | Literature |
+| Sources for the `usedFor` labels of the 28 known analogs (NASA, ESA, DLR, CSA, ISRO, NPS, USGS and Europlanet pages; NASA NTRS records; journal abstracts). Each is cited next to its label in `usedForSource` | listed per site in data/analogs.json and validation/build/make_analogs.py | 2026-11-14 | analogs.json: what each known site is actually used for (purpose rankings check) | Literature |

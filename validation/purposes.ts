@@ -78,9 +78,12 @@ interface SiteRow {
   usedFor: PurposeId[];
   primary: PurposeId | null;
   targets: number;
-  /** Mean over the site's targets of the share of Earth cells beaten or tied. null if never scored. */
+  /** Tie-fair (mid-rank) percentile among Earth cells, averaged over the site's targets. null if never scored. */
   purposePercentile: Record<string, number | null>;
   dimensionPercentile: Record<string, number | null>;
+  /** The first definition, "beats or ties", kept for the record. It flatters values that tie with most cells. */
+  purposeBeatsOrTies: Record<string, number | null>;
+  dimensionBeatsOrTies: Record<string, number | null>;
   dimensionSimilarity: Record<string, number | null>;
 }
 
@@ -93,6 +96,8 @@ for (const s of known) {
   if (!hit || hit.distanceKm > MAX_SNAP_KM) fail(`"${s.id}" has no cell within ${MAX_SNAP_KM} km`);
   const pPct: Record<string, number[]> = {};
   const dPct: Record<string, number[]> = {};
+  const pTie: Record<string, number[]> = {};
+  const dTie: Record<string, number[]> = {};
   const dSim: Record<string, number[]> = {};
   for (const targetId of s.analogFor) {
     const pt = perTarget.get(targetId);
@@ -100,14 +105,18 @@ for (const s of known) {
     for (const p of PURPOSES) {
       const score = scoreCell(hit.cell, pt.prepared, purposeWeights(p.id)).score;
       if (score === null) continue;
-      (pPct[p.id] ??= []).push(rankIn(pt.purposeSorted[p.id] as Float64Array, score).percentile);
+      const rank = rankIn(pt.purposeSorted[p.id] as Float64Array, score);
+      (pPct[p.id] ??= []).push(rank.midPercentile);
+      (pTie[p.id] ??= []).push(rank.percentile);
     }
     const sims = dimensionSimilarities(hit.cell, pt.prepared);
     for (const d of DIMENSIONS) {
       const v = sims[d.id];
       if (v === null) continue;
       (dSim[d.id] ??= []).push(v);
-      (dPct[d.id] ??= []).push(rankIn(pt.index.sorted[d.id], v).percentile);
+      const rank = rankIn(pt.index.sorted[d.id], v);
+      (dPct[d.id] ??= []).push(rank.midPercentile);
+      (dTie[d.id] ??= []).push(rank.percentile);
     }
   }
   rows.push({
@@ -118,6 +127,8 @@ for (const s of known) {
     targets: s.analogFor.length,
     purposePercentile: Object.fromEntries(PURPOSES.map((p) => [p.id, r3(mean(pPct[p.id] ?? []))])),
     dimensionPercentile: Object.fromEntries(DIMENSIONS.map((d) => [d.id, r3(mean(dPct[d.id] ?? []))])),
+    purposeBeatsOrTies: Object.fromEntries(PURPOSES.map((p) => [p.id, r3(mean(pTie[p.id] ?? []))])),
+    dimensionBeatsOrTies: Object.fromEntries(DIMENSIONS.map((d) => [d.id, r3(mean(dTie[d.id] ?? []))])),
     dimensionSimilarity: Object.fromEntries(DIMENSIONS.map((d) => [d.id, r3(mean(dSim[d.id] ?? []))])),
   });
 }
@@ -193,7 +204,10 @@ const report = {
   frozenAt: frozen.frozenAt,
   earthGeneratedAt: data.earth.meta.generatedAt,
   definitions: 'validation/purposes/DEFINITIONS.md',
-  percentile: 'Share of Earth cells the site beats or ties, averaged over the targets the site is an analog for.',
+  percentile:
+    'Tie-fair (mid-rank) percentile: the share of Earth cells with a strictly lower value plus half of those exactly equal, ' +
+    'averaged over the targets the site is an analog for. Chance is exactly 0.5. The first definition, "beats or ties", is kept ' +
+    'in purposeBeatsOrTies and dimensionBeatsOrTies: it gave 0.96 to sites whose rock class is unrelated to the target.',
   purposes: PURPOSES,
   byPurpose,
   byPrimary,
@@ -213,7 +227,8 @@ md.push(`**${caveat}**`, '');
 md.push(`Generated ${report.generatedAt} by \`npx tsx validation/purposes.ts\`. Earth grid built ${data.earth.meta.generatedAt}.`);
 md.push('The all-round score is the one frozen on ' + frozen.frozenAt + ' and is not changed by this view. Definitions and the');
 md.push('reason this view exists: `validation/purposes/DEFINITIONS.md`. Candidate sites are not part of this report.', '');
-md.push('A percentile is the share of Earth cells the site beats or ties, averaged over the targets it is an analog for.', '');
+md.push('A percentile here is tie-fair (mid-rank): the share of Earth cells with a strictly lower value plus half of those');
+md.push('exactly equal, averaged over the targets the site is an analog for. Chance is exactly 0.5.', '');
 
 md.push('## By purpose', '');
 md.push('For the sites cited as used for each purpose: their mean percentile on that purpose\'s ranking, the same');
@@ -251,6 +266,19 @@ md.push('Geology has three possible values, so ties are large. Share of Earth ce
 md.push('as each target (all of them share the top geology percentile):', '');
 md.push('| Target | Share of cells tied at the top |', '| --- | --- |');
 for (const [id, v] of Object.entries(geologyTies)) md.push(`| ${id} | ${v === null ? 'no rock class for this target' : `${(v * 100).toFixed(1)}%`} |`);
+md.push('');
+md.push('What the rock class of each geology-labelled site actually is against its targets (mean similarity over its');
+md.push('targets: 1.0 same class, 0.6 related, 0.15 unrelated):', '');
+md.push('| Mean rock similarity | Sites used for geology |', '| --- | --- |');
+{
+  const geo = rows.filter((r) => r.usedFor.includes('geology'));
+  const band = (lo: number, hi: number): number => geo.filter((r) => { const v = r.dimensionSimilarity.geology; return v !== null && v !== undefined && v >= lo && v < hi; }).length;
+  md.push(`| same class for every target (1.0) | ${band(0.999, 2)} |`);
+  md.push(`| related on average (0.5 to under 1.0) | ${band(0.5, 0.999)} |`);
+  md.push(`| partly related (0.2 to under 0.5) | ${band(0.2, 0.5)} |`);
+  md.push(`| unrelated for every target (0.15) | ${band(0, 0.2)} |`);
+  md.push(`| no rock class for the cell or the target | ${geo.filter((r) => r.dimensionSimilarity.geology === null || r.dimensionSimilarity.geology === undefined).length} |`);
+}
 md.push('');
 md.push('## Every known site', '');
 md.push('| Site | Cited use | ' + PURPOSES.map((p) => p.label).join(' | ') + ' | ' + DIMENSIONS.map((d) => `${d.label} (dim.)`).join(' | ') + ' |');

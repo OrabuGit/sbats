@@ -1,0 +1,1753 @@
+{
+  "generatedAt": "2026-11-14T12:43:30.652Z",
+  "caveat": "Development numbers, not a clean test. All 28 known sites, including the 8 hold-out sites, had been scored and read before the dimensions and purposes were defined. Chance is a mean percentile of 0.5.",
+  "frozenAt": "2026-11-14",
+  "earthGeneratedAt": "2026-11-14T12:33:51Z",
+  "definitions": "validation/purposes/DEFINITIONS.md",
+  "percentile": "Tie-fair (mid-rank) percentile: the share of Earth cells with a strictly lower value plus half of those exactly equal, averaged over the targets the site is an analog for. Chance is exactly 0.5. The first definition, \"beats or ties\", is kept in purposeBeatsOrTies and dimensionBeatsOrTies: it gave 0.96 to sites whose rock class is unrelated to the target.",
+  "purposes": [
+    {
+      "id": "geology",
+      "label": "Instrument and geology testing",
+      "dimensions": [
+        "geology"
+      ],
+      "why": "An instrument or a field geologist is tested by the rock in front of them. Outcrops are far smaller than a grid cell, so the cell's climate, light and vegetation do not decide whether the right rock is there."
+    },
+    {
+      "id": "mobility",
+      "label": "Rover mobility",
+      "dimensions": [
+        "terrain",
+        "bareGround"
+      ],
+      "why": "Wheels, suspension and navigation respond to slope, relief and an open surface free of vegetation and ice. Rock chemistry and weather do not move a rover."
+    },
+    {
+      "id": "ice",
+      "label": "Ice and resources",
+      "dimensions": [
+        "climate",
+        "sunlight",
+        "geology"
+      ],
+      "why": "Ground ice and other volatiles survive where it is cold, dry and poorly lit, and what can be extracted from the ground depends on the host rock."
+    },
+    {
+      "id": "astrobiology",
+      "label": "Astrobiology",
+      "dimensions": [
+        "climate",
+        "geology",
+        "bareGround"
+      ],
+      "why": "Life at its limits is set by temperature and water and by the mineral substrate. Ground with almost no vegetation is where biology is as sparse as a mission would meet."
+    },
+    {
+      "id": "base",
+      "label": "Full base rehearsal",
+      "dimensions": [
+        "geology",
+        "terrain",
+        "climate",
+        "bareGround",
+        "sunlight"
+      ],
+      "why": "A crewed base lives with everything at once: ground, rock, weather and light. This is the existing all-round score."
+    }
+  ],
+  "byPurpose": [
+    {
+      "purpose": "geology",
+      "label": "Instrument and geology testing",
+      "dimensions": [
+        "geology"
+      ],
+      "sitesUsedForIt": [
+        "atacama-yungay",
+        "haughton-crater",
+        "don-juan-pond",
+        "mauna-kea",
+        "kilauea",
+        "craters-of-the-moon",
+        "lanzarote-timanfaya",
+        "ries-crater",
+        "askja",
+        "rio-tinto",
+        "dallol",
+        "meteor-crater",
+        "death-valley-ubehebe",
+        "pilbara-north-pole-dome",
+        "arkaroola",
+        "qaidam-basin",
+        "lonar-crater",
+        "makgadikgadi-pans",
+        "teide",
+        "etna",
+        "sudbury",
+        "kangerlussuaq",
+        "mistastin-crater"
+      ],
+      "onPurposeRanking": {
+        "sites": 19,
+        "meanPercentile": 0.593,
+        "top10": 1,
+        "top25": 2
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 23,
+        "meanPercentile": 0.718,
+        "top10": 7,
+        "top25": 12
+      },
+      "otherKnownSitesOnPurposeRanking": {
+        "sites": 4,
+        "meanPercentile": 0.565,
+        "top10": 0,
+        "top25": 0
+      }
+    },
+    {
+      "purpose": "mobility",
+      "label": "Rover mobility",
+      "dimensions": [
+        "terrain",
+        "bareGround"
+      ],
+      "sitesUsedForIt": [
+        "atacama-yungay",
+        "haughton-crater",
+        "mdrs-utah",
+        "sp-crater",
+        "arkaroola",
+        "teide",
+        "etna",
+        "mistastin-crater"
+      ],
+      "onPurposeRanking": {
+        "sites": 8,
+        "meanPercentile": 0.805,
+        "top10": 4,
+        "top25": 6
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 8,
+        "meanPercentile": 0.803,
+        "top10": 4,
+        "top25": 5
+      },
+      "otherKnownSitesOnPurposeRanking": {
+        "sites": 20,
+        "meanPercentile": 0.7,
+        "top10": 5,
+        "top25": 10
+      }
+    },
+    {
+      "purpose": "ice",
+      "label": "Ice and resources",
+      "dimensions": [
+        "climate",
+        "sunlight",
+        "geology"
+      ],
+      "sitesUsedForIt": [
+        "beacon-valley",
+        "don-juan-pond",
+        "mauna-kea"
+      ],
+      "onPurposeRanking": {
+        "sites": 3,
+        "meanPercentile": 0.612,
+        "top10": 1,
+        "top25": 2
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 3,
+        "meanPercentile": 0.402,
+        "top10": 0,
+        "top25": 0
+      },
+      "otherKnownSitesOnPurposeRanking": {
+        "sites": 25,
+        "meanPercentile": 0.584,
+        "top10": 4,
+        "top25": 8
+      }
+    },
+    {
+      "purpose": "astrobiology",
+      "label": "Astrobiology",
+      "dimensions": [
+        "climate",
+        "geology",
+        "bareGround"
+      ],
+      "sitesUsedForIt": [
+        "atacama-yungay",
+        "haughton-crater",
+        "don-juan-pond",
+        "kilauea",
+        "craters-of-the-moon",
+        "rio-tinto",
+        "dallol",
+        "death-valley-ubehebe",
+        "pilbara-north-pole-dome",
+        "arkaroola",
+        "qaidam-basin",
+        "ladakh-tso-kar",
+        "makgadikgadi-pans"
+      ],
+      "onPurposeRanking": {
+        "sites": 13,
+        "meanPercentile": 0.822,
+        "top10": 6,
+        "top25": 10
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 13,
+        "meanPercentile": 0.79,
+        "top10": 7,
+        "top25": 9
+      },
+      "otherKnownSitesOnPurposeRanking": {
+        "sites": 15,
+        "meanPercentile": 0.704,
+        "top10": 3,
+        "top25": 7
+      }
+    },
+    {
+      "purpose": "base",
+      "label": "Full base rehearsal",
+      "dimensions": [
+        "geology",
+        "terrain",
+        "climate",
+        "bareGround",
+        "sunlight"
+      ],
+      "sitesUsedForIt": [
+        "haughton-crater",
+        "kilauea",
+        "craters-of-the-moon",
+        "lanzarote-timanfaya",
+        "mdrs-utah",
+        "sp-crater",
+        "makhtesh-ramon",
+        "ladakh-tso-kar",
+        "mistastin-crater"
+      ],
+      "onPurposeRanking": {
+        "sites": 9,
+        "meanPercentile": 0.795,
+        "top10": 4,
+        "top25": 6
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 9,
+        "meanPercentile": 0.795,
+        "top10": 4,
+        "top25": 6
+      },
+      "otherKnownSitesOnPurposeRanking": {
+        "sites": 19,
+        "meanPercentile": 0.695,
+        "top10": 5,
+        "top25": 9
+      }
+    }
+  ],
+  "byPrimary": [
+    {
+      "purpose": "geology",
+      "label": "Instrument and geology testing",
+      "sitesBestKnownForIt": [
+        "kilauea",
+        "craters-of-the-moon",
+        "lanzarote-timanfaya",
+        "ries-crater",
+        "askja",
+        "meteor-crater",
+        "death-valley-ubehebe",
+        "arkaroola",
+        "qaidam-basin",
+        "lonar-crater",
+        "makgadikgadi-pans",
+        "sudbury",
+        "kangerlussuaq",
+        "mistastin-crater"
+      ],
+      "onPurposeRanking": {
+        "sites": 11,
+        "meanPercentile": 0.609,
+        "top10": 1,
+        "top25": 2
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 14,
+        "meanPercentile": 0.743,
+        "top10": 4,
+        "top25": 8
+      }
+    },
+    {
+      "purpose": "mobility",
+      "label": "Rover mobility",
+      "sitesBestKnownForIt": [
+        "teide",
+        "etna"
+      ],
+      "onPurposeRanking": {
+        "sites": 2,
+        "meanPercentile": 0.545,
+        "top10": 0,
+        "top25": 0
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 2,
+        "meanPercentile": 0.57,
+        "top10": 0,
+        "top25": 0
+      }
+    },
+    {
+      "purpose": "ice",
+      "label": "Ice and resources",
+      "sitesBestKnownForIt": [
+        "beacon-valley",
+        "don-juan-pond",
+        "mauna-kea"
+      ],
+      "onPurposeRanking": {
+        "sites": 3,
+        "meanPercentile": 0.612,
+        "top10": 1,
+        "top25": 2
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 3,
+        "meanPercentile": 0.402,
+        "top10": 0,
+        "top25": 0
+      }
+    },
+    {
+      "purpose": "astrobiology",
+      "label": "Astrobiology",
+      "sitesBestKnownForIt": [
+        "atacama-yungay",
+        "rio-tinto",
+        "dallol",
+        "pilbara-north-pole-dome",
+        "ladakh-tso-kar"
+      ],
+      "onPurposeRanking": {
+        "sites": 5,
+        "meanPercentile": 0.8,
+        "top10": 2,
+        "top25": 3
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 5,
+        "meanPercentile": 0.789,
+        "top10": 2,
+        "top25": 3
+      }
+    },
+    {
+      "purpose": "base",
+      "label": "Full base rehearsal",
+      "sitesBestKnownForIt": [
+        "haughton-crater",
+        "mdrs-utah",
+        "sp-crater",
+        "makhtesh-ramon"
+      ],
+      "onPurposeRanking": {
+        "sites": 4,
+        "meanPercentile": 0.917,
+        "top10": 3,
+        "top25": 4
+      },
+      "sameSitesOnAllRoundScore": {
+        "sites": 4,
+        "meanPercentile": 0.917,
+        "top10": 3,
+        "top25": 4
+      }
+    }
+  ],
+  "byDimension": [
+    {
+      "dimension": "geology",
+      "label": "Geology",
+      "purposesThatDependOnIt": [
+        "geology",
+        "ice",
+        "astrobiology"
+      ],
+      "sitesKnownForIt": {
+        "sites": 20,
+        "meanPercentile": 0.593,
+        "top10": 1,
+        "top25": 2
+      },
+      "otherKnownSites": {
+        "sites": 3,
+        "meanPercentile": 0.555,
+        "top10": 0,
+        "top25": 0
+      }
+    },
+    {
+      "dimension": "terrain",
+      "label": "Terrain",
+      "purposesThatDependOnIt": [
+        "mobility"
+      ],
+      "sitesKnownForIt": {
+        "sites": 8,
+        "meanPercentile": 0.743,
+        "top10": 3,
+        "top25": 4
+      },
+      "otherKnownSites": {
+        "sites": 20,
+        "meanPercentile": 0.586,
+        "top10": 3,
+        "top25": 8
+      }
+    },
+    {
+      "dimension": "climate",
+      "label": "Climate",
+      "purposesThatDependOnIt": [
+        "ice",
+        "astrobiology"
+      ],
+      "sitesKnownForIt": {
+        "sites": 15,
+        "meanPercentile": 0.505,
+        "top10": 0,
+        "top25": 2
+      },
+      "otherKnownSites": {
+        "sites": 13,
+        "meanPercentile": 0.384,
+        "top10": 0,
+        "top25": 0
+      }
+    },
+    {
+      "dimension": "bareGround",
+      "label": "Bare ground",
+      "purposesThatDependOnIt": [
+        "mobility",
+        "astrobiology"
+      ],
+      "sitesKnownForIt": {
+        "sites": 18,
+        "meanPercentile": 0.806,
+        "top10": 6,
+        "top25": 14
+      },
+      "otherKnownSites": {
+        "sites": 10,
+        "meanPercentile": 0.706,
+        "top10": 3,
+        "top25": 5
+      }
+    },
+    {
+      "dimension": "sunlight",
+      "label": "Sunlight",
+      "purposesThatDependOnIt": [
+        "ice"
+      ],
+      "sitesKnownForIt": {
+        "sites": 3,
+        "meanPercentile": 0.186,
+        "top10": 0,
+        "top25": 0
+      },
+      "otherKnownSites": {
+        "sites": 25,
+        "meanPercentile": 0.601,
+        "top10": 3,
+        "top25": 7
+      }
+    }
+  ],
+  "shareOfEarthCellsWithTheSameRockClassAsTheTarget": {
+    "moon-malapert-massif": 0.007,
+    "moon-mons-mouton": 0.007,
+    "moon-haworth": 0.007,
+    "moon-shackleton-rim": 0.007,
+    "mars-jezero": 0.029,
+    "mars-gale": 0.134,
+    "mars-arcadia-planitia": null
+  },
+  "sites": [
+    {
+      "id": "atacama-yungay",
+      "name": "Atacama Desert hyperarid core (Yungay), Chile",
+      "usedFor": [
+        "astrobiology",
+        "geology",
+        "mobility"
+      ],
+      "primary": "astrobiology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.377,
+        "mobility": 0.906,
+        "ice": 0.891,
+        "astrobiology": 0.906,
+        "base": 0.94
+      },
+      "dimensionPercentile": {
+        "geology": 0.377,
+        "terrain": 0.542,
+        "climate": 0.561,
+        "bareGround": 0.982,
+        "sunlight": 0.845
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.754,
+        "mobility": 0.906,
+        "ice": 0.891,
+        "astrobiology": 0.906,
+        "base": 0.94
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.754,
+        "terrain": 0.542,
+        "climate": 0.561,
+        "bareGround": 0.982,
+        "sunlight": 0.846
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.378,
+        "climate": 0.046,
+        "bareGround": 0.962,
+        "sunlight": 0.917
+      }
+    },
+    {
+      "id": "haughton-crater",
+      "name": "Haughton impact structure, Devon Island, Canada",
+      "usedFor": [
+        "geology",
+        "mobility",
+        "base",
+        "astrobiology"
+      ],
+      "primary": "base",
+      "targets": 3,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.949,
+        "ice": 0.561,
+        "astrobiology": 0.985,
+        "base": 0.913
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.617,
+        "climate": 0.698,
+        "bareGround": 0.987,
+        "sunlight": 0.242
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.949,
+        "ice": 0.561,
+        "astrobiology": 0.985,
+        "base": 0.913
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.617,
+        "climate": 0.698,
+        "bareGround": 0.987,
+        "sunlight": 0.246
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.404,
+        "climate": 0.095,
+        "bareGround": 0.976,
+        "sunlight": 0.027
+      }
+    },
+    {
+      "id": "beacon-valley",
+      "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+      "usedFor": [
+        "ice"
+      ],
+      "primary": "ice",
+      "targets": 1,
+      "purposePercentile": {
+        "geology": null,
+        "mobility": 0.382,
+        "ice": 0.9,
+        "astrobiology": 0.956,
+        "base": 0.466
+      },
+      "dimensionPercentile": {
+        "geology": null,
+        "terrain": 0.072,
+        "climate": 0.854,
+        "bareGround": 0.736,
+        "sunlight": 0.199
+      },
+      "purposeBeatsOrTies": {
+        "geology": null,
+        "mobility": 0.383,
+        "ice": 0.9,
+        "astrobiology": 0.956,
+        "base": 0.466
+      },
+      "dimensionBeatsOrTies": {
+        "geology": null,
+        "terrain": 0.072,
+        "climate": 0.854,
+        "bareGround": 0.736,
+        "sunlight": 0.202
+      },
+      "dimensionSimilarity": {
+        "geology": null,
+        "terrain": 0,
+        "climate": 0.299,
+        "bareGround": 0.085,
+        "sunlight": 0.06
+      }
+    },
+    {
+      "id": "don-juan-pond",
+      "name": "Don Juan Pond, Wright Valley, Antarctica",
+      "usedFor": [
+        "ice",
+        "astrobiology",
+        "geology"
+      ],
+      "primary": "ice",
+      "targets": 1,
+      "purposePercentile": {
+        "geology": null,
+        "mobility": 0.332,
+        "ice": 0.896,
+        "astrobiology": 0.974,
+        "base": 0.374
+      },
+      "dimensionPercentile": {
+        "geology": null,
+        "terrain": 0.037,
+        "climate": 0.842,
+        "bareGround": 0.762,
+        "sunlight": 0.199
+      },
+      "purposeBeatsOrTies": {
+        "geology": null,
+        "mobility": 0.332,
+        "ice": 0.896,
+        "astrobiology": 0.974,
+        "base": 0.374
+      },
+      "dimensionBeatsOrTies": {
+        "geology": null,
+        "terrain": 0.037,
+        "climate": 0.842,
+        "bareGround": 0.762,
+        "sunlight": 0.202
+      },
+      "dimensionSimilarity": {
+        "geology": null,
+        "terrain": 0,
+        "climate": 0.294,
+        "bareGround": 0.133,
+        "sunlight": 0.06
+      }
+    },
+    {
+      "id": "mauna-kea",
+      "name": "Mauna Kea, Hawaii, USA",
+      "usedFor": [
+        "ice",
+        "geology"
+      ],
+      "primary": "ice",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.468,
+        "ice": 0.04,
+        "astrobiology": 0.363,
+        "base": 0.365
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.984,
+        "climate": 0.044,
+        "bareGround": 0.447,
+        "sunlight": 0.16
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.468,
+        "ice": 0.04,
+        "astrobiology": 0.363,
+        "base": 0.365
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.984,
+        "climate": 0.044,
+        "bareGround": 0.447,
+        "sunlight": 0.162
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.7,
+        "climate": 0,
+        "bareGround": 0,
+        "sunlight": 0
+      }
+    },
+    {
+      "id": "kilauea",
+      "name": "Kilauea, Hawaii, USA",
+      "usedFor": [
+        "geology",
+        "astrobiology",
+        "base"
+      ],
+      "primary": "geology",
+      "targets": 6,
+      "purposePercentile": {
+        "geology": null,
+        "mobility": 0.56,
+        "ice": 0.042,
+        "astrobiology": 0.371,
+        "base": 0.394
+      },
+      "dimensionPercentile": {
+        "geology": null,
+        "terrain": 0.87,
+        "climate": 0.069,
+        "bareGround": 0.534,
+        "sunlight": 0.41
+      },
+      "purposeBeatsOrTies": {
+        "geology": null,
+        "mobility": 0.56,
+        "ice": 0.042,
+        "astrobiology": 0.371,
+        "base": 0.394
+      },
+      "dimensionBeatsOrTies": {
+        "geology": null,
+        "terrain": 0.87,
+        "climate": 0.069,
+        "bareGround": 0.535,
+        "sunlight": 0.412
+      },
+      "dimensionSimilarity": {
+        "geology": null,
+        "terrain": 0.516,
+        "climate": 0,
+        "bareGround": 0,
+        "sunlight": 0.327
+      }
+    },
+    {
+      "id": "craters-of-the-moon",
+      "name": "Craters of the Moon, Idaho, USA",
+      "usedFor": [
+        "geology",
+        "base",
+        "astrobiology"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.633,
+        "mobility": 0.86,
+        "ice": 0.886,
+        "astrobiology": 0.852,
+        "base": 0.918
+      },
+      "dimensionPercentile": {
+        "geology": 0.633,
+        "terrain": 0.874,
+        "climate": 0.584,
+        "bareGround": 0.779,
+        "sunlight": 0.622
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.781,
+        "mobility": 0.86,
+        "ice": 0.886,
+        "astrobiology": 0.852,
+        "base": 0.918
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.781,
+        "terrain": 0.874,
+        "climate": 0.584,
+        "bareGround": 0.78,
+        "sunlight": 0.624
+      },
+      "dimensionSimilarity": {
+        "geology": 0.575,
+        "terrain": 0.575,
+        "climate": 0.053,
+        "bareGround": 0.174,
+        "sunlight": 0.256
+      }
+    },
+    {
+      "id": "lanzarote-timanfaya",
+      "name": "Timanfaya, Lanzarote, Spain",
+      "usedFor": [
+        "geology",
+        "base"
+      ],
+      "primary": "geology",
+      "targets": 6,
+      "purposePercentile": {
+        "geology": null,
+        "mobility": 0.965,
+        "ice": 0.318,
+        "astrobiology": 0.81,
+        "base": 0.824
+      },
+      "dimensionPercentile": {
+        "geology": null,
+        "terrain": 0.807,
+        "climate": 0.427,
+        "bareGround": 0.938,
+        "sunlight": 0.417
+      },
+      "purposeBeatsOrTies": {
+        "geology": null,
+        "mobility": 0.965,
+        "ice": 0.318,
+        "astrobiology": 0.81,
+        "base": 0.824
+      },
+      "dimensionBeatsOrTies": {
+        "geology": null,
+        "terrain": 0.807,
+        "climate": 0.427,
+        "bareGround": 0.938,
+        "sunlight": 0.418
+      },
+      "dimensionSimilarity": {
+        "geology": null,
+        "terrain": 0.359,
+        "climate": 0.014,
+        "bareGround": 0.869,
+        "sunlight": 0.261
+      }
+    },
+    {
+      "id": "ries-crater",
+      "name": "Noerdlinger Ries impact crater, Germany",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.42,
+        "ice": 0.332,
+        "astrobiology": 0.467,
+        "base": 0.476
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.614,
+        "climate": 0.263,
+        "bareGround": 0.423,
+        "sunlight": 0.429
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.42,
+        "ice": 0.332,
+        "astrobiology": 0.467,
+        "base": 0.476
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.614,
+        "climate": 0.263,
+        "bareGround": 0.423,
+        "sunlight": 0.432
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.197,
+        "climate": 0.002,
+        "bareGround": 0,
+        "sunlight": 0.08
+      }
+    },
+    {
+      "id": "askja",
+      "name": "Askja caldera, Iceland highlands",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 6,
+      "purposePercentile": {
+        "geology": 0.862,
+        "mobility": 0.975,
+        "ice": 0.345,
+        "astrobiology": 0.737,
+        "base": 0.81
+      },
+      "dimensionPercentile": {
+        "geology": 0.862,
+        "terrain": 0.846,
+        "climate": 0.226,
+        "bareGround": 0.95,
+        "sunlight": 0.533
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.922,
+        "mobility": 0.975,
+        "ice": 0.345,
+        "astrobiology": 0.737,
+        "base": 0.81
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.922,
+        "terrain": 0.846,
+        "climate": 0.226,
+        "bareGround": 0.95,
+        "sunlight": 0.536
+      },
+      "dimensionSimilarity": {
+        "geology": 0.592,
+        "terrain": 0.432,
+        "climate": 0.002,
+        "bareGround": 0.897,
+        "sunlight": 0.347
+      }
+    },
+    {
+      "id": "mdrs-utah",
+      "name": "Mars Desert Research Station, Hanksville, Utah, USA",
+      "usedFor": [
+        "base",
+        "mobility"
+      ],
+      "primary": "base",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.982,
+        "ice": 0.947,
+        "astrobiology": 0.942,
+        "base": 0.987
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.957,
+        "climate": 0.611,
+        "bareGround": 0.881,
+        "sunlight": 0.663
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.982,
+        "ice": 0.947,
+        "astrobiology": 0.942,
+        "base": 0.987
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.957,
+        "climate": 0.611,
+        "bareGround": 0.882,
+        "sunlight": 0.665
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.672,
+        "climate": 0.061,
+        "bareGround": 0.631,
+        "sunlight": 0.417
+      }
+    },
+    {
+      "id": "rio-tinto",
+      "name": "Rio Tinto, Huelva, Spain",
+      "usedFor": [
+        "astrobiology",
+        "geology"
+      ],
+      "primary": "astrobiology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.703,
+        "mobility": 0.579,
+        "ice": 0.584,
+        "astrobiology": 0.588,
+        "base": 0.615
+      },
+      "dimensionPercentile": {
+        "geology": 0.703,
+        "terrain": 0.594,
+        "climate": 0.343,
+        "bareGround": 0.562,
+        "sunlight": 0.672
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.973,
+        "mobility": 0.579,
+        "ice": 0.584,
+        "astrobiology": 0.588,
+        "base": 0.615
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.973,
+        "terrain": 0.594,
+        "climate": 0.343,
+        "bareGround": 0.563,
+        "sunlight": 0.673
+      },
+      "dimensionSimilarity": {
+        "geology": 0.575,
+        "terrain": 0.246,
+        "climate": 0.013,
+        "bareGround": 0,
+        "sunlight": 0.454
+      }
+    },
+    {
+      "id": "dallol",
+      "name": "Dallol, Danakil Depression, Ethiopia",
+      "usedFor": [
+        "astrobiology",
+        "geology"
+      ],
+      "primary": "astrobiology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.994,
+        "ice": 0.541,
+        "astrobiology": 0.776,
+        "base": 0.933
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.931,
+        "climate": 0.31,
+        "bareGround": 0.98,
+        "sunlight": 0.902
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.994,
+        "ice": 0.541,
+        "astrobiology": 0.776,
+        "base": 0.933
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.931,
+        "climate": 0.31,
+        "bareGround": 0.981,
+        "sunlight": 0.903
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.697,
+        "climate": 0.01,
+        "bareGround": 0.959,
+        "sunlight": 0.989
+      }
+    },
+    {
+      "id": "sp-crater",
+      "name": "SP Crater, San Francisco Volcanic Field, Arizona, USA",
+      "usedFor": [
+        "base",
+        "mobility"
+      ],
+      "primary": "base",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.79,
+        "ice": 0.426,
+        "astrobiology": 0.773,
+        "base": 0.788
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.768,
+        "climate": 0.522,
+        "bareGround": 0.775,
+        "sunlight": 0.316
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.79,
+        "ice": 0.426,
+        "astrobiology": 0.773,
+        "base": 0.788
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.768,
+        "climate": 0.522,
+        "bareGround": 0.775,
+        "sunlight": 0.317
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.277,
+        "climate": 0.022,
+        "bareGround": 0.161,
+        "sunlight": 0.008
+      }
+    },
+    {
+      "id": "meteor-crater",
+      "name": "Meteor Crater, Arizona, USA",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.977,
+        "mobility": 0.84,
+        "ice": 0.472,
+        "astrobiology": 0.895,
+        "base": 0.835
+      },
+      "dimensionPercentile": {
+        "geology": 0.977,
+        "terrain": 0.74,
+        "climate": 0.491,
+        "bareGround": 0.835,
+        "sunlight": 0.311
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.993,
+        "mobility": 0.84,
+        "ice": 0.472,
+        "astrobiology": 0.895,
+        "base": 0.835
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.993,
+        "terrain": 0.74,
+        "climate": 0.491,
+        "bareGround": 0.835,
+        "sunlight": 0.313
+      },
+      "dimensionSimilarity": {
+        "geology": 0.6,
+        "terrain": 0.255,
+        "climate": 0.017,
+        "bareGround": 0.365,
+        "sunlight": 0.007
+      }
+    },
+    {
+      "id": "death-valley-ubehebe",
+      "name": "Ubehebe Crater, Death Valley, California, USA",
+      "usedFor": [
+        "geology",
+        "astrobiology"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.986,
+        "ice": 0.951,
+        "astrobiology": 0.951,
+        "base": 0.989
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.944,
+        "climate": 0.612,
+        "bareGround": 0.901,
+        "sunlight": 0.672
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.986,
+        "ice": 0.951,
+        "astrobiology": 0.951,
+        "base": 0.989
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.944,
+        "climate": 0.612,
+        "bareGround": 0.902,
+        "sunlight": 0.673
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.62,
+        "climate": 0.061,
+        "bareGround": 0.743,
+        "sunlight": 0.454
+      }
+    },
+    {
+      "id": "pilbara-north-pole-dome",
+      "name": "North Pole Dome, Pilbara, Australia",
+      "usedFor": [
+        "geology",
+        "astrobiology"
+      ],
+      "primary": "astrobiology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.703,
+        "mobility": 0.815,
+        "ice": 0.616,
+        "astrobiology": 0.732,
+        "base": 0.831
+      },
+      "dimensionPercentile": {
+        "geology": 0.703,
+        "terrain": 0.7,
+        "climate": 0.329,
+        "bareGround": 0.788,
+        "sunlight": 0.897
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.973,
+        "mobility": 0.815,
+        "ice": 0.616,
+        "astrobiology": 0.732,
+        "base": 0.831
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.973,
+        "terrain": 0.7,
+        "climate": 0.329,
+        "bareGround": 0.789,
+        "sunlight": 0.898
+      },
+      "dimensionSimilarity": {
+        "geology": 0.575,
+        "terrain": 0.317,
+        "climate": 0.012,
+        "bareGround": 0.198,
+        "sunlight": 0.966
+      }
+    },
+    {
+      "id": "arkaroola",
+      "name": "Arkaroola, Flinders Ranges, Australia",
+      "usedFor": [
+        "geology",
+        "astrobiology",
+        "mobility"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.377,
+        "mobility": 0.949,
+        "ice": 0.81,
+        "astrobiology": 0.814,
+        "base": 0.94
+      },
+      "dimensionPercentile": {
+        "geology": 0.377,
+        "terrain": 0.903,
+        "climate": 0.516,
+        "bareGround": 0.847,
+        "sunlight": 0.737
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.754,
+        "mobility": 0.949,
+        "ice": 0.81,
+        "astrobiology": 0.814,
+        "base": 0.94
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.754,
+        "terrain": 0.903,
+        "climate": 0.516,
+        "bareGround": 0.847,
+        "sunlight": 0.738
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.629,
+        "climate": 0.036,
+        "bareGround": 0.424,
+        "sunlight": 0.726
+      }
+    },
+    {
+      "id": "qaidam-basin",
+      "name": "Qaidam Basin, China",
+      "usedFor": [
+        "geology",
+        "astrobiology"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.889,
+        "ice": 0.991,
+        "astrobiology": 0.992,
+        "base": 0.981
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.223,
+        "climate": 0.716,
+        "bareGround": 1,
+        "sunlight": 0.672
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.889,
+        "ice": 0.991,
+        "astrobiology": 0.992,
+        "base": 0.981
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.223,
+        "climate": 0.716,
+        "bareGround": 1,
+        "sunlight": 0.673
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.16,
+        "climate": 0.112,
+        "bareGround": 1,
+        "sunlight": 0.454
+      }
+    },
+    {
+      "id": "makhtesh-ramon",
+      "name": "Makhtesh Ramon, Negev, Israel",
+      "usedFor": [
+        "base"
+      ],
+      "primary": "base",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.983,
+        "ice": 0.889,
+        "astrobiology": 0.918,
+        "base": 0.981
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.888,
+        "climate": 0.522,
+        "bareGround": 0.945,
+        "sunlight": 0.73
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.983,
+        "ice": 0.89,
+        "astrobiology": 0.918,
+        "base": 0.981
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.888,
+        "climate": 0.522,
+        "bareGround": 0.946,
+        "sunlight": 0.731
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.592,
+        "climate": 0.037,
+        "bareGround": 0.887,
+        "sunlight": 0.707
+      }
+    },
+    {
+      "id": "lonar-crater",
+      "name": "Lonar crater, Maharashtra, India",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.633,
+        "mobility": 0.548,
+        "ice": 0.247,
+        "astrobiology": 0.516,
+        "base": 0.539
+      },
+      "dimensionPercentile": {
+        "geology": 0.633,
+        "terrain": 0.599,
+        "climate": 0.185,
+        "bareGround": 0.532,
+        "sunlight": 0.919
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.781,
+        "mobility": 0.548,
+        "ice": 0.247,
+        "astrobiology": 0.516,
+        "base": 0.539
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.781,
+        "terrain": 0.599,
+        "climate": 0.185,
+        "bareGround": 0.533,
+        "sunlight": 0.92
+      },
+      "dimensionSimilarity": {
+        "geology": 0.575,
+        "terrain": 0.249,
+        "climate": 0.001,
+        "bareGround": 0,
+        "sunlight": 0.978
+      }
+    },
+    {
+      "id": "ladakh-tso-kar",
+      "name": "Tso Kar, Ladakh, India",
+      "usedFor": [
+        "astrobiology",
+        "base"
+      ],
+      "primary": "astrobiology",
+      "targets": 3,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.56,
+        "ice": 0.974,
+        "astrobiology": 0.996,
+        "base": 0.627
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.191,
+        "climate": 0.737,
+        "bareGround": 0.999,
+        "sunlight": 0.766
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.56,
+        "ice": 0.974,
+        "astrobiology": 0.996,
+        "base": 0.627
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.191,
+        "climate": 0.737,
+        "bareGround": 0.999,
+        "sunlight": 0.768
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.061,
+        "climate": 0.142,
+        "bareGround": 1,
+        "sunlight": 0.709
+      }
+    },
+    {
+      "id": "makgadikgadi-pans",
+      "name": "Makgadikgadi Pans, Botswana",
+      "usedFor": [
+        "geology",
+        "astrobiology"
+      ],
+      "primary": "geology",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.593,
+        "mobility": 0.782,
+        "ice": 0.647,
+        "astrobiology": 0.753,
+        "base": 0.814
+      },
+      "dimensionPercentile": {
+        "geology": 0.593,
+        "terrain": 0.063,
+        "climate": 0.357,
+        "bareGround": 0.818,
+        "sunlight": 0.907
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.905,
+        "mobility": 0.782,
+        "ice": 0.647,
+        "astrobiology": 0.753,
+        "base": 0.814
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.905,
+        "terrain": 0.063,
+        "climate": 0.357,
+        "bareGround": 0.819,
+        "sunlight": 0.908
+      },
+      "dimensionSimilarity": {
+        "geology": 0.375,
+        "terrain": 0.139,
+        "climate": 0.015,
+        "bareGround": 0.296,
+        "sunlight": 0.971
+      }
+    },
+    {
+      "id": "teide",
+      "name": "Teide and Las Canadas, Tenerife, Spain",
+      "usedFor": [
+        "mobility",
+        "geology"
+      ],
+      "primary": "mobility",
+      "targets": 2,
+      "purposePercentile": {
+        "geology": 0.633,
+        "mobility": 0.589,
+        "ice": 0.538,
+        "astrobiology": 0.649,
+        "base": 0.614
+      },
+      "dimensionPercentile": {
+        "geology": 0.633,
+        "terrain": 0.513,
+        "climate": 0.302,
+        "bareGround": 0.663,
+        "sunlight": 0.755
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.781,
+        "mobility": 0.589,
+        "ice": 0.538,
+        "astrobiology": 0.649,
+        "base": 0.614
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.781,
+        "terrain": 0.513,
+        "climate": 0.302,
+        "bareGround": 0.663,
+        "sunlight": 0.757
+      },
+      "dimensionSimilarity": {
+        "geology": 0.575,
+        "terrain": 0.324,
+        "climate": 0.009,
+        "bareGround": 0.013,
+        "sunlight": 0.799
+      }
+    },
+    {
+      "id": "etna",
+      "name": "Mount Etna, Sicily, Italy",
+      "usedFor": [
+        "mobility",
+        "geology"
+      ],
+      "primary": "mobility",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.5,
+        "ice": 0.305,
+        "astrobiology": 0.511,
+        "base": 0.526
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.961,
+        "climate": 0.291,
+        "bareGround": 0.477,
+        "sunlight": 0.333
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.5,
+        "ice": 0.305,
+        "astrobiology": 0.511,
+        "base": 0.526
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.961,
+        "climate": 0.291,
+        "bareGround": 0.478,
+        "sunlight": 0.334
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.607,
+        "climate": 0.003,
+        "bareGround": 0,
+        "sunlight": 0.012
+      }
+    },
+    {
+      "id": "sudbury",
+      "name": "Sudbury Basin, Ontario, Canada",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.484,
+        "ice": 0.324,
+        "astrobiology": 0.512,
+        "base": 0.52
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.587,
+        "climate": 0.264,
+        "bareGround": 0.486,
+        "sunlight": 0.41
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.484,
+        "ice": 0.324,
+        "astrobiology": 0.512,
+        "base": 0.52
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.587,
+        "climate": 0.264,
+        "bareGround": 0.487,
+        "sunlight": 0.412
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.19,
+        "climate": 0.002,
+        "bareGround": 0,
+        "sunlight": 0.059
+      }
+    },
+    {
+      "id": "kangerlussuaq",
+      "name": "Kangerlussuaq, Greenland",
+      "usedFor": [
+        "geology"
+      ],
+      "primary": "geology",
+      "targets": 1,
+      "purposePercentile": {
+        "geology": null,
+        "mobility": 0.58,
+        "ice": 0.627,
+        "astrobiology": 0.839,
+        "base": 0.637
+      },
+      "dimensionPercentile": {
+        "geology": null,
+        "terrain": 0.146,
+        "climate": 0.652,
+        "bareGround": 0.767,
+        "sunlight": 0.37
+      },
+      "purposeBeatsOrTies": {
+        "geology": null,
+        "mobility": 0.58,
+        "ice": 0.627,
+        "astrobiology": 0.839,
+        "base": 0.637
+      },
+      "dimensionBeatsOrTies": {
+        "geology": null,
+        "terrain": 0.146,
+        "climate": 0.652,
+        "bareGround": 0.767,
+        "sunlight": 0.373
+      },
+      "dimensionSimilarity": {
+        "geology": null,
+        "terrain": 0,
+        "climate": 0.074,
+        "bareGround": 0.144,
+        "sunlight": 0.188
+      }
+    },
+    {
+      "id": "mistastin-crater",
+      "name": "Mistastin crater, Labrador, Canada",
+      "usedFor": [
+        "geology",
+        "base",
+        "mobility"
+      ],
+      "primary": "geology",
+      "targets": 4,
+      "purposePercentile": {
+        "geology": 0.48,
+        "mobility": 0.777,
+        "ice": 0.333,
+        "astrobiology": 0.676,
+        "base": 0.72
+      },
+      "dimensionPercentile": {
+        "geology": 0.48,
+        "terrain": 0.686,
+        "climate": 0.241,
+        "bareGround": 0.779,
+        "sunlight": 0.499
+      },
+      "purposeBeatsOrTies": {
+        "geology": 0.961,
+        "mobility": 0.777,
+        "ice": 0.333,
+        "astrobiology": 0.676,
+        "base": 0.72
+      },
+      "dimensionBeatsOrTies": {
+        "geology": 0.961,
+        "terrain": 0.686,
+        "climate": 0.241,
+        "bareGround": 0.78,
+        "sunlight": 0.501
+      },
+      "dimensionSimilarity": {
+        "geology": 0.15,
+        "terrain": 0.223,
+        "climate": 0.001,
+        "bareGround": 0.174,
+        "sunlight": 0.204
+      }
+    }
+  ]
+}

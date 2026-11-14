@@ -106,9 +106,40 @@ Known limits of this factor:
 Base is the DESIGN.md table. The other three follow its one-line rule and are a starting guess written by
 Session C. They need the team's sign-off, and may be tuned once against the validation set, then frozen.
 
+## Analog profile and purpose rankings (a second view)
+
+Added on 2026-11-14, after validation showed that the all-round score under-ranks sites known for one
+dimension only. It adds no tuned parameter and does not change the frozen score. Definitions and the
+honest results are in `validation/purposes/DEFINITIONS.md` and `FINDINGS.md`. In short: it describes a
+site well, but it is **not validated**, and the Geology dimension is weak at 0.5 degrees.
+
+```ts
+import { DIMENSIONS, PURPOSES, analogProfile, buildProfileIndex, purposeWeights, scoreCells } from './scoring';
+
+const index = buildProfileIndex(earth.cells, prepared);        // once per target
+const profile = analogProfile(cell, prepared, index);          // five dimensions for the dossier
+const mobility = scoreCells(earth.cells, prepared, purposeWeights('mobility')); // a purpose ranking
+```
+
+| Export | Returns |
+| --- | --- |
+| `DIMENSIONS` | geology, terrain, climate (temperature and dryness), bareGround, sunlight, with the factors in each. |
+| `PURPOSES` | geology, mobility, ice, astrobiology, base: label, the dimensions each depends on, and a one-line `why`. |
+| `analogProfile(cell, prepared, index)` | Per dimension: `similarity` (0 to 1), `midPercentile` (tie-fair rank among Earth cells, chance 0.5), `shareAbove`, `shareTied`. |
+| `dimensionSimilarities(cell, prepared)` | The five similarities alone. |
+| `purposeWeights(id)` | The frozen Base weights of the purpose's factors, zero elsewhere. Pass to `scoreCells` or `scoreCell`. `purposeWeights('base')` is the Base preset. |
+| `factorSimilarities(cell, prepared)` | The six per-factor similarities with no weights or limits. |
+
+Rules for showing it:
+- Use `midPercentile`, not `percentile`. The older "beats or ties" figure flatters values that tie with
+  most of the Earth.
+- For Geology show the level in words (same, related, unrelated). It has three values, so a rank says little.
+- A profile has no veto and no "no data" rule. A forest can show a perfect terrain match. That is the point.
+- Label purpose rankings as not validated.
+
 ## Tests
 
-126 tests in `__tests__/` (112 for the rules, 14 that check the real files in `/data`), run with Node's built-in test runner:
+159 tests in `__tests__/` (rules, the analog profile and purposes, and checks of the real files in `/data`), run with Node's built-in test runner:
 
 ```bash
 npx tsx --test app/src/lib/scoring/__tests__/*.test.ts

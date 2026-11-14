@@ -18,7 +18,7 @@ export {
   purposeWeights,
   rankIn,
 } from './profile';
-export type { DimensionDef, DimensionId, DimensionProfile, ProfileIndex, PurposeDef, PurposeId } from './profile';
+export type { DimensionDef, DimensionId, DimensionProfile, ProfileIndex, PurposeDef, PurposeId, Rank } from './profile';
 
 export { buildReason, describeGap, formatValue, matchWord } from './explain';
 

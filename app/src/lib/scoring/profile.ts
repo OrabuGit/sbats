@@ -158,16 +158,28 @@ export function buildProfileIndex(cells: readonly EarthCell[], target: PreparedT
   return { sorted };
 }
 
+export interface Rank {
+  /** Tie-fair percentile: share of values strictly lower, plus half of those exactly equal. Chance is 0.5. */
+  midPercentile: number;
+  /** Share of values it beats or ties, 1 - shareAbove. Flatters a value that ties with most of the list. */
+  percentile: number;
+  /** Share of values strictly higher (0 means nothing beats it). */
+  shareAbove: number;
+  /** Share of values exactly equal, the value itself included when it is in the list. */
+  shareTied: number;
+}
+
 /**
  * Where a value stands in a sorted list.
- * `shareAbove` is the share of values strictly higher (0 means nothing beats it).
- * `shareTied` is the share exactly equal, the value itself included when it is in the list.
- * `percentile` is the share it beats or ties, 1 - shareAbove. With many ties at the top (rock class has
- * only three levels) a percentile of 1 can be shared by a large part of the Earth: read shareTied with it.
+ *
+ * Use `midPercentile` to judge a site. `percentile` (beats or ties) was the first definition, and the
+ * first run showed its flaw: rock class has three levels, most of the Earth is "unrelated" to any one
+ * target, and a site at that lowest level "ties" with all of them and gets a percentile near 1.
+ * The mid-rank percentile counts ties as half, so the average over all cells is 0.5 whatever the ties.
  */
-export function rankIn(sorted: Float64Array, value: number): { percentile: number; shareAbove: number; shareTied: number } {
+export function rankIn(sorted: Float64Array, value: number): Rank {
   const n = sorted.length;
-  if (n === 0) return { percentile: 0, shareAbove: 1, shareTied: 0 };
+  if (n === 0) return { midPercentile: 0, percentile: 0, shareAbove: 1, shareTied: 0 };
   let lo = 0;
   let hi = n;
   while (lo < hi) {
@@ -184,7 +196,8 @@ export function rankIn(sorted: Float64Array, value: number): { percentile: numbe
     else hi = mid;
   }
   const shareAbove = (n - upper) / n;
-  return { percentile: 1 - shareAbove, shareAbove, shareTied: (upper - lo) / n };
+  const shareTied = (upper - lo) / n;
+  return { midPercentile: lo / n + shareTied / 2, percentile: 1 - shareAbove, shareAbove, shareTied };
 }
 
 export interface DimensionProfile {
@@ -193,7 +206,9 @@ export interface DimensionProfile {
   measures: string;
   /** 0 to 1, or null when the cell or the target has no data for the dimension. */
   similarity: number | null;
-  /** Share of Earth cells this cell beats or ties on the dimension, 0 to 1. null with no similarity. */
+  /** Tie-fair percentile among Earth cells: share strictly lower plus half the ties. Chance is 0.5. Use this one. */
+  midPercentile: number | null;
+  /** Share of Earth cells this cell beats or ties on the dimension. Misleading when many cells tie: see rankIn. */
   percentile: number | null;
   /** Share of Earth cells with a strictly higher similarity. */
   shareAbove: number | null;
@@ -213,6 +228,7 @@ export function analogProfile(cell: EarthCell, target: PreparedTarget, index: Pr
       label: d.label,
       measures: d.measures,
       similarity,
+      midPercentile: rank?.midPercentile ?? null,
       percentile: rank?.percentile ?? null,
       shareAbove: rank?.shareAbove ?? null,
       shareTied: rank?.shareTied ?? null,

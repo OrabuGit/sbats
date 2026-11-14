@@ -82,3 +82,11 @@ therefore equals the all-round Base score exactly.
    all-round score, and higher than the known sites not used for it?
 3. For each dimension: do the sites used for a purpose that depends on it rank high on that dimension?
 4. Everything is reported as it comes out, with the caveat above.
+
+## Addendum after the first run, 2026-11-14
+
+One definition above was changed after the first run, and only one: the percentile. "Beats or ties" gave
+0.96 to sites whose rock class is unrelated to the target, because most Earth cells tie at that lowest
+value. The tie-fair mid-rank percentile (share strictly below plus half the ties) is now the figure to
+use. It lowers the geology result from 0.90 to 0.59. Dimensions, purposes, their justifications and the
+use labels were not touched. Results and their reading: `FINDINGS.md`.

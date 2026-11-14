@@ -129,23 +129,50 @@ describe('Rank among Earth cells', () => {
   const sorted = Float64Array.from([0.15, 0.15, 0.6, 1, 1]);
 
   it('counts the share strictly above, the share tied, and the share beaten or tied', () => {
-    deepEqual(rankIn(sorted, 1), { percentile: 1, shareAbove: 0, shareTied: 0.4 });
+    const top = rankIn(sorted, 1);
+    equal(top.percentile, 1);
+    equal(top.shareAbove, 0);
+    equal(top.shareTied, 0.4);
     const mid = rankIn(sorted, 0.6);
     ok(near(mid.percentile, 0.6) && near(mid.shareAbove, 0.4) && near(mid.shareTied, 0.2));
     const low = rankIn(sorted, 0.15);
     ok(near(low.percentile, 0.4) && near(low.shareAbove, 0.6) && near(low.shareTied, 0.4));
   });
 
+  it('gives a tie-fair mid-rank percentile: share below plus half the ties', () => {
+    ok(near(rankIn(sorted, 1).midPercentile, 0.8)); // 3 below, 2 tied: 0.6 + 0.2
+    ok(near(rankIn(sorted, 0.6).midPercentile, 0.5)); // 2 below, 1 tied: 0.4 + 0.1
+    ok(near(rankIn(sorted, 0.15).midPercentile, 0.2)); // 0 below, 2 tied: 0 + 0.2
+  });
+
+  it('does not flatter the lowest value when most of the list ties with it', () => {
+    // 96 cells of unrelated rock, 3 related, 1 the same class: like a rare target rock on Earth.
+    const earth = Float64Array.from([...new Array<number>(96).fill(0.15), 0.6, 0.6, 0.6, 1]);
+    const unrelated = rankIn(earth, 0.15);
+    equal(unrelated.percentile, 0.96); // "beats or ties" calls the worst possible value the 96th percentile
+    ok(near(unrelated.midPercentile, 0.48)); // the tie-fair figure says: no better than chance
+    ok(near(rankIn(earth, 1).midPercentile, 0.995));
+  });
+
+  it('averages to exactly 0.5 over a whole list, whatever the ties', () => {
+    for (const list of [[0.15, 0.15, 0.6, 1, 1], [1, 1, 1, 1], [0.1, 0.2, 0.3], [0, 0, 0, 0, 0, 0, 1]]) {
+      const arr = Float64Array.from(list).sort();
+      const mean = list.reduce((sum, v) => sum + rankIn(arr, v).midPercentile, 0) / list.length;
+      ok(near(mean, 0.5, 1e-12), `${list.join(',')}: ${mean}`);
+    }
+  });
+
   it('handles a value that is not in the list, and the two ends', () => {
     const between = rankIn(sorted, 0.5);
-    ok(near(between.percentile, 0.4) && near(between.shareTied, 0));
+    ok(near(between.percentile, 0.4) && near(between.shareTied, 0) && near(between.midPercentile, 0.4));
     equal(rankIn(sorted, 2).percentile, 1);
+    equal(rankIn(sorted, 2).midPercentile, 1);
     equal(rankIn(sorted, 0).percentile, 0);
     equal(rankIn(sorted, 0).shareAbove, 1);
   });
 
   it('gives an empty list a percentile of 0', () => {
-    deepEqual(rankIn(new Float64Array(0), 0.5), { percentile: 0, shareAbove: 1, shareTied: 0 });
+    deepEqual(rankIn(new Float64Array(0), 0.5), { midPercentile: 0, percentile: 0, shareAbove: 1, shareTied: 0 });
   });
 });
 
@@ -167,6 +194,7 @@ describe('Analog profile', () => {
     equal(geology.similarity, 0.6);
     // three cells have rock data: 1.0, 0.6, 0.15. The related rock beats or ties two of three.
     ok(near(geology.percentile, 2 / 3));
+    ok(near(geology.midPercentile, 0.5)); // one below, itself tied: 1/3 + 1/6
     ok(near(geology.shareAbove, 1 / 3));
     ok(near(geology.shareTied, 1 / 3));
   });
@@ -177,6 +205,7 @@ describe('Analog profile', () => {
     const profile = analogProfile(cells[3] as (typeof cells)[number], prepared, index);
     equal(profile[0]?.similarity, null);
     equal(profile[0]?.percentile, null);
+    equal(profile[0]?.midPercentile, null);
     equal(profile[0]?.shareAbove, null);
     ok(near(profile[1]?.percentile ?? -1, 0.25)); // worst terrain of four
   });
@@ -194,6 +223,7 @@ describe('Analog profile', () => {
     const geology = analogProfile(same[0] as (typeof same)[number], prepared, idx)[0];
     equal(geology?.percentile, 1);
     equal(geology?.shareTied, 0.75);
+    ok(near(geology?.midPercentile ?? -1, 0.625)); // one below, three tied: 0.25 + 0.375
   });
 });
 
