@@ -1,0 +1,79 @@
+{
+  "levels": {
+    "same": 1,
+    "related": 0.6,
+    "unrelated": 0.15
+  },
+  "pairs": [
+    {
+      "a": 1,
+      "b": 2,
+      "relation": "related",
+      "justification": "Fixture pairing: both igneous.",
+      "source": null
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "relation": "related",
+      "justification": "Fixture pairing: both igneous.",
+      "source": null
+    },
+    {
+      "a": 1,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 2,
+      "b": 4,
+      "relation": "related",
+      "justification": "Fixture pairing: both igneous.",
+      "source": null
+    },
+    {
+      "a": 2,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "relation": "unrelated",
+      "justification": "Fixture pairing: different origin.",
+      "source": null
+    }
+  ]
+}

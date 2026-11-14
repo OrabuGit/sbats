@@ -1,0 +1,99 @@
+[
+  {
+    "id": "atacama-yungay",
+    "name": "Atacama Desert, Yungay",
+    "lat": -24.1,
+    "lon": -70,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "mcmurdo-dry-valleys",
+    "name": "McMurdo Dry Valleys",
+    "lat": -77.5,
+    "lon": 162,
+    "kind": "known",
+    "analogFor": [
+      "mars-jezero",
+      "moon-shackleton-rim"
+    ],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "mauna-kea",
+    "name": "Mauna Kea",
+    "lat": 19.82,
+    "lon": -155.47,
+    "kind": "known",
+    "analogFor": [
+      "moon-shackleton-rim",
+      "mars-jezero"
+    ],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "haughton-crater",
+    "name": "Haughton Crater, Devon Island",
+    "lat": 75.38,
+    "lon": -89.67,
+    "kind": "known",
+    "analogFor": [
+      "mars-gale"
+    ],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "kalimantan-rainforest",
+    "name": "Central Kalimantan rainforest",
+    "lat": -1,
+    "lon": 113.5,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "amazon-basin",
+    "name": "Amazon basin",
+    "lat": -3.5,
+    "lon": -62,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "paris",
+    "name": "Paris",
+    "lat": 48.86,
+    "lon": 2.35,
+    "kind": "negative",
+    "analogFor": [],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "kawah-ijen",
+    "name": "Kawah Ijen, East Java",
+    "lat": -8.06,
+    "lon": 114.24,
+    "kind": "candidate",
+    "analogFor": [
+      "mars-gale"
+    ],
+    "source": "FIXTURE, not real data"
+  },
+  {
+    "id": "merapi",
+    "name": "Merapi, Central Java",
+    "lat": -7.54,
+    "lon": 110.45,
+    "kind": "candidate",
+    "analogFor": [
+      "mars-jezero",
+      "mars-gale"
+    ],
+    "source": "FIXTURE, not real data"
+  }
+]

@@ -1,0 +1,230 @@
+[
+  {
+    "id": "moon-shackleton-rim",
+    "name": "Shackleton rim",
+    "body": "moon",
+    "lat": -89.5,
+    "lon": 130,
+    "summary": "Fixture entry. Lunar south polar rim site used to exercise the UI until targets.json is published.",
+    "values": {
+      "tempMean": {
+        "value": -170,
+        "sigma": 9,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "tempRange": {
+        "value": 60,
+        "sigma": 12,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 180,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0,
+        "sigma": 0.12,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "slope": {
+        "value": 11,
+        "sigma": 5,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 420,
+        "sigma": 200,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 4,
+        "sigma": null,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      }
+    },
+    "cannotCopy": [
+      "Gravity: the Moon pulls with about one sixth of Earth gravity, so loads, dust and walking behave differently (fixture text, not a cited figure).",
+      "Atmosphere: the surface is in hard vacuum, so no Earth site tests seals, outgassing or heat rejection (fixture text, not a cited figure).",
+      "Radiation: there is no magnetic field or air to shield crews from solar and cosmic radiation (fixture text, not a cited figure)."
+    ]
+  },
+  {
+    "id": "moon-malapert-massif",
+    "name": "Malapert Massif",
+    "body": "moon",
+    "lat": -85.9,
+    "lon": 0,
+    "summary": "Fixture entry. Lunar south polar massif with two factors left unpublished on purpose.",
+    "values": {
+      "tempMean": {
+        "value": -150,
+        "sigma": 9,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "tempRange": {
+        "value": null,
+        "sigma": null,
+        "source": null,
+        "badge": null
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 180,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0,
+        "sigma": 0.12,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "slope": {
+        "value": 14,
+        "sigma": 5,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 560,
+        "sigma": 200,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": null,
+        "sigma": null,
+        "source": null,
+        "badge": null
+      }
+    },
+    "cannotCopy": [
+      "Gravity: the Moon pulls with about one sixth of Earth gravity, so loads, dust and walking behave differently (fixture text, not a cited figure).",
+      "Atmosphere: the surface is in hard vacuum, so no Earth site tests seals, outgassing or heat rejection (fixture text, not a cited figure).",
+      "Radiation: there is no magnetic field or air to shield crews from solar and cosmic radiation (fixture text, not a cited figure)."
+    ]
+  },
+  {
+    "id": "mars-jezero",
+    "name": "Jezero crater",
+    "body": "mars",
+    "lat": 18.4,
+    "lon": 77.7,
+    "summary": "Fixture entry. Martian crater with an ancient river delta, used to exercise the UI.",
+    "values": {
+      "tempMean": {
+        "value": -55,
+        "sigma": 14,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "tempRange": {
+        "value": 70,
+        "sigma": 20,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 200,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0,
+        "sigma": 0.12,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "slope": {
+        "value": 4,
+        "sigma": 4,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 120,
+        "sigma": 150,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 1,
+        "sigma": null,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      }
+    },
+    "cannotCopy": [
+      "Gravity: Mars pulls with a little over one third of Earth gravity (fixture text, not a cited figure).",
+      "Atmosphere: the air is thin carbon dioxide at under one percent of Earth surface pressure (fixture text, not a cited figure).",
+      "Radiation: the surface dose is far above any place on Earth (fixture text, not a cited figure)."
+    ]
+  },
+  {
+    "id": "mars-gale",
+    "name": "Gale crater",
+    "body": "mars",
+    "lat": -5.4,
+    "lon": 137.8,
+    "summary": "Fixture entry. Martian crater with layered sediments, used to exercise the UI.",
+    "values": {
+      "tempMean": {
+        "value": -48,
+        "sigma": 14,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "tempRange": {
+        "value": 75,
+        "sigma": 20,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 200,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0,
+        "sigma": 0.12,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      },
+      "slope": {
+        "value": 6,
+        "sigma": 4,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 260,
+        "sigma": 150,
+        "source": "FIXTURE, not real data",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 3,
+        "sigma": null,
+        "source": "FIXTURE, not real data",
+        "badge": "Literature"
+      }
+    },
+    "cannotCopy": [
+      "Gravity: Mars pulls with a little over one third of Earth gravity (fixture text, not a cited figure).",
+      "Atmosphere: the air is thin carbon dioxide at under one percent of Earth surface pressure (fixture text, not a cited figure).",
+      "Radiation: the surface dose is far above any place on Earth (fixture text, not a cited figure)."
+    ]
+  }
+]

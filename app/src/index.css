@@ -1,0 +1,202 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+@import 'tailwindcss';
+
+/* UI tokens from DESIGN.md section 10. One accent. Green and red are for readiness only. */
+@theme {
+  --color-bg: #0b0d0f;
+  --color-panel: #12161a;
+  --color-line: #2a3138;
+  --color-text: #d7dde3;
+  --color-muted: #7c8894;
+  --color-accent: #ffb000;
+  --color-ready: #3ddc84;
+  --color-fail: #ff4d4d;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Corner radius never goes above 4px. */
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+}
+button:disabled,
+button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* Small uppercase letter-spaced label. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Flat range slider: 2px track, square thumb, 44px tall hit area. */
+input[type='range'].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range'].slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--color-line);
+}
+input[type='range'].slider::-moz-range-track {
+  height: 2px;
+  background: var(--color-line);
+}
+input[type='range'].slider::-moz-range-progress {
+  height: 2px;
+  background: var(--color-muted);
+}
+input[type='range'].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  margin-top: -9px;
+  background: var(--color-text);
+  border: 0;
+  border-radius: 1px;
+}
+input[type='range'].slider::-moz-range-thumb {
+  width: 10px;
+  height: 20px;
+  background: var(--color-text);
+  border: 0;
+  border-radius: 1px;
+}
+input[type='range'].slider:focus-visible {
+  outline: none;
+}
+input[type='range'].slider:focus-visible::-webkit-slider-thumb {
+  background: var(--color-accent);
+}
+input[type='range'].slider:focus-visible::-moz-range-thumb {
+  background: var(--color-accent);
+}
+
+/* Thin flat scrollbars inside panels. */
+.scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+/* Globe markers are plain DOM nodes created outside React. */
+.gm {
+  pointer-events: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.gm-rank {
+  width: 22px;
+  height: 22px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+  border-radius: 2px;
+}
+.gm-rank:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.gm-site {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 0;
+}
+.gm-site span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: var(--color-bg);
+  border: 2px solid var(--color-text);
+  transform: rotate(45deg);
+}
+.gm-site:hover span {
+  border-color: var(--color-accent);
+}
+.gm-selected {
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 2px solid var(--color-accent);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.gm-selected::before,
+.gm-selected::after {
+  content: '';
+  position: absolute;
+  background: var(--color-accent);
+}
+.gm-selected::before {
+  width: 2px;
+  height: 8px;
+}
+.gm-selected::after {
+  width: 8px;
+  height: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
