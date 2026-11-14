@@ -55,6 +55,33 @@ These seven keys are data fields, not the six scoring factors of DESIGN.md secti
 - Stored as an integer class code so that every factor field is numeric.
 - The code legend lives in the `lithology` entry of `meta.factors` as
   `classes: [{ code, label }]`. Session B defines it from the source lithology dataset. Do not invent classes.
+- Published legend (Session B, 2026-11-14). Source: GLiM v1.0 global lithological map, 0.5 degree grid
+  (Hartmann & Moosdorf 2012, doi:10.1594/PANGAEA.788537, CC BY 3.0). Codes are the raster values of the
+  published grid. Labels are the first-level GLiM classes. `abbr` is the GLiM abbreviation, also written
+  to each `classes` entry as an extra key.
+
+  | code | abbr | label |
+  | --- | --- | --- |
+  | 1 | su | Unconsolidated sediments |
+  | 2 | vb | Basic volcanic rocks |
+  | 3 | ss | Siliciclastic sedimentary rocks |
+  | 4 | pb | Basic plutonic rocks |
+  | 5 | sm | Mixed sedimentary rocks |
+  | 6 | sc | Carbonate sedimentary rocks |
+  | 7 | va | Acid volcanic rocks |
+  | 8 | mt | Metamorphics |
+  | 9 | pa | Acid plutonic rocks |
+  | 10 | vi | Intermediate volcanic rocks |
+  | 12 | py | Pyroclastics |
+  | 13 | pi | Intermediate plutonic rocks |
+  | 14 | ev | Evaporites |
+  | 16 | ig | Ice and glaciers |
+
+  Codes 11 (water bodies) and 15 (no data) exist in GLiM but are not rock classes: cells with those values
+  have `lithology: null`, and the codes never appear in `earth.json`. That leaves 14 classes and 91 pairs
+  for `lithology_similarity.json`. Each cell holds the single class of the authors' 0.5 degree grid, so a
+  small volcanic edifice inside a cell of mostly sediment reads as sediment (the Kawah Ijen cell is 1,
+  the Merapi cell is 10).
 - Targets use the same codes in `values.lithology.value`.
 - Codes are labels, not quantities: the distance between two codes means nothing.
   Lithology is therefore the one factor that does not use the Gaussian rule. Its similarity is looked up in
