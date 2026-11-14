@@ -163,6 +163,9 @@ def write(earth: dict) -> Path:
     tmp = DATA / "earth.json.tmp"
     tmp.write_text(json.dumps(earth, ensure_ascii=False, separators=(",", ":"), allow_nan=False))
     os.replace(tmp, out)  # atomic: other sessions never read a half-written file
+    import compact
+    n = compact.write(earth, DATA / "earth.bin")  # browser copy, verified against earth.json
+    print(f"wrote {DATA / 'earth.bin'} ({n / 1e6:.2f} MB, decodes back to earth.json exactly)")
     return out
 
 
