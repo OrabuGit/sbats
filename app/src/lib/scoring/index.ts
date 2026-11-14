@@ -4,8 +4,21 @@
 export { PRESETS, PRESET_IDS, DEFAULT_PRESET_ID, normaliseWeights } from './presets';
 export type { Preset, PresetId } from './presets';
 
-export { computeEarthRanges, prepareTarget, scoreCell, scoreCells, scoreCellSummary, nearestCell } from './score';
+export { computeEarthRanges, prepareTarget, scoreCell, scoreCells, scoreCellSummary, factorSimilarities, nearestCell } from './score';
 export type { PrepareOptions } from './score';
+
+export {
+  DIMENSIONS,
+  DIMENSION_IDS,
+  PURPOSES,
+  PURPOSE_IDS,
+  analogProfile,
+  buildProfileIndex,
+  dimensionSimilarities,
+  purposeWeights,
+  rankIn,
+} from './profile';
+export type { DimensionDef, DimensionId, DimensionProfile, ProfileIndex, PurposeDef, PurposeId } from './profile';
 
 export { buildReason, describeGap, formatValue, matchWord } from './explain';
 

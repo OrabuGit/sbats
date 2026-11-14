@@ -313,6 +313,31 @@ function core(cell: EarthCell, pt: PreparedTarget, nw: Weights, sink?: KeySink):
   return { score, coverage, missing, confidence, unscoredReason: null, bareGroundSource, presentWeight };
 }
 
+/**
+ * Similarity of each scoring factor for one cell, with no weights, no veto and no limits applied.
+ * `similarity` is the geometric mean of the factor's keys that have data, or null when none has.
+ * `present` is the share of the factor's keys that have data (0, 0.5 or 1).
+ * These are the same per-factor similarities that enter the score. The analog profile is built from them.
+ */
+export function factorSimilarities(
+  cell: EarthCell,
+  target: PreparedTarget,
+): Record<FactorId, { similarity: number | null; present: number }> {
+  const result = {} as Record<FactorId, { similarity: number | null; present: number }>;
+  for (const factor of FACTORS) {
+    let logSum = 0;
+    let count = 0;
+    for (const key of factor.keys) {
+      evaluateKey(key, cell, target);
+      if (out.status !== 'scored') continue;
+      logSum += out.logSim;
+      count += 1;
+    }
+    result[factor.id] = { similarity: count > 0 ? Math.exp(logSum / count) : null, present: count / factor.keys.length };
+  }
+  return result;
+}
+
 function toSummary(c: Core): CellSummary {
   return {
     score: c.score,
