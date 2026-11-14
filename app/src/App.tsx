@@ -10,6 +10,8 @@ import { LeftPanel } from './components/LeftPanel';
 import { CandidateList, type ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
 import { MethodPage } from './components/MethodPage';
+import { ValidationPage } from './components/ValidationPage';
+import { InfoShell } from './components/InfoParts';
 import { flags } from './flags';
 
 // The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
@@ -66,7 +68,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [step, setStep] = useState<Step>(1);
-  const [view, setView] = useState<'orbit' | 'method'>('orbit');
+  const [view, setView] = useState<'orbit' | 'method' | 'validation'>('orbit');
 
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
@@ -135,6 +137,17 @@ function Orbit({ data }: { data: DataBundle }) {
       rightRef.current?.scrollTo({ top: 0 });
     },
     [earth],
+  );
+
+  // From the Validation page: open the grid cell nearest to a site, against the given target.
+  const openSite = useCallback(
+    (lat: number, lon: number, id: string) => {
+      const i = index.nearest(lat, lon, 2);
+      if (i < 0) return;
+      setTargetId(id);
+      select(i);
+    },
+    [index, select],
   );
 
   // Demo: plays the ORBIT part of the flow. Later steps join when their flags are on.
@@ -216,8 +229,8 @@ function Orbit({ data }: { data: DataBundle }) {
         onStep={onStep}
         demoRunning={demo !== null}
         onDemo={runDemo}
-        methodOpen={view === 'method'}
-        onMethod={() => setView((v) => (v === 'method' ? 'orbit' : 'method'))}
+        methodOpen={view !== 'orbit'}
+        onMethod={() => setView((v) => (v === 'orbit' ? 'method' : 'orbit'))}
       />
 
       {data.warnings.length > 0 && (
@@ -226,12 +239,27 @@ function Orbit({ data }: { data: DataBundle }) {
         </div>
       )}
 
-      {flags.methodPage && view === 'method' && (
-        <MethodPage earth={earth} lithology={lithology} listLimit={LIST_LIMIT} onBack={() => setView('orbit')} />
+      {flags.methodPage && view !== 'orbit' && (
+        <InfoShell
+          view={view}
+          onView={setView}
+          onBack={() => setView('orbit')}
+          title={
+            view === 'method'
+              ? 'How a match score is made, with what data, and where it stops being reliable'
+              : 'Do known analog sites score high and wrong places score low? The numbers, including the weak ones'
+          }
+        >
+          {view === 'method' ? (
+            <MethodPage earth={earth} targets={targets} lithology={lithology} listLimit={LIST_LIMIT} />
+          ) : (
+            <ValidationPage earth={earth} targets={targets} onOpenSite={openSite} />
+          )}
+        </InfoShell>
       )}
 
       {/* The globe stays mounted behind the Method page, so coming back is instant. */}
-      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${view === 'method' ? 'hidden' : 'flex lg:grid'}`}>
+      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${view !== 'orbit' ? 'hidden' : 'flex lg:grid'}`}>
         <aside
           ref={leftRef}
           aria-label="Target and mission controls"
@@ -344,8 +372,8 @@ function Orbit({ data }: { data: DataBundle }) {
         cells={earth.cells.length}
         resolutionDeg={earth.meta.resolutionDeg}
         fixtureFiles={data.fixtureFiles.map((f) => `${f}.json`)}
-        view={view === 'method' ? 'Method' : 'Orbit'}
-        status={view === 'method' ? 'Method' : status}
+        view={view}
+        status={view === 'orbit' ? status : 'Reading'}
       />
     </div>
   );

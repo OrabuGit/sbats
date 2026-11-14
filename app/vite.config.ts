@@ -10,10 +10,61 @@ import path from 'node:path';
 // the data-access module falls back to the fixtures in src/mocks.
 const DATA_DIR = path.resolve(__dirname, '../data');
 
+const ROOT = path.resolve(__dirname, '..');
+
+/** Splits SOURCES.md into its tables, one per heading, so the Method page can show every row. */
+function parseSources(md: string): { title: string; headers: string[]; rows: string[][] }[] {
+  const out: { title: string; headers: string[]; rows: string[][] }[] = [];
+  let title = 'Datasets';
+  let current: { title: string; headers: string[]; rows: string[][] } | null = null;
+  const cells = (line: string) =>
+    line
+      .trim()
+      .replace(/^\||\|$/g, '')
+      .split(/(?<!\\)\|/)
+      .map((c) => c.trim());
+  for (const line of md.split('\n')) {
+    if (line.startsWith('## ')) {
+      title = line.slice(3).trim();
+      current = null;
+    } else if (line.trim().startsWith('|')) {
+      const c = cells(line);
+      if (c.every((x) => /^:?-+:?$/.test(x))) continue;
+      if (!current) {
+        current = { title, headers: c, rows: [] };
+        out.push(current);
+      } else if (c.some((x) => x !== '')) current.rows.push(c);
+    } else if (line.trim() === '') current = current && current.rows.length > 0 ? null : current;
+  }
+  return out.filter((t) => t.rows.length > 0);
+}
+
+// Files from outside /data that the Method and Validation pages show. They are read at build time
+// (and on each request in dev) and published next to the data files, so the pages always show the
+// numbers the validation scripts wrote, never a copy typed into the app.
+const fromFile = (rel: string) => () => {
+  const f = path.join(ROOT, rel);
+  return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null;
+};
+const EXTRA: Record<string, () => string | null> = {
+  'validation-report-base.json': fromFile('validation/output/report.json'),
+  'validation-report-rover.json': fromFile('validation/output/report.rover.json'),
+  'validation-report-ice.json': fromFile('validation/output/report.ice.json'),
+  'validation-report-astrobiology.json': fromFile('validation/output/report.astrobiology.json'),
+  'validation-candidates.json': fromFile('validation/output/candidates.json'),
+  'validation-purposes.json': fromFile('validation/output/purposes.json'),
+  'validation-frozen.json': fromFile('validation/tuning/frozen.json'),
+  'sources.json': () => {
+    const md = fromFile('SOURCES.md')();
+    return md === null ? null : JSON.stringify(parseSources(md));
+  },
+};
+
 /** The built data files that exist right now. The app asks for this list before fetching anything. */
 function listData(): string[] {
-  if (!fs.existsSync(DATA_DIR)) return [];
-  return fs.readdirSync(DATA_DIR).filter((f) => f.endsWith('.json') && f !== 'manifest.json').sort();
+  const data = fs.existsSync(DATA_DIR) ? fs.readdirSync(DATA_DIR).filter((f) => f.endsWith('.json') && f !== 'manifest.json') : [];
+  const extra = Object.keys(EXTRA).filter((k) => EXTRA[k]() !== null);
+  return [...data, ...extra].sort();
 }
 
 function sbatsData(): Plugin {
@@ -24,11 +75,15 @@ function sbatsData(): Plugin {
         const url = (req.url ?? '').split('?')[0];
         const m = url.match(/\/data\/([A-Za-z0-9_.-]+\.json)$/);
         if (!m) return next();
-        if (m[1] === 'manifest.json') {
+        const json = (body: string) => {
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
           res.setHeader('Cache-Control', 'no-cache');
-          res.end(JSON.stringify({ files: listData() }));
-          return;
+          res.end(body);
+        };
+        if (m[1] === 'manifest.json') return json(JSON.stringify({ files: listData() }));
+        if (m[1] in EXTRA) {
+          const body = EXTRA[m[1]]();
+          if (body !== null) return json(body);
         }
         const file = path.join(DATA_DIR, m[1]);
         if (!fs.existsSync(file)) {
@@ -45,7 +100,10 @@ function sbatsData(): Plugin {
       const out = path.resolve(__dirname, 'dist/data');
       const files = listData();
       fs.mkdirSync(out, { recursive: true });
-      for (const f of files) fs.copyFileSync(path.join(DATA_DIR, f), path.join(out, f));
+      for (const f of files) {
+        if (f in EXTRA) fs.writeFileSync(path.join(out, f), EXTRA[f]() ?? 'null');
+        else fs.copyFileSync(path.join(DATA_DIR, f), path.join(out, f));
+      }
       fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify({ files }));
     },
   };

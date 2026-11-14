@@ -57,7 +57,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
           type="button"
           onClick={onMethod}
           aria-pressed={methodOpen}
-          aria-label="Method"
+          aria-label="Method and validation"
           className={`label flex min-w-11 items-center justify-center gap-2 border-l border-line px-3 sm:px-4 ${
             methodOpen ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'
           }`}

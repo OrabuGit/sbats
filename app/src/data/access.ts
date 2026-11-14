@@ -171,3 +171,17 @@ export function loadData(): Promise<DataBundle> {
   })();
   return cached;
 }
+
+/**
+ * A published file that is not one of the four contract files: validation reports, the frozen
+ * tuning record, the SOURCES.md tables. null when the file was not published with this build.
+ */
+const extras = new Map<string, Promise<unknown | null>>();
+export function loadExtra<T>(file: string): Promise<T | null> {
+  let hit = extras.get(file);
+  if (!hit) {
+    hit = present().then(async (files) => (files.has(file) ? ((await fetchJson(file)) ?? null) : null));
+    extras.set(file, hit);
+  }
+  return hit as Promise<T | null>;
+}
