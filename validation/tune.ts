@@ -6,8 +6,8 @@
 // What it may and may not do:
 // - It sees the TUNING set only (validation/tuning/split.json). The hold-out sites are never
 //   scored here, and the Indonesian candidate sites are never loaded.
-// - It refuses to run until slope and roughness are in earth.json, until cells south of 60 S have
-//   NDVI (the Antarctica fix), and unless it is started with --team-go.
+// - It refuses to run until slope and roughness are in earth.json, until Bare ground can be
+//   computed south of 60 S (the Antarctica fix), and unless it is started with --team-go.
 // - It refuses to run a second time: once validation/tuning/frozen.json exists, tuning is over.
 // - It changes no source file. It writes frozen.json and tuning-log.json; the frozen values are then
 //   copied by hand into validation/build/make_targets.py, app/src/lib/scoring/presets.ts and
@@ -140,12 +140,14 @@ if (selftest) {
     fail('the tuning pass runs only when the team says so. Start it with --team-go once they have confirmed that terrain and the Antarctica fix are both in earth.json.');
   }
   data = loadData();
-  // Team rule of 2026-11-14: no tuning while Antarctica is unscored for lack of NDVI.
+  // Team rule of 2026-11-14: no tuning while Antarctica is unscored. The fix that landed leaves NDVI null
+  // south of 60 S and supplies the measured barren share instead, so the test is whether Bare ground can
+  // be computed there (data/SCHEMA.md, "Bare ground and permanent ice"), not whether NDVI exists.
   const south = data.cells.filter((c) => c.lat < -60);
-  const southWithNdvi = south.filter((c) => c.ndvi !== null).length;
-  if (south.length > 0 && southWithNdvi / south.length < 0.8) {
+  const southWithBareGround = south.filter((c) => c.ndvi !== null || (c.barrenFrac !== null && c.barrenFrac !== undefined)).length;
+  if (south.length > 0 && southWithBareGround / south.length < 0.8) {
     fail(
-      `the Antarctica fix has not landed: ${southWithNdvi} of ${south.length} cells south of 60 S have NDVI. ` +
+      `the Antarctica fix has not landed: ${southWithBareGround} of ${south.length} cells south of 60 S have NDVI or a barren share. ` +
         'Tuning now would freeze the weights with a whole continent unscored.',
     );
   }

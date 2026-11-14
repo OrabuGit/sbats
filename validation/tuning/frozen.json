@@ -1,0 +1,280 @@
+{
+  "frozenAt": "2026-11-14",
+  "frozenAtTime": "2026-11-14T12:02:45.811Z",
+  "earthGeneratedAt": "2026-11-14T11:56:02Z",
+  "rule": "This is the only tuning pass. These values are frozen and are not tuned again, even if a later result looks worse.",
+  "split": {
+    "seed": 20261114,
+    "tuningSites": [
+      "arkaroola",
+      "atacama-yungay",
+      "beacon-valley",
+      "craters-of-the-moon",
+      "death-valley-ubehebe",
+      "don-juan-pond",
+      "haughton-crater",
+      "kangerlussuaq",
+      "kilauea",
+      "lanzarote-timanfaya",
+      "makgadikgadi-pans",
+      "makhtesh-ramon",
+      "mauna-kea",
+      "meteor-crater",
+      "mistastin-crater",
+      "neg-congo-salonga",
+      "neg-jakarta",
+      "neg-kalimantan-betung-kerihun",
+      "neg-paris",
+      "qaidam-basin",
+      "rio-tinto",
+      "sp-crater",
+      "sudbury",
+      "teide"
+    ]
+  },
+  "objective": "Mean of strict ROC AUC and mean percentile of known analogs, tuning set, Base preset.",
+  "before": {
+    "tempMeanSigma": 15,
+    "tempRangeSigma": 5,
+    "precipSigma": 250,
+    "ndviSigma": 0.1,
+    "terrainFraction": 0.5,
+    "sunSigma": 15,
+    "baseWeights": {
+      "terrain": 0.25,
+      "bareGround": 0.2,
+      "dryness": 0.15,
+      "temperature": 0.15,
+      "sunlight": 0.1,
+      "rockType": 0.15
+    }
+  },
+  "after": {
+    "tempMeanSigma": 15,
+    "tempRangeSigma": 5,
+    "precipSigma": 250,
+    "ndviSigma": 0.1,
+    "terrainFraction": 0.5,
+    "sunSigma": 15,
+    "baseWeights": {
+      "terrain": 0.25,
+      "bareGround": 0.2,
+      "dryness": 0.15,
+      "temperature": 0.15,
+      "sunlight": 0.1,
+      "rockType": 0.15
+    }
+  },
+  "presets": {
+    "base": {
+      "terrain": 0.25,
+      "bareGround": 0.2,
+      "dryness": 0.15,
+      "temperature": 0.15,
+      "sunlight": 0.1,
+      "rockType": 0.15
+    },
+    "rover": {
+      "terrain": 0.4,
+      "bareGround": 0.2,
+      "dryness": 0.1,
+      "temperature": 0.1,
+      "sunlight": 0.1,
+      "rockType": 0.1
+    },
+    "ice": {
+      "terrain": 0.15,
+      "bareGround": 0.15,
+      "dryness": 0.1,
+      "temperature": 0.3,
+      "sunlight": 0.05,
+      "rockType": 0.25
+    },
+    "astrobiology": {
+      "terrain": 0.1,
+      "bareGround": 0.15,
+      "dryness": 0.3,
+      "temperature": 0.1,
+      "sunlight": 0.05,
+      "rockType": 0.3
+    }
+  },
+  "presetsBefore": {
+    "base": {
+      "terrain": 0.25,
+      "bareGround": 0.2,
+      "dryness": 0.15,
+      "temperature": 0.15,
+      "sunlight": 0.1,
+      "rockType": 0.15
+    },
+    "rover": {
+      "terrain": 0.4,
+      "bareGround": 0.2,
+      "dryness": 0.1,
+      "temperature": 0.1,
+      "sunlight": 0.1,
+      "rockType": 0.1
+    },
+    "ice": {
+      "terrain": 0.15,
+      "bareGround": 0.15,
+      "dryness": 0.1,
+      "temperature": 0.3,
+      "sunlight": 0.05,
+      "rockType": 0.25
+    },
+    "astrobiology": {
+      "terrain": 0.1,
+      "bareGround": 0.15,
+      "dryness": 0.3,
+      "temperature": 0.1,
+      "sunlight": 0.05,
+      "rockType": 0.3
+    }
+  },
+  "changes": [],
+  "tuningSet": {
+    "before": {
+      "overall": {
+        "knownSites": 20,
+        "negativeSites": 4,
+        "positiveCases": 56,
+        "rocAuc": 0.853,
+        "rocAucScoredOnly": 0.853,
+        "top10Share": 0.292,
+        "casesInTop10": 13,
+        "knownSitesInTop10AnyTarget": 8,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.731,
+        "meanScoreKnown": 10.7,
+        "meanScoreNegative": 0.3,
+        "limitingFactorShare": {
+          "temperature": 0.542,
+          "sunlight": 0.033,
+          "terrain": 0.175,
+          "dryness": 0.15,
+          "bareGround": 0.1
+        },
+        "largestLimitingShare": 0.542
+      },
+      "moon": {
+        "knownSites": 7,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.786,
+        "rocAucScoredOnly": 0.786,
+        "top10Share": 0,
+        "casesInTop10": 0,
+        "knownSitesInTop10AnyTarget": 0,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.63,
+        "meanScoreKnown": 4.9,
+        "meanScoreNegative": 0.2,
+        "limitingFactorShare": {
+          "dryness": 0.429,
+          "temperature": 0.429,
+          "bareGround": 0.143
+        },
+        "largestLimitingShare": 0.429
+      },
+      "mars": {
+        "knownSites": 15,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.871,
+        "rocAucScoredOnly": 0.871,
+        "top10Share": 0.411,
+        "casesInTop10": 13,
+        "knownSitesInTop10AnyTarget": 8,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.765,
+        "meanScoreKnown": 12.9,
+        "meanScoreNegative": 0.3,
+        "limitingFactorShare": {
+          "temperature": 0.589,
+          "sunlight": 0.044,
+          "terrain": 0.233,
+          "dryness": 0.067,
+          "bareGround": 0.067
+        },
+        "largestLimitingShare": 0.589
+      }
+    },
+    "after": {
+      "overall": {
+        "knownSites": 20,
+        "negativeSites": 4,
+        "positiveCases": 56,
+        "rocAuc": 0.853,
+        "rocAucScoredOnly": 0.853,
+        "top10Share": 0.292,
+        "casesInTop10": 13,
+        "knownSitesInTop10AnyTarget": 8,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.731,
+        "meanScoreKnown": 10.7,
+        "meanScoreNegative": 0.3,
+        "limitingFactorShare": {
+          "temperature": 0.542,
+          "sunlight": 0.033,
+          "terrain": 0.175,
+          "dryness": 0.15,
+          "bareGround": 0.1
+        },
+        "largestLimitingShare": 0.542
+      },
+      "moon": {
+        "knownSites": 7,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.786,
+        "rocAucScoredOnly": 0.786,
+        "top10Share": 0,
+        "casesInTop10": 0,
+        "knownSitesInTop10AnyTarget": 0,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.63,
+        "meanScoreKnown": 4.9,
+        "meanScoreNegative": 0.2,
+        "limitingFactorShare": {
+          "dryness": 0.429,
+          "temperature": 0.429,
+          "bareGround": 0.143
+        },
+        "largestLimitingShare": 0.429
+      },
+      "mars": {
+        "knownSites": 15,
+        "negativeSites": 4,
+        "positiveCases": 28,
+        "rocAuc": 0.871,
+        "rocAucScoredOnly": 0.871,
+        "top10Share": 0.411,
+        "casesInTop10": 13,
+        "knownSitesInTop10AnyTarget": 8,
+        "knownSitesUnscored": 0,
+        "casesUnscored": 0,
+        "meanPercentile": 0.765,
+        "meanScoreKnown": 12.9,
+        "meanScoreNegative": 0.3,
+        "limitingFactorShare": {
+          "temperature": 0.589,
+          "sunlight": 0.044,
+          "terrain": 0.233,
+          "dryness": 0.067,
+          "bareGround": 0.067
+        },
+        "largestLimitingShare": 0.589
+      }
+    },
+    "objectiveBefore": 0.792,
+    "objectiveAfter": 0.792
+  },
+  "evaluations": 69
+}

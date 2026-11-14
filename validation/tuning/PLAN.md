@@ -56,11 +56,29 @@ Added after the plan was first committed. Nothing above or below this section wa
 - The real pass therefore still lies ahead. It is the same procedure, with the same allowed values,
   objective and acceptance tests. Having seen the void run cannot steer it: there are no choices left
   to make.
-- `tune.ts` now also refuses to run unless at least 80% of the cells south of 60 S have NDVI, and
-  unless it is started with `--team-go`. The team starts the pass; no watcher does.
+- `tune.ts` now also refuses to run unless Bare ground can be computed for at least 80% of the cells
+  south of 60 S, and unless it is started with `--team-go`. The team starts the pass; no watcher does.
+  (This precondition first read "have NDVI". Session B's fix leaves NDVI null there and supplies the
+  measured barren share instead, so the test was corrected to "have NDVI or a barren share" before the
+  real pass. It is a precondition only; the search was not touched.)
+- Between the void run and the real pass the scoring library gained the team-approved Bare ground and
+  permanent ice rule (data/SCHEMA.md), and `earth.json` gained `snowIceFrac` and `barrenFrac`. Tuning-set
+  numbers on that data, before any tuning, are kept in `before-tuning/`.
 - Approved by the team on 2026-11-14: the disclosed hold-out peek (keep it documented), the 0.03
   threshold, and not searching the three other presets. After tuning, the weights table in DESIGN.md
   section 6 may be updated; nothing else in that file.
+
+## Record of the real pass, 2026-11-14
+
+- Run once, with `--team-go`, after the team confirmed that terrain and the Antarctica fix were both in
+  `earth.json` (build 2026-11-14T11:56:02Z).
+- 68 alternative values were tried on the tuning set. None raised the objective by 0.03, so none was
+  accepted. Every sigma and every weight is frozen at its starting value. The closest was a move of 0.05
+  from Terrain to Sunlight, with a gain of 0.020.
+- So the honest count is: one run before the Antarctica fix, which accepted no changes and was voided,
+  and one real pass after it, which also accepted no changes and is the frozen result.
+- The hold-out set was scored for the first time on complete data after the freeze. Results and the full
+  before-and-after table are in `FROZEN.md`.
 
 ## What may change
 
