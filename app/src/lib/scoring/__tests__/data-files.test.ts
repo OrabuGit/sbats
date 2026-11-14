@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { validateLithologyTable } from '../lithology';
 import { PRESET_IDS, PRESETS } from '../presets';
+import { PURPOSE_IDS } from '../profile';
 import { SUN_ELEVATION_SIGMA_DEG } from '../sunlight';
 import { computeEarthRanges, prepareTarget, scoreCell, scoreCells } from '../score';
 import { FACTOR_KEYS } from '../types';
@@ -24,6 +25,9 @@ interface EarthFile {
   cells: EarthCell[];
 }
 interface Analog {
+  usedFor?: string[];
+  usedForPrimary?: string;
+  usedForSource?: Record<string, string>;
   id: string;
   name: string;
   lat: number;
@@ -151,6 +155,31 @@ describe('data/analogs.json', () => {
     equal(analogs.filter((a) => a.kind === 'negative').length, 6);
     const candidates = analogs.filter((a) => a.kind === 'candidate').map((a) => a.id);
     ok(candidates.includes('id-kawah-ijen') && candidates.includes('id-merapi'), candidates.join(', '));
+  });
+});
+
+describe('What each known analog is used for', () => {
+  it('labels every known site with at least one use, a primary use, and a source for each', () => {
+    if (!analogs) return skip('analogs.json does not exist yet');
+    const purposes: readonly string[] = PURPOSE_IDS;
+    for (const a of analogs.filter((x) => x.kind === 'known')) {
+      ok(Array.isArray(a.usedFor) && a.usedFor.length > 0, `${a.id}: usedFor`);
+      equal(new Set(a.usedFor).size, a.usedFor.length, `${a.id}: repeated use`);
+      for (const use of a.usedFor) {
+        ok(purposes.includes(use), `${a.id}: unknown use "${use}"`);
+        ok((a.usedForSource?.[use] ?? '').length > 20, `${a.id}: no source for "${use}"`);
+      }
+      deepEqual(Object.keys(a.usedForSource ?? {}).sort(), [...a.usedFor].sort(), `${a.id}: sources and uses differ`);
+      ok(a.usedForPrimary !== undefined && a.usedFor.includes(a.usedForPrimary), `${a.id}: primary use must be one of its uses`);
+    }
+  });
+
+  it('labels no negative control and no candidate: candidates took no part in this view', () => {
+    if (!analogs) return skip('analogs.json does not exist yet');
+    for (const a of analogs.filter((x) => x.kind !== 'known')) {
+      equal(a.usedFor, undefined, a.id);
+      equal(a.usedForSource, undefined, a.id);
+    }
   });
 });
 

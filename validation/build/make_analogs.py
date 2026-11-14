@@ -117,10 +117,112 @@ CANDIDATE = [
 ]
 
 
+# --------------------------------------------------------------------------------------------
+# What each known site is actually used for (added 2026-11-14 for the purpose rankings).
+# Collected by a research agent that was shown no scores or rankings. Rule for using its report:
+# every use it could back with a fetched source is kept, except the ones it marked "weak" itself.
+# Use ids: geology (instrument testing, geology training or study), mobility (rover or vehicle trials),
+# ice (ground ice, brines, volatiles, resource extraction), astrobiology, base (crewed simulations,
+# habitats, EVA rehearsals). "page" = words seen on the fetched page; "abstract" = seen in an abstract.
+# id: (primary use, {use: source})
+# --------------------------------------------------------------------------------------------
+USED_FOR = {
+    "atacama-yungay": ("astrobiology", {
+        "astrobiology": "NASA Astrobiology Program 2017, 'NASA Tests Life-Detection Drill in the Mars-Like Atacama Desert', astrobiology.nasa.gov (page)",
+        "geology": "NASA Astrobiology Program 2017, same page: drilling and instrument tests (page)",
+        "mobility": "Astrobiology.com 2024, 'The Atacama Rover Astrobiology Drilling Studies (ARADS) Project' (page; the autonomous drive was at a nearby playa site)"}),
+    "haughton-crater": ("base", {
+        "geology": "Lee and Osinski 2005, Meteoritics and Planetary Science, doi:10.1111/j.1945-5100.2005.tb00144.x (abstract)",
+        "mobility": "NASA NTRS 20130012984, 'Haughton-Mars Project Expedition 2005': long traverses (abstract)",
+        "base": "Wikipedia 'Flashline Mars Arctic Research Station': simulated Mars habitat overlooking the crater (page); Dube et al. 2024, ICES, doi:10.32865/2346/99018 (abstract)",
+        "astrobiology": "Parnell et al. 2004, International Journal of Astrobiology, doi:10.1017/S1473550404001995 (abstract)"}),
+    "beacon-valley": ("ice", {
+        "ice": "Schorghofer 2005, Geophysical Research Letters, doi:10.1029/2005GL023881: survival of ground ice (abstract)"}),
+    "don-juan-pond": ("ice", {
+        "ice": "Dickson et al. 2013, Scientific Reports, doi:10.1038/srep01166: brine water tracks (page)",
+        "astrobiology": "Dickson et al. 2013, same paper: habitability in extreme environments (page)",
+        "geology": "Dickson et al. 2013, same paper: origin of chloride deposits (page)"}),
+    "mauna-kea": ("ice", {
+        "ice": "NASA NTRS 20100033667, 'RESOLVE's Field Demonstration on Mauna Kea, Hawaii 2010': resource extraction demonstration (abstract)",
+        "geology": "ten Kate et al. 2013, Journal of Aerospace Engineering, doi:10.1061/(ASCE)AS.1943-5525.0000200: lunar instruments field tested (abstract)"}),
+    "kilauea": ("geology", {
+        "geology": "Wikipedia 'Kilauea': Apollo astronaut training (page); Hughes et al. 2019, Astrobiology, doi:10.1089/ast.2018.1847 (abstract)",
+        "astrobiology": "NASA, 'BASALT Research Program Hawaii 2017 Field Deployment', nasa.gov (page)",
+        "base": "NASA, same page: field science under simulated Mars mission conditions (page)"}),
+    "craters-of-the-moon": ("geology", {
+        "geology": "US National Park Service, 'Space Exploration Research and Astronaut Training', nps.gov/crmo (page)",
+        "base": "NASA NTRS 20170000363: 10 simulated extravehicular activities on the lava flows (abstract)",
+        "astrobiology": "Hughes et al. 2019, Astrobiology, doi:10.1089/ast.2018.1847: habitability of basaltic terrains (abstract)"}),
+    "lanzarote-timanfaya": ("geology", {
+        "geology": "ESA, 'What is PANGAEA?', esa.int: field geological traverses (page; ESA says Lanzarote, not Timanfaya)",
+        "base": "ESA 2018, 'Exploration makes perfect', esa.int: simulated exploration operations (page)"}),
+    "ries-crater": ("geology", {
+        "geology": "ESA, 'What is PANGAEA?', esa.int: lunar geology and impact cratering (page); Wikipedia 'Noerdlinger Ries': Apollo 14 training (page)"}),
+    "askja": ("geology", {
+        "geology": "Wikipedia 'Askja': NASA Apollo training (page); The Exploration Museum, 'Apollo astronaut training in Iceland' (page)"}),
+    "mdrs-utah": ("base", {
+        "base": "Wikipedia 'Mars Desert Research Station': simulated Mars analog habitat (page)",
+        "mobility": "University Rover Challenge, urc.marssociety.org: held at the station (page)"}),
+    "rio-tinto": ("astrobiology", {
+        "astrobiology": "NASA Astrobiology 2003, 'Red River Drills for Mars', astrobiology.nasa.gov (page); Amils et al. 2014, Life, doi:10.3390/life4030511 (abstract)",
+        "geology": "Europlanet TA1 Facility 2, Rio Tinto, europlanet.org: instrument testing for space missions (page)"}),
+    "dallol": ("astrobiology", {
+        "astrobiology": "Cavalazzi et al. 2019, Astrobiology, doi:10.1089/ast.2018.1926 (abstract)",
+        "geology": "Cavalazzi et al. 2019, same paper: acidic sulfate deposits (abstract)"}),
+    "sp-crater": ("base", {
+        "base": "NASA 2022, 'NASA to Practice Artemis Moonwalking, Roving Operations in Arizona Desert', nasa.gov: simulated moonwalks (page)",
+        "mobility": "NASA 2022, same page: pressurised rover runs at Black Point Lava Flow, near the crater (page)"}),
+    "meteor-crater": ("geology", {
+        "geology": "Vaughan et al. 2019, USGS, 'Walk in the footsteps of the Apollo astronauts', pubs.usgs.gov/publication/70206910 (page)"}),
+    "death-valley-ubehebe": ("geology", {
+        "geology": "US National Park Service, 'NASA in Death Valley', nps.gov/deva/nasa.htm: clay-rich playa compared with Curiosity's mudstone (page)",
+        "astrobiology": "Bonaccorsi 2015, AGU Fall Meeting abstract P43B-2118 (page)"}),
+    "pilbara-north-pole-dome": ("astrobiology", {
+        "geology": "Brown, Walter and Cudahy 2005, Australian Journal of Earth Sciences, doi:10.1080/08120090500134530 (abstract)",
+        "astrobiology": "Djokic et al. 2021, Astrobiology, doi:10.1089/ast.2019.2072 (abstract)"}),
+    "arkaroola": ("geology", {
+        "geology": "Thomas et al. 2012, Episodes, doi:10.18814/epiiugs/2012/v35i1/022 (abstract)",
+        "astrobiology": "Thomas et al. 2012, same paper: astrobiological research and training (abstract)",
+        "mobility": "Mars Society Australia, 'Arkaroola Mars Robot Challenge Expedition', marssociety.org.au (page)"}),
+    "qaidam-basin": ("geology", {
+        "geology": "Europlanet TA1 Facility 7, Qaidam Basin, europlanet.org (page); Angles and Li 2017, JGR Planets, doi:10.1002/2017JE005293 (abstract)",
+        "astrobiology": "Liu et al. 2025, Scientific Data, doi:10.1038/s41597-025-06085-3 (page)"}),
+    "makhtesh-ramon": ("base", {
+        "base": "Austrian Space Forum, AMADEE-20, oewf.org (page); Jerusalem Post 2021: crew living in a habitat in the Ramon Crater (page)"}),
+    "lonar-crater": ("geology", {
+        "geology": "Kumar et al. 2014, JGR Planets, doi:10.1002/2013JE004543 (abstract)"}),
+    "ladakh-tso-kar": ("astrobiology", {
+        "astrobiology": "Pandey et al. 2020, International Journal of Astrobiology, doi:10.1017/S1473550419000119 (abstract)",
+        "base": "ISRO 2025, 'ISRO organizes Space Analog Mission in Tso Kar Valley, Ladakh', isro.gov.in (page)"}),
+    "makgadikgadi-pans": ("geology", {
+        "geology": "Pineau et al. 2024, EPSC2024-991, doi:10.5194/epsc2024-991 (page)",
+        "astrobiology": "Europlanet TA1 Facility 5, Makgadikgadi Salt Pans, europlanet.org (page)"}),
+    "teide": ("mobility", {
+        "mobility": "ESA 2017, 'Rovers drive through Tenerife darkness', esa.int: rover tests in Teide National Park (page)",
+        "geology": "Lalla et al. 2015, Estudios Geologicos, doi:10.3989/egeol.41927.354 (abstract)"}),
+    "etna": ("mobility", {
+        "mobility": "DLR 2022, 'Robotics team practises lunar exploration on Mount Etna', dlr.de (page)",
+        "geology": "DLR 2022, same page: rock sampling and analysis (page); Wedler et al. 2021, doi:10.1098/rsta.2019.0574 (abstract)"}),
+    "sudbury": ("geology", {
+        "geology": "NASA History 2021, '50 Years Ago: NASA Selects Landing Site for Apollo 16', nasa.gov (page)"}),
+    "kangerlussuaq": ("geology", {
+        "geology": "Grau Galofre and Noblet 2024, EPSC2024-1039, doi:10.5194/epsc2024-1039: subglacial landforms (page)"}),
+    "mistastin-crater": ("geology", {
+        "geology": "Canadian Space Agency 2023, '15 photos of lunar geology training in Canada', asc-csa.gc.ca (page)",
+        "base": "Western University News 2011, 'A mission to the Moon without leaving Earth' (page)",
+        "mobility": "Western University News 2011, same page: robotic rover (page)"}),
+}
+
+
 def entry(id_, name, lat, lon, kind, analog_for, source, note):
     e = {"id": id_, "name": name, "lat": lat, "lon": lon, "kind": kind, "analogFor": analog_for, "source": source}
     if note:
         e["note"] = note
+    if kind == "known":
+        primary, uses = USED_FOR[id_]
+        e["usedFor"] = list(uses)
+        e["usedForPrimary"] = primary
+        e["usedForSource"] = uses
     return e
 
 
