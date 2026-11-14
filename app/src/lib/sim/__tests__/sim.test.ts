@@ -4,7 +4,7 @@ import { MODULE_PARAMS, missingParams, validateModulesFile } from '../catalog';
 import { DEFAULT_CANNOT_TEST, deployTwice } from '../compare';
 import { countModules, evaluate } from '../evaluate';
 import { simulate } from '../simulate';
-import { earthSite, layoutOf, makeFile, marsSite, moonSite, near, s } from './fixtures';
+import { earthSite, layoutOf, makeFile, marsSite, moonSite, s } from './fixtures';
 
 const file = makeFile();
 
