@@ -11,6 +11,8 @@ interface TopBarProps {
   /** True while the Method page is open. */
   methodOpen: boolean;
   onMethod: () => void;
+  /** True while step 3 cannot be opened. */
+  reconLocked: boolean;
 }
 
 const STEPS: { n: Step; label: string }[] = [
@@ -19,7 +21,7 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 3, label: 'Build base' },
 ];
 
-export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod }: TopBarProps) {
+export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod, reconLocked }: TopBarProps) {
   return (
     <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
       <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
@@ -29,7 +31,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
       <nav aria-label="Steps" className="flex min-w-0 flex-1 items-stretch">
         <ol className="flex items-stretch">
           {STEPS.map(({ n, label }) => {
-            const locked = n === 3 && !flags.recon;
+            const locked = n === 3 && reconLocked;
             const active = step === n && !methodOpen;
             return (
               <li key={n} className="flex items-stretch border-r border-line">

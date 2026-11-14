@@ -1,0 +1,439 @@
+{
+ "meta": {
+  "note": "UI FIXTURE, NOT REAL DATA. Made-up round numbers so the sandbox can be built before data/modules.json exists. Never shown as real: the app labels it and keeps the sandbox locked in production builds."
+ },
+ "crew": {
+  "oxygenKgPerDay": {
+   "value": 1,
+   "unit": "kg",
+   "source": "FIXTURE, not real data",
+   "badge": "Literature"
+  },
+  "waterKgPerDay": {
+   "value": 3,
+   "unit": "kg",
+   "source": "FIXTURE, not real data",
+   "badge": "Literature"
+  },
+  "foodKgPerDay": {
+   "value": 1,
+   "unit": "kg",
+   "source": "FIXTURE, not real data",
+   "badge": "Literature"
+  }
+ },
+ "constants": {
+  "oxygenKgPerKgWater": {
+   "value": 0.8,
+   "unit": "",
+   "source": "FIXTURE, not real data",
+   "badge": "Literature"
+  },
+  "solarConstantWm2": {
+   "value": 1000,
+   "unit": "W/m2",
+   "source": "FIXTURE, not real data",
+   "badge": "Literature"
+  }
+ },
+ "modules": {
+  "habitat": {
+   "label": "Habitat",
+   "description": "Crew quarters. Needs power, more when it is cold.",
+   "params": {
+    "massKg": {
+     "value": 10000,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "crewCapacity": {
+     "value": 4,
+     "unit": "people",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "powerKw": {
+     "value": 5,
+     "unit": "kW",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "heatingKwPerDegC": {
+     "value": 0.1,
+     "unit": "kW/\u00b0C",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "comfortTempC": {
+     "value": 20,
+     "unit": "\u00b0C",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "solar": {
+   "label": "Solar array",
+   "description": "Makes power while the Sun is up.",
+   "params": {
+    "massKg": {
+     "value": 500,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "areaM2": {
+     "value": 100,
+     "unit": "m2",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "efficiency": {
+     "value": 0.2,
+     "unit": "",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "battery": {
+   "label": "Battery",
+   "description": "Stores power for dark periods.",
+   "params": {
+    "massKg": {
+     "value": 200,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "capacityKwh": {
+     "value": 100,
+     "unit": "kWh",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "greenhouse": {
+   "label": "Greenhouse",
+   "description": "Grows food and some oxygen. Needs power and water.",
+   "params": {
+    "massKg": {
+     "value": 1000,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "growingAreaM2": {
+     "value": 50,
+     "unit": "m2",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "foodKgPerM2Day": {
+     "value": 0.02,
+     "unit": "kg/m2/day",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "oxygenKgPerM2Day": {
+     "value": 0.03,
+     "unit": "kg/m2/day",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "waterKgPerM2Day": {
+     "value": 0.1,
+     "unit": "kg/m2/day",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "powerKwPerM2": {
+     "value": 0.1,
+     "unit": "kW/m2",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "iceMiner": {
+   "label": "Ice miner",
+   "description": "Makes water from ground ice, and oxygen by electrolysis.",
+   "params": {
+    "massKg": {
+     "value": 800,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "waterKgPerDay": {
+     "value": 50,
+     "unit": "kg/day",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "powerKw": {
+     "value": 4,
+     "unit": "kW",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "electrolysisKwhPerKgOxygen": {
+     "value": 6,
+     "unit": "kWh/kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "landingPad": {
+   "label": "Landing pad",
+   "description": "Receives cargo. Needs flat ground.",
+   "params": {
+    "massKg": {
+     "value": 100,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "cargoKgPerDelivery": {
+     "value": 3000,
+     "unit": "kg",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "maxSlopeDeg": {
+     "value": 5,
+     "unit": "\u00b0",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  }
+ },
+ "events": {
+  "lunarNight": {
+   "label": "Lunar night",
+   "description": "No sunlight.",
+   "body": "moon",
+   "params": {
+    "durationDays": {
+     "value": 14,
+     "unit": "days",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "solarFactor": {
+     "value": 0,
+     "unit": "",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  },
+  "marsDustStorm": {
+   "label": "Mars dust storm",
+   "description": "Dust cuts sunlight.",
+   "body": "mars",
+   "params": {
+    "durationDays": {
+     "value": 10,
+     "unit": "days",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    },
+    "solarFactor": {
+     "value": 0.1,
+     "unit": "",
+     "source": "FIXTURE, not real data",
+     "badge": "Literature"
+    }
+   }
+  }
+ },
+ "sites": {
+  "moon-malapert-massif": {
+   "irradianceWm2": {
+    "value": 1000,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.8,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 48,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "moon-mons-mouton": {
+   "irradianceWm2": {
+    "value": 1000,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.8,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 48,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "moon-haworth": {
+   "irradianceWm2": {
+    "value": 1000,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.8,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 48,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "moon-shackleton-rim": {
+   "irradianceWm2": {
+    "value": 1000,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.8,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 48,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "mars-jezero": {
+   "irradianceWm2": {
+    "value": 500,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 12,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 1,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "mars-gale": {
+   "irradianceWm2": {
+    "value": 500,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 12,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 1,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  },
+  "mars-arcadia-planitia": {
+   "irradianceWm2": {
+    "value": 500,
+    "unit": "W/m2",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "litFraction": {
+    "value": 0.5,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "longestDarkHours": {
+    "value": 12,
+    "unit": "hours",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   },
+   "iceAvailability": {
+    "value": 1,
+    "unit": "",
+    "source": "FIXTURE, not real data",
+    "badge": "Literature"
+   }
+  }
+ }
+}

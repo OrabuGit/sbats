@@ -29,6 +29,8 @@ interface Props {
   /** Notes from scoring, for example when Rock type had to be left out. */
   notes: string[];
   onBack: () => void;
+  /** Opens the base sandbox on this cell. null while the sandbox is not available. */
+  onBuild: (() => void) | null;
 }
 
 const KIND_LABEL = { candidate: 'SBATS candidate', known: 'Known analog', negative: 'Negative control' } as const;
@@ -147,7 +149,7 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
   );
 }
 
-export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack }: Props) {
+export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack, onBuild }: Props) {
   const scored = e.score !== null;
   const sources = new Map<string, string>();
   for (const f of e.breakdown)
@@ -207,6 +209,11 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           </div>
           <p className="mt-3 text-[14px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
           {/* "Best month to test" goes here when flags.bestMonth is on. It needs monthly climate data, which earth.json does not have yet. */}
+          {onBuild && (
+            <button type="button" onClick={onBuild} className="label mt-3 flex min-h-11 w-full items-center justify-center gap-2 border border-accent !text-accent hover:bg-bg">
+              Build a base here
+            </button>
+          )}
           {notes.map((n) => (
             <p key={n} className="mt-2 text-[12px] text-accent" role="note">
               {n}

@@ -13,6 +13,10 @@ import { MethodPage } from './components/MethodPage';
 import { ValidationPage } from './components/ValidationPage';
 import { InfoShell } from './components/InfoParts';
 import { flags } from './flags';
+import { Sandbox, type SandboxHandle } from './components/Sandbox';
+import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
+import { useAsync } from './lib/useAsync';
+import { decodeLayout, type SavedLayout } from './lib/simAdapter';
 
 // The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
@@ -73,7 +77,13 @@ function Orbit({ data }: { data: DataBundle }) {
   const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [step, setStep] = useState<Step>(1);
-  const [view, setView] = useState<'orbit' | 'method' | 'validation'>('orbit');
+  const [view, setView] = useState<'orbit' | 'method' | 'validation' | 'recon'>('orbit');
+  const [sharedLayout, setSharedLayout] = useState<SavedLayout | null>(null);
+  const sandboxRef = useRef<SandboxHandle>(null);
+  const modules = useAsync(loadModules, 'modules');
+  const climate = useAsync(loadSiteClimate, 'climate');
+  const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
+  const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
@@ -204,7 +214,42 @@ function Orbit({ data }: { data: DataBundle }) {
     });
   };
 
+  const openRecon = useCallback(() => {
+    if (!reconReady) return;
+    // Step 3 needs an Earth site. With none open, take the featured candidate site or the top cell.
+    const i = selected ?? featured;
+    if (i === null) return;
+    if (selected === null) setSelected(i);
+    setStep(3);
+    setTab('results');
+    setView('recon');
+  }, [reconReady, selected, featured]);
+
+  // A share link carries a layout, a target and an Earth cell. Apply it once, when the sandbox can open.
+  const linkDone = useRef(false);
+  useEffect(() => {
+    if (linkDone.current || !reconReady) return;
+    linkDone.current = true;
+    const q = new URLSearchParams(window.location.search);
+    const base = q.get('base');
+    if (!base) return;
+    try {
+      const layout = decodeLayout(base);
+      const t = targets.find((x) => x.id === q.get('target'));
+      const [lat, lon] = (q.get('site') ?? '').split(',').map(Number);
+      const i = Number.isFinite(lat) && Number.isFinite(lon) ? index.nearest(lat, lon, 1) : -1;
+      if (t) setTargetId(t.id);
+      setSharedLayout(layout);
+      setSelected(i >= 0 ? i : featured);
+      setStep(3);
+      setView('recon');
+    } catch {
+      // A link that cannot be read opens the app as usual.
+    }
+  }, [reconReady, targets, index, featured]);
+
   const onStep = (s: Step) => {
+    if (s === 3) return openRecon();
     setView('orbit');
     setStep(s);
     if (s === 1) {
@@ -237,8 +282,9 @@ function Orbit({ data }: { data: DataBundle }) {
         onStep={onStep}
         demoRunning={demo !== null}
         onDemo={runDemo}
-        methodOpen={view !== 'orbit'}
-        onMethod={() => setView((v) => (v === 'orbit' ? 'method' : 'orbit'))}
+        methodOpen={view === 'method' || view === 'validation'}
+        onMethod={() => setView((v) => (v === 'method' || v === 'validation' ? 'orbit' : 'method'))}
+        reconLocked={!reconReady}
       />
 
       {data.warnings.length > 0 && (
@@ -247,7 +293,7 @@ function Orbit({ data }: { data: DataBundle }) {
         </div>
       )}
 
-      {flags.methodPage && view !== 'orbit' && (
+      {flags.methodPage && (view === 'method' || view === 'validation') && (
         <InfoShell
           view={view}
           onView={setView}
@@ -264,6 +310,25 @@ function Orbit({ data }: { data: DataBundle }) {
             <ValidationPage earth={earth} targets={targets} onOpenSite={openSite} />
           )}
         </InfoShell>
+      )}
+
+      {view === 'recon' && reconReady && selectedCell && modules.status === 'ready' && (
+        <Sandbox
+          ref={sandboxRef}
+          cell={selectedCell}
+          siteName={named?.name ?? siteCode(selectedCell)}
+          siteCode={siteCode(selectedCell)}
+          target={target}
+          modules={modules.value}
+          solar={annualSolar(climate.status === 'ready' ? climate.value : null, named?.id ?? null)}
+          initial={sharedLayout}
+          tab={tab}
+          onTab={setTab}
+          onBack={() => {
+            setView('orbit');
+            setStep(2);
+          }}
+        />
       )}
 
       {/* The globe stays mounted behind the Method page, so coming back is instant. */}
@@ -368,6 +433,7 @@ function Orbit({ data }: { data: DataBundle }) {
               gaps={ts.prepared.gaps}
               notes={ts.notes}
               onBack={() => setSelected(null)}
+              onBuild={reconReady ? openRecon : null}
             />
           ) : (
             <CandidateList
@@ -395,9 +461,9 @@ function Orbit({ data }: { data: DataBundle }) {
         code={selectedCell ? siteCode(selectedCell) : null}
         cells={earth.cells.length}
         resolutionDeg={earth.meta.resolutionDeg}
-        fixtureFiles={data.fixtureFiles.map((f) => `${f}.json`)}
+        fixtureFiles={[...data.fixtureFiles.map((f) => `${f}.json`), ...(view === 'recon' && modules.status === 'ready' && modules.value.fixture ? ['modules.json'] : [])]}
         view={view}
-        status={view === 'orbit' ? status : 'Reading'}
+        status={view === 'orbit' ? status : view === 'recon' ? (demo ?? 'Sandbox') : 'Reading'}
       />
     </div>
   );
