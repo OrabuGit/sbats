@@ -148,6 +148,25 @@ Example (illustrative numbers, not real data):
 }
 ```
 
+### Land cover keys (added 2026-11-14, requested by the team)
+
+Every cell also carries two measured land cover shares. They are not factor keys and have no entry in
+`meta.factors`; they are described in `meta.landCover` (`source`, `keys`, `method`).
+
+| Key | Meaning | Unit |
+| --- | --- | --- |
+| `snowIceFrac` | Share of the cell's land classed as permanent snow and ice (IGBP class 15) | fraction, 0 to 1 |
+| `barrenFrac` | Share of the cell's land classed as barren or sparsely vegetated (IGBP class 16) | fraction, 0 to 1 |
+
+- Source: MODIS MCD12C1 v061 yearly land cover, 0.05 degree, 2025 (NASA LP DAAC). Badge: Measured.
+- Value: mean of the class percent over the cell's land pixels, divided by 100. `null` if the product has
+  no data for the cell (no such cell in the current build).
+- Why they exist: the NDVI product (MOD13C2) has no retrievals over Antarctica, so `ndvi` is `null` for
+  every cell south of 60 S (25,225 cells in all). `ndvi` is never filled with a stand-in number.
+  The scoring rule below uses these shares instead. See "Bare ground without NDVI".
+- The example cell above predates these keys. A real cell looks like
+  `{ "lat": -77.75, "lon": 161.75, ..., "ndvi": null, ..., "snowIceFrac": 0.847, "barrenFrac": 0.148 }`.
+
 Additive rule: Session B may add other keys to `meta` (for example data date ranges for the Method page).
 Consumers ignore keys they do not know. A finer Indonesia grid, if built, is a separate file with this same
 shape and its own `resolutionDeg`; add it to this document before another session reads it.
@@ -248,11 +267,34 @@ Approved by the team on 2026-11-14. Implemented in `/app/src/lib/scoring` (Sessi
 A scoring factor that cannot be computed for a cell is left out, and the weights of the remaining factors
 are renormalised to sum to 1. Two limits apply:
 
-1. Required factors. `ndvi` (Bare ground) and `precip` (Dryness) must be present. They carry the veto that
+1. Required factors. Bare ground and `precip` (Dryness) must be present. They carry the veto that
    rules out forests and wet regions. A cell missing either gets no score: it is shown as "no data" and is
-   never ranked.
+   never ranked. Bare ground is present when `ndvi` is not `null`, or when `ndvi` is `null` and
+   `barrenFrac` is not `null` (see "Bare ground without NDVI").
 2. Minimum coverage. The present factors must add up to at least 0.6 of the total weight of the active
    mission preset. Below that, no score.
+
+Bare ground without NDVI. Requested by the team on 2026-11-14, so that Antarctica can be scored from real
+data. It applies only to cells where `ndvi` is `null`:
+
+- The Bare ground similarity is `barrenFrac`, used directly as a similarity from 0 to 1. No Gaussian and no
+  target value are involved: the Moon and Mars targets are bare ground, and `barrenFrac` is the measured
+  share of the cell that is bare ground.
+- A cell that is all permanent ice has `barrenFrac` 0, so its Bare ground similarity is 0 and, through the
+  geometric mean, its score is 0. This is the "permanent ice" veto of DESIGN.md section 6: ice is not
+  regolith. An ice-free barren cell has `barrenFrac` near 1 and scores as bare.
+- The factor counts as present, with its full weight, for coverage and confidence. `ndvi` is not listed in
+  `missing`. The result should carry `bareGroundSource`: `"ndvi"` or `"landCover"`, so the dossier can say
+  which measurement was used.
+- If `ndvi` and `barrenFrac` are both `null`, the cell has no score, as before.
+- What this does at 0.5 degrees: of the 25,225 cells without NDVI, 24,353 have `barrenFrac` 0, and the
+  highest value is 0.148, in the McMurdo Dry Valleys cell at -77.75, 161.75. The Dry Valleys are small
+  ice-free valleys inside cells that are mostly ice, so they get a low score, not a high one. Showing them
+  as a strong analog needs a finer grid.
+- Not changed: cells that do have `ndvi` are scored from `ndvi` alone, as before. This includes 3,101 cells
+  that are at least half permanent ice (mostly Greenland), where NDVI is near 0 and so reads as bare.
+  Applying `snowIceFrac` to those cells too would be a change to the scoring formula and needs the
+  user's approval.
 
 Coverage is measured with the preset's weights before renormalising, so it changes with the preset.
 A two-key factor with one key missing counts for half its weight (see "Settled details").
