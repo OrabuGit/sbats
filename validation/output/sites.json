@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-15T06:49:53.943Z",
+  "generatedAt": "2026-11-15T07:27:42.908Z",
   "frozenAt": "2026-11-14",
-  "sitesGeneratedAt": "2026-11-15T06:42:20Z",
+  "sitesGeneratedAt": "2026-11-15T07:23:39Z",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
   "notPublished": [],
   "sites": [
@@ -5374,7 +5374,7 @@
           "grid": 0.759
         },
         "lithology": {
-          "site": null,
+          "site": 6,
           "siteScale": "site",
           "grid": 10
         },
@@ -5395,7 +5395,7 @@
         }
       },
       "bareFrac": 0.001,
-      "rockType": null,
+      "rockType": "limestone",
       "results": [
         {
           "target": "moon-malapert-massif",
@@ -5412,8 +5412,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.48
               },
               "terrain": {
                 "similarity": 0.518,
@@ -5434,10 +5434,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.48,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -5446,20 +5446,20 @@
                 "limitingFactor": "bareGround"
               },
               "ice": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 0,
+                "midPercentile": 0.03,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.298,
+                "midPercentile": 0.318,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.304,
+                "midPercentile": 0.317,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -5538,8 +5538,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.48
               },
               "terrain": {
                 "similarity": 0.997,
@@ -5560,10 +5560,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.48,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -5572,20 +5572,20 @@
                 "limitingFactor": "bareGround"
               },
               "ice": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 0,
+                "midPercentile": 0.03,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.298,
+                "midPercentile": 0.318,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.305,
+                "midPercentile": 0.319,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -5664,8 +5664,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.48
               },
               "terrain": {
                 "similarity": 0.824,
@@ -5686,10 +5686,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.48,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -5698,20 +5698,20 @@
                 "limitingFactor": "bareGround"
               },
               "ice": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 0,
+                "midPercentile": 0.03,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.298,
+                "midPercentile": 0.318,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.304,
+                "midPercentile": 0.318,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -5790,8 +5790,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.48
               },
               "terrain": {
                 "similarity": 0.972,
@@ -5812,10 +5812,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.48,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -5824,20 +5824,20 @@
                 "limitingFactor": "bareGround"
               },
               "ice": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 0,
+                "midPercentile": 0.03,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.298,
+                "midPercentile": 0.318,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.305,
+                "midPercentile": 0.319,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -5916,8 +5916,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.473
               },
               "terrain": {
                 "similarity": 0.042,
@@ -5938,10 +5938,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -5951,19 +5951,19 @@
               },
               "ice": {
                 "score": 0,
-                "midPercentile": 0.023,
+                "midPercentile": 0.038,
                 "unscoredReason": null,
                 "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.299,
+                "midPercentile": 0.317,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.317,
+                "midPercentile": 0.331,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -6042,8 +6042,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.473
               },
               "terrain": {
                 "similarity": 0.088,
@@ -6064,10 +6064,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -6077,19 +6077,19 @@
               },
               "ice": {
                 "score": 0,
-                "midPercentile": 0.023,
+                "midPercentile": 0.038,
                 "unscoredReason": null,
                 "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.299,
+                "midPercentile": 0.317,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.307,
+                "midPercentile": 0.32,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }
@@ -6168,8 +6168,8 @@
           "site": {
             "dimensions": {
               "geology": {
-                "similarity": null,
-                "midPercentile": null
+                "similarity": 0.15,
+                "midPercentile": 0.281
               },
               "terrain": {
                 "similarity": 0.015,
@@ -6190,10 +6190,10 @@
             },
             "purposes": {
               "geology": {
-                "score": null,
-                "midPercentile": null,
-                "unscoredReason": "coverage-too-low",
-                "limitingFactor": null
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
               },
               "mobility": {
                 "score": 0,
@@ -6203,19 +6203,19 @@
               },
               "ice": {
                 "score": 0,
-                "midPercentile": 0.023,
+                "midPercentile": 0.037,
                 "unscoredReason": null,
                 "limitingFactor": "dryness"
               },
               "astrobiology": {
                 "score": 0,
-                "midPercentile": 0.299,
+                "midPercentile": 0.316,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               },
               "base": {
                 "score": 0,
-                "midPercentile": 0.3,
+                "midPercentile": 0.31,
                 "unscoredReason": null,
                 "limitingFactor": "bareGround"
               }

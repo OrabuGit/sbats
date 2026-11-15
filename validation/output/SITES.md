@@ -1,6 +1,6 @@
 # Site-level scores from fine-scale values
 
-Written 2026-11-15T06:49:53.940Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T06:42:20Z (Session B).
+Written 2026-11-15T07:27:42.905Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T07:23:39Z (Session B).
 Scoring values frozen 2026-11-14. Target windows: validation/output/target_terrain_windows.json (2026-11-15T04:50:09Z).
 
 Read this first:
@@ -224,7 +224,7 @@ Footprint 5 km. One 5 km sample of the karst at the listed coordinates, not the 
 | Slope (degrees) | 4.37 | site | 6.83 |
 | Roughness (m) | 83.2 | site, window-dependent | 534.6 |
 | NDVI | 0.81, 0% of the footprint bare | site | 0.76 |
-| Rock class | no data | site | 10 Intermediate volcanic rocks |
+| Rock class | 6 Carbonate sedimentary rocks ("limestone") | site | 10 Intermediate volcanic rocks |
 | Mean temperature (deg C) | 26.3 | grid | same |
 | Day-night range (deg C) | 4.7 | grid | same |
 | Precipitation (mm/year) | 1939 | grid | same |
@@ -233,26 +233,26 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 
 | Target | Geology | Terrain | Climate | Bare ground | Sunlight | Target terrain in the same window | Terrain against the 55.6 km target |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| moon-malapert-massif | no data [0.15] | 0.52 (p 0.94) [0.57] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 11.28 deg, 178.0 m | 0.30 |
-| moon-mons-mouton | no data [0.15] | 1.00 (p 1.00) [0.74] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 4.35 deg, 88.9 m | 0.32 |
-| moon-haworth | no data [0.15] | 0.82 (p 1.00) [0.60] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 3.19 deg, 59.2 m | 0.31 |
-| moon-shackleton-rim | no data [0.15] | 0.97 (p 1.00) [0.74] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 5.21 deg, 88.7 m | 0.31 |
-| moon-marius-hills | no data [0.60] | 0.04 (p 0.13) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 1.00 (p 0.96) [1.00] | 1.03 deg, 22.2 m | 0.12 |
-| mars-jezero | no data [0.60] | 0.09 (p 0.09) [0.04] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.94 (p 0.82) [0.94] | 1.39 deg, 36.8 m | 0.39 |
-| mars-gale | no data [0.15] | 0.01 (p 0.00) [0.71] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 1.00 (p 0.94) [1.00] | 0.55 deg, 10.0 m | 0.39 |
+| moon-malapert-massif | 0.15 (p 0.48) [0.15] | 0.52 (p 0.94) [0.57] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 11.28 deg, 178.0 m | 0.30 |
+| moon-mons-mouton | 0.15 (p 0.48) [0.15] | 1.00 (p 1.00) [0.74] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 4.35 deg, 88.9 m | 0.32 |
+| moon-haworth | 0.15 (p 0.48) [0.15] | 0.82 (p 1.00) [0.60] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 3.19 deg, 59.2 m | 0.31 |
+| moon-shackleton-rim | 0.15 (p 0.48) [0.15] | 0.97 (p 1.00) [0.74] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.00 (p 0.04) [0.00] | 5.21 deg, 88.7 m | 0.31 |
+| moon-marius-hills | 0.15 (p 0.47) [0.60] | 0.04 (p 0.13) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 1.00 (p 0.96) [1.00] | 1.03 deg, 22.2 m | 0.12 |
+| mars-jezero | 0.15 (p 0.47) [0.60] | 0.09 (p 0.09) [0.04] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.94 (p 0.82) [0.94] | 1.39 deg, 36.8 m | 0.39 |
+| mars-gale | 0.15 (p 0.28) [0.15] | 0.01 (p 0.00) [0.71] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 1.00 (p 0.94) [1.00] | 0.55 deg, 10.0 m | 0.39 |
 | mars-arcadia-planitia | no data [no data] | 0.01 (p 0.20) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.26 (p 0.45) [0.26] | 0.09 deg, 1.4 m | 0.01 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
 | Target | Instrument and geology testing | Rover mobility | Ice and resources | Astrobiology | Full base rehearsal |
 | --- | --- | --- | --- | --- | --- |
-| moon-malapert-massif | no score: coverage-too-low [15.0] | 0.0 (p 0.32) [0.0] | no score: coverage-too-low [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.30) [0.0] |
-| moon-mons-mouton | no score: coverage-too-low [15.0] | 0.0 (p 0.32) [0.0] | no score: coverage-too-low [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.30) [0.0] |
-| moon-haworth | no score: coverage-too-low [15.0] | 0.0 (p 0.32) [0.0] | no score: coverage-too-low [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.30) [0.0] |
-| moon-shackleton-rim | no score: coverage-too-low [15.0] | 0.0 (p 0.32) [0.0] | no score: coverage-too-low [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.30) [0.0] |
-| moon-marius-hills | no score: coverage-too-low [60.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.32) [0.0] |
-| mars-jezero | no score: coverage-too-low [60.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.31) [0.0] |
-| mars-gale | no score: coverage-too-low [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.30) [0.0] |
+| moon-malapert-massif | 15.0 (p 0.48) [15.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
+| moon-mons-mouton | 15.0 (p 0.48) [15.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
+| moon-haworth | 15.0 (p 0.48) [15.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
+| moon-shackleton-rim | 15.0 (p 0.48) [15.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
+| moon-marius-hills | 15.0 (p 0.47) [60.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.33) [0.0] |
+| mars-jezero | 15.0 (p 0.47) [60.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
+| mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.31) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.37) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.35) [0.0] |
 
 ### Mount Tambora caldera, Sumbawa, Indonesia

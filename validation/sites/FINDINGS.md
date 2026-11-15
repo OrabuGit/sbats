@@ -157,37 +157,38 @@ no factor for water chemistry or alteration minerals.
 
 ## Minerals on both sides (added after the freeze, site-level only)
 
-> **Provisional, 2026-11-15 14:00 WIB. Do not quote the numbers in this section.** Session B found that
-> the EMIT mineral values in `data/sites.json` built between 12:30 and 13:59 today were not screened
-> with every cloud flag: newer EMIT scenes carry cloud in mask bands the pipeline did not read, so some
-> "identifications" are cloud, not ground. Scenes from 2023 (Mauna Kea, Kilauea, Atacama, Dallol,
-> Dasht-e Lut, Tunupa, Craters of the Moon) are probably unaffected. Every Indonesian scene is newer
-> (Merapi 2026, Tambora and Batur 2024) and is at risk. The Merapi and Tambora rows and the two
-> bullets about them below are **withdrawn until the corrected file is re-run**. This section will be
-> rewritten to whatever the corrected data shows, including nothing.
-
 Tables: `validation/output/MINERALS.md`, from `npx tsx validation/minerals.ts`. Earth side: NASA EMIT
 mineral identifications inside each footprint, on one date. Target side: minerals reported by rovers
 and orbiters in cited papers (`data/target_minerals.json`). Not part of any score, not validated.
 
+**Checked after a cloud problem, 2026-11-15.** The first mineral values (built 12:30 to 13:59) were
+not screened with every cloud flag, and some matches were cloud. Session B rebuilt them with every
+flag (`data/sites.json` built 07:23 UTC). This section was withdrawn in between and is now written
+from the corrected file. What changed: Kawah Ijen and Maros-Pangkep have no minerals again (their
+only scenes were cloud); Mauna Kea and Craters of the Moon use a different scene; the other sites,
+Merapi and Tambora included, came out the same to within 0.1 of a percentage point.
+
 What an identification is: a spectral match in a 60 m pixel. The percentages below say how often a
 mineral's signature is matched in the cloud-free pixels, not how much of it is there.
 
-| Site | Minerals identified | Shared with Gale (of 9 comparable families) | Shared with Jezero (of 7) |
-| --- | --- | --- | --- |
-| Merapi | goethite 18%, jarosite 10%, smectite clay 10%, hematite 8% | **3: hematite, jarosite, smectite clay** | 1: smectite clay |
-| Tambora caldera | hematite 24%, goethite 12%, smectite clay 2% | 2: hematite, smectite clay | 1: smectite clay |
-| Batur lava fields | goethite 1% | none | none |
-| Kesaksak (Batur cone), Maros-Pangkep | EMIT identified no mineral: no observation, so not compared | | |
-| Kawah Ijen, Gua Lawa, Goa Pandan | no usable cloud-free EMIT scene | | |
+| Site | Scene, clear pixels | Minerals identified | Shared with Gale (of 9 comparable families) | Shared with Jezero (of 7) |
+| --- | --- | --- | --- | --- |
+| Merapi | 2026-09-20, 73% | goethite 18%, jarosite 10%, smectite clay 10%, hematite 8%, gibbsite 4% | **3: hematite, jarosite, smectite clay** | 1: smectite clay |
+| Tambora caldera | 2024-10-28, 84% | hematite 24%, goethite 12%, calcium carbonate 4%, hydrated volcanic glass 3%, smectite clay 2% | 2: hematite, smectite clay | 1: smectite clay |
+| Batur lava fields | 2024-09-29, 64% | goethite 1% | none | none |
+| Kesaksak (Batur cone), Gua Lawa | clear scenes | no mineral reached 1% of pixels: no observation, so not compared | | |
+| Kawah Ijen, Maros-Pangkep, Goa Pandan | none | no usable cloud-free EMIT scene: no data | | |
 
 What this says:
 
 - **Merapi shares three mineral families with Gale crater**: hematite, jarosite and smectite clay,
   all three measured in place by Curiosity. That is as many as Mauna Kea, Kilauea and Dallol share
   with Gale by the same count. Merapi is the candidate the literature links to Gale, and this is the
-  first number in the project that supports that link.
+  one number in the project that supports that link. It held when the cloud screening was tightened.
 - **Tambora shares two with Gale** (hematite, and smectite clay in 2% of pixels).
+- **Five of the eight Indonesian candidates have no mineral result.** Three have no clear scene and
+  two have a clear scene in which nothing was identified. The mineral comparison speaks for Merapi
+  and Tambora only.
 - **No site shares olivine or pyroxene**, the minerals that define the basalt targets (Jezero's crater
   floor, Marius Hills). EMIT identified neither anywhere, including on Mauna Kea and Kilauea. So every
   site shows "0 of 2" against Marius Hills. That is a limit of what this instrument reports on
@@ -201,9 +202,12 @@ Cautions, all of which apply:
   surface chemistry overlaps, not that the rocks formed the same way.
 - EMIT's own documentation says minerals outside its ten core ones still need validation. Jarosite
   and nontronite, both in the Merapi result, are outside the ten.
-- One scene per site. Tambora and Batur show dry vegetation in 72% and 75% of pixels, which hides the
-  ground; Merapi 16%.
+- One scene per site, and the scene matters: Mauna Kea's first scene showed jarosite in 9% of
+  pixels, its replacement shows none and shows silica instead. A single-scene result for Merapi
+  could move the same way. More than a quarter of Merapi's footprint was cloud and is not counted.
+- Tambora and Batur show dry vegetation in 72% and 75% of pixels, which hides the ground; Merapi 16%.
 - A family counts at 1% of clear pixels. Tambora's smectite, at 2%, is close to that line.
+- `MINERALS.md` lists, for every scene, the cloud flags it was screened with.
 
 ## Wind, dust and ice (added after the freeze, cell scale)
 
@@ -247,13 +251,13 @@ Read with care:
 Tables: `validation/output/BENCHMARKS.md` and `data/benchmarks.json`, from
 `npx tsx validation/benchmarks.ts`. Every site of `data/sites.json` is scored by one procedure:
 8 candidates and 13 known analogs, each against all 8 targets, at site scale. Numbers as of the site file built
-2026-11-15T06:40Z; `BENCHMARKS.md` is regenerated whenever sites are added and is the one to quote.
+2026-11-15T07:23Z; `BENCHMARKS.md` is regenerated whenever sites are added and is the one to quote.
 
 Mean similarity over all targets:
 
 | Dimension | Candidates | Known analogs |
 | --- | --- | --- |
-| Geology | 0.44 | 0.45 |
+| Geology | 0.40 | 0.45 |
 | Terrain | 0.28 | 0.41 |
 | Climate | 0.00 | 0.10 |
 | Bare ground | 0.01 | 0.70 |
@@ -263,7 +267,7 @@ Purpose scores out of 100, for the typical (median) target and for the best targ
 
 | Purpose | Candidates, typical | Known, typical | Candidates, best | Known, best |
 | --- | --- | --- | --- | --- |
-| Instrument and geology testing | 34 | 41 | 77 | 70 |
+| Instrument and geology testing | 32 | 41 | 69 | 70 |
 | Rover mobility | 0.1 | 41 | 4 | 75 |
 | Ice and resources | 0 | 5 | 0 | 10 |
 | Astrobiology | 0 | 14 | 0 | 16 |
@@ -271,8 +275,9 @@ Purpose scores out of 100, for the typical (median) target and for the best targ
 
 Read plainly:
 
-- **On rock, the candidates stand beside the known analogs** (0.44 against 0.45; best-target geology
-  77 against 70).
+- **On rock, the candidates come close to the known analogs** (0.40 against 0.45; best-target geology
+  69 against 70). The candidates' figure fell from 0.44 when Maros-Pangkep received a cited rock type:
+  it is limestone, unrelated to every target.
 - **On bare ground they do not** (0.01 against 0.70). This one dimension is the whole gap in rover
   mobility, 0.1 against 41.
 - **Climate is poor for everyone** (0.10 for the known analogs). No place on Earth is cold and dry
@@ -306,8 +311,7 @@ score over every land cell, listed from the top.
 
 So the tool's own answer to "where on Earth is most like these targets, all round" is not Indonesia.
 The Indonesian sites are put forward for specific things the all-round score does not reward: basalt
-rock, crater and lava shapes, and lava tubes (the Merapi mineral overlap with Gale is withdrawn
-pending a re-run, see the minerals section). That distinction
+rock, crater and lava shapes, lava tubes, and at Merapi a mineral overlap with Gale. That distinction
 should be said out loud, not hidden.
 
 ## What this view cannot tell you

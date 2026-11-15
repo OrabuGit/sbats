@@ -1,6 +1,6 @@
 # Geology dimension: where the number comes from
 
-Generated 2026-11-15T06:49:50.165Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:42:18Z. Score frozen 2026-11-14; nothing here changes it.
+Generated 2026-11-15T07:27:36.045Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:42:18Z. Score frozen 2026-11-14; nothing here changes it.
 The cause, in words, is in `validation/purposes/GEOLOGY.md`. Percentiles are tie-fair (0.5 is chance).
 
 ## 1. The dimension has three possible values per target
@@ -153,13 +153,13 @@ Mean geology percentile of those sites against their own targets: 0.59 with the 
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | related, p 0.96 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | related, p 0.96 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | no data |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | no data |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | unrelated, p 0.48 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | unrelated, p 0.48 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | unrelated, p 0.48 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | unrelated, p 0.48 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | unrelated, p 0.47 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | unrelated, p 0.47 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | limestone | 6 Carbonate sedimentary rocks (site) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | related, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | related, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | related, p 0.98 |

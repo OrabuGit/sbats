@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-15T06:49:50.165Z",
+  "generatedAt": "2026-11-15T07:27:36.045Z",
   "frozenAt": "2026-11-14",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
-  "sitesGeneratedAt": "2026-11-15T06:42:20Z",
+  "sitesGeneratedAt": "2026-11-15T07:23:39Z",
   "levels": {
     "same": 1,
     "related": 0.6,
@@ -1530,68 +1530,68 @@
         "id": "id-maros-pangkep-karst",
         "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
         "kind": "candidate",
-        "rockType": null,
-        "siteClass": null,
+        "rockType": "limestone",
+        "siteClass": 6,
         "siteScale": "site",
-        "source": null,
+        "source": "Maulany et al. 2019, IOP Conference Series: Earth and Environmental Science 270:012030, doi:10.1088/1755-1315/270/1/012030 (abstract: limestone ecosystem including the Maros-Pangkep karst area)",
         "cellClass": 10,
-        "agrees": null,
+        "agrees": false,
         "pairs": [
           {
             "target": "moon-malapert-massif",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.48,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
           },
           {
             "target": "moon-mons-mouton",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.48,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
           },
           {
             "target": "moon-haworth",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.48,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
           },
           {
             "target": "moon-shackleton-rim",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.48,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
           },
           {
             "target": "moon-marius-hills",
             "listed": false,
             "cellLevel": "related",
             "cellPercentile": 0.958,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.473
           },
           {
             "target": "mars-jezero",
             "listed": false,
             "cellLevel": "related",
             "cellPercentile": 0.958,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.473
           },
           {
             "target": "mars-gale",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.281,
-            "siteLevel": "no data",
-            "sitePercentile": null
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },

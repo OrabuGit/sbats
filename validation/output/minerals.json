@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-11-15T06:49:54.810Z",
- "sitesGeneratedAt": "2026-11-15T06:42:20Z",
+ "generatedAt": "2026-11-15T07:27:44.487Z",
+ "sitesGeneratedAt": "2026-11-15T07:23:39Z",
  "emitMinimumShare": 0.01,
  "sites": [
   {
@@ -8,7 +8,10 @@
    "name": "Kawah Ijen, East Java, Indonesia",
    "kind": "candidate",
    "date": null,
-   "reason": "EMIT has 1 granules over the site, but none of the 1 least cloudy ones gave a usable footprint.",
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
+   "reason": "EMIT has 18 granules over the site, but none of the 8 least cloudy ones gave a usable footprint.",
    "vegetationShare": null,
    "identified": null,
    "unassigned": null,
@@ -24,6 +27,9 @@
    "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
    "kind": "candidate",
    "date": "2026-09-20",
+   "clearShare": 0.73,
+   "pixels": 2724,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.157,
    "identified": [
@@ -35,7 +41,7 @@
     {
      "family": "jarosite",
      "label": "Jarosite",
-     "shareOfValidPixels": 0.104
+     "shareOfValidPixels": 0.103
     },
     {
      "family": "smectite",
@@ -45,12 +51,12 @@
     {
      "family": "hematite",
      "label": "Hematite",
-     "shareOfValidPixels": 0.081
+     "shareOfValidPixels": 0.08
     },
     {
      "family": "gibbsite",
      "label": "Gibbsite",
-     "shareOfValidPixels": 0.034
+     "shareOfValidPixels": 0.035
     }
    ],
    "unassigned": [
@@ -146,11 +152,14 @@
    "id": "id-gua-lawa",
    "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
    "kind": "candidate",
-   "date": null,
-   "reason": "EMIT has 2 granules over the site, but none of the 2 least cloudy ones gave a usable footprint.",
-   "vegetationShare": null,
-   "identified": null,
-   "unassigned": null,
+   "date": "2025-07-21",
+   "clearShare": 1,
+   "pixels": 956,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag",
+   "reason": null,
+   "vegetationShare": 0.001,
+   "identified": [],
+   "unassigned": [],
    "targets": {
     "mars-gale": null,
     "mars-jezero": null,
@@ -163,7 +172,10 @@
    "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
    "kind": "candidate",
    "date": null,
-   "reason": "EMIT has 4 granules over the site, but none of the 4 least cloudy ones gave a usable footprint.",
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
+   "reason": "EMIT has 14 granules over the site, but none of the 8 least cloudy ones gave a usable footprint.",
    "vegetationShare": null,
    "identified": null,
    "unassigned": null,
@@ -179,6 +191,9 @@
    "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
    "kind": "candidate",
    "date": "2024-09-29",
+   "clearShare": 0.912,
+   "pixels": 5449,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.387,
    "identified": [],
@@ -194,11 +209,14 @@
    "id": "id-maros-pangkep-karst",
    "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
    "kind": "candidate",
-   "date": "2025-02-22",
-   "reason": null,
-   "vegetationShare": 0,
-   "identified": [],
-   "unassigned": [],
+   "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
+   "reason": "EMIT has 11 granules over the site, but none of the 8 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
    "targets": {
     "mars-gale": null,
     "mars-jezero": null,
@@ -211,6 +229,9 @@
    "name": "Mount Tambora caldera, Sumbawa, Indonesia",
    "kind": "candidate",
    "date": "2024-10-28",
+   "clearShare": 0.84,
+   "pixels": 11150,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.715,
    "identified": [
@@ -329,6 +350,9 @@
    "name": "Mount Batur black lava fields, Bali, Indonesia",
    "kind": "candidate",
    "date": "2024-09-29",
+   "clearShare": 0.636,
+   "pixels": 2417,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.746,
    "identified": [
@@ -422,46 +446,54 @@
    "id": "mauna-kea",
    "name": "Mauna Kea, Hawaii, USA",
    "kind": "known",
-   "date": "2023-11-25",
+   "date": "2025-05-25",
+   "clearShare": 0.605,
+   "pixels": 2323,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0,
    "identified": [
     {
-     "family": "hematite",
-     "label": "Hematite",
-     "shareOfValidPixels": 0.817
+     "family": "silica",
+     "label": "Silica (tridymite, cristobalite, opal)",
+     "shareOfValidPixels": 0.567
     },
     {
-     "family": "hydrated-glass",
-     "label": "Hydrated volcanic glass",
-     "shareOfValidPixels": 0.807
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.383
     },
     {
      "family": "goethite",
      "label": "Goethite",
-     "shareOfValidPixels": 0.526
+     "shareOfValidPixels": 0.29
     },
     {
-     "family": "jarosite",
-     "label": "Jarosite",
-     "shareOfValidPixels": 0.088
+     "family": "hydrated-glass",
+     "label": "Hydrated volcanic glass",
+     "shareOfValidPixels": 0.18
     },
     {
      "family": "smectite",
      "label": "Smectite clay",
-     "shareOfValidPixels": 0.017
+     "shareOfValidPixels": 0.099
+    },
+    {
+     "family": "gibbsite",
+     "label": "Gibbsite",
+     "shareOfValidPixels": 0.08
     }
    ],
    "unassigned": [
     {
-     "libraryName": "fe3+mix_AMD.assemb1",
-     "libraryTitle": "Acid_Mine_Dr Assemb1-Fe3+ W1R1Fb",
-     "shareOfValidPixels": 0.076
+     "libraryName": "nHematit+fg-Goethit 34B2+MPC W1R1Hb",
+     "libraryTitle": null,
+     "shareOfValidPixels": 0.172
     },
     {
-     "libraryName": "fe3+bearing1",
-     "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
-     "shareOfValidPixels": 0.03
+     "libraryName": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+     "libraryTitle": null,
+     "shareOfValidPixels": 0.068
     }
    ],
    "targets": {
@@ -469,15 +501,15 @@
      "similarity": 0.333,
      "shared": [
       "Hematite",
-      "Jarosite",
-      "Smectite clay"
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)"
      ],
      "targetOnly": [
       "Pyroxene",
       "Olivine",
       "Magnetite",
+      "Jarosite",
       "Calcium sulfate (gypsum, bassanite, anhydrite)",
-      "Silica (tridymite, cristobalite, opal)",
       "Magnesium-iron carbonate (magnesite, siderite)"
      ],
      "notComparable": [
@@ -485,8 +517,9 @@
       "Akaganeite"
      ],
      "earthOnly": [
+      "Goethite",
       "Hydrated volcanic glass",
-      "Goethite"
+      "Gibbsite"
      ]
     },
     "mars-jezero": {
@@ -507,10 +540,11 @@
       "Phosphate"
      ],
      "earthOnly": [
+      "Silica (tridymite, cristobalite, opal)",
       "Hematite",
-      "Hydrated volcanic glass",
       "Goethite",
-      "Jarosite"
+      "Hydrated volcanic glass",
+      "Gibbsite"
      ]
     },
     "moon-shackleton-rim": {
@@ -521,11 +555,12 @@
       "Plagioclase feldspar"
      ],
      "earthOnly": [
+      "Silica (tridymite, cristobalite, opal)",
       "Hematite",
-      "Hydrated volcanic glass",
       "Goethite",
-      "Jarosite",
-      "Smectite clay"
+      "Hydrated volcanic glass",
+      "Smectite clay",
+      "Gibbsite"
      ]
     },
     "moon-marius-hills": {
@@ -537,11 +572,12 @@
      ],
      "notComparable": [],
      "earthOnly": [
+      "Silica (tridymite, cristobalite, opal)",
       "Hematite",
-      "Hydrated volcanic glass",
       "Goethite",
-      "Jarosite",
-      "Smectite clay"
+      "Hydrated volcanic glass",
+      "Smectite clay",
+      "Gibbsite"
      ]
     }
    }
@@ -551,6 +587,9 @@
    "name": "Kilauea, Hawaii, USA",
    "kind": "known",
    "date": "2023-08-01",
+   "clearShare": 0.935,
+   "pixels": 5566,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.237,
    "identified": [
@@ -679,6 +718,9 @@
    "name": "Atacama Desert hyperarid core (Yungay), Chile",
    "kind": "known",
    "date": "2023-01-26",
+   "clearShare": 1,
+   "pixels": 5897,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0,
    "identified": [
@@ -803,6 +845,9 @@
    "name": "Haughton impact structure, Devon Island, Canada",
    "kind": "known",
    "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
    "reason": "No EMIT L2B mineral granule contains the site.",
    "vegetationShare": null,
    "identified": null,
@@ -819,6 +864,9 @@
    "name": "Timanfaya, Lanzarote, Spain",
    "kind": "known",
    "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
    "reason": "EMIT has 2 granules over the site, but none of the 2 least cloudy ones gave a usable footprint.",
    "vegetationShare": null,
    "identified": null,
@@ -835,40 +883,43 @@
    "name": "Dallol, Danakil Depression, Ethiopia",
    "kind": "known",
    "date": "2023-01-20",
+   "clearShare": 0.975,
+   "pixels": 2079,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0,
    "identified": [
     {
      "family": "goethite",
      "label": "Goethite",
-     "shareOfValidPixels": 0.629
+     "shareOfValidPixels": 0.627
     },
     {
      "family": "hematite",
      "label": "Hematite",
-     "shareOfValidPixels": 0.541
+     "shareOfValidPixels": 0.532
     },
     {
      "family": "jarosite",
      "label": "Jarosite",
-     "shareOfValidPixels": 0.522
+     "shareOfValidPixels": 0.532
     },
     {
      "family": "iron-sulfate",
      "label": "Iron sulfate",
-     "shareOfValidPixels": 0.162
+     "shareOfValidPixels": 0.163
     },
     {
      "family": "smectite",
      "label": "Smectite clay",
-     "shareOfValidPixels": 0.042
+     "shareOfValidPixels": 0.026
     }
    ],
    "unassigned": [
     {
      "libraryName": "fe2+fe3+_water_RTsludge",
      "libraryTitle": "Renyolds_TnlSldgWet SM93-15w W1R1Ba",
-     "shareOfValidPixels": 0.116
+     "shareOfValidPixels": 0.119
     }
    ],
    "targets": {
@@ -958,6 +1009,9 @@
    "name": "Dasht-e Lut (Lut Desert), Iran",
    "kind": "known",
    "date": "2023-08-19",
+   "clearShare": 1,
+   "pixels": 5932,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0,
    "identified": [
@@ -1076,7 +1130,10 @@
    "name": "Salar de Uyuni salt flat, Bolivia",
    "kind": "known",
    "date": null,
-   "reason": "EMIT has 15 granules over the site, but none of the 6 least cloudy ones gave a usable footprint.",
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
+   "reason": "EMIT has 18 granules over the site, but none of the 8 least cloudy ones gave a usable footprint.",
    "vegetationShare": null,
    "identified": null,
    "unassigned": null,
@@ -1092,6 +1149,9 @@
    "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
    "kind": "known",
    "date": "2023-12-31",
+   "clearShare": 0.719,
+   "pixels": 4308,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag",
    "reason": null,
    "vegetationShare": 0.468,
    "identified": [
@@ -1202,6 +1262,9 @@
    "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
    "kind": "known",
    "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
    "reason": "No EMIT L2B mineral granule contains the site.",
    "vegetationShare": null,
    "identified": null,
@@ -1218,6 +1281,9 @@
    "name": "Don Juan Pond, Wright Valley, Antarctica",
    "kind": "known",
    "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
    "reason": "No EMIT L2B mineral granule contains the site.",
    "vegetationShare": null,
    "identified": null,
@@ -1233,22 +1299,46 @@
    "id": "craters-of-the-moon",
    "name": "Craters of the Moon, Idaho, USA",
    "kind": "known",
-   "date": "2023-08-17",
+   "date": "2025-05-31",
+   "clearShare": 0.985,
+   "pixels": 5890,
+   "cloudScreening": "cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag",
    "reason": null,
-   "vegetationShare": 0.611,
+   "vegetationShare": 0.007,
    "identified": [
     {
      "family": "hematite",
      "label": "Hematite",
-     "shareOfValidPixels": 0.214
+     "shareOfValidPixels": 0.09
+    },
+    {
+     "family": "carbonate-ca",
+     "label": "Calcium carbonate (calcite, aragonite, dolomite)",
+     "shareOfValidPixels": 0.015
     },
     {
      "family": "goethite",
      "label": "Goethite",
-     "shareOfValidPixels": 0.14
+     "shareOfValidPixels": 0.012
     }
    ],
-   "unassigned": [],
+   "unassigned": [
+    {
+     "libraryName": "Maghemite GDS81 Syn (M-3) W1R1Bb",
+     "libraryTitle": null,
+     "shareOfValidPixels": 0.018
+    },
+    {
+     "libraryName": "Grass_Golden_Dry GDS480 W1R1Fa",
+     "libraryTitle": null,
+     "shareOfValidPixels": 0.844
+    },
+    {
+     "libraryName": "Dry_Long_Grass AV87-2 W1R1Ba",
+     "libraryTitle": null,
+     "shareOfValidPixels": 0.01
+    }
+   ],
    "targets": {
     "mars-gale": {
      "similarity": 0.111,
@@ -1270,6 +1360,7 @@
       "Akaganeite"
      ],
      "earthOnly": [
+      "Calcium carbonate (calcite, aragonite, dolomite)",
       "Goethite"
      ]
     },
@@ -1291,6 +1382,7 @@
      ],
      "earthOnly": [
       "Hematite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
       "Goethite"
      ]
     },
@@ -1303,6 +1395,7 @@
      ],
      "earthOnly": [
       "Hematite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
       "Goethite"
      ]
     },
@@ -1316,6 +1409,7 @@
      "notComparable": [],
      "earthOnly": [
       "Hematite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
       "Goethite"
      ]
     }
@@ -1326,6 +1420,9 @@
    "name": "Askja caldera, Iceland highlands",
    "kind": "known",
    "date": null,
+   "clearShare": null,
+   "pixels": null,
+   "cloudScreening": null,
    "reason": "No EMIT L2B mineral granule contains the site.",
    "vegetationShare": null,
    "identified": null,
