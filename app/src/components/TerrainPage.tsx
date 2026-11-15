@@ -1,10 +1,10 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Pause, Play, RotateCcw, Undo2 } from 'lucide-react';
 import { loadElevation, type ExtractItem } from '../data/sites';
-import { getLastLayout } from '../lib/layoutStore';
-import { heightSampler, routeFigures, routeProfile, type RouteFigures, type RoutePoint, type RouteProfile } from '../lib/routeStub';
+import { getLastLayout, routeKey, setRoutes } from '../lib/layoutStore';
+import { measureRoute, type ElevationTile, type RouteResult } from '../lib/matchAdapter';
 import { useAsync } from '../lib/useAsync';
-import { ComputedBadge, Tag } from './Badges';
+import { ComputedBadge } from './Badges';
 import { SLOPE_CLASSES } from './Terrain3D';
 
 const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
@@ -22,6 +22,19 @@ interface Props {
 }
 
 type Surface = 'image' | 'relief' | 'slope';
+interface RoutePoint {
+  x: number;
+  z: number;
+}
+/** Distance and height along a route, for the chart. Height is above the lowest point of the route's own square. */
+interface RouteProfile {
+  distKm: number[];
+  heightM: number[];
+}
+const profileOf = (r: RouteResult, floor: number): RouteProfile => {
+  const s = r.samples.filter((x) => x.elevationM !== null);
+  return { distKm: s.map((x) => x.distanceM / 1000), heightM: s.map((x) => (x.elevationM as number) - floor) };
+};
 const DRIVE_SECONDS = 12;
 const fx = (v: number | null | undefined, d: number) => (v === null || v === undefined ? 'no data' : v.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d }));
 
@@ -70,14 +83,34 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const heights = useAsync(() => Promise.all([loadElevation(earth.elevation!), loadElevation(target.elevation!)]), `${earth.id}|${target.id}`);
   const layout = getLastLayout();
-  const limit = slopeLimitDeg ?? 15;
 
-  const samplers = useMemo(() => {
-    if (heights.status !== 'ready') return null;
-    return [heightSampler(heights.value[0], earth.elevation!.size, windowKm), heightSampler(heights.value[1], target.elevation!.size, windowKm)] as const;
-  }, [heights, earth, target, windowKm]);
-  const profiles = useMemo(() => (samplers && route.length >= 2 ? ([routeProfile(route, samplers[0]), routeProfile(route, samplers[1])] as const) : null), [samplers, route]);
-  const figures = useMemo(() => (profiles ? ([routeFigures(profiles[0], limit), routeFigures(profiles[1], limit)] as const) : null), [profiles, limit]);
+  // Session C's route library measures the same waypoints on each elevation tile.
+  const measured = useMemo(() => {
+    if (heights.status !== 'ready' || route.length < 2) return null;
+    const items = [earth, target];
+    return heights.value.map((data, i) => {
+      const el = items[i].elevation!;
+      const tile: ElevationTile = { size: el.size, pixelM: el.pixelM, data };
+      const toTile = (p: RoutePoint) => ({ col: ((p.x + windowKm / 2) / windowKm) * (el.size - 1), row: ((p.z + windowKm / 2) / windowKm) * (el.size - 1) });
+      try {
+        return measureRoute(tile, route.map(toTile), { limit: slopeLimitDeg === null ? null : { rover: 'Landing pad limit', limitDeg: slopeLimitDeg, kind: 'landing pad slope limit in data/modules.json', source: 'data/modules.json, landingPad.maxSlopeDeg' } });
+      } catch {
+        return null;
+      }
+    }) as [RouteResult | null, RouteResult | null];
+  }, [heights, route, earth, target, windowKm, slopeLimitDeg]);
+  const profiles = useMemo(
+    () => (measured && measured[0] && measured[1] ? ([profileOf(measured[0], earth.elevation!.min), profileOf(measured[1], target.elevation!.min)] as const) : null),
+    [measured, earth, target],
+  );
+  const figures = measured;
+  // Keep the measured routes for the report of this pair.
+  useEffect(() => {
+    const list: { label: string; result: RouteResult }[] = [];
+    if (measured?.[0]) list.push({ label: `Route on ${earthName} (Earth)`, result: measured[0] });
+    if (measured?.[1]) list.push({ label: `The same route laid on ${targetName}`, result: measured[1] });
+    setRoutes(routeKey(earth.id, target.id), list);
+  }, [measured, earth, target, earthName, targetName]);
 
   // The rover drives the route once in a fixed time, then stops at the end.
   const start = useRef(0);
@@ -106,14 +139,14 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
     setRover(null);
     setDriving(false);
   };
-  const row = (label: string, get: (f: RouteFigures) => string) => (
+  const row = (label: string, get: (f: RouteResult) => string) => (
     <tr className="border-b border-line">
       <th scope="row" className="py-2 pr-4 text-left text-[12px] font-normal text-muted">
         {label}
       </th>
       {[0, 1].map((i) => (
         <td key={i} className={`num py-2 pl-4 text-right text-[13px] ${figures?.[i] ? 'text-text' : 'text-muted'}`}>
-          {figures?.[i] ? get(figures[i] as RouteFigures) : 'no data'}
+          {figures?.[i] ? get(figures[i] as RouteResult) : 'no data'}
         </td>
       ))}
     </tr>
@@ -231,10 +264,8 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-[14px] font-semibold text-text">Route figures</h3>
-            <ComputedBadge title="Computed in the browser from the elevation grids, sampled every 100 m along the route." />
-            <Tag tone="accent" title="Session C's route function is not published yet. These are plain geometry computed in the app.">
-              Stub
-            </Tag>
+            <ComputedBadge title="Computed in the browser by the route library from the elevation grids, sampled at each grid's own pixel size." />
+
           </div>
           <table className="mt-2 w-full max-w-[460px] border-collapse">
             <thead>
@@ -251,18 +282,27 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
               </tr>
             </thead>
             <tbody>
-              {row('Length on the surface', (f) => `${fx(f.lengthKm, 2)} km`)}
-              {row('Total climb', (f) => `${fx(f.climbM, 0)} m`)}
+              {row('Length on the map', (f) => `${fx(f.distanceM / 1000, 2)} km`)}
+              {row('Length on the surface', (f) => (f.surfaceDistanceM === null ? 'no data' : `${fx(f.surfaceDistanceM / 1000, 2)} km`))}
+              {row('Total climb', (f) => `${fx(f.ascentM, 0)} m`)}
               {row('Total descent', (f) => `${fx(f.descentM, 0)} m`)}
-              {row('Steepest 100 m', (f) => `${fx(f.maxSlopeDeg, 1)}°`)}
-              {row(`Share steeper than ${limit}°`, (f) => `${fx(f.shareOverLimit * 100, 0)}%`)}
+              {row('Steepest climb on the route', (f) => (f.maxUphillDeg === null ? 'no data' : `${fx(f.maxUphillDeg, 1)}°`))}
+              {row('Steepest ground crossed', (f) => (f.maxTerrainSlopeDeg === null ? 'no data' : `${fx(f.maxTerrainSlopeDeg, 1)}°`))}
+              {row(slopeLimitDeg === null ? 'Share above a slope limit' : `Share on ground steeper than ${slopeLimitDeg}°`, (f) => (f.shareAboveLimit === null ? 'no data' : `${fx(f.shareAboveLimit * 100, 0)}%`))}
+              {row('Slope measured over', (f) => `${fx(f.baselineM, 0)} m`)}
             </tbody>
           </table>
-          <p className="mt-2 max-w-[60ch] text-[11px] text-muted">
-            Geometry only. No speed, time or energy is shown: the data has no cited rover figure for them.{' '}
-            {slopeLimitDeg === null ? `${limit}° is a placeholder limit.` : `${limit}° is the landing pad slope limit in modules.json.`} The target grid is
-            coarser than Earth's, which hides short steep steps.
-          </p>
+          <ul className="mt-2 max-w-[60ch] space-y-1">
+            {[...new Set([...(figures?.[0]?.notes ?? []), ...(figures?.[1]?.notes ?? [])])].map((n) => (
+              <li key={n} className="text-[11px] text-muted">
+                {n}
+              </li>
+            ))}
+            <li className="text-[11px] text-muted">
+              No driving time or energy is shown: data/rovers.json, with cited rover speeds and slope limits, is not published yet.{' '}
+              {slopeLimitDeg === null ? 'No slope limit is set.' : `The ${slopeLimitDeg}° limit is the landing pad slope limit in modules.json, used as a stand-in.`}
+            </li>
+          </ul>
         </div>
       </section>
 

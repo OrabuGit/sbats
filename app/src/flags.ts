@@ -21,8 +21,6 @@ export const flags = {
   report: true,
   /** Terrain page: route, rover, slope colours. */
   terrain: true,
-  /** Route figures from Session C's library. Off: the app's own geometry stub (lib/routeStub.ts), labelled Stub. */
-  routeFromLib: false,
   /**
    * Step 2 "click any point" on the Moon or Mars. Off: the data has measured values for the listed
    * base sites only. Turn on when Session B publishes values for arbitrary points.

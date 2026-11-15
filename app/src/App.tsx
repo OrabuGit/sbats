@@ -26,6 +26,7 @@ import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
+import { getRoutes, routeKey } from './lib/layoutStore';
 import { loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
@@ -594,21 +595,14 @@ function Orbit({ data }: { data: DataBundle }) {
         />
       )}
 
-      {view === 'report' && selectedCell && explained && (
+      {view === 'report' && selectedCell && match && (
         <Report
           cell={selectedCell}
-          placeName={named?.name ?? null}
           target={target}
-          explained={explained}
-          meta={meta}
           earth={earth}
-          purpose={purpose}
-          profile={profile}
-          purposeScores={purposeScores}
-          percentile={pct}
-          rank={rank}
-          gaps={ts.prepared.gaps}
-          month={month}
+          record={match.record}
+          stability={stabNow ? { result: stabNow, cell: stabSelected } : null}
+          routes={earthExtract ? getRoutes(routeKey(earthExtract.id, target.id)) : []}
           results={results}
           onBack={() => setView('match')}
         />
@@ -658,7 +652,7 @@ function Orbit({ data }: { data: DataBundle }) {
           stability={
             stabSelected && stabNow && stabSelected.baseRank !== null
               ? {
-                  text: `Rank ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells with these weights. With each weight redrawn within ±${Math.round(stabNow.spread * 100)}% (${stabNow.draws} times), nine in ten ranks fall between ${stabSelected.rankP05?.toLocaleString('en-US')} and ${stabSelected.rankP95?.toLocaleString('en-US')}, and it is in the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of them.`,
+                  text: `Grid cell rank ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells with these weights. With each weight redrawn within ±${Math.round(stabNow.spread * 100)}% (${stabNow.draws} times), nine in ten ranks fall between ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')} and ${Math.round(stabSelected.rankP95 ?? 0).toLocaleString('en-US')}, and it is in the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of them.`,
                 }
               : null
           }
