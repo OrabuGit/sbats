@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T05:30:37Z",
+  "generatedAt": "2026-11-15T06:06:23Z",
   "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json, two more candidate sites proposed by a team member, and nine already-known analogs for comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint.",
   "year": 2025,
   "bareNdviThreshold": 0.2,
@@ -143,6 +143,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 2.44,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.24,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -499,6 +523,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.32,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.38,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -919,6 +967,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 2.6,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.39,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -1252,6 +1324,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 2.87,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.35,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -1623,6 +1719,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.02,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.22,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -2054,6 +2174,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.6,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.24,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -2341,7 +2485,7 @@
    "footprintBasis": "Square enclosing the caldera rim as traced on Copernicus DEM GLO-30: rim crest 3.1 to 4.2 km from its centre, 7.1 km north-south by 7.4 km east-west. Smithsonian GVP describes a 6-km-wide, 1250-m-deep caldera.",
    "inAnalogsJson": true,
    "coordinateSource": "Centre of the caldera rim traced on Copernicus DEM GLO-30 (highest point along 180 rays from the caldera floor). Smithsonian GVP volcano 264040 lists the volcano at 8.25 S, 118.0 E.",
-   "analogSource": "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced by Session B on Copernicus DEM GLO-30 (decisions/B.md)",
+   "analogSource": "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced on the Copernicus DEM GLO-30 elevation model",
    "proposedBy": "team member",
    "caveat": null,
    "values": {
@@ -2459,6 +2603,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 2.89,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.21,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -2774,7 +2942,7 @@
    "footprintBasis": "Square enclosing the bare-rock polygon mapped in OpenStreetMap (relation 19753621): 4.0 km north-south by 3.2 km east-west. The square also holds ground outside the polygon. Smithsonian GVP confirms historical basaltic lava flows on the caldera floor but gives no outline.",
    "inAnalogsJson": true,
    "coordinateSource": "Centre of the bounding box of OpenStreetMap relation 19753621 (natural=bare_rock, 7.5 km2, version 3 of 2025-10-25), the mapped bare lava south-west of the Batur cone. (c) OpenStreetMap contributors, ODbL.",
-   "analogSource": "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL, read by Session B (decisions/B.md)",
+   "analogSource": "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL",
    "proposedBy": "team member",
    "caveat": "The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the footprint is ground outside the lava field.",
    "values": {
@@ -2892,6 +3060,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.02,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.22,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -3332,6 +3524,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 4.81,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.1,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -3804,6 +4020,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 5.34,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.1,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -4268,6 +4508,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.56,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.04,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -4729,6 +4993,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 4.32,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.07,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": 1.0,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": "Obu et al. 2018, Northern Hemisphere permafrost map 2000-2016, permafrost probability, 1 km (ESA GlobPermafrost; PANGAEA doi:10.1594/PANGAEA.888600)",
+     "badge": "Literature",
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -5056,6 +5344,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 6.4,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.27,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -5461,6 +5773,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.83,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.4,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -5910,6 +6246,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 4.66,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.32,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": 0.0,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": "Obu et al. 2018, Northern Hemisphere permafrost map 2000-2016, permafrost probability, 1 km (ESA GlobPermafrost; PANGAEA doi:10.1594/PANGAEA.888600)",
+     "badge": "Literature",
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -6353,6 +6713,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 3.1,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.1,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {
@@ -6770,6 +7154,30 @@
      "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter PRECTOTCORR",
      "badge": "Measured",
      "note": "0.5 degree cell value, not measured at the site."
+    },
+    "windSpeed": {
+     "value": 2.96,
+     "unit": "m/s",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (MERRA-2), parameter WS10M, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site."
+    },
+    "aod": {
+     "value": 0.1,
+     "unit": "dimensionless",
+     "scale": "grid",
+     "source": "NASA POWER climatology 2001-2020 (CERES SYN1deg), parameter AOD_55, annual mean",
+     "badge": "Measured",
+     "note": "0.5 degree cell value, not measured at the site. All airborne particles, not dust alone."
+    },
+    "permafrostFrac": {
+     "value": null,
+     "unit": "fraction of the cell's land, 0 to 1",
+     "scale": "grid",
+     "source": null,
+     "badge": null,
+     "note": "0.5 degree cell value, not measured at the site. Modelled. Covers land north of 25 N only: null elsewhere, Antarctica included."
     }
    },
    "gridCell": {

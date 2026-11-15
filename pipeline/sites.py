@@ -574,6 +574,9 @@ def build() -> dict:
                                         "Literature")
         for k, unit in (("tempMean", "°C"), ("tempRange", "°C"), ("precip", "mm/year")):
             vals[k] = V(g.get(k), unit, "grid", fsrc[k], note="0.5 degree cell value, not measured at the site.")
+        for e in earth["meta"].get("extraKeys", []):   # wind speed, aerosol, permafrost: grid scale too
+            vals[e["key"]] = V(g.get(e["key"]), e["unit"], "grid", e["source"], e["badge"],
+                               note="0.5 degree cell value, not measured at the site." + (" " + e["note"] if e.get("note") else ""))
         site = {
             "id": sid, "name": a["name"], "lat": lat, "lon": lon, "kind": a["kind"],
             "footprintKm": side, "footprintNote": fnote,

@@ -38,12 +38,14 @@ COLUMNS = {
     "tempMean": ("int16", 100), "tempRange": ("int16", 100), "precip": ("uint16", 10),
     "ndvi": ("int16", 1000), "slope": ("int16", 100), "roughness": ("uint16", 10),
     "lithology": ("uint8", 1), "snowIceFrac": ("uint16", 1000), "barrenFrac": ("uint16", 1000),
+    "windSpeed": ("uint16", 100), "aod": ("uint16", 1000), "permafrostFrac": ("uint16", 1000),
 }
 NULLS = {"int16": -32768, "uint16": 65535, "uint8": 255}
 SIZES = {"int16": 2, "uint16": 2, "uint8": 1}
 
 
-def encode(earth: dict) -> bytes:
+def encode(earth: dict, columns: dict | None = None) -> bytes:
+    COLUMNS = columns or globals()["COLUMNS"]
     cells = earth["cells"]
     res = earth["meta"]["resolutionDeg"]
     n = len(cells)
@@ -116,8 +118,9 @@ def decode(buf: bytes) -> dict:
     return {"meta": h["meta"], "cells": cells}
 
 
-def write(earth: dict, out: Path) -> int:
-    buf = encode(earth)
+def write(earth: dict, out: Path, columns: dict | None = None) -> int:
+    """columns: key -> (dtype, scale) for files other than earth.json (the Moon and Mars grids)."""
+    buf = encode(earth, columns)
     back = decode(buf)
     assert back["meta"] == earth["meta"]
     assert len(back["cells"]) == len(earth["cells"])
@@ -125,6 +128,7 @@ def write(earth: dict, out: Path) -> int:
         for k, v in a.items():
             w = b[k]
             assert (v is None and w is None) or (v is not None and w is not None and abs(v - w) < 1e-9), (a, b, k)
+        assert set(a) == set(b)
     tmp = out.with_suffix(".bin.tmp")
     tmp.write_bytes(buf)
     os.replace(tmp, out)

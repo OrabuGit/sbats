@@ -23,12 +23,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import CACHE, DATA, LATS, LONS, NLAT, NLON, RES, cell_index, load_grid  # noqa: E402
 import landmask  # noqa: E402
 
-STAGES = ["climate", "ndvi", "terrain", "lithology", "landcover"]
+STAGES = ["climate", "ndvi", "terrain", "lithology", "landcover", "atmosphere", "permafrost"]
 FACTOR_STAGES = STAGES[:4]
 FACTOR_ORDER = ["tempMean", "tempRange", "precip", "ndvi", "slope", "roughness", "lithology"]
 # Measured land cover shares, extra cell keys (data/SCHEMA.md, "Land cover keys").
-EXTRA_KEYS = ["snowIceFrac", "barrenFrac"]
-DECIMALS = {"snowIceFrac": 3, "barrenFrac": 3, "tempMean": 2, "tempRange": 2, "precip": 1, "ndvi": 3, "slope": 2, "roughness": 1}
+EXTRA_KEYS = ["snowIceFrac", "barrenFrac", "windSpeed", "aod", "permafrostFrac"]
+LAND_COVER_KEYS = ["snowIceFrac", "barrenFrac"]
+DECIMALS = {"windSpeed": 2, "aod": 3, "permafrostFrac": 3, "snowIceFrac": 3, "barrenFrac": 3, "tempMean": 2, "tempRange": 2, "precip": 1, "ndvi": 3, "slope": 2, "roughness": 1}
 
 # Static part of meta.factors. Each stage adds its real provenance to cache/meta_<stage>.json.
 FACTOR_META = {
@@ -79,6 +80,12 @@ def run_stage(name: str) -> None:
     elif name == "landcover":
         import landcover
         info = landcover.build()
+    elif name == "atmosphere":
+        import atmosphere
+        info = atmosphere.build()
+    elif name == "permafrost":
+        import permafrost
+        info = permafrost.build()
     else:
         raise ValueError(name)
     (CACHE / f"meta_{name}.json").write_text(json.dumps(info, indent=1))
@@ -154,6 +161,9 @@ def assemble() -> dict:
     lc = stage_meta("landcover")
     if lc:
         meta["landCover"] = {"source": lc["source"], "keys": lc["keys"], "method": lc["method"]}
+    extra = [k for s_ in ("atmosphere", "permafrost") if (m := stage_meta(s_)) for k in m["keys"]]
+    if extra:
+        meta["extraKeys"] = extra
     return {"meta": meta, "cells": cells}
 
 
@@ -181,8 +191,11 @@ def sanity(earth: dict) -> None:
         assert set(c) == want, c
         assert (c["lat"] * 4) % 2 == 1 and (c["lon"] * 4) % 2 == 1, c
         assert -90 < c["lat"] < 90 and -180 < c["lon"] < 180, c
-        fr = [c[k] for k in EXTRA_KEYS if c[k] is not None]
+        fr = [c[k] for k in LAND_COVER_KEYS if c[k] is not None]
         assert all(0 <= x <= 1 for x in fr) and sum(fr) <= 1.001, c
+        assert c["permafrostFrac"] is None or 0 <= c["permafrostFrac"] <= 1, c
+        assert c["windSpeed"] is None or 0 <= c["windSpeed"] < 30, c
+        assert c["aod"] is None or 0 <= c["aod"] < 5, c
     codes = {k["code"] for f in earth["meta"]["factors"] if f["key"] == "lithology" for k in f["classes"]}
     assert all(c["lithology"] is None or c["lithology"] in codes for c in cells)
     print(f"\ncells: {n}")
