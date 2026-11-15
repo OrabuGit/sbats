@@ -26,19 +26,21 @@ interface Props {
   onSelect: (index: number) => void;
 }
 
-const KIND_LABEL = { candidate: 'SBATS candidate', known: 'Known analog', negative: 'Negative control' } as const;
+const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 const KIND_NOTE = {
-  candidate: 'New sites proposed by SBATS. The headline, not the validation set.',
-  known: 'Established analog sites from the literature. Used to validate the score.',
-  negative: 'Places that must score low: forests and cities.',
+  candidate: 'Proposed by the SBATS team. Not used in validation.',
+  known: 'Analog sites from the literature. The validation set.',
+  negative: 'Forests and cities. They must score low.',
 } as const;
 
 function ScoreBlock({ r }: { r: CellSummary | undefined }) {
   return (
     <div className="flex w-16 shrink-0 flex-col items-end">
-      <span className={`num text-[22px] font-semibold leading-6 ${r && r.score !== null ? 'text-text' : 'text-muted'}`}>
-        {r ? formatScore(r.score) : '—'}
-      </span>
+      {r && r.score !== null ? (
+        <span className="num text-[22px] font-semibold leading-6 text-text">{formatScore(r.score)}</span>
+      ) : (
+        <span className="num text-[11px] uppercase leading-6 tracking-wider text-muted">no data</span>
+      )}
       <span className="mt-1">
         <ConfidenceBadge confidence={r?.confidence ?? null} coverage={r?.coverage} />
       </span>
@@ -54,12 +56,11 @@ export function CandidateList(p: Props) {
   return (
     <div className="flex min-h-0 flex-col">
       <header className="border-b border-line p-4">
-        <h2 className="label mb-1">02 Analog candidates</h2>
+        <h2 className="label mb-2">02 Candidates</h2>
         <p className="text-[13px] text-text">
-          Earth cells ranked {p.purpose ? <>for <span className="font-semibold">{p.purpose.label.toLowerCase()}</span> </> : ''}against{' '}
-          <span className="font-semibold">{target.name}</span>.
+          {p.purpose ? 'Match by purpose' : 'All-round match'} to <span className="font-semibold">{target.name}</span>
+          {p.purpose ? <>, for <span className="font-semibold">{p.purpose.label.toLowerCase()}</span></> : ''}.
         </p>
-        <p className="num mt-1 text-[11px] uppercase tracking-wider text-accent">{p.purpose ? 'Match by purpose' : 'All-round match'}</p>
         <p className="num mt-2 text-[11px] uppercase tracking-wider text-muted">
           {t.scored.toLocaleString('en-US')} scored · {t.low.toLocaleString('en-US')} low confidence · {t.noData.toLocaleString('en-US')} no data
         </p>
@@ -72,7 +73,7 @@ export function CandidateList(p: Props) {
               onClick={() => p.onMode(m)}
               className={`label min-h-11 px-3 ${p.mode === m ? 'bg-bg !text-accent' : 'bg-panel !text-text hover:bg-bg'}`}
             >
-              {m === 'ranked' ? 'Top cells' : 'Named sites'}
+              {m === 'ranked' ? 'Top cells' : 'Sites'}
             </button>
           ))}
         </div>
@@ -94,7 +95,7 @@ export function CandidateList(p: Props) {
           <div className="p-4">
             <p className="label mb-1 !text-text">{t.scored > 0 ? 'Nothing to list' : 'No data'}</p>
             <p className="text-[13px] text-text">
-              {p.emptyReason ?? 'No cell passes the current filter.'}
+              {p.emptyReason ?? 'No cell is listed with these settings.'}
             </p>
           </div>
         ) : (
@@ -102,7 +103,7 @@ export function CandidateList(p: Props) {
             {tied > candidates.length && (
               <li className="border-b border-line px-4 py-3 text-[12px] text-text" role="note">
                 <span className="num">{tied.toLocaleString('en-US')}</span> cells tie at the top score of{' '}
-                <span className="num">{formatScore(topScore)}</span>. The list shows a spaced sample of them, in no order of merit.
+                <span className="num">{formatScore(topScore)}</span>. The list is a spaced sample of them, in no order.
               </li>
             )}
             {candidates.map((c) => {
@@ -143,7 +144,7 @@ export function CandidateList(p: Props) {
             return (
               <section key={kind} aria-label={KIND_LABEL[kind]}>
                 <div className="border-b border-line bg-bg px-4 py-2">
-                  <h3 className="label">{KIND_LABEL[kind]}s</h3>
+                  <h3 className="label !text-text">{KIND_LABEL[kind]}s</h3>
                   <p className="mt-0.5 text-[12px] text-muted">{KIND_NOTE[kind]}</p>
                 </div>
                 <ul>
@@ -168,10 +169,10 @@ export function CandidateList(p: Props) {
                               {index < 0
                                 ? 'No land cell near this site in the grid.'
                                 : kind === 'negative'
-                                  ? 'Should score low for every target.'
+                                  ? 'Must score low for every target.'
                                   : forThis
-                                    ? `Listed as an analog for ${target.name}.`
-                                    : 'Listed for other targets, not this one.'}
+                                    ? `Analog for ${target.name}.`
+                                    : 'Analog for other targets.'}
                             </span>
                           </span>
                           <ScoreBlock r={r} />
@@ -183,7 +184,7 @@ export function CandidateList(p: Props) {
               </section>
             );
           })}
-          {sites.length === 0 && <p className="p-4 text-[13px] text-muted">No named sites in analogs.json.</p>}
+          {sites.length === 0 && <p className="p-4 text-[13px] text-muted">No data. analogs.json lists no sites.</p>}
         </div>
       )}
     </div>

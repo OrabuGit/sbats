@@ -40,7 +40,7 @@ interface Props {
   onSitePage: (() => void) | null;
 }
 
-const KIND_LABEL = { candidate: 'SBATS candidate', known: 'Known analog', negative: 'Negative control' } as const;
+const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 
 function ValueRow({ k, target, meta }: { k: KeyBreakdown; target: Target; meta: MetaByKey }) {
   const sun = isSunKey(k.key);
@@ -49,9 +49,9 @@ function ValueRow({ k, target, meta }: { k: KeyBreakdown; target: Target; meta: 
   const clamped = k.targetValue !== null && k.targetClamped !== null && k.targetValue !== k.targetClamped;
   const state =
     k.status === 'scored'
-      ? `sim ${formatSim(k.similarity)}`
+      ? `similarity ${formatSim(k.similarity)}`
       : k.status === 'zero-weight'
-        ? `sim ${formatSim(k.similarity)} · weight 0`
+        ? `similarity ${formatSim(k.similarity)} · weight 0`
         : 'left out';
   return (
     <div className="mt-2 border-l border-line pl-3">
@@ -123,7 +123,7 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
   const partial = f.weight > 0 && f.coveredWeight > 0 && f.coveredWeight < f.weight - 1e-9;
   const dropped = f.weight > 0 && f.coveredWeight === 0;
   return (
-    <li className="border-b border-line px-4 py-3 last:border-b-0">
+    <li className="border-b border-line p-4 last:border-b-0">
       <div className="flex items-baseline justify-between gap-3">
         <h4 className="label !text-text">{f.label}</h4>
         <span className="num text-[11px] text-muted">weight {f.weight.toFixed(2)}</span>
@@ -144,8 +144,8 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
           {f.similarity === null ? 'no data' : formatSim(f.similarity)}
         </span>
       </div>
-      {partial && <p className="mt-1 text-[11px] text-muted">One of two inputs is missing. This factor counts for half its weight.</p>}
-      {dropped && <p className="mt-1 text-[11px] text-muted">Left out of the score. The other weights were rescaled.</p>}
+      {partial && <p className="mt-1 text-[11px] text-muted">One of its two measurements has no value. The factor counts for half its weight.</p>}
+      {dropped && <p className="mt-1 text-[11px] text-muted">Left out. The other weights are scaled up.</p>}
       {f.keys.map((k) => (
         <div key={k.key}>
           <ValueRow k={k} target={target} meta={meta} />
@@ -182,7 +182,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           <ArrowLeft size={14} aria-hidden="true" /> Back to candidates
         </button>
         <div className="p-4">
-          <p className="label">Site dossier</p>
+          <p className="label">Dossier</p>
           <h2 id="h-dossier" className="mt-1 text-[17px] font-semibold leading-6 text-text">
             {named ? named.name : siteCode(cell)}
           </h2>
@@ -193,7 +193,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           <div className="mt-2 flex flex-wrap gap-1.5">
             {named && <Tag>{KIND_LABEL[named.kind]}</Tag>}
             {scored && isNew && (
-              <Tag tone="accent" title={`More than ${NEW_DISTANCE_KM} km from every known analog site`}>
+              <Tag tone="accent" title={`More than ${NEW_DISTANCE_KM} km from every known analog`}>
                 New
               </Tag>
             )}
@@ -211,7 +211,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
             <div className="flex flex-col items-end gap-1 pb-0.5">
               <ConfidenceBadge confidence={e.confidence} coverage={e.coverage} />
               <span className="num text-[11px] text-muted">coverage {(e.coverage * 100).toFixed(0)}%</span>
-              {percentile !== null && <span className="num text-[11px] text-muted">beats {percentile.toFixed(0)}% of cells</span>}
+              {percentile !== null && <span className="num text-[11px] text-muted">above {percentile.toFixed(0)}% of cells</span>}
             </div>
           </div>
           <p className="mt-3 text-[14px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
@@ -238,25 +238,25 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
       </header>
 
       {flags.bestMonth && scored && (
-        <section className="border-b border-line px-4 py-3" aria-labelledby="h-month">
+        <section className="border-b border-line p-4" aria-labelledby="h-month">
           <h3 id="h-month" className="label">
             Best month to test
           </h3>
           {month ? (
             <BestMonthSummary result={month.result} targetName={target.name} source={month.source} />
           ) : (
-            <p className="mt-1 text-[13px] text-muted">No data. Monthly climate is published for named sites only.</p>
+            <p className="mt-1 text-[13px] text-muted">No data. Monthly climate exists for the sites in analogs.json only.</p>
           )}
         </section>
       )}
 
       <section className="border-b border-line" aria-labelledby="h-missing">
-        <div className="px-4 py-3">
+        <div className="p-4">
           <h3 id="h-missing" className="label">
-            Missing factors
+            Left out of the score
           </h3>
           {e.missing.length === 0 ? (
-            <p className="mt-1 text-[13px] text-text">None. Every factor has data for this cell and target.</p>
+            <p className="mt-1 text-[13px] text-text">Nothing. Every measurement has a value for this cell and this target.</p>
           ) : (
             <ul className="mt-1.5 space-y-1">
               {e.missing.map((key) => {
@@ -283,12 +283,12 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
       </section>
 
       {profile && (
-        <section className="border-b border-line px-4 py-3" aria-labelledby="h-profile">
+        <section className="border-b border-line p-4" aria-labelledby="h-profile">
           <h3 id="h-profile" className="label">
             Analog profile
           </h3>
           <p className="mt-1 text-[12px] text-muted">
-            What this cell is like the target in, one dimension at a time. No veto and no weights: it reports what is there. Percentile 50 is an average Earth cell, and ties count as half.
+            Similarity to the target on five dimensions, 0 to 1, unweighted and without the veto. Percentile 50 is the median Earth cell. A tie counts as half.
           </p>
           <ul className="mt-2 space-y-2.5">
             {profile.map((d) => (
@@ -328,12 +328,12 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
 
       {purposeScores && (
         <section className="border-b border-line" aria-labelledby="h-purposes">
-          <div className="px-4 pt-3">
+          <div className="px-4 pt-4">
             <h3 id="h-purposes" className="label">
               Match by purpose
             </h3>
             <p className="mt-1 text-[12px] text-muted">
-              The same formula with only the factors each use depends on. Pick one to rank the whole Earth by it.
+              The match score, 0 to 100, using only the factors each purpose depends on. Select one to rank every cell by it.
             </p>
           </div>
           <ul className="mt-2 border-t border-line">
@@ -352,7 +352,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
                     <span className={`block h-2.5 w-2.5 shrink-0 border ${on ? 'border-accent bg-accent' : 'border-muted'}`} aria-hidden="true" />
                     <span className={`flex-1 text-[13px] ${on ? 'text-accent' : 'text-text'}`}>{def.label}</span>
                     <ConfidenceBadge confidence={result.confidence} coverage={result.coverage} />
-                    <span className={`num w-9 text-right text-[15px] font-semibold ${result.score === null ? 'text-muted' : 'text-text'}`}>
+                    <span className={`num w-14 text-right font-semibold ${result.score === null ? 'text-[11px] text-muted' : 'text-[14px] text-text'}`}>
                       {formatScore(result.score)}
                     </span>
                   </button>
@@ -361,15 +361,15 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
             })}
           </ul>
           <p className="border-t border-line px-4 py-2 text-[11px] text-muted">
-            Full base rehearsal is the all-round score with the Base weights. The purposes were defined after validation results had been seen:
-            a second view, not proof.
+            Full base rehearsal is the all-round match with the Base weights. The purposes were defined after the validation results were
+            known, so they are a second view and not evidence.
           </p>
         </section>
       )}
 
       <section className="border-b border-line" aria-labelledby="h-radar">
-        <h3 id="h-radar" className="label px-4 pt-3">
-          Similarity by factor
+        <h3 id="h-radar" className="label px-4 pt-4">
+          Similarity by factor, 0 to 1
         </h3>
         <div className="px-4 pb-2">
           <Radar factors={e.breakdown} />
@@ -377,7 +377,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
       </section>
 
       <section className="border-b border-line" aria-labelledby="h-breakdown">
-        <h3 id="h-breakdown" className="label border-b border-line px-4 py-3">
+        <h3 id="h-breakdown" className="label border-b border-line p-4">
           Factor breakdown
         </h3>
         <ul>
@@ -387,11 +387,11 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </ul>
       </section>
 
-      <section className="border-b border-line px-4 py-3" aria-labelledby="h-cannot">
+      <section className="border-b border-line p-4" aria-labelledby="h-cannot">
         <h3 id="h-cannot" className="label">
           What Earth cannot copy
         </h3>
-        <p className="mt-1 text-[12px] text-muted">Never part of the score. No site on Earth reproduces these.</p>
+        <p className="mt-1 text-[12px] text-muted">Never part of the score.</p>
         <ul className="mt-2 space-y-2">
           {target.cannotCopy.map((s, i) => (
             <li key={i} className="border-l-2 border-line pl-3 text-[13px] text-text">
@@ -408,16 +408,16 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
                 {sun ? <ComputedBadge /> : <SourceBadge badge={tv?.badge ?? null} source={tv?.source} />}. The closest any Earth cell comes is{' '}
                 <span className="num">{formatValue(g.key, g.clampedValue, meta)}</span>{' '}
                 {sun ? <ComputedBadge /> : <SourceBadge badge={m?.badge ?? null} source={m?.source} />}. The score compares against that Earth limit, so
-                the real gap is larger than the score shows.
+                the real difference is larger than the score shows.
               </li>
             );
           })}
         </ul>
       </section>
 
-      <section className="px-4 py-3" aria-labelledby="h-sources">
+      <section className="p-4" aria-labelledby="h-sources">
         <h3 id="h-sources" className="label">
-          Sources for this dossier
+          Sources
         </h3>
         <ul className="mt-1.5 space-y-1">
           {[...sources.keys()].sort().map((s) => (
@@ -427,8 +427,8 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           ))}
         </ul>
         <p className="mt-2 text-[12px] text-muted">
-          Measured: computed from a dataset. Mission: measured by a spacecraft or rover. Literature: an estimate from a paper.
-          {hasSun ? ' Sunlight values are computed in the browser from latitude and axial tilt.' : ''}
+          Measured: from a gridded dataset. Mission: from a spacecraft or rover. Literature: from a paper.
+          {hasSun ? ' Computed: worked out in the browser, here Sun elevation from latitude and axial tilt.' : ''}
         </p>
       </section>
     </article>

@@ -10,7 +10,7 @@ export function metaByKey(earth: EarthFile): MetaByKey {
 
 const FALLBACK_LABELS: Record<string, string> = {
   tempMean: 'Mean temperature',
-  tempRange: 'Day-night swing',
+  tempRange: 'Day-night temperature range',
   precip: 'Precipitation',
   ndvi: 'Vegetation (NDVI)',
   slope: 'Mean slope',
@@ -19,6 +19,10 @@ const FALLBACK_LABELS: Record<string, string> = {
   sunElevation: 'Noon Sun elevation',
   sunSeason: 'Seasonal Sun swing',
 };
+
+/** Decimals per quantity, the same wherever the quantity is shown. */
+const DECIMALS: Record<string, number> = { tempMean: 1, tempRange: 1, precip: 0, ndvi: 2, slope: 1, roughness: 0 };
+const FALLBACK_UNITS: Record<string, string> = { tempMean: '°C', tempRange: '°C', precip: 'mm/year', slope: '°', roughness: 'm' };
 
 export const isSunKey = (key: string) => key === 'sunElevation' || key === 'sunSeason';
 
@@ -37,15 +41,16 @@ export function formatValue(key: string, value: number | null | undefined, meta:
     const cls = m?.classes?.find((c) => c.code === value);
     return cls ? cls.label : `class ${value}`;
   }
-  const digits = key === 'ndvi' ? 2 : Math.abs(value) >= 100 ? 0 : 1;
-  const raw = m?.unit ?? '';
+  const digits = DECIMALS[key] ?? 1;
+  const raw = m?.unit ?? FALLBACK_UNITS[key] ?? '';
   const unit = raw === 'degrees' || raw === 'deg' ? '°' : raw;
-  const gap = unit === '' || unit.startsWith('°') ? '' : ' ';
+  // A space before every unit except the degree sign of an angle: 11.1°, 25.4 °C, 147 m.
+  const gap = unit === '' || unit === '°' ? '' : ' ';
   return minus(`${value.toFixed(digits)}${gap}${unit}`);
 }
 
-export const formatScore = (s: number | null) => (s === null ? '\u2014' : s.toFixed(0));
-export const formatSim = (s: number | null) => (s === null ? '\u2014' : s.toFixed(2));
+export const formatScore = (s: number | null) => (s === null ? 'no data' : s.toFixed(0));
+export const formatSim = (s: number | null) => (s === null ? 'no data' : s.toFixed(2));
 
 /** One short line for the candidates list, built from the breakdown. */
 export function reasonLine(e: CellScore): string {

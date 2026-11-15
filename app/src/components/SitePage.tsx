@@ -3,7 +3,7 @@ import type { Analog, CellScore, EarthCell, EarthFile, KeyBreakdown, Target } fr
 import type { CellIndex } from '../lib/geo';
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatShare, formatSim, formatValue, isSunKey, type MetaByKey } from '../lib/format';
-import { KEY_INFO, PRESETS, PURPOSES, type TargetScorer } from '../lib/scoringAdapter';
+import { PRESETS, PURPOSES, type TargetScorer } from '../lib/scoringAdapter';
 import { bestMonth } from '../lib/bestMonth';
 import type { ExtractIndex, FeaturedSite, SiteValue, SitesFile } from '../data/sites';
 import type { SiteClimate } from '../data/sandbox';
@@ -32,7 +32,7 @@ interface Props {
   onBuild: ((cellIndex: number) => void) | null;
 }
 
-const KIND_LABEL = { candidate: 'SBATS candidate', known: 'Known analog', negative: 'Negative control' } as const;
+const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 const SCALE_LABEL = { site: 'Footprint', volcano: 'Whole volcano', grid: 'Grid cell' } as const;
 const COMPARED = ['slope', 'roughness', 'ndvi', 'lithology', 'precip', 'tempMean', 'tempRange', 'sunElevation'] as const;
 const OTHER: { key: string; label: string }[] = [
@@ -46,7 +46,17 @@ const OTHER: { key: string; label: string }[] = [
 ];
 
 /** Short names: the earth.json labels describe the 0.5° window, which is wrong for a footprint. */
-const name = (key: string) => KEY_INFO[key as keyof typeof KEY_INFO]?.label ?? key;
+const NAMES: Record<string, string> = {
+  slope: 'Mean slope',
+  roughness: 'Roughness',
+  ndvi: 'Vegetation (NDVI)',
+  lithology: 'Rock class',
+  precip: 'Precipitation',
+  tempMean: 'Mean temperature',
+  tempRange: 'Day-night temperature range',
+  sunElevation: 'Noon Sun elevation',
+};
+const name = (key: string) => NAMES[key] ?? key;
 
 const num = (v: SiteValue | undefined): number | null => (typeof v?.value === 'number' ? v.value : null);
 
@@ -143,8 +153,8 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
   return (
     <>
       <div className="border-b border-line">
-        <div className="flex flex-wrap items-stretch border-b border-line">
-          <label className="flex min-h-11 min-w-0 items-center gap-2 border-r border-line px-4 sm:px-6">
+        <div className="flex flex-col items-stretch border-b border-line sm:flex-row">
+          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 border-b border-line px-4 sm:flex-none sm:border-b-0 sm:border-r sm:px-6">
             <span className="label">Site</span>
             <select value={site.id} onChange={(e) => onSite(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-panel text-[13px] text-text">
               {sites.sites.map((s) => (
@@ -154,7 +164,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
               ))}
             </select>
           </label>
-          <label className="flex min-h-11 min-w-0 items-center gap-2 border-r border-line px-4 sm:px-6">
+          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-4 sm:flex-none sm:border-r sm:border-line sm:px-6">
             <span className="label">Target</span>
             <select value={target.id} onChange={(e) => onTarget(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-panel text-[13px] text-text">
               {targets.map((t) => (
@@ -177,8 +187,8 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
             </Tag>
           </div>
           <p className="mt-3 max-w-[72ch] text-[14px] text-text">
-            {site.footprintNote} The 0.5° grid cell around it is about 55 km on a side, so the two columns below describe very different
-            areas.
+            {site.footprintNote} The 0.5° grid cell around it is about 55 km on a side, about{' '}
+            <span className="num">{Math.round((55 * 55) / (site.footprintKm * site.footprintKm))}</span> times the area of the footprint.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {cellIndex >= 0 && (
@@ -195,11 +205,11 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
         </div>
       </div>
 
-      <Section id="s-score" title={`Match to ${target.name}, Base weights`} wide>
+      <Section id="s-score" title={`All-round match to ${target.name}, Base weights`} wide>
         <dl className="grid max-w-[720px] gap-px border border-line bg-line sm:grid-cols-2">
           {[
-            { label: `Footprint, ${site.footprintKm} km`, e: atSite, note: 'Same formula on the footprint values. Not used in the global ranking.' },
-            { label: 'Grid cell, 0.5°', e: atCell, note: 'The score the heatmap and the candidates list use.' },
+            { label: `Footprint, ${site.footprintKm} km`, e: atSite, note: 'The same formula on the footprint values. Not used in the ranking.' },
+            { label: 'Grid cell, 0.5°', e: atCell, note: 'The score in the heatmap and the candidates list.' },
           ].map(({ label, e, note }) => (
             <div key={label} className="bg-bg p-3">
               <dt className="label">{label}</dt>
@@ -224,7 +234,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
       <Section id="s-values" title="Footprint next to grid cell" wide>
         <DataTable
           caption={`Values at ${site.name}: footprint, grid cell and ${target.name}`}
-          headers={['Quantity', `Footprint, ${site.footprintKm} km`, 'Describes', 'Grid cell, 0.5°', target.name, 'Match, footprint', 'Match, grid cell']}
+          headers={['Quantity', `Footprint, ${site.footprintKm} km`, 'Describes', 'Grid cell, 0.5°', target.name, 'Similarity, footprint', 'Similarity, grid cell']}
           numeric={[1, 3, 4, 5, 6]}
           minWidth={860}
         >
@@ -261,7 +271,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
         <p className="max-w-[72ch] text-[12px] text-muted">
           Slope and roughness use the same method and 463 m posts at all three scales, so they are comparable. In a footprint this small that is
           only {site.values.slope?.pixels ?? 'a few'} pixels. Climate is the grid cell value in both columns: no climate dataset here resolves
-          the footprint. Match runs from 0 to 1.
+          the footprint. Similarity runs from 0 to 1.
         </p>
 
         <DataTable caption="Other footprint measurements" headers={['Other footprint measurements', 'Value', 'Describes', 'Note']} numeric={[1]} minWidth={640}>
@@ -309,7 +319,8 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
           </p>
         )}
         <p className="text-[12px] text-muted">
-          Footprint values against the target. Bands: {MATCH.toFixed(1)} and above matches, below {MISS.toFixed(1)} does not.
+          Footprint values against the target, with the similarity on the right. {MATCH.toFixed(1)} and above counts as a match, below{' '}
+          {MISS.toFixed(1)} as no match.
         </p>
         <h4 className="label mt-3">What Earth cannot copy</h4>
         <ul className="mt-1.5 space-y-1.5">
@@ -333,8 +344,8 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
           ))}
         </DataTable>
         <p className="max-w-[72ch] text-[12px] text-muted">
-          Scores out of 100 <ComputedBadge title="Computed in the browser by the scoring library." />. A purpose score uses only the factors that
-          purpose depends on. The purposes were defined after validation results had been seen, so read them as a second view.
+          Match scores, 0 to 100 <ComputedBadge title="Computed in the browser by the scoring library." />. A purpose score uses only the
+          factors that purpose depends on. The purposes were defined after the validation results were known, so they are a second view.
         </p>
         {analog && (
           <div className="max-w-[72ch] space-y-2">
@@ -357,7 +368,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
             </p>
             {analog.note && <p className="text-[12px] text-muted">{analog.note}</p>}
             {site.kind === 'candidate' && (!analog.usedFor || analog.usedFor.length === 0) && (
-              <p className="text-[12px] text-muted">No recorded field campaign for space analog work at this site. It is a proposal.</p>
+              <p className="text-[12px] text-muted">No field campaign for space analog work is recorded for this site. It is a proposal.</p>
             )}
           </div>
         )}
@@ -436,7 +447,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
         ))}
       </Section>
 
-      <Section id="s-sources" title="Sources for this page">
+      <Section id="s-sources" title="Sources">
         <ul className="space-y-1">
           {[...sources.entries()].sort().map(([s, badge]) => (
             <li key={s} className="text-[12px] text-muted">

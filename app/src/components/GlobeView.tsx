@@ -422,7 +422,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     <section className="relative h-full min-h-0 w-full overflow-hidden bg-bg" aria-label="Globe with match score heatmap">
       <div ref={holder} className="absolute inset-0" />
       <div className="pointer-events-none absolute left-3 top-3 hidden sm:block">
-        <p className="label">Drag to rotate. Click land to inspect a cell.</p>
+        <p className="label bg-bg px-1.5 py-1">Drag to rotate. Click land to open a cell.</p>
       </div>
       <div className="absolute bottom-3 left-3 border border-line bg-panel px-3 py-2">
         <p className="label mb-1.5">Match score, 0 to 100</p>
@@ -439,6 +439,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
           </div>
         </div>
         <p className="sr-only">Six steps from 0 to 100. Brighter amber is a closer match. Grey cells have no score.</p>
+        <p className="mt-1.5 text-[10px] leading-3 text-muted">Imagery: NASA Blue Marble, GIBS</p>
       </div>
       <div className="absolute bottom-3 right-3 flex flex-col border border-line bg-panel">
         <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="flex h-11 w-11 items-center justify-center text-text hover:text-accent">

@@ -1,6 +1,6 @@
 import { Suspense, forwardRef, lazy, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { flags } from '../flags';
-import { Eraser, FolderOpen, Link2, Minus, Plus, Rocket, Save, Trash2 } from 'lucide-react';
+import { Eraser, FolderOpen, Link2, Minus, Plus, Save, Trash2 } from 'lucide-react';
 import type { EarthCell, Target } from '../types';
 import {
   LayoutError,
@@ -89,7 +89,7 @@ const signed = (v: number | null) => (v === null ? 'no data' : `${v > 0 ? '+' : 
 
 const READY_CLASS: Record<Readiness, string> = { GREEN: 'border-ready text-ready', AMBER: 'border-accent text-accent', RED: 'border-fail text-fail' };
 const READY_TEXT: Record<Readiness, string> = {
-  GREEN: 'Every resource balances through the longest dark period.',
+  GREEN: 'Every resource balance is zero or positive through the longest dark period.',
   AMBER: 'At least one resource survives only on stored reserves.',
   RED: 'At least one resource runs out.',
 };
@@ -128,7 +128,7 @@ function Pane({
 }) {
   const at = useMemo(() => new Map(modules.map((m) => [m.x * 100 + m.y, m.type])), [modules]);
   const rows = [
-    { label: 'Sunlight when lit', value: site.irradianceWm2 === null ? 'no data' : `${n0(site.irradianceWm2)} W/m2${site.irradianceIsUpperBound ? ' (upper bound)' : ''}` },
+    { label: 'Sunlight when lit', value: site.irradianceWm2 === null ? 'no data' : `${n0(site.irradianceWm2)} W/m²${site.irradianceIsUpperBound ? ' (upper bound)' : ''}` },
     { label: 'Share of time lit', value: site.litFraction === null ? 'no data' : `${n0(site.litFraction * 100)}%` },
     { label: 'Longest dark period', value: site.longestDarkHours === null ? 'no data' : `${n1(site.longestDarkHours)} h` },
     { label: 'Mean temperature', value: site.tempMeanC === null ? 'no data' : `${n1(site.tempMeanC)} °C` },
@@ -147,7 +147,7 @@ function Pane({
         const x = i % COLS;
         const y = Math.floor(i / COLS);
         const type = at.get(x * 100 + y);
-        const cls = `flex items-center justify-center border-b border-r text-[9px] font-semibold leading-none num ${over ? 'border-bg/25' : 'aspect-square border-line'} ${
+        const cls = `flex items-center justify-center border-b border-r text-[10px] font-semibold leading-none num ${over ? 'border-bg/25' : 'aspect-square border-line'} ${
           type ? 'bg-text text-bg' : onCell ? (over ? 'hover:bg-bg/50' : 'hover:bg-panel') : ''
         }`;
         return onCell ? (
@@ -166,8 +166,8 @@ function Pane({
     <section className="flex min-w-0 flex-1 flex-col border-line bg-bg p-3 lg:border-r lg:last:border-r-0" aria-label={title}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="label">{body}</p>
-          <h3 className="mt-0.5 truncate text-[14px] font-semibold text-text">{title}</h3>
+          <p className="label truncate">{body}</p>
+          <h3 className="mt-0.5 min-h-10 text-[14px] font-semibold leading-5 text-text">{title}</h3>
         </div>
         {readiness !== undefined && <ReadinessBadge value={readiness} />}
       </div>
@@ -228,11 +228,11 @@ const STOCKS: { key: 'batteryKwh' | 'waterKg' | 'oxygenKg' | 'foodKg'; label: st
 
 function sustainText(s: Simulation['sustainability']): string {
   if (!s) return 'no data';
-  return s.reachedHorizon ? `${s.days}+ days` : `${s.days} days`;
+  return s.reachedHorizon ? `over ${s.days}` : `${s.days}`;
 }
 
 export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
-  { cell, siteName, siteCode, target, modules, solar, ground, initial, tab, onTab, onBack },
+  { cell, siteName, target, modules, solar, ground, initial, tab, onTab, onBack },
   ref,
 ) {
   const file = modules.file;
@@ -423,7 +423,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         </p>
         {modules.fixture && (
           <p className="mb-3 border border-accent p-2 text-[12px] text-accent" role="note">
-            Fixture module numbers, not real. data/modules.json is not published yet, so every result in this sandbox is a placeholder.
+            Fixture module numbers, not real. data/modules.json is not published with this build, so every result here is a placeholder.
           </p>
         )}
         {modules.problems.length > 0 && (
@@ -531,7 +531,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             onChange={(e) => change({ ...layout, resupplyEveryDays: e.target.checked ? 10 : null })}
             className="h-4 w-4 appearance-none border border-muted bg-bg checked:border-accent checked:bg-accent"
           />
-          Resupply by cargo
+          Cargo deliveries
         </label>
         {layout.resupplyEveryDays !== null && (
           <label className="flex items-center justify-between gap-3 text-[13px] text-text">
@@ -546,7 +546,10 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             />
           </label>
         )}
-        <p className="mt-1 text-[12px] text-muted">A delivery needs a landing pad on flat enough ground. No orbital mechanics.</p>
+        <p className="mt-1 text-[12px] text-muted">
+          A delivery needs a landing pad on a mean slope of{' '}
+          <span className="num">{file.modules.landingPad.params.maxSlopeDeg?.value ?? 'no data'}°</span> or less. Transit is not modelled.
+        </p>
       </section>
 
       <section className="p-4" aria-labelledby="h-save">
@@ -573,7 +576,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className="num mt-1 h-11 w-full border border-line bg-bg px-2 text-[11px] text-text" />
           </label>
         )}
-        <p className="mt-2 text-[12px] text-muted">The link holds the layout, the Earth cell and the target. Nothing is sent to a server.</p>
+        <p className="mt-2 text-[12px] text-muted">The link holds the layout, the Earth cell and the target. Saving stays in this browser.</p>
       </section>
     </aside>
   );
@@ -617,24 +620,24 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             </tr>
           </tbody>
         </table>
-        <p className="mt-1 text-[11px] text-muted">Launch cost is not shown: no cited cost per kg is in the data.</p>
+        <p className="mt-1 text-[11px] text-muted">No launch cost: the data has no cited cost per kg.</p>
       </section>
 
       <section className="border-b border-line p-4" aria-labelledby="h-gap">
         <h2 id="h-gap" className="label">
-          Rehearsal gap report
+          Gap report
         </h2>
         {!deployed ? (
           <>
             <p className="mt-2 text-[13px] text-text">
-              Deploy the same layout on {target.name} to see what the Earth rehearsal would and would not tell you.
+              Runs the same layout under the conditions at {target.name} and lists each difference from the Earth site.
             </p>
             <button type="button" onClick={() => setDeployed(true)} className="label mt-3 flex min-h-11 w-full items-center justify-center gap-2 bg-accent font-semibold !text-bg hover:bg-text">
-              <Rocket size={14} aria-hidden="true" /> Deploy on {target.name}
+              Deploy at {target.name}
             </button>
           </>
         ) : layout.modules.length === 0 ? (
-          <p className="mt-2 text-[13px] text-text">Nothing to compare yet. Place a module, or press Example.</p>
+          <p className="mt-2 text-[13px] text-muted">No modules placed. Place one, or press Example.</p>
         ) : (
           <>
             <ul className="mt-2 space-y-2">
@@ -644,7 +647,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
                 </li>
               ))}
             </ul>
-            <h3 className="label mt-4">What a rehearsal at this site cannot test at all</h3>
+            <h3 className="label mt-4">What a rehearsal on Earth cannot test</h3>
             <ul className="mt-2 space-y-2">
               {report.cannotTest.map((l, i) => (
                 <li key={i} className="border-l-2 border-line pl-3 text-[13px] text-text">
@@ -662,12 +665,12 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         </h2>
         <dl className="mt-2 grid grid-cols-2 gap-2">
           <div className="border border-line bg-bg p-2">
-            <dt className="label text-[10px]">Lasts without resupply, Earth</dt>
-            <dd className="num mt-1 text-[18px] font-semibold text-text">{sustainText(simEarth.sustainability)}</dd>
+            <dt className="label text-[10px]">Days without cargo, Earth</dt>
+            <dd className="num mt-1 text-[17px] font-semibold text-text">{sustainText(simEarth.sustainability)}</dd>
           </div>
           <div className="border border-line bg-bg p-2">
-            <dt className="label text-[10px]">Lasts without resupply, target</dt>
-            <dd className={`num mt-1 text-[18px] font-semibold ${deployed ? 'text-accent' : 'text-muted'}`}>{deployed ? sustainText(simTarget.sustainability) : 'not deployed'}</dd>
+            <dt className="label text-[10px]">Days without cargo, target</dt>
+            <dd className={`num mt-1 text-[17px] font-semibold ${deployed ? 'text-accent' : 'text-muted'}`}>{deployed ? sustainText(simTarget.sustainability) : 'not deployed'}</dd>
           </div>
         </dl>
         <label htmlFor="sim-day" className="mt-3 flex items-baseline justify-between text-[13px] text-text">
@@ -680,7 +683,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           ))}
         </div>
         <p className="mt-1 text-[11px] text-muted">
-          {cargoDays.length > 0 ? `Cargo on days ${cargoDays.join(', ')} (amber).` : 'No resupply.'}
+          {cargoDays.length > 0 ? `Cargo on days ${cargoDays.join(', ')} (amber).` : 'No cargo scheduled.'}
           {deployed && eventDays.length > 0 ? ` ${eventEntry.label} on days ${eventDays[0]} to ${eventDays[eventDays.length - 1]} at the target (grey).` : ''}
         </p>
         <ul className="mt-2 divide-y divide-line">
@@ -713,7 +716,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
 
       <section className="p-4" aria-labelledby="h-notes">
         <h2 id="h-notes" className="label">
-          Where the site conditions come from
+          Sources of the site conditions
         </h2>
         <ul className="mt-2 space-y-1.5">
           {[...new Set([...earthSite.notes, ...targetSite.notes, ...report.earth.notes, ...(deployed ? report.target.notes : [])])].map((n) => (
@@ -721,7 +724,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
               {n}
             </li>
           ))}
-          {solar && <li className="text-[12px] text-muted">Sunlight at the Earth site is the measured annual mean for the grid cell around it, not a measurement at the site: {solar.source}.</li>}
+          {solar && <li className="text-[12px] text-muted">Earth sunlight is the annual mean of the grid cell around the site, not a measurement at the site: {solar.source}.</li>}
         </ul>
       </section>
     </aside>
@@ -731,11 +734,12 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
     <div className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
       {left}
       <div className="scroll order-1 shrink-0 border-b border-line bg-bg lg:order-2 lg:min-h-0 lg:border-b-0">
-        <div className="flex items-stretch border-b border-line bg-panel">
+        <div className="flex flex-wrap items-stretch border-b border-line bg-panel">
           <button type="button" onClick={onBack} className="label min-h-11 border-r border-line px-4 !text-text hover:!text-accent">
             Back to dossier
           </button>
-          <p className="label flex min-w-0 flex-1 items-center truncate px-4">Same layout, two sites</p>
+          <p className="label hidden min-w-0 flex-1 items-center px-4 md:flex">One layout, two sites</p>
+          <span className="flex-1 md:hidden" />
           {flags.boots && (
             <div className="flex" role="group" aria-label="View">
               {(['plan', '3d'] as const).map((m) => (
@@ -781,7 +785,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <div className={mode === '3d' ? 'hidden' : 'flex flex-col lg:flex-row'}>
           <Pane
             title={siteName}
-            body={`Earth · ${siteCode} · ${formatCoords(cell.lat, cell.lon)}`}
+            body={`Earth · ${formatCoords(cell.lat, cell.lon)}`}
             site={earthSite}
             modules={layout.modules}
             readiness={layout.modules.length === 0 ? null : report.earth.readiness}
@@ -791,7 +795,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
               <>
                 <SourceBadge badge="Measured" source="Temperature and slope: data/earth.json" />
                 {solar ? <SourceBadge badge="Measured" source={solar.source} /> : <ComputedBadge title="Sunlight and night length are computed from latitude. The sunlight figure is an upper bound." />}
-                <span>{solar ? 'Grid-scale sunlight, measured.' : 'Sunlight is an upper bound from latitude.'}</span>
+                <span>{solar ? 'Sunlight: 0.5° grid cell.' : 'Sunlight: upper bound from latitude.'}</span>
               </>
             }
           />
@@ -806,13 +810,13 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
               <>
                 <SourceBadge badge={target.values.tempMean.badge} source={target.values.tempMean.source} />
                 <SourceBadge badge={file.sites[target.id]?.irradianceWm2.badge ?? null} source={file.sites[target.id]?.irradianceWm2.source} />
-                <span>{deployed ? 'Deployed.' : 'Not deployed yet.'}</span>
+                <span>{deployed ? 'Deployed.' : 'Not deployed.'}</span>
               </>
             }
           >
             {!deployed && (
               <button type="button" onClick={() => setDeployed(true)} className="label mt-3 flex min-h-11 items-center justify-center gap-2 border border-accent !text-accent hover:bg-panel">
-                <Rocket size={14} aria-hidden="true" /> Deploy the same layout here
+                Deploy the same layout here
               </button>
             )}
           </Pane>

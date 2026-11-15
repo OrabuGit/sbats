@@ -13,7 +13,7 @@ interface Props {
   onOpenSite: (lat: number, lon: number, targetId: string) => void;
 }
 
-const dash = '—';
+const dash = 'no data';
 const f3 = (v: number | null | undefined) => (v === null || v === undefined ? dash : v.toFixed(3));
 const f1 = (v: number | null | undefined) => (v === null || v === undefined ? dash : v.toFixed(1));
 const pct1 = (v: number | null | undefined) => (v === null || v === undefined ? dash : `${(v * 100).toFixed(1)}%`);
@@ -29,7 +29,7 @@ function Stat({ label, value, sub, note }: { label: string; value: string; sub: 
   return (
     <div className="border border-line bg-bg p-3">
       <p className="label">{label}</p>
-      <p className="num mt-1 text-[28px] font-semibold leading-none text-accent">{value}</p>
+      <p className="num mt-1 text-[32px] font-semibold leading-none text-accent">{value}</p>
       <p className="num mt-1.5 text-[11px] uppercase tracking-wider text-muted">{sub}</p>
       <p className="mt-2 text-[12px] text-text">{note}</p>
     </div>
@@ -67,7 +67,7 @@ function SiteButton({ site, targetId, onOpen }: { site: ReportSite; targetId: st
     <button
       type="button"
       onClick={() => onOpen(site.lat, site.lon, targetId)}
-      title="Open this site's dossier on the globe"
+      title="Open the dossier of this site's grid cell"
       className="-my-2 min-h-11 text-left text-text underline decoration-line underline-offset-2 hover:text-accent"
     >
       {site.name}
@@ -164,13 +164,13 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
             label="Mean percentile"
             value={f3(hold.overall.meanPercentile)}
             sub={`tuning set ${f3(tune.overall.meanPercentile)}`}
-            note="Mean share of Earth cells a known analog beats or ties. 0.5 is chance. The harder test."
+            note="Mean share of Earth cells a known analog scores above or ties. 0.5 is chance. The harder test."
           />
           <Stat
             label="Mean score, known"
             value={f1(hold.overall.meanScoreKnown)}
             sub={`negative controls ${f1(hold.overall.meanScoreNegative)}`}
-            note="Out of 100. Low in absolute terms: see the weak results below."
+            note="Out of 100. Low in absolute terms. See Weak results."
           />
         </div>
         <StatsTable
@@ -185,7 +185,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
 
       <Section id="v-weak" title="Weak results" wide>
         <Prose>
-          <p>These are reported as they came out. A validation that shows only its good numbers is not one.</p>
+          <p>Reported as computed.</p>
           <ul className="space-y-2">
             <li className="border-l-2 border-line pl-3">
               Moon targets do worse than Mars targets. On the hold-out set, <span className="num">{pct1(hold.moon.top10Share)}</span> of known Moon
@@ -224,10 +224,10 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
           <li className="border-l-2 border-line pl-3">
             The hold-out set is small: <span className="num">{hold.overall.knownSites}</span> known sites and{' '}
             <span className="num">{hold.overall.negativeSites}</span> controls. One site moving changes the top-10% share by several points. Read
-            the hold-out numbers as a check that the tuning-set numbers were not flattered, not as precise estimates.
+            the hold-out numbers as a check on the tuning-set numbers, not as precise estimates.
           </li>
           <li className="border-l-2 border-line pl-3">
-            A ROC AUC close to 1 is partly an easy test. The controls are rainforests and cities, which any sensible score separates from deserts.
+            A ROC AUC close to 1 partly reflects an easy test. The controls are rainforests and cities, which any reasonable score separates from deserts.
             The mean percentile compares known analogs with every land cell and is the more useful number.
           </li>
           <li className="border-l-2 border-line pl-3">
@@ -269,7 +269,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
             </p>
           </>
         ) : (
-          <p className="text-muted">The tuning record was not published with this build.</p>
+          <p className="text-muted">No data. The tuning record was not published with this build.</p>
         )}
       </Section>
 
@@ -285,7 +285,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
             </tr>
           ))}
         </DataTable>
-        <p className="text-[13px] text-muted">Best rank is the highest any control reaches over all seven targets.</p>
+        <p className="text-[13px] text-muted">Best rank is the highest any control reaches over the targets in the report.</p>
       </Section>
 
       <Section id="v-known" title="Known analogs, scored against their own targets" wide>
@@ -325,18 +325,18 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
         </ul>
       </Section>
 
-      <Section id="v-candidates" title="Indonesian candidate sites" wide>
+      <Section id="v-candidates" title="Proposed Indonesian sites" wide>
         <Prose>
           <p>
-            The candidates took no part in tuning or validation. They are specialist analogs (volcanic rock, acid crater lakes, lava tubes), not
-            all-round matches, because Indonesia is wet and vegetated. On the all-round score they rank low, and that is the honest result.
+            The proposed sites took no part in tuning or validation. They are specialist analogs (volcanic rock, acid crater lakes, lava
+            tubes), not all-round matches, because Indonesia is wet and vegetated. On the all-round match they rank low.
           </p>
         </Prose>
         {cand.length === 0 ? (
-          <p className="text-muted">No candidate scores were published with this build.</p>
+          <p className="text-muted">No data. Scores for the proposed sites were not published with this build.</p>
         ) : (
           <DataTable
-            caption="Indonesian candidate sites against their own targets"
+            caption="Proposed Indonesian sites against their own targets"
             headers={['Site', 'Target', 'Score', 'Rank among Earth cells', 'Confidence', 'Limiting factor', 'Why']}
             numeric={[2, 3]}
             minWidth={980}
@@ -370,13 +370,13 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
           <Prose>
             <p>{pv.caveat}</p>
             <p>
-              The question: do the sites that are actually used for a purpose rank higher on that purpose's ranking than on the all-round score,
-              and higher than the other known sites? Where the first column is not above the other two, the purpose ranking did not help.
+              The test: do the sites used for a purpose rank higher on that purpose's ranking than on the all-round match, and higher than the
+              other known sites? Where the first number is not above the other two, the purpose ranking did not help.
             </p>
           </Prose>
           <DataTable
-            caption="Purpose rankings against the all-round score"
-            headers={['Purpose', 'Sites used for it', 'On the purpose ranking', 'Same sites, all-round score', 'Other known sites, purpose ranking']}
+            caption="Purpose rankings against the all-round match"
+            headers={['Purpose', 'Sites used for it', 'On the purpose ranking', 'Same sites, all-round match', 'Other known sites, purpose ranking']}
             numeric={[1, 2, 3, 4]}
             minWidth={820}
           >

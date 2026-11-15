@@ -47,21 +47,50 @@ export default function App() {
     };
   }, []);
 
-  if (load.status === 'loading')
-    return (
-      <div className="flex h-full items-center p-6">
-        <p className="label" role="status">
-          Loading data
+  // While the data loads, and if it fails, the frame of the app is already in place: nothing jumps when it arrives.
+  if (load.status !== 'ready') {
+    const failed = load.status === 'error';
+    const cell = (text: string, extra = '') => (
+      <div className={`bg-panel p-4 ${extra}`}>
+        <p className="label" role={failed ? undefined : 'status'}>
+          {failed ? 'No data' : text}
         </p>
       </div>
     );
-  if (load.status === 'error')
     return (
-      <div className="p-6">
-        <p className="label mb-2">Data could not be loaded</p>
-        <p className="text-text">{load.message}</p>
+      <div className="flex min-h-full flex-col lg:h-full">
+        <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
+          <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
+            <span className="block h-3 w-3 bg-accent" aria-hidden="true" />
+            <h1 className="num text-[14px] font-semibold tracking-[0.08em] text-text">SBATS-26</h1>
+          </div>
+        </header>
+        <div className="flex min-h-0 flex-1 flex-col gap-px bg-line lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
+          {cell('Loading targets', 'order-2 lg:order-1')}
+          <div className="order-1 h-[46vh] min-h-[280px] bg-bg p-4 lg:order-2 lg:h-auto">
+            {failed ? (
+              <div role="alert" className="max-w-[60ch]">
+                <p className="label !text-fail">Data could not be loaded</p>
+                <p className="mt-2 text-[14px] text-text">{load.message}</p>
+                <p className="mt-2 text-[13px] text-muted">The app reads its data files from the data folder next to this page. Check the connection and try again.</p>
+                <button type="button" onClick={() => window.location.reload()} className="label mt-4 min-h-11 border border-line px-4 !text-text hover:!text-accent">
+                  Reload
+                </button>
+              </div>
+            ) : (
+              <p className="label" role="status">
+                Loading the Earth grid, 1.9 MB
+              </p>
+            )}
+          </div>
+          {cell('Loading sites', 'order-3')}
+        </div>
+        <footer className="num flex min-h-8 shrink-0 items-center border-t border-line bg-panel px-3 text-[11px] uppercase tracking-wider text-muted sm:px-4">
+          {failed ? 'Stopped' : 'Loading'}
+        </footer>
       </div>
     );
+  }
   return <Orbit data={load.data} />;
 }
 
@@ -119,7 +148,7 @@ function Orbit({ data }: { data: DataBundle }) {
         names.length > 0 ? `${names.join(', ')} ${names.length > 1 ? 'are' : 'is'} not in earth.json yet` : '',
         noTarget.length > 0 ? `${target.name} has no published value for ${noTarget.join(', ')}` : '',
       ].filter(Boolean);
-      return `All ${counts.scored.toLocaleString('en-US')} scored cells are low confidence${why.length > 0 ? `: ${why.join(', and ')}` : ''}. Tick "Include low confidence cells" to list them anyway.`;
+      return `All ${counts.scored.toLocaleString('en-US')} scored cells are low confidence${why.length > 0 ? `: ${why.join(', and ')}` : ''}. Tick "Include low confidence cells" to list them.`;
     }
     // Bare ground can come from NDVI or, where NDVI is null, from the barren share of land cover.
     const noBare = unbuilt.includes('ndvi') && earth.cells.every((c) => c.barrenFrac == null);
@@ -236,7 +265,7 @@ function Orbit({ data }: { data: DataBundle }) {
     });
     if (featured !== null) {
       at(11000, () => {
-        setDemo(featuredSite ? `Demo: ${featuredSite.analog.name.split(',')[0]}, an SBATS candidate` : 'Demo: a second site');
+        setDemo(featuredSite ? `Demo: ${featuredSite.analog.name.split(',')[0]}, a proposed site` : 'Demo: a second site');
         select(featured);
       });
     }
@@ -396,7 +425,7 @@ function Orbit({ data }: { data: DataBundle }) {
           }
         >
           {view === 'method' ? (
-            <MethodPage earth={earth} targets={targets} lithology={lithology} listLimit={LIST_LIMIT} />
+            <MethodPage earth={earth} targets={targets} lithology={lithology} listLimit={LIST_LIMIT} siteCount={analogs.length} />
           ) : view === 'validation' ? (
             <ValidationPage earth={earth} targets={targets} onOpenSite={openSite} />
           ) : sitesFile.status === 'loading' ? (

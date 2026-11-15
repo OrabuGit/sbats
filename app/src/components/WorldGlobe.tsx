@@ -105,8 +105,12 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
   useEffect(() => {
     const globe = globeRef.current;
     if (!globe) return;
-    if (active) globe.resumeAnimation();
-    else globe.pauseAnimation();
+    if (active) {
+      globe.resumeAnimation();
+      // A flight started while the globe was hidden never ran: put the camera where it belongs.
+      globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 0.7 : 1.6 }, 0);
+    } else globe.pauseAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
   const zoom = (factor: number) => {

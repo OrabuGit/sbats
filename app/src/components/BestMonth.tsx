@@ -3,7 +3,7 @@ import { MONTH_NAMES, MONTH_SHORT } from '../lib/bestMonth';
 import { ComputedBadge, SourceBadge } from './Badges';
 import { DataTable, Td } from './InfoParts';
 
-const KEY_WORD = { precip: 'precipitation', tempMean: 'mean temperature', tempRange: 'day-night range' } as const;
+const KEY_WORD = { precip: 'precipitation', tempMean: 'mean temperature', tempRange: 'day-night temperature range' } as const;
 const fx = (v: number | null, d: number) => (v === null ? 'no data' : v.toFixed(d).replace('-', '−'));
 
 /** Twelve bars of monthly precipitation with the best month marked. */
@@ -29,19 +29,21 @@ function Bars({ result }: { result: Result }) {
 export function BestMonthSummary({ result, targetName, source }: { result: Result; targetName: string; source: string }) {
   const best = result.months.find((m) => m.month === result.best);
   if (!best) return <p className="mt-1 text-[13px] text-muted">No data. The target has no published climate value to compare a month with.</p>;
+  const max = Math.max(1, ...result.months.map((m) => m.precip ?? 0));
   return (
     <>
       <p className="mt-1 flex flex-wrap items-baseline gap-x-2">
-        <span className="text-[15px] font-semibold text-accent">{MONTH_NAMES[best.month - 1]}</span>
+        <span className="text-[14px] font-semibold text-accent">{MONTH_NAMES[best.month - 1]}</span>
         <span className="num text-[12px] text-text">
-          {fx(best.precip, 0)} mm · {fx(best.tempMean, 1)} °C mean · {fx(best.tempRange, 1)} °C day-night range
+          {fx(best.precip, 0)} mm · mean {fx(best.tempMean, 1)} °C · day-night range {fx(best.tempRange, 1)} °C
         </span>
         <SourceBadge badge="Measured" source={source} />
       </p>
       <Bars result={result} />
       <p className="mt-2 text-[11px] text-muted">
-        Bars: precipitation, mm per month. The marked month is closest to {targetName} on {result.keys.map((k) => KEY_WORD[k]).join(', ')}, by the
-        same comparison as the match score. Values are for the 0.5° grid cell around the site, not measured at the site.
+        Bars: precipitation, 0 to {max.toFixed(0)} mm per month. The marked month is closest to {targetName} on{' '}
+        {result.keys.map((k) => KEY_WORD[k]).join(', ')}, by the comparison the match score uses. Values are for the 0.5° grid cell around the
+        site, not measured at the site.
       </p>
     </>
   );
@@ -49,7 +51,7 @@ export function BestMonthSummary({ result, targetName, source }: { result: Resul
 
 export function BestMonthTable({ result, source, period }: { result: Result; source: string; period: string }) {
   return (
-    <DataTable caption={`Monthly climate normals, ${period}`} headers={['Month', 'Precipitation, mm', 'Mean, °C', 'Day-night range, °C', 'Sunlight, W/m2', 'Climate match']} numeric={[1, 2, 3, 4, 5]} minWidth={620}>
+    <DataTable caption={`Monthly climate normals, ${period}`} headers={['Month', 'Precipitation, mm', 'Mean temperature, °C', 'Day-night range, °C', 'Sunlight, W/m²', 'Climate similarity']} numeric={[1, 2, 3, 4, 5]} minWidth={620}>
       {result.months.map((m) => {
         const on = m.month === result.best;
         return (
@@ -68,8 +70,8 @@ export function BestMonthTable({ result, source, period }: { result: Result; sou
       })}
       <tr>
         <td colSpan={6} className="pt-2 text-[11px] text-muted">
-          <SourceBadge badge="Measured" source={source} /> {source}. Climate match <ComputedBadge title="Computed in the browser from the monthly normals and the target values." /> runs
-          from 0 to 1.
+          <SourceBadge badge="Measured" source={source} /> {source}. Climate similarity{' '}
+          <ComputedBadge title="Computed in the browser from the monthly normals and the target values." /> runs from 0 to 1.
         </td>
       </tr>
     </DataTable>

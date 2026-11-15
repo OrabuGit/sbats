@@ -39,7 +39,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
                   type="button"
                   aria-current={active ? 'step' : undefined}
                   aria-disabled={locked || undefined}
-                  title={locked ? 'The base sandbox is not available yet' : undefined}
+                  title={locked ? 'Locked: data/modules.json is not published with this build' : undefined}
                   onClick={() => !locked && onStep(n)}
                   className={`flex min-w-11 items-center gap-2 px-3 sm:px-4 ${
                     active ? 'bg-bg text-accent' : locked ? 'text-muted' : 'text-text hover:bg-bg'
@@ -47,7 +47,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
                 >
                   <span className={`num text-[12px] font-semibold ${active ? 'text-accent' : 'text-muted'}`}>0{n}</span>
                   <span className="label hidden !text-inherit md:inline">{label}</span>
-                  {locked && <span className="label hidden text-[10px] lg:inline">soon</span>}
+                  {locked && <span className="label hidden text-[10px] lg:inline">no data</span>}
                 </button>
               </li>
             );

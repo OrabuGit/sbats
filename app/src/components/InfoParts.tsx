@@ -73,7 +73,7 @@ export function Rule({ name, value, children }: { name: string; value: string; c
     <div className="border border-line bg-bg p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4">
         <span className="label !text-text">{name}</span>
-        <span className="num text-[18px] font-semibold text-accent">{value}</span>
+        <span className="num text-[17px] font-semibold text-accent">{value}</span>
       </div>
       <p className="mt-1.5 text-[13px] text-text">{children}</p>
     </div>

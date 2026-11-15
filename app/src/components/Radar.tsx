@@ -28,7 +28,7 @@ export function Radar({ factors }: { factors: FactorBreakdown[] }) {
     .join(', ');
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="mx-auto block w-full max-w-[340px]" role="img" aria-label={`Similarity by factor: ${summary}`}>
+    <svg viewBox={`0 0 ${w} ${h}`} className="block w-full max-w-[340px]" role="img" aria-label={`Similarity by factor: ${summary}`}>
       {[0.25, 0.5, 0.75, 1].map((v) => (
         <polygon key={v} points={ring(v)} fill="none" stroke="#2A3138" strokeWidth="1" />
       ))}

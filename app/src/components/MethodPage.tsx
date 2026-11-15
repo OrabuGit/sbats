@@ -21,12 +21,34 @@ interface Props {
   targets: Target[];
   lithology: LithologySimilarity;
   listLimit: number;
+  /** Number of sites in analogs.json. */
+  siteCount: number;
 }
 
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 
+/** One name per concept. The app uses these words and no others for them. */
+const GLOSSARY: [string, string][] = [
+  ['Target', 'A place on the Moon or Mars where a base is planned or proposed.'],
+  ['Cell', 'One 0.5° square of the Earth grid, about 55 km on a side at the equator. Every score describes a whole cell.'],
+  ['Site', 'A named place on Earth from analogs.json: a known analog, a proposed site or a negative control.'],
+  ['Proposed site', 'A site put forward by the SBATS team. The six in the data are in Indonesia. Not used in validation.'],
+  ['Candidate', 'A cell in the ranked list for the selected target.'],
+  ['Factor', 'One of the six things compared: terrain, bare ground, dryness, temperature, sunlight, rock type.'],
+  ['Measurement', 'A data value behind a factor, for example mean slope. Terrain and Temperature have two each.'],
+  ['Similarity', 'How close one measurement or factor is to the target, from 0 to 1.'],
+  ['Match score', 'The similarities combined into one number from 0 to 100.'],
+  ['All-round match', 'The match score with all six factors, at the weights of the mission preset.'],
+  ['Purpose', 'One use of an analog site, such as rover mobility. A purpose score uses only the factors that use depends on.'],
+  ['Analog profile', 'The similarity of a cell on five dimensions, each with its percentile among all Earth cells. No weights and no veto.'],
+  ['Coverage', 'The share of the weight that had data, from 0 to 1. It sets the confidence: high, medium or low.'],
+  ['Footprint', 'The 2 to 5 km square around a featured site in which its fine-scale values are measured.'],
+  ['Readiness', 'GREEN, AMBER or RED: whether a base layout keeps every resource balance at or above zero.'],
+  ['Measured, Mission, Literature', 'Where a value comes from: a gridded dataset, a spacecraft or rover, or a paper. Computed marks a value worked out in the browser.'],
+];
+
 /** The Method page: how a score is made, with what data, and where it stops being reliable. Numbers come from the code and the data files. */
-export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
+export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: Props) {
   const spacing = separationKm(earth);
   const cellKm = earth.meta.resolutionDeg * 111;
   const meta = metaByKey(earth);
@@ -43,10 +65,21 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
 
   return (
     <>
+      <Section id="m-terms" title="Glossary">
+        <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-[max-content_1fr]">
+          {GLOSSARY.map(([term, meaning]) => (
+            <div key={term} className="sm:col-span-2 sm:grid sm:grid-cols-subgrid">
+              <dt className="font-medium text-text">{term}</dt>
+              <dd className="text-[13px] text-muted">{meaning}</dd>
+            </div>
+          ))}
+        </dl>
+      </Section>
+
       <Section id="m-factors" title="Six factors" wide>
         <p className="max-w-[72ch]">
-          Every Earth cell is compared with the target on six factors. The same factor is measured the same way on Earth, the Moon and Mars.
-          Mission presets change the weights only.
+          Every cell is compared with the target on six factors. A factor is measured the same way on Earth, the Moon and Mars. A mission
+          preset changes the weights only.
         </p>
         <DataTable caption="Factors and preset weights" headers={['Factor', 'What it measures', ...PRESETS.map((p) => p.label)]} numeric={PRESETS.map((_, i) => i + 2)} minWidth={640}>
           {FACTORS.map((f) => (
@@ -75,11 +108,11 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
         </p>
         <p>
           Sunlight is the annual mean noon Sun elevation, computed from latitude and the axial tilt of each body, with a tolerance of{' '}
-          <span className="num">{SUN_ELEVATION_SIGMA_DEG}°</span>. It is the one value computed in the browser, and it is tagged Computed.
+          <span className="num">{SUN_ELEVATION_SIGMA_DEG}°</span>. It is worked out in the browser, not read from a dataset, and is tagged Computed.
         </p>
         <p>The score is 100 times the weighted geometric mean of the similarities:</p>
         <Formula>score = 100 × exp( Σ weight × ln(similarity) / Σ weight )</Formula>
-        <p>One similarity near 0 pulls the whole score near 0. A forest or a wet region cannot be rescued by good terrain.</p>
+        <p>One similarity near 0 pulls the whole score near 0. This is the veto: good terrain does not offset forest cover or heavy rain.</p>
       </Section>
 
       <Section id="m-bare" title="Bare ground and permanent ice">
@@ -133,7 +166,7 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
         {fz && (
           <p className="max-w-[72ch] text-[13px] text-muted">
             The tolerances were set by rule before any validation run and frozen on <span className="num">{fz.frozenAt}</span>: mean temperature{' '}
-            <span className="num">{fz.after.tempMeanSigma} °C</span>, day-night swing <span className="num">{fz.after.tempRangeSigma} °C</span>,
+            <span className="num">{fz.after.tempMeanSigma} °C</span>, day-night temperature range <span className="num">{fz.after.tempRangeSigma} °C</span>,
             precipitation <span className="num">{fz.after.precipSigma} mm/year</span>, NDVI <span className="num">{fz.after.ndviSigma}</span>, slope
             and roughness <span className="num">{pct(fz.after.terrainFraction)}</span> of the target's own value, sunlight{' '}
             <span className="num">{fz.after.sunSigma}°</span>. The one tuning pass changed <span className="num">{fz.changes.length}</span> of them.
@@ -197,10 +230,10 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
 
       <Section id="m-purpose" title="Analog profile and match by purpose" wide>
         <p className="max-w-[72ch]">
-          The all-round score asks whether a whole base could be rehearsed at a place. Many real analog sites are used for one thing only: a
-          crater in farmland is a geology site, whatever its climate. The second view reports each cell on five dimensions, and ranks by what a
-          site would be used for. It adds no tuned number: every value is one of the factor similarities above, combined with the frozen Base
-          weights.
+          The all-round match asks whether a whole base could be rehearsed at a place. Many analog sites are used for one thing only: a
+          crater in farmland is a geology site, whatever its climate. The analog profile reports each cell on five dimensions, and match by
+          purpose ranks by one use. Neither adds a tuned number: every value is one of the factor similarities above, combined with the frozen
+          Base weights.
         </p>
         <DataTable caption="Purposes and the dimensions they use" headers={['Purpose', 'Depends on', 'Why']} minWidth={720}>
           {PURPOSES.map((p) => (
@@ -216,8 +249,8 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
         <p className="max-w-[72ch] text-[13px] text-muted">
           Climate joins Temperature and Dryness. A profile has no veto, no required factor and no minimum coverage. Geology has three possible
           values, so very many cells tie on it. Percentiles count a tie as half, so an average cell sits at 50 whatever the ties, and the dossier
-          shows the tied share. The purposes were written down after every known site had been
-          scored, so their rankings are development numbers. They show the view behaves sensibly. They do not prove it.
+          shows the tied share. The purposes were written down after every known site had been scored, so their rankings are development
+          numbers and not evidence.
         </p>
       </Section>
 
@@ -233,11 +266,32 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
             {earth.meta.resolutionDeg}° grid (about {Math.round(cellKm)} km per cell) the spacing in use is {Math.round(spacing)} km.
           </Rule>
           <Rule name="New tag" value={`${NEW_DISTANCE_KM} km`}>
-            A site is tagged New when it is farther than this from every known analog site in the literature set. The known sites validate the
-            score. The new ones are what this tool is for.
+            A cell is tagged New when it is farther than this from every known analog. Known analogs are the validation set. New cells are the
+            result.
           </Rule>
         </div>
         <p className="text-[13px] text-muted">Distances are great-circle distances between cell centres.</p>
+      </Section>
+
+      <Section id="m-sites" title="Featured sites, best month and terrain">
+        <div className="grid gap-2 sm:grid-cols-2">
+          <Rule name="Footprint" value="2 to 5 km">
+            A featured site is measured again inside a small square: slope and roughness on the same 463 m posts as the grid, NDVI from
+            Sentinel-2 at 10 m. The site page shows these next to the cell values. The ranking uses the cell values only.
+          </Rule>
+          <Rule name="Best month" value="12 months">
+            The month whose normals are closest to the target on precipitation (as a yearly rate), mean temperature and day-night temperature
+            range, by the formula above with the Base weights for Dryness and Temperature. Grid-cell values, not measured at the site.
+          </Rule>
+          <Rule name="Ground extracts" value="20 km">
+            Every extract covers the same 20 km square, north up. Pixel size is 30 m on Earth, 80 m on the Moon and 463 m on Mars, and nothing
+            is upsampled. Relief is shaded with one light on all three.
+          </Rule>
+          <Rule name="3D terrain" value="1 : 1">
+            No vertical exaggeration. Heights are measured from each place's own lowest point, because the datums differ. Modules are drawn
+            about 50 times larger than life.
+          </Rule>
+        </div>
       </Section>
 
       <Section id="m-limits" title="Limits">
@@ -258,10 +312,15 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
             temperature match is always better than the real gap. The dossier shows the real value next to the one used.
           </li>
           <li className="border-l-2 border-line pl-3">
-            Values are annual means. Seasons, single storms and the best month for a field test are not in the data yet.
+            Scores use annual means. Monthly normals exist for the {siteCount} sites in analogs.json only. They feed "Best month to test" and
+            never a score.
           </li>
           <li className="border-l-2 border-line pl-3">
             Absolute scores are low and known Moon analogs rank mid-table. The numbers are on the Validation page.
+          </li>
+          <li className="border-l-2 border-line pl-3">
+            The base simulation is a daily balance of power, water, oxygen and food. It has no thermal model, no dust on panels outside a
+            storm and no transit. A module with an unsourced number is tagged Illustrative and its effect is left out.
           </li>
         </ul>
       </Section>
@@ -269,7 +328,8 @@ export function MethodPage({ earth, targets, lithology, listLimit }: Props) {
       <Section id="m-sources" title="Data sources" wide>
         <p className="max-w-[72ch]">Every row of SOURCES.md, as it stands in this build.</p>
         {sources.status === 'loading' && <p className="label">Loading sources</p>}
-        {sources.status === 'ready' && sources.value === null && <p className="text-muted">The sources table was not published with this build.</p>}
+        {sources.status === 'error' && <p className="text-muted">The sources table could not be loaded: {sources.message}</p>}
+        {sources.status === 'ready' && sources.value === null && <p className="text-muted">No data. The sources table was not published with this build.</p>}
         {sources.status === 'ready' &&
           sources.value?.map((t, i) => (
             <details key={t.title} open={i === 0} className="border border-line">

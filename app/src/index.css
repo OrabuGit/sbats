@@ -46,8 +46,32 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* No one-word last lines in headings; fewer in paragraphs. */
+h1,
+h2,
+h3,
+h4,
+legend {
+  text-wrap: balance;
+}
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
 button {
   cursor: pointer;
+}
+select {
+  cursor: pointer;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-sans);
+}
+/* One hover treatment for plain text links. */
+a:hover {
+  color: var(--color-accent);
 }
 button:disabled,
 button[aria-disabled='true'] {

@@ -41,7 +41,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
   return (
     <div className="flex flex-col">
       <section className="border-b border-line p-4" aria-labelledby="h-mode">
-        <h2 id="h-mode" className="label mb-3">
+        <h2 id="h-mode" className="label mb-2">
           Ranking
         </h2>
         <div className="grid grid-cols-2 gap-px border border-line bg-line" role="group" aria-label="Ranking">
@@ -59,14 +59,14 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
         </div>
         <p className="mt-2 text-[12px] text-muted">
           {mode === 'all'
-            ? 'Could a whole base be rehearsed here? Every factor counts, and one bad factor pulls the score down.'
-            : 'What is this place like the target in, and what is that good for? Only the factors the purpose depends on count.'}
+            ? 'All six factors, weighted. One factor near 0 pulls the score near 0.'
+            : 'Only the factors the selected purpose depends on, at their Base weights.'}
         </p>
       </section>
 
       <section className="border-b border-line p-4" aria-labelledby="h-target">
-        <h2 id="h-target" className="label mb-3">
-          01 Target site
+        <h2 id="h-target" className="label mb-2">
+          01 Target
         </h2>
         {(['moon', 'mars'] as const).map((body) => {
           const group = targets.filter((t) => t.body === body);
@@ -119,8 +119,8 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
           {unpublished.length > 0 && (
             <p className="mt-3 border-t border-line pt-3 text-[12px] text-text" role="note">
               <span className="label mr-1 text-[10px]">No published value:</span>
-              {unpublished.map((k) => keyLabel(k, meta).toLowerCase()).join(', ')}. {unpublished.length > 1 ? 'These are' : 'This is'} left out of
-              every score for this target, which lowers confidence.
+              {unpublished.map((k) => keyLabel(k, meta).toLowerCase()).join(', ')}. Left out of every score for this target, which lowers
+              confidence.
             </p>
           )}
         </div>
@@ -129,7 +129,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
       {mode === 'purpose' && (
         <section className="p-4" aria-labelledby="h-purpose" id="purpose-section">
           <fieldset>
-            <legend id="h-purpose" className="label mb-3">
+            <legend id="h-purpose" className="label mb-2">
               Purpose
             </legend>
             <div className="border border-line">
@@ -163,8 +163,8 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
             ))}
           </dl>
           <p className="mt-3 text-[12px] text-muted">
-            A purpose score is the same formula with only these factors, at their frozen Base weights. Nothing is tuned for it. The purposes were
-            defined after the validation results had been seen, so read these rankings as a second view, not as proof.
+            A purpose score is the match score with only these factors, at their frozen Base weights. Nothing is tuned for it. The purposes
+            were defined after the validation results were known, so these rankings are a second view and not evidence.
           </p>
         </section>
       )}
@@ -172,7 +172,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
       {mode === 'all' && (
       <>
       <section className="border-b border-line p-4" aria-labelledby="h-mission">
-        <h2 id="h-mission" className="label mb-3">
+        <h2 id="h-mission" className="label mb-2">
           Mission preset
         </h2>
         <div className="grid grid-cols-2 gap-px border border-line bg-line">
@@ -192,7 +192,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
           })}
         </div>
         <p className="mt-2 text-[12px] text-muted">
-          {activePreset?.description ? `${activePreset.description} ` : ''}Presets change the weights only. The formula stays the same.
+          {activePreset?.description ? `${activePreset.description} ` : ''}A preset changes the weights only.
         </p>
       </section>
 
@@ -236,7 +236,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
           );
         })}
         <p className="text-[12px] text-muted">
-          Shown as shares of 1. Gravity, vacuum and radiation are never part of the score.
+          Shares of 1. Gravity, vacuum and radiation are never scored.
         </p>
       </section>
       </>
