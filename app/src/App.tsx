@@ -11,7 +11,10 @@ import { CandidateList, type ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
 import { MethodPage } from './components/MethodPage';
 import { ValidationPage } from './components/ValidationPage';
-import { InfoShell } from './components/InfoParts';
+import { Absent, InfoShell, Loading } from './components/InfoParts';
+import { SitePage } from './components/SitePage';
+import { loadExtracts, loadSites } from './data/sites';
+import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
@@ -77,11 +80,14 @@ function Orbit({ data }: { data: DataBundle }) {
   const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [step, setStep] = useState<Step>(1);
-  const [view, setView] = useState<'orbit' | 'method' | 'validation' | 'recon'>('orbit');
+  const [view, setView] = useState<'orbit' | 'method' | 'validation' | 'site' | 'recon'>('orbit');
+  const [siteId, setSiteId] = useState<string | null>(null);
   const [sharedLayout, setSharedLayout] = useState<SavedLayout | null>(null);
   const sandboxRef = useRef<SandboxHandle>(null);
   const modules = useAsync(loadModules, 'modules');
   const climate = useAsync(loadSiteClimate, 'climate');
+  const sitesFile = useAsync(loadSites, 'sites');
+  const extracts = useAsync(loadExtracts, 'extracts');
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
   const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
@@ -300,6 +306,28 @@ function Orbit({ data }: { data: DataBundle }) {
     [explained, results],
   );
 
+  const climateFile = climate.status === 'ready' ? climate.value : null;
+  const featuredSites = flags.sitePages && sitesFile.status === 'ready' ? sitesFile.value : null;
+  const extractIndex = extracts.status === 'ready' ? extracts.value : null;
+  const month = useMemo(() => {
+    const months = named ? climateFile?.sites.find((x) => x.id === named.id)?.months : undefined;
+    if (!months || !explained || !climateFile) return null;
+    return { result: bestMonth(months, explained), source: `NASA POWER monthly climatology ${climateFile.meta.period}` };
+  }, [named, climateFile, explained]);
+  const namedHasPage = !!named && !!featuredSites?.sites.some((x) => x.id === named.id);
+  const infoOpen = view === 'method' || view === 'validation' || view === 'site';
+
+  // A site page opens against the target the site is proposed for, when it has one.
+  const openSitePage = useCallback(
+    (id: string) => {
+      const a = analogs.find((x) => x.id === id);
+      if (a && a.analogFor.length > 0 && !a.analogFor.includes(targetId) && targets.some((t) => t.id === a.analogFor[0])) setTargetId(a.analogFor[0]);
+      setSiteId(id);
+      setView('site');
+    },
+    [analogs, targetId, targets],
+  );
+
   const status = demo ?? (weights !== liveWeights ? 'Scoring' : selected !== null ? 'Dossier open' : 'Ready');
 
   return (
@@ -309,8 +337,8 @@ function Orbit({ data }: { data: DataBundle }) {
         onStep={onStep}
         demoRunning={demo !== null}
         onDemo={runDemo}
-        methodOpen={view === 'method' || view === 'validation'}
-        onMethod={() => setView((v) => (v === 'method' || v === 'validation' ? 'orbit' : 'method'))}
+        methodOpen={infoOpen}
+        onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
         reconLocked={!reconReady}
       />
 
@@ -320,21 +348,54 @@ function Orbit({ data }: { data: DataBundle }) {
         </div>
       )}
 
-      {flags.methodPage && (view === 'method' || view === 'validation') && (
+      {flags.methodPage && infoOpen && (
         <InfoShell
           view={view}
-          onView={setView}
+          onView={(v) => (v === 'site' ? openSitePage(siteId ?? featuredSites?.sites[0]?.id ?? '') : setView(v))}
           onBack={() => setView('orbit')}
           title={
             view === 'method'
               ? 'How a match score is made, with what data, and where it stops being reliable'
-              : 'Do known analog sites score high and wrong places score low? The numbers, including the weak ones'
+              : view === 'validation'
+                ? 'Do known analog sites score high and wrong places score low? The numbers, including the weak ones'
+                : (featuredSites?.sites.find((x) => x.id === siteId) ?? featuredSites?.sites[0])?.name ?? 'Featured sites'
           }
         >
           {view === 'method' ? (
             <MethodPage earth={earth} targets={targets} lithology={lithology} listLimit={LIST_LIMIT} />
-          ) : (
+          ) : view === 'validation' ? (
             <ValidationPage earth={earth} targets={targets} onOpenSite={openSite} />
+          ) : sitesFile.status === 'loading' ? (
+            <Loading what="featured sites" />
+          ) : featuredSites && featuredSites.sites.length > 0 ? (
+            <SitePage
+              sites={featuredSites}
+              siteId={siteId ?? featuredSites.sites[0].id}
+              onSite={openSitePage}
+              earth={earth}
+              index={index}
+              meta={meta}
+              targets={targets}
+              target={target}
+              onTarget={setTargetId}
+              scorer={ts}
+              analogs={analogs}
+              climate={climateFile}
+              extracts={extractIndex}
+              onDossier={(i) => select(i)}
+              onBuild={
+                reconReady
+                  ? (i) => {
+                      setSelected(i);
+                      setStep(3);
+                      setTab('results');
+                      setView('recon');
+                    }
+                  : null
+              }
+            />
+          ) : (
+            <Absent what={sitesFile.status === 'error' ? `data/sites.json could not be read: ${sitesFile.message}` : 'data/sites.json is not published with this build.'} />
           )}
         </InfoShell>
       )}
@@ -347,7 +408,12 @@ function Orbit({ data }: { data: DataBundle }) {
           siteCode={siteCode(selectedCell)}
           target={target}
           modules={modules.value}
-          solar={annualSolar(climate.status === 'ready' ? climate.value : null, named?.id ?? null)}
+          solar={annualSolar(climateFile, named?.id ?? null)}
+          ground={{
+            earth: extractIndex?.items.find((x) => x.id === named?.id) ?? null,
+            target: extractIndex?.items.find((x) => x.id === target.id) ?? null,
+            windowKm: extractIndex?.meta.windowKm ?? 20,
+          }}
           initial={sharedLayout}
           tab={tab}
           onTab={setTab}
@@ -461,6 +527,10 @@ function Orbit({ data }: { data: DataBundle }) {
               notes={ts.notes}
               onBack={() => setSelected(null)}
               onBuild={reconReady ? openRecon : null}
+              month={month}
+              onSitePage={
+namedHasPage && named ? () => openSitePage(named.id) : null
+              }
             />
           ) : (
             <CandidateList
@@ -490,7 +560,7 @@ function Orbit({ data }: { data: DataBundle }) {
         resolutionDeg={earth.meta.resolutionDeg}
         fixtureFiles={[...data.fixtureFiles.map((f) => `${f}.json`), ...(view === 'recon' && modules.status === 'ready' && modules.value.fixture ? ['modules.json'] : [])]}
         view={view}
-        status={view === 'orbit' ? status : view === 'recon' ? (demo ?? 'Sandbox') : 'Reading'}
+        status={view === 'orbit' ? status : view === 'recon' ? (demo ?? 'Sandbox') : view === 'site' ? 'Site page' : 'Reading'}
       />
     </div>
   );

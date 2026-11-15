@@ -68,7 +68,20 @@ function listData(): string[] {
   // are identical), so a production build ships only the compact file.
   const data = production && all.includes('earth.bin') ? all.filter((f) => f !== 'earth.json') : all;
   const extra = Object.keys(EXTRA).filter((k) => EXTRA[k]() !== null);
-  return [...data, ...extra].sort();
+  return [...data, ...extra, ...listExtracts()].sort();
+}
+
+/** Same-scale elevation and imagery extracts (data/extracts), listed as paths relative to /data. */
+const EXTRACT_DIR = path.join(DATA_DIR, 'extracts');
+const EXTRACT_TYPES: Record<string, string> = { '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg', '.f32': 'application/octet-stream' };
+function listExtracts(): string[] {
+  if (!fs.existsSync(path.join(EXTRACT_DIR, 'index.json'))) return [];
+  const out = ['extracts/index.json'];
+  for (const d of fs.readdirSync(EXTRACT_DIR, { withFileTypes: true })) {
+    if (!d.isDirectory()) continue;
+    for (const f of fs.readdirSync(path.join(EXTRACT_DIR, d.name))) if (path.extname(f) in EXTRACT_TYPES) out.push(`extracts/${d.name}/${f}`);
+  }
+  return out;
 }
 
 function sbatsData(): Plugin {
@@ -80,6 +93,19 @@ function sbatsData(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = (req.url ?? '').split('?')[0];
+        const ex = url.match(/\/data\/(extracts\/(?:[a-z0-9-]+\/)?[A-Za-z0-9_.-]+\.(?:json|jpg|f32))$/);
+        if (ex) {
+          const file = path.join(DATA_DIR, ex[1]);
+          if (!fs.existsSync(file)) {
+            res.statusCode = 404;
+            res.end('not found');
+            return;
+          }
+          res.setHeader('Content-Type', EXTRACT_TYPES[path.extname(file)]);
+          res.setHeader('Cache-Control', 'no-cache');
+          fs.createReadStream(file).pipe(res);
+          return;
+        }
         const m = url.match(/\/data\/([A-Za-z0-9_.-]+\.(?:json|bin))$/);
         if (!m) return next();
         const json = (body: string) => {
@@ -109,7 +135,10 @@ function sbatsData(): Plugin {
       fs.mkdirSync(out, { recursive: true });
       for (const f of files) {
         if (f in EXTRA) fs.writeFileSync(path.join(out, f), EXTRA[f]() ?? 'null');
-        else fs.copyFileSync(path.join(DATA_DIR, f), path.join(out, f));
+        else if (f.startsWith('extracts/')) {
+          fs.mkdirSync(path.dirname(path.join(out, f)), { recursive: true });
+          fs.copyFileSync(path.join(DATA_DIR, f), path.join(out, f));
+        } else fs.copyFileSync(path.join(DATA_DIR, f), path.join(out, f));
       }
       fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify({ files }));
     },

@@ -6,6 +6,9 @@ import { NEW_DISTANCE_KM } from '../lib/rank';
 import { PURPOSES, type DimensionProfile, type PurposeDef, type PurposeId } from '../lib/scoringAdapter';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { Radar } from './Radar';
+import { BestMonthSummary } from './BestMonth';
+import type { BestMonth } from '../lib/bestMonth';
+import { flags } from '../flags';
 
 interface Props {
   cell: EarthCell;
@@ -31,6 +34,10 @@ interface Props {
   onBack: () => void;
   /** Opens the base sandbox on this cell. null while the sandbox is not available. */
   onBuild: (() => void) | null;
+  /** Best month to test, for a named site with monthly climate. null when there is none for this cell. */
+  month: { result: BestMonth; source: string } | null;
+  /** Opens the featured site page. null when the cell has none. */
+  onSitePage: (() => void) | null;
 }
 
 const KIND_LABEL = { candidate: 'SBATS candidate', known: 'Known analog', negative: 'Negative control' } as const;
@@ -149,7 +156,7 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
   );
 }
 
-export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack, onBuild }: Props) {
+export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack, onBuild, month, onSitePage }: Props) {
   const scored = e.score !== null;
   const sources = new Map<string, string>();
   for (const f of e.breakdown)
@@ -208,11 +215,19 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
             </div>
           </div>
           <p className="mt-3 text-[14px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
-          {/* "Best month to test" goes here when flags.bestMonth is on. It needs monthly climate data, which earth.json does not have yet. */}
-          {onBuild && (
-            <button type="button" onClick={onBuild} className="label mt-3 flex min-h-11 w-full items-center justify-center gap-2 border border-accent !text-accent hover:bg-bg">
-              Build a base here
-            </button>
+          {(onSitePage || onBuild) && (
+            <div className="mt-3 grid gap-2">
+              {onSitePage && (
+                <button type="button" onClick={onSitePage} className="label min-h-11 w-full border border-line !text-text hover:!text-accent">
+                  Open the site page
+                </button>
+              )}
+              {onBuild && (
+                <button type="button" onClick={onBuild} className="label min-h-11 w-full border border-accent !text-accent hover:bg-bg">
+                  Build a base here
+                </button>
+              )}
+            </div>
           )}
           {notes.map((n) => (
             <p key={n} className="mt-2 text-[12px] text-accent" role="note">
@@ -221,6 +236,19 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           ))}
         </div>
       </header>
+
+      {flags.bestMonth && scored && (
+        <section className="border-b border-line px-4 py-3" aria-labelledby="h-month">
+          <h3 id="h-month" className="label">
+            Best month to test
+          </h3>
+          {month ? (
+            <BestMonthSummary result={month.result} targetName={target.name} source={month.source} />
+          ) : (
+            <p className="mt-1 text-[13px] text-muted">No data. Monthly climate is published for named sites only.</p>
+          )}
+        </section>
+      )}
 
       <section className="border-b border-line" aria-labelledby="h-missing">
         <div className="px-4 py-3">

@@ -27,6 +27,8 @@ import {
 } from '../lib/simAdapter';
 import { formatCoords } from '../lib/geo';
 import { ComputedBadge, SourceBadge, Tag } from './Badges';
+import { Ground, shownLayer, type GroundLayer } from './Ground';
+import type { ExtractItem } from '../data/sites';
 
 // The part of the 36 x 36 layout grid that is drawn. Modules outside it (from a share link made
 // elsewhere) still count and are reported in a note.
@@ -39,16 +41,13 @@ const LETTER: Record<ModuleType, string> = { habitat: 'H', solar: 'S', battery: 
 
 /** A small starting base, so there is something to deploy. A layout only: every number still comes from modules.json. */
 export const EXAMPLE_LAYOUT: SavedLayout = {
-  resupplyEveryDays: null,
+  resupplyEveryDays: 10,
   modules: [
-    { type: 'habitat', x: 10, y: 5 },
-    { type: 'habitat', x: 12, y: 5 },
-    { type: 'greenhouse', x: 10, y: 7 },
+    { type: 'habitat', x: 11, y: 5 },
     { type: 'iceMiner', x: 14, y: 7 },
     { type: 'landingPad', x: 19, y: 9 },
-    { type: 'battery', x: 8, y: 5 },
-    { type: 'battery', x: 8, y: 6 },
-    ...[4, 5, 6, 7, 8, 9].map((x) => ({ type: 'solar' as const, x, y: 2 })),
+    ...[4, 5, 6, 7, 8, 9, 10, 11].map((x) => ({ type: 'solar' as const, x, y: 2 })),
+    ...[6, 7, 8, 9].flatMap((x) => [4, 5, 6].map((y) => ({ type: 'battery' as const, x, y }))),
   ],
 };
 
@@ -66,6 +65,8 @@ interface Props {
   modules: { file: ModulesFile; fixture: boolean; problems: string[] };
   /** Measured annual mean sunlight at the surface for a named site, or null to use the latitude upper bound. */
   solar: { wm2: number; source: string } | null;
+  /** Same-scale ground extracts for the two panes. An item is null when none was built for that place. */
+  ground: { earth: ExtractItem | null; target: ExtractItem | null; windowKm: number };
   /** A layout from a share link, applied once. */
   initial: SavedLayout | null;
   /** Phone only: which of the two side panels is shown under the split view. */
@@ -105,6 +106,7 @@ function Pane({
   badge,
   onCell,
   children,
+  ground,
 }: {
   title: string;
   site: SiteConditions;
@@ -114,6 +116,7 @@ function Pane({
   badge: React.ReactNode;
   onCell?: (x: number, y: number) => void;
   children?: React.ReactNode;
+  ground: { item: ExtractItem | null; windowKm: number; layer: GroundLayer };
 }) {
   const at = useMemo(() => new Map(modules.map((m) => [m.x * 100 + m.y, m.type])), [modules]);
   const rows = [
@@ -124,6 +127,33 @@ function Pane({
     { label: 'Mean slope', value: site.slopeDeg === null ? 'no data' : `${n1(site.slopeDeg)}°` },
     { label: 'Ice an ice miner can reach', value: site.iceAvailability === null ? 'no data' : `${n0(site.iceAvailability * 100)}%` },
   ];
+  const over = ground.item !== null;
+  const grid = (
+    <div
+      className={over ? 'absolute inset-0 grid' : 'grid border-l border-t border-line'}
+      style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`, gridTemplateRows: over ? `repeat(${ROWS}, minmax(0, 1fr))` : undefined }}
+      role={onCell ? 'group' : 'img'}
+      aria-label={onCell ? 'Base layout grid. Click a square to place the selected module or to remove one.' : `The same layout at ${title}`}
+    >
+      {Array.from({ length: ROWS * COLS }, (_, i) => {
+        const x = i % COLS;
+        const y = Math.floor(i / COLS);
+        const type = at.get(x * 100 + y);
+        const cls = `flex items-center justify-center border-b border-r text-[9px] font-semibold leading-none num ${over ? 'border-bg/25' : 'aspect-square border-line'} ${
+          type ? 'bg-text text-bg' : onCell ? (over ? 'hover:bg-bg/50' : 'hover:bg-panel') : ''
+        }`;
+        return onCell ? (
+          <button key={i} type="button" tabIndex={-1} className={cls} onClick={() => onCell(x, y)} aria-label={`Square ${x + 1}, ${y + 1}${type ? `: ${type}` : ''}`}>
+            {type ? LETTER[type] : ''}
+          </button>
+        ) : (
+          <span key={i} className={cls}>
+            {type ? LETTER[type] : ''}
+          </span>
+        );
+      })}
+    </div>
+  );
   return (
     <section className="flex min-w-0 flex-1 flex-col border-line bg-bg p-3 lg:border-r lg:last:border-r-0" aria-label={title}>
       <div className="flex items-start justify-between gap-3">
@@ -133,29 +163,17 @@ function Pane({
         </div>
         {readiness !== undefined && <ReadinessBadge value={readiness} />}
       </div>
-      <div
-        className="mt-3 grid border-l border-t border-line"
-        style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
-        role={onCell ? 'group' : 'img'}
-        aria-label={onCell ? 'Base layout grid. Click a square to place the selected module or to remove one.' : `The same layout at ${title}`}
-      >
-        {Array.from({ length: ROWS * COLS }, (_, i) => {
-          const x = i % COLS;
-          const y = Math.floor(i / COLS);
-          const type = at.get(x * 100 + y);
-          const cls = `flex aspect-square items-center justify-center border-b border-r border-line text-[9px] font-semibold leading-none num ${
-            type ? 'bg-text text-bg' : onCell ? 'hover:bg-panel' : ''
-          }`;
-          return onCell ? (
-            <button key={i} type="button" tabIndex={-1} className={cls} onClick={() => onCell(x, y)} aria-label={`Square ${x + 1}, ${y + 1}${type ? `: ${type}` : ''}`}>
-              {type ? LETTER[type] : ''}
-            </button>
-          ) : (
-            <span key={i} className={cls}>
-              {type ? LETTER[type] : ''}
-            </span>
-          );
-        })}
+      <div className="mt-3">
+        {ground.item ? (
+          <Ground item={ground.item} layer={ground.layer} windowKm={ground.windowKm} band>
+            {grid}
+          </Ground>
+        ) : (
+          <>
+            {grid}
+            <p className="mt-1.5 text-[11px] text-muted">No data. No same-scale ground extract was built for this place.</p>
+          </>
+        )}
       </div>
       <dl className="mt-3 grid grid-cols-[1fr_auto] gap-x-3 gap-y-1">
         {rows.map((r) => (
@@ -206,7 +224,7 @@ function sustainText(s: Simulation['sustainability']): string {
 }
 
 export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
-  { cell, siteName, siteCode, target, modules, solar, initial, tab, onTab, onBack },
+  { cell, siteName, siteCode, target, modules, solar, ground, initial, tab, onTab, onBack },
   ref,
 ) {
   const file = modules.file;
@@ -218,6 +236,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   const [eventDay, setEventDay] = useState(5);
   const [message, setMessage] = useState<string | null>(null);
   const [link, setLink] = useState<string | null>(null);
+  const [layer, setLayer] = useState<GroundLayer>('image');
 
   useEffect(() => {
     if (initial) setLayout(initial);
@@ -379,7 +398,10 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <h2 id="h-palette" className="label mb-1">
           03 Modules
         </h2>
-        <p className="mb-3 text-[12px] text-muted">Pick a module, then click squares on the Earth grid. Or use the plus and minus buttons.</p>
+        <p className="mb-3 text-[12px] text-muted">
+          Pick a module, then click squares on the Earth grid, or use the plus and minus buttons. One square is{' '}
+          <span className="num">{((ground.windowKm / COLS) * 1000).toFixed(0)} m</span> of ground. Modules are far smaller, so positions are schematic.
+        </p>
         {modules.fixture && (
           <p className="mb-3 border border-accent p-2 text-[12px] text-accent" role="note">
             Fixture module numbers, not real. data/modules.json is not published yet, so every result in this sandbox is a placeholder.
@@ -449,7 +471,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           <button type="button" aria-pressed={tool === 'erase'} onClick={() => setTool('erase')} className={`label flex min-h-11 items-center justify-center gap-1.5 ${tool === 'erase' ? 'bg-bg !text-accent' : 'bg-panel !text-text hover:bg-bg'}`}>
             <Eraser size={13} aria-hidden="true" /> Erase
           </button>
-          <button type="button" onClick={() => change({ ...EXAMPLE_LAYOUT, resupplyEveryDays: layout.resupplyEveryDays })} className="label min-h-11 bg-panel !text-text hover:bg-bg">
+          <button type="button" onClick={() => change(EXAMPLE_LAYOUT)} className="label min-h-11 bg-panel !text-text hover:bg-bg">
             Example
           </button>
           <button type="button" onClick={() => change({ modules: [], resupplyEveryDays: layout.resupplyEveryDays })} className="label flex min-h-11 items-center justify-center gap-1.5 bg-panel !text-text hover:bg-bg">
@@ -694,7 +716,16 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           <button type="button" onClick={onBack} className="label min-h-11 border-r border-line px-4 !text-text hover:!text-accent">
             Back to dossier
           </button>
-          <p className="label flex min-w-0 flex-1 items-center truncate px-4">Recon · same layout, two worlds</p>
+          <p className="label flex min-w-0 flex-1 items-center truncate px-4">Same layout, two sites</p>
+          {(ground.earth || ground.target) && (
+            <div className="flex" role="group" aria-label="Ground layer">
+              {(['image', 'relief'] as const).map((l) => (
+                <button key={l} type="button" aria-pressed={layer === l} onClick={() => setLayer(l)} className={`label min-h-11 border-l border-line px-4 ${layer === l ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}>
+                  {l === 'image' ? 'Image' : 'Relief'}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex flex-col lg:flex-row">
           <Pane
@@ -704,6 +735,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             modules={layout.modules}
             readiness={layout.modules.length === 0 ? null : report.earth.readiness}
             onCell={onCell}
+            ground={{ item: ground.earth, windowKm: ground.windowKm, layer }}
             badge={
               <>
                 <SourceBadge badge="Measured" source="Temperature and slope: data/earth.json" />
@@ -718,6 +750,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             site={targetSite}
             modules={deployed ? layout.modules : []}
             readiness={deployed ? (layout.modules.length === 0 ? null : report.target.readiness) : undefined}
+            ground={{ item: ground.target, windowKm: ground.windowKm, layer }}
             badge={
               <>
                 <SourceBadge badge={target.values.tempMean.badge} source={target.values.tempMean.source} />
@@ -733,6 +766,11 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             )}
           </Pane>
         </div>
+        {layer === 'image' && ground.target && shownLayer(ground.target, 'image') === 'relief' && (
+          <p className="border-t border-line px-3 py-2 text-[11px] text-muted" role="note">
+            No image of {target.name} is in the data, so its pane shows shaded relief from the elevation grid.
+          </p>
+        )}
         {deployed && layout.modules.length > 0 && (
           <div className="grid gap-px border-t border-line bg-line sm:grid-cols-2">
             {[

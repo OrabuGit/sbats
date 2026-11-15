@@ -2,11 +2,12 @@ import { ArrowLeft } from 'lucide-react';
 
 // Shared pieces of the Method and Validation pages.
 
-export type InfoView = 'method' | 'validation';
+export type InfoView = 'method' | 'validation' | 'site';
 
 const TABS: { id: InfoView; label: string }[] = [
   { id: 'method', label: 'Method' },
   { id: 'validation', label: 'Validation' },
+  { id: 'site', label: 'Sites' },
 ];
 
 export function InfoShell({
@@ -45,7 +46,7 @@ export function InfoShell({
           </div>
         </div>
         <div className="px-4 py-4 sm:px-6">
-          <p className="label">{view === 'method' ? 'Method' : 'Validation'}</p>
+          <p className="label">{view === 'method' ? 'Method' : view === 'validation' ? 'Validation' : 'Featured site'}</p>
           <h2 id="h-info" className="mt-1 max-w-[60ch] text-[17px] font-semibold text-text">
             {title}
           </h2>

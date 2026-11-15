@@ -79,6 +79,11 @@ export interface Analog {
   kind: AnalogKind;
   analogFor: string[];
   source: string;
+  note?: string;
+  /** What the site is used for in practice (purpose ids), with a source per use. Known analogs only. */
+  usedFor?: string[];
+  usedForPrimary?: string;
+  usedForSource?: Record<string, string>;
 }
 
 export interface LithologySimilarity {
