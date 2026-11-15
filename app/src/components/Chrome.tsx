@@ -74,10 +74,12 @@ export function NavRight({
         <span className="hidden sm:inline">Saved</span>
         {savedCount > 0 && <span className="num text-[12px] text-accent">{savedCount}</span>}
       </button>
-      <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
+      {flags.demoButton && (
+        <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
         {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
         <span className="hidden sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
+      )}
     </nav>
   );
 }

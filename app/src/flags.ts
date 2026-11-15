@@ -35,5 +35,7 @@ export const flags = {
    */
   indonesiaMinerals: true,
   /** A faint starfield behind the worlds on the home page. An experiment: set to false to remove it. */
-  stars: true,
+  stars: false,
+  /** The "Run demo" button in the top bar. Off at the owner's request; the demo itself still exists. */
+  demoButton: false,
 } as const;

@@ -140,7 +140,7 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
             className="h-11 min-w-0 flex-1 bg-transparent text-[15px] text-text placeholder:text-muted focus:outline-none"
           />
         </div>
-        <fieldset className="mt-1 min-h-0 flex-1 pb-6">
+        <fieldset className="mt-1 min-h-0 min-w-0 flex-1 pb-6">
           <legend className="sr-only">Places on {world}</legend>
           {listed.map((p) => {
             const on = p.id === placeId;
@@ -154,7 +154,12 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
                   <span className={`block text-[14px] leading-5 ${p.hasValues ? 'text-text' : 'text-muted'} ${on ? 'font-medium' : ''}`}>{p.name}</span>
                   {p.sub && <span className="block truncate text-[12px] text-muted">{p.sub}</span>}
                 </span>
-                {p.hasValues && <span className="shrink-0 text-[11px] font-medium text-accent">Measured</span>}
+                {p.hasValues && (
+                  <span className="flex shrink-0 items-center" title="Has measured values">
+                    <span className="block h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+                    <span className="sr-only">Measured values</span>
+                  </span>
+                )}
               </label>
             );
           })}

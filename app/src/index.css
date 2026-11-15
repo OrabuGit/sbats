@@ -241,14 +241,23 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
   background: transparent;
   border: 0;
   /* The marker's dot, not its label, sits on the site. */
-  transform: translate(calc(50% - 6px), 0);
+  transform: translate(calc(50% - 8px), 0);
 }
 .tm-dot {
+  position: relative;
   display: block;
-  width: 12px;
-  height: 12px;
-  background: var(--color-bg);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: transparent;
   border: 2px solid var(--color-text);
+}
+.tm-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--color-text);
 }
 .tm-name {
   font-family: var(--font-sans);
@@ -261,8 +270,37 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
   background: var(--color-bg);
 }
 .tm-on .tm-dot {
+  width: 22px;
+  height: 22px;
   border-color: var(--color-accent);
+}
+.tm-on .tm-dot::after {
+  inset: 4px;
   background: var(--color-accent);
+}
+.tm-on .tm-dot::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent);
+  opacity: 0.55;
+  animation: tm-pulse 2s ease-out infinite;
+}
+@keyframes tm-pulse {
+  from {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tm-on .tm-dot::before {
+    animation: none;
+  }
 }
 .tm-on .tm-name,
 .tm:hover .tm-name {
@@ -270,6 +308,9 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
 }
 .tm:hover .tm-dot {
   border-color: var(--color-accent);
+}
+.tm:hover .tm-dot::after {
+  background: var(--color-accent);
 }
 
 @layer components {
@@ -526,10 +567,14 @@ input[type='checkbox'].check:focus-visible {
 
 /* A named place with no measured values yet: smaller and muted. */
 .tm-quiet .tm-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-width: 1px;
   border-color: var(--color-muted);
+}
+.tm-quiet .tm-dot::after {
+  inset: 2px;
+  background: var(--color-muted);
 }
 .tm-quiet {
   transform: translate(calc(50% - 4px), 0);

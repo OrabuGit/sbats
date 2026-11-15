@@ -102,7 +102,7 @@ export function Ground({
           {item.elevation ? ` · ${(item.elevation.max - item.elevation.min).toLocaleString('en-US', { maximumFractionDigits: 0 })} m of relief` : ''}
         </span>
         {meta && <SourceBadge badge={meta.badge} source={meta.product} />}
-        {meta && <span className="basis-full text-text">{shown === 'image' ? meta.product : `Shaded relief from ${meta.product}`}</span>}
+        {meta && <span className="basis-full text-text">{shown === 'image' ? meta.product : `Shaded relief, tinted by height, from ${meta.product}`}</span>}
         {meta && <span className="basis-full">{meta.attribution}</span>}
       </figcaption>
     </figure>
