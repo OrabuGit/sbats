@@ -7,6 +7,9 @@ import { loadExtra } from '../data/access';
 import { loadFrozen, loadReport, loadSources } from '../data/validation';
 import type { ExtractIndex } from '../data/sites';
 import { verdictOf, VERDICT_WORD } from '../lib/verdict';
+import { ActivityArt } from './ActivityArt';
+import type { HeroPlace } from './HeroGlobes';
+import { countryAt } from '../lib/where';
 
 /** Fades and lifts its children once, the first time they come into view. */
 export function Reveal({ children, i = 0, className = '' }: { children: React.ReactNode; i?: number; className?: string }) {
@@ -78,6 +81,70 @@ function MiniHeat({ earth, results, shown }: { earth: EarthFile; results: CellSu
   );
 }
 
+const TEX = (name: string) => `${import.meta.env.BASE_URL}textures/${name}.jpg`;
+
+/** Counts up to a number once `on` turns true. */
+function useCount(to: number, on: boolean, ms = 1800) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!on) return setV(0);
+    const t0 = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const k = Math.min(1, (now - t0) / ms);
+      setV(Math.round(to * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [to, on, ms]);
+  return v;
+}
+
+/** A world's real imagery as a flat map with its named places pinned at their true positions. */
+function PinMap({ body, places, chosen, on }: { body: 'moon' | 'mars'; places: HeroPlace[]; chosen: string | null; on: boolean }) {
+  const here = places.filter((p) => p.body === body);
+  return (
+    <figure className="m-0">
+      <div className="relative aspect-[2.6/1] overflow-hidden bg-panel" style={{ backgroundImage: `url(${TEX(body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048')})`, backgroundSize: '100% 100%' }}>
+        <span className="absolute inset-0 bg-bg/35" aria-hidden="true" />
+        {here.map((p, i) => {
+          const strong = p.hasValues;
+          const isChosen = p.id === chosen;
+          return (
+            <span
+              key={p.id}
+              className={`absolute block -translate-x-1/2 -translate-y-1/2 rounded-full border-2 ${isChosen ? 'z-10 h-4 w-4 border-accent bg-accent' : strong ? 'h-2.5 w-2.5 border-accent bg-bg' : 'h-2 w-2 border-text bg-bg'}`}
+              style={{ left: `${((p.lon + 180) / 360) * 100}%`, top: `${((90 - p.lat) / 180) * 100}%`, opacity: on ? 1 : 0, transform: `translate(-50%, -50%) scale(${on ? 1 : 0.2})`, transition: `opacity 500ms ease ${Math.min(i * 40, 900)}ms, transform 500ms ease ${Math.min(i * 40, 900)}ms` }}
+              aria-hidden="true"
+            />
+          );
+        })}
+      </div>
+      <figcaption className="mt-1.5 flex items-baseline justify-between text-[13px] text-muted">
+        <span className="text-text">{body === 'moon' ? 'The Moon' : 'Mars'}</span>
+        <span>{here.length} places pinned, amber where values exist</span>
+      </figcaption>
+    </figure>
+  );
+}
+
+/** A round window onto a world's imagery, centred on a point. */
+function Disc({ tex, lat, lon, size = 132 }: { tex: string; lat: number; lon: number; size?: number }) {
+  const w = size * 4;
+  const x = ((lon + 180) / 360) * w - size / 2;
+  const y = ((90 - lat) / 180) * (w / 2) - size / 2;
+  return (
+    <span
+      className="relative block shrink-0 overflow-hidden rounded-full bg-panel"
+      style={{ width: size, height: size, backgroundImage: `url(${TEX(tex)})`, backgroundSize: `${w}px ${w / 2}px`, backgroundPosition: `${-x}px ${-y}px` }}
+      aria-hidden="true"
+    >
+      <span className="absolute left-1/2 top-1/2 block h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent" />
+    </span>
+  );
+}
+
 interface Pick {
   lat: number;
   lon: number;
@@ -118,7 +185,7 @@ interface Props {
   results: CellSummary[];
   targetName: string;
   targetId: string;
-  placeNames: string[];
+  places: HeroPlace[];
   placeCount: number;
   extracts: ExtractIndex | null;
   leadImage: string | null;
@@ -128,7 +195,7 @@ interface Props {
 }
 
 /** How it works: text on the left, a stage on the right that shows the step with real data. Then why to trust it. */
-export function HomeStory({ earth, results, targetName, targetId, placeNames, placeCount, leadImage, onMethod, onValidation, onFind }: Props) {
+export function HomeStory({ earth, results, targetName, targetId, places, placeCount, leadImage, onMethod, onValidation, onFind }: Props) {
   const [active, setActive] = useState(0);
   const stepRefs = useRef<(HTMLElement | null)[]>([]);
   const sources = useAsync(loadSources, 'home-sources');
@@ -175,57 +242,94 @@ export function HomeStory({ earth, results, targetName, targetId, placeNames, pl
   const pct = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : `${(v * 100).toFixed(0)}%`);
   const base = PRESETS[0];
 
+  const counted = useCount(earth.cells.length, active === 1);
+  const moonChosen = places.find((p) => p.body === 'moon' && targetName && p.name.includes(targetName))?.id ?? places.find((p) => p.body === 'moon' && p.hasValues)?.id ?? null;
+  const marsChosen = places.find((p) => p.body === 'mars' && p.hasValues)?.id ?? null;
+  const targetPos = places.find((p) => targetName && p.name.includes(targetName)) ?? null;
+  const [where, setWhere] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    if (pick) countryAt(pick.lat, pick.lon).then((c) => alive && setWhere(c));
+    return () => {
+      alive = false;
+    };
+  }, [pick]);
+
   const stage = [
-    // 1. Pick a place
-    <div key="s1" className="flex h-full flex-col justify-center gap-3">
-      <p className="text-[13px] text-muted">Places on Mars and the Moon</p>
-      {placeNames.slice(0, 6).map((n, i) => (
-        <div key={n} className={`flex items-center gap-4 border-l-2 py-2.5 pl-4 text-[17px] ${i === 1 ? 'border-accent text-text' : 'border-line text-muted'}`}>
-          <span className="inline-block h-3 w-3 rounded-full border-2 border-current" aria-hidden="true" />
-          {n}
-        </div>
-      ))}
-      <p className="mt-2 text-[13px] text-muted">…and {Math.max(0, placeCount - 6)} more</p>
+    // 1. Pick a place: the real imagery with every place at its true position
+    <div key="s1" className="flex h-full flex-col justify-center gap-6">
+      <PinMap body="moon" places={places} chosen={moonChosen} on={active === 0} />
+      <PinMap body="mars" places={places} chosen={marsChosen} on={active === 0} />
     </div>,
-    // 2. Scored
+    // 2. Scored: a scan sweeps across the Earth and lights each cell
     <div key="s2" className="flex h-full flex-col justify-center">
-      <MiniHeat earth={earth} results={results} shown={active === 1} />
-      <p className="mt-3 text-[13px] text-muted">
-        Every land cell, scored for <span className="text-text">{targetName}</span>. Brighter is closer, relative to the best cell. Real scores, computed in your browser.
-      </p>
+      <div className="relative aspect-[2/1] overflow-hidden bg-panel" style={{ backgroundImage: `url(${TEX('blue-marble-2048')})`, backgroundSize: '100% 100%' }}>
+        <span className="absolute inset-0 bg-bg/70" aria-hidden="true" />
+        <div className="absolute inset-0">
+          <MiniHeat earth={earth} results={results} shown={active === 1} />
+        </div>
+        <span
+          className="absolute inset-y-0 w-0.5 bg-accent"
+          style={{ left: active === 1 ? '100%' : '0%', opacity: active === 1 ? 1 : 0, transition: 'left 2200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 400ms ease 2100ms' }}
+          aria-hidden="true"
+        />
+      </div>
+      <div className="mt-5 flex items-baseline gap-4">
+        <p className="display text-[44px] leading-none text-text">{counted.toLocaleString('en-US')}</p>
+        <p className="text-[14px] leading-5 text-muted">
+          land cells scored for <span className="text-text">{targetName}</span>, in your browser. Brighter is closer.
+        </p>
+      </div>
     </div>,
-    // 3. Match
+    // 3. Match: the two places, the score, and the verdict of each dimension
     <div key="s3" className="flex h-full flex-col justify-center">
-      <p className="text-[13px] text-muted">The best cell for {targetName}</p>
-      <p className="display-l mt-1 text-[56px] text-text">{pick ? pick.score.toFixed(0) : 'no data'}<span className="ml-2 text-[16px] font-normal text-muted">/ 100</span></p>
-      <ul className="mt-6 divide-y divide-line">
-        {DIMS.map(([id, label]) => {
+      <div className="flex items-center gap-4">
+        {pick ? <Disc tex="blue-marble-2048" lat={pick.lat} lon={pick.lon} /> : <span className="block h-[132px] w-[132px]" />}
+        <svg viewBox="0 0 120 40" className="h-10 min-w-0 flex-1" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M2 30 Q60 -12 118 30" fill="none" stroke="#FFB000" strokeWidth="2" strokeDasharray="130" strokeDashoffset={active === 2 ? 0 : 130} style={{ transition: 'stroke-dashoffset 1200ms ease 200ms' }} />
+        </svg>
+        {targetPos ? <Disc tex={targetPos.body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048'} lat={targetPos.lat} lon={targetPos.lon} /> : <span className="block h-[132px] w-[132px]" />}
+      </div>
+      <div className="mt-2 flex justify-between text-[13px] text-muted">
+        <span className="text-text">{where ?? 'Open land'}</span>
+        <span className="text-text">{targetName}</span>
+      </div>
+      <p className="display-l mt-4 text-[56px] leading-none text-text">
+        {pick ? pick.score.toFixed(0) : 'no data'}
+        <span className="ml-2 text-[16px] font-normal text-muted">out of 100</span>
+      </p>
+      <ul className="mt-4 divide-y divide-line">
+        {DIMS.map(([id, label], k) => {
           const d = pick?.dimensions[id];
           const v = toVerdict(d?.verdict ?? '');
           const sim = d?.similarity ?? null;
           return (
-            <li key={id} className="flex items-center gap-4 py-3">
-              <span className="w-[110px] text-[15px] text-text">{label}</span>
+            <li key={id} className="flex items-center gap-4 py-2.5">
+              <span className="w-[100px] text-[15px] text-text">{label}</span>
               <span className="relative block h-2 flex-1 bg-line" aria-hidden="true">
+                <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: active === 2 ? `${(sim ?? 0) * 100}%` : '0%', transition: `width 900ms cubic-bezier(0.4, 0, 0.2, 1) ${300 + k * 120}ms` }} />
                 <span className="absolute inset-y-0 left-[30%] w-px bg-bg" />
                 <span className="absolute inset-y-0 left-[75%] w-px bg-bg" />
-                <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: `${(sim ?? 0) * 100}%` }} />
               </span>
-              <span className={`w-[110px] text-right text-[13px] ${v === 'match' ? 'font-semibold text-text' : 'text-muted'}`}>{VERDICT_WORD[verdictOf(sim)] ?? 'No data'}</span>
+              <span className={`w-[100px] text-right text-[13px] ${v === 'match' ? 'font-semibold text-text' : 'text-muted'}`}>{VERDICT_WORD[verdictOf(sim)] ?? 'No data'}</span>
             </li>
           );
         })}
       </ul>
     </div>,
-    // 4. Act
+    // 4. Act: the three things to do with a match
     <div key="s4" className="flex h-full flex-col justify-center">
-      <div className="relative aspect-[4/3] overflow-hidden bg-panel">
-        {leadImage && <img src={leadImage} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
-      </div>
-      <ul className="mt-5 grid grid-cols-3 gap-4 text-[15px] text-text">
-        {['Report', '3D terrain', 'Base layout'].map((t) => (
-          <li key={t} className="border-t border-line pt-3">
-            {t}
+      <div className="relative aspect-[16/9] overflow-hidden bg-panel">{leadImage && <img src={leadImage} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}</div>
+      <ul className="mt-6 grid grid-cols-3 gap-5">
+        {([
+          ['base', 'Plan a base', 'Modules, power, water, 30 days'],
+          ['rover', 'Drive a rover', '3D terrain of both places'],
+          ['life', 'Print the report', 'Cited, to PDF'],
+        ] as const).map(([kind, t, line], k) => (
+          <li key={t} className="border-t-2 border-accent pt-3" style={{ opacity: active === 3 ? 1 : 0, transform: active === 3 ? 'none' : 'translateY(14px)', transition: `opacity 600ms ease ${200 + k * 150}ms, transform 600ms ease ${200 + k * 150}ms` }}>
+            <ActivityArt kind={kind} className="h-9 w-auto text-accent" />
+            <p className="display mt-2 text-[18px] leading-6 text-text">{t}</p>
+            <p className="text-[13px] leading-5 text-muted">{line}</p>
           </li>
         ))}
       </ul>

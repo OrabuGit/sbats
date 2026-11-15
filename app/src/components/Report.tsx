@@ -95,7 +95,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
   };
 
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-report">
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-report">
       <div className="no-print flex flex-wrap items-stretch border-b border-line">
         <button type="button" onClick={onBack} className="tool border-r border-line">
           <ArrowLeft size={14} aria-hidden="true" /> Match

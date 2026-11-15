@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FACTORS, PRESETS } from '../lib/scoringAdapter';
-import { weightedGeometricMean } from '../lib/scoring';
+import { weightedGeometricMean } from '../lib/scoringAdapter';
 import type { FactorId } from '../types';
 import { MChip, pct, s2 } from './MethodParts';
 

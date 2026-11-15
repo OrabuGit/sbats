@@ -29,7 +29,7 @@ export function WorldPage({ world, onWorld, targets, onPlace, onFind }: Props) {
   const here = world === 'earth' ? [] : targets.filter((t) => t.body === world);
 
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-worldpage">
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-worldpage">
       <div className="tabs px-2 sm:px-3" role="group" aria-label="World">
         {WORLDS.map((w) => (
           <button key={w} type="button" aria-pressed={w === world} onClick={() => onWorld(w)} className="tab sm:!px-5">

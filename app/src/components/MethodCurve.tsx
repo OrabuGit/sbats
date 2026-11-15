@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 // The adapter does not re-export the similarity function, so the page reads it from the library itself.
-import { gaussianSimilarity } from '../lib/scoring';
+import { gaussianSimilarity } from '../lib/scoringAdapter';
 import { MATCH, MISS, VERDICT_WORD, verdictOf } from '../lib/verdict';
 import { MChip, s2 } from './MethodParts';
 

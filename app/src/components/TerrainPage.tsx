@@ -179,7 +179,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
   );
 
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-terrain">
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-terrain">
       <div className="flex flex-wrap items-stretch border-b border-line [&_.tab]:-mb-px">
         <button type="button" onClick={onBack} className="tool border-r border-line">
           <ArrowLeft size={14} aria-hidden="true" /> Match

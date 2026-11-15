@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import type { CellSummary, EarthFile } from '../types';
 import { loadExtra } from '../data/access';
-import { siteCode, formatCoords } from '../lib/geo';
+import { formatCoords } from '../lib/geo';
 import { ConfidenceBadge } from './Badges';
 import { dataUrl, loadFindings, type ExtractIndex, type FeaturedSite, type Findings, type SitesFile } from '../data/sites';
 import { useAsync } from '../lib/useAsync';
+import { countryKey, useCountries } from '../lib/where';
 import { HeroGlobes, type HeroLink, type HeroPick, type HeroPlace, type HeroSite } from './HeroGlobes';
 import { HomePair, type PairInfo } from './HomePair';
 import { HomeStory, Reveal } from './HomeStory';
@@ -105,6 +106,7 @@ interface Discoveries {
 function TopScan({ target, onOpen }: { target: { id: string; name: string }; onOpen: (lat: number, lon: number, id: string) => void }) {
   const disc = useAsync(() => loadExtra<Discoveries>('discoveries.json'), 'home-top-scan');
   const picks = disc.status === 'ready' ? (disc.value?.targets.find((t) => t.target === target.id)?.top.slice(0, 3) ?? []) : [];
+  const names = useCountries(picks);
   if (disc.status === 'ready' && picks.length === 0) return null;
   return (
     <section aria-labelledby="h-top-scan" className="mt-24 px-5 sm:px-10 lg:px-16">
@@ -123,8 +125,8 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
                 {p.score.toFixed(0)}
                 <span className="ml-2 text-[15px] font-normal text-muted">/ 100</span>
               </p>
-              <p className="num mt-2 text-[13px] text-text">{siteCode({ lat: p.lat, lon: p.lon })}</p>
-              <p className="num text-[12px] text-muted">{formatCoords(p.lat, p.lon)}</p>
+              <p className="mt-2 text-[16px] font-medium text-text">{names.get(countryKey(p.lat, p.lon)) ?? 'Open land'}</p>
+              <p className="text-[13px] text-muted">{formatCoords(p.lat, p.lon)}</p>
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <ConfidenceBadge confidence={p.confidence} />
                 {p.isNew && (
@@ -302,7 +304,7 @@ export function Home(p: Props) {
           results={p.results}
           targetName={p.target.name}
           targetId={p.target.id}
-          placeNames={p.places.filter((x) => x.hasValues).map((x) => x.name)}
+          places={p.places}
           placeCount={p.places.length}
           extracts={p.extracts}
           leadImage={leadImage ? dataUrl(leadImage.file) : null}

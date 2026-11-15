@@ -119,9 +119,14 @@ export default function App() {
 
 /** Runs a state change inside a view transition, so the screens cross-fade instead of jumping. */
 function transition(fn: () => void) {
-  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  type VT = { ready?: Promise<void>; finished?: Promise<void>; updateCallbackDone?: Promise<void> };
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => VT };
   if (!doc.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
-  doc.startViewTransition(() => flushSync(fn));
+  const t = doc.startViewTransition(() => flushSync(fn));
+  // A transition skipped because another began is normal, not an error.
+  t.ready?.catch(() => {});
+  t.finished?.catch(() => {});
+  t.updateCallbackDone?.catch(() => {});
 }
 
 function Orbit({ data }: { data: DataBundle }) {

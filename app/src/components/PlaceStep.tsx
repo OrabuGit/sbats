@@ -78,7 +78,7 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
         </div>
       </div>
 
-      <aside aria-label="Places" className="scroll flex min-h-0 flex-1 flex-col bg-panel lg:w-[420px] lg:flex-none">
+      <aside aria-label="Places" className="scroll flex min-h-0 flex-1 flex-col bg-bg lg:w-[420px] lg:flex-none lg:border-l lg:border-line">
         <div className="px-5 pt-5 sm:px-6">
           <div className="flex gap-6" role="group" aria-label="World">
             {(['moon', 'mars'] as const).map((b) => (

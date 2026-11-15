@@ -40,7 +40,7 @@ export function MatchesStep({ globe, controls, listMode, onListMode, hidden, bod
         <div className="relative h-[44svh] min-h-[280px] lg:h-full">{globe}</div>
         {strip}
       </div>
-      <aside aria-label="Matches" className="scroll min-h-0 flex-1 bg-panel pb-8 pt-5 lg:w-[460px] lg:flex-none">
+      <aside aria-label="Matches" className="scroll min-h-0 flex-1 bg-bg pb-8 pt-5 lg:w-[460px] lg:flex-none lg:border-l lg:border-line">
         <MatchControls {...controls} />
         <div className="mt-5">
           <CandidateList {...list} countries={countries} mode={listMode} onMode={onListMode} />

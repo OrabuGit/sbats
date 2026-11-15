@@ -396,7 +396,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   const left = (
     <aside
       aria-label="Modules and base settings"
-      className={`scroll order-3 bg-panel lg:order-1 lg:block lg:min-h-0 lg:border-r lg:border-line ${tab === 'setup' ? 'block' : 'hidden'}`}
+      className={`scroll order-3 bg-bg lg:order-1 lg:block lg:min-h-0 lg:border-r lg:border-line ${tab === 'setup' ? 'block' : 'hidden'}`}
     >
       <section className="border-b border-line p-4" aria-labelledby="h-palette">
         <h2 id="h-palette" className="label mb-1">
@@ -572,7 +572,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   const right = (
     <aside
       aria-label="Resources and gap report"
-      className={`scroll order-3 bg-panel lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
+      className={`scroll order-3 bg-bg lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
     >
       <section className="border-b border-line p-4" aria-labelledby="h-res">
         <div className="flex items-baseline justify-between gap-2">
@@ -722,7 +722,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
     <div className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
       {left}
       <div className="scroll order-1 shrink-0 border-b border-line bg-bg lg:order-2 lg:min-h-0 lg:border-b-0">
-        <div className="flex flex-wrap items-stretch border-b border-line bg-panel [&_.tab]:-mb-px">
+        <div className="flex flex-wrap items-stretch border-b border-line bg-bg [&_.tab]:-mb-px">
           <button type="button" onClick={onBack} className="tool border-r border-line">
             Back to the match
           </button>
@@ -829,7 +829,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           </div>
         )}
       </div>
-      <div className="tabs tabs-fill order-2 shrink-0 bg-panel lg:hidden" role="group" aria-label="Panel">
+      <div className="tabs tabs-fill order-2 shrink-0 bg-bg lg:hidden" role="group" aria-label="Panel">
         {(['setup', 'results'] as const).map((t) => (
           <button key={t} type="button" aria-pressed={tab === t} onClick={() => onTab(t)} className="tab">
             {t === 'setup' ? 'Modules' : 'Resources'}

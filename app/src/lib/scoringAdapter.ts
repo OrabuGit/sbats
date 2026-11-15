@@ -44,7 +44,7 @@ export {
   SUN_ELEVATION_SIGMA_DEG,
 } from './scoring';
 
-export { DIMENSIONS, PURPOSES, matchWord } from './scoring';
+export { DIMENSIONS, PURPOSES, matchWord, gaussianSimilarity, weightedGeometricMean } from './scoring';
 export type { DimensionProfile, PurposeDef, PurposeId } from './scoring';
 
 /** Weights of each purpose ranking, built once so the same object is reused between renders. */
