@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import type { CellSummary, EarthFile } from '../types';
 import { loadExtra } from '../data/access';
 import { formatCoords } from '../lib/geo';
 import { ConfidenceBadge } from './Badges';
-import { dataUrl, loadFindings, type ExtractIndex, type FeaturedSite, type Findings, type SitesFile } from '../data/sites';
+import { dataUrl, type ExtractIndex, type SitesFile } from '../data/sites';
+import type { StoryPair } from '../lib/storyPairs';
+import { StoryPairs } from './StoryPairs';
 import { useAsync } from '../lib/useAsync';
 import { countryKey, useCountries } from '../lib/where';
 import { HeroGlobes, type HeroLink, type HeroPick, type HeroPlace, type HeroSite } from './HeroGlobes';
@@ -59,17 +61,12 @@ interface Props {
   onCustom: () => void;
   onAiUse: () => void;
   onValidation: () => void;
+  /** The tool's verdict for each team story pair, from pairVerdict() in lib/storyPairs.ts. */
+  pairs?: StoryPair[];
+  /** Opens the site page of a featured site. Falls back to onFeatured(id). */
+  onSitePair?: (siteId: string) => void;
 }
 
-const LEAD = ['tambora', 'batur'];
-const short = (n: string) => n.split(',')[0];
-const region = (n: string) => n.split(',').slice(1).join(',').trim();
-const claimOf = (f: Findings | null) => {
-  const raw = f?.claim?.replace(/^.*?narrow:\s*/, '') ?? null;
-  return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : null;
-};
-
-/** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
 /** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
 function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRight>[0] }) {
   return (
@@ -82,21 +79,6 @@ function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRig
         <NavRight {...nav} />
       </div>
     </header>
-  );
-}
-
-function Tile({ site, extracts, onOpen }: { site: FeaturedSite; extracts: ExtractIndex | null; onOpen: () => void }) {
-  const img = extracts?.items.find((i) => i.id === site.id)?.image;
-  return (
-    <button type="button" onClick={onOpen} className="group block w-full text-left">
-      <span className="block aspect-[4/3] overflow-hidden bg-panel">
-        {img && <img src={dataUrl(img.file)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" />}
-      </span>
-      <span className="display mt-3 block text-[20px] text-text group-hover:text-accent">{short(site.name)}</span>
-      <span className="mt-0.5 block text-[13px] text-muted">
-        {region(site.name)} · <span className="num">{site.footprintKm}</span> km footprint
-      </span>
-    </button>
   );
 }
 
@@ -121,18 +103,18 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
   const names = useCountries(picks);
   if (disc.status === 'ready' && picks.length === 0) return null;
   return (
-    <section aria-labelledby="h-top-scan" className="mt-24 px-5 sm:px-10 lg:px-16">
+    <section aria-labelledby="h-top-scan" className="mt-16 px-5 sm:px-10 lg:px-16">
       <Reveal>
-        <h2 id="h-top-scan" className="display-l text-[30px] sm:text-[44px]">
+        <h2 id="h-top-scan" className="display text-[22px] leading-7 sm:text-[26px] sm:leading-8">
           Top of the global scan for {target.name}
         </h2>
       </Reveal>
-      <ol className="mt-10 grid gap-x-10 gap-y-10 md:grid-cols-3">
+      <ol className="mt-6 grid gap-x-10 gap-y-8 md:grid-cols-3">
         {disc.status === 'loading' &&
           [0, 1, 2].map((k) => (
-            <li key={k} className="min-h-[250px] animate-pulse" aria-hidden="true">
+            <li key={k} className="min-h-[200px] animate-pulse motion-reduce:animate-none" aria-hidden="true">
               <div className="h-3 w-16 bg-line" />
-              <div className="mt-3 h-14 w-28 bg-line" />
+              <div className="mt-3 h-10 w-24 bg-line" />
               <div className="mt-4 h-4 w-32 bg-line" />
               <div className="mt-2 h-3 w-44 bg-line" />
               <div className="mt-5 h-3 w-full bg-line" />
@@ -142,11 +124,11 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
           <li key={`${p.lat},${p.lon}`}>
             <Reveal i={i}>
               <p className="text-[13px] text-muted">Rank {p.rank.toLocaleString('en-US')}</p>
-              <p className="display-xl mt-1 text-[64px] text-text">
+              <p className="display mt-1 text-[40px] leading-none text-text">
                 {p.score.toFixed(0)}
-                <span className="ml-2 text-[15px] font-normal text-muted">/ 100</span>
+                <span className="ml-2 text-[13px] font-normal text-muted">/ 100</span>
               </p>
-              <p className="mt-2 text-[16px] font-medium text-text">{names.get(countryKey(p.lat, p.lon)) ?? 'Open land'}</p>
+              <p className="mt-2 text-[15px] font-medium text-text">{names.get(countryKey(p.lat, p.lon)) ?? 'Open land'}</p>
               <p className="text-[13px] text-muted">{formatCoords(p.lat, p.lon)}</p>
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <ConfidenceBadge confidence={p.confidence} />
@@ -168,9 +150,9 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
           </li>
         ))}
       </ol>
-      <Reveal className="mt-10">
-        <p className="max-w-[72ch] text-[14px] leading-[22px] text-muted">
-          These are the tool&rsquo;s own all-round picks. Our Indonesian candidates above are offered for specific properties, such as rock type and landform, not as all-round matches.
+      <Reveal className="mt-8">
+        <p className="max-w-[72ch] text-[13px] leading-5 text-muted">
+          These are the tool&rsquo;s own all-round picks. The team&rsquo;s sites above are offered for specific properties, such as rock type and landform, not as all-round matches.
         </p>
       </Reveal>
     </section>
@@ -181,20 +163,8 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
 export function Home(p: Props) {
   const scroller = useRef<HTMLElement>(null);
   const [solid, setSolid] = useState(false);
-  const findings = useAsync(loadFindings, 'home-findings');
-  const claim = claimOf(findings.status === 'ready' ? findings.value : null);
-
-  const proposed = useMemo(() => {
-    const all = (p.sites?.sites ?? []).filter((s) => s.kind === 'candidate' && p.extracts?.items.some((i) => i.id === s.id && i.image));
-    const rank = (s: FeaturedSite) => {
-      const i = LEAD.findIndex((k) => s.id.includes(k));
-      return i < 0 ? LEAD.length : i;
-    };
-    return [...all].sort((a, b) => rank(a) - rank(b));
-  }, [p.sites, p.extracts]);
-  const lead = proposed[0] ?? null;
-  const rest = proposed.slice(1);
-  const leadImage = lead ? p.extracts?.items.find((i) => i.id === lead.id)?.image : null;
+  // The Tambora image is the backdrop of the story section further down.
+  const leadImage = p.extracts?.items.find((i) => i.id === 'id-tambora-caldera')?.image ?? p.extracts?.items.find((i) => i.image && p.sites?.sites.some((x) => x.id === i.id && x.kind === 'candidate'))?.image ?? null;
 
   useEffect(() => {
     const el = scroller.current;
@@ -254,9 +224,6 @@ export function Home(p: Props) {
             </div>
           )}
           <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:order-1 lg:pb-0 lg:pl-16 lg:pr-6 lg:pt-14">
-            <p className="mb-3 text-[13px] leading-5 text-muted lg:mb-4">
-              <span className="font-semibold text-text">SBATS</span> stands for <span className="text-text">S</span>pace <span className="text-text">B</span>ase <span className="text-text">A</span>nalog <span className="text-text">T</span>errain <span className="text-text">S</span>ystem
-            </p>
             <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[46px] lg:leading-[1.05]">Find where on Earth to rehearse a Moon or Mars base.</h2>
             <p className="mt-3 max-w-[42ch] text-[15px] leading-[24px] text-muted lg:mt-5">
               Pick a landing site or a planned base on the Moon or Mars. SBATS ranks every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.
@@ -318,68 +285,8 @@ export function Home(p: Props) {
           </ul>
         </section>
 
-        {/* 2. Featured sites, the team's candidates first. */}
-        <section aria-labelledby="h-home-featured" className="pb-8">
-          {lead && leadImage && (
-            <div className="relative min-h-[460px] overflow-hidden bg-panel sm:min-h-[72svh]">
-              <img src={dataUrl(leadImage.file)} alt={`${short(lead.name)} from Sentinel-2, 20 km across, north up`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-bg/55" aria-hidden="true" />
-              <div className="relative flex min-h-[460px] flex-col justify-end px-5 pb-10 pt-24 sm:min-h-[72svh] sm:px-10 lg:px-16 lg:pb-16">
-                <Reveal>
-                  <p className="num text-[12px] text-text/80">Featured sites · proposed by the team</p>
-                </Reveal>
-                <Reveal i={1}>
-                  <h2 id="h-home-featured" className="display-xl mt-3 max-w-[16ch] text-[44px] text-text sm:text-[76px] lg:text-[96px]">
-                    {short(lead.name)}
-                  </h2>
-                </Reveal>
-                <Reveal i={2}>
-                  <p className="mt-3 max-w-[58ch] text-[15px] leading-[24px] text-text sm:text-[17px] sm:leading-7">
-                    {region(lead.name)}. {claim ?? lead.footprintNote}
-                  </p>
-                </Reveal>
-                <Reveal i={3}>
-                  <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-                    <button type="button" onClick={() => p.onFeatured(lead.id)} className="btn btn-primary !px-6">
-                      Open {short(lead.name)}
-                    </button>
-                    <button type="button" onClick={() => p.onFeatured()} className="link-rule text-[16px] font-medium text-text">
-                      All featured sites
-                    </button>
-                  </div>
-                </Reveal>
-                <p className="readout absolute bottom-3 right-4 hidden text-text/70 sm:block">Sentinel-2, contains modified Copernicus Sentinel data 2025</p>
-              </div>
-            </div>
-          )}
-          {!lead && (
-            <div className="px-5 py-24 sm:px-10 lg:px-16">
-              <h2 id="h-home-featured" className="display-l text-[34px]">Featured sites</h2>
-              <p className="mt-3 text-[14px] text-muted">{p.sites === null ? 'No data. data/sites.json is not published with this build.' : 'No data. No featured site has an image yet.'}</p>
-            </div>
-          )}
-          {rest.length > 0 && (
-            <div className="mt-14 px-5 sm:px-10 lg:px-16">
-              <ul className="-mx-5 flex scroll-pl-5 snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:overflow-visible sm:px-0 lg:grid-cols-4">
-                {rest.map((s, i) => (
-                  <li key={s.id} className="w-[74vw] shrink-0 snap-start sm:w-auto">
-                    <Reveal i={i % 4}>
-                      <Tile site={s} extracts={p.extracts} onOpen={() => p.onFeatured(s.id)} />
-                    </Reveal>
-                  </li>
-                ))}
-              </ul>
-              <Reveal className="mt-12">
-                <p className="max-w-[60ch] text-[14px] leading-[22px] text-muted">
-                  The established analog sites, shown as benchmarks, and the best three cells of the global scan are on the featured sites page.
-                </p>
-                <button type="button" onClick={() => p.onFeatured()} className="link-rule mt-3 text-[16px] font-medium text-text">
-                  All featured sites
-                </button>
-              </Reveal>
-            </div>
-          )}
-        </section>
+        {/* 2. Featured sites: the team's five pairs, each with the tool's own verdict. */}
+        <StoryPairs pairs={p.pairs} sites={p.sites} extracts={p.extracts} onSite={(id) => (p.onSitePair ? p.onSitePair(id) : p.onFeatured(id))} onAll={() => p.onFeatured()} />
 
         <TopScan target={p.target} onOpen={p.onOpenMatch} />
 

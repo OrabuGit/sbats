@@ -56,9 +56,13 @@ export function MatchesStep({ globe, controls, listMode, onListMode, hidden, bod
       <aside aria-label="Matches" className="scroll min-h-0 flex-1 bg-bg pb-8 pt-5 lg:w-[460px] lg:flex-none lg:border-l lg:border-line">
         <MatchControls {...controls} />
         {onExplore && (
-          <div className="px-5 pt-2 sm:px-6">
-            <button type="button" onClick={onExplore} className="link-rule text-[14px] font-medium text-text">
-              Explore every cell on two factors
+          <div className="mt-6 px-5 sm:px-6">
+            <p className="text-[14px] font-semibold text-text">Explore the data</p>
+            <p className="mt-0.5 text-[13px] leading-5 text-muted">
+              See all {list.earth.cells.length.toLocaleString('en-US')} Earth cells on any two measurements, with this target and its best matches marked.
+            </p>
+            <button type="button" onClick={onExplore} className="link-rule mt-1.5 inline-flex min-h-11 items-center text-[14px] font-medium text-text">
+              Open the chart
             </button>
           </div>
         )}

@@ -7,7 +7,7 @@ features, scoring and UI. JUDGING.md lists the acceptance rules for data, logic 
 is not done until it meets them. CHALLENGE.md is the official challenge statement.
 
 ## Hard deadline
-Submission freeze is Sunday 15 Nov, 20:00 Jakarta time. Work in the checkpoint order below.
+Feature work stops Sunday 15 Nov, 21:00 Jakarta time; submission is 23:59 the same day. Work in the checkpoint order below.
 Never start a later checkpoint while an earlier one is broken on the live link.
 
 1. Finder live: target picker, heatmap, dossier

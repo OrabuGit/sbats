@@ -30,6 +30,7 @@ import type { HeroLink, HeroPick, HeroSite } from './components/HeroGlobes';
 import { HomePair, type PairInfo } from './components/HomePair';
 import { countryKey, useCountries } from './lib/where';
 import { storiesFor, useStories } from './data/stories';
+import { pairVerdict } from './lib/storyPairs';
 import { GuidedTour } from './components/GuidedTour';
 import { Home } from './components/Home';
 import { SavedPage } from './components/SavedPage';
@@ -106,10 +107,13 @@ export default function App() {
 
 /** Runs a state change inside a view transition, so the screens cross-fade instead of jumping. */
 function transition(fn: () => void) {
-  type VT = { ready?: Promise<void>; finished?: Promise<void>; updateCallbackDone?: Promise<void> };
+  type VT = { ready?: Promise<void>; finished?: Promise<void>; updateCallbackDone?: Promise<void>; skipTransition?: () => void };
   const doc = document as Document & { startViewTransition?: (cb: () => void) => VT };
-  if (!doc.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
+  // A hidden page never finishes a transition: change the screen directly.
+  if (!doc.startViewTransition || document.visibilityState !== 'visible' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
   const t = doc.startViewTransition(() => flushSync(fn));
+  // However slow the new screen is to draw, never leave the old one frozen over it.
+  window.setTimeout(() => t.skipTransition?.(), 900);
   // A transition skipped because another began is normal, not an error.
   t.ready?.catch(() => {});
   t.finished?.catch(() => {});
@@ -702,6 +706,7 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const climateFile = climate.status === 'ready' ? climate.value : null;
   const featuredSites = flags.sitePages && sitesFile.status === 'ready' ? sitesFile.value : null;
+  const storyPairs = useMemo(() => pairVerdict(earth, scorer, targets, featuredSites, storiesFile), [earth, scorer, targets, featuredSites, storiesFile]);
   const month = useMemo(() => {
     const months = named ? climateFile?.sites.find((x) => x.id === named.id)?.months : undefined;
     if (!months || !explained || !climateFile) return null;
@@ -1127,6 +1132,8 @@ function Orbit({ data }: { data: DataBundle }) {
           }}
           onOpenPair={openHomePair}
           onAllMatches={homePlace && homeReady ? () => goToEarth() : null}
+          pairs={storyPairs}
+          onSitePair={openSitePage}
           onTour={() => {
             userTouch();
             tourGo(0);
@@ -1335,8 +1342,6 @@ function Orbit({ data }: { data: DataBundle }) {
         <InfoShell
           onAiUse={() => setView('aiuse')}
           view={view}
-          onView={(v) => (v === 'site' ? openSitePage(siteId ?? featuredSites?.sites[0]?.id ?? '') : setView(v))}
-          onBack={() => setView('home')}
           title={
             view === 'method'
               ? 'How a match score is made, with what data, and where it stops being reliable'

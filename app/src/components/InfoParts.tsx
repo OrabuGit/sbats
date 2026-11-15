@@ -1,59 +1,28 @@
 import { SiteFooter } from './SiteFooter';
-import { ArrowLeft } from 'lucide-react';
 
 // Shared pieces of the Method and Validation pages.
 
 export type InfoView = 'method' | 'validation' | 'site';
 
-const TABS: { id: InfoView; label: string }[] = [
-  { id: 'method', label: 'Method' },
-  { id: 'validation', label: 'Validation' },
-  { id: 'site', label: 'Sites' },
-];
 
 export function InfoShell({
   view,
-  onView,
-  onBack,
   onAiUse,
   title,
   children,
 }: {
   view: InfoView;
-  onView: (v: InfoView) => void;
-  onBack: () => void;
   onAiUse?: () => void;
   title: string;
   children: React.ReactNode;
 }) {
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-info">
-      <header className="border-b border-line">
-        <div className="flex items-stretch border-b border-line [&_.tab]:-mb-px">
-          <button type="button" onClick={onBack} className="tool border-r border-line sm:!px-6">
-            <ArrowLeft size={14} aria-hidden="true" /> <span className="hidden sm:inline">Back to the globe</span>
-            <span className="sm:hidden">Globe</span>
-          </button>
-          <div className="flex pl-2" role="group" aria-label="Page">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                aria-pressed={view === t.id}
-                onClick={() => onView(t.id)}
-                className="tab sm:!px-5"
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="px-4 pb-5 pt-6 sm:px-6">
-          <p className="label">{view === 'method' ? 'Method' : view === 'validation' ? 'Validation' : 'Featured site'}</p>
-          <h2 id="h-info" className="mt-1 max-w-[60ch] text-[22px] font-semibold leading-7 text-text">
-            {title}
-          </h2>
-        </div>
+      <header className="mx-auto w-full max-w-[1200px] px-5 pb-6 pt-8 sm:px-10 sm:pt-12">
+        <p className="text-[14px] text-muted">{view === 'method' ? 'Method' : view === 'validation' ? 'Validation' : 'Featured site'}</p>
+        <h2 id="h-info" className="display mt-1 max-w-[30ch] text-[28px] leading-9 text-text sm:text-[36px] sm:leading-[44px]">
+          {title}
+        </h2>
       </header>
       {children}
       {onAiUse && <SiteFooter onAiUse={onAiUse} />}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { Analog, CellScore, EarthCell, EarthFile, KeyBreakdown, Target } from '../types';
 import type { CellIndex } from '../lib/geo';
 import { formatCoords, siteCode } from '../lib/geo';
@@ -12,6 +12,7 @@ import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { BestMonthTable } from './BestMonth';
 import { ELEMENT_NAME, isElement } from './ElementIcon';
 import { Ground } from './Ground';
+import { SiteTile } from './MapTile';
 import { FieldLogistics, type LogisticsValue } from './FieldLogistics';
 import { TeamStories } from './StoryTeam';
 import { storiesFor, useStories } from '../data/stories';
@@ -78,6 +79,53 @@ function otherText(key: string, v: SiteValue): string {
   if (typeof v.value === 'string') return v.value;
   if (key.endsWith('Frac') || key.endsWith('Share')) return formatShare(v.value);
   return `${v.value.toFixed(1)}${v.unit === 'degrees' ? '°' : ` ${v.unit}`}`;
+}
+
+const GROUPS: { kind: FeaturedSite['kind']; label: string }[] = [
+  { kind: 'candidate', label: 'Proposed' },
+  { kind: 'known', label: 'Established' },
+  { kind: 'negative', label: 'Controls' },
+];
+
+/** Every featured site as a row of plain text tabs, proposed first, the current one underlined. Scrolls sideways on its own. */
+function SiteTabs({ sites, current, onSite }: { sites: FeaturedSite[]; current: string; onSite: (id: string) => void }) {
+  const row = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = row.current;
+    const on = el?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!el || !on) return;
+    // Bring the current tab into the row's view without moving the page.
+    el.scrollLeft = Math.max(0, on.offsetLeft - el.clientWidth / 2 + on.offsetWidth / 2);
+  }, [current]);
+  return (
+    <nav aria-label="Featured sites" className="border-b border-line">
+      <div ref={row} className="relative flex items-stretch gap-x-6 overflow-x-auto px-5 sm:px-10 lg:px-16">
+        {GROUPS.map((g) => {
+          const list = sites.filter((s) => s.kind === g.kind);
+          if (list.length === 0) return null;
+          return (
+            <div key={g.kind} className="flex shrink-0 items-stretch gap-x-5" role="group" aria-label={g.label}>
+              <span className="label flex items-center">{g.label}</span>
+              {list.map((s) => {
+                const on = s.id === current;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => onSite(s.id)}
+                    aria-current={on ? 'page' : undefined}
+                    className={`min-h-11 shrink-0 whitespace-nowrap border-b-2 text-[14px] transition-colors ${on ? 'border-accent text-text' : 'border-transparent text-muted hover:text-text'}`}
+                  >
+                    {short(s.name)}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </nav>
+  );
 }
 
 /** A match score in big type, counting up once on screen. */
@@ -207,19 +255,10 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
 
   return (
     <>
+      <SiteTabs sites={sites.sites} current={site.id} onSite={onSite} />
       <div className="border-b border-line">
-        <div className="flex flex-col items-stretch sm:flex-row">
-          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 border-b border-line px-4 sm:flex-none sm:border-b-0 sm:border-r sm:px-6">
-            <span className="label">Site</span>
-            <select value={site.id} onChange={(e) => onSite(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-bg text-[13px] text-text">
-              {sites.sites.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-4 sm:flex-none sm:px-6">
+        <div className="flex flex-col items-stretch px-1 sm:flex-row sm:px-6 lg:px-12">
+          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-4 sm:flex-none">
             <span className="label">Target</span>
             <select value={target.id} onChange={(e) => onTarget(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-bg text-[13px] text-text">
               {targets.map((t) => (
@@ -239,9 +278,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
             {extract ? (
               <Ground item={extract} layer="image" windowKm={windowKm} footprintKm={site.footprintKm} />
             ) : (
-              <div className="flex aspect-square items-center border border-line p-6">
-                <p className="text-[14px] text-muted">No data. No same-scale extract was built for this site.</p>
-              </div>
+              <SiteTile body="earth" lat={site.lat} lon={site.lon} name={short(site.name)} />
             )}
           </Rv>
           <div className="min-w-0">

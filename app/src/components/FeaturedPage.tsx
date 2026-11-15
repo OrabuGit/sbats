@@ -13,6 +13,7 @@ import { TeamStories } from './StoryTeam';
 import { ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { ELEMENT_NAME, ElementIcon, type ElementId } from './ElementIcon';
 import { Reveal } from './HomeStory';
+import { SiteTile } from './MapTile';
 import { useState } from 'react';
 
 interface Props {
@@ -182,7 +183,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           {image ? (
             <img src={dataUrl(image.file)} alt={`${short(site.name)} from Sentinel-2, 20 km across, north up`} loading="lazy" className="h-full w-full object-cover" />
           ) : (
-            <p className="p-3 text-[12px] text-muted">No data. No image extract was built for this site.</p>
+            <SiteTile body="earth" lat={site.lat} lon={site.lon} name={short(site.name)} caption={false} />
           )}
         </div>
         {image && (
@@ -529,7 +530,11 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                 <Reveal i={k % 3}>
                   <button type="button" onClick={() => onSitePage(s.id)} className="group block w-full text-left">
                     <span className="relative block aspect-[16/10] overflow-hidden bg-panel">
-                      {img && <img src={dataUrl(img.file)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]" />}
+                      {img ? (
+                        <img src={dataUrl(img.file)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]" />
+                      ) : (
+                        <SiteTile item={extracts?.items.find((x) => x.id === s.id) ?? null} body="earth" lat={s.lat} lon={s.lon} name={short(s.name)} caption={false} />
+                      )}
                       <span className="absolute bottom-0 left-0 bg-bg px-3 py-2">
                         <span className="display block text-[34px] leading-none text-text">{best ? best.score.toFixed(0) : '-'}</span>
                       </span>

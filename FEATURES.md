@@ -28,8 +28,9 @@ button or tab. "Nav" means the word in the top bar, which is on every page.
 | Save a match or base | "Save" on the match page; nav "Saved" lists them | 5 to save, 1 to list |
 | Explore the data (two-factor chart of every Earth cell) | Nav "Explore data" | 1 (1 from the home card) |
 | Custom conditions | Nav "Custom conditions" | 1 |
-| Featured sites and team stories | Nav "Featured sites" | 1 |
-| Site pages | Featured sites, then a site | 2 |
+| Five team story pairs with the tool's own verdict, the Earth site beside its Moon or Mars target | Home, section "Featured sites · proposed by the team" | 0 (scroll) |
+| Featured sites, benchmarks and team stories | Nav "Featured sites" | 1 |
+| Site pages, with a row of all the other sites at the top | Featured sites, then a site, or a pair on the home page | 1 to 2 |
 | Validation, incl. remove-one-factor and agreement cards | Nav "Validation" | 1 |
 | Method, scoring walkthrough, limits and known gaps (caves) | Nav "Method" | 1 |
 | Learn (bases, rovers, worlds, history) | Nav "Learn" | 1 |
