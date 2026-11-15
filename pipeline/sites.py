@@ -63,7 +63,8 @@ SITE_CACHE = CACHE / "sites"
 SITE_CACHE.mkdir(exist_ok=True)
 
 COMPARISON_IDS = ["mauna-kea", "kilauea", "atacama-yungay", "haughton-crater", "lanzarote-timanfaya",
-                  "dallol", "dasht-e-lut", "salar-de-uyuni", "tunupa-volcano"]
+                  "dallol", "dasht-e-lut", "salar-de-uyuni", "tunupa-volcano",
+                  "beacon-valley", "don-juan-pond", "craters-of-the-moon", "askja"]
 
 # Sites proposed by a team member. Where data/analogs.json has the same id, its name, coordinates and
 # kind are used and this entry only adds the coordinate source; otherwise the site is taken from here. Coordinates come from the source named in "coordinateSource"; nothing is typed
@@ -140,6 +141,10 @@ FOOTPRINTS = {
     "dasht-e-lut": (5.0, "One 5 km sample of the Lut Desert, not the whole desert."),
     "salar-de-uyuni": (5.0, "One 5 km sample of the salt flat."),
     "tunupa-volcano": (5.0, "Summit area of Tunupa volcano. The salt flat is outside it."),
+    "beacon-valley": (5.0, "Floor and lower walls of Beacon Valley at the listed coordinates."),
+    "don-juan-pond": (3.0, "Don Juan Pond and the floor of upper Wright Valley around it."),
+    "craters-of-the-moon": (5.0, "Lava field at the listed coordinates, not the whole national monument."),
+    "askja": (5.0, "Askja caldera at the listed coordinates."),
 }
 
 # Smithsonian GVP volcano numbers, taken from the site's own citation in analogs.json
@@ -147,7 +152,7 @@ FOOTPRINTS = {
 GVP_NUMBER = {
     "id-kawah-ijen": 263350, "id-merapi": 263250, "id-kesaksak-lava-tube": 264010,
     "id-gua-lawa": 263180, "mauna-kea": 332030, "kilauea": 332010, "lanzarote-timanfaya": 383060,
-    "id-tambora-caldera": 264040, "id-batur-lava-fields": 264010, "dallol": 221041,
+    "id-tambora-caldera": 264040, "id-batur-lava-fields": 264010, "dallol": 221041, "askja": 373060,
 }
 
 # Rock type stated in a paper about the feature itself, used only where no regional map and no
@@ -620,7 +625,7 @@ def build() -> dict:
     meta = {
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "description": ("Factors measured inside a small square footprint centred on each site, for the candidate sites of "
-                        "analogs.json, two more candidate sites proposed by a team member, and nine already-known analogs for "
+                        "analogs.json, two more candidate sites proposed by a team member, and thirteen already-known analogs for "
                         "comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known "
                         "analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint."),
         "year": YEAR,
