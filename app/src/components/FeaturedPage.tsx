@@ -30,7 +30,31 @@ const region = (name: string) => name.split(',').slice(1).join(',').trim();
 type Scored = SiteScores['sites'][number];
 
 /** data/benchmarks.json (Session C): proposed and established sites scored by one procedure, with group figures. */
+interface Tested {
+  text: string;
+  basis: string;
+}
+/** data/discoveries.json (Session C): what the frozen score ranks first per target, with rank ranges. */
+interface Discoveries {
+  meta: { caveats: string[]; rules: { indonesiaBox: { latMin: number; latMax: number; lonMin: number; lonMax: number } } };
+  targets: {
+    target: string;
+    top: Pick[];
+    indonesia: Pick[];
+  }[];
+}
+interface Pick {
+  lat: number;
+  lon: number;
+  score: number;
+  rank: number;
+  percentile: number;
+  isNew: boolean;
+  nearestKnown: { name: string; km: number } | null;
+  stability: { rankP05: number; rankP95: number; shareInTop10: number } | null;
+}
 interface Benchmarks {
+  sites?: { id: string; couldTest?: Tested[]; cannotTest?: Tested[] }[];
   meta: { caveats: string[] };
   groups: {
     candidates: number;
@@ -97,7 +121,7 @@ function Lines({ title, items, empty }: { title: string; items: string[]; empty:
   );
 }
 
-function SiteArticle({ site, lead, image, finding, scored, analog, targets, onSitePage, onMatch }: {
+function SiteArticle({ site, lead, image, finding, scored, analog, targets, tested, onSitePage, onMatch }: {
   site: FeaturedSite;
   lead: boolean;
   image: { file: string; attribution: string; date?: string } | null;
@@ -105,6 +129,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, onSi
   scored: Scored | undefined;
   analog: Analog | undefined;
   targets: Target[];
+  /** Sentences built by fixed rules from measured values (data/benchmarks.json). */
+  tested: { could: Tested[]; cannot: Tested[] } | null;
   onSitePage: Props['onSitePage'];
   onMatch: Props['onMatch'];
 }) {
@@ -157,29 +183,68 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, onSi
 
         <div className="mt-5 grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <div>
-            <h4 className="label mb-1.5">Process and published basis</h4>
-            <p className="text-[13px] leading-5 text-text">
-              {scored?.rockType ? `Rock: ${scored.rockType}. ` : ''}
-              {analog ? analog.source : 'No published basis is recorded for this site.'} {analog && <SourceBadge badge="Literature" source={analog.source} />}
-            </p>
+            <h4 className="label mb-1.5">Process</h4>
+            {analog?.process ? (
+              <>
+                <p className="text-[13px] leading-5 text-text">
+                  {analog.process.text} <SourceBadge badge="Literature" source={analog.process.source} />
+                </p>
+                {analog.process.links.map((l) => (
+                  <p key={l.target + l.text} className="mt-1.5 border-l-2 border-line pl-3 text-[13px] leading-5 text-text">
+                    <span className="label mr-2">{targets.find((t) => t.id === l.target)?.name ?? l.target}</span>
+                    {l.text} <SourceBadge badge="Literature" source={l.source} />
+                  </p>
+                ))}
+                <p className="mt-1.5 text-[12px] text-muted">Where it differs: {analog.process.differs}</p>
+              </>
+            ) : (
+              <p className="text-[13px] leading-5 text-text">
+                {scored?.rockType ? `Rock: ${scored.rockType}. ` : ''}
+                {analog ? analog.source : 'No data. No process is recorded for this site.'}
+              </p>
+            )}
             {analog?.note && <p className="mt-1.5 text-[12px] text-muted">{analog.note}</p>}
           </div>
           <div>
-            <h4 className="label mb-1.5">What a team could test here{target ? `, against ${target.name}` : ''}</h4>
-            {result ? (
-              <dl className="kv">
+            <h4 className="label mb-1.5">What a team could test here</h4>
+            {tested && tested.could.length > 0 ? (
+              <ul className="space-y-1.5">
+                {tested.could.map((t) => (
+                  <li key={t.text} title={`From ${t.basis}`} className="border-l-2 border-line pl-3 text-[13px] leading-5 text-text">
+                    {t.text}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-[13px] text-muted">No data. No test sentences were published for this site.</p>
+            )}
+            {tested && tested.cannot.length > 0 && (
+              <>
+                <h4 className="label mb-1.5 mt-4">What it cannot test</h4>
+                <ul className="space-y-1.5">
+                  {tested.cannot.map((t) => (
+                    <li key={t.text} title={`From ${t.basis}`} className="border-l-2 border-line pl-3 text-[13px] leading-5 text-muted">
+                      {t.text}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {result && (
+              <dl className="kv mt-4">
                 {PURPOSES.map((p) => {
                   const v = result.site.purposes[p.id]?.score ?? null;
                   return (
                     <div key={p.id}>
-                      <dt>{p.label}</dt>
+                      <dt>
+                        {p.label}
+                        {target ? `, ${target.name}` : ''}
+                      </dt>
                       <dd className={v === null ? '!text-muted' : ''}>{v === null ? 'no data' : `${v.toFixed(0)} / 100`}</dd>
                     </div>
                   );
                 })}
               </dl>
-            ) : (
-              <p className="text-[13px] text-muted">No data. No site-scale score was published for this site.</p>
             )}
           </div>
         </div>
@@ -235,6 +300,10 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
   const scores = useAsync(loadSiteScores, 'site-scores');
   const bench = useAsync(() => loadExtra<Benchmarks>('benchmarks.json'), 'benchmarks');
   const bm = bench.status === 'ready' ? bench.value : null;
+  const disc = useAsync(() => loadExtra<Discoveries>('discoveries.json'), 'discoveries');
+  const found = disc.status === 'ready' ? (disc.value?.targets.find((t) => t.target === target.id) ?? null) : null;
+  const pickAt = (lat: number, lon: number) => found?.top.find((p) => p.lat === lat && p.lon === lon) ?? null;
+  const indo = found?.indonesia[0] ?? null;
   const fd = findings.status === 'ready' ? findings.value : null;
   const sc = scores.status === 'ready' ? scores.value : null;
   const findingOf = (id: string) => fd?.sections.find((s) => s.strong.length > 0 && id.includes(s.slug)) ?? null;
@@ -292,6 +361,10 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
               scored={sc?.sites.find((x) => x.id === s.id)}
               analog={analogs.find((a) => a.id === s.id)}
               targets={targets}
+              tested={(() => {
+                const b = bm?.sites?.find((x) => x.id === s.id);
+                return b ? { could: b.couldTest ?? [], cannot: b.cannotTest ?? [] } : null;
+              })()}
               onSitePage={onSitePage}
               onMatch={onMatch}
             />
@@ -458,6 +531,15 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                   <p className="mt-1 flex items-center gap-3 text-[12px] text-muted">
                     {reason(c.index)} <ConfidenceBadge confidence={r.confidence} coverage={r.coverage} />
                   </p>
+                  {(() => {
+                    const pk = pickAt(cell.lat, cell.lon);
+                    return pk ? (
+                      <p className="mt-1 text-[12px] text-muted">
+                        {pk.isNew && pk.nearestKnown ? `New: ${Math.round(pk.nearestKnown.km).toLocaleString('en-US')} km from the nearest known analog. ` : ''}
+                        {pk.stability ? `Rank ${pk.stability.rankP05} to ${pk.stability.rankP95} in nine of ten redraws of the weights.` : ''}
+                      </p>
+                    ) : null;
+                  })()}
                   <button type="button" onClick={() => onCell(c.index)} className="btn mt-3">
                     Open the match
                   </button>
@@ -465,6 +547,23 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
               );
             })}
           </ol>
+        )}
+        {indo && (
+          <p className="mt-6 max-w-[72ch] border-t border-line pt-3 text-[13px] leading-5 text-text">
+            Best cell in the Indonesian region for {target.name}: <span className="num">{formatCoords(indo.lat, indo.lon)}</span>, score{' '}
+            <span className="num">{indo.score.toFixed(0)}</span> of 100, rank <span className="num">{indo.rank.toLocaleString('en-US')}</span>, above{' '}
+            <span className="num">{Math.round(indo.percentile * 100)}%</span> of Earth's cells. The proposed sites are not at the top of the scan, and
+            the page does not claim they are.
+          </p>
+        )}
+        {found && disc.status === 'ready' && disc.value && (
+          <ul className="mt-3 max-w-[72ch] space-y-1">
+            {disc.value.meta.caveats.map((c) => (
+              <li key={c} className="text-[12px] text-muted">
+                {c}
+              </li>
+            ))}
+          </ul>
         )}
       </section>
     </main>

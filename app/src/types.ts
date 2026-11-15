@@ -84,6 +84,8 @@ export interface Analog {
   usedFor?: string[];
   usedForPrimary?: string;
   usedForSource?: Record<string, string>;
+  /** The process the site stands for, from its cited sources (proposed sites). */
+  process?: { text: string; source: string; links: { target: string; text: string; source: string }[]; differs: string } | null;
 }
 
 export interface LithologySimilarity {
