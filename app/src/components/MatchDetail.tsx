@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { ArrowLeft, Bookmark, BookmarkCheck, Check, Minus, X } from 'lucide-react';
 import type { CellScore, EarthCell, Target } from '../types';
 import type { MatchDimension, MatchRecord, MatchSide } from '../lib/matchAdapter';
@@ -14,6 +14,8 @@ import { ActivityArt, type Activity } from './ActivityArt';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
 import { ScoreDial } from './ScoreDial';
 import { countryKey, useCountries } from '../lib/where';
+
+const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
 
 export interface Tool {
   title: string;
@@ -48,6 +50,8 @@ interface Props {
   saved: boolean;
   onSave: () => void;
   onBack: () => void;
+  /** Elevation extracts of both places, when they were built: the 3D terrain is then shown at the top. */
+  terrain: { earth: ExtractItem; target: ExtractItem; windowKm: number; onOpen: () => void } | null;
   /** The two tools, ordered by what the match is for. */
   tools: { primary: Tool; secondary: Tool };
   actions: { label: string; onClick: (() => void) | null; primary?: boolean; why?: string }[];
@@ -194,7 +198,7 @@ function Place({ title, sub, item, layer, windowKm, state }: { title: string; su
 
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, children }: Props) {
+export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, terrain, children }: Props) {
   const site = scale === 'site';
   const score = site ? record.score.value : e.score;
   const scored = score !== null;
@@ -228,7 +232,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
 
       <div>
         <div>
-          <header className={`${pad} grid gap-x-12 gap-y-8 pb-12 pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)]`}>
+          <header className={`${pad} grid gap-x-12 gap-y-8 pb-12 pt-6 ${terrain ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,640px)]' : 'lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)]'}`}>
             <div className="min-w-0">
               <p className="text-[14px] text-muted">
                 {rank !== null ? `Match number ${rank}` : 'Match'}
@@ -291,13 +295,27 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 </div>
               )}
             </div>
-            <div className="lg:pt-10">
-              <Locator
-                points={[
-                  { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
-                  { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
-                ]}
-              />
+            <div className={`lg:pt-6 ${terrain ? 'order-first lg:order-none' : ''}`}>
+              {terrain ? (
+                <figure className="m-0">
+                  <Suspense fallback={<div className="h-[320px] w-full bg-bg" role="status" aria-label="Loading terrain" />}>
+                    <Terrain3D earth={{ item: terrain.earth, modules: [] }} target={{ item: terrain.target, modules: [] }} windowKm={terrain.windowKm} layer="image" cols={24} rows={12} />
+                  </Suspense>
+                  <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[13px] text-muted">
+                    <span>The two places as 3D terrain, at one scale. Drag to turn it.</span>
+                    <button type="button" onClick={terrain.onOpen} className="link-rule font-medium text-text">
+                      Drive a rover on it
+                    </button>
+                  </figcaption>
+                </figure>
+              ) : (
+                <Locator
+                  points={[
+                    { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
+                    { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+                  ]}
+                />
+              )}
             </div>
           </header>
 

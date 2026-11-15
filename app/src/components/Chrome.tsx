@@ -87,7 +87,7 @@ export function TopBar({
   onHome: () => void;
 } & Parameters<typeof NavRight>[0]) {
   return (
-    <header className="relative z-30 flex h-16 shrink-0 items-center justify-between gap-3 bg-bg px-3 sm:px-8">
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-3 bg-bg px-3 sm:px-8">
       <button type="button" onClick={onHome} aria-label="SBATS, home" className="flex min-h-11 items-center">
         <Logo height={26} />
       </button>

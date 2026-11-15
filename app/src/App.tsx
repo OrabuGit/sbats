@@ -46,7 +46,10 @@ import { decodeLayout, layoutFromJson, type SavedLayout } from './lib/simAdapter
 // The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
 const globeModule = import('./components/GlobeView');
-const LearnPage = lazy(() => import('./components/LearnPage').then((m) => ({ default: m.LearnPage })));
+const learnModule = () => import('./components/LearnPage').then((m) => ({ default: m.LearnPage }));
+const LearnPage = lazy(learnModule);
+// Fetch the Learn page while the browser is idle, so opening it is not a wait.
+if (typeof window !== 'undefined') (window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 2500)))(() => void learnModule());
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 
 type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
@@ -89,11 +92,7 @@ export default function App() {
     return (
       <div className="splash" role="status" aria-label="Loading">
         <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="SBATS" />
-        <p>
-          <b>S</b>pace <b>B</b>ase <b>A</b>nalog <b>T</b>errain <b>S</b>ystem
-        </p>
         <i />
-        <p className="splash-line">Finding the places on Earth that stand in for a Moon or Mars base</p>
       </div>
     );
   }
@@ -925,7 +924,7 @@ function Orbit({ data }: { data: DataBundle }) {
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
         learnOpen={view === 'learn'}
-        onLearn={() => transition(() => setView('learn'))}
+        onLearn={() => setView('learn')}
       />
       )}
 
@@ -995,13 +994,13 @@ function Orbit({ data }: { data: DataBundle }) {
           }}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
           onMethod={() => setView('method')}
-          onLearn={() => transition(() => setView('learn'))}
+          onLearn={() => setView('learn')}
           onValidation={() => setView('validation')}
         />
       )}
 
       {view === 'learn' && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<div className="min-h-0 flex-1 bg-bg px-5 py-16 sm:px-10" aria-busy="true" />}>
           <LearnPage onFind={() => onStep(1)} onWorld={(w) => { setWorldPage(w); setView('world'); }} />
         </Suspense>
       )}
@@ -1102,6 +1101,7 @@ function Orbit({ data }: { data: DataBundle }) {
           onSave={toggleSaved}
           onBack={backToEarth}
           tools={matchTools}
+          terrain={terrainReady && earthExtract && targetExtract ? { earth: earthExtract, target: targetExtract, windowKm, onOpen: () => transition(() => setView('terrain')) } : null}
           actions={[
             { label: 'View report', onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },
             {

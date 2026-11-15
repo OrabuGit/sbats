@@ -115,10 +115,8 @@ export function SourceLine({ badge, source, url, className = '' }: { badge: Badg
 export function ChapterHead({ id, n, kicker, title, lead }: { id: string; n: string; kicker: string; title: string; lead: string }) {
   return (
     <LearnReveal className="max-w-[860px]">
-      <p className="label flex items-center gap-3">
-        <span className="num text-accent">{n}</span>
-        <span className="h-px w-10 bg-line" aria-hidden="true" />
-        <span>{kicker}</span>
+      <p className="text-[14px] text-accent" data-n={n}>
+        {kicker}
       </p>
       <h2 id={id} className="display-l mt-4 text-[40px] text-text sm:text-[60px]">
         {title}

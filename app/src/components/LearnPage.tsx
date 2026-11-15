@@ -118,7 +118,6 @@ export function LearnPage({ onFind, onWorld }: { onFind: () => void; onWorld: (w
         <div className="learn-rail flex h-full items-stretch overflow-x-auto px-2 sm:px-8">
           {CHAPTERS.map((c, i) => (
             <button key={c.id} type="button" className="tab shrink-0" aria-pressed={chapter === i} onClick={() => go(c.id)}>
-              <span className="num text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</span>
               {c.name}
             </button>
           ))}

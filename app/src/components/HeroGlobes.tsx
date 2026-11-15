@@ -128,6 +128,12 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   const tip = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
+  // Show the globes after a moment even if a texture is slow: an empty hero is worse than a plain one.
+  const [late, setLate] = useState(false);
+  useEffect(() => {
+    const t = window.setTimeout(() => setLate(true), 1000);
+    return () => window.clearTimeout(t);
+  }, []);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const placesRef = useRef(places);
   placesRef.current = places;
@@ -625,7 +631,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   const caption = (w: WorldId) => (w === 'earth' ? `${cells.toLocaleString('en-US')} cells scored` : `${count(w)} named places`);
 
   return (
-    <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg transition-opacity duration-700" style={{ opacity: state === "loading" ? 0 : 1 }}>
+    <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg transition-opacity duration-700" style={{ opacity: state === 'loading' && !late ? 0 : 1 }}>
       {state === 'error' && (
         <p className="readout absolute left-4 top-20" role="status">
           Globes could not be drawn on this device
@@ -654,9 +660,9 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
             </g>
             <circle data-end="" r="4" fill="#FFB000" />
             <g data-tag="">
-              <rect x="-24" y="-11" width="48" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
-              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="12" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
-                {pick?.kind === 'place' ? `${i + 1} · ${l.score === null ? '-' : l.score.toFixed(0)}` : l.score === null ? '-' : l.score.toFixed(0)}
+              <rect x="-17" y="-10" width="34" height="20" rx="3" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="13" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
+                {l.score === null ? '-' : l.score.toFixed(0)}
               </text>
             </g>
           </g>

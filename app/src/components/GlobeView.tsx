@@ -523,9 +523,9 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
             <path fill="none" stroke="#FFB000" strokeWidth={i === activeLink ? 2.4 : 1.4} strokeLinecap="round" />
             <circle r="4" fill="#FFB000" />
             <g data-tag="">
-              <rect x="-26" y="-11" width="52" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
-              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="12" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
-                {i + 1} · {l.label}
+              <rect x="-17" y="-10" width="34" height="20" rx="3" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="13" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
+                {l.label}
               </text>
             </g>
           </g>

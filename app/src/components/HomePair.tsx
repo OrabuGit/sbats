@@ -1,5 +1,4 @@
 import { ArrowRight, X } from 'lucide-react';
-import { ConfidenceBadge } from './Badges';
 import { ActivityArt, activityOf } from './ActivityArt';
 import { ElementIcon, isElement } from './ElementIcon';
 import { PRESET_WORDS } from './MatchControls';
@@ -55,21 +54,20 @@ function Mini({ id, label, v }: { id: string; label: string; v: number | null })
 /** The strip under the home globes: the selected pair, dimension by dimension, and one click to the match. */
 export function HomePair({ pair, chips, active, onActive, presets, presetId, onPreset, onOpen, onAll, onClose }: Props) {
   return (
-    <section aria-label="Selected pair" className="relative z-10 bg-bg px-5 pb-5 pt-4 sm:px-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-line">
-      <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-3">
+    <section aria-label="Selected pair" className="relative z-10 bg-bg px-5 pb-5 pt-5 sm:px-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-line">
+      <div className="flex items-start justify-between gap-6">
         <div className="min-w-0">
-          <p className="text-[13px] text-muted">{pair.mode === 'place' ? 'Best Earth matches for' : 'Most like'}</p>
-          <p className="display text-[22px] leading-7 text-text">
-            {pair.from} <span className="text-muted">to</span> {pair.to}
+          <p className="display truncate text-[24px] leading-8 text-text">{pair.from}</p>
+          <p className="mt-0.5 text-[14px] leading-5 text-muted">
+            {pair.mode === 'place' ? 'Closest on Earth: ' : 'Closest base site: '}
+            <span className="text-text">{pair.to}</span>
+            {pair.toSub ? `. ${pair.toSub}` : ''}
           </p>
-          <p className="mt-0.5 text-[13px] text-muted">{pair.toSub}</p>
         </div>
-        <div className="flex items-end gap-5">
+        <div className="flex shrink-0 items-start gap-4">
           <div className="text-right">
-            <p className="display text-[44px] leading-none text-text">{pair.score === null ? '-' : pair.score.toFixed(0)}</p>
-            <div className="mt-1 flex justify-end">
-              <ConfidenceBadge confidence={pair.confidence} />
-            </div>
+            <p className="display text-[40px] leading-none text-text">{pair.score === null ? '-' : pair.score.toFixed(0)}</p>
+            <p className="mt-1 text-[12px] text-muted">{pair.confidence ? `${pair.confidence} confidence` : 'no confidence'}</p>
           </div>
           <button type="button" onClick={onClose} aria-label="Clear the selection" className="tool !px-2">
             <X size={16} aria-hidden="true" />
@@ -78,41 +76,40 @@ export function HomePair({ pair, chips, active, onActive, presets, presetId, onP
       </div>
 
       {pair.note ? (
-        <p className="mt-3 text-[13px] leading-5 text-muted">{pair.note}</p>
+        <p className="mt-4 text-[14px] leading-5 text-muted">{pair.note}</p>
       ) : (
-        <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">
+        <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">
           {pair.dims.map((d) => (
             <Mini key={d.id} id={d.id} label={d.label} v={d.similarity} />
           ))}
         </div>
       )}
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-3">
         {chips.length > 1 && (
-          <div className="flex flex-wrap gap-1" role="group" aria-label="Matches">
+          <div className="flex flex-wrap gap-x-5" role="group" aria-label="Other matches">
             {chips.map((c, i) => (
-              <button key={i} type="button" aria-pressed={i === active} onClick={() => onActive(i)} className={`inline-flex h-9 items-center gap-1.5 border px-2.5 text-[12px] ${i === active ? 'border-accent text-text' : 'border-line text-muted hover:text-text'}`}>
-                <span className="num font-semibold">{i + 1}</span>
-                <span className="max-w-[110px] truncate">{c.label}</span>
-                <span className="num text-text">{c.score === null ? '-' : c.score.toFixed(0)}</span>
+              <button key={i} type="button" aria-pressed={i === active} onClick={() => onActive(i)} className={`min-h-9 border-b-2 text-[14px] transition-colors ${i === active ? 'border-accent text-text' : 'border-transparent text-muted hover:text-text'}`}>
+                {c.label}
+                <span className="ml-1.5 text-muted">{c.score === null ? '-' : c.score.toFixed(0)}</span>
               </button>
             ))}
           </div>
         )}
         {pair.mode === 'place' && (
-          <div className="flex flex-wrap gap-1" role="group" aria-label="What the match is for">
+          <div className="flex flex-wrap gap-x-4" role="group" aria-label="What the match is for">
             {presets.map((p) => (
-              <button key={p.id} type="button" aria-pressed={p.id === presetId} onClick={() => onPreset(p.id)} className={`inline-flex h-9 items-center gap-1.5 px-2 text-[12px] ${p.id === presetId ? 'text-accent' : 'text-muted hover:text-text'}`}>
+              <button key={p.id} type="button" aria-pressed={p.id === presetId} title={PRESET_WORDS[p.id]?.line} onClick={() => onPreset(p.id)} className={`inline-flex h-9 items-center gap-1.5 text-[13px] ${p.id === presetId ? 'text-accent' : 'text-muted hover:text-text'}`}>
                 <ActivityArt kind={activityOf(p.id, null)} className="h-5 w-auto" />
                 {PRESET_WORDS[p.id]?.label ?? p.id}
               </button>
             ))}
           </div>
         )}
-        <div className="ml-auto flex flex-wrap items-center gap-3">
+        <div className="ml-auto flex flex-wrap items-center gap-4">
           {onAll && (
             <button type="button" onClick={onAll} className="link-rule text-[14px] font-medium text-text">
-              All matches for {pair.from}
+              All matches
             </button>
           )}
           <button type="button" onClick={onOpen} className="btn btn-primary !px-5">
