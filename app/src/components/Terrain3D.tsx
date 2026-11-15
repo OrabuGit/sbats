@@ -6,6 +6,7 @@ import {
   BufferGeometry,
   Line,
   LineBasicMaterial,
+  LineSegments,
   Raycaster,
   Vector2,
   Vector3,
@@ -29,9 +30,10 @@ import { dataUrl, loadElevation, type ExtractItem } from '../data/sites';
 import type { ModuleType, PlacedModule } from '../lib/simAdapter';
 import { shownLayer, type GroundLayer } from './Ground';
 import { SourceBadge } from './Badges';
+import { contourPositions, niceInterval, rampIndex, HEIGHT_RAMP, SUN_DEFAULT } from './TerrainScale';
 
 // BOOTS: two places as terrain, side by side at one scale, with the base on each.
-// Horizontal and vertical units are kilometres on both, with no vertical exaggeration.
+// Horizontal and vertical units are kilometres on both. The vertical exaggeration is 1x unless the page sets it, and then it is printed.
 
 /** Largest number of height samples per side. Coarser grids (Moon 250, Mars 43) are used as they are. */
 const MAX_SAMPLES = 256;
@@ -55,6 +57,14 @@ interface Props {
   rows: number;
   /** Colour the surface by slope class instead of the image or plain grey. */
   slope?: boolean;
+  /** Colour the surface by height above each window's own lowest point, with one fixed ramp. */
+  height?: boolean;
+  /** Draw contour lines on the surface. */
+  contours?: boolean;
+  /** Vertical exaggeration, 1 to 5. Defaults to 1 (none). */
+  exaggeration?: number;
+  /** Sun elevation above the horizon in degrees, from the north-west. Defaults to 45. */
+  sunElevation?: number;
   /** Route waypoints in km from the centre of the square (x east, z south). Drawn on both terrains. */
   route?: { x: number; z: number }[];
   /** Position of the rover along the route, 0 to 1, or null for no rover. */
@@ -77,8 +87,13 @@ interface Built {
   modules: Group;
   routeGroup: Group;
   terrain: Mesh;
+  /** Height of the drawn surface at a point, with the current exaggeration applied. */
   heightAt: (xKm: number, zKm: number) => number;
   reliefKm: number;
+  view: { exag: number };
+  sun: DirectionalLight;
+  ambient: AmbientLight;
+  contourLines: LineSegments | null;
   dispose: () => void;
 }
 
@@ -100,7 +115,27 @@ function moduleGeometry(type: ModuleType): BufferGeometry {
   }
 }
 
-function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer: GroundLayer, slope: boolean, onTexture: () => void): Built {
+/** Lights and vertical scale for a sun elevation and an exaggeration. The sun stays in the north-west. */
+function applyView(b: Built, exag: number, sunDeg: number) {
+  b.view.exag = exag;
+  b.terrain.scale.y = exag;
+  const e = (Math.max(1, Math.min(89, sunDeg)) * Math.PI) / 180;
+  const flat = Math.cos(e) / Math.SQRT2;
+  b.sun.position.set(-flat * 10, Math.sin(e) * 10, -flat * 10);
+  // Less fill light when the sun is low, so the shadowed sides are dark and the relief reads.
+  b.ambient.intensity = 0.3 + 0.6 * Math.max(0, Math.min(1, (sunDeg - 10) / 35));
+}
+
+function build(
+  item: ExtractItem,
+  heights: Float32Array,
+  windowKm: number,
+  layer: GroundLayer,
+  slope: boolean,
+  height: boolean,
+  view: { exag: number; sunDeg: number; contours: boolean },
+  onTexture: () => void,
+): Built {
   const el = item.elevation!;
   const step = Math.max(1, Math.ceil(el.size / MAX_SAMPLES));
   const n = Math.floor((el.size - 1) / step) + 1;
@@ -126,12 +161,26 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
 
   const scene = new Scene();
   scene.background = new Color('#0B0D0F');
-  // The same light on every body: from the north-west, 45 degrees up, as in the shaded relief.
+  // The same light on every body: from the north-west, at the sun elevation the page sets (45 degrees by default).
   const sun = new DirectionalLight(0xffffff, 2.4);
-  sun.position.set(-1, 1.4, -1);
-  scene.add(sun, new AmbientLight(0xffffff, 0.9));
+  const ambient = new AmbientLight(0xffffff, 0.9);
+  scene.add(sun, ambient);
 
-  const material = new MeshLambertMaterial({ color: slope ? 0xffffff : 0x6b737b, flatShading: n < 100, vertexColors: slope });
+  const coloured = slope || height;
+  // Polygon offset keeps the contour lines from flickering against the surface they lie on.
+  const material = new MeshLambertMaterial({ color: coloured ? 0xffffff : 0x6b737b, flatShading: n < 100, vertexColors: coloured, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  if (height) {
+    // One ramp for both places: the colour class is the share of this window's own relief above its lowest point.
+    const colors = new Float32Array(n * n * 3);
+    const palette = HEIGHT_RAMP.map((c) => new Color(c));
+    const span = Math.max(1e-9, (max - min) / 1000);
+    for (let r = 0; r < n; r++)
+      for (let c = 0; c < n; c++) {
+        const col = palette[rampIndex(sample(c, r) / span)];
+        colors.set([col.r, col.g, col.b], (r * n + c) * 3);
+      }
+    geo.setAttribute('color', new BufferAttribute(colors, 3));
+  }
   if (slope) {
     // Slope at each sample from its four neighbours, in the same horizontal and vertical unit (km).
     const spacing = windowKm / (n - 1);
@@ -148,7 +197,7 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
     geo.setAttribute('color', new BufferAttribute(colors, 3));
   }
   const shown = shownLayer(item, layer);
-  if (!slope && shown === 'image' && item.image) {
+  if (!coloured && shown === 'image' && item.image) {
     new TextureLoader().load(dataUrl(item.image.file), (tex) => {
       tex.colorSpace = SRGBColorSpace;
       tex.anisotropy = 4;
@@ -160,32 +209,54 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
   }
   const terrain = new Mesh(geo, material);
   scene.add(terrain);
+  // Contour lines are children of the terrain, so they take its vertical exaggeration with it.
+  let contourLines: LineSegments | null = null;
+  const interval = niceInterval(max - min);
+  const contourGeo = new BufferGeometry();
+  const contourMat = new LineBasicMaterial({ color: 0xd7dde3, transparent: true, opacity: 0.75 });
+  if (interval !== null) {
+    const grid = new Float32Array(n * n);
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) grid[r * n + c] = sample(c, r);
+    contourGeo.setAttribute('position', new BufferAttribute(contourPositions(grid, n, windowKm, interval, 0.003), 3));
+    contourLines = new LineSegments(contourGeo, contourMat);
+    contourLines.visible = view.contours;
+    terrain.add(contourLines);
+  }
   const modules = new Group();
   const routeGroup = new Group();
   scene.add(modules, routeGroup);
 
   const half = windowKm / 2;
+  const state = { exag: view.exag };
   const heightAt = (xKm: number, zKm: number) => {
     const c = Math.round(((xKm + half) / windowKm) * (n - 1));
     const r = Math.round(((zKm + half) / windowKm) * (n - 1));
-    return sample(Math.max(0, Math.min(n - 1, c)), Math.max(0, Math.min(n - 1, r)));
+    return sample(Math.max(0, Math.min(n - 1, c)), Math.max(0, Math.min(n - 1, r))) * state.exag;
   };
-  return {
+  const built: Built = {
     scene,
     modules,
     routeGroup,
     terrain,
     heightAt,
     reliefKm: (max - min) / 1000,
+    view: state,
+    sun,
+    ambient,
+    contourLines,
     dispose: () => {
+      contourGeo.dispose();
+      contourMat.dispose();
       geo.dispose();
       material.map?.dispose();
       material.dispose();
     },
   };
+  applyView(built, view.exag, view.sunDeg);
+  return built;
 }
 
-export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, route, rover = null, onPoint }: Props) {
+export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, rover = null, onPoint }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [orbit, setOrbit] = useState(!reduced);
@@ -194,6 +265,8 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const built = useRef<[Built, Built] | null>(null);
   const redraw = useRef<() => void>(() => {});
+  const viewRef = useRef({ exag: exaggeration, sunDeg: sunElevation, contours });
+  viewRef.current = { exag: exaggeration, sunDeg: sunElevation, contours };
   const onPointRef = useRef(onPoint);
   onPointRef.current = onPoint;
   const sides = [earth, target] as const;
@@ -247,7 +320,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       draw(); // leaves the camera as both viewports use it
       const ray = new Raycaster();
       ray.setFromCamera(new Vector2((x / vw) * 2 - 1, -(y / vh) * 2 + 1), camera);
-      const hit = ray.intersectObject(built.current[0].terrain)[0];
+      const hit = ray.intersectObject(built.current[0].terrain, false)[0];
       if (hit) onPointRef.current(hit.point.x, hit.point.z);
     };
     canvas.addEventListener('pointerdown', onDown);
@@ -264,7 +337,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       const vw = stacked ? w : Math.floor(w / 2);
       const vh = stacked ? Math.floor(h / 2) : h;
       // One camera path for both, so the two are always seen from the same place.
-      const lift = Math.max(b[0].reliefKm, b[1].reliefKm) * 0.4;
+      const lift = Math.max(b[0].reliefKm * b[0].view.exag, b[1].reliefKm * b[1].view.exag) * 0.4;
       // Far enough back that the whole square, corner to corner, fits the narrower side of the viewport.
       const aspect = vw / vh;
       const halfFov = Math.tan(((camera.fov / 2) * Math.PI) / 180);
@@ -299,7 +372,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
     Promise.all([loadElevation(earth.item.elevation!), loadElevation(target.item.elevation!)]).then(
       ([he, ht]) => {
         if (!alive) return;
-        built.current = [build(earth.item, he, windowKm, layer, slope, () => draw()), build(target.item, ht, windowKm, layer, slope, () => draw())];
+        built.current = [build(earth.item, he, windowKm, layer, slope, height, viewRef.current, () => draw()), build(target.item, ht, windowKm, layer, slope, height, viewRef.current, () => draw())];
         setState('ready');
         ro.observe(el);
         frame = requestAnimationFrame(loop);
@@ -318,7 +391,18 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [earth.item, target.item, windowKm, layer, slope, ready]);
+  }, [earth.item, target.item, windowKm, layer, slope, height, ready]);
+
+  // Contours, exaggeration and sun: changed in place, without rebuilding the terrain.
+  useEffect(() => {
+    const b = built.current;
+    if (!b || state !== 'ready') return;
+    b.forEach((side) => {
+      applyView(side, exaggeration, sunElevation);
+      if (side.contourLines) side.contourLines.visible = contours;
+    });
+    redraw.current();
+  }, [exaggeration, sunElevation, contours, state]);
 
   // Modules: replaced when the layout changes, without rebuilding the terrain.
   useEffect(() => {
@@ -345,7 +429,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       material.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [earth.modules, target.modules, state, cols, rows, windowKm]);
+  }, [earth.modules, target.modules, state, cols, rows, windowKm, exaggeration]);
 
   // Route and rover: the same path, in km from the centre, draped on both terrains.
   useEffect(() => {
@@ -393,7 +477,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
     });
     redraw.current();
     return () => disposables.forEach((d) => d.dispose());
-  }, [route, rover, state]);
+  }, [route, rover, state, exaggeration]);
 
   if (!ready) return <p className="p-3 text-[13px] text-muted">No data. A terrain extract is missing for one of the two places.</p>;
 
@@ -440,8 +524,9 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
         })}
       </div>
       <p className="border-t border-line px-3 py-2 text-[11px] text-muted" role="note">
-        Same horizontal and vertical scale on both, no vertical exaggeration, same camera and light. Heights are measured from each place's own
-        lowest point. Modules are drawn about 50 times larger than life so they can be seen.
+        Same horizontal and vertical scale on both, {exaggeration === 1 ? 'no vertical exaggeration (1x)' : `vertical exaggeration ${exaggeration}x, so slopes look steeper than they are`}, same
+        camera and light (sun {sunElevation}° above the horizon, from the north-west). Heights are measured from each place's own lowest point. Modules are drawn
+        about 50 times larger than life so they can be seen.
       </p>
     </div>
   );

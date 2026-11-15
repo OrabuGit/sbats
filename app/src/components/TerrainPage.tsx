@@ -6,6 +6,8 @@ import { measureRoute, type ElevationTile, type RouteResult } from '../lib/match
 import { useAsync } from '../lib/useAsync';
 import { ComputedBadge } from './Badges';
 import { SLOPE_CLASSES } from './Terrain3D';
+import { TerrainControls, TerrainLegend } from './TerrainControls';
+import { heightRange, niceInterval, SUN_DEFAULT } from './TerrainScale';
 
 const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
 
@@ -23,7 +25,7 @@ interface Props {
   onBase: (() => void) | null;
 }
 
-type Surface = 'image' | 'relief' | 'slope';
+type Surface = 'image' | 'relief' | 'slope' | 'height';
 interface Sourced {
   value: number | null;
   unit: string;
@@ -100,12 +102,23 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
   const roverSpec = usable.find((r) => r.id === roverId) ?? usable.find((r) => r.body === targetBody) ?? usable[0] ?? null;
   const slopeLimitDeg = roverSpec?.slopeLimit?.value ?? null;
   const [surface, setSurface] = useState<Surface>('image');
+  const [contours, setContours] = useState(false);
+  const [exaggeration, setExaggeration] = useState(1);
+  const [sun, setSun] = useState(SUN_DEFAULT);
   const [route, setRoute] = useState<RoutePoint[]>([]);
   const [rover, setRover] = useState<number | null>(null);
   const [driving, setDriving] = useState(false);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const heights = useAsync(() => Promise.all([loadElevation(earth.elevation!), loadElevation(target.elevation!)]), `${earth.id}|${target.id}`);
   const layout = getLastLayout();
+  // Relief and contour interval of each window, by the same rule on both.
+  const places = useMemo(() => {
+    const names = [earthName, targetName];
+    return [0, 1].map((i) => {
+      const range = heights.status === 'ready' ? heightRange(heights.value[i]) : null;
+      return { name: names[i], reliefM: range?.reliefM ?? null, intervalM: range ? niceInterval(range.reliefM) : null };
+    });
+  }, [heights, earthName, targetName]);
 
   // Session C's route library measures the same waypoints on each elevation tile.
   const measured = useMemo(() => {
@@ -185,9 +198,9 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
           <ArrowLeft size={14} aria-hidden="true" /> Match
         </button>
         <div className="flex px-1" role="group" aria-label="Surface">
-          {(['image', 'relief', 'slope'] as const).map((s) => (
+          {(['image', 'relief', 'slope', 'height'] as const).map((s) => (
             <button key={s} type="button" aria-pressed={surface === s} onClick={() => setSurface(s)} className="tab">
-              {s === 'image' ? 'Image' : s === 'relief' ? 'Relief' : 'Slope'}
+              {s === 'image' ? 'Satellite' : s === 'relief' ? 'Relief' : s === 'slope' ? 'Slope' : 'Height'}
             </button>
           ))}
         </div>
@@ -216,7 +229,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
       </div>
 
       <header className="border-b border-line px-4 py-4 sm:px-6">
-        <p className="label">3D terrain · {windowKm} km × {windowKm} km · no vertical exaggeration</p>
+        <p className="label">3D terrain · {windowKm} km × {windowKm} km · {exaggeration === 1 ? 'no vertical exaggeration (1x)' : `${exaggeration}x vertical exaggeration`}</p>
         <h2 id="h-terrain" className="mt-1 text-[17px] font-semibold leading-6 text-text">
           {earthName} and {targetName} at one scale
         </h2>
@@ -239,6 +252,10 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
           windowKm={windowKm}
           layer={surface === 'relief' ? 'relief' : 'image'}
           slope={surface === 'slope'}
+          height={surface === 'height'}
+          contours={contours}
+          exaggeration={exaggeration}
+          sunElevation={sun}
           cols={24}
           rows={12}
           route={route}
@@ -246,6 +263,9 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
           onPoint={(x, z) => change([...route, { x, z }])}
         />
       </Suspense>
+
+      <TerrainControls contours={contours} onContours={setContours} exaggeration={exaggeration} onExaggeration={setExaggeration} sun={sun} onSun={setSun} />
+      <TerrainLegend height={surface === 'height'} contours={contours} places={places} />
 
       {surface === 'slope' && (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-line px-4 py-2 sm:px-6">

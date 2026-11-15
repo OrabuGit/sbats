@@ -5,6 +5,7 @@ import type { Badge } from '../types';
 import { ComputedBadge } from './Badges';
 import { ChapterHead, Counter, LearnReveal, SourceLine, WorldDisc, reducedMotion, useSeen } from './LearnParts';
 import { LearnRoverArt } from './LearnRoverArt';
+import { AiMark } from './AiMark';
 import { WORLD_TEX } from './LearnData';
 
 interface Fig {
@@ -232,6 +233,7 @@ export function LearnRovers() {
         title="Wheels on other worlds"
         lead="A rover is a car for another world. Some are driven by astronauts, most by teams on Earth. Two numbers decide where one can go: how steep a slope it can climb, and how fast it moves."
       />
+      <AiMark className="mt-6" />
       {data.status === 'loading' && <p className="mt-10 text-[14px] text-muted">Loading rover data…</p>}
       {data.status !== 'loading' && rovers.length === 0 && <p className="mt-10 text-[14px] text-muted">No data: rovers.json is not available.</p>}
       {rovers.length > 0 && (

@@ -10,6 +10,7 @@ import { countryKey, useCountries } from '../lib/where';
 import { HeroGlobes, type HeroLink, type HeroPick, type HeroPlace, type HeroSite } from './HeroGlobes';
 import { HomePair, type PairInfo } from './HomePair';
 import { HomeStory, Reveal } from './HomeStory';
+import { SiteFooter } from './SiteFooter';
 import { Logo } from './Logo';
 import { NavRight } from './Chrome';
 import type { WorldId } from './Worlds';
@@ -51,6 +52,8 @@ interface Props {
   onFeatured: (id?: string) => void;
   onMethod: () => void;
   onLearn: () => void;
+  onTour: () => void;
+  onAiUse: () => void;
   onValidation: () => void;
 }
 
@@ -208,6 +211,7 @@ export function Home(p: Props) {
           onMethod: p.onMethod,
           learnOpen: false,
           onLearn: p.onLearn,
+          onTour: p.onTour,
           savedCount: p.savedCount,
           savedOpen: false,
           onSaved: p.onSaved,
@@ -347,7 +351,7 @@ export function Home(p: Props) {
           onValidation={p.onValidation}
           onFind={p.onFind}
         />
-
+        <SiteFooter onAiUse={p.onAiUse} />
       </main>
     </div>
   );

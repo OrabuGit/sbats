@@ -626,6 +626,1207 @@
     "noDataShare": 0.0,
     "note": "Daytime thermal infrared brightness, not visible light: sunlit and warm surfaces are bright. Grey-scale; use it as surface texture, not as true colour."
    }
+  },
+  {
+   "id": "SBATS-N8225-W08275",
+   "name": "Open land N82.25 W82.75",
+   "body": "earth",
+   "lat": 82.25,
+   "lon": -82.75,
+   "matchedTargets": [
+    "moon-haworth",
+    "moon-malapert-massif",
+    "moon-shackleton-rim"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-malapert-massif": 1,
+     "moon-haworth": 1,
+     "moon-shackleton-rim": 1
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N8225-W08275/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 0.0,
+    "max": 1559.2,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N82_00_W084_00_DEM",
+     "Copernicus_DSM_COG_10_N82_00_W083_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N8225-W08275/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_16XES_20250619_2_L2A",
+    "date": "2025-06-19",
+    "sceneCloudPct": 4.0,
+    "clearShareInWindow": 0.855,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N8175-W02675",
+   "name": "Open land N81.75 W26.75",
+   "body": "earth",
+   "lat": 81.75,
+   "lon": -26.75,
+   "matchedTargets": [
+    "moon-haworth",
+    "moon-malapert-massif",
+    "moon-mons-mouton",
+    "moon-shackleton-rim"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-malapert-massif": 2,
+     "moon-mons-mouton": 2,
+     "moon-haworth": 2,
+     "moon-shackleton-rim": 2
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N8175-W02675/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 111.6,
+    "max": 945.1,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N81_00_W028_00_DEM",
+     "Copernicus_DSM_COG_10_N81_00_W027_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N8175-W02675/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_26XMR_20250917_0_L2A, S2B_25XEL_20250917_0_L2A, S2B_27XVL_20250917_0_L2A, S2B_26XNR_20250917_0_L2A",
+    "date": "2025-09-17",
+    "sceneCloudPct": 4.0,
+    "clearShareInWindow": 0.86,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N7975-W08275",
+   "name": "Open land N79.75 W82.75",
+   "body": "earth",
+   "lat": 79.75,
+   "lon": -82.75,
+   "matchedTargets": [
+    "moon-haworth",
+    "moon-malapert-massif",
+    "moon-mons-mouton",
+    "moon-shackleton-rim"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-malapert-massif": 3,
+     "moon-mons-mouton": 4,
+     "moon-haworth": 3,
+     "moon-shackleton-rim": 4
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N7975-W08275/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 37.5,
+    "max": 1291.3,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N79_00_W084_00_DEM",
+     "Copernicus_DSM_COG_10_N79_00_W083_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N7975-W08275/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_16XEP_20250805_3_L2A, S2B_17XMJ_20250805_3_L2A, S2C_16XEP_20250805_1_L2A, S2C_17XMJ_20250805_1_L2A",
+    "date": "2025-08-05",
+    "sceneCloudPct": 2.1,
+    "clearShareInWindow": 0.904,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N8075-W06325",
+   "name": "Open land N80.75 W63.25",
+   "body": "earth",
+   "lat": 80.75,
+   "lon": -63.25,
+   "matchedTargets": [
+    "moon-mons-mouton",
+    "moon-shackleton-rim",
+    "moon-haworth",
+    "moon-malapert-massif"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-malapert-massif": 4,
+     "moon-mons-mouton": 3,
+     "moon-haworth": 4,
+     "moon-shackleton-rim": 3
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N8075-W06325/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": -0.4,
+    "max": 1110.1,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N80_00_W064_00_DEM",
+     "Copernicus_DSM_COG_10_N80_00_W063_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N8075-W06325/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_19XEK_20250902_1_L2A, S2C_20XMQ_20250902_1_L2A, S2A_19XEK_20250902_4_L2A, S2A_20XMQ_20250902_2_L2A, S2B_19XEK_20250902_2_L2A, S2B_20XMQ_20250902_3_L2A, S2C_19XEK_20250902_3_L2A, S2C_20XMQ_20250902_4_L2A",
+    "date": "2025-09-02",
+    "sceneCloudPct": 18.6,
+    "clearShareInWindow": 0.703,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N8225-W05025",
+   "name": "Open land N82.25 W50.25",
+   "body": "earth",
+   "lat": 82.25,
+   "lon": -50.25,
+   "matchedTargets": [
+    "moon-haworth",
+    "moon-malapert-massif",
+    "moon-mons-mouton",
+    "moon-shackleton-rim"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-malapert-massif": 5,
+     "moon-mons-mouton": 5,
+     "moon-haworth": 5,
+     "moon-shackleton-rim": 5
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N8225-W05025/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": -0.6,
+    "max": 1192.5,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N82_00_W051_00_DEM",
+     "Copernicus_DSM_COG_10_N82_00_W050_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N8225-W05025/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_21XWM_20250806_2_L2A, S2C_22XES_20250806_4_L2A, S2B_21XWM_20250806_0_L2A, S2B_22XES_20250806_1_L2A, S2C_21XWM_20250806_1_L2A, S2C_22XES_20250806_2_L2A",
+    "date": "2025-08-06",
+    "sceneCloudPct": 2.2,
+    "clearShareInWindow": 0.759,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N8275-W07725",
+   "name": "Open land N82.75 W77.25",
+   "body": "earth",
+   "lat": 82.75,
+   "lon": -77.25,
+   "matchedTargets": [
+    "moon-mons-mouton"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-mons-mouton": 1
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N8275-W07725/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 0.0,
+    "max": 1279.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N82_00_W078_00_DEM",
+     "Copernicus_DSM_COG_10_N82_00_W077_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": null,
+   "imageNote": "No Sentinel-2 L2A pass of 2025 under 40% cloud covers the whole window."
+  },
+  {
+   "id": "SBATS-N3475-E08475",
+   "name": "Open land N34.75 E84.75",
+   "body": "earth",
+   "lat": 34.75,
+   "lon": 84.75,
+   "matchedTargets": [
+    "mars-jezero",
+    "moon-marius-hills"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-marius-hills": 1,
+     "mars-jezero": 1
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3475-E08475/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 5033.6,
+    "max": 5550.4,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N34_00_E084_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3475-E08475/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_45STU_20250911_0_L2A, S2B_45STU_20250911_1_L2A",
+    "date": "2025-09-11",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.998,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3625-E08875",
+   "name": "Open land N36.25 E88.75",
+   "body": "earth",
+   "lat": 36.25,
+   "lon": 88.75,
+   "matchedTargets": [
+    "mars-jezero",
+    "moon-marius-hills"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-marius-hills": 2,
+     "mars-jezero": 2
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3625-E08875/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4923.8,
+    "max": 5386.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N36_00_E088_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3625-E08875/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_45SXA_20250905_0_L2A",
+    "date": "2025-09-05",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.999,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3475-E07925",
+   "name": "Open land N34.75 E79.25",
+   "body": "earth",
+   "lat": 34.75,
+   "lon": 79.25,
+   "matchedTargets": [
+    "moon-marius-hills"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-marius-hills": 3
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3475-E07925/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 5212.3,
+    "max": 5715.9,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N34_00_E079_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3475-E07925/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_44SLD_20250821_1_L2A, S2B_44SLD_20250821_0_L2A",
+    "date": "2025-08-21",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3675-E09325",
+   "name": "Open land N36.75 E93.25",
+   "body": "earth",
+   "lat": 36.75,
+   "lon": 93.25,
+   "matchedTargets": [
+    "mars-jezero",
+    "moon-marius-hills"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-marius-hills": 4,
+     "mars-jezero": 3
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3675-E09325/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 2885.5,
+    "max": 3790.7,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N36_00_E093_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3675-E09325/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_46SEF_20251114_0_L2A",
+    "date": "2025-11-14",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.975,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N4325-E10075",
+   "name": "Open land N43.25 E100.75",
+   "body": "earth",
+   "lat": 43.25,
+   "lon": 100.75,
+   "matchedTargets": [
+    "moon-marius-hills"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "moon-marius-hills": 5
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N4325-E10075/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 1829.8,
+    "max": 2466.1,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N43_00_E100_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N4325-E10075/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_47TPH_20251031_0_L2A, S2C_47TPJ_20251031_0_L2A",
+    "date": "2025-10-31",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.974,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-S2275-W06725",
+   "name": "Open land S22.75 W67.25",
+   "body": "earth",
+   "lat": -22.75,
+   "lon": -67.25,
+   "matchedTargets": [
+    "mars-jezero"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-jezero": 4
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-S2275-W06725/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4482.2,
+    "max": 5622.6,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S23_00_W068_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-S2275-W06725/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_19KFQ_20250611_0_L2A",
+    "date": "2025-06-11",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.997,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3525-E07975",
+   "name": "Open land N35.25 E79.75",
+   "body": "earth",
+   "lat": 35.25,
+   "lon": 79.75,
+   "matchedTargets": [
+    "mars-jezero"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-jezero": 5
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3525-E07975/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4847.0,
+    "max": 5232.5,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N35_00_E079_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3525-E07975/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_44SLE_20251119_0_L2A",
+    "date": "2025-11-19",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.999,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3525-E08025",
+   "name": "Open land N35.25 E80.25",
+   "body": "earth",
+   "lat": 35.25,
+   "lon": 80.25,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-gale": 1
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3525-E08025/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4903.8,
+    "max": 5782.4,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N35_00_E080_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3525-E08025/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_44SME_20251206_0_L2A",
+    "date": "2025-12-06",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.995,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3175-E07975",
+   "name": "Open land N31.75 E79.75",
+   "body": "earth",
+   "lat": 31.75,
+   "lon": 79.75,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-gale": 2
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3175-E07975/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 3971.6,
+    "max": 5497.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N31_00_E079_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3175-E07975/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_44SLA_20251123_0_L2A",
+    "date": "2025-11-23",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.998,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3675-E08725",
+   "name": "Open land N36.75 E87.25",
+   "body": "earth",
+   "lat": 36.75,
+   "lon": 87.25,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-gale": 3
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3675-E08725/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4563.4,
+    "max": 5289.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N36_00_E087_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3675-E08725/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_45SWA_20251127_1_L2A",
+    "date": "2025-11-27",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 0.991,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-S2475-W06875",
+   "name": "Open land S24.75 W68.75",
+   "body": "earth",
+   "lat": -24.75,
+   "lon": -68.75,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-gale": 4
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-S2475-W06875/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 3261.1,
+    "max": 4865.2,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S25_00_W069_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-S2475-W06875/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_19JEN_20250407_0_L2A",
+    "date": "2025-04-07",
+    "sceneCloudPct": 0.6,
+    "clearShareInWindow": 0.999,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3625-E08325",
+   "name": "Open land N36.25 E83.25",
+   "body": "earth",
+   "lat": 36.25,
+   "lon": 83.25,
+   "matchedTargets": [
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-gale": 5
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3625-E08325/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4404.7,
+    "max": 5406.0,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N36_00_E083_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3625-E08325/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_44SPF_20250830_0_L2A, S2C_44SQF_20250830_0_L2A",
+    "date": "2025-08-30",
+    "sceneCloudPct": 0.1,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3525-E08525",
+   "name": "Open land N35.25 E85.25",
+   "body": "earth",
+   "lat": 35.25,
+   "lon": 85.25,
+   "matchedTargets": [
+    "mars-arcadia-planitia"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-arcadia-planitia": 1
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3525-E08525/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 4920.1,
+    "max": 5292.1,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N35_00_E085_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3525-E08525/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_45SUV_20250911_0_L2A, S2B_45SUV_20250911_1_L2A",
+    "date": "2025-09-11",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3825-E09225",
+   "name": "Open land N38.25 E92.25",
+   "body": "earth",
+   "lat": 38.25,
+   "lon": 92.25,
+   "matchedTargets": [
+    "mars-arcadia-planitia"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-arcadia-planitia": 2
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3825-E09225/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 2689.3,
+    "max": 2788.6,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N38_00_E092_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3825-E09225/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2A_46SDH_20250113_0_L2A",
+    "date": "2025-01-13",
+    "sceneCloudPct": 0.2,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N3675-E09575",
+   "name": "Open land N36.75 E95.75",
+   "body": "earth",
+   "lat": 36.75,
+   "lon": 95.75,
+   "matchedTargets": [
+    "mars-arcadia-planitia"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-arcadia-planitia": 3
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N3675-E09575/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 2674.5,
+    "max": 2698.6,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N36_00_E095_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N3675-E09575/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_46SGF_20251113_0_L2A, S2C_47SKA_20251113_0_L2A",
+    "date": "2025-11-13",
+    "sceneCloudPct": 0.1,
+    "clearShareInWindow": 0.986,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N4475-E10525",
+   "name": "Open land N44.75 E105.25",
+   "body": "earth",
+   "lat": 44.75,
+   "lon": 105.25,
+   "matchedTargets": [
+    "mars-arcadia-planitia"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-arcadia-planitia": 4
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N4475-E10525/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 1191.7,
+    "max": 1316.7,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N44_00_E105_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N4475-E10525/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_48TWQ_20250918_0_L2A",
+    "date": "2025-09-18",
+    "sceneCloudPct": 0,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "SBATS-N4875-E09325",
+   "name": "Open land N48.75 E93.25",
+   "body": "earth",
+   "lat": 48.75,
+   "lon": 93.25,
+   "matchedTargets": [
+    "mars-arcadia-planitia"
+   ],
+   "pairedWith": null,
+   "rankedCell": {
+    "ranks": {
+     "mars-arcadia-planitia": 5
+    },
+    "preset": "base",
+    "source": "pipeline/candidate_cells.ts",
+    "note": "A 0.5 degree cell ranked by the app's all-round score, not a named site. The extract is centred on the cell centre."
+   },
+   "elevation": {
+    "file": "extracts/SBATS-N4875-E09325/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 1031.9,
+    "max": 1279.9,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N48_00_E093_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/SBATS-N4875-E09325/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_46UEU_20250908_1_L2A, S2B_46UEV_20250908_1_L2A",
+    "date": "2025-09-08",
+    "sceneCloudPct": 3.5,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
   }
  ]
 }

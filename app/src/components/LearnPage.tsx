@@ -1,3 +1,4 @@
+import { SiteFooter } from './SiteFooter';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Crosshair, Layers, Mountain } from 'lucide-react';
 import type { WorldId } from './Worlds';
@@ -18,7 +19,7 @@ const CHAPTERS = [
 ];
 
 /** The Learn page: space bases, rovers, the three worlds, a history timeline, and why analogs matter. */
-export function LearnPage({ onFind, onWorld }: { onFind: () => void; onWorld: (w: WorldId) => void }) {
+export function LearnPage({ onFind, onWorld, onAiUse }: { onFind: () => void; onWorld: (w: WorldId) => void; onAiUse?: () => void }) {
   const main = useRef<HTMLElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
   const [chapter, setChapter] = useState(-1);
@@ -178,6 +179,7 @@ export function LearnPage({ onFind, onWorld }: { onFind: () => void; onWorld: (w
           </div>
         </LearnReveal>
       </section>
+      {onAiUse && <SiteFooter onAiUse={onAiUse} />}
     </main>
   );
 }

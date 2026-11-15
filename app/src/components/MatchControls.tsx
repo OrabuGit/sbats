@@ -3,6 +3,7 @@ import { FACTOR_IDS } from '../types';
 import { FACTOR_LABELS, PURPOSES, type PurposeId } from '../lib/scoringAdapter';
 import type { MatchMode } from './LeftPanel';
 import { ActivityArt, activityOf } from './ActivityArt';
+import { AiMark } from './AiMark';
 
 /** What each mission preset means in plain words. The weights themselves are in lib/scoring/presets.ts. */
 export const PRESET_WORDS: Record<string, { label: string; line: string }> = {
@@ -57,6 +58,8 @@ export function MatchControls({ presets, presetId, onPreset, mode, onMode, purpo
           );
         })}
       </div>
+
+      <AiMark className="mt-2" />
 
       <details className="group mt-4">
         <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-[13px] font-medium text-muted hover:text-text [&::-webkit-details-marker]:hidden">

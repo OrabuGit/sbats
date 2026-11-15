@@ -1,3 +1,4 @@
+import { SiteFooter } from './SiteFooter';
 import { ArrowLeft } from 'lucide-react';
 
 // Shared pieces of the Method and Validation pages.
@@ -14,12 +15,14 @@ export function InfoShell({
   view,
   onView,
   onBack,
+  onAiUse,
   title,
   children,
 }: {
   view: InfoView;
   onView: (v: InfoView) => void;
   onBack: () => void;
+  onAiUse?: () => void;
   title: string;
   children: React.ReactNode;
 }) {
@@ -53,6 +56,7 @@ export function InfoShell({
         </div>
       </header>
       {children}
+      {onAiUse && <SiteFooter onAiUse={onAiUse} />}
     </main>
   );
 }

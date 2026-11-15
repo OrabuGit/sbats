@@ -12,6 +12,9 @@ import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { BestMonthTable } from './BestMonth';
 import { ELEMENT_NAME, isElement } from './ElementIcon';
 import { Ground } from './Ground';
+import { FieldLogistics, type LogisticsValue } from './FieldLogistics';
+import { StoryNote } from './FeaturedPage';
+import { storyFor, useStories } from '../data/stories';
 import { Absent, DataTable, Td } from './InfoParts';
 import { DimensionStrip, LedgerRow, ScaleSquares, Spark, type DimTile } from './SiteParts';
 import { Block, CountUp, Meter, More, Rv, useSeen } from './ValidationParts';
@@ -190,6 +193,15 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
   const sources = new Map<string, string>();
   for (const v of Object.values(site.values)) if (v?.source && v.badge) sources.set(v.source, v.badge);
   const times = Math.round((55 * 55) / (site.footprintKm * site.footprintKm));
+  const stories = useStories();
+  // Field logistics: the footprint value where there is one, else the grid cell's, each with its own badge.
+  const logistic = (key: 'tempMean' | 'precip' | 'slope' | 'roughness'): LogisticsValue | null => {
+    const sv = site.values[key];
+    if (sv && typeof sv.value === 'number') return { value: sv.value, badge: sv.badge, source: sv.source, scale: sv.scale === 'site' ? `footprint, ${site.footprintKm} km` : sv.scale === 'volcano' ? 'whole volcano' : 'grid cell, 55 km' };
+    const cv = cell ? cell[key] : null;
+    if (typeof cv === 'number') return { value: cv, badge: meta[key]?.badge ?? null, source: meta[key]?.source ?? null, scale: 'grid cell, 55 km' };
+    return null;
+  };
 
   return (
     <>
@@ -273,6 +285,11 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
                 )}
               </div>
             </Rv>
+            {storyFor(stories, site.id) && (
+              <Rv i={3}>
+                <StoryNote story={storyFor(stories, site.id)} />
+              </Rv>
+            )}
           </div>
         </div>
       </section>
@@ -451,6 +468,16 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
           <p className="text-[14px] text-muted">No data. No monthly climate is published for this site.</p>
         )}
       </Block>
+
+      <FieldLogistics
+        variant="site"
+        lat={site.lat}
+        tempMean={logistic('tempMean')}
+        precip={logistic('precip')}
+        slope={logistic('slope')}
+        roughness={logistic('roughness')}
+        relief={extract?.elevation ? { item: extract, windowKm } : null}
+      />
 
       {/* Purposes */}
       <Block id="s-test" label="What a mission team could test here" title="Which purposes fit." lead="A purpose score uses only the factors that purpose depends on.">

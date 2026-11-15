@@ -7,6 +7,7 @@ import { ConfidenceBadge, Tag } from './Badges';
 import { Absent, DataTable, Loading, Td } from './InfoParts';
 import { Block, CountUp, Mark, Meter, More, Rv, useSeen } from './ValidationParts';
 import { PercentileStrips, StripAxis, StripLegend, type StripRowData } from './ValidationStrip';
+import { ValidationChecks, ValidationHeadline } from './ValidationExtra';
 
 interface Props {
   earth: EarthFile;
@@ -108,6 +109,9 @@ function BodyResult({ name, hold, tune, index }: { name: string; hold: SetStats;
             <dt className="label">ROC AUC</dt>
             <dd className="num mt-1 text-[22px] font-semibold text-text">{f3(hold.rocAuc)}</dd>
             <dd className="num text-[11px] text-muted">tuning {f3(tune.rocAuc)}</dd>
+            <dd className="num text-[11px] text-muted">
+              {hold.knownSites} test sites, {hold.negativeSites} controls
+            </dd>
           </div>
           <div>
             <dt className="label">Mean score</dt>
@@ -121,7 +125,7 @@ function BodyResult({ name, hold, tune, index }: { name: string; hold: SetStats;
 }
 
 /** A headline figure that counts up once on screen. */
-function BigStat({ label, value, decimals, suffix, sub, note, index }: { label: string; value: number | null; decimals: number; suffix?: string; sub: string; note: string; index: number }) {
+function BigStat({ label, value, decimals, suffix, sub, note, plain, index }: { label: string; value: number | null; decimals: number; suffix?: string; sub: string; note: string; plain?: string | null; index: number }) {
   const [ref, seen] = useSeen<HTMLDivElement>();
   return (
     <Rv i={index}>
@@ -131,6 +135,7 @@ function BigStat({ label, value, decimals, suffix, sub, note, index }: { label: 
           <CountUp value={value} decimals={decimals} play={seen} suffix={suffix} />
         </p>
         <p className="num mt-2 text-[12px] text-muted">{sub}</p>
+        {plain && <p className="num mt-2 text-[13px] font-semibold leading-5 text-text">{plain}</p>}
         <p className="mt-2 text-[13px] leading-5 text-text">{note}</p>
       </div>
     </Rv>
@@ -327,12 +332,13 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
       {presetPicker}
 
       {/* The result in one screen */}
-      <section id="v-status" aria-labelledby="v-result" className="px-5 pb-16 pt-14 sm:px-10 sm:pt-20 lg:px-16">
+      <section id="v-status" aria-labelledby="v-headline" className="px-5 pb-16 pt-14 sm:px-10 sm:pt-20 lg:px-16">
         <Rv>
           <p className="label">The result, hold-out sites</p>
-          <h3 id="v-result" className="display-xl mt-3 max-w-[18ch] text-[40px] sm:text-[72px]">
+          <ValidationHeadline stats={hold.overall} />
+          <h4 id="v-result" className="display mt-12 max-w-[26ch] text-[28px] leading-[1.1] text-text sm:text-[40px]">
             Mars analogs {verdict(hold.mars.meanPercentile)}. Moon analogs {verdict(hold.moon.meanPercentile)}.
-          </h3>
+          </h4>
           <p className="mt-5 max-w-[60ch] text-[16px] leading-[26px] text-muted">
             The hold-out sites were never used to choose a tolerance or a weight. These are the numbers to quote.
           </p>
@@ -353,6 +359,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
             value={hold.overall.rocAuc}
             decimals={3}
             sub={`tuning set ${f3(tune.overall.rocAuc)}`}
+            plain={hold.overall.rocAuc === null ? null : `${Math.round(hold.overall.rocAuc * 100)}% of ${hold.overall.knownSites} test sites (${hold.overall.negativeSites} controls)`}
             note="How often a known analog outscores a negative control. 0.5 is chance, 1.0 is perfect."
           />
           <BigStat
@@ -609,6 +616,9 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
           </div>
         </Rv>
       </Block>
+
+      {/* Extra checks: render only when their files are published */}
+      <ValidationChecks />
 
       {/* Limits */}
       <Block id="v-limits" label="Limits" title="Where this validation stops." lead="Six reasons to read the numbers above with care.">

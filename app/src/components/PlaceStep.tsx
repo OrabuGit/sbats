@@ -6,6 +6,8 @@ import type { TargetProfile } from '../lib/matchAdapter';
 import { formatCoords } from '../lib/geo';
 import { Ground } from './Ground';
 import type { GlobePlace } from './WorldGlobe';
+import { formatValue, type MetaByKey } from '../lib/format';
+import { SourceBadge } from './Badges';
 
 const WorldGlobe = lazy(() => import('./WorldGlobe').then((m) => ({ default: m.WorldGlobe })));
 
@@ -32,12 +34,13 @@ interface Props {
   profile: TargetProfile | null;
   extract: ExtractItem | null;
   windowKm: number;
+  meta: MetaByKey;
   onFind: () => void;
   hidden?: boolean;
 }
 
 /** Step 2: the world as a big globe with its places pinned, a list to search, and one button to go on. */
-export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, targets, target, profile, extract, windowKm, onFind, hidden = false }: Props) {
+export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, targets, target, profile, extract, windowKm, meta, onFind, hidden = false }: Props) {
   const [query, setQuery] = useState('');
   const here = places.filter((p) => p.body === body);
   const q = query.trim().toLowerCase();
@@ -103,20 +106,53 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
                 {picked.sub ? `${picked.sub}. ` : ''}
                 <span className="num">{formatCoords(picked.lat, picked.lon)}</span>
               </p>
-              {ready && <p className="mt-3 text-[14px] leading-[22px] text-text">{profile ? profile.target.summary : target.summary}</p>}
-              {profile?.notes.map((n) => (
-                <p key={n} className="mt-2 border-l-2 border-accent pl-3 text-[12px] leading-[18px] text-text" role="note">
-                  {n}
+              {/* One verdict line and the key figures; the rest opens on request. */}
+              <p className="mt-3 text-[15px] leading-6 text-text">
+                {ready ? `Ready. Measured values exist for ${picked.name.split(',')[0]}, so Earth can be searched for it.` : 'Not ready. No measured values exist for this place yet.'}
+              </p>
+              {ready && (
+                <dl className="mt-3 grid grid-cols-3 gap-x-4">
+                  {(['slope', 'roughness', 'tempMean'] as const).map((k) => {
+                    const tv = (profile ? profile.target : target).values[k];
+                    return (
+                      <div key={k}>
+                        <dt className="text-[12px] text-muted">{k === 'slope' ? 'Slope' : k === 'roughness' ? 'Roughness' : 'Mean temperature'}</dt>
+                        <dd className="num text-[15px] text-text">{formatValue(k, tv?.value, meta)}</dd>
+                        {tv?.badge && <SourceBadge badge={tv.badge} source={tv.source ?? undefined} />}
+                      </div>
+                    );
+                  })}
+                </dl>
+              )}
+              {profile?.notes[0] && (
+                <p className="mt-3 border-l-2 border-accent pl-3 text-[12px] leading-[18px] text-text" role="note">
+                  {profile.notes[0]}
                 </p>
-              ))}
-              {ready && extract && (
-                <div className="mt-4 max-w-[260px]">
-                  <Ground item={extract} layer="relief" windowKm={windowKm} />
-                </div>
               )}
               <button type="button" onClick={onFind} disabled={!ready} className="btn btn-primary mt-5 !h-12 w-full !justify-between !px-5 !text-[16px] disabled:opacity-60">
                 {ready ? 'Find analogs on Earth' : 'No values for this place yet'} {ready && <ArrowRight size={17} aria-hidden="true" />}
               </button>
+              {ready && (
+                <details className="group mt-4 border-t border-line pt-1">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[14px] font-medium text-muted hover:text-text [&::-webkit-details-marker]:hidden">
+                    More about this place
+                    <span className="transition-transform group-open:rotate-90" aria-hidden="true">
+                      ›
+                    </span>
+                  </summary>
+                  <p className="text-[14px] leading-[22px] text-text">{profile ? profile.target.summary : target.summary}</p>
+                  {profile?.notes.slice(1).map((n) => (
+                    <p key={n} className="mt-2 text-[12px] leading-[18px] text-muted">
+                      {n}
+                    </p>
+                  ))}
+                  {extract && (
+                    <div className="mt-4 max-w-[260px]">
+                      <Ground item={extract} layer="relief" windowKm={windowKm} />
+                    </div>
+                  )}
+                </details>
+              )}
               {!ready && (
                 <p className="mt-2 text-[12px] leading-[18px] text-muted">
                   {picked.line || 'No terrain, temperature or rock values exist for this place in the data.'} Places with values are listed first.

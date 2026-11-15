@@ -8,6 +8,7 @@ import { countryKey, useCountries } from '../lib/where';
 import { loadExtra } from '../data/access';
 import { mineralsWithheld } from '../lib/matchAdapter';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
+import { storyFor, useStories, type SiteStory } from '../data/stories';
 import { ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { ELEMENT_NAME, ElementIcon, type ElementId } from './ElementIcon';
 import { Reveal } from './HomeStory';
@@ -124,7 +125,34 @@ function ProfileDots({ result, size = 'md' }: { result: NonNullable<ReturnType<t
   );
 }
 
-function SiteArticle({ site, lead, image, finding, scored, analog, targets, tested, onSitePage, onMatch }: {
+/** The written story of a site with its source badge. Nothing at all when there is no story. */
+export function StoryNote({ story }: { story: SiteStory | null }) {
+  if (!story) return null;
+  return (
+    <div className="mt-6 border-l-2 border-line pl-4" role="note">
+      <p className="label">{story.title ?? 'Story'}</p>
+      <div className="mt-1 max-w-[62ch] space-y-2">
+        {story.paragraphs.map((t) => (
+          <p key={t} className="text-[14px] leading-[22px] text-text">
+            {t}
+          </p>
+        ))}
+      </div>
+      <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted">
+        <SourceBadge badge={story.badge} source={story.source} />
+        {story.url?.startsWith('https://') ? (
+          <a href={story.url} target="_blank" rel="noreferrer" className="link-rule">
+            {story.source}
+          </a>
+        ) : (
+          <span>{story.source}</span>
+        )}
+      </p>
+    </div>
+  );
+}
+
+function SiteArticle({ site, lead, image, finding, scored, analog, targets, tested, story, onSitePage, onMatch }: {
   site: FeaturedSite;
   lead: boolean;
   image: { file: string; attribution: string; date?: string } | null;
@@ -134,6 +162,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
   targets: Target[];
   /** Sentences built by fixed rules from measured values (data/benchmarks.json). */
   tested: { could: Tested[]; cannot: Tested[] } | null;
+  /** The written story of the site, when data/site_stories.json has one. */
+  story: SiteStory | null;
   onSitePage: Props['onSitePage'];
   onMatch: Props['onMatch'];
 }) {
@@ -190,6 +220,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           <Lines title="Strong for" items={finding?.strong ?? []} empty="No written finding for this site. See the numbers on its site page." />
           <Lines title="Falls short on" items={[...(finding?.short ?? []), ...(finding?.notScored ?? []).map((t) => `Not scored at all: ${t}`)]} empty="No written finding for this site." />
         </div>
+
+        <StoryNote story={story} />
 
         <details className="group mt-6 border-t border-line pt-3">
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[15px] font-medium text-text [&::-webkit-details-marker]:hidden">
@@ -314,6 +346,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
 export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, target, earth, results, top, reason, warnings, onSitePage, onMatch, onCell }: Props) {
   const findings = useAsync(loadFindings, 'findings');
   const scores = useAsync(loadSiteScores, 'site-scores');
+  const stories = useStories();
   const bench = useAsync(() => loadExtra<Benchmarks>('benchmarks.json'), 'benchmarks');
   const bm = bench.status === 'ready' ? bench.value : null;
   const disc = useAsync(() => loadExtra<Discoveries>('discoveries.json'), 'discoveries');
@@ -433,6 +466,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                   const keep = (t: Tested) => !(mineralsWithheld(s.id) && /mineral/i.test(t.text));
                   return b ? { could: (b.couldTest ?? []).filter(keep), cannot: b.cannotTest ?? [] } : null;
                 })()}
+                story={storyFor(stories, s.id)}
                 onSitePage={onSitePage}
                 onMatch={onMatch}
               />

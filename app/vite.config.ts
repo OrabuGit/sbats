@@ -125,7 +125,7 @@ function sbatsData(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = (req.url ?? '').split('?')[0];
-        const ex = url.match(/\/data\/(extracts\/(?:[a-z0-9-]+\/)?[A-Za-z0-9_.-]+\.(?:json|jpg|f32))$/);
+        const ex = url.match(/\/data\/(extracts\/(?:[A-Za-z0-9-]+\/)?[A-Za-z0-9_.-]+\.(?:json|jpg|f32))$/);
         if (ex) {
           const file = path.join(DATA_DIR, ex[1]);
           if (!fs.existsSync(file)) {
@@ -180,7 +180,7 @@ function sbatsData(): Plugin {
 export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss(), sbatsData()],
-  server: { port: 5173, strictPort: false },
+  server: { port: 5173, strictPort: false, fs: { allow: ['..'] } },
   build: {
     rolldownOptions: {
       output: {

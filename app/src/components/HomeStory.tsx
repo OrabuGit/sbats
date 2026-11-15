@@ -8,6 +8,7 @@ import { loadFrozen, loadReport, loadSources } from '../data/validation';
 import type { ExtractIndex } from '../data/sites';
 import { verdictOf, VERDICT_WORD } from '../lib/verdict';
 import { ActivityArt } from './ActivityArt';
+import { AiMark } from './AiMark';
 import { ElementIcon, isElement } from './ElementIcon';
 import type { HeroPlace } from './HeroGlobes';
 import { countryAt } from '../lib/where';
@@ -364,6 +365,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
           </li>
         ))}
       </ul>
+      <AiMark className="mt-3 self-start" />
     </div>,
   ];
 

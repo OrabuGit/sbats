@@ -12,6 +12,9 @@ import { activityOf } from './components/ActivityArt';
 import type { Tool } from './components/MatchDetail';
 import { MatchesStep } from './components/MatchesStep';
 import { PickWorld } from './components/PickWorld';
+import { CustomStep } from './components/CustomStep';
+import { AiUsePage } from './components/AiUsePage';
+import { ExplorePage } from './components/ExplorePage';
 import { PlaceStep } from './components/PlaceStep';
 import type { ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
@@ -26,6 +29,7 @@ import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import type { HeroLink, HeroPick, HeroSite } from './components/HeroGlobes';
 import { HomePair, type PairInfo } from './components/HomePair';
 import { countryKey, useCountries } from './lib/where';
+import { GuidedTour } from './components/GuidedTour';
 import { Home } from './components/Home';
 import { SavedPage } from './components/SavedPage';
 import { Logo } from './components/Logo';
@@ -52,7 +56,7 @@ const LearnPage = lazy(learnModule);
 if (typeof window !== 'undefined') (window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 2500)))(() => void learnModule());
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 
-type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
+type View = 'home' | 'custom' | 'aiuse' | 'explore' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 
 const LIST_LIMIT = 15;
@@ -117,9 +121,12 @@ function Orbit({ data }: { data: DataBundle }) {
   const [targetId, setTargetIdRaw] = useState(targets[0].id);
   // A target built from a clicked point or a named place with no curated target (lib/targets).
   const [pointProfile, setPointProfile] = useState<TargetProfile | null>(null);
+  // Conditions the person set by hand (the Custom option beside the Moon and Mars). Any other target replaces it.
+  const [customTarget, setCustomTarget] = useState<Target | null>(null);
   // Choosing a listed base site always leaves any picked point.
   const setTargetId = useCallback((id: string) => {
     setPointProfile(null);
+    setCustomTarget(null);
     setTargetIdRaw(id);
   }, []);
   const [presetId, setPresetId] = useState<string | null>(PRESETS[0].id);
@@ -127,7 +134,9 @@ function Orbit({ data }: { data: DataBundle }) {
   const [matchMode, setMatchMode] = useState<MatchMode>('all');
   const [purposeId, setPurposeId] = useState<PurposeId>(PURPOSES[0].id);
   // In purpose mode the weights are fixed by the purpose. The sliders keep their own values for the way back.
-  const weights = matchMode === 'purpose' ? purposeWeights(purposeId) : sliderWeights;
+  // Sunlight needs a place on a body, which a custom search does not have: it is left out.
+  const baseWeights = matchMode === 'purpose' ? purposeWeights(purposeId) : sliderWeights;
+  const weights = customTarget ? { ...baseWeights, sunlight: 0 } : baseWeights;
   const purpose = matchMode === 'purpose' ? (PURPOSES.find((p) => p.id === purposeId) ?? null) : null;
   const choosePreset = useCallback((id: string) => {
     const p = PRESETS.find((x) => x.id === id);
@@ -214,7 +223,10 @@ function Orbit({ data }: { data: DataBundle }) {
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
   const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
-  const target = pointProfile?.target ?? targets.find((t) => t.id === targetId) ?? targets[0];
+  useEffect(() => {
+    if (pointProfile) setCustomTarget(null);
+  }, [pointProfile]);
+  const target = pointProfile?.target ?? customTarget ?? targets.find((t) => t.id === targetId) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
   const index = useMemo(() => buildIndex(earth), [earth]);
   const scorer = useMemo(() => createScorer(earth, lithology), [earth, lithology]);
@@ -467,6 +479,58 @@ function Orbit({ data }: { data: DataBundle }) {
     [reconReady, selected, featured],
   );
 
+  // The guided tour: the first visit starts it, the Tour button replays it. Each step moves the app to what it is about.
+  const [tour, setTour] = useState<number | null>(null);
+  const tourGo = (n: number) => {
+    setTour(n);
+    const shackleton = places.find((p) => p.id === 'moon-shackleton-crater') ?? places.find((p) => /shackleton/i.test(p.name) && !!p.targetId);
+    const tambora = featuredSites?.sites.find((x) => x.id === 'id-tambora-caldera') ?? null;
+    if (n === 0) {
+      transition(() => setView('home'));
+      setHomePick(null);
+    } else if (n === 1) {
+      if (shackleton) pickPlace(shackleton.id);
+      transition(() => {
+        setView('orbit');
+        setStep(2);
+        setTab('setup');
+      });
+    } else if (n === 2) {
+      goToEarth();
+    } else if (n === 3) {
+      if (tambora) openSite(tambora.lat, tambora.lon, 'moon-shackleton-rim');
+    } else if (n === 4) {
+      window.setTimeout(() => document.getElementById('h-why')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+    } else if (n === 5) {
+      window.setTimeout(() => (document.querySelector('main.scroll') as HTMLElement | null)?.scrollTo({ top: 0, behavior: 'smooth' }), 300);
+    } else {
+      transition(() => setView('home'));
+    }
+  };
+  const closeTour = useCallback(() => {
+    try {
+      localStorage.setItem('sbats-tour-seen', '1');
+    } catch {
+      // Without storage the tour simply offers itself again next visit.
+    }
+    setTour(null);
+  }, []);
+  useEffect(() => {
+    let seen = false;
+    try {
+      seen = localStorage.getItem('sbats-tour-seen') === '1';
+    } catch {
+      seen = false;
+    }
+    if (seen || new URLSearchParams(window.location.search).has('base')) return;
+    const t = window.setTimeout(() => {
+      userTouch();
+      setTour(0);
+    }, 2600);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const runDemo = () => {
     if (demo) return stopDemo();
     const at = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
@@ -577,6 +641,11 @@ function Orbit({ data }: { data: DataBundle }) {
       if (view === 'orbit' && step === 3) return;
       if (step < 3 || view === 'home') return goToEarth();
       return backToEarth();
+    }
+    if (s === 2 && customTarget) {
+      setView('custom');
+      setStep(2);
+      return;
     }
     setView('orbit');
     setStep(s);
@@ -935,7 +1004,7 @@ function Orbit({ data }: { data: DataBundle }) {
     <div className={view === 'home' ? 'flex h-full flex-col' : 'flex min-h-full flex-col lg:h-full'}>
       {view !== 'home' && (
       <TopBar
-        step={view === 'orbit' || view === 'match' ? step : null}
+        step={view === 'orbit' || view === 'match' || view === 'custom' ? step : null}
         onStep={onStep}
         canMatch={selected !== null}
         onHome={() => transition(() => setView('home'))}
@@ -949,6 +1018,10 @@ function Orbit({ data }: { data: DataBundle }) {
         onDemo={runDemo}
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
+        onTour={() => {
+          userTouch();
+          tourGo(0);
+        }}
         learnOpen={view === 'learn'}
         onLearn={() => setView('learn')}
       />
@@ -1014,6 +1087,11 @@ function Orbit({ data }: { data: DataBundle }) {
           }}
           onOpenPair={openHomePair}
           onAllMatches={homePlace && homeReady ? () => goToEarth() : null}
+          onTour={() => {
+            userTouch();
+            tourGo(0);
+          }}
+          onAiUse={() => setView('aiuse')}
           onClearPick={() => {
             userTouch();
             setHomePick(null);
@@ -1027,14 +1105,33 @@ function Orbit({ data }: { data: DataBundle }) {
 
       {view === 'learn' && (
         <Suspense fallback={<div className="min-h-0 flex-1 bg-bg px-5 py-16 sm:px-10" aria-busy="true" />}>
-          <LearnPage onFind={() => onStep(1)} onWorld={(w) => { setWorldPage(w); setView('world'); }} />
+          <LearnPage onAiUse={() => setView('aiuse')} onFind={() => onStep(1)} onWorld={(w) => { setWorldPage(w); setView('world'); }} />
         </Suspense>
       )}
 
       {view === 'saved' && <SavedPage saved={saved.list} onOpen={openSavedItem} onRemove={saved.remove} onFind={() => { setView('orbit'); setStep(1); }} />}
 
       {view === 'orbit' && step === 1 && (
-        <PickWorld moonPlaces={places.filter((p) => p.body === 'moon').length} marsPlaces={places.filter((p) => p.body === 'mars').length} onPick={pickWorld} />
+        <PickWorld moonPlaces={places.filter((p) => p.body === 'moon').length} marsPlaces={places.filter((p) => p.body === 'mars').length} onPick={pickWorld} onCustom={() => transition(() => { setView('custom'); setStep(2); })} />
+      )}
+
+      {view === 'explore' && <ExplorePage earth={earth} target={target} candidates={candidates} analogs={sites} onOpenCell={(i) => select(i)} onBack={backToEarth} />}
+
+      {view === 'aiuse' && <AiUsePage onBack={() => setView('home')} />}
+
+      {view === 'custom' && (
+        <CustomStep
+          earth={earth}
+          targets={targets}
+          onSearch={(t) => {
+            setPointProfile(null);
+            setCustomTarget(t);
+            setPresetId(null);
+            setMatchMode('all');
+            setSelected(null);
+            goToEarth();
+          }}
+        />
       )}
 
       {view === 'featured' && (
@@ -1173,6 +1270,7 @@ function Orbit({ data }: { data: DataBundle }) {
 
       {flags.methodPage && infoOpen && (
         <InfoShell
+          onAiUse={() => setView('aiuse')}
           view={view}
           onView={(v) => (v === 'site' ? openSitePage(siteId ?? featuredSites?.sites[0]?.id ?? '') : setView(v))}
           onBack={() => setView('home')}
@@ -1250,14 +1348,17 @@ function Orbit({ data }: { data: DataBundle }) {
             profile={pointProfile}
             extract={targetExtract}
             windowKm={windowKm}
+            meta={meta}
             onFind={() => goToEarth()}
           />
           <MatchesStep
             hidden={!showEarth}
             body={target.body}
+            custom={target.id === 'custom-conditions'}
+            onExplore={() => transition(() => setView('explore'))}
             globe={
               <Suspense fallback={<p className="absolute left-5 top-5 text-[13px] text-muted" role="status">Loading globe</p>}>
-                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={previewFromGlobe} focus={focus} links={topLinks} anchor={target.body === 'moon' || target.body === 'mars' ? { name: target.name.split(',')[0], body: target.body } : undefined} activeLink={Math.max(-1, topIdx.indexOf(preview ?? -1))} active={showEarth} />
+                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={previewFromGlobe} focus={focus} links={topLinks} anchor={target.id !== 'custom-conditions' && (target.body === 'moon' || target.body === 'mars') ? { name: target.name.split(',')[0], body: target.body } : undefined} activeLink={Math.max(-1, topIdx.indexOf(preview ?? -1))} active={showEarth} />
               </Suspense>
             }
             controls={{
@@ -1299,6 +1400,7 @@ function Orbit({ data }: { data: DataBundle }) {
         </>
       )}
 
+      {tour !== null && <GuidedTour step={tour} onStep={tourGo} onClose={closeTour} />}
     </div>
   );
 }

@@ -113,6 +113,8 @@ rover), Literature (from a paper), or Computed (worked out in the browser).
 
 ## AI assistance
 
+The in-app page "AI assistance" (linked in the footer) shows the full record, which is `AI_USE.md`. Drawings made in code with AI assistance carry a small "AI-generated drawings" mark.
+
 Code, data compilation and written text in this repository were produced with AI assistance (Claude
 Code), directed and reviewed by the team. The concept and the decisions are the team's. Every use is
 logged in `AI_USE.md` with the tool, what it did and which files. No value in the data comes from an AI
@@ -127,4 +129,6 @@ Software: React, Vite, TypeScript, Tailwind CSS, three.js, globe.gl, three-slipp
 icons, the Inter and IBM Plex Mono typefaces (through Fontsource), world-atlas (Natural Earth) and
 topojson-client. See `SOURCES.md`, "Software and libraries".
 
-No code, text, assets or visual design were taken from another entry.
+Several ideas in the app (a guided tour, an explore chart, plain-language results, a custom-conditions search,
+extra validation cards) also appear in other 2026 entries. No code, text, assets or visual design were taken
+from any of them: each was written for this project from its own data.

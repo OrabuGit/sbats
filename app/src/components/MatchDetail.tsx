@@ -13,6 +13,9 @@ import { Locator } from './Locator';
 import { ActivityArt, type Activity } from './ActivityArt';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
 import { ScoreDial } from './ScoreDial';
+import { PlainResults } from './PlainResults';
+import { FieldLogistics, logisticsFromRecord } from './FieldLogistics';
+import { CompareSlider } from './CompareSlider';
 import { countryKey, useCountries } from '../lib/where';
 
 const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
@@ -218,6 +221,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
   // A cell with no site in it is named by where it is.
   const name = placeName ?? (country ? `Open land in ${country}` : 'Open land');
   const worldWord = target.body === 'moon' ? 'the Moon' : 'Mars';
+  // Conditions typed in by hand are not a place: no second world, no ground picture of it.
+  const custom = target.id === 'custom-conditions';
   const pad = 'mx-auto w-full max-w-[1200px] px-5 sm:px-10';
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-match">
@@ -242,7 +247,15 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 {name}
               </h2>
               <p className="mt-2 text-[18px] leading-7 text-muted">
-                as a stand-in for <span className="text-text">{target.name}</span> on {worldWord}
+                {custom ? (
+                  <>
+                    as a match for <span className="text-text">your custom conditions</span>
+                  </>
+                ) : (
+                  <>
+                    as a stand-in for <span className="text-text">{target.name}</span> on {worldWord}
+                  </>
+                )}
               </p>
               <p className="num mt-2 text-[12px] text-muted">
                 {country && placeName ? `${country} · ` : ''}
@@ -308,7 +321,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                     </button>
                   </figcaption>
                 </figure>
-              ) : (
+              ) : custom ? null : (
                 <Locator
                   points={[
                     { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
@@ -318,6 +331,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               )}
             </div>
           </header>
+
+          <PlainResults record={record} score={score} placeName={name} />
 
           {core.length > 0 && (
             <section className={`${pad} pb-16`} aria-labelledby="h-why">
@@ -406,6 +421,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </div>
           </section>
 
+          {!custom && (
           <section className={`${pad} py-10`} aria-labelledby="h-side">
             <h3 id="h-side" className="display mb-4 text-[24px] leading-8 text-text">
               Side by side, {ground.windowKm} km across
@@ -419,6 +435,22 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               side, which is larger than either square.
             </p>
           </section>
+          )}
+
+          {ground.earth && ground.target && (
+            <section className={`${pad} py-10`} aria-labelledby="h-slide">
+              <h3 id="h-slide" className="display mb-4 text-[24px] leading-8 text-text">
+                Slide between the two
+              </h3>
+              <CompareSlider earth={ground.earth} target={ground.target} windowKm={ground.windowKm} earthName={name} targetName={target.name} targetWorld={target.body === 'moon' ? 'Moon' : 'Mars'} />
+            </section>
+          )}
+
+          <FieldLogistics
+            lat={cell.lat}
+            {...logisticsFromRecord(record)}
+            relief={ground.earth?.elevation ? { item: ground.earth, windowKm: ground.windowKm } : null}
+          />
 
           <section className={`${pad} py-10`} aria-labelledby="h-rows">
             <h3 id="h-rows" className="display text-[24px] leading-8 text-text">
