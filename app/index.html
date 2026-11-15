@@ -7,10 +7,56 @@
     <meta name="description" content="SBATS-26 ranks every 0.5° cell of Earth by how closely it matches a Moon or Mars base site, and tests a base layout at both." />
     <meta name="generator" content="Code written with AI assistance (Claude Code). See AI_USE.md in the repository." />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=2" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #0b0d0f;
+      }
+      .splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        background: #0b0d0f;
+      }
+      .splash img {
+        height: 30px;
+        width: auto;
+        opacity: 0.95;
+      }
+      .splash i {
+        position: relative;
+        display: block;
+        width: 120px;
+        height: 2px;
+        overflow: hidden;
+        background: #2a3138;
+      }
+      .splash i::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        width: 40%;
+        background: #ffb000;
+        animation: splash-run 1.1s ease-in-out infinite;
+      }
+      @keyframes splash-run {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(250%);
+        }
+      }
+    </style>
     <title>SBATS-26 · Earth analogs for Moon and Mars base sites</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="splash" role="status" aria-label="Loading"><img src="./logo.svg" alt="SBATS" /><i></i></div></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -209,7 +209,6 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
   const weakest = core.reduce((w, d, i) => (d.similarity !== null && (w < 0 || d.similarity < (core[w].similarity as number)) ? i : w), -1);
   const [picked, setPicked] = useState<number | null>(null);
   const sel = Math.min(picked ?? Math.max(0, weakest), Math.max(0, core.length - 1));
-  const chosen = core[sel] ?? null;
   const countries = useCountries([cell]);
   const country = countries.get(countryKey(cell.lat, cell.lon)) ?? null;
   // A cell with no site in it is named by where it is.
@@ -308,59 +307,57 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 {scored ? `Why it scores ${formatScore(score)}` : 'What can be compared'}
               </h3>
               <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">
-                Each icon is one thing the two places are compared on. The amber shape reaches further out the closer they are alike: past the outer dashed ring is a match, inside the inner one is not.
+                One ring for each thing the two places are compared on. A ring fills the more alike they are; the gaps mark where a match starts.
               </p>
-              <div className="mt-8 grid items-center gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+              <div className="mt-8 grid items-start gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
                 <ScoreDial dims={core} score={scored ? (score as number) : null} selected={sel} onSelect={setPicked} />
-                {chosen && (
-                  <div aria-live="polite">
-                    <div className="flex items-center gap-4">
-                      {isElement(chosen.id) && (
-                        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 ${fromRecord(chosen.verdict) === 'match' ? 'border-accent bg-accent text-bg' : fromRecord(chosen.verdict) === 'partial' ? 'border-accent text-accent' : 'border-line text-muted'}`}>
-                          <ElementIcon id={chosen.id} size={32} />
-                        </span>
-                      )}
-                      <div>
-                        <p className="display text-[28px] leading-8 text-text">{isElement(chosen.id) ? ELEMENT_NAME[chosen.id] : chosen.label}</p>
-                        <p className="text-[13px] text-muted">{chosen.measures}</p>
-                      </div>
-                      <div className="ml-auto text-right">
-                        <p className="display text-[44px] leading-none text-text">{formatSim(chosen.similarity)}</p>
-                        <VerdictChip v={fromRecord(chosen.verdict)} />
-                      </div>
-                    </div>
-                    <div className="mt-5">
-                      <Track value={chosen.similarity} label={chosen.label} />
-                    </div>
-                    <p className="mt-5 text-[16px] leading-[26px] text-text">{chosen.reason}</p>
-                    {chosen.rows.slice(0, 2).map((r) => (
-                      <dl key={r.key} className="mt-4 grid grid-cols-2 gap-x-6">
-                        <Side label="Earth" side={r.earth} />
-                        <Side label={target.name} side={r.target} />
-                      </dl>
-                    ))}
-                    {weakest >= 0 && (
-                      <p className="mt-6 border-l-2 border-accent pl-4 text-[14px] leading-[22px] text-muted">
-                        {sel === weakest ? (
-                          <>
-                            <span className="font-semibold text-text">The weakest link.</span> The score multiplies the factors together (a weighted geometric mean), so a weak one cannot be averaged away.
-                          </>
-                        ) : (
-                          <>
-                            Weakest here is{' '}
-                            <button type="button" onClick={() => setPicked(weakest)} className="link-rule font-semibold text-text">
-                              {core[weakest].label.toLowerCase()}
-                            </button>
-                            . The score multiplies the factors together, so a weak one cannot be averaged away.
-                          </>
+                <ul>
+                  {core.map((d, i) => {
+                    const v = fromRecord(d.verdict);
+                    const open = i === sel;
+                    return (
+                      <li key={d.id} className={`border-l-2 ${open ? 'border-accent' : 'border-line'}`}>
+                        <button type="button" onClick={() => setPicked(i)} aria-expanded={open} className="flex w-full items-center gap-4 py-3 pl-4 pr-1 text-left">
+                          {isElement(d.id) && (
+                            <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${v === 'miss' || v === 'none' ? 'bg-line text-muted' : 'bg-accent text-bg'}`}>
+                              <ElementIcon id={d.id} size={26} still={!open} />
+                            </span>
+                          )}
+                          <span className="min-w-0 flex-1">
+                            <span className={`block text-[17px] leading-6 ${open ? 'font-semibold text-text' : 'text-text/85'}`}>{isElement(d.id) ? ELEMENT_NAME[d.id] : d.label}</span>
+                            <span className="block text-[12px] leading-4 text-muted">{d.measures}</span>
+                          </span>
+                          <span className={`display text-[28px] leading-none ${d.similarity === null ? 'text-[14px] text-muted' : 'text-text'}`}>{formatSim(d.similarity)}</span>
+                        </button>
+                        {open && (
+                          <div className="pb-5 pl-4 pr-1">
+                            <div className="flex items-center gap-4">
+                              <VerdictChip v={v} />
+                              <div className="flex-1">
+                                <Track value={d.similarity} label={d.label} />
+                              </div>
+                            </div>
+                            <p className="mt-4 text-[15px] leading-6 text-text">{d.reason}</p>
+                            {d.rows.slice(0, 2).map((r) => (
+                              <dl key={r.key} className="mt-3 grid grid-cols-2 gap-x-6">
+                                <Side label="Earth" side={r.earth} />
+                                <Side label={target.name} side={r.target} />
+                              </dl>
+                            ))}
+                            {weakest >= 0 && i === weakest && (
+                              <p className="mt-4 text-[13px] leading-5 text-muted">
+                                <span className="font-semibold text-text">The weakest link.</span> The score multiplies the factors together, a weighted geometric mean, so a weak one cannot be averaged away.
+                              </p>
+                            )}
+                            <a href={`#dim-${d.id}`} className="link-rule mt-3 inline-block text-[13px] font-medium text-text">
+                              All the numbers
+                            </a>
+                          </div>
                         )}
-                      </p>
-                    )}
-                    <a href={`#dim-${chosen.id}`} className="link-rule mt-5 inline-block text-[14px] font-medium text-text">
-                      All the numbers for {chosen.label.toLowerCase()}
-                    </a>
-                  </div>
-                )}
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </section>
           )}

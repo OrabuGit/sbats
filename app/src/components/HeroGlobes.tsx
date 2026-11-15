@@ -146,6 +146,12 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   // SVG nodes of the links, moved every frame with the globes they join.
   const linkEls = useRef<(SVGGElement | null)[]>([]);
   const markEl = useRef<SVGCircleElement>(null);
+  // When the current pair was picked: the rocket leaves then.
+  const launchAt = useRef(0);
+  const pairKey = `${pick?.kind}:${pick?.id}|${links.map((l) => `${l.lat},${l.lon}`).join(';')}|${reverse?.place ?? ''}`;
+  useEffect(() => {
+    launchAt.current = performance.now();
+  }, [pairKey]);
   // Set by the effect below: turns a globe to face a point, or lets it spin again.
   const focusApi = useRef<{ focus: (updates: { world: WorldId; lat: number; lon: number }[]) => void; release: () => void } | null>(null);
   // On a wide screen the pair strip lies over the bottom of the canvas: the globes make room for it.
@@ -404,7 +410,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
       return { x: g.slot.cx + v.x * g.slot.r, y: g.slot.cy - v.y * g.slot.r, front: v.z > 0.05 };
     };
     const pinWorld = (): WorldId | null => (pickRef.current ? (pickRef.current.kind === 'site' ? 'earth' : (placesRef.current.find((p) => p.id === pickRef.current!.id)?.body ?? null)) : null);
-    const placeLinks = () => {
+    const placeLinks = (now: number) => {
       const pk = pickRef.current;
       const els = linkEls.current;
       const hideAll = () =>
@@ -455,17 +461,44 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         const mx = (a.x + b.x) / 2;
         const my = (a.y + b.y) / 2 - Math.hypot(b.x - a.x, b.y - a.y) * 0.28;
         const path = el.querySelector('path');
-        path?.style.setProperty('stroke-dashoffset', '0');
         path?.setAttribute('d', `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
+        // The launch: a rocket flies the arc from one world to the other, drawing it as it goes, then the label lands.
+        const FLIGHT = 1700;
+        const t0 = launchAt.current + i * 180;
+        const p = reduced ? 1 : Math.max(0, Math.min(1, (now - t0) / FLIGHT));
+        const k = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        path?.style.setProperty('stroke-dashoffset', String(100 * (1 - k)));
+        const at = (u: number) => [(1 - u) * (1 - u) * a.x + 2 * (1 - u) * u * mx + u * u * b.x, (1 - u) * (1 - u) * a.y + 2 * (1 - u) * u * my + u * u * b.y];
+        const rocket = el.querySelector<SVGGElement>('[data-rocket]');
+        if (rocket) {
+          const [rx, ry] = at(k);
+          const dx = 2 * (1 - k) * (mx - a.x) + 2 * k * (b.x - mx);
+          const dy = 2 * (1 - k) * (my - a.y) + 2 * k * (b.y - my);
+          const ang = (Math.atan2(dy, dx) * 180) / Math.PI + 90;
+          rocket.setAttribute('transform', `translate(${rx.toFixed(1)} ${ry.toFixed(1)}) rotate(${ang.toFixed(1)})`);
+          rocket.style.opacity = k > 0.01 && p < 1 ? '1' : '0';
+          const flame = rocket.querySelector('[data-flame]');
+          flame?.setAttribute('transform', `scale(1 ${(0.8 + 0.5 * Math.abs(Math.sin(now / 55))).toFixed(2)})`);
+        }
         const tag = el.querySelector<SVGGElement>('[data-tag]');
         // The label sits on the curve, a little short of the far end.
         const t = ends.length > 1 ? 0.86 - i * 0.11 : 0.82;
-        const lx = (1 - t) * (1 - t) * a.x + 2 * (1 - t) * t * mx + t * t * b.x;
-        const ly = (1 - t) * (1 - t) * a.y + 2 * (1 - t) * t * my + t * t * b.y;
+        const [lx, ly] = at(t);
         tag?.setAttribute('transform', `translate(${lx.toFixed(1)} ${ly.toFixed(1)})`);
-        const end = el.querySelector('circle');
+        if (tag) tag.style.opacity = p >= 1 ? '1' : '0';
+        const end = el.querySelector('[data-end]');
         end?.setAttribute('cx', b.x.toFixed(1));
         end?.setAttribute('cy', b.y.toFixed(1));
+        end?.setAttribute('opacity', p >= 1 ? '1' : '0');
+        // A ring spreads from the landing point.
+        const ring = el.querySelector<SVGCircleElement>('[data-ring]');
+        if (ring) {
+          const pr = Math.max(0, Math.min(1, (now - (t0 + FLIGHT)) / 1000));
+          ring.setAttribute('cx', b.x.toFixed(1));
+          ring.setAttribute('cy', b.y.toFixed(1));
+          ring.setAttribute('r', (4 + 18 * pr).toFixed(1));
+          ring.setAttribute('opacity', p >= 1 && pr < 1 ? String(0.9 * (1 - pr)) : '0');
+        }
         el.style.opacity = String(i === activeRef.current ? 1 : Math.max(0.3, 0.85 - i * 0.14));
       });
     };
@@ -519,7 +552,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
           g.vy = 0;
         }
       }
-      placeLinks();
+      placeLinks(now);
       draw();
     };
     relayout.current = layout;
@@ -592,10 +625,10 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   const caption = (w: WorldId) => (w === 'earth' ? `${cells.toLocaleString('en-US')} cells scored` : `${count(w)} named places`);
 
   return (
-    <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg">
-      {state !== 'ready' && (
+    <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg transition-opacity duration-700" style={{ opacity: state === "loading" ? 0 : 1 }}>
+      {state === 'error' && (
         <p className="readout absolute left-4 top-20" role="status">
-          {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn on this device'}
+          Globes could not be drawn on this device
         </p>
       )}
       <svg className="pointer-events-none absolute inset-0 z-[5] h-full w-full" aria-hidden="true">
@@ -609,8 +642,17 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
             }}
             style={{ opacity: 0 }}
           >
-            <path className="hero-arc" pathLength={100} fill="none" stroke="#FFB000" strokeWidth={i === active ? 2.4 : 1.4} strokeLinecap="round" style={{ transitionDelay: `${i * 140}ms` }} />
-            <circle r="4" fill="#FFB000" />
+            <path className="hero-arc" pathLength={100} fill="none" stroke="#FFB000" strokeWidth={i === active ? 2.4 : 1.4} strokeLinecap="round" />
+            <circle data-ring="" r="4" fill="none" stroke="#FFB000" strokeWidth="1.5" opacity="0" />
+            <g data-rocket="" style={{ opacity: 0 }}>
+              <g data-flame="">
+                <path d="M-1.9 5.2 Q0 13 1.9 5.2 Z" fill="#FFB000" />
+              </g>
+              <path d="M-2.4 2 L-5.4 7 L-2.4 5.6 Z M2.4 2 L5.4 7 L2.4 5.6 Z" fill="#FFB000" />
+              <path d="M0 -8.5 C3.4 -4.5 3.4 1.5 2.6 5.6 H-2.6 C-3.4 1.5 -3.4 -4.5 0 -8.5 Z" fill="#D7DDE3" />
+              <circle cx="0" cy="-2.2" r="1.3" fill="#0B0D0F" />
+            </g>
+            <circle data-end="" r="4" fill="#FFB000" />
             <g data-tag="">
               <rect x="-24" y="-11" width="48" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
               <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="12" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">

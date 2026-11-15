@@ -1,4 +1,4 @@
-import { Bookmark, BookOpen, MapPin, Play, Square } from 'lucide-react';
+import { Bookmark, BookOpen, GraduationCap, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
 import { Logo } from './Logo';
 
@@ -19,6 +19,8 @@ export function NavRight({
   onFeatured,
   methodOpen,
   onMethod,
+  learnOpen,
+  onLearn,
   savedCount,
   savedOpen,
   onSaved,
@@ -30,6 +32,8 @@ export function NavRight({
   onFeatured: () => void;
   methodOpen: boolean;
   onMethod: () => void;
+  learnOpen: boolean;
+  onLearn: () => void;
   savedCount: number;
   savedOpen: boolean;
   onSaved: () => void;
@@ -51,6 +55,10 @@ export function NavRight({
           <span className="hidden sm:inline">Method</span>
         </button>
       )}
+      <button type="button" onClick={onLearn} aria-pressed={learnOpen} aria-label="Learn" className={`${NAV} ${tone(learnOpen)}`}>
+        <GraduationCap size={15} aria-hidden="true" className="sm:hidden" />
+        <span className="hidden sm:inline">Learn</span>
+      </button>
       <button type="button" onClick={onSaved} aria-pressed={savedOpen} aria-label={`Saved, ${savedCount}`} className={`${NAV} ${tone(savedOpen)}`}>
         <Bookmark size={15} aria-hidden="true" />
         <span className="hidden sm:inline">Saved</span>

@@ -46,9 +46,10 @@ import { decodeLayout, layoutFromJson, type SavedLayout } from './lib/simAdapter
 // The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
 const globeModule = import('./components/GlobeView');
+const LearnPage = lazy(() => import('./components/LearnPage').then((m) => ({ default: m.LearnPage })));
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 
-type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain';
+type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 
 const LIST_LIMIT = 15;
@@ -69,48 +70,26 @@ export default function App() {
     };
   }, []);
 
-  // While the data loads, and if it fails, the frame of the app is already in place: nothing jumps when it arrives.
+  // While the data loads: the same splash as the page ships with (see index.html), so nothing is drawn in pieces.
   if (load.status !== 'ready') {
-    const failed = load.status === 'error';
-    const cell = (text: string, extra = '') => (
-      <div className={`bg-panel p-4 ${extra}`}>
-        <p className="label" role={failed ? undefined : 'status'}>
-          {failed ? 'No data' : text}
-        </p>
-      </div>
-    );
-    return (
-      <div className="flex min-h-full flex-col lg:h-full">
-        <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
-          <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
-            <h1 className="m-0">
-              <Logo height={24} />
-            </h1>
+    if (load.status === 'error')
+      return (
+        <div className="flex h-full items-center justify-center bg-bg px-6">
+          <div role="alert" className="max-w-[60ch]">
+            <Logo height={26} />
+            <p className="mt-6 text-[16px] font-medium text-text">The data could not be loaded</p>
+            <p className="mt-2 text-[14px] text-muted">{load.message}</p>
+            <p className="mt-2 text-[13px] text-muted">The app reads its data files from the data folder next to this page. Check the connection and try again.</p>
+            <button type="button" onClick={() => window.location.reload()} className="btn mt-5">
+              Reload
+            </button>
           </div>
-        </header>
-        <div className="flex min-h-0 flex-1 flex-col gap-px bg-line lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
-          {cell('Loading targets', 'order-2 lg:order-1')}
-          <div className="order-1 h-[46vh] min-h-[280px] bg-bg p-4 lg:order-2 lg:h-auto">
-            {failed ? (
-              <div role="alert" className="max-w-[60ch]">
-                <p className="label !text-fail">Data could not be loaded</p>
-                <p className="mt-2 text-[14px] text-text">{load.message}</p>
-                <p className="mt-2 text-[13px] text-muted">The app reads its data files from the data folder next to this page. Check the connection and try again.</p>
-                <button type="button" onClick={() => window.location.reload()} className="btn mt-4">
-                  Reload
-                </button>
-              </div>
-            ) : (
-              <p className="label" role="status">
-                Loading the Earth grid, 1.9 MB
-              </p>
-            )}
-          </div>
-          {cell('Loading sites', 'order-3')}
         </div>
-        <footer className="num flex min-h-8 shrink-0 items-center border-t border-line bg-panel px-3 text-[11px] uppercase tracking-wider text-muted sm:px-4">
-          {failed ? 'Stopped' : 'Loading'}
-        </footer>
+      );
+    return (
+      <div className="splash" role="status" aria-label="Loading">
+        <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="SBATS" />
+        <i />
       </div>
     );
   }
@@ -941,6 +920,8 @@ function Orbit({ data }: { data: DataBundle }) {
         onDemo={runDemo}
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
+        learnOpen={view === 'learn'}
+        onLearn={() => transition(() => setView('learn'))}
       />
       )}
 
@@ -994,6 +975,7 @@ function Orbit({ data }: { data: DataBundle }) {
             setHomeActive(i);
           }}
           pair={homePair}
+          auto={homeAuto}
           chips={homeChips}
           presets={PRESETS}
           presetId={presetId}
@@ -1009,8 +991,15 @@ function Orbit({ data }: { data: DataBundle }) {
           }}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
           onMethod={() => setView('method')}
+          onLearn={() => transition(() => setView('learn'))}
           onValidation={() => setView('validation')}
         />
+      )}
+
+      {view === 'learn' && (
+        <Suspense fallback={null}>
+          <LearnPage onFind={() => onStep(1)} onWorld={(w) => { setWorldPage(w); setView('world'); }} />
+        </Suspense>
       )}
 
       {view === 'saved' && <SavedPage saved={saved.list} onOpen={openSavedItem} onRemove={saved.remove} onFind={() => { setView('orbit'); setStep(1); }} />}

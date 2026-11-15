@@ -382,6 +382,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </section>
       )}
 
+      {!embedded && (
       <section className={embedded ? '' : 'border-b border-line'} aria-labelledby="h-radar">
         <h3 id="h-radar" className={embedded ? 'label' : 'label px-4 pt-4'}>
           Similarity by factor, 0 to 1
@@ -390,6 +391,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           <Radar factors={e.breakdown} />
         </div>
       </section>
+      )}
 
       {!embedded && (
         <>

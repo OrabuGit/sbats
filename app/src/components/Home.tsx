@@ -39,6 +39,8 @@ interface Props {
   active: number;
   onActive: (i: number) => void;
   pair: PairInfo | null;
+  /** True while the hero is choosing pairs by itself: only a title is shown, so the buttons stay the focus. */
+  auto: boolean;
   chips: { label: string; score: number | null }[];
   presets: { id: string }[];
   presetId: string | null;
@@ -48,6 +50,7 @@ interface Props {
   onClearPick: () => void;
   onFeatured: (id?: string) => void;
   onMethod: () => void;
+  onLearn: () => void;
   onValidation: () => void;
 }
 
@@ -184,7 +187,7 @@ export function Home(p: Props) {
   }, []);
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col bg-bg">
+    <div className="arrive relative flex min-h-0 flex-1 flex-col bg-bg">
       <HomeNav
         solid={solid}
         nav={{
@@ -192,6 +195,8 @@ export function Home(p: Props) {
           onFeatured: () => p.onFeatured(),
           methodOpen: false,
           onMethod: p.onMethod,
+          learnOpen: false,
+          onLearn: p.onLearn,
           savedCount: p.savedCount,
           savedOpen: false,
           onSaved: p.onSaved,
@@ -205,14 +210,20 @@ export function Home(p: Props) {
         <section className="flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
           <div className="h-[60svh] min-h-[380px] lg:order-2 lg:h-auto lg:min-h-[640px]">
             <HeroGlobes places={p.places} sites={p.earthPins} cells={p.earth.cells.length} onPick={p.onPick} onWorld={p.onWorld} pick={p.pick} links={p.links} reverse={p.reverse} active={p.active}>
-              {p.pair && (
+              {p.pair && p.auto && (
+                <p className="pointer-events-none absolute inset-x-0 bottom-1 z-10 flex items-center justify-center gap-2 px-4 sm:bottom-5 text-center text-[14px] text-muted" aria-live="polite">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                  {p.pair.mode === 'place' ? 'Best matches for' : 'Best match for'} <span className="text-text">{p.pair.from}</span>
+                </p>
+              )}
+              {p.pair && !p.auto && (
                 <div className="hidden lg:block">
                   <HomePair pair={p.pair} chips={p.chips} active={p.active} onActive={p.onActive} presets={p.presets} presetId={p.presetId} onPreset={p.onPreset} onOpen={p.onOpenPair} onAll={p.onAllMatches} onClose={p.onClearPick} />
                 </div>
               )}
             </HeroGlobes>
           </div>
-          {p.pair && (
+          {p.pair && !p.auto && (
             <div className="lg:hidden">
               <HomePair pair={p.pair} chips={p.chips} active={p.active} onActive={p.onActive} presets={p.presets} presetId={p.presetId} onPreset={p.onPreset} onOpen={p.onOpenPair} onAll={p.onAllMatches} onClose={p.onClearPick} />
             </div>
