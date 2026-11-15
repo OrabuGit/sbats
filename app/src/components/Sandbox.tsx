@@ -163,7 +163,7 @@ function Pane({
     </div>
   );
   return (
-    <section className="flex min-w-0 flex-1 flex-col border-line bg-bg p-3 lg:border-r lg:last:border-r-0" aria-label={title}>
+    <section className="flex min-w-0 flex-1 flex-col border-b border-line bg-bg p-3 last:border-b-0 xl:border-b-0 xl:border-r xl:last:border-r-0" aria-label={title}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="label truncate">{body}</p>
@@ -782,7 +782,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
               No data. No terrain extract was built for {ground.earth ? target.name : 'this Earth cell'}. Open a featured site that has one, for example Kawah Ijen or Mount Merapi.
             </p>
           ))}
-        <div className={mode === '3d' ? 'hidden' : 'flex flex-col lg:flex-row'}>
+        <div className={mode === '3d' ? 'hidden' : 'flex flex-col xl:flex-row'}>
           <Pane
             title={siteName}
             body={`Earth · ${formatCoords(cell.lat, cell.lon)}`}
