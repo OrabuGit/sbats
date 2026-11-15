@@ -7,7 +7,7 @@ and `output/DISCOVERIES.md`. Nothing was retuned.
 
 | | Lunar targets | Mars targets |
 | --- | --- | --- |
-| Known analogs beat this share of Earth's cells, on average | 63% | 79% |
+| Known analogs beat this share of Earth's cells, on average | 63% | 77% |
 | Known analogs in the top tenth | none | about 4 in 10 |
 | Mean all-round score of a known analog | about 5 | about 13 |
 | What most often holds a known analog back | dryness (16 of 40 pairs), bare ground (12), temperature (12) | temperature (25 of 41 pairs) |
