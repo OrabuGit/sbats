@@ -95,6 +95,9 @@ Both read the frozen values and change nothing.
 - `npx tsx validation/grid_check.ts` checks "targets from anywhere" on Session B's Moon and Mars grids: how far
   each grid cell is from the curated target inside it, what profile every named place gets, and its best-ranked
   Earth cells (`output/GRID_CHECK.md`, `data/place_matches.json`).
+- `npx tsx validation/check_fresh.ts` lists every output here that is older than the data it was
+  built from, with the command to rebuild it. Run it whenever Session B rebuilds `sites.json` or a
+  grid. It changes nothing and exits 1 when something is stale.
 - `npx tsx validation/minerals.ts` lists which mineral families each site shares with each target
   (`output/MINERALS.md`). Site-level only, added after the freeze.
 - `SUMMARY.md` is the one-page plain-language account of all of it.

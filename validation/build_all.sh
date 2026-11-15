@@ -51,4 +51,6 @@ npx tsx validation/grid_check.ts > /dev/null
 # Tests
 npx tsx --test app/src/lib/scoring/__tests__/*.test.ts app/src/lib/sim/__tests__/*.test.ts \
   app/src/lib/targets/__tests__/*.test.ts app/src/lib/match/__tests__/*.test.ts app/src/lib/route/__tests__/*.test.ts
+# Every output is newer than the data it was built from (fails otherwise)
+npx tsx validation/check_fresh.ts
 echo "Session C files rebuilt and tested."
