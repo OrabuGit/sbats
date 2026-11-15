@@ -5,7 +5,7 @@ Used by sites.py (the result is the "mineralogy" block of each site in data/site
     uv run --project pipeline pipeline/emit_minerals.py
 
 Source: EMIT L2B Estimated Mineral Identification and Band Depth, 60 m (EMITL2BMIN, NASA LP DAAC),
-with the cloud, cirrus and water flags of the matching EMIT L2A mask product. EMIT is an imaging
+with every flag (cloud, cirrus, water, spacecraft, aggregate) of the matching EMIT L2A mask product. EMIT is an imaging
 spectrometer on the International Space Station; it sees latitudes up to about 52 degrees.
 
 Per site: the granules whose outline contains the site (product version 2, plus version 1 for
@@ -41,8 +41,10 @@ TOP = 5
 RAW = CACHE / "emit"
 RAW.mkdir(exist_ok=True)
 M_PER_DEG = 111194.9
-# Flag bands of the L2A mask that remove a pixel (names as written in the file).
-BAD_FLAGS = ("cloud flag", "cirrus flag", "water flag", "dilated cloud flag")
+# Every band of the L2A mask whose name ends in "flag" removes a pixel when set: cloud, cirrus, water,
+# spacecraft, dilated cloud, the aggregate flag and, in newer masks, the SpecTf cloud flag. Reading only
+# the older cloud flags is not enough: in newer masks they are empty and the cloud is in the SpecTf flag
+# (seen at Kawah Ijen, 2026-04-27: older flags 0, SpecTf cloud flag 1 over the whole footprint).
 
 
 def _cmr(short_name: str, version: str, **params) -> list[dict]:
@@ -101,12 +103,14 @@ def _mask_for(g: dict) -> tuple[np.ndarray, str] | None:
             with h5py.File(p) as f:
                 names = [n.decode().strip().lower() if isinstance(n, bytes) else str(n).strip().lower()
                          for n in f["sensor_band_parameters/mask_bands"][:]]
-                idx = [i for i, n in enumerate(names) if n in BAD_FLAGS]
+                idx = [i for i, n in enumerate(names) if n.endswith("flag")]
                 if not idx:
                     continue
+                assert any("cloud" in names[i] for i in idx), names
                 bad = np.zeros(f["mask"].shape[:2], bool)
                 for i in idx:
-                    bad |= f["mask"][:, :, i] > 0.5
+                    band = f["mask"][:, :, i]
+                    bad |= (band > 0.5) | (band < 0) | ~np.isfinite(band)   # set, or no mask value at all
             p.unlink()
             return bad, f"{m['GranuleUR']} (flags: {', '.join(names[i] for i in idx)})"
     return None

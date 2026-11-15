@@ -1,7 +1,7 @@
 {
  "meta": {
   "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
-  "generatedAt": "2026-11-15T06:59:24Z",
+  "generatedAt": "2026-11-15T07:23:39Z",
   "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json, two more candidate sites proposed by a team member, and thirteen already-known analogs for comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint.",
   "year": 2025,
   "bareNdviThreshold": 0.2,
@@ -373,48 +373,13 @@
     "errors": []
    },
    "mineralogy": {
-    "value": {
-     "group1": {
-      "identifiedShare": 0.025,
-      "top": [
-       {
-        "libraryName": "Hypersthene NMNHC2368 W1R1Bb",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.025,
-        "meanBandDepth": 0.4796
-       }
-      ]
-     },
-     "group2": {
-      "identifiedShare": 0.712,
-      "top": [
-       {
-        "libraryName": "Cronstedtite M3542 =bb_",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.448,
-        "meanBandDepth": 0.2741
-       },
-       {
-        "libraryName": "Prehnite GDS613.a <60um =aa_",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.209,
-        "meanBandDepth": 0.2179
-       },
-       {
-        "libraryName": "Perchlorate_Mg GDS851.2 220K",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.055,
-        "meanBandDepth": 0.2444
-       }
-      ]
-     }
-    },
+    "value": null,
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20260427T031739_2611702_050; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20260427T031739_2611702_050 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
-    "badge": "Measured",
-    "date": "2026-04-27",
-    "validShare": 1.0,
-    "pixels": 2084,
+    "source": null,
+    "badge": null,
+    "date": null,
+    "validShare": null,
+    "pixels": null,
     "emitCovers": true,
     "granulesAvailable": 18,
     "granulesTried": [
@@ -450,10 +415,32 @@
       "granule": "EMIT_L2B_MIN_001_20260427T031739_2611702_050",
       "date": "2026-04-27",
       "sceneCloudPct": 72,
-      "validShare": 1.0
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251121T043051_2532503_004",
+      "date": "2025-11-21",
+      "sceneCloudPct": 74,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251129T012424_2533301_003",
+      "date": "2025-11-29",
+      "sceneCloudPct": 88,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251023T045228_2529603_051",
+      "date": "2025-10-23",
+      "sceneCloudPct": 89,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      }
     ],
-    "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
+    "note": "EMIT has 18 granules over the site, but none of the 8 least cloudy ones gave a usable footprint."
    }
   },
   {
@@ -828,8 +815,8 @@
        {
         "libraryName": "fe2+fe3+_hematite_weathering",
         "libraryTitle": "Basalt_weathered BR93-43 W1R1Bb",
-        "shareOfValidPixels": 0.057,
-        "meanBandDepth": 0.0687
+        "shareOfValidPixels": 0.056,
+        "meanBandDepth": 0.0688
        },
        {
         "libraryName": "fe3+_hematite.nano.BR34b2",
@@ -863,8 +850,8 @@
        {
         "libraryName": "sulfate_jarosite-Na",
         "libraryTitle": "Jarosite GDS24 Na W1R1Bb",
-        "shareOfValidPixels": 0.065,
-        "meanBandDepth": 0.0305
+        "shareOfValidPixels": 0.064,
+        "meanBandDepth": 0.0304
        },
        {
         "libraryName": "sulfate_jarosite-lowT",
@@ -875,20 +862,20 @@
        {
         "libraryName": "hydroxide_gibbsite",
         "libraryTitle": "Gibbsite WS214 W1R1Bb",
-        "shareOfValidPixels": 0.034,
+        "shareOfValidPixels": 0.035,
         "meanBandDepth": 0.0413
        }
       ]
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20260920T045536; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20260920T045536 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20260920T045536; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20260920T045536 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2026-09-20",
     "validShare": 0.73,
-    "pixels": 2725,
+    "pixels": 2724,
     "emitCovers": true,
-    "granulesAvailable": 11,
+    "granulesAvailable": 17,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20260920T045536",
@@ -1260,7 +1247,7 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250721T053513_2520204_003; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250721T053513_2520204_003 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250721T053513_2520204_003; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250721T053513_2520204_003 (flags: cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2025-07-21",
     "validShare": 1.0,
@@ -2131,13 +2118,13 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20240929T020112; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20240929T020112 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20240929T020112; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20240929T020112 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2024-09-29",
     "validShare": 0.912,
-    "pixels": 5451,
+    "pixels": 5449,
     "emitCovers": true,
-    "granulesAvailable": 6,
+    "granulesAvailable": 13,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20241020T062937",
@@ -2508,41 +2495,13 @@
     "errors": []
    },
    "mineralogy": {
-    "value": {
-     "group1": {
-      "identifiedShare": 0.0,
-      "top": []
-     },
-     "group2": {
-      "identifiedShare": 0.001,
-      "top": [
-       {
-        "libraryName": "Perchlorate_Mg GDS851.2 220K",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.0,
-        "meanBandDepth": 0.2118
-       },
-       {
-        "libraryName": "Calcite WS272 W1R1Ha",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.0,
-        "meanBandDepth": 0.1627
-       },
-       {
-        "libraryName": "Cronstedtite M3542 =bb_",
-        "libraryTitle": null,
-        "shareOfValidPixels": 0.0,
-        "meanBandDepth": 0.1392
-       }
-      ]
-     }
-    },
+    "value": null,
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250222T043308_2505303_026; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250222T043308_2505303_026 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
-    "badge": "Measured",
-    "date": "2025-02-22",
-    "validShare": 0.65,
-    "pixels": 3837,
+    "source": null,
+    "badge": null,
+    "date": null,
+    "validShare": null,
+    "pixels": null,
     "emitCovers": true,
     "granulesAvailable": 11,
     "granulesTried": [
@@ -2578,10 +2537,31 @@
       "granule": "EMIT_L2B_MIN_001_20250222T043308_2505303_026",
       "date": "2025-02-22",
       "sceneCloudPct": 96,
-      "validShare": 0.65
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20241021T054111_2429504_041",
+      "date": "2024-10-21",
+      "sceneCloudPct": 97,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250226T025842_2505702_027",
+      "date": "2025-02-26",
+      "sceneCloudPct": 97,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250519T055644_2513904_009",
+      "date": "2025-05-19",
+      "sceneCloudPct": 98,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      }
     ],
-    "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
+    "note": "EMIT has 11 granules over the site, but none of the 8 least cloudy ones gave a usable footprint."
    }
   },
   {
@@ -3010,13 +2990,13 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20241028T031404; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20241028T031404 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20241028T031404; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20241028T031404 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2024-10-28",
     "validShare": 0.84,
     "pixels": 11150,
     "emitCovers": true,
-    "granulesAvailable": 7,
+    "granulesAvailable": 17,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20240904T003951",
@@ -3473,13 +3453,13 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20240929T020112; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20240929T020112 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20240929T020112; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20240929T020112 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2024-09-29",
     "validShare": 0.636,
     "pixels": 2417,
     "emitCovers": true,
-    "granulesAvailable": 6,
+    "granulesAvailable": 15,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20241020T062937",
@@ -3900,94 +3880,87 @@
       "identifiedShare": 1.0,
       "top": [
        {
-        "libraryName": "fe3+_hematite-nano+goethite-fg-amix",
-        "libraryTitle": "nHematit+fg-Goethit 34B2+MPC W1R1Hb",
-        "shareOfValidPixels": 0.435,
-        "meanBandDepth": 0.0708
+        "libraryName": "Goethite_Thin_Film WS222 W1R1Ba",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.29,
+        "meanBandDepth": 0.0605
        },
        {
-        "libraryName": "fe3+_hematite.nano.BR34b2",
-        "libraryTitle": "Nanohematite BR93-34B2 W1R1BbS",
-        "shareOfValidPixels": 0.291,
-        "meanBandDepth": 0.1547
+        "libraryName": "Nanohematite BR93-34B2 W1R1BbS",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.232,
+        "meanBandDepth": 0.1291
        },
        {
-        "libraryName": "fe3+_hematite.1+goeth.4+qtz",
-        "libraryTitle": "Hematite0.1+Goeth0.4+Qtz.5",
-        "shareOfValidPixels": 0.091,
-        "meanBandDepth": 0.088
+        "libraryName": "nHematit+fg-Goethit 34B2+MPC W1R1Hb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.172,
+        "meanBandDepth": 0.0598
        },
        {
-        "libraryName": "fe3+mix_AMD.assemb1",
-        "libraryTitle": "Acid_Mine_Dr Assemb1-Fe3+ W1R1Fb",
-        "shareOfValidPixels": 0.076,
-        "meanBandDepth": 0.0743
+        "libraryName": "Nanohematite FBR93-34B2b ed1 W1R1Hb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.151,
+        "meanBandDepth": 0.0902
        },
        {
-        "libraryName": "fe3+bearing1",
-        "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
-        "shareOfValidPixels": 0.03,
-        "meanBandDepth": 0.091
+        "libraryName": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.068,
+        "meanBandDepth": 0.0715
        }
       ]
      },
      "group2": {
-      "identifiedShare": 0.96,
+      "identifiedShare": 0.956,
       "top": [
        {
-        "libraryName": "sioh_hydrated_basaltic_glass",
-        "libraryTitle": "HyBasaltGlassMLUT03-9CMarP&T",
-        "shareOfValidPixels": 0.807,
-        "meanBandDepth": 0.028
+        "libraryName": "Chalcedony CU91-6A W1R1Ba",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.567,
+        "meanBandDepth": 0.0311
        },
        {
-        "libraryName": "sulfate_jarosite-lowT",
-        "libraryTitle": "Jarosite SJ-1 H3O,10-20% W1R1Bb",
-        "shareOfValidPixels": 0.039,
-        "meanBandDepth": 0.0285
+        "libraryName": "HyBasaltGlassMLUT03-9CMarP&T",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.18,
+        "meanBandDepth": 0.0261
        },
        {
-        "libraryName": "sulfate_jarosite-K",
-        "libraryTitle": "Jarosite GDS99 K 200C Syn W1R1Ba",
-        "shareOfValidPixels": 0.034,
-        "meanBandDepth": 0.0383
+        "libraryName": "Gibbsite WS214 W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.08,
+        "meanBandDepth": 0.0407
        },
        {
-        "libraryName": "smectite_montmorillonite_na_highswelling",
-        "libraryTitle": "Montmorillonite SWy-1 W1R1Hb",
-        "shareOfValidPixels": 0.017,
-        "meanBandDepth": 0.0279
+        "libraryName": "Nontronite NG-1.a W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.066,
+        "meanBandDepth": 0.0312
        },
        {
-        "libraryName": "sulfate_jarosite-Na",
-        "libraryTitle": "Jarosite GDS24 Na W1R1Bb",
-        "shareOfValidPixels": 0.015,
-        "meanBandDepth": 0.0364
+        "libraryName": "Montmorillonite SWy-1 W1R1Hb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.033,
+        "meanBandDepth": 0.0267
        }
       ]
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20231125T000223; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20231125T000223 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250525T230238_2514515_003; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250525T230238_2514515_003 (flags: cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
-    "date": "2023-11-25",
-    "validShare": 0.811,
-    "pixels": 3100,
+    "date": "2025-05-25",
+    "validShare": 0.605,
+    "pixels": 2323,
     "emitCovers": true,
-    "granulesAvailable": 11,
+    "granulesAvailable": 23,
     "granulesTried": [
      {
-      "granule": "EMIT_L2B_MIN_002_20230123T010728",
-      "date": "2023-01-23",
-      "sceneCloudPct": 47,
-      "validShare": 0.0,
-      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
-     },
-     {
-      "granule": "EMIT_L2B_MIN_002_20231125T000223",
-      "date": "2023-11-25",
-      "sceneCloudPct": 49,
-      "validShare": 0.811
+      "granule": "EMIT_L2B_MIN_001_20250525T230238_2514515_003",
+      "date": "2025-05-25",
+      "sceneCloudPct": 32,
+      "validShare": 0.605
      }
     ],
     "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
@@ -4464,19 +4437,32 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230801T213228; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230801T213228 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230801T213228; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230801T213228 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2023-08-01",
     "validShare": 0.935,
     "pixels": 5566,
     "emitCovers": true,
-    "granulesAvailable": 6,
+    "granulesAvailable": 18,
     "granulesTried": [
+     {
+      "granule": "EMIT_L2B_MIN_001_20250817T233356_2522915_007",
+      "date": "2025-08-17",
+      "sceneCloudPct": 34,
+      "skipped": "footprint not wholly inside the scene"
+     },
      {
       "granule": "EMIT_L2B_MIN_002_20241127T215417",
       "date": "2024-11-27",
       "sceneCloudPct": 52,
       "validShare": 0.334,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20260816T233350_2622815_006",
+      "date": "2026-08-16",
+      "sceneCloudPct": 55,
+      "validShare": 0.0,
       "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      },
      {
@@ -4957,13 +4943,13 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230126T153144; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230126T153144 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230126T153144; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230126T153144 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2023-01-26",
     "validShare": 1.0,
     "pixels": 5897,
     "emitCovers": true,
-    "granulesAvailable": 11,
+    "granulesAvailable": 19,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20230126T153144",
@@ -6139,60 +6125,60 @@
    "mineralogy": {
     "value": {
      "group1": {
-      "identifiedShare": 0.905,
+      "identifiedShare": 0.903,
       "top": [
        {
         "libraryName": "fe3+_hematite.1+goeth.4+qtz",
         "libraryTitle": "Hematite0.1+Goeth0.4+Qtz.5",
-        "shareOfValidPixels": 0.394,
+        "shareOfValidPixels": 0.404,
         "meanBandDepth": 0.0736
        },
        {
         "libraryName": "fe3+_goethite.thincoat",
         "libraryTitle": "Goethite_Thin_Film WS222 W1R1Ba",
-        "shareOfValidPixels": 0.141,
-        "meanBandDepth": 0.0453
+        "shareOfValidPixels": 0.142,
+        "meanBandDepth": 0.0444
        },
        {
         "libraryName": "fe2+fe3+_water_RTsludge",
         "libraryTitle": "Renyolds_TnlSldgWet SM93-15w W1R1Ba",
-        "shareOfValidPixels": 0.116,
+        "shareOfValidPixels": 0.119,
         "meanBandDepth": 0.0781
        },
        {
         "libraryName": "fe3+_hematite-nano+goethite-fg-amix",
         "libraryTitle": "nHematit+fg-Goethit 34B2+MPC W1R1Hb",
-        "shareOfValidPixels": 0.094,
-        "meanBandDepth": 0.0876
+        "shareOfValidPixels": 0.081,
+        "meanBandDepth": 0.0835
        },
        {
         "libraryName": "fe2+fe3+_hematite_weathering",
         "libraryTitle": "Basalt_weathered BR93-43 W1R1Bb",
-        "shareOfValidPixels": 0.053,
-        "meanBandDepth": 0.0826
+        "shareOfValidPixels": 0.047,
+        "meanBandDepth": 0.0706
        }
       ]
      },
      "group2": {
-      "identifiedShare": 0.728,
+      "identifiedShare": 0.722,
       "top": [
        {
         "libraryName": "sulfate_jarosite-lowT",
         "libraryTitle": "Jarosite SJ-1 H3O,10-20% W1R1Bb",
-        "shareOfValidPixels": 0.522,
-        "meanBandDepth": 0.0609
+        "shareOfValidPixels": 0.532,
+        "meanBandDepth": 0.061
        },
        {
         "libraryName": "sulfate_szomolnokite",
         "libraryTitle": "Szomolnokite NMNH104303 UT",
-        "shareOfValidPixels": 0.162,
+        "shareOfValidPixels": 0.163,
         "meanBandDepth": 0.0115
        },
        {
         "libraryName": "smectite_nontronite_swelling",
         "libraryTitle": "Nontronite NG-1.a W1R1Bb",
-        "shareOfValidPixels": 0.037,
-        "meanBandDepth": 0.0663
+        "shareOfValidPixels": 0.021,
+        "meanBandDepth": 0.0512
        },
        {
         "libraryName": "smectite_montmorillonite_na_highswelling",
@@ -6210,19 +6196,19 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230120T124439; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230120T124439 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230120T124439; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230120T124439 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2023-01-20",
-    "validShare": 1.0,
-    "pixels": 2133,
+    "validShare": 0.975,
+    "pixels": 2079,
     "emitCovers": true,
-    "granulesAvailable": 12,
+    "granulesAvailable": 22,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20230120T124439",
       "date": "2023-01-20",
       "sceneCloudPct": 0,
-      "validShare": 1.0
+      "validShare": 0.975
      }
     ],
     "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
@@ -6677,7 +6663,7 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230819T092614; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230819T092614 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230819T092614; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230819T092614 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2023-08-19",
     "validShare": 1.0,
@@ -7611,13 +7597,13 @@
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20231231T153810; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20231231T153810 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20231231T153810; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20231231T153810 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
     "date": "2023-12-31",
     "validShare": 0.719,
     "pixels": 4308,
     "emitCovers": true,
-    "granulesAvailable": 11,
+    "granulesAvailable": 22,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20231231T153810",
@@ -8627,90 +8613,102 @@
    "mineralogy": {
     "value": {
      "group1": {
-      "identifiedShare": 0.236,
+      "identifiedShare": 0.175,
       "top": [
        {
-        "libraryName": "fe3+_hematite.4+goeth.1+qtz",
-        "libraryTitle": "Hematite0.4+Goeth0.1+Qtz.5",
-        "shareOfValidPixels": 0.14,
-        "meanBandDepth": 0.0231
+        "libraryName": "Hematite FE2602 W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.09,
+        "meanBandDepth": 0.0245
        },
        {
-        "libraryName": "fe3+_hematite.thincoat",
-        "libraryTitle": "Hematite_Thin_Film GDS27 W1R1Ba",
-        "shareOfValidPixels": 0.048,
-        "meanBandDepth": 0.0301
+        "libraryName": "Maghemite GDS81 Syn (M-3) W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.018,
+        "meanBandDepth": 0.0265
        },
        {
-        "libraryName": "fe3+_hematite.fine.gr.fe2602",
-        "libraryTitle": "Hematite FE2602 W1R1Bb",
-        "shareOfValidPixels": 0.019,
-        "meanBandDepth": 0.0213
+        "libraryName": "Goethite_Thin_Film WS222 W1R1Ba",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.012,
+        "meanBandDepth": 0.0199
        },
        {
-        "libraryName": "fe3+_maghemite",
-        "libraryTitle": "Maghemite GDS81 Syn (M-3) W1R1Bb",
+        "libraryName": "Jarosite_on_Qtzite BR93-34A2 W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.009,
+        "meanBandDepth": 0.0183
+       },
+       {
+        "libraryName": "nHematit+fg-Goethit 34B2+MPC W1R1Hb",
+        "libraryTitle": null,
         "shareOfValidPixels": 0.008,
-        "meanBandDepth": 0.0652
-       },
-       {
-        "libraryName": "fe3+_hematite.nano.BR34b2b",
-        "libraryTitle": "Nanohematite FBR93-34B2b ed1 W1R1Hb",
-        "shareOfValidPixels": 0.007,
-        "meanBandDepth": 0.0561
+        "meanBandDepth": 0.0185
        }
       ]
      },
      "group2": {
-      "identifiedShare": 0.623,
+      "identifiedShare": 0.888,
       "top": [
        {
-        "libraryName": "organic_vegetation-dry-grass-golden",
-        "libraryTitle": "Grass_Golden_Dry GDS480 W1R1Fa",
-        "shareOfValidPixels": 0.4,
-        "meanBandDepth": 0.0877
+        "libraryName": "Grass_Golden_Dry GDS480 W1R1Fa",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.844,
+        "meanBandDepth": 0.0769
        },
        {
-        "libraryName": "organic_vegetation-dry-wood",
-        "libraryTitle": "Plywood GDS365 Fresh Pine W1R1Fa",
-        "shareOfValidPixels": 0.188,
-        "meanBandDepth": 0.0384
+        "libraryName": "Aragonite GDS898 Moracco",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.015,
+        "meanBandDepth": 0.0396
        },
        {
-        "libraryName": "organic_plastic-vinyl",
-        "libraryTitle": "Plastic_Vinyl GDS372 White W1R1Fa",
-        "shareOfValidPixels": 0.023,
-        "meanBandDepth": 0.0391
+        "libraryName": "Dry_Long_Grass AV87-2 W1R1Ba",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.01,
+        "meanBandDepth": 0.0464
        },
        {
-        "libraryName": "carbonate_aragonite",
-        "libraryTitle": "Aragonite GDS898 Moracco",
-        "shareOfValidPixels": 0.003,
-        "meanBandDepth": 0.031
+        "libraryName": "Plastic_Vinyl GDS372 White W1R1Fa",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.007,
+        "meanBandDepth": 0.0683
        },
        {
-        "libraryName": "smectite_nontronite_swelling",
-        "libraryTitle": "Nontronite NG-1.a W1R1Bb",
-        "shareOfValidPixels": 0.002,
-        "meanBandDepth": 0.0611
+        "libraryName": "Nontronite NG-1.a W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.004,
+        "meanBandDepth": 0.0343
        }
       ]
      }
     },
     "scale": "site",
-    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v002), granule EMIT_L2B_MIN_002_20230817T201156; cloud, cirrus and water removed with EMIT_L2A_MASK_003_20230817T201156 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250531T200118_2515113_014; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250531T200118_2515113_014 (flags: cloud flag, cirrus flag, water flag, spacecraft flag, dilated cloud flag, aggregate flag, spectf-cloud flag). NASA LP DAAC.",
     "badge": "Measured",
-    "date": "2023-08-17",
-    "validShare": 0.989,
-    "pixels": 5863,
+    "date": "2025-05-31",
+    "validShare": 0.985,
+    "pixels": 5890,
     "emitCovers": true,
-    "granulesAvailable": 8,
+    "granulesAvailable": 32,
     "granulesTried": [
      {
-      "granule": "EMIT_L2B_MIN_002_20230817T201156",
-      "date": "2023-08-17",
-      "sceneCloudPct": 10,
-      "validShare": 0.989
+      "granule": "EMIT_L2B_MIN_001_20250531T200130_2515113_015",
+      "date": "2025-05-31",
+      "sceneCloudPct": 0,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250614T200221_2516513_015",
+      "date": "2025-06-14",
+      "sceneCloudPct": 0,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250531T200118_2515113_014",
+      "date": "2025-05-31",
+      "sceneCloudPct": 1,
+      "validShare": 0.985
      }
     ],
     "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
