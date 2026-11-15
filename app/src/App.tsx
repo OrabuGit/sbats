@@ -89,7 +89,11 @@ export default function App() {
     return (
       <div className="splash" role="status" aria-label="Loading">
         <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="SBATS" />
+        <p>
+          <b>S</b>pace <b>B</b>ase <b>A</b>nalog <b>T</b>errain <b>S</b>ystem
+        </p>
         <i />
+        <p className="splash-line">Finding the places on Earth that stand in for a Moon or Mars base</p>
       </div>
     );
   }

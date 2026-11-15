@@ -4,14 +4,17 @@ import type { CellIndex } from '../lib/geo';
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatShare, formatSim, formatValue, isSunKey, type MetaByKey } from '../lib/format';
 import { PRESETS, PURPOSES, type TargetScorer } from '../lib/scoringAdapter';
-import { bestMonth } from '../lib/bestMonth';
+import { bestMonth, MONTH_NAMES } from '../lib/bestMonth';
 import { MATCH, MISS } from '../lib/verdict';
 import type { ExtractIndex, FeaturedSite, SiteValue, SitesFile } from '../data/sites';
 import type { SiteClimate } from '../data/sandbox';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
-import { BestMonthSummary, BestMonthTable } from './BestMonth';
+import { BestMonthTable } from './BestMonth';
+import { ELEMENT_NAME, isElement } from './ElementIcon';
 import { Ground } from './Ground';
-import { Absent, DataTable, Section, Td } from './InfoParts';
+import { Absent, DataTable, Td } from './InfoParts';
+import { DimensionStrip, LedgerRow, ScaleSquares, Spark, type DimTile } from './SiteParts';
+import { Block, CountUp, Meter, More, Rv, useSeen } from './ValidationParts';
 
 interface Props {
   sites: SitesFile;
@@ -58,8 +61,12 @@ const NAMES: Record<string, string> = {
   sunElevation: 'Noon Sun elevation',
 };
 const name = (key: string) => NAMES[key] ?? key;
+const KEY_WORD = { precip: 'precipitation', tempMean: 'mean temperature', tempRange: 'day-night temperature range' } as const;
+const fx = (v: number | null, d: number) => (v === null ? 'no data' : v.toFixed(d).replace('-', '−'));
 
 const num = (v: SiteValue | undefined): number | null => (typeof v?.value === 'number' ? v.value : null);
+const short = (n: string) => n.split(',')[0];
+const region = (n: string) => n.split(',').slice(1).join(',').trim();
 
 function otherText(key: string, v: SiteValue): string {
   if (v.value === null) return 'no data';
@@ -68,7 +75,24 @@ function otherText(key: string, v: SiteValue): string {
   return `${v.value.toFixed(1)}${v.unit === 'degrees' ? '°' : ` ${v.unit}`}`;
 }
 
-/** Similarity bands for the plain-language lists. The numbers are shown next to every line. */
+/** A match score in big type, counting up once on screen. */
+function ScoreTile({ label, e, note }: { label: string; e: CellScore | null; note: string }) {
+  const [ref, seen] = useSeen<HTMLDivElement>();
+  const has = e !== null && e.score !== null;
+  return (
+    <div ref={ref} className="border-t border-line pt-4">
+      <p className="label">{label}</p>
+      <p className={`display mt-2 leading-none ${has ? 'text-[64px] text-text sm:text-[84px]' : 'text-[28px] text-muted'}`}>
+        {has ? <CountUp value={e.score} decimals={0} play={seen} /> : 'NO DATA'}
+        {has && <span className="ml-2 text-[20px] font-normal text-muted">/ 100</span>}
+      </p>
+      <div className="mt-3 flex items-center gap-3">
+        <ConfidenceBadge confidence={e?.confidence ?? null} coverage={e?.coverage} />
+      </div>
+      <p className="mt-2 max-w-[34ch] text-[13px] leading-5 text-muted">{note}</p>
+    </div>
+  );
+}
 
 export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild }: Props) {
   const site: FeaturedSite = sites.sites.find((s) => s.id === siteId) ?? sites.sites[0];
@@ -115,6 +139,27 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
   const siteKeys = keysOf(atSite);
   const cellKeys = keysOf(atCell);
 
+  // The five dimensions, at the footprint and at the grid cell.
+  const tiles: DimTile[] = useMemo(() => {
+    const at = (c: EarthCell | null) => {
+      try {
+        return c ? scorer.profile(c) : [];
+      } catch {
+        return [];
+      }
+    };
+    const s = at(footprint);
+    const g = at(cell);
+    return g.map((d) => ({
+      id: isElement(d.id) ? d.id : 'terrain',
+      name: isElement(d.id) ? ELEMENT_NAME[d.id] : d.label,
+      site: s.find((x) => x.id === d.id)?.similarity ?? null,
+      cell: d.similarity,
+      measures: d.measures,
+    }));
+  }, [scorer, footprint, cell]);
+  const profileNote = tiles.length > 0 && tiles.every((t) => t.site === null);
+
   const purposes = useMemo(() => {
     let s: ReturnType<TargetScorer['purposeScores']> | null = null;
     try {
@@ -128,34 +173,31 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
 
   const months = climate?.sites.find((s) => s.id === site.id)?.months ?? null;
   const month = useMemo(() => (months && atCell ? bestMonth(months, atCell) : null), [months, atCell]);
+  const bestRow = month?.months.find((m) => m.month === month.best) ?? null;
   const climateSource = climate ? `NASA POWER monthly climatology ${climate.meta.period}` : '';
 
   const extract = extracts?.items.find((i) => i.id === site.id) ?? null;
   const targetExtract = extracts?.items.find((i) => i.id === target.id) ?? null;
   const windowKm = extracts?.meta.windowKm ?? 20;
 
-  const lines = COMPARED.map((key) => ({ key, k: siteKeys.get(key) })).filter((x): x is { key: (typeof COMPARED)[number]; k: KeyBreakdown } => !!x.k && x.k.similarity !== null);
-  const text = (x: { key: string; k: KeyBreakdown }) =>
-    `${name(x.key)}: ${formatValue(x.key, x.k.earthValue, meta)} here, ${formatValue(x.key, x.k.targetValue, meta)} at ${target.name}`;
-  const groups = [
-    { title: 'Matches', items: lines.filter((x) => (x.k.similarity as number) >= MATCH) },
-    { title: 'Partly matches', items: lines.filter((x) => (x.k.similarity as number) < MATCH && (x.k.similarity as number) >= MISS) },
-    { title: 'Does not match', items: lines.filter((x) => (x.k.similarity as number) < MISS) },
-  ];
+  const lines = COMPARED.map((key) => ({ key, k: siteKeys.get(key) }))
+    .filter((x): x is { key: (typeof COMPARED)[number]; k: KeyBreakdown } => !!x.k && x.k.similarity !== null)
+    .sort((a, b) => (b.k.similarity as number) - (a.k.similarity as number));
   const noData = COMPARED.filter((key) => siteKeys.get(key)?.similarity == null);
 
   const scenes = site.detail.sentinel2Scenes ?? [];
   const sceneDates = scenes.map((s) => s.date).sort();
   const sources = new Map<string, string>();
   for (const v of Object.values(site.values)) if (v?.source && v.badge) sources.set(v.source, v.badge);
+  const times = Math.round((55 * 55) / (site.footprintKm * site.footprintKm));
 
   return (
     <>
       <div className="border-b border-line">
-        <div className="flex flex-col items-stretch border-b border-line sm:flex-row">
+        <div className="flex flex-col items-stretch sm:flex-row">
           <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 border-b border-line px-4 sm:flex-none sm:border-b-0 sm:border-r sm:px-6">
             <span className="label">Site</span>
-            <select value={site.id} onChange={(e) => onSite(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-panel text-[13px] text-text">
+            <select value={site.id} onChange={(e) => onSite(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-bg text-[13px] text-text">
               {sites.sites.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -163,9 +205,9 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
               ))}
             </select>
           </label>
-          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-4 sm:flex-none sm:border-r sm:border-line sm:px-6">
+          <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-4 sm:flex-none sm:px-6">
             <span className="label">Target</span>
-            <select value={target.id} onChange={(e) => onTarget(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-panel text-[13px] text-text">
+            <select value={target.id} onChange={(e) => onTarget(e.target.value)} className="h-11 min-w-0 max-w-[60vw] bg-bg text-[13px] text-text">
               {targets.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name}
@@ -174,290 +216,388 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
             </select>
           </label>
         </div>
-        <div className="px-4 py-4 sm:px-6">
-          <p className="num text-[12px] text-muted">
-            {formatCoords(site.lat, site.lon)}
-            {cell ? ` · grid cell ${siteCode(cell)}` : ''}
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <Tag>{KIND_LABEL[site.kind]}</Tag>
-            <Tag>
-              Footprint {site.footprintKm} km × {site.footprintKm} km
-            </Tag>
-          </div>
-          <p className="mt-3 max-w-[72ch] text-[14px] text-text">
-            {site.footprintNote} The 0.5° grid cell around it is about 55 km on a side, about{' '}
-            <span className="num">{Math.round((55 * 55) / (site.footprintKm * site.footprintKm))}</span> times the area of the footprint.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {cellIndex >= 0 && (
-              <button type="button" onClick={() => onDossier(cellIndex)} className="btn">
-                Open the grid cell dossier
-              </button>
-            )}
-            {cellIndex >= 0 && onBuild && (
-              <button type="button" onClick={() => onBuild(cellIndex)} className="btn btn-primary">
-                Build a base here
-              </button>
-            )}
-          </div>
-        </div>
       </div>
 
-      <Section id="s-score" title={`All-round match to ${target.name}, Base weights`} wide>
-        <dl className="grid max-w-[720px] gap-x-6 gap-y-5 sm:grid-cols-2">
-          {[
-            { label: `Footprint, ${site.footprintKm} km`, e: atSite, note: 'The same formula on the footprint values. Not used in the ranking.' },
-            { label: 'Grid cell, 0.5°', e: atCell, note: 'The score in the heatmap and the candidates list.' },
-          ].map(({ label, e, note }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="label">{label}</dt>
-              <dd className="mt-1 flex items-end justify-between gap-3">
-                <span className={`num font-semibold leading-none ${e && e.score !== null ? 'text-[32px] text-text' : 'text-[17px] text-muted'}`}>
-                  {e && e.score !== null ? formatScore(e.score) : 'NO DATA'}
-                  {e && e.score !== null && <span className="ml-1 text-[13px] font-normal text-muted">/ 100</span>}
-                </span>
-                <ConfidenceBadge confidence={e?.confidence ?? null} coverage={e?.coverage} />
-              </dd>
-              <dd className="mt-2 text-[12px] text-muted">{note}</dd>
-            </div>
-          ))}
-        </dl>
-        {siteNote && (
-          <p className="text-[12px] text-accent" role="note">
-            {siteNote}
-          </p>
-        )}
-      </Section>
-
-      <Section id="s-values" title="Footprint next to grid cell" wide>
-        <DataTable
-          caption={`Values at ${site.name}: footprint, grid cell and ${target.name}`}
-          headers={['Quantity', `Footprint, ${site.footprintKm} km`, 'Describes', 'Grid cell, 0.5°', target.name, 'Similarity, footprint', 'Similarity, grid cell']}
-          numeric={[1, 3, 4, 5, 6]}
-          minWidth={860}
-        >
-          {COMPARED.map((key) => {
-            const sv = site.values[key];
-            const sk = siteKeys.get(key);
-            const ck = cellKeys.get(key);
-            const sun = isSunKey(key);
-            const tv = sun ? null : target.values[key as keyof Target['values']];
-            const m = sun ? null : meta[key as keyof MetaByKey];
-            const siteVal = sun ? (sk?.earthValue ?? null) : num(sv);
-            const cellVal = sun ? (ck?.earthValue ?? null) : cell ? (cell[key as keyof Target['values']] ?? null) : null;
-            const targetVal = sk?.targetValue ?? ck?.targetValue ?? tv?.value ?? null;
-            return (
-              <tr key={key} className="border-b border-line">
-                <Td>
-                  <span className="whitespace-nowrap">{name(key)}</span>
-                </Td>
-                <Td num muted={siteVal === null}>
-                  {formatValue(key, siteVal, meta)} {siteVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={sv?.badge ?? null} source={sv?.source} />)}
-                </Td>
-                <Td muted>{sun ? 'Latitude' : sv ? SCALE_LABEL[sv.scale] : 'no data'}</Td>
-                <Td num muted={cellVal === null}>
-                  {formatValue(key, cellVal, meta)} {cellVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={m?.badge ?? null} source={m?.source} />)}
-                </Td>
-                <Td num muted={targetVal === null}>
-                  {targetVal === null ? 'no published value' : formatValue(key, targetVal, meta)}{' '}
-                  {targetVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={tv?.badge ?? null} source={tv?.source} />)}
-                </Td>
-                <Td num muted={sk?.similarity == null}>{sk?.similarity == null ? 'no data' : formatSim(sk.similarity)}</Td>
-                <Td num muted={ck?.similarity == null}>{ck?.similarity == null ? 'no data' : formatSim(ck.similarity)}</Td>
-              </tr>
-            );
-          })}
-        </DataTable>
-        <p className="max-w-[72ch] text-[12px] text-muted">
-          Slope and roughness use the same method and 463 m posts at all three scales, so they are comparable. In a footprint this small that is
-          only {site.values.slope?.pixels ?? 'a few'} pixels. Climate is the grid cell value in both columns: no climate dataset here resolves
-          the footprint. Similarity runs from 0 to 1.
-        </p>
-
-        <DataTable caption="Other footprint measurements" headers={['Other footprint measurements', 'Value', 'Describes', 'Note']} numeric={[1]} minWidth={640}>
-          {OTHER.map(({ key, label }) => {
-            const v = site.values[key];
-            if (!v) return null;
-            return (
-              <tr key={key} className="border-b border-line">
-                <Td>{label}</Td>
-                <Td num muted={v.value === null}>
-                  {otherText(key, v)} <SourceBadge badge={v.badge} source={v.source} />
-                </Td>
-                <Td muted>{SCALE_LABEL[v.scale]}</Td>
-                <Td muted>{v.note ?? ''}</Td>
-              </tr>
-            );
-          })}
-        </DataTable>
-      </Section>
-
-      <Section id="s-match" title={`What matches ${target.name} and what does not`}>
-        {lines.length === 0 ? (
-          <p className="text-muted">No data. Nothing at this site could be compared with {target.name}.</p>
-        ) : (
-          groups.map(
-            (g) =>
-              g.items.length > 0 && (
-                <div key={g.title}>
-                  <h4 className="label mt-3 first:mt-0">{g.title}</h4>
-                  <ul className="mt-1.5 space-y-1.5">
-                    {g.items.map((x) => (
-                      <li key={x.key} className="flex items-baseline justify-between gap-4 border-l-2 border-line pl-3 text-[13px]">
-                        <span>{text(x)}</span>
-                        <span className="num shrink-0 text-[12px] text-muted">{formatSim(x.k.similarity)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ),
-          )
-        )}
-        {noData.length > 0 && (
-          <p className="text-[12px] text-muted">
-            No data, left out: {noData.map((k) => name(k).toLowerCase()).join(', ')}.
-          </p>
-        )}
-        <p className="text-[12px] text-muted">
-          Footprint values against the target, with the similarity on the right. {MATCH.toFixed(2)} and above counts as a match, below{' '}
-          {MISS.toFixed(2)} as no match.
-        </p>
-        <h4 className="label mt-3">What Earth cannot copy</h4>
-        <ul className="mt-1.5 space-y-1.5">
-          {target.cannotCopy.map((s, i) => (
-            <li key={i} className="border-l-2 border-line pl-3 text-[13px]">
-              {s}
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section id="s-test" title="What a mission team could test here" wide>
-        <DataTable caption="Match by purpose" headers={['Purpose', 'Depends on', `Footprint, ${site.footprintKm} km`, 'Grid cell, 0.5°']} numeric={[2, 3]} minWidth={560}>
-          {purposes.map(({ def, site: s, cell: c }) => (
-            <tr key={def.id} className="border-b border-line">
-              <Td>{def.label}</Td>
-              <Td muted>{def.why}</Td>
-              <Td num muted={!s || s.score === null}>{s && s.score !== null ? formatScore(s.score) : 'no data'}</Td>
-              <Td num muted={!c || c.score === null}>{c && c.score !== null ? formatScore(c.score) : 'no data'}</Td>
-            </tr>
-          ))}
-        </DataTable>
-        <p className="max-w-[72ch] text-[12px] text-muted">
-          Match scores, 0 to 100 <ComputedBadge title="Computed in the browser by the scoring library." />. A purpose score uses only the
-          factors that purpose depends on. The purposes were defined after the validation results were known, so they are a second view.
-        </p>
-        {analog && (
-          <div className="max-w-[72ch] space-y-2">
-            {analog.usedFor && analog.usedFor.length > 0 && (
-              <>
-                <h4 className="label mt-3">Used in practice for</h4>
-                <ul className="space-y-1.5">
-                  {analog.usedFor.map((u) => (
-                    <li key={u} className="border-l-2 border-line pl-3 text-[13px]">
-                      {PURPOSES.find((p) => p.id === u)?.label ?? u}
-                      {analog.usedForSource?.[u] ? <span className="block text-[12px] text-muted">{analog.usedForSource[u]}</span> : null}
-                    </li>
-                  ))}
-                </ul>
-              </>
+      {/* Poster */}
+      <section id="s-score" aria-labelledby="s-name" className="px-5 pb-16 pt-10 sm:px-10 sm:pt-14 lg:px-16">
+        <div className="grid items-start gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+          <Rv>
+            {extract ? (
+              <Ground item={extract} layer="image" windowKm={windowKm} footprintKm={site.footprintKm} />
+            ) : (
+              <div className="flex aspect-square items-center border border-line p-6">
+                <p className="text-[14px] text-muted">No data. No same-scale extract was built for this site.</p>
+              </div>
             )}
-            <h4 className="label mt-3">Published basis</h4>
-            <p className="text-[13px]">
-              {analog.source} <SourceBadge badge="Literature" source={analog.source} />
-            </p>
-            {analog.note && <p className="text-[12px] text-muted">{analog.note}</p>}
-            {site.kind === 'candidate' && (!analog.usedFor || analog.usedFor.length === 0) && (
-              <p className="text-[12px] text-muted">No field campaign for space analog work is recorded for this site. It is a proposal.</p>
-            )}
+          </Rv>
+          <div className="min-w-0">
+            <Rv>
+              <p className="label">{KIND_LABEL[site.kind]}</p>
+              <h3 id="s-name" className="display-xl mt-3 text-[44px] sm:text-[72px]">
+                {short(site.name)}
+              </h3>
+              {region(site.name) && <p className="mt-3 text-[18px] text-muted">{region(site.name)}</p>}
+              <p className="num mt-3 text-[13px] text-muted">
+                {formatCoords(site.lat, site.lon)}
+                {cell ? ` · grid cell ${siteCode(cell)}` : ''}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                <Tag>
+                  Footprint {site.footprintKm} km × {site.footprintKm} km
+                </Tag>
+              </div>
+            </Rv>
+            <Rv i={1} className="mt-10">
+              <p className="label">All-round match to {target.name}, Base weights</p>
+              <div className="mt-3 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                <ScoreTile label="Grid cell, 0.5°" e={atCell} note="The score in the heatmap and the candidates list." />
+                <ScoreTile label={`Footprint, ${site.footprintKm} km`} e={atSite} note="The same formula on the footprint values. Not used in the ranking." />
+              </div>
+              {siteNote && (
+                <p className="mt-3 text-[13px] text-accent" role="note">
+                  {siteNote}
+                </p>
+              )}
+            </Rv>
+            <Rv i={2} className="mt-8">
+              <div className="flex flex-wrap gap-2">
+                {cellIndex >= 0 && (
+                  <button type="button" onClick={() => onDossier(cellIndex)} className="btn">
+                    Open the grid cell dossier
+                  </button>
+                )}
+                {cellIndex >= 0 && onBuild && (
+                  <button type="button" onClick={() => onBuild(cellIndex)} className="btn btn-primary">
+                    Build a base here
+                  </button>
+                )}
+              </div>
+            </Rv>
           </div>
-        )}
-      </Section>
+        </div>
+      </section>
 
-      <Section id="s-month" title="Best month to test" wide>
-        {month ? (
+      {/* Five dimensions and the ledger */}
+      <Block
+        id="s-match"
+        label={`Against ${target.name}`}
+        title="What matches and what does not."
+        lead={
           <>
-            <div className="max-w-[420px]">
-              <BestMonthSummary result={month} targetName={target.name} source={climateSource} />
-            </div>
-            <BestMonthTable result={month} source={climateSource} period={climate?.meta.period ?? ''} />
+            Five dimensions at the footprint. A similarity of <span className="num text-text">{MATCH.toFixed(2)}</span> or more counts as a match, below <span className="num text-text">{MISS.toFixed(2)}</span> as no
+            match. The two ticks on each bar mark those cut-offs.
           </>
-        ) : (
-          <p className="text-muted">No data. No monthly climate is published for this site.</p>
-        )}
-      </Section>
+        }
+      >
+        <div className="max-w-[1200px]">
+          {tiles.length === 0 ? (
+            <p className="text-[14px] text-muted">No data. No dimension could be compared with this target.</p>
+          ) : (
+            <DimensionStrip tiles={tiles} />
+          )}
+          {profileNote && <p className="mt-4 text-[13px] text-muted">No footprint value could be compared. The grid cell figures under each tile are shown instead.</p>}
 
-      <Section id="s-ground" title={`Ground at one scale, ${windowKm} km across`} wide>
-        {extract ? (
-          <div className="grid max-w-[1100px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {extract.image && (
-              <div>
-                <p className="label mb-1.5">{site.name.split(',')[0]}, image</p>
-                <Ground item={extract} layer="image" windowKm={windowKm} footprintKm={site.footprintKm} />
-              </div>
+          <Rv className="mt-16">
+            <h4 className="display text-[26px] leading-8 text-text">Value by value</h4>
+            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Footprint values against the target, with the similarity on the right.</p>
+            {lines.length === 0 ? (
+              <p className="mt-4 text-[14px] text-muted">No data. Nothing at this site could be compared with {target.name}.</p>
+            ) : (
+              <ul className="mt-4">
+                {lines.map((x) => (
+                  <LedgerRow
+                    key={x.key}
+                    name={name(x.key)}
+                    here={formatValue(x.key, x.k.earthValue, meta)}
+                    there={formatValue(x.key, x.k.targetValue, meta)}
+                    similarity={x.k.similarity}
+                  />
+                ))}
+                <li className="border-t border-line" aria-hidden="true" />
+              </ul>
             )}
-            <div>
-              <p className="label mb-1.5">{site.name.split(',')[0]}, relief</p>
-              <Ground item={extract} layer="relief" windowKm={windowKm} footprintKm={site.footprintKm} />
+            {noData.length > 0 && <p className="mt-2 text-[13px] text-muted">No data, left out: {noData.map((k) => name(k).toLowerCase()).join(', ')}.</p>}
+          </Rv>
+
+          <Rv className="mt-16">
+            <h4 className="display text-[26px] leading-8 text-text">What Earth cannot copy</h4>
+            <ul className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+              {target.cannotCopy.map((s, i) => (
+                <li key={i} className="border-t border-line pt-3 text-[14px] leading-[22px] text-text">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </Rv>
+        </div>
+      </Block>
+
+      {/* Scale */}
+      <Block id="s-values" label="Scale" title="How small the footprint is." lead={site.footprintNote} size="m">
+        <div className="grid max-w-[1200px] items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+          <Rv>
+            <ScaleSquares footprintKm={site.footprintKm} windowKm={extract ? windowKm : null} />
+          </Rv>
+          <Rv i={1}>
+            <p className="display-l text-[44px] sm:text-[64px]">
+              <span className="num">1 / {times}</span>
+            </p>
+            <p className="mt-3 max-w-[44ch] text-[16px] leading-[26px] text-muted">
+              The 0.5° grid cell around the site is about 55 km on a side, about <span className="num text-text">{times}</span> times the area of the {site.footprintKm} km footprint. Terrain and
+              vegetation are measured inside the footprint. Climate is the grid cell value.
+            </p>
+          </Rv>
+        </div>
+        <Rv className="mt-12 max-w-[1200px]">
+          <More title="Footprint next to grid cell, every value">
+            <DataTable
+              caption={`Values at ${site.name}: footprint, grid cell and ${target.name}`}
+              headers={['Quantity', `Footprint, ${site.footprintKm} km`, 'Describes', 'Grid cell, 0.5°', target.name, 'Similarity, footprint', 'Similarity, grid cell']}
+              numeric={[1, 3, 4, 5, 6]}
+              minWidth={860}
+            >
+              {COMPARED.map((key) => {
+                const sv = site.values[key];
+                const sk = siteKeys.get(key);
+                const ck = cellKeys.get(key);
+                const sun = isSunKey(key);
+                const tv = sun ? null : target.values[key as keyof Target['values']];
+                const m = sun ? null : meta[key as keyof MetaByKey];
+                const siteVal = sun ? (sk?.earthValue ?? null) : num(sv);
+                const cellVal = sun ? (ck?.earthValue ?? null) : cell ? (cell[key as keyof Target['values']] ?? null) : null;
+                const targetVal = sk?.targetValue ?? ck?.targetValue ?? tv?.value ?? null;
+                return (
+                  <tr key={key} className="border-b border-line">
+                    <Td>
+                      <span className="whitespace-nowrap">{name(key)}</span>
+                    </Td>
+                    <Td num muted={siteVal === null}>
+                      {formatValue(key, siteVal, meta)} {siteVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={sv?.badge ?? null} source={sv?.source} />)}
+                    </Td>
+                    <Td muted>{sun ? 'Latitude' : sv ? SCALE_LABEL[sv.scale] : 'no data'}</Td>
+                    <Td num muted={cellVal === null}>
+                      {formatValue(key, cellVal, meta)} {cellVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={m?.badge ?? null} source={m?.source} />)}
+                    </Td>
+                    <Td num muted={targetVal === null}>
+                      {targetVal === null ? 'no published value' : formatValue(key, targetVal, meta)}{' '}
+                      {targetVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={tv?.badge ?? null} source={tv?.source} />)}
+                    </Td>
+                    <Td num muted={sk?.similarity == null}>{sk?.similarity == null ? 'no data' : formatSim(sk.similarity)}</Td>
+                    <Td num muted={ck?.similarity == null}>{ck?.similarity == null ? 'no data' : formatSim(ck.similarity)}</Td>
+                  </tr>
+                );
+              })}
+            </DataTable>
+            <p className="max-w-[72ch] text-[12px] leading-5 text-muted">
+              Slope and roughness use the same method and 463 m posts at all three scales, so they are comparable. In a footprint this small that is only {site.values.slope?.pixels ?? 'a few'} pixels.
+              Climate is the grid cell value in both columns: no climate dataset here resolves the footprint. Similarity runs from 0 to 1.
+            </p>
+            <DataTable caption="Other footprint measurements" headers={['Other footprint measurements', 'Value', 'Describes', 'Note']} numeric={[1]} minWidth={640}>
+              {OTHER.map(({ key, label }) => {
+                const v = site.values[key];
+                if (!v) return null;
+                return (
+                  <tr key={key} className="border-b border-line">
+                    <Td>{label}</Td>
+                    <Td num muted={v.value === null}>
+                      {otherText(key, v)} <SourceBadge badge={v.badge} source={v.source} />
+                    </Td>
+                    <Td muted>{SCALE_LABEL[v.scale]}</Td>
+                    <Td muted>{v.note ?? ''}</Td>
+                  </tr>
+                );
+              })}
+            </DataTable>
+          </More>
+        </Rv>
+      </Block>
+
+      {/* Climate */}
+      <Block
+        id="s-month"
+        label="Best month to test"
+        title={bestRow ? `${MONTH_NAMES[bestRow.month - 1]} is the closest month.` : 'The year at this site.'}
+        lead={bestRow ? `The month whose climate is closest to ${target.name}.` : undefined}
+      >
+        {month && bestRow ? (
+          <div className="max-w-[1200px]">
+            <Rv>
+              <p className="num flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px] text-text">
+                <span className="font-semibold text-accent">{MONTH_NAMES[bestRow.month - 1]}</span>
+                <span>
+                  {fx(bestRow.precip, 0)} mm · mean {fx(bestRow.tempMean, 1)} °C · day-night range {fx(bestRow.tempRange, 1)} °C
+                </span>
+                <SourceBadge badge="Measured" source={climateSource} />
+              </p>
+            </Rv>
+            <Rv i={1} className="mt-8">
+              <div className="grid gap-x-10 gap-y-8 md:grid-cols-3">
+                <Spark title="Precipitation" unit="mm" kind="bars" best={month.best} points={month.months.map((m) => ({ month: m.month, value: m.precip }))} />
+                <Spark title="Mean temperature" unit="°C" kind="line" digits={1} best={month.best} points={month.months.map((m) => ({ month: m.month, value: m.tempMean }))} />
+                <Spark title="Sunlight" unit="W/m²" kind="line" best={month.best} points={month.months.map((m) => ({ month: m.month, value: m.solar }))} />
+              </div>
+              <p className="mt-6 max-w-[72ch] text-[13px] leading-5 text-muted">
+                The amber month is closest to {target.name} on {month.keys.map((k) => KEY_WORD[k]).join(', ')}, by the comparison the match score uses. Values are for the 0.5° grid cell around the site, not
+                measured at the site.
+              </p>
+            </Rv>
+            <div className="mt-6">
+              <More title="Monthly climate table">
+                <BestMonthTable result={month} source={climateSource} period={climate?.meta.period ?? ''} />
+              </More>
             </div>
-            {targetExtract && (
-              <div>
-                <p className="label mb-1.5">{target.name}, relief</p>
-                <Ground item={targetExtract} layer="relief" windowKm={windowKm} />
-              </div>
-            )}
           </div>
         ) : (
-          <p className="text-muted">No data. No same-scale extract was built for this site.</p>
+          <p className="text-[14px] text-muted">No data. No monthly climate is published for this site.</p>
         )}
-        {extract && (
-          <p className="max-w-[72ch] text-[12px] text-muted">
-            North is up. The amber square is the {site.footprintKm} km footprint. Relief is shaded from the elevation grid with the same light on
-            each body. Pixel size differs by world and is printed under each picture. Nothing is upsampled.
-          </p>
+      </Block>
+
+      {/* Purposes */}
+      <Block id="s-test" label="What a mission team could test here" title="Which purposes fit." lead="A purpose score uses only the factors that purpose depends on.">
+        <div className="max-w-[1200px]">
+          <Rv>
+            <ul>
+              {purposes.map(({ def, site: s, cell: c }) => {
+                const sv = s && s.score !== null ? s.score : null;
+                const cv = c && c.score !== null ? c.score : null;
+                return (
+                  <li key={def.id} className="grid items-center gap-x-8 gap-y-3 border-t border-line py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+                    <div>
+                      <p className="text-[16px] font-semibold text-text">{def.label}</p>
+                      <p className="mt-1 text-[13px] leading-5 text-muted">{def.why}</p>
+                    </div>
+                    <div className="space-y-2.5">
+                      {[
+                        { l: `Footprint, ${site.footprintKm} km`, v: sv },
+                        { l: 'Grid cell, 0.5°', v: cv },
+                      ].map((row) => (
+                        <div key={row.l} className="grid grid-cols-[minmax(0,130px)_minmax(0,1fr)_56px] items-center gap-3">
+                          <span className="text-[12px] text-muted">{row.l}</span>
+                          <Meter value={row.v === null ? null : row.v / 100} label={`${def.label}, ${row.l}`} height={8} />
+                          <span className={`num text-right ${row.v === null ? 'text-[11px] text-muted' : 'text-[14px] text-text'}`}>{row.v === null ? 'no data' : formatScore(row.v)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </li>
+                );
+              })}
+              <li className="border-t border-line" aria-hidden="true" />
+            </ul>
+            <p className="mt-2 max-w-[72ch] text-[12px] leading-5 text-muted">
+              Match scores, 0 to 100 <ComputedBadge title="Computed in the browser by the scoring library." />. The purposes were defined after the validation results were known, so they are a second view.
+            </p>
+          </Rv>
+          {analog && (
+            <Rv className="mt-12">
+              <div className="grid gap-x-12 gap-y-8 md:grid-cols-2">
+                <div>
+                  <h4 className="display text-[22px] leading-7 text-text">Used in practice for</h4>
+                  {analog.usedFor && analog.usedFor.length > 0 ? (
+                    <ul className="mt-3 space-y-2">
+                      {analog.usedFor.map((u) => (
+                        <li key={u} className="border-l-2 border-line pl-3 text-[14px] leading-[22px] text-text">
+                          {PURPOSES.find((p) => p.id === u)?.label ?? u}
+                          {analog.usedForSource?.[u] ? <span className="block text-[12px] text-muted">{analog.usedForSource[u]}</span> : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-3 text-[14px] leading-[22px] text-muted">
+                      {site.kind === 'candidate' ? 'No field campaign for space analog work is recorded for this site. It is a proposal.' : 'No data.'}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <h4 className="display text-[22px] leading-7 text-text">Published basis</h4>
+                  <p className="mt-3 text-[14px] leading-[22px] text-text">
+                    {analog.source} <SourceBadge badge="Literature" source={analog.source} />
+                  </p>
+                  {analog.note && <p className="mt-2 text-[13px] leading-5 text-muted">{analog.note}</p>}
+                </div>
+              </div>
+            </Rv>
+          )}
+        </div>
+      </Block>
+
+      {/* Ground at one scale */}
+      <Block
+        id="s-ground"
+        label={`Ground at one scale, ${windowKm} km across`}
+        title={`${short(site.name)} next to ${target.name}.`}
+        lead={extract ? `North is up. The amber square is the ${site.footprintKm} km footprint. Both pictures cover the same ground area.` : undefined}
+      >
+        {extract ? (
+          <div className="max-w-[1100px]">
+            <Rv>
+              <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+                <div>
+                  <p className="label mb-2">{short(site.name)}, relief</p>
+                  <Ground item={extract} layer="relief" windowKm={windowKm} footprintKm={site.footprintKm} />
+                </div>
+                {targetExtract && (
+                  <div>
+                    <p className="label mb-2">{target.name}, relief</p>
+                    <Ground item={targetExtract} layer="relief" windowKm={windowKm} />
+                  </div>
+                )}
+              </div>
+            </Rv>
+            <p className="mt-4 max-w-[72ch] text-[12px] leading-5 text-muted">
+              Relief is shaded from the elevation grid with the same light on each body. Pixel size differs by world and is printed under each picture. Nothing is upsampled.
+            </p>
+          </div>
+        ) : (
+          <p className="text-[14px] text-muted">No data. No same-scale extract was built for this site.</p>
         )}
-      </Section>
+      </Block>
 
-      <Section id="s-process" title="How the footprint values were measured">
-        <dl className="space-y-3">
-          {Object.entries(sites.meta.methods).map(([k, v]) => (
-            <div key={k}>
-              <dt className="label">{k}</dt>
-              <dd className="mt-1 text-[13px]">{v}</dd>
-            </div>
+      {/* Method and sources */}
+      <section id="s-process" aria-labelledby="s-details" className="px-5 pb-24 pt-6 sm:px-10 lg:px-16">
+        <h3 id="s-details" className="sr-only">
+          Method and sources
+        </h3>
+        <div className="max-w-[1100px]">
+          {(site.detail.errors ?? []).map((e) => (
+            <p key={e} className="mb-4 border-l-2 border-accent pl-3 text-[14px] leading-[22px] text-text" role="note">
+              {e}
+            </p>
           ))}
-        </dl>
-        <h4 className="label mt-3">This site</h4>
-        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]">
-          <dt className="text-muted">Elevation in the footprint</dt>
-          <dd className="num">{site.detail.elevMinM == null || site.detail.elevMaxM == null ? 'no data' : `${site.detail.elevMinM.toFixed(0)} m to ${site.detail.elevMaxM.toFixed(0)} m`}</dd>
-          <dt className="text-muted">Elevation tile</dt>
-          <dd className="num break-all">{site.detail.demTile ?? 'no data'}</dd>
-          <dt className="text-muted">Sentinel-2 scenes</dt>
-          <dd className="num">{scenes.length === 0 ? 'no data' : `${scenes.length}, ${sceneDates[0]} to ${sceneDates[sceneDates.length - 1]}, tile ${site.detail.sentinel2Tile ?? 'unknown'}`}</dd>
-          <dt className="text-muted">Months with a clear view, median per pixel</dt>
-          <dd className="num">{site.detail.sentinel2MedianMonthsPerPixel == null ? 'no data' : `${site.detail.sentinel2MedianMonthsPerPixel} of 12`}</dd>
-          <dt className="text-muted">Pixels never clear</dt>
-          <dd className="num">{site.detail.sentinel2PixelsNeverClear == null ? 'no data' : site.detail.sentinel2PixelsNeverClear.toLocaleString('en-US')}</dd>
-        </dl>
-        {(site.detail.errors ?? []).map((e) => (
-          <p key={e} className="text-[12px] text-accent" role="note">
-            {e}
-          </p>
-        ))}
-      </Section>
-
-      <Section id="s-sources" title="Sources">
-        <ul className="space-y-1">
-          {[...sources.entries()].sort().map(([s, badge]) => (
-            <li key={s} className="text-[12px] text-muted">
-              {badge}: {s}
-            </li>
-          ))}
-        </ul>
-        {!atSite && !atCell && <Absent what="No score could be computed for this site." />}
-      </Section>
+          <More title="How the footprint values were measured">
+            <dl className="space-y-3">
+              {Object.entries(sites.meta.methods).map(([k, v]) => (
+                <div key={k}>
+                  <dt className="label">{k}</dt>
+                  <dd className="mt-1 text-[13px] leading-5 text-text">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <h4 className="label">This site</h4>
+            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]">
+              <dt className="text-muted">Elevation in the footprint</dt>
+              <dd className="num">{site.detail.elevMinM == null || site.detail.elevMaxM == null ? 'no data' : `${site.detail.elevMinM.toFixed(0)} m to ${site.detail.elevMaxM.toFixed(0)} m`}</dd>
+              <dt className="text-muted">Elevation tile</dt>
+              <dd className="num break-all">{site.detail.demTile ?? 'no data'}</dd>
+              <dt className="text-muted">Sentinel-2 scenes</dt>
+              <dd className="num">{scenes.length === 0 ? 'no data' : `${scenes.length}, ${sceneDates[0]} to ${sceneDates[sceneDates.length - 1]}, tile ${site.detail.sentinel2Tile ?? 'unknown'}`}</dd>
+              <dt className="text-muted">Months with a clear view, median per pixel</dt>
+              <dd className="num">{site.detail.sentinel2MedianMonthsPerPixel == null ? 'no data' : `${site.detail.sentinel2MedianMonthsPerPixel} of 12`}</dd>
+              <dt className="text-muted">Pixels never clear</dt>
+              <dd className="num">{site.detail.sentinel2PixelsNeverClear == null ? 'no data' : site.detail.sentinel2PixelsNeverClear.toLocaleString('en-US')}</dd>
+            </dl>
+          </More>
+          <More id="s-sources" title={`Sources, ${sources.size}`} className="!border-t-0">
+            <ul className="space-y-1">
+              {[...sources.entries()].sort().map(([s, badge]) => (
+                <li key={s} className="text-[12px] text-muted">
+                  {badge}: {s}
+                </li>
+              ))}
+            </ul>
+            {!atSite && !atCell && <Absent what="No score could be computed for this site." />}
+          </More>
+        </div>
+      </section>
     </>
   );
 }

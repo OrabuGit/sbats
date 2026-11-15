@@ -12,24 +12,51 @@ import { ElementIcon, isElement } from './ElementIcon';
 import type { HeroPlace } from './HeroGlobes';
 import { countryAt } from '../lib/where';
 
-/** Fades and lifts its children once, the first time they come into view. */
+// One scroll watcher for every Reveal. An intersection observer only reports a change, so an element that a fast
+// scroll jumps clean over would never fire; this checks every waiting element on each scroll frame as well.
+const waiting = new Set<{ el: HTMLElement; show: () => void }>();
+let watching = false;
+function check() {
+  const limit = window.innerHeight * 1.05;
+  for (const w of [...waiting]) {
+    const r = w.el.getBoundingClientRect();
+    if (r.top < limit) {
+      waiting.delete(w);
+      w.show();
+    }
+  }
+}
+function watch(item: { el: HTMLElement; show: () => void }) {
+  waiting.add(item);
+  if (!watching) {
+    watching = true;
+    let frame = 0;
+    const on = () => {
+      if (!frame)
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          check();
+        });
+    };
+    window.addEventListener('scroll', on, true);
+    window.addEventListener('resize', on);
+  }
+  return () => {
+    waiting.delete(item);
+  };
+}
+
+/** Fades and lifts its children once, the first time they come into view or are scrolled past. */
 export function Reveal({ children, i = 0, className = '' }: { children: React.ReactNode; i?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el || on) return;
-    const io = new IntersectionObserver(
-      (e) => {
-        if (e[0]?.isIntersecting) {
-          setOn(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    const stop = watch({ el, show: () => setOn(true) });
+    // Already in view when it mounts.
+    requestAnimationFrame(check);
+    return stop;
   }, [on]);
   return (
     <div ref={ref} className={`reveal ${on ? 'in' : ''} ${className}`} style={{ ['--i' as string]: i }}>
@@ -76,7 +103,7 @@ function MiniHeat({ earth, results, shown }: { earth: EarthFile; results: CellSu
       style={{
         imageRendering: 'auto',
         clipPath: shown ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)',
-        transition: 'clip-path 2200ms cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'clip-path 1300ms cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     />
   );
@@ -85,7 +112,7 @@ function MiniHeat({ earth, results, shown }: { earth: EarthFile; results: CellSu
 const TEX = (name: string) => `${import.meta.env.BASE_URL}textures/${name}.jpg`;
 
 /** Counts up to a number once `on` turns true. */
-function useCount(to: number, on: boolean, ms = 1800) {
+function useCount(to: number, on: boolean, ms = 1200) {
   const [v, setV] = useState(0);
   useEffect(() => {
     if (!on) return setV(0);
@@ -116,7 +143,7 @@ function PinMap({ body, places, chosen, on }: { body: 'moon' | 'mars'; places: H
             <span
               key={p.id}
               className={`absolute block -translate-x-1/2 -translate-y-1/2 rounded-full border-2 ${isChosen ? 'z-10 h-4 w-4 border-accent bg-accent' : strong ? 'h-2.5 w-2.5 border-accent bg-bg' : 'h-2 w-2 border-text bg-bg'}`}
-              style={{ left: `${((p.lon + 180) / 360) * 100}%`, top: `${((90 - p.lat) / 180) * 100}%`, opacity: on ? 1 : 0, transform: `translate(-50%, -50%) scale(${on ? 1 : 0.2})`, transition: `opacity 500ms ease ${Math.min(i * 40, 900)}ms, transform 500ms ease ${Math.min(i * 40, 900)}ms` }}
+              style={{ left: `${((p.lon + 180) / 360) * 100}%`, top: `${((90 - p.lat) / 180) * 100}%`, opacity: on ? 1 : 0, transform: `translate(-50%, -50%) scale(${on ? 1 : 0.2})`, transition: `opacity 350ms ease ${Math.min(i * 25, 500)}ms, transform 350ms ease ${Math.min(i * 25, 500)}ms` }}
               aria-hidden="true"
             />
           );
@@ -271,7 +298,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
         </div>
         <span
           className="absolute inset-y-0 w-0.5 bg-accent"
-          style={{ left: active === 1 ? '100%' : '0%', opacity: active === 1 ? 1 : 0, transition: 'left 2200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 400ms ease 2100ms' }}
+          style={{ left: active === 1 ? '100%' : '0%', opacity: active === 1 ? 1 : 0, transition: 'left 1300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease 1200ms' }}
           aria-hidden="true"
         />
       </div>
@@ -287,7 +314,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
       <div className="flex items-center gap-4">
         {pick ? <Disc tex="blue-marble-2048" lat={pick.lat} lon={pick.lon} /> : <span className="block h-[132px] w-[132px]" />}
         <svg viewBox="0 0 120 40" className="h-10 min-w-0 flex-1" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M2 30 Q60 -12 118 30" fill="none" stroke="#FFB000" strokeWidth="2" strokeDasharray="130" strokeDashoffset={active === 2 ? 0 : 130} style={{ transition: 'stroke-dashoffset 1200ms ease 200ms' }} />
+          <path d="M2 30 Q60 -12 118 30" fill="none" stroke="#FFB000" strokeWidth="2" strokeDasharray="130" strokeDashoffset={active === 2 ? 0 : 130} style={{ transition: 'stroke-dashoffset 700ms ease 100ms' }} />
         </svg>
         {targetPos ? <Disc tex={targetPos.body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048'} lat={targetPos.lat} lon={targetPos.lon} /> : <span className="block h-[132px] w-[132px]" />}
       </div>
@@ -311,7 +338,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
                 {label}
               </span>
               <span className="relative block h-2 flex-1 bg-line" aria-hidden="true">
-                <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: active === 2 ? `${(sim ?? 0) * 100}%` : '0%', transition: `width 900ms cubic-bezier(0.4, 0, 0.2, 1) ${300 + k * 120}ms` }} />
+                <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: active === 2 ? `${(sim ?? 0) * 100}%` : '0%', transition: `width 600ms cubic-bezier(0.4, 0, 0.2, 1) ${100 + k * 70}ms` }} />
                 <span className="absolute inset-y-0 left-[30%] w-px bg-bg" />
                 <span className="absolute inset-y-0 left-[75%] w-px bg-bg" />
               </span>
@@ -330,7 +357,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
           ['rover', 'Drive a rover', '3D terrain of both places'],
           ['life', 'Print the report', 'Cited, to PDF'],
         ] as const).map(([kind, t, line], k) => (
-          <li key={t} className="border-t-2 border-accent pt-3" style={{ opacity: active === 3 ? 1 : 0, transform: active === 3 ? 'none' : 'translateY(14px)', transition: `opacity 600ms ease ${200 + k * 150}ms, transform 600ms ease ${200 + k * 150}ms` }}>
+          <li key={t} className="border-t-2 border-accent pt-3" style={{ opacity: active === 3 ? 1 : 0, transform: active === 3 ? 'none' : 'translateY(14px)', transition: `opacity 400ms ease ${80 + k * 90}ms, transform 400ms ease ${80 + k * 90}ms` }}>
             <ActivityArt kind={kind} className="h-9 w-auto text-accent" />
             <p className="display mt-2 text-[18px] leading-6 text-text">{t}</p>
             <p className="text-[13px] leading-5 text-muted">{line}</p>
@@ -371,7 +398,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
           <div className="hidden lg:block">
             <div className="sticky top-28 h-[calc(100vh-9rem)] max-h-[640px]">
               {stage.map((v, n) => (
-                <div key={n} className="absolute inset-0 transition-all duration-700 ease-out" style={{ opacity: active === n ? 1 : 0, transform: active === n ? 'none' : 'translateY(18px)', pointerEvents: active === n ? 'auto' : 'none' }} aria-hidden={active !== n}>
+                <div key={n} className="absolute inset-0 transition-all duration-300 ease-out" style={{ opacity: active === n ? 1 : 0, transform: active === n ? 'none' : 'translateY(10px)', pointerEvents: active === n ? 'auto' : 'none' }} aria-hidden={active !== n}>
                   {v}
                 </div>
               ))}

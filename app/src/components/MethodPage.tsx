@@ -10,6 +10,7 @@ import { DataTable, Linked, Td } from './InfoParts';
 import { MethodBars } from './MethodBars';
 import { MethodCannotCopy } from './MethodCannotCopy';
 import { MethodCoverage } from './MethodCoverage';
+import { MethodFlow } from './MethodFlow';
 import { MethodCurve, type Tolerance } from './MethodCurve';
 import { MethodHoldout } from './MethodHoldout';
 import { MethodMean } from './MethodMean';
@@ -81,11 +82,13 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
 
   return (
     <div className="bg-bg">
+      <MethodFlow earth={earth} targets={targets} lithology={lithology} />
+
       <MSection
         id="m-pipeline"
-        kicker="The whole method"
+        kicker="All the steps"
         title="From datasets to one score"
-        lead="Every cell of Earth is compared with the target on six factors. A factor is measured the same way on Earth, the Moon and Mars."
+        lead="Every Earth cell is compared with the target on six factors, measured the same way on Earth, the Moon and Mars."
       >
         <MethodPipeline earth={earth} />
       </MSection>
@@ -128,7 +131,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-factors"
         kicker="2 · Factors and weights"
         title="Six factors, four sets of weights"
-        lead="A mission preset changes the weights only. The similarity of every factor is the same under every preset."
+        lead="A mission preset changes the weights and nothing else."
       >
         <MethodWeights />
         <p className={`${PM} mt-8`}>A factor with two measurements (Terrain, Temperature) splits its weight equally between them.</p>
@@ -138,7 +141,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-formula"
         kicker="3 · Similarity"
         title="Close to the target scores near 1"
-        lead="Each measurement gets a similarity between 0 and 1 from the gap between the Earth value and the target value, counted in tolerances."
+        lead="The gap between the Earth value and the target value, in tolerances, becomes a similarity from 0 to 1."
       >
         <MFormula>similarity = exp( −0.5 × ((earth − target) / tolerance)² )</MFormula>
         <div className="mt-8">
@@ -161,7 +164,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-rock"
         kicker="3 · Similarity, rock type"
         title="Rock type uses a lookup, not a curve"
-        lead="Rock type is a class, not a number, so it uses a lookup table instead of the formula."
+        lead="Rock type is a class, so it uses a lookup table."
       >
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
           <MethodBars
@@ -203,7 +206,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-bare"
         kicker="3 · Similarity, bare ground"
         title="Bare ground and permanent ice"
-        lead="One rule for every cell. The Bare ground similarity is the share of the cell's ground that is exposed and free of ice."
+        lead="Bare ground is how much of a cell is exposed and free of ice."
       >
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-4">
@@ -249,7 +252,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-missing"
         kicker="5 · Confidence"
         title="Missing data and confidence"
-        lead="A measurement with no value, on Earth or for the target, is left out and the other weights are scaled up to fill the gap. The share of the weight that had data is the coverage."
+        lead="A measurement with no value is left out and the other weights scale up. The share of weight with data is the coverage."
       >
         <MethodCoverage />
       </MSection>
@@ -258,7 +261,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-cannot"
         kicker="Outside the score"
         title="What Earth cannot copy"
-        lead="Gravity, vacuum and radiation cannot be matched anywhere on Earth. They are never scored. Each dossier lists them."
+        lead="No place on Earth can match gravity, vacuum or radiation. They are never scored."
       >
         <MethodCannotCopy targets={targets} />
       </MSection>
@@ -267,7 +270,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-validation"
         kicker="6 · Does it work"
         title="Known sites against a hold-out set"
-        lead="The hold-out sites were never used to choose a tolerance or a weight. Absolute scores are low and known Moon analogs rank mid-table."
+        lead="The hold-out sites were never used to set a tolerance or a weight."
       >
         <MethodHoldout />
         <p className={`${PM} mt-8`}>
@@ -326,7 +329,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         id="m-purpose"
         kicker="Reference · Purposes"
         title="Analog profile and match by purpose"
-        lead="The all-round match asks whether a whole base could be rehearsed at a place. Many analog sites are used for one thing only: a crater in farmland is a geology site, whatever its climate."
+        lead="Many analog sites serve one use only: a crater in farmland is a geology site, whatever its climate."
       >
         <p className={P}>
           The analog profile reports each cell on five dimensions, and match by purpose ranks by one use. Neither adds a tuned number: every value is

@@ -8,7 +8,10 @@ import { countryKey, useCountries } from '../lib/where';
 import { loadExtra } from '../data/access';
 import { mineralsWithheld } from '../lib/matchAdapter';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
-import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
+import { ConfidenceBadge, SourceBadge, Tag } from './Badges';
+import { ELEMENT_NAME, ElementIcon, type ElementId } from './ElementIcon';
+import { Reveal } from './HomeStory';
+import { useState } from 'react';
 
 interface Props {
   sites: SitesFile | null;
@@ -81,31 +84,6 @@ function pick(s: Scored | undefined, analog: Analog | undefined) {
   return [...s.results].sort((a, b) => best(b) - best(a))[0];
 }
 
-/** Five dimensions as rows of flat bars, similarity 0 to 1 at footprint scale. */
-function Profile({ result, targetName }: { result: NonNullable<ReturnType<typeof pick>>; targetName: string }) {
-  return (
-    <div>
-      <p className="mb-2 text-[14px] font-semibold text-text">
-        Profile against {targetName}, footprint scale <ComputedBadge title="Computed by validation/score_sites.ts from the footprint values with the frozen formula." />
-      </p>
-      <dl>
-        {DIMENSIONS.map((d) => {
-          const v = result.site.dimensions[d.id]?.similarity ?? null;
-          return (
-            <div key={d.id} className="grid grid-cols-[92px_1fr_44px] items-center gap-3 border-b border-line py-1.5 last:border-b-0">
-              <dt className="text-[12px] text-muted">{d.label}</dt>
-              <dd className="h-1.5 bg-line" role="meter" aria-label={`${d.label} similarity`} aria-valuemin={0} aria-valuemax={1} aria-valuenow={v ?? 0} aria-valuetext={v === null ? 'no data' : v.toFixed(2)}>
-                <div className="h-full bg-accent" style={{ width: `${(v ?? 0) * 100}%` }} />
-              </dd>
-              <dd className={`num text-right ${v === null ? 'text-[11px] text-muted' : 'text-[12px] text-text'}`}>{v === null ? 'no data' : v.toFixed(2)}</dd>
-            </div>
-          );
-        })}
-      </dl>
-    </div>
-  );
-}
-
 function Lines({ title, items, empty }: { title: string; items: string[]; empty: string }) {
   return (
     <div>
@@ -122,6 +100,27 @@ function Lines({ title, items, empty }: { title: string; items: string[]; empty:
         </ul>
       )}
     </div>
+  );
+}
+
+/** The five dimensions as five lit icons: filled where the site matches, outlined where it partly does, grey where it does not. */
+function ProfileDots({ result, size = 'md' }: { result: NonNullable<ReturnType<typeof pick>> | null; size?: 'sm' | 'md' }) {
+  const box = size === 'sm' ? 'h-8 w-8' : 'h-12 w-12';
+  return (
+    <ul className={`flex ${size === 'sm' ? 'gap-1.5' : 'gap-3'}`} aria-label="Match to its target on five dimensions">
+      {DIMENSIONS.map((d) => {
+        const v = result?.site.dimensions[d.id]?.similarity ?? null;
+        const tone = v === null ? 'border-dashed border-line text-muted' : v >= 0.75 ? 'border-accent bg-accent text-bg' : v >= 0.3 ? 'border-accent text-accent' : 'border-line text-muted';
+        return (
+          <li key={d.id} className="flex flex-col items-center gap-1" title={`${ELEMENT_NAME[d.id as ElementId] ?? d.label}: ${v === null ? 'no data' : v.toFixed(2)}`}>
+            <span className={`flex ${box} items-center justify-center rounded-full border-2 ${tone}`}>
+              <ElementIcon id={d.id as ElementId} size={size === 'sm' ? 18 : 26} still={size === 'sm'} />
+            </span>
+            {size === 'md' && <span className="num text-[12px] text-muted">{v === null ? 'no data' : v.toFixed(2)}</span>}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -180,12 +179,24 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           {typeof scored?.bareFrac === 'number' && <Tag>{formatShare(scored.bareFrac)} bare</Tag>}
         </div>
 
-        <div className="mt-5 grid gap-x-6 gap-y-5 sm:grid-cols-2">
+        {result && target && (
+          <div className="mt-6">
+            <p className="mb-2 text-[13px] text-muted">Match to {target.name}, from the footprint</p>
+            <ProfileDots result={result} />
+          </div>
+        )}
+
+        <div className="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <Lines title="Strong for" items={finding?.strong ?? []} empty="No written finding for this site. See the numbers on its site page." />
           <Lines title="Falls short on" items={[...(finding?.short ?? []), ...(finding?.notScored ?? []).map((t) => `Not scored at all: ${t}`)]} empty="No written finding for this site." />
         </div>
 
-        <div className="mt-5 grid gap-x-6 gap-y-5 sm:grid-cols-2">
+        <details className="group mt-6 border-t border-line pt-3">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[15px] font-medium text-text [&::-webkit-details-marker]:hidden">
+            Process, and what a team could test here
+            <span className="text-muted transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+          </summary>
+        <div className="mt-3 grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <div>
             <h4 className="mb-2 text-[14px] font-semibold text-text">Process</h4>
             {analog?.process ? (
@@ -253,17 +264,18 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           </div>
         </div>
 
-        {result && target && (
-          <div className="mt-5 max-w-[420px]">
-            <Profile result={result} targetName={target.name} />
-          </div>
-        )}
+        </details>
 
-        <h4 className="mb-2 mt-6 text-[14px] font-semibold text-text">Scale</h4>
-        <p className="max-w-[60ch] text-[13px] leading-5 text-text">
+        <details className="group border-t border-line pt-3">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[15px] font-medium text-text [&::-webkit-details-marker]:hidden">
+            Scale of the numbers
+            <span className="text-muted transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+          </summary>
+        <p className="mt-2 max-w-[60ch] text-[13px] leading-5 text-text">
           {site.footprintNote} Terrain and vegetation are measured inside the footprint. Climate is the value of the 55 km grid cell.
           {scored?.caveat ? ` ${scored.caveat}` : ''}
         </p>
+        </details>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <button type="button" onClick={() => onSitePage(site.id)} className="btn">
@@ -312,6 +324,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
   const sc = scores.status === 'ready' ? scores.value : null;
   const findingOf = (id: string) => fd?.sections.find((s) => s.strong.length > 0 && id.includes(s.slug)) ?? null;
   const countries = useCountries(top.slice(0, 3).map((c) => earth.cells[c.index]));
+  const [selId, setSelId] = useState<string | null>(null);
   const all = sites?.sites ?? [];
   // Sites with a written finding and an image lead; the rest follow in file order.
   const LEAD = ['tambora', 'batur'];
@@ -330,12 +343,28 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-featured">
       <div className="mx-auto w-full max-w-[1200px] [&_section]:px-5 sm:[&_section]:px-10">
-      <header className="px-5 pb-8 pt-10 sm:px-10 sm:pt-16">
-        <h2 id="h-featured" className="display-l max-w-[18ch] text-[40px] sm:text-[64px]">
-          Featured sites
-        </h2>
-        <p className="mt-3 max-w-[52ch] text-[18px] leading-7 text-muted">The team&rsquo;s proposed sites in Indonesia, the established analogs they are measured against, and the top of the global scan.</p>
-        {claim && <p className="mt-6 max-w-[60ch] text-[18px] leading-8 text-text">{claim}</p>}
+      <header className="px-5 pb-6 pt-10 sm:px-10 sm:pt-16">
+        <Reveal>
+          <h2 id="h-featured" className="display-xl max-w-[14ch] text-[44px] sm:text-[84px]">
+            Featured sites
+          </h2>
+        </Reveal>
+        <Reveal i={1}>
+          <p className="mt-4 max-w-[48ch] text-[18px] leading-7 text-muted">Places we propose, places the world already uses, and the best the scan found.</p>
+        </Reveal>
+        <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-4">
+          {[
+            [proposed.length, 'proposed in Indonesia'],
+            [known.length, 'established benchmarks'],
+            [top.length > 0 ? Math.min(3, top.length) : 0, 'best cells of the global scan'],
+          ].map(([n, t]) => (
+            <div key={t as string} className="flex items-baseline gap-3">
+              <dt className="display text-[44px] leading-none text-text">{n}</dt>
+              <dd className="text-[14px] text-muted">{t}</dd>
+            </div>
+          ))}
+        </dl>
+        {claim && <p className="mt-8 max-w-[60ch] border-l-2 border-accent pl-4 text-[17px] leading-7 text-text">{claim}</p>}
         <p className="mt-3 max-w-[72ch] text-[12px] text-muted">
           {findings.status === 'loading'
             ? 'Loading findings'
@@ -355,29 +384,61 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           </p>
         )}
         {sitesState !== 'loading' && proposed.length === 0 && <p className="py-6 text-[13px] text-muted">No data. data/sites.json is not published with this build.</p>}
-        {proposed.map((s, i) => {
+        {proposed.length > 0 && (
+          <div className="-mx-5 mt-6 overflow-x-auto px-6 py-1 pb-4 sm:-mx-10 sm:px-11" role="tablist" aria-label="Proposed sites">
+            <div className="flex snap-x gap-4">
+              {proposed.map((s) => {
+                const img = extracts?.items.find((x) => x.id === s.id)?.image ?? null;
+                const on = (selId ?? proposed[0].id) === s.id;
+                const result = pick(sc?.sites.find((x) => x.id === s.id), analogs.find((a) => a.id === s.id));
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={on}
+                    onClick={() => setSelId(s.id)}
+                    className={`group relative flex h-[300px] w-[210px] shrink-0 snap-start flex-col justify-end overflow-hidden bg-panel text-left sm:h-[340px] sm:w-[250px] ${on ? 'outline outline-2 outline-offset-2 outline-accent' : ''}`}
+                  >
+                    {img && <img src={dataUrl(img.file)} alt="" loading="lazy" className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out ${on ? 'scale-105' : 'group-hover:scale-[1.04]'}`} />}
+                    <span className={`absolute inset-0 transition-colors duration-300 ${on ? 'bg-bg/35' : 'bg-bg/60 group-hover:bg-bg/45'}`} aria-hidden="true" />
+                    <span className="relative p-4">
+                      <ProfileDots result={result} size="sm" />
+                      <span className="display mt-3 block text-[22px] leading-6 text-text">{short(s.name)}</span>
+                      <span className="mt-0.5 block text-[12px] text-text/80">{region(s.name)}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {(() => {
+          const s = proposed.find((x) => x.id === selId) ?? proposed[0];
+          if (!s) return null;
           const img = extracts?.items.find((x) => x.id === s.id)?.image ?? null;
           return (
-            <SiteArticle
-              key={s.id}
-              site={s}
-              lead={i === 0}
-              image={img}
-              finding={findingOf(s.id)}
-              scored={sc?.sites.find((x) => x.id === s.id)}
-              analog={analogs.find((a) => a.id === s.id)}
-              targets={targets}
-              tested={(() => {
-                const b = bm?.sites?.find((x) => x.id === s.id);
-                // The sentence about minerals seen from orbit is withheld for the Indonesian sites until their EMIT data is rebuilt.
-                const keep = (t: Tested) => !(mineralsWithheld(s.id) && /mineral/i.test(t.text));
-                return b ? { could: (b.couldTest ?? []).filter(keep), cannot: b.cannotTest ?? [] } : null;
-              })()}
-              onSitePage={onSitePage}
-              onMatch={onMatch}
-            />
+            <div key={s.id} className="arrive" role="tabpanel">
+              <SiteArticle
+                site={s}
+                lead
+                image={img}
+                finding={findingOf(s.id)}
+                scored={sc?.sites.find((x) => x.id === s.id)}
+                analog={analogs.find((a) => a.id === s.id)}
+                targets={targets}
+                tested={(() => {
+                  const b = bm?.sites?.find((x) => x.id === s.id);
+                  // The sentence about minerals seen from orbit is withheld for the Indonesian sites until their EMIT data is rebuilt.
+                  const keep = (t: Tested) => !(mineralsWithheld(s.id) && /mineral/i.test(t.text));
+                  return b ? { could: (b.couldTest ?? []).filter(keep), cannot: b.cannotTest ?? [] } : null;
+                })()}
+                onSitePage={onSitePage}
+                onMatch={onMatch}
+              />
+            </div>
           );
-        })}
+        })()}
       </section>
 
       {limits.length > 0 && (
@@ -403,51 +464,38 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           Sites used by space agencies and field teams, scored by the same footprint procedure. Scores are match scores, 0 to 100, for the purpose
           and target each site does best on. Best is chosen after the fact from all targets, which flatters.
         </p>
-        <div className="mt-4 overflow-x-auto" tabIndex={0} role="region" aria-label="Established analog sites">
-          <table className="w-full min-w-[720px] max-w-[1100px] border-collapse text-left text-[13px]">
-            <thead>
-              <tr className="border-b border-line">
-                {['Site', 'Footprint', 'Best purpose', 'Against', 'Score'].map((h, i) => (
-                  <th key={h} scope="col" className={`label py-2 pr-4 font-normal ${i === 4 ? 'text-right' : ''}`}>
-                    {h}
-                  </th>
-                ))}
-                <th scope="col" className="label py-2 font-normal">
-                  <span className="sr-only">Open</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {known.map((s) => {
-                const scored = sc?.sites.find((x) => x.id === s.id);
-                let best: { purpose: string; target: string; score: number } | null = null;
-                for (const r of scored?.results ?? [])
-                  for (const p of PURPOSES) {
-                    const v = r.site.purposes[p.id]?.score;
-                    if (typeof v === 'number' && (!best || v > best.score)) best = { purpose: p.label, target: r.target, score: v };
-                  }
-                const t = targets.find((x) => x.id === best?.target);
-                return (
-                  <tr key={s.id} className="border-b border-line">
-                    <td className="py-2 pr-4">
-                      <span className="block text-[14px] text-text">{short(s.name)}</span>
-                      <span className="num block text-[11px] text-muted">{formatCoords(s.lat, s.lon)}</span>
-                    </td>
-                    <td className="num py-2 pr-4 text-muted">{s.footprintKm} km</td>
-                    <td className="py-2 pr-4 text-text">{best ? best.purpose : <span className="text-muted">no data</span>}</td>
-                    <td className="py-2 pr-4 text-muted">{t?.name ?? 'no data'}</td>
-                    <td className={`num py-2 pr-4 text-right ${best ? 'text-[17px] font-semibold text-text' : 'text-[12px] text-muted'}`}>{best ? best.score.toFixed(0) : 'no data'}</td>
-                    <td className="py-1 text-right">
-                      <button type="button" onClick={() => onSitePage(s.id)} className="tool">
-                        Site page
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <ul className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {known.map((s, k) => {
+            const scored = sc?.sites.find((x) => x.id === s.id);
+            let best: { purpose: string; target: string; score: number; res: NonNullable<ReturnType<typeof pick>> } | null = null;
+            for (const r of scored?.results ?? [])
+              for (const p of PURPOSES) {
+                const v = r.site.purposes[p.id]?.score;
+                if (typeof v === 'number' && (!best || v > best.score)) best = { purpose: p.label, target: r.target, score: v, res: r };
+              }
+            const t = targets.find((x) => x.id === best?.target);
+            const img = extracts?.items.find((x) => x.id === s.id)?.image ?? null;
+            return (
+              <li key={s.id}>
+                <Reveal i={k % 3}>
+                  <button type="button" onClick={() => onSitePage(s.id)} className="group block w-full text-left">
+                    <span className="relative block aspect-[16/10] overflow-hidden bg-panel">
+                      {img && <img src={dataUrl(img.file)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]" />}
+                      <span className="absolute bottom-0 left-0 bg-bg px-3 py-2">
+                        <span className="display block text-[34px] leading-none text-text">{best ? best.score.toFixed(0) : '-'}</span>
+                      </span>
+                    </span>
+                    <span className="display mt-3 block text-[20px] leading-6 text-text group-hover:text-accent">{short(s.name)}</span>
+                    <span className="mt-0.5 block text-[13px] text-muted">{best ? `${best.purpose}, against ${t?.name ?? 'a target'}` : 'no data'} · {s.footprintKm} km footprint</span>
+                  </button>
+                  <div className="mt-3">
+                    <ProfileDots result={best?.res ?? null} size="sm" />
+                  </div>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ul>
         {scores.status === 'ready' && !sc && <p className="mt-2 text-[12px] text-muted">No data. Site-scale scores were not published with this build.</p>}
 
         <h3 className="display mt-12 text-[26px] leading-8 text-text">Proposed sites against the benchmarks</h3>

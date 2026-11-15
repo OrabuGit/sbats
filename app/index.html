@@ -44,6 +44,21 @@
         background: #ffb000;
         animation: splash-run 1.1s ease-in-out infinite;
       }
+      .splash p {
+        margin: 0;
+        text-align: center;
+        font: 500 14px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: #7c8894;
+      }
+      .splash b {
+        font-weight: 700;
+        color: #ffb000;
+      }
+      .splash .splash-line {
+        max-width: 34ch;
+        font-size: 13px;
+        opacity: 0.8;
+      }
       @keyframes splash-run {
         from {
           transform: translateX(-100%);
@@ -56,7 +71,7 @@
     <title>SBATS-26 · Earth analogs for Moon and Mars base sites</title>
   </head>
   <body>
-    <div id="root"><div class="splash" role="status" aria-label="Loading"><img src="./logo.svg" alt="SBATS" /><i></i></div></div>
+    <div id="root"><div class="splash" role="status" aria-label="Loading"><img src="./logo.svg" alt="SBATS" /><p><b>S</b>pace <b>B</b>ase <b>A</b>nalog <b>T</b>errain <b>S</b>ystem</p><i></i><p class="splash-line">Finding the places on Earth that stand in for a Moon or Mars base</p></div></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
