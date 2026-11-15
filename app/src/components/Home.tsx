@@ -207,7 +207,7 @@ export function Home(p: Props) {
       />
       <main ref={scroller} className="scroll min-h-0 flex-1 bg-bg" aria-label="SBATS-26 home">
         {/* 1. Hero: three globes on the left three quarters, the two actions on the right. */}
-        <section className="flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
+        <section className="relative flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
           <div className="h-[60svh] min-h-[380px] lg:order-2 lg:h-auto lg:min-h-[640px]">
             <HeroGlobes places={p.places} sites={p.earthPins} cells={p.earth.cells.length} onPick={p.onPick} onWorld={p.onWorld} pick={p.pick} links={p.links} reverse={p.reverse} active={p.active}>
               {p.pair && p.auto && (
@@ -237,11 +237,24 @@ export function Home(p: Props) {
               <button type="button" onClick={p.onFind} className="btn btn-primary !h-14 !min-h-14 w-full max-w-[320px] !justify-between !px-6 !text-[17px] !font-semibold">
                 Find analog <ArrowRight size={18} aria-hidden="true" />
               </button>
+              <p className="text-[14px] leading-5 text-muted">Pick a place. See where on Earth. Open the match.</p>
               <button type="button" onClick={() => p.onFeatured()} className="link-rule text-[17px] font-medium text-text">
                 Featured sites
               </button>
             </div>
           </div>
+          <dl className="pointer-events-none absolute bottom-7 left-16 z-10 hidden gap-9 lg:flex">
+            {[
+              [p.earth.cells.length.toLocaleString('en-US'), 'land cells scored'],
+              [String(p.places.length), 'places on the Moon and Mars'],
+              [String(p.presets.length), 'ways to rank'],
+            ].map(([n, t]) => (
+              <div key={t}>
+                <dt className="display text-[26px] leading-none text-text">{n}</dt>
+                <dd className="mt-1 text-[12px] text-muted">{t}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         {/* 2. Featured sites, the team's candidates first. */}

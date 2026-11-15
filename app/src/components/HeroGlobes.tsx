@@ -101,13 +101,14 @@ export function layoutGlobes(w: number, h: number, reserve = 0): Slot[] {
       { world: 'moon', cx: w * 0.73, cy: nav + uh * 0.73, r: rE * 0.5 },
     ];
   }
-  const col = w / 3;
-  const rE = Math.min(uh * 0.37, col * 0.5);
-  const cy = nav + uh * 0.45;
+  // Earth is the largest and sits a little right of centre; Mars and the Moon stand either side, off the line,
+  // so the arcs between them have room to rise.
+  const rE = Math.min(uh * 0.38, w * 0.165);
+  const cy = nav + uh * 0.46;
   return [
-    { world: 'mars', cx: col * 0.5, cy, r: rE * 0.74 },
-    { world: 'earth', cx: col * 1.5, cy, r: rE },
-    { world: 'moon', cx: col * 2.5, cy, r: rE * 0.62 },
+    { world: 'mars', cx: w * 0.17, cy: cy - uh * 0.06, r: rE * 0.74 },
+    { world: 'earth', cx: w * 0.5, cy, r: rE },
+    { world: 'moon', cx: w * 0.84, cy: cy + uh * 0.05, r: rE * 0.62 },
   ];
 }
 
