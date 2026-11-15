@@ -5,9 +5,13 @@ import { SourceBadge } from './Badges';
 
 export type GroundLayer = 'image' | 'relief';
 
-/** Which layer is actually drawn for an item: the image when asked for and present, else the relief. */
+/** A lunar polar image with at least this share of black pixels is mostly shadow and shows less than the relief. */
+const MAX_DARK_SHARE = 0.3;
+export const mostlyShadow = (item: ExtractItem) => (item.image?.darkShare ?? 0) >= MAX_DARK_SHARE;
+
+/** Which layer is actually drawn for an item: the image when asked for, present and not mostly shadow, else the relief. */
 export function shownLayer(item: ExtractItem, want: GroundLayer): GroundLayer | null {
-  if (want === 'image' && item.image) return 'image';
+  if (want === 'image' && item.image && !(mostlyShadow(item) && item.elevation)) return 'image';
   return item.elevation ? 'relief' : item.image ? 'image' : null;
 }
 

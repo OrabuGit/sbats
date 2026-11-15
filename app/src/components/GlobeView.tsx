@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
-import { CanvasTexture, MeshBasicMaterial, SRGBColorSpace } from 'three';
+import { CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
+import SlippyMap from 'three-slippy-map-globe';
 import { feature } from 'topojson-client';
 import type { MultiPolygon, Polygon } from 'geojson';
 import { Minus, Plus } from 'lucide-react';
@@ -28,6 +29,8 @@ const NO_DATA = '#2B333B';
 const CELL_ALPHA = 0.9;
 const LOW_ALPHA = 0.2;
 const NO_DATA_ALPHA = 0.8;
+/** Closest the camera comes, in globe radii above the surface: about 500 km, where the level 7 tiles are in use. */
+const MIN_ALTITUDE = 0.08;
 const OCEAN = '#0F1418';
 const LAND_FILL = '#161B20';
 const LAND_LINE = '#39434D';
@@ -113,6 +116,31 @@ function drawImagery(base: HTMLCanvasElement, img: HTMLImageElement) {
   g.globalAlpha = 1;
 }
 
+/**
+ * NASA GIBS Blue Marble tiles (Web Mercator, levels 0 to 8, 500 m at the deepest). They sharpen
+ * the globe as the camera comes closer. A tile that does not arrive is simply not drawn, and the
+ * bundled Blue Marble texture underneath stays visible, so the map never waits on the network.
+ */
+const GIBS_TILE = (x: number, y: number, level: number) =>
+  `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/2004-08/GoogleMapsCompatible_Level8/${level}/${y}/${x}.jpeg`;
+const GIBS_MAX_LEVEL = 8;
+const GLOBE_RADIUS = 100;
+
+/** Tile material with the same treatment as the bundled texture: less saturation, darker, unlit. */
+function tileMaterial(map: Texture): MeshBasicMaterial {
+  const m = new MeshBasicMaterial({ map });
+  m.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <map_fragment>',
+      `#include <map_fragment>
+      float sbatsLuma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+      diffuseColor.rgb = mix(diffuseColor.rgb, vec3(sbatsLuma), 0.6) * 0.45;`,
+    );
+  };
+  m.customProgramCacheKey = () => 'sbats-tile';
+  return m;
+}
+
 function drawOutlines(g: CanvasRenderingContext2D, w: number, h: number, rings: { ring: Ring; wraps: boolean }[]) {
   const x = (lon: number) => ((lon + 180) / 360) * w;
   const y = (lat: number) => ((90 - lat) / 180) * h;
@@ -158,8 +186,10 @@ interface Props {
   candidates: Candidate[];
   sites: SiteMarker[];
   onSelect: (index: number) => void;
-  /** Change `seq` to fly the camera to a point. */
-  focus: { lat: number; lon: number; seq: number } | null;
+  /** Change `seq` to fly the camera to a point. `arrive` starts far out and comes in, as when arriving from another world. */
+  focus: { lat: number; lon: number; seq: number; arrive?: boolean } | null;
+  /** False while another view covers the globe, so it stops drawing. */
+  active: boolean;
 }
 
 type Marker =
@@ -167,10 +197,10 @@ type Marker =
   | { kind: 'rank'; lat: number; lng: number; index: number; rank: number }
   | { kind: 'site'; lat: number; lng: number; index: number; name: string };
 
-export function GlobeView({ earth, results, index, selected, candidates, sites, onSelect, focus }: Props) {
+export function GlobeView({ earth, results, index, selected, candidates, sites, onSelect, focus, active }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeInstance | null>(null);
-  const texRef = useRef<{ canvas: HTMLCanvasElement; texture: CanvasTexture; base: HTMLCanvasElement; rings: { ring: Ring; wraps: boolean }[] } | null>(null);
+  const texRef = useRef<{ canvas: HTMLCanvasElement; texture: CanvasTexture; rings: { ring: Ring; wraps: boolean }[] } | null>(null);
   const onSelectRef = useRef(onSelect);
   const indexRef = useRef(index);
   onSelectRef.current = onSelect;
@@ -188,13 +218,17 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     const w = small ? 2048 : 4096;
     const h = w / 2;
     const { canvas: base, rings } = drawBase(w, h);
+    const baseTexture = new CanvasTexture(base);
+    baseTexture.colorSpace = SRGBColorSpace;
+    baseTexture.anisotropy = 8;
+    // The heatmap is its own see-through layer above the imagery, so imagery can sharpen under it.
     const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
+    canvas.width = 4096;
+    canvas.height = 2048;
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
-    texture.anisotropy = 8;
-    texRef.current = { canvas, texture, base, rings };
+    texture.magFilter = NearestFilter;
+    texRef.current = { canvas, texture, rings };
 
     // The coastline base shows first. The imagery replaces it when it has loaded.
     let alive = true;
@@ -202,6 +236,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     img.onload = () => {
       if (!alive) return;
       drawImagery(base, img);
+      baseTexture.needsUpdate = true;
       setImagery((n) => n + 1);
     };
     img.src = `${import.meta.env.BASE_URL}textures/blue-marble-${w}.jpg`;
@@ -210,7 +245,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       .backgroundColor('#0B0D0F')
       .showAtmosphere(false)
       .showGraticules(false)
-      .globeMaterial(new MeshBasicMaterial({ map: texture }))
+      .globeMaterial(new MeshBasicMaterial({ map: baseTexture }))
       .width(el.clientWidth || 300)
       .height(el.clientHeight || 300)
       .htmlLat('lat')
@@ -255,10 +290,39 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     const controls = globe.controls();
     controls.autoRotate = false;
     controls.enableDamping = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    controls.minDistance = 130;
+    controls.minDistance = GLOBE_RADIUS * (1 + MIN_ALTITUDE);
     controls.maxDistance = 600;
+
+    const tiles = new SlippyMap(GLOBE_RADIUS * 1.0004, { tileUrl: GIBS_TILE, maxLevel: GIBS_MAX_LEVEL });
+    // One level deeper than the library's default at each distance on a large screen, for sharpness.
+    if (!small) tiles.thresholds = tiles.thresholds.map((t) => t * 2);
+    const addTile = tiles.add.bind(tiles);
+    tiles.add = (...objs: Object3D[]) => {
+      for (const o of objs) {
+        const mesh = o as Mesh;
+        const old = mesh.material as MeshBasicMaterial | undefined;
+        if (old?.map) {
+          mesh.material = tileMaterial(old.map);
+          old.dispose();
+        }
+        mesh.raycast = () => {};
+      }
+      return addTile(...objs);
+    };
+    const overlay = new Mesh(
+      new SphereGeometry(GLOBE_RADIUS * 1.0012, 96, 48),
+      new MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false }),
+    );
+    overlay.rotation.y = -Math.PI / 2; // same orientation as the library's globe
+    overlay.raycast = () => {};
+    overlay.renderOrder = 1;
+    globe.scene().add(tiles, overlay);
+    const camera = globe.camera();
+    const updateTiles = () => tiles.updatePov(camera);
+    controls.addEventListener('change', updateTiles);
     globe.pointOfView({ lat: 5, lng: 105, altitude: small ? 2.3 : 2.2 }, 0);
     globeRef.current = globe;
+    updateTiles();
 
     const ro = new ResizeObserver(() => {
       if (el.clientWidth > 0 && el.clientHeight > 0) globe.width(el.clientWidth).height(el.clientHeight);
@@ -268,8 +332,13 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       alive = false;
       img.onload = null;
       ro.disconnect();
+      controls.removeEventListener('change', updateTiles);
+      tiles.clearTiles();
+      overlay.geometry.dispose();
+      (overlay.material as MeshBasicMaterial).dispose();
       globe._destructor();
       texture.dispose();
+      baseTexture.dispose();
       el.replaceChildren();
       globeRef.current = null;
       texRef.current = null;
@@ -280,11 +349,11 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   useEffect(() => {
     const t = texRef.current;
     if (!t) return;
-    const { canvas, texture, base, rings } = t;
+    const { canvas, texture, rings } = t;
     const g = canvas.getContext('2d')!;
     const w = canvas.width;
     const h = canvas.height;
-    g.drawImage(base, 0, 0);
+    g.clearRect(0, 0, w, h);
     const res = earth.meta.resolutionDeg;
     const cw = (res / 360) * w;
     const ch = (res / 180) * h;
@@ -297,7 +366,8 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       g.fillRect(((c.lon - res / 2 + 180) / 360) * w - pad, ((90 - c.lat - res / 2) / 180) * h - pad, cw + pad * 2, ch + pad * 2);
     });
     g.globalAlpha = 1;
-    drawOutlines(g, w, h, rings);
+    // The drawn coastline is only needed until the imagery, which has its own coasts, is in place.
+    if (imagery === 0) drawOutlines(g, w, h, rings);
     texture.needsUpdate = true;
   }, [earth, results, imagery]);
 
@@ -325,15 +395,27 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   useEffect(() => {
     const globe = globeRef.current;
     if (!globe || !focus) return;
+    if (focus.arrive && !reduced) {
+      globe.pointOfView({ lat: focus.lat, lng: focus.lon - 50, altitude: 4.5 }, 0);
+      globe.pointOfView({ lat: focus.lat, lng: focus.lon, altitude: 1.9 }, 1800);
+      return;
+    }
     const current = globe.pointOfView();
     globe.pointOfView({ lat: focus.lat, lng: focus.lon, altitude: Math.min(current.altitude, 1.9) }, reduced ? 0 : 1100);
   }, [focus, reduced]);
+
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!globe) return;
+    if (active) globe.resumeAnimation();
+    else globe.pauseAnimation();
+  }, [active]);
 
   const zoom = (factor: number) => {
     const globe = globeRef.current;
     if (!globe) return;
     const pov = globe.pointOfView();
-    globe.pointOfView({ ...pov, altitude: Math.min(5, Math.max(0.35, pov.altitude * factor)) }, reduced ? 0 : 300);
+    globe.pointOfView({ ...pov, altitude: Math.min(5, Math.max(MIN_ALTITUDE, pov.altitude * factor)) }, reduced ? 0 : 300);
   };
 
   return (
@@ -343,7 +425,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
         <p className="label">Drag to rotate. Click land to inspect a cell.</p>
       </div>
       <div className="absolute bottom-3 left-3 border border-line bg-panel px-3 py-2">
-        <p className="label mb-1.5">Match score</p>
+        <p className="label mb-1.5">Match score, 0 to 100</p>
         <div className="flex items-end gap-px" aria-hidden="true">
           {SCORE_CLASSES.map((c) => (
             <div key={c.min} className="w-7">

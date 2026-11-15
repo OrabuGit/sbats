@@ -1,4 +1,5 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { Suspense, forwardRef, lazy, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { flags } from '../flags';
 import { Eraser, FolderOpen, Link2, Minus, Plus, Rocket, Save, Trash2 } from 'lucide-react';
 import type { EarthCell, Target } from '../types';
 import {
@@ -27,8 +28,10 @@ import {
 } from '../lib/simAdapter';
 import { formatCoords } from '../lib/geo';
 import { ComputedBadge, SourceBadge, Tag } from './Badges';
-import { Ground, shownLayer, type GroundLayer } from './Ground';
-import type { ExtractItem } from '../data/sites';
+import { Ground, mostlyShadow, shownLayer, type GroundLayer } from './Ground';
+import { loadElevation, type ExtractItem } from '../data/sites';
+
+const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
 
 // The part of the 36 x 36 layout grid that is drawn. Modules outside it (from a share link made
 // elsewhere) still count and are reported in a note.
@@ -51,8 +54,13 @@ export const EXAMPLE_LAYOUT: SavedLayout = {
   ],
 };
 
+/** The layout being worked on, kept while the sandbox is closed so going back to the dossier does not lose it. */
+let lastLayout: SavedLayout | null = null;
+
 export interface SandboxHandle {
   loadExample: () => void;
+  /** Switches the centre between the plan grids and the 3D terrain. */
+  setMode: (mode: 'plan' | '3d') => void;
   deploy: () => void;
   setDay: (day: number) => void;
 }
@@ -228,7 +236,10 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   ref,
 ) {
   const file = modules.file;
-  const [layout, setLayout] = useState<SavedLayout>(initial ?? { modules: [], resupplyEveryDays: null });
+  const [layout, setLayout] = useState<SavedLayout>(initial ?? lastLayout ?? { modules: [], resupplyEveryDays: null });
+  useEffect(() => {
+    lastLayout = layout;
+  }, [layout]);
   const [tool, setTool] = useState<ModuleType | 'erase'>('habitat');
   const [deployed, setDeployed] = useState(false);
   const [day, setDay] = useState(DAYS);
@@ -237,6 +248,12 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   const [message, setMessage] = useState<string | null>(null);
   const [link, setLink] = useState<string | null>(null);
   const [layer, setLayer] = useState<GroundLayer>('image');
+  const [mode, setMode] = useState<'plan' | '3d'>('plan');
+  // Fetch the elevation grids ahead of time, so the 3D view opens without a wait.
+  useEffect(() => {
+    if (!flags.boots) return;
+    for (const item of [ground.earth, ground.target]) if (item?.elevation) loadElevation(item.elevation).catch(() => {});
+  }, [ground.earth, ground.target]);
 
   useEffect(() => {
     if (initial) setLayout(initial);
@@ -351,8 +368,10 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         setLayout(EXAMPLE_LAYOUT);
         setDeployed(false);
         setDay(DAYS);
+        setMode('plan');
       },
       deploy: () => setDeployed(true),
+      setMode,
       setDay: (d: number) => setDay(Math.max(1, Math.min(DAYS, Math.round(d)))),
     }),
     [],
@@ -717,6 +736,15 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             Back to dossier
           </button>
           <p className="label flex min-w-0 flex-1 items-center truncate px-4">Same layout, two sites</p>
+          {flags.boots && (
+            <div className="flex" role="group" aria-label="View">
+              {(['plan', '3d'] as const).map((m) => (
+                <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)} className={`label min-h-11 border-l border-line px-4 ${mode === m ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}>
+                  {m === 'plan' ? 'Plan' : '3D terrain'}
+                </button>
+              ))}
+            </div>
+          )}
           {(ground.earth || ground.target) && (
             <div className="flex" role="group" aria-label="Ground layer">
               {(['image', 'relief'] as const).map((l) => (
@@ -727,7 +755,30 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             </div>
           )}
         </div>
-        <div className="flex flex-col lg:flex-row">
+        {mode === '3d' &&
+          (ground.earth && ground.target ? (
+            <Suspense
+              fallback={
+                <p className="label p-3" role="status">
+                  Loading terrain
+                </p>
+              }
+            >
+              <Terrain3D
+                earth={{ item: ground.earth, modules: layout.modules }}
+                target={{ item: ground.target, modules: deployed ? layout.modules : [], note: deployed ? undefined : 'not deployed' }}
+                windowKm={ground.windowKm}
+                layer={layer}
+                cols={COLS}
+                rows={ROWS}
+              />
+            </Suspense>
+          ) : (
+            <p className="p-3 text-[13px] text-muted">
+              No data. No terrain extract was built for {ground.earth ? target.name : 'this Earth cell'}. Open a featured site that has one, for example Kawah Ijen or Mount Merapi.
+            </p>
+          ))}
+        <div className={mode === '3d' ? 'hidden' : 'flex flex-col lg:flex-row'}>
           <Pane
             title={siteName}
             body={`Earth · ${siteCode} · ${formatCoords(cell.lat, cell.lon)}`}
@@ -768,7 +819,9 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         </div>
         {layer === 'image' && ground.target && shownLayer(ground.target, 'image') === 'relief' && (
           <p className="border-t border-line px-3 py-2 text-[11px] text-muted" role="note">
-            No image of {target.name} is in the data, so its pane shows shaded relief from the elevation grid.
+            {ground.target.image && mostlyShadow(ground.target)
+              ? `The image of ${target.name} is ${((ground.target.image.darkShare ?? 0) * 100).toFixed(0)}% shadow, so its pane shows shaded relief from the elevation grid.`
+              : `No image of ${target.name} is in the data, so its pane shows shaded relief from the elevation grid.`}
           </p>
         )}
         {deployed && layout.modules.length > 0 && (

@@ -6,8 +6,8 @@ export const flags = {
    * placeholder numbers; `?sandbox=fixture` opens it anyway, labelled.
    */
   recon: true,
-  /** BOOTS 3D terrain shot (checkpoint 5). */
-  boots: false,
+  /** BOOTS 3D terrain view (checkpoint 5): site and target side by side from data/extracts. */
+  boots: true,
   /** Method page: the scoring formula and the ranking rules. */
   methodPage: true,
   /**

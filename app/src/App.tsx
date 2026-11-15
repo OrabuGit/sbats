@@ -13,6 +13,7 @@ import { MethodPage } from './components/MethodPage';
 import { ValidationPage } from './components/ValidationPage';
 import { Absent, InfoShell, Loading } from './components/InfoParts';
 import { SitePage } from './components/SitePage';
+import { TargetBrief } from './components/TargetBrief';
 import { loadExtracts, loadSites } from './data/sites';
 import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
@@ -25,6 +26,8 @@ import { decodeLayout, type SavedLayout } from './lib/simAdapter';
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
 const globeModule = import('./components/GlobeView');
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
+const worldModule = import('./components/WorldGlobe');
+const WorldGlobe = lazy(() => worldModule.then((m) => ({ default: m.WorldGlobe })));
 
 const LIST_LIMIT = 15;
 const MAP_MARKERS = 10;
@@ -76,8 +79,8 @@ function Orbit({ data }: { data: DataBundle }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [includeLow, setIncludeLow] = useState(false);
   const [mode, setMode] = useState<ListMode>('ranked');
-  const [tab, setTab] = useState<'setup' | 'results'>('results');
-  const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number } | null>(null);
+  const [tab, setTab] = useState<'setup' | 'results'>('setup');
+  const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number; arrive?: boolean } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   const [step, setStep] = useState<Step>(1);
   const [view, setView] = useState<'orbit' | 'method' | 'validation' | 'site' | 'recon'>('orbit');
@@ -160,6 +163,23 @@ function Orbit({ data }: { data: DataBundle }) {
     [earth],
   );
 
+  // Step 1 to step 2: leave the Moon or Mars globe and arrive over the best-matching part of Earth.
+  const arriving = useRef(false);
+  const goToEarth = useCallback((id?: string) => {
+    if (id) setTargetId(id);
+    arriving.current = true;
+    setSelected(null);
+    setView('orbit');
+    setStep(2);
+    setTab('results');
+  }, []);
+  useEffect(() => {
+    if (!arriving.current || step !== 2) return;
+    arriving.current = false;
+    const top = candidates[0] ? earth.cells[candidates[0].index] : null;
+    setFocus({ lat: top?.lat ?? 5, lon: top?.lon ?? 105, seq: ++seq.current, arrive: true });
+  }, [step, candidates, earth]);
+
   // From the Validation page: open the grid cell nearest to a site, against the given target.
   const openSite = useCallback(
     (lat: number, lon: number, id: string) => {
@@ -180,15 +200,23 @@ function Orbit({ data }: { data: DataBundle }) {
   }, []);
   useEffect(() => stopDemo, [stopDemo]);
 
-  const featured = useMemo(() => {
-    const cand = sites.find((s) => s.analog.kind === 'candidate' && s.index >= 0 && results[s.index]?.score !== null);
-    return cand?.index ?? candidates[0]?.index ?? null;
-  }, [sites, results, candidates]);
+  // The site the demo and step 3 fall back to: an SBATS candidate, with a terrain extract if one exists.
+  const extractIds = useMemo(() => new Set(extracts.status === 'ready' && extracts.value ? extracts.value.items.map((x) => x.id) : []), [extracts]);
+  const featuredSite = useMemo(() => {
+    const cands = sites.filter((s) => s.analog.kind === 'candidate' && s.index >= 0);
+    return cands.find((s) => extractIds.has(s.analog.id)) ?? cands[0] ?? null;
+  }, [sites, extractIds]);
+  const featured = featuredSite?.index ?? candidates[0]?.index ?? null;
+  const candidatesRef = useRef(candidates);
+  candidatesRef.current = candidates;
 
   const runDemo = () => {
     if (demo) return stopDemo();
-    setView('orbit');
     const at = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
+    // The demo runs against the target its site is proposed for, so the comparison means something.
+    const demoTarget = targets.find((t) => t.id === featuredSite?.analog.analogFor[0]) ?? target;
+    setTargetId(demoTarget.id);
+    setView('orbit');
     setSelected(null);
     setMode('ranked');
     setPresetId(PRESETS[0].id);
@@ -196,45 +224,49 @@ function Orbit({ data }: { data: DataBundle }) {
     setMatchMode('all');
     setTab('setup');
     setStep(1);
-    setDemo(`Demo: target ${target.name}`);
-    const top = candidates[0]?.index ?? null;
-    at(2500, () => {
-      setTab('results');
-      setStep(2);
+    setDemo(`Demo: target ${demoTarget.name}`);
+    at(3000, () => {
       setDemo('Demo: ranking Earth cells');
-      if (top !== null) setFocus({ lat: earth.cells[top].lat, lon: earth.cells[top].lon, seq: ++seq.current });
+      goToEarth();
     });
-    at(6000, () => {
-      setDemo('Demo: opening the top candidate');
-      if (top !== null) select(top);
+    at(6500, () => {
+      setDemo('Demo: the top candidate');
+      const top = candidatesRef.current[0]?.index;
+      if (top !== undefined) select(top);
     });
-    if (featured !== null && featured !== top) {
+    if (featured !== null) {
       at(11000, () => {
-        setDemo('Demo: an SBATS candidate site');
+        setDemo(featuredSite ? `Demo: ${featuredSite.analog.name.split(',')[0]}, an SBATS candidate` : 'Demo: a second site');
         select(featured);
       });
     }
-    const site = featured ?? top;
-    if (reconReady && site !== null) {
-      // Step 3: the same site in the sandbox, an example base, deployed twice, then 30 days.
-      at(16000, () => {
-        setDemo('Demo: building a base at the site');
-        setSelected(site);
+    if (reconReady && featured !== null) {
+      const has3d = flags.boots && !!featuredSite && extractIds.has(featuredSite.analog.id) && extractIds.has(demoTarget.id);
+      at(15500, () => {
+        setDemo('Demo: a base at the site');
+        setSelected(featured);
         setStep(3);
         setTab('results');
         setView('recon');
       });
-      at(17000, () => sandboxRef.current?.loadExample());
-      at(20000, () => {
-        setDemo(`Demo: deploying the same base on ${target.name}`);
+      at(16300, () => sandboxRef.current?.loadExample());
+      at(18500, () => {
+        setDemo(`Demo: the same base at ${demoTarget.name}`);
         sandboxRef.current?.deploy();
       });
-      at(23500, () => {
+      if (has3d) {
+        at(20500, () => {
+          setDemo('Demo: both sites as terrain, one scale');
+          sandboxRef.current?.setMode('3d');
+        });
+      }
+      at(25000, () => {
         setDemo('Demo: 30 days, day by day');
+        sandboxRef.current?.setMode('plan');
         sandboxRef.current?.setDay(1);
         document.getElementById('h-time')?.scrollIntoView({ block: 'start' });
       });
-      for (let i = 1; i <= 10; i++) at(23500 + i * 450, () => sandboxRef.current?.setDay(i * 3));
+      for (let i = 1; i <= 10; i++) at(25000 + i * 420, () => sandboxRef.current?.setDay(i * 3));
       at(30000, () => {
         timers.current = [];
         setDemo(null);
@@ -290,6 +322,7 @@ function Orbit({ data }: { data: DataBundle }) {
       setTab('setup');
       leftRef.current?.querySelector<HTMLElement>('input[name="target"]:checked')?.focus();
     } else if (s === 2) {
+      if (step === 1) return goToEarth();
       setTab('results');
       rightRef.current?.querySelector<HTMLElement>('button')?.focus();
     }
@@ -316,6 +349,7 @@ function Orbit({ data }: { data: DataBundle }) {
   }, [named, climateFile, explained]);
   const namedHasPage = !!named && !!featuredSites?.sites.some((x) => x.id === named.id);
   const infoOpen = view === 'method' || view === 'validation' || view === 'site';
+  const showWorld = view === 'orbit' && step === 1;
 
   // A site page opens against the target the site is proposed for, when it has one.
   const openSitePage = useCallback(
@@ -466,13 +500,17 @@ function Orbit({ data }: { data: DataBundle }) {
         <div className="h-[46vh] min-h-[280px] shrink-0 order-1 border-b border-line lg:order-2 lg:h-auto lg:min-h-0 lg:border-b-0">
           <Suspense
             fallback={
-              <div className="flex h-full items-center justify-center bg-bg">
+              <div className="flex h-full items-center bg-bg px-4">
                 <p className="label" role="status">
                   Loading globe
                 </p>
               </div>
             }
           >
+            <div className={showWorld ? 'h-full' : 'hidden'}>
+              <WorldGlobe targets={targets} targetId={target.id} onTarget={setTargetId} onPick={goToEarth} active={showWorld} />
+            </div>
+            <div className={showWorld ? 'hidden' : 'h-full'}>
             <GlobeView
               earth={earth}
               results={results}
@@ -482,7 +520,9 @@ function Orbit({ data }: { data: DataBundle }) {
               sites={mapSites}
               onSelect={select}
               focus={focus}
+              active={view === 'orbit' && !showWorld}
             />
+            </div>
           </Suspense>
         </div>
 
@@ -495,17 +535,25 @@ function Orbit({ data }: { data: DataBundle }) {
               onClick={() => setTab(t)}
               className={`label min-h-11 border-r border-line last:border-r-0 ${tab === t ? 'bg-bg !text-accent' : '!text-text'}`}
             >
-              {t === 'setup' ? 'Target and weights' : selected !== null ? 'Dossier' : 'Candidates'}
+              {t === 'setup' ? (step === 1 ? 'Targets' : 'Target and weights') : step === 1 ? 'This target' : selected !== null ? 'Dossier' : 'Candidates'}
             </button>
           ))}
         </div>
 
         <aside
           ref={rightRef}
-          aria-label={selected !== null ? 'Site dossier' : 'Analog candidates'}
+          aria-label={step === 1 ? 'Target' : selected !== null ? 'Site dossier' : 'Analog candidates'}
           className={`scroll order-3 bg-panel lg:order-3 lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
         >
-          {selectedCell && explained ? (
+          {showWorld ? (
+            <TargetBrief
+              target={target}
+              extract={extractIndex?.items.find((x) => x.id === target.id) ?? null}
+              extractsState={extracts.status}
+              windowKm={extractIndex?.meta.windowKm ?? 20}
+              onFind={() => goToEarth()}
+            />
+          ) : selectedCell && explained ? (
             <Dossier
               cell={selectedCell}
               target={target}

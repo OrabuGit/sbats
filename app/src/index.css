@@ -200,3 +200,46 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
     animation: none !important;
   }
 }
+
+/* Target markers on the Moon and Mars globes. */
+.tm {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  min-height: 24px;
+  background: transparent;
+  border: 0;
+  /* The marker's dot, not its label, sits on the site. */
+  transform: translate(calc(50% - 6px), 0);
+}
+.tm-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: var(--color-bg);
+  border: 2px solid var(--color-text);
+}
+.tm-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0 4px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+.tm-on .tm-dot {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+.tm-on .tm-name,
+.tm:hover .tm-name {
+  color: var(--color-accent);
+}
+.tm:hover .tm-dot {
+  border-color: var(--color-accent);
+}
