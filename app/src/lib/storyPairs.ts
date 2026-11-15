@@ -9,6 +9,7 @@ import { buildIndex, type CellIndex } from './geo';
 import { PRESETS, matchWord, type Scorer } from './scoringAdapter';
 import type { MatchRecord } from './matchAdapter';
 import { fromRecord, type Verdict } from './verdict';
+import { profileOf, type Profile } from './profile';
 import type { FeaturedSite } from '../data/sites';
 
 export interface PairVerdict {
@@ -34,6 +35,8 @@ export interface SiteScale {
   score: number | null;
   word: string;
   confidence: string | null;
+  /** The five dimensions with both values and the one-line verdict. */
+  profile: Profile;
 }
 
 export interface EarthOwnValue {
@@ -126,7 +129,7 @@ export function pairVerdict(
             .flatMap((d) => d.rows.map((r) => ({ label: r.label, earth: r.earth.text, target: r.target.text, verdict: fromRecord(r.verdict) })))
             .filter((r) => r.earth !== 'no data' || r.target !== 'no data');
           const sc = rec.score.value;
-          siteScale = { footprintKm: rec.earth.footprintKm ?? null, rows, score: sc, word: sc === null ? 'no data' : matchWord(sc), confidence: rec.score.confidence ?? null };
+          siteScale = { footprintKm: rec.earth.footprintKm ?? null, rows, score: sc, word: sc === null ? 'no data' : matchWord(sc), confidence: rec.score.confidence ?? null, profile: profileOf(rec) };
         }
       } catch {
         siteScale = null;

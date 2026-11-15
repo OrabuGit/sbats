@@ -56,7 +56,7 @@ const BADGES = ['Measured', 'Mission', 'Literature'];
 const skip = (what: string): void => console.log(`    (skipped: ${what})`);
 
 describe('data/targets.json', () => {
-  it('lists the seven DESIGN.md sites, Marius Hills and the two Mars targets added after the freeze, with unique kebab-case ids', () => {
+  it('lists the seven original sites, Marius Hills and the two Mars targets added after the freeze, with unique kebab-case ids', () => {
     if (!targets) return skip('targets.json does not exist yet');
     const ids = targets.map((t) => t.id);
     equal(new Set(ids).size, ids.length);
@@ -283,7 +283,7 @@ describe('Antarctica in the real data', () => {
 describe('Sigmas and weights against the frozen tuning result', () => {
   const DESIGN_BASE = { terrain: 0.25, bareGround: 0.2, dryness: 0.15, temperature: 0.15, sunlight: 0.1, rockType: 0.15 };
 
-  it('uses the Base weights of the DESIGN.md table until a tuning pass is frozen', () => {
+  it('uses the Base weights of the Method page table until a tuning pass is frozen', () => {
     if (frozen) return skip(`tuning was frozen on ${frozen.frozenAt}; the next checks apply instead`);
     deepEqual(PRESETS.base.weights, DESIGN_BASE);
     equal(SUN_ELEVATION_SIGMA_DEG, 15);

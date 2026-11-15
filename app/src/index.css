@@ -7,7 +7,7 @@
 @import '@fontsource-variable/archivo/wdth.css';
 @import 'tailwindcss';
 
-/* UI tokens from DESIGN.md section 10. One accent. Green and red are for readiness only. */
+/* UI tokens. One accent. Green and red are for readiness only. */
 @theme {
   --color-bg: #0b0d0f;
   --color-panel: #12161a;

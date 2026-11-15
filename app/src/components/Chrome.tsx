@@ -51,8 +51,6 @@ export function NavRight(p: NavProps) {
     { label: 'Home', on: !!p.homeOpen, go: p.onHome },
     { label: 'Find analog', on: !!p.findOpen, go: p.onFind },
     { label: 'Featured sites', on: p.featuredOpen, go: p.onFeatured },
-    { label: 'Explore data', on: !!p.exploreOpen, go: p.onExplore },
-    { label: 'Custom conditions', on: !!p.customOpen, go: p.onCustom },
     { label: 'Validation', on: !!p.validationOpen, go: p.onValidation },
     ...(flags.methodPage ? [{ label: 'Method', on: p.methodOpen, go: p.onMethod }] : []),
     { label: 'Learn', on: p.learnOpen, go: p.onLearn },

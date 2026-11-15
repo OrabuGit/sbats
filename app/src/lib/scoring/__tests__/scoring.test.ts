@@ -24,7 +24,7 @@ const SUN = sunSimilarity(TARGET_LAT, target);
 /** Base weights with Sunlight switched off, so that a cell equal to the target scores exactly 100. */
 const NO_SUN: Weights = { ...BASE, sunlight: 0 };
 
-describe('Overall score (DESIGN.md section 6)', () => {
+describe('Overall score (the Method page)', () => {
   it('is 100 for a cell that equals the target on every factor', () => {
     const result = scoreCell(makeCell(), prepared, NO_SUN);
     ok(near(result.score, 100));
@@ -146,7 +146,7 @@ describe('Mission presets', () => {
     }
   });
 
-  it('raises the factors DESIGN.md says each preset raises', () => {
+  it('raises the factors the Method page says each preset raises', () => {
     const { base, rover, ice, astrobiology } = PRESETS;
     ok(rover.weights.terrain > base.weights.terrain);
     ok(ice.weights.temperature > base.weights.temperature);
@@ -667,7 +667,7 @@ describe('Missing target values', () => {
 });
 
 describe('Per-cell outputs', () => {
-  it('returns the six factors in DESIGN.md order with weights that sum to 1', () => {
+  it('returns the six factors in the Method page order with weights that sum to 1', () => {
     const result = scoreCell(makeCell(), prepared, BASE);
     deepEqual(result.breakdown.map((f) => f.factor), FACTORS.map((f) => f.id));
     ok(near(result.breakdown.reduce((sum, f) => sum + f.weight, 0), 1, 1e-12));

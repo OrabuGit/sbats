@@ -1,5 +1,5 @@
 // SBATS scoring library. Pure TypeScript, no UI and no file or network access.
-// Implements DESIGN.md section 6 and the scoring rules of data/SCHEMA.md. See README.md in this folder.
+// Implements the Method page and the scoring rules of data/SCHEMA.md. See README.md in this folder.
 
 export { PRESETS, PRESET_IDS, DEFAULT_PRESET_ID, normaliseWeights } from './presets';
 export type { Preset, PresetId } from './presets';

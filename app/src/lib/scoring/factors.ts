@@ -10,7 +10,7 @@ export interface FactorDef {
 }
 
 /**
- * The six scoring factors of DESIGN.md section 6 and the data keys behind each
+ * The six scoring factors of the Method page and the data keys behind each
  * (mapping from data/SCHEMA.md, "Factor keys").
  */
 export const FACTORS: readonly FactorDef[] = [

@@ -1,6 +1,6 @@
 # SBATS base simulation
 
-Pure TypeScript. No UI, no file access, no network. It implements DESIGN.md section 8: place modules
+Pure TypeScript. No UI, no file access, no network. It implements app/src/lib/sim/README.md: place modules
 on an Earth analog site, run the same layout at the Moon or Mars target, and say what differs and what
 the Earth rehearsal cannot test. Code generated with AI assistance (Claude Code), directed and
 reviewed by the team; see `AI_USE.md`.
@@ -50,7 +50,7 @@ const back = decodeLayout(link);
 | Landing pad | cargo per delivery | nothing | slope: no cargo above the pad's slope limit |
 
 - Solar power per array = `ratedPowerKw x (site irradiance / ratedIrradianceWm2) x litFraction`. This is
-  DESIGN.md's `P = I x A x efficiency x lit_fraction` with `A x efficiency` written as rated power over
+  The base model's `P = I x A x efficiency x lit_fraction` with `A x efficiency` written as rated power over
   rated sunlight, because that is the form in which arrays are published.
 - Crew needs = crew x per-person oxygen, water and food (NASA BVAD). Crew defaults to every habitat place.
 - Electrolysis turns surplus water into oxygen, only as much as the crew still needs after the greenhouses.

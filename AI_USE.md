@@ -2,6 +2,50 @@
 
 Space Apps requires teams to state where and how AI was used. Keep this current.
 
+## What the team did
+
+- The team set the concept: searching all of Earth for places that stand in for Moon and Mars base sites.
+- The team sketched the home page layout and directed the product flow, the navigation and each round of changes through written briefs.
+- The team proposed the featured sites and wrote their stories.
+- The team set the scoring rules. No value is invented, and any change to the weights or to the factor list needs the team's approval.
+- The team directed and reviewed the work.
+
+## What AI did
+
+- Wrote the application and pipeline code under that direction.
+- Compiled data from cited public sources.
+- Drafted interface text and documentation.
+- Drew the line icons and drawings in code.
+
+## What AI did not do
+
+- No data value comes from an AI model. Every value traces to a source in SOURCES.md.
+- No AI-generated photographs, images or video are used. The line drawings made in code (the four purpose drawings, the nine element icons, the rover and tool drawings) carry a small "AI-generated drawings" mark in the app where they appear in groups, and every entry in the full log below that built them is listed.
+- The featured-site stories and descriptions are the team's.
+
+## Summary by kind of work
+
+Each of the dated entries in the full log below is counted under exactly one kind, by its main purpose. Some entries also did smaller work of another kind, for example line drawings made inside larger app entries; the Notes at the end of this file still apply to those. The folders are taken from the Files column of the entries.
+
+| Kind of work | What AI did | Tools used | Folders | Dated entries |
+| --- | --- | --- | --- | --- |
+| App code | Wrote the React and Vite screens, pages, charts, terrain views, rover route planner and match and target libraries of the app, and wired the app to the data files built elsewhere. Also made visual and layout passes, the home page, the featured-site pages, the Learn page and fixes from a walk of the live site. | Claude Code; Claude Code with web fetch of NASA pages for facts; Claude Code (Claude Sonnet 5.5); Claude Code (Claude Opus 5.5); a delegated Claude Code run (Method page graphics) | app/, pipeline/ (first generic entry only), SOURCES.md | 2026-11-14 to 2026-11-15, 28 entries |
+| Scoring library and simulation code | Wrote the scoring library with its unit tests from the team's rules and data/SCHEMA.md, and added the bare ground and permanent ice rule. Wrote the base simulation engine and its tests, and the rover route measurement and rank stability under perturbed weights. | Claude Code | app/src/lib/scoring/, app/src/lib/sim/, app/src/lib/route | 2026-11-14 to 2026-11-15, 4 entries |
+| Pipeline code | Wrote and ran the pipeline scripts for the site analysis, minerals, Moon and Mars grids, wind, aerosol and permafrost keys, the JAXA cross-check and the 3D extracts. Queried the Mars Climate Database and built the terrain extracts for the best-ranked Earth cells. Every value comes from a downloaded dataset; the AI wrote code, not data values. | Claude Code; Claude Code (Claude Fable 5.2) | pipeline/, validation/build/, data/ (earth, sites, site_climate, extracts, moon, mars, jaxa_check, target_environment files), SOURCES.md | 2026-11-15, 3 entries |
+| Data compilation | Compiled data/modules.json from NASA technical reports and the Mars Climate Database with a research sub-agent, then reviewed and filled its null values. Compiled the named Moon and Mars places, target mineralogy and rover figures, and wrote the rock-class similarity table from the team's three approved levels. | Claude Code; Claude Code with a research sub-agent and web search; research sub-agents | data/ (modules, lithology_similarity, known_sites, target_minerals, rovers, target_windows, benchmarks, REVIEW_ME), validation/build/, validation/output/, SOURCES.md | 2026-11-14 to 2026-11-15, 4 entries |
+| Target and site research | Collected target and analog-site sources, measured target terrain and temperature, and entered the values. Added the Marius Hills target and two Mars targets after the freeze, read the sources for five more named places, and added cited process statements for the candidate sites. | Claude Code with research sub-agents and web search; Claude Code | data/ (targets, analogs, known_sites, place_matches, benchmarks, modules, REVIEW_ME), validation/build/, validation/output/, validation/sites/, SOURCES.md | 2026-11-14 to 2026-11-15, 5 entries |
+| Validation | Wrote the validation script and report, drew the tuning and hold-out split, and ran the one tuning pass on the team's go-ahead (none accepted, values frozen). Wrote the analog profile and purpose rankings, the geology diagnosis, site-scale scoring, discovery listings, rank stability, the grid check and the freshness check, and withdrew the provisional mineral findings. | Claude Code; Claude Code with a research sub-agent and web search | validation/, data/ (analogs, discoveries, place_matches), app/src/lib/scoring/, app/src/lib/targets | 2026-11-14 to 2026-11-15, 10 entries |
+| Interface text and documentation | Audited every screen and rewrote the copy, with one term per concept, a glossary and number and unit formats. Wrote the one-page plain-language validation summary from the existing reports. | Claude Code | app/src/components/, app/src/lib/format.ts, app/src/index.css, app/src/App.tsx, validation/SUMMARY.md | 2026-11-15, 2 entries |
+| Concept research and design documents | Researched challenge rules and similar projects and drafted the design brief, the UI layout concept and the acceptance rules (working notes, not published). Drafted the shared data contract from the team's field list and ownership split. | Claude (chat); Claude Code | design/, data/SCHEMA.md, and working notes kept in the team's folder and not published | 2026-11-14, 2 entries |
+| Drawings and icons | Made the logo without the ring mark, the tab icon, the element icon set and the score dial, and used icons on the match page and strips. Made in code, with no AI imagery. | Claude Code | app/public/, app/index.html, app/src/components/ | 2026-11-15, 1 entry |
+| Review | Had the new libraries reviewed by a separate read-only agent, fixed the nine defects it found and added tests. | Claude Code | app/src/lib/match, app/src/lib/targets, app/src/lib/route, validation/benchmarks.ts | 2026-11-15, 1 entry |
+| Publishing | Scanned the files and full git history for secrets, merged the remote LICENSE commit, wrote the GitHub Pages workflow, rewrote the README from the existing reports and compiled the submission resource lists from SOURCES.md. | Claude Code (Claude Fable 5.2) | .github/workflows/, README.md, SUBMISSION_NOTES.md | 2026-11-15, 1 entry |
+| Total | | | | 61 entries (28 + 4 + 3 + 4 + 5 + 10 + 2 + 2 + 1 + 1 + 1) |
+
+## Full dated log
+
+This is the complete log of AI use, oldest first. Some rows name working files (DESIGN.md, CLAUDE.md, JUDGING.md, CHALLENGE.md, SUBMISSION_GUIDE.md and the decisions logs). They are kept in the team's working folder and are not published.
+
 | Date | Tool | What it did | Files or outputs |
 | --- | --- | --- | --- |
 | 2026-11-14 | Claude (chat) | Researched challenge rules and similar projects, drafted the design document, UI layout concept, CLAUDE.md, JUDGING.md | DESIGN.md, CLAUDE.md, JUDGING.md, design/ |
@@ -64,6 +108,7 @@ Space Apps requires teams to state where and how AI was used. Keep this current.
 | 2026-11-15 | Claude Code (Claude Opus 5.5) | Home featured section back in the old layout (full-bleed Tambora lead with the Shackleton tile inset, four pair cards with the target inset); each pair's tool block leads with the comparison measured inside the site's footprint, then the footprint score and the grid score with a line saying the grid score covers the whole grid square; pairs whose target has no measurements show the Earth site's own measured values with badges; Best new places fixed on Shackleton rim with the rank-skip line and the excluded top place when there is one; icons on What you can do; hero in km | app/src/components/StoryPairs.tsx, StoryTool.tsx, Home.tsx |
 | 2026-11-15 | Claude Code | Added two Mars targets after the freeze (Columbia Hills in Gusev crater, Holden crater): ran the same terrain and climate measurements as the other Mars targets, found and read the sources for rock class and minerals, rebuilt the data files and reports | validation/build/make_targets.py, make_target_minerals.py, make_target_environment.py, make_modules.py, make_review.py, data/targets.json and the files built from it, validation/output/ |
 | 2026-11-15 | Claude Code (Claude Sonnet 5.5) | Fixes from a walk of the live site: error boundary and GL guard, flat 2D maps for the Moon and Mars picker and the Earth heatmap, no-WebGL notice for the 3D terrain, default target Shackleton rim, faster first load (early data fetch, lazy three.js, 2048 textures first, lazy below-the-fold pictures, progress on the splash), Minerals label on result rows, Dallol and Uyuni pairs with the two added Mars targets, page margins, Saved icon. Files: app/index.html, app/src/App.tsx, app/src/main.tsx, app/src/data/access.ts, app/src/lib/gl.ts, lib/heat.ts, lib/useNear.ts, lib/defaults.ts, lib/storyPairs.ts, components/ErrorBoundary.tsx, GlGuard.tsx, FlatFrame.tsx, FlatWorldMap.tsx, FlatEarthMap.tsx, HeroStill.tsx, worldInfo.ts, terrainTypes.ts and edits to Home, HeroGlobes, GlobeView, WorldGlobe, Worlds, Locator, Terrain3D, PlaceStep, MapTile, HomeStory, CandidateList, StoryTool, Chrome, InfoParts, Method and Validation pages. |
+| 2026-11-15 | Claude Code (Claude Sonnet 5.5) | Analog profile first wherever one site is compared with one target (home pair cards, site pages, match pages, result cards): the five dimensions as matches, partly or does not match with both values, one verdict line, then the all-round score smaller with the failing dimensions named; Explore data and Custom conditions taken out of the top bar; the in-app AI assistance page shortened to a summary; AI_USE.md grouped by kind of work; internal working files taken out of the published repository and references to them repointed | app/src/lib/profile.ts, app/src/components/AnalogProfile.tsx, StoryTool.tsx, SitePage.tsx, MatchDetail.tsx, CandidateList.tsx, Chrome.tsx, AiUsePage.tsx, app/src/App.tsx, AI_USE.md, README.md, .gitignore |
 
 Notes:
 - No AI-generated photographs, images or video are used. The line drawings in the app (the four purpose drawings, the nine element icons, the rover and tool drawings) were drawn in code with AI assistance; they carry a small visible "AI-generated drawings" mark where they appear in groups, and every row above that built them is listed.

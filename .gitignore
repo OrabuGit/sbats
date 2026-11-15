@@ -1,4 +1,11 @@
 .env
+# Internal working files: kept in the working folder, not published.
+/CLAUDE.md
+/DESIGN.md
+/JUDGING.md
+/CHALLENGE.md
+/SUBMISSION_GUIDE.md
+/decisions/
 node_modules/
 dist/
 .DS_Store

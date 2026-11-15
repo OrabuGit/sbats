@@ -29,7 +29,7 @@ import { buildMatchRecord, earthPlaceFromCell } from '../app/src/lib/match/index
 import type { Verdict } from '../app/src/lib/match/index';
 import { DATA, OUT, fail, loadData, loadFrozen } from './lib';
 
-/** The app's rules (app/src/lib/rank.ts, DESIGN.md section 5). */
+/** The app's rules (app/src/lib/rank.ts). */
 const NEW_DISTANCE_KM = 500;
 const MIN_SEPARATION_KM = 250;
 const TOP = 8;

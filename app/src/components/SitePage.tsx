@@ -1,3 +1,6 @@
+import type { MatchRecord } from '../lib/matchAdapter';
+import { AnalogProfile } from './AnalogProfile';
+import { profileOf, scoreSentence, type ProfileDim } from '../lib/profile';
 import { useEffect, useMemo, useRef } from 'react';
 import type { Analog, CellScore, EarthCell, EarthFile, KeyBreakdown, Target } from '../types';
 import type { CellIndex } from '../lib/geo';
@@ -21,6 +24,8 @@ import { DimensionStrip, LedgerRow, ScaleSquares, Spark, type DimTile } from './
 import { Block, CountUp, Meter, More, Rv, useSeen } from './ValidationParts';
 
 interface Props {
+  /** The match record of this site against a target, at the footprint. */
+  recordFor?: (site: FeaturedSite, target: Target) => MatchRecord | null;
   sites: SitesFile;
   siteId: string;
   onSite: (id: string) => void;
@@ -129,30 +134,40 @@ function SiteTabs({ sites, current, onSite }: { sites: FeaturedSite[]; current: 
 }
 
 /** A match score in big type, counting up once on screen. */
-function ScoreTile({ label, e, note }: { label: string; e: CellScore | null; note: string }) {
+function ScoreTile({ label, e, note, dims }: { label: string; e: CellScore | null; note: string; dims: ProfileDim[] | null }) {
   const [ref, seen] = useSeen<HTMLDivElement>();
   const has = e !== null && e.score !== null;
   return (
     <div ref={ref} className="border-t border-line pt-4">
       <p className="label">{label}</p>
-      <p className={`display mt-2 leading-none ${has ? 'text-[64px] text-text sm:text-[84px]' : 'text-[28px] text-muted'}`}>
+      <p className={`display mt-2 leading-none ${has ? 'text-[32px] text-text sm:text-[40px]' : 'text-[22px] text-muted'}`}>
         {has ? <CountUp value={e.score} decimals={0} play={seen} /> : 'NO DATA'}
-        {has && <span className="ml-2 text-[20px] font-normal text-muted">/ 100</span>}
+        {has && <span className="ml-2 text-[16px] font-normal text-muted">/ 100</span>}
       </p>
       <div className="mt-3 flex items-center gap-3">
         <ConfidenceBadge confidence={e?.confidence ?? null} coverage={e?.coverage} />
       </div>
+      {dims && <p className="mt-2 max-w-[40ch] text-[13px] leading-5 text-text">{scoreSentence(has ? e.score : null, dims)}</p>}
       <p className="mt-2 max-w-[34ch] text-[13px] leading-5 text-muted">{note}</p>
     </div>
   );
 }
 
-export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild, onTerrain }: Props) {
+export function SitePage({ recordFor, sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild, onTerrain }: Props) {
   const site: FeaturedSite = sites.sites.find((s) => s.id === siteId) ?? sites.sites[0];
   const analog = analogs.find((a) => a.id === site.id) ?? null;
   const cellIndex = useMemo(() => index.nearest(site.lat, site.lon, 2), [index, site]);
   const cell: EarthCell | null = cellIndex >= 0 ? earth.cells[cellIndex] : null;
   const weights = PRESETS[0].weights;
+  // The profile of this site against this target, from the match record.
+  const profile = useMemo(() => {
+    try {
+      const rec = recordFor ? recordFor(site, target) : null;
+      return rec ? profileOf(rec) : null;
+    } catch {
+      return null;
+    }
+  }, [recordFor, site, target]);
 
   // The footprint values in the shape of a grid cell, so the same scoring function reads both.
   const footprint: EarthCell = useMemo(
@@ -299,10 +314,18 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
               </div>
             </Rv>
             <Rv i={1} className="mt-10">
-              <p className="label">Computed by the tool: all-round match to {target.name}, Base weights</p>
+              <p className="label">Analog profile against {target.name}, measured inside the {site.footprintKm} km footprint</p>
+              {profile ? (
+                <div className="mt-3 max-w-[560px]">
+                  <AnalogProfile profile={profile} />
+                </div>
+              ) : (
+                <p className="mt-3 text-[14px] text-muted">No data. The footprint could not be compared with this target.</p>
+              )}
+              <p className="label mt-8">Computed by the tool: all-round match to {target.name}, Base weights</p>
               <div className="mt-3 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-                <ScoreTile label="Grid cell, 0.5°" e={atCell} note="The score in the heatmap and the candidates list." />
-                <ScoreTile label={`Footprint, ${site.footprintKm} km`} e={atSite} note="The same formula on the footprint values. Not used in the ranking." />
+                <ScoreTile label={`Footprint, ${site.footprintKm} km`} e={atSite} dims={profile?.dims ?? null} note="The same formula on the footprint values. Not used in the ranking." />
+                <ScoreTile label="Grid cell, 0.5°" e={atCell} dims={null} note="The whole 55 km square around the site: the score in the heatmap and the candidates list. It describes the square, not the site." />
               </div>
               {siteNote && (
                 <p className="mt-3 text-[13px] text-accent" role="note">

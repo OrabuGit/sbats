@@ -1,5 +1,5 @@
 // SBATS base simulation. Pure TypeScript, no UI and no file or network access.
-// Implements DESIGN.md section 8. See README.md in this folder.
+// Implements app/src/lib/sim/README.md. See README.md in this folder.
 
 export { MODULE_TYPES, RESOURCE_IDS } from './types';
 export type {

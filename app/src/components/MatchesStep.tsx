@@ -23,12 +23,13 @@ interface Props extends Omit<ListProps, 'countries' | 'mode' | 'onMode'> {
   /** Opens the chart of every Earth cell on two factors. */
   onExplore?: () => void;
   available?: (index: number) => string[];
+  profileOf?: (analogId: string, index: number) => import('../lib/profile').Profile | null;
   /** The strip comparing the previewed pair, shown over the bottom of the globe. */
   strip?: ReactNode;
 }
 
 /** Step 3: Earth fills the page, the best places are pinned on it, and one panel lists them. */
-export function MatchesStep({ globe, controls, listMode, onListMode, hidden, body, custom = false, onExplore, strip, available, ...list }: Props) {
+export function MatchesStep({ globe, controls, listMode, onListMode, hidden, body, custom = false, onExplore, strip, available, profileOf, ...list }: Props) {
   const shown: Candidate[] = list.candidates;
   const countries = useCountries(shown.map((c) => list.earth.cells[c.index]));
   const world = body === 'moon' ? 'the Moon' : 'Mars';
@@ -67,7 +68,7 @@ export function MatchesStep({ globe, controls, listMode, onListMode, hidden, bod
           </div>
         )}
         <div className="mt-5">
-          <CandidateList {...list} available={available} countries={countries} mode={listMode} onMode={onListMode} />
+          <CandidateList {...list} available={available} profileOf={profileOf} countries={countries} mode={listMode} onMode={onListMode} />
         </div>
       </aside>
     </main>

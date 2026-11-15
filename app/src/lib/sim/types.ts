@@ -4,7 +4,7 @@
 export const MODULE_TYPES = ['habitat', 'solar', 'battery', 'greenhouse', 'iceMiner', 'landingPad'] as const;
 export type ModuleType = (typeof MODULE_TYPES)[number];
 
-/** The resources shown in the live panel (DESIGN.md section 5, checkpoint 3). */
+/** The resources shown in the live panel (checkpoint 3). */
 export const RESOURCE_IDS = ['power', 'water', 'oxygen', 'food', 'crew'] as const;
 export type ResourceId = (typeof RESOURCE_IDS)[number];
 
@@ -190,7 +190,7 @@ export interface Simulation {
   firstDepletion: { resource: ResourceId; day: number } | null;
   /** Readiness over the whole run. null when it cannot be judged. */
   readiness: Readiness | null;
-  /** Days survived with no resupply (DESIGN.md section 8). */
+  /** Days survived with no resupply (app/src/lib/sim/README.md). */
   sustainability: {
     days: number;
     /** True when nothing ran out before the last simulated day: the true figure is at least `days`. */

@@ -7,6 +7,7 @@ import type { StabilityResult } from '../lib/matchAdapter';
 import { countryKey } from '../lib/where';
 import { flags } from '../flags';
 import { ConfidenceBadge } from './Badges';
+import { scoreSentence, type Profile } from '../lib/profile';
 
 export type ListMode = 'ranked' | 'sites';
 
@@ -34,6 +35,8 @@ interface Props {
   onMode: (m: ListMode) => void;
   /** Quiet labels for what is available for a cell: 3D terrain, route planner, site story. */
   available?: (index: number) => string[];
+  /** The analog profile of a named place against the current target. */
+  profileOf?: (analogId: string, index: number) => Profile | null;
   onSelect: (index: number) => void;
 }
 
@@ -53,6 +56,17 @@ function Score({ r }: { r: CellSummary | undefined }) {
   return (
     <div className="flex w-[64px] shrink-0 flex-col items-end">
       {has ? <span className="display text-[28px] leading-8 text-text">{formatScore(r.score)}</span> : <span className="text-[12px] leading-8 text-muted">no data</span>}
+      <ConfidenceBadge confidence={r?.confidence ?? null} coverage={r?.coverage} />
+    </div>
+  );
+}
+
+/** For a named place: the score, small and plain, with the reason it is low in its tooltip. The headline is the profile. */
+function SmallScore({ r, profile }: { r: CellSummary | undefined; profile: Profile }) {
+  const has = !!r && r.score !== null;
+  return (
+    <div className="flex w-[64px] shrink-0 flex-col items-end gap-0.5" title={scoreSentence(has ? r.score : null, profile.dims)}>
+      <span className="num text-[13px] leading-5 text-muted">{has ? `${formatScore(r.score)} / 100` : 'no data'}</span>
       <ConfidenceBadge confidence={r?.confidence ?? null} coverage={r?.coverage} />
     </div>
   );
@@ -178,6 +192,7 @@ export function CandidateList(p: Props) {
                   {group.map(({ analog, index }) => {
                     const r = index >= 0 ? results[index] : undefined;
                     const forThis = analog.analogFor.includes(target.id);
+                    const prof = kind !== 'negative' && p.profileOf && index >= 0 ? p.profileOf(analog.id, index) : null;
                     return (
                       <li key={analog.id}>
                         <button
@@ -197,6 +212,7 @@ export function CandidateList(p: Props) {
                                     ? `Analog for ${target.name}.`
                                     : 'Analog for other targets.'}
                             </span>
+                            {prof && <span className="mt-1 block text-[13px] leading-5 text-text">{prof.line}</span>}
                             {index >= 0 && p.available && p.available(index).length > 0 && (
                               <span className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[12px] text-muted">
                                 {p.available(index).map((t) => (
@@ -208,7 +224,7 @@ export function CandidateList(p: Props) {
                               </span>
                             )}
                           </span>
-                          <Score r={r} />
+                          {prof ? <SmallScore r={r} profile={prof} /> : <Score r={r} />}
                         </button>
                       </li>
                     );

@@ -69,7 +69,7 @@ COMPARISON_IDS = ["mauna-kea", "kilauea", "atacama-yungay", "haughton-crater", "
 # Sites proposed by a team member. Where data/analogs.json has the same id, its name, coordinates and
 # kind are used and this entry only adds the coordinate source; otherwise the site is taken from here. Coordinates come from the source named in "coordinateSource"; nothing is typed
 # from memory. "candidate" = proposed new analog. "known" = already-known analog added for comparison,
-# not a new finding. How each position was fixed is logged in decisions/B.md.
+# not a new finding.
 EXTRA_SITES = {
     "id-tambora-caldera": {
         "name": "Mount Tambora caldera, Sumbawa, Indonesia", "lat": -8.2438, "lon": 117.9918, "kind": "candidate",

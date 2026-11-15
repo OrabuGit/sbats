@@ -1,6 +1,6 @@
 # SBATS scoring library
 
-Pure TypeScript. No UI, no file access, no network. It implements DESIGN.md section 6 and every scoring
+Pure TypeScript. No UI, no file access, no network. It implements the Method page and every scoring
 rule in `data/SCHEMA.md`. Code generated with AI assistance (Claude Code), directed and reviewed by the
 team; see `AI_USE.md`.
 
@@ -103,7 +103,7 @@ Known limits of this factor:
 | Ice | 0.15 | 0.15 | 0.10 | 0.30 | 0.05 | 0.25 |
 | Astrobiology | 0.10 | 0.15 | 0.30 | 0.10 | 0.05 | 0.30 |
 
-Base is the DESIGN.md table. The other three follow its one-line rule and are a starting guess written by
+Base is the table on the Method page. The other three follow its one-line rule and are a starting guess written by
 Session C. They need the team's sign-off, and may be tuned once against the validation set, then frozen.
 
 ## Analog profile and purpose rankings (a second view)

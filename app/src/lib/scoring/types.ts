@@ -19,7 +19,7 @@ export type GaussianKey = NumericKey | SunKey;
 /** Every key that can appear in a breakdown. */
 export type ScoreKey = FactorKey | SunKey;
 
-/** The six scoring factors of DESIGN.md section 6. */
+/** The six scoring factors of the Method page. */
 export const FACTOR_IDS = ['terrain', 'bareGround', 'dryness', 'temperature', 'sunlight', 'rockType'] as const;
 export type FactorId = (typeof FACTOR_IDS)[number];
 

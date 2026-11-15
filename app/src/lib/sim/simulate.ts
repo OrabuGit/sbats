@@ -71,7 +71,7 @@ interface Run {
 }
 
 /**
- * Day-by-day simulation (DESIGN.md section 8): each day adds production, subtracts crew use and
+ * Day-by-day simulation (app/src/lib/sim/README.md): each day adds production, subtracts crew use and
  * applies any active event.
  *
  * Start of the run: batteries full, and one cargo delivery already on the ground, split between

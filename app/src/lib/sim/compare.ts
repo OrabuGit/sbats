@@ -24,7 +24,7 @@ function ratioPhrase(earth: number, target: number): string {
 
 /**
  * Deploys one layout twice, at the Earth site and at the target, and explains the difference
- * (DESIGN.md section 8). Every number in a sentence is computed here from sourced module data.
+ * (app/src/lib/sim/README.md). Every number in a sentence is computed here from sourced module data.
  * The report always ends with what the Earth rehearsal cannot test at all.
  */
 export function deployTwice(layout: Layout, earthSite: SiteConditions, targetSite: SiteConditions, file: ModulesFile): GapReport {

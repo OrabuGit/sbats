@@ -3,7 +3,7 @@
 **Live site: https://orabugit.github.io/sbats/**
 
 A NASA Space Apps 2026 entry for the challenge "Identify Earth Locations that Analog the Permanent Moon
-Base Locations and Mars". The challenge statement is in [CHALLENGE.md](CHALLENGE.md).
+Base Locations and Mars".
 
 SBATS compares every 0.5 degree cell of Earth's land with a base site on the Moon or Mars, ranks the
 cells, and shows for any pair where the match holds, where it fails, and what no place on Earth can copy.
@@ -201,7 +201,6 @@ design were taken from any of them: each was written for this project from its o
 | `data/` | Built data files. `data/SCHEMA.md` is the contract |
 | `pipeline/` | Python scripts that build the data from the sources |
 | `validation/` | Validation scripts, outputs and written findings |
-| `decisions/` | One log per work stream of the choices made and why |
 | `SOURCES.md` | Every dataset: provider, URL, access date, licence, use |
 | `AI_USE.md` | Every use of AI in the project |
 | `FEATURES.md` | Where every feature is in the app and how many clicks it takes from the home page |

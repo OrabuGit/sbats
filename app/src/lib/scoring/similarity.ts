@@ -1,7 +1,7 @@
 import type { Range } from './types';
 
 /**
- * Per-factor similarity of DESIGN.md section 6:
+ * Per-factor similarity of the Method page:
  *
  *     s = exp( -0.5 * ((x - t) / sigma)^2 )
  *
@@ -29,7 +29,7 @@ export function clampToRange(value: number, range: Range): number {
 }
 
 /**
- * Overall score of DESIGN.md section 6: 100 times the weighted geometric mean of the similarities.
+ * Overall score of the Method page: 100 times the weighted geometric mean of the similarities.
  *
  *     S = 100 * product over i of ( s_i ^ (w_i / sum of w) )
  *

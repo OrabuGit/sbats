@@ -70,7 +70,7 @@ export interface Flows {
 }
 
 /**
- * The model, in one place (DESIGN.md section 8).
+ * The model, in one place (app/src/lib/sim/README.md).
  *
  *   crew places   = habitats x crewCapacity
  *   solar power   = arrays x ratedPowerKw x (irradiance / ratedIrradiance) x litFraction   (P = I A eff lit)
@@ -216,7 +216,7 @@ function consumable(
 /**
  * Steady-state evaluation of a layout at one site: the resource panel and the readiness rating.
  *
- * Readiness (DESIGN.md section 8):
+ * Readiness (app/src/lib/sim/README.md):
  *   GREEN  every balance is zero or positive, and the batteries carry the base through the longest dark period.
  *   AMBER  at least one of water, oxygen or food is short each day but the first cargo delivery covers 30 days.
  *   RED    something runs out: power in the dark, a consumable within 30 days, or more crew than places.

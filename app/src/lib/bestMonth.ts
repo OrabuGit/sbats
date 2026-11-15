@@ -1,6 +1,6 @@
 // "Best month to test": the calendar month whose climate is closest to the target.
 //
-// Rule (logged in decisions/A.md): the same Gaussian comparison as the match score, applied to the
+// Rule (see the Method page): the same Gaussian comparison as the match score, applied to the
 // monthly normals of the three climate keys, with the Base preset's Dryness and Temperature weights.
 // Monthly precipitation is scaled to a yearly rate so it can be compared with the target's mm/year.
 // Nothing else enters, and this never changes a match score.

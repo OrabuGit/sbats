@@ -14,9 +14,9 @@ export interface Preset {
 /**
  * Mission presets. They change weights only: the similarity of every factor is the same under every preset.
  *
- * Base is the table in DESIGN.md section 6. The other three follow the one-line rule there
+ * Base is the table in the Method page. The other three follow the one-line rule there
  * ("Rover raises Terrain, Ice raises Temperature and Rock type, Astrobiology raises Dryness and Rock type").
- * DESIGN.md calls these weights a starting guess: tune once against the validation set, then freeze.
+ * These weights are a starting guess: tune once against the validation set, then freeze.
  * Each preset sums to 1.
  */
 export const PRESETS: Record<PresetId, Preset> = {

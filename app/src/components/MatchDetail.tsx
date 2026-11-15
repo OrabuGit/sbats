@@ -14,6 +14,8 @@ import { ActivityArt, type Activity } from './ActivityArt';
 import { AiMark } from './AiMark';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
 import { ScoreDial } from './ScoreDial';
+import { AnalogProfile } from './AnalogProfile';
+import { profileOf, scoreSentence } from '../lib/profile';
 import { SunlightCompare } from './SunlightCompare';
 import { PlainResults } from './PlainResults';
 import { FieldLogistics, logisticsFromRecord } from './FieldLogistics';
@@ -297,6 +299,9 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
   const score = site ? record.score.value : e.score;
   const scored = score !== null;
   const core = record.dimensions.filter((d) => d.inScore);
+  // A named place (a known analog, a team site, a control) leads with its analog profile; the score follows, smaller.
+  const named = target.id !== 'custom-conditions' && (site || !!kindLabel);
+  const profile = profileOf(record);
   const extra = record.dimensions.filter((d) => d.addedAfterFreeze);
   const by = (v: Verdict) => core.filter((d) => fromRecord(d.verdict) === v).map((d) => d.label.toLowerCase());
   const matches = by('match');
@@ -355,6 +360,23 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 {formatCoords(cell.lat, cell.lon)} · cell <span className="code">{siteCode(cell)}</span>
               </p>
 
+              {named ? (
+                <>
+                  <p className="label mt-8">Analog profile against {target.name}</p>
+                  <div className="mt-3 max-w-[560px]">
+                    <AnalogProfile profile={profile} />
+                  </div>
+                  <p className="mt-6 max-w-[60ch] text-[14px] leading-[22px] text-muted">
+                    {scoreSentence(scored ? (score as number) : null, profile.dims, purpose ? `${purpose.label} score` : 'All-round score')}{' '}
+                    {site ? `Measured inside the ${record.earth.footprintKm ?? ''} km footprint. ` : ''}
+                    <span className="inline-flex align-middle">
+                      <ConfidenceBadge confidence={site ? record.score.confidence : e.confidence} coverage={site ? record.score.coverage : e.coverage} />
+                    </span>
+                  </p>
+                  <p className="mt-2 max-w-[60ch] text-[13px] leading-5 text-muted">{site ? record.score.reason : scored ? e.reason : unscoredText(e, meta)}</p>
+                </>
+              ) : (
+                <>
               <div className="mt-8 flex items-end gap-5">
                 <p className={`display leading-none ${scored ? 'text-[76px] text-text' : 'text-[28px] text-muted'}`}>
                   {scored ? formatScore(score) : 'No data'}
@@ -385,6 +407,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                     </div>
                   ))}
               </dl>
+                </>
+              )}
               {stability && <p className="mt-5 max-w-[64ch] text-[13px] leading-5 text-muted">{stability.text}</p>}
               {notes.map((n) => (
                 <p key={n} className="mt-3 max-w-[64ch] border-l-2 border-accent pl-3 text-[13px] leading-5 text-text" role="note">

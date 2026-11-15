@@ -85,7 +85,7 @@ Add a row BEFORE a feature that uses the dataset is marked done.
 | React 19, React DOM | MIT | App UI |
 | Vite 8, @vitejs/plugin-react | MIT | Build and dev server |
 | TypeScript | Apache-2.0 | Type checking |
-| Tailwind CSS 4 | MIT | Styling with the DESIGN.md tokens |
+| Tailwind CSS 4 | MIT | Styling with the app's colour and type tokens |
 | globe.gl, three.js | MIT | ORBIT 3D globe |
 | topojson-client | ISC | Decoding the coastline file |
 | d3-geo | ISC | Which country a point is in (`geoContains` on the Natural Earth outline), in the browser, and the land test for UI fixtures |

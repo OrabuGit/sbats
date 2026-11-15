@@ -130,7 +130,7 @@ function Lead({ r, cellKm, onSite, onAll }: { r: Resolved; cellKm: number; onSit
       </p>
       <div className="mt-8 px-5 sm:px-10 lg:px-16">
         <Reveal>
-          <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} maxRows={8} onSite={onSite} wide />
+          <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} onSite={onSite} wide />
         </Reveal>
       </div>
     </>
@@ -160,7 +160,7 @@ function Card({ r, cellKm, onSite }: { r: Resolved; cellKm: number; onSite: () =
         Pictures: {credit(r.earthItem, 'earth')} {credit(r.tItem, r.tBody)}
       </p>
       <div className="mt-4">
-        <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} maxRows={4} onSite={onSite} />
+        <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} onSite={onSite} />
       </div>
     </article>
   );

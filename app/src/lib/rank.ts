@@ -1,7 +1,7 @@
 import type { Analog, CellSummary, EarthCell, EarthFile } from '../types';
 import { distanceKm } from './geo';
 
-/** A site counts as NEW when it is farther than this from every known analog (DESIGN.md section 5). */
+/** A site counts as NEW when it is farther than this from every known analog (the Method page). */
 export const NEW_DISTANCE_KM = 500;
 
 export interface Candidate {

@@ -12,6 +12,7 @@ import { activityOf } from './components/ActivityArt';
 import type { Tool } from './components/MatchDetail';
 import { MatchesStep } from './components/MatchesStep';
 import { DEFAULT_TARGET_ID } from './lib/defaults';
+import { profileOf, type Profile } from './lib/profile';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PickWorld } from './components/PickWorld';
 import { CustomStep } from './components/CustomStep';
@@ -24,7 +25,7 @@ import { MethodPage } from './components/MethodPage';
 import { ValidationPage } from './components/ValidationPage';
 import { Absent, InfoShell, Loading } from './components/InfoParts';
 import { SitePage } from './components/SitePage';
-import { loadExtracts, loadSites } from './data/sites';
+import { loadExtracts, loadSites, type FeaturedSite } from './data/sites';
 import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
@@ -747,25 +748,64 @@ function Orbit({ data }: { data: DataBundle }) {
     }
     return { lat: c.lat, lon: c.lon, score: bestScore, near, excluded: !!near && near.km <= NEW_DISTANCE_KM };
   }, [earth, scorer, targets, analogs]);
-  const storyPairs = useMemo(
-    () =>
-      pairVerdict(earth, scorer, targets, featuredSites, storiesFile, (site, t) => {
-        const i = index.nearest(site.lat, site.lon, 2);
-        if (i < 0) return null;
-        return matchRecord({
-          earth,
-          lithology,
-          target: t,
-          cell: earth.cells[i],
-          name: site.name,
-          site: site as unknown as Parameters<typeof matchRecord>[0]['site'],
-          targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
-          minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
-          environment: targetEnv.status === 'ready' ? targetEnv.value : null,
-          profile: null,
-        }).record;
-      }),
-    [earth, scorer, targets, featuredSites, storiesFile, index, lithology, targetWindows, targetMinerals, targetEnv],
+  // The site-scale comparison of one featured site with one target: the analog profile and the match record behind it.
+  const siteRecord = useCallback(
+    (site: FeaturedSite, t: Target) => {
+      const i = index.nearest(site.lat, site.lon, 2);
+      if (i < 0) return null;
+      return matchRecord({
+        earth,
+        lithology,
+        target: t,
+        cell: earth.cells[i],
+        name: site.name,
+        site: site as unknown as Parameters<typeof matchRecord>[0]['site'],
+        targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
+        minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
+        environment: targetEnv.status === 'ready' ? targetEnv.value : null,
+        profile: null,
+      }).record;
+    },
+    [earth, lithology, index, targetWindows, targetMinerals, targetEnv],
+  );
+  const storyPairs = useMemo(() => pairVerdict(earth, scorer, targets, featuredSites, storiesFile, siteRecord), [earth, scorer, targets, featuredSites, storiesFile, siteRecord]);
+  // The analog profile of a named place (a known analog or a team site) against the current target, for the result cards.
+  const profileCache = useRef(new Map<string, Profile | null>());
+  useEffect(() => {
+    profileCache.current.clear();
+  }, [siteRecord, target]);
+  const profileOfAnalog = useCallback(
+    (analogId: string, cellIndex: number): Profile | null => {
+      const key = `${target.id}|${analogId}`;
+      const hit = profileCache.current.get(key);
+      if (hit !== undefined) return hit;
+      let out: Profile | null = null;
+      try {
+        const analog = analogs.find((a) => a.id === analogId);
+        const feat = featuredSites?.sites.find((x) => x.id === analogId) ?? null;
+        if (analog && cellIndex >= 0 && target.id !== 'custom-conditions') {
+          out = profileOf(
+            matchRecord({
+              earth,
+              lithology,
+              target,
+              cell: earth.cells[cellIndex],
+              name: analog.name,
+              site: feat ? (feat as unknown as Parameters<typeof matchRecord>[0]['site']) : null,
+              targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
+              minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
+              environment: targetEnv.status === 'ready' ? targetEnv.value : null,
+              profile: pointProfile,
+            }).record,
+          );
+        }
+      } catch {
+        out = null;
+      }
+      profileCache.current.set(key, out);
+      return out;
+    },
+    [analogs, featuredSites, earth, lithology, target, targetWindows, targetMinerals, targetEnv, pointProfile],
   );
   const month = useMemo(() => {
     const months = named ? climateFile?.sites.find((x) => x.id === named.id)?.months : undefined;
@@ -1447,6 +1487,7 @@ function Orbit({ data }: { data: DataBundle }) {
               onDossier={(i) => select(i)}
               onBuild={reconReady ? (i) => openRecon(i) : null}
               onTerrain={flags.terrain ? openTerrainFor : null}
+              recordFor={siteRecord}
             />
           ) : (
             <Absent what={sitesFile.status === 'error' ? `data/sites.json could not be read: ${sitesFile.message}` : 'data/sites.json is not published with this build.'} />
@@ -1537,6 +1578,7 @@ function Orbit({ data }: { data: DataBundle }) {
             stability={stabNow}
             warnings={pointProfile?.notes ?? []}
             onSelect={openFromGlobe}
+            profileOf={profileOfAnalog}
             available={(i) => {
               const cell = earth.cells[i];
               const named = sites.find((s) => s.index === i)?.analog;

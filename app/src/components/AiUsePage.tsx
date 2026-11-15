@@ -1,36 +1,46 @@
 import aiUse from '../../../AI_USE.md?raw';
 
-interface Row {
-  date: string;
-  tool: string;
-  what: string;
-  files: string;
-}
+const LOG_URL = 'https://github.com/OrabuGit/sbats/blob/main/AI_USE.md';
 
-/** The project's AI_USE.md, shown as it is written: the table of every use, then its notes. */
-function parse(md: string): { intro: string; rows: Row[]; notes: string[] } {
-  const lines = md.split('\n');
-  const rows: Row[] = [];
-  const notes: string[] = [];
-  const intro: string[] = [];
-  let inNotes = false;
-  for (const line of lines) {
-    if (/^\s*\|/.test(line)) {
-      const cells = line.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
-      if (cells.length >= 4 && cells[0] !== 'Date' && !/^-+$/.test(cells[0])) rows.push({ date: cells[0], tool: cells[1], what: cells[2], files: cells.slice(3).join(' | ') });
-    } else if (/^Notes:/i.test(line)) {
-      inNotes = true;
-    } else if (inNotes && line.startsWith('- ')) {
-      notes.push(line.slice(2));
-    } else if (!inNotes && line.trim() && !line.startsWith('#')) {
-      intro.push(line.trim());
-    }
-  }
-  return { intro: intro.join(' '), rows, notes };
+// The page is a short summary. The complete log, with every dated entry and its files, is AI_USE.md in the repository.
+// Every statement under "What the team did" is one the repository supports (README, the team's rules in the code,
+// the team's own site stories); nothing else is claimed.
+const TEAM = [
+  'Set the concept: search all of Earth for places that stand in for Moon and Mars base sites.',
+  'Sketched the home page layout, and directed the product flow, the navigation and each round of changes through written briefs.',
+  'Proposed the featured sites and wrote their stories.',
+  'Set the scoring rules: no value is invented, and any change to the weights or the factor list needs the team’s approval.',
+  'Directed and reviewed the work.',
+];
+const AI = [
+  'Wrote the application and the pipeline code under that direction.',
+  'Compiled data from cited public sources.',
+  'Drafted interface text and documentation.',
+  'Drew the line icons and drawings in code.',
+];
+const NOT = [
+  'No data value comes from an AI model. Every value traces to a source in SOURCES.md.',
+  'No AI-generated photographs, images or video are used.',
+  'The featured site ideas and descriptions are the team’s.',
+];
+
+function Block({ title, items }: { title: string; items: string[] }) {
+  return (
+    <section className="mt-10" aria-label={title}>
+      <h2 className="display text-[24px] leading-8 text-text sm:text-[28px]">{title}</h2>
+      <ul className="mt-3 max-w-[68ch] space-y-2">
+        {items.map((t) => (
+          <li key={t} className="border-l-2 border-line pl-3 text-[16px] leading-7 text-text">
+            {t}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export function AiUsePage({ onBack }: { onBack: () => void }) {
-  const { intro, rows, notes } = parse(aiUse);
+  const entries = (aiUse.match(/^\| 20/gm) ?? []).length;
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-ai">
       <div className="mx-auto max-w-[1000px] px-5 pb-20 pt-8 sm:px-10 sm:pt-12">
@@ -40,29 +50,16 @@ export function AiUsePage({ onBack }: { onBack: () => void }) {
         <h1 id="h-ai" className="display-l mt-4 text-[40px] sm:text-[64px]">
           AI assistance
         </h1>
-        <p className="mt-3 max-w-[62ch] text-[16px] leading-7 text-muted">{intro}</p>
-        <ul className="mt-6 max-w-[70ch] space-y-2">
-          {notes.map((n) => (
-            <li key={n} className="border-l-2 border-accent pl-3 text-[14px] leading-6 text-text">
-              {n}
-            </li>
-          ))}
-        </ul>
-        <p className="mt-10 text-[14px] text-muted">{rows.length} uses, oldest first. This is the text of AI_USE.md in the project repository.</p>
-        <ol className="mt-4">
-          {rows.map((r, i) => (
-            <li key={i} className="grid gap-x-8 gap-y-1 border-t border-line py-4 md:grid-cols-[120px_minmax(0,1fr)]">
-              <p className="text-[13px] text-muted">
-                {r.date}
-                <span className="block text-text">{r.tool}</span>
-              </p>
-              <div>
-                <p className="text-[14px] leading-6 text-text">{r.what}</p>
-                <p className="mt-1 break-words text-[12px] leading-5 text-muted">{r.files}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <Block title="What the team did" items={TEAM} />
+        <Block title="What AI did" items={AI} />
+        <Block title="What AI did not do" items={NOT} />
+        <p className="mt-12 max-w-[68ch] border-t border-line pt-6 text-[16px] leading-7 text-text">
+          The complete log, {entries} entries with files, is in{' '}
+          <a href={LOG_URL} target="_blank" rel="noreferrer" className="link-rule font-medium text-text">
+            AI_USE.md
+          </a>
+          .
+        </p>
       </div>
     </main>
   );
