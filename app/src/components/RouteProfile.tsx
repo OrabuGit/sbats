@@ -47,7 +47,7 @@ export function RouteProfile({ id, points, limitDeg, at, straight, title }: { id
   const amber = runs.filter((r) => r.cls === 1);
   const yTicks = [lo, (lo + hi) / 2, hi];
   const xTicks = [0, maxD / 2, maxD];
-  const idx = at === null ? null : Math.min(points.length - 1, Math.round(at * (points.length - 1)));
+  const idx = at === null || Number.isNaN(at) ? null : Math.max(0, Math.min(points.length - 1, Math.round(at * (points.length - 1))));
   const label = `${title}. Height from ${fx(lo, 0)} to ${fx(hi, 0)} m over ${fx(maxD, 2)} km. ${over.length} section${over.length === 1 ? '' : 's'} over the ${limitDeg} degree limit, ${amber.length} over 75 percent of it.`;
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="block w-full max-w-[640px]" role="img" aria-label={label}>

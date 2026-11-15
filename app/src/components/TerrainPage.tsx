@@ -180,7 +180,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
     let frame = 0;
     start.current = performance.now() - (rover ?? 0) * DRIVE_SECONDS * 1000;
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start.current) / (DRIVE_SECONDS * 1000));
+      const t = Math.max(0, Math.min(1, (now - start.current) / (DRIVE_SECONDS * 1000)));
       setRover(t);
       if (t < 1) frame = requestAnimationFrame(tick);
       else setDriving(false);

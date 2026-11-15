@@ -6,9 +6,12 @@ export const TOUR_STEPS = [
   { title: 'What SBATS does', text: 'SBATS scores every land square on Earth by how well it stands in for a base on the Moon or Mars.' },
   { title: 'Pick a place', text: 'Choose a landing site on the Moon or Mars. Here it is Shackleton rim, near the lunar south pole.' },
   { title: 'See where on Earth', text: 'Every Earth square is scored against it in your browser. The brightest ones are the closest.' },
-  { title: 'Open a match', text: 'Tambora, a volcano in Indonesia, against Shackleton rim: the score, and where the two places match or fail.' },
+  { title: 'Open a match', text: 'Tambora, a volcano in Indonesia, against Shackleton rim. The tabs at the top jump between the parts of a match.' },
   { title: 'Read the score', text: 'Each ring is one thing compared. The weakest ring holds the whole score down.' },
-  { title: 'See the ground', text: 'Both places as 3D terrain at one scale, so you can judge the shape of the land yourself.' },
+  { title: 'Full data', text: 'Every measurement with both values, units, difference, similarity and source, then the charts behind them.' },
+  { title: 'What to test here', text: 'Seven kinds of testing, each marked Ready, Partial, Not suited or Not assessed from our data.' },
+  { title: '3D terrain', text: 'Both places as live 3D terrain at one scale. Open it to change the surface, add contours and set the sun.' },
+  { title: 'Plan a rover route', text: 'In the 3D view a rover drives an example route. Draw your own, and see where the slopes block it.' },
   { title: 'That is the tour', text: 'Pick any place and try it. You can replay this tour from the Tour button in the top bar.' },
 ] as const;
 

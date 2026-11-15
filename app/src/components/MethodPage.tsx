@@ -425,7 +425,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             "The Moon and Mars are colder than anywhere on Earth. Target temperatures are moved to Earth's coldest cell before scoring, so the temperature match is always better than the real gap. The dossier shows the real value next to the one used.",
             `Scores use annual means. Monthly normals exist for the ${siteCount} sites in analogs.json only. They feed "Best month to test" and never a score.`,
             'Absolute scores are low and known Moon analogs rank mid-table. The numbers are on the Validation page.',
-            'Atacama, Antarctica, Iceland, Hawaii, Death Valley and Haughton are the well-known analog sites. The tool treats them as known and its job is to find places beyond them.',
+            'Atacama, Antarctica, Iceland, Hawaii, Mojave, Death Valley and Haughton are the seven well-known analog places. The tool treats them as known, and its job is to find places beyond them. Our data holds footprint-scale values for some of them only.',
             'The base simulation is a daily balance of power, water, oxygen and food. It has no thermal model, no dust on panels outside a storm and no transit. A module with an unsourced number is tagged Illustrative and its effect is left out.',
           ].map((t) => (
             <li key={t} className="border-t border-line py-4 text-[14px] leading-6 text-text">

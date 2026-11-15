@@ -162,10 +162,10 @@ export function plainResults(record: MatchRecord, score: number | null, placeNam
 // Capabilities (rule 4b)
 
 type NeedId = 'geology' | 'terrain' | 'climate' | 'bareGround' | 'sunlight' | 'minerals' | 'ice';
-/** Noun phrase for each dimension in a reason, and whether it reads as plural ("slope and roughness match"). */
+/** Noun phrase for each dimension in a reason, and whether it reads as plural ("minerals match"). Terrain is slope and roughness. */
 const NAME: Record<NeedId, { text: string; pl: boolean }> = {
   geology: { text: 'rock type', pl: false },
-  terrain: { text: 'slope and roughness', pl: true },
+  terrain: { text: 'terrain', pl: false },
   climate: { text: 'climate', pl: false },
   bareGround: { text: 'open bare ground', pl: false },
   sunlight: { text: 'sunlight', pl: false },

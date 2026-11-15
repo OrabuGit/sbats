@@ -542,8 +542,9 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
         side.routeGroup.add(m);
       }
       if (rover !== null && dense.length > 1 && !draw?.straight) {
-        const at = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)))];
-        const next = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)) + 1)];
+        const ri = Math.max(0, Math.min(dense.length - 1, Math.round(rover * (dense.length - 1))));
+        const at = dense[ri];
+        const next = dense[Math.min(dense.length - 1, ri + 1)];
         // A box on a wider box: a rover drawn far larger than life, like the modules.
         const body = new BoxGeometry(0.5, 0.16, 0.34).translate(0, 0.16, 0);
         const mast = new BoxGeometry(0.12, 0.26, 0.12).translate(0.1, 0.36, 0);

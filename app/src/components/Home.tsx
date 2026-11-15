@@ -54,6 +54,8 @@ interface Props {
   onLearn: () => void;
   onTour: () => void;
   onExplore: () => void;
+  /** Opens a feature straight away on the Tambora and Shackleton pair. */
+  onFeature: (kind: 'matches' | 'compare' | 'terrain' | 'route' | 'explore') => void;
   onCustom: () => void;
   onAiUse: () => void;
   onValidation: () => void;
@@ -281,6 +283,39 @@ export function Home(p: Props) {
               </div>
             ))}
           </dl>
+        </section>
+
+        {/* 1b. What you can do: each card opens the feature on the Tambora and Shackleton pair. */}
+        <section aria-labelledby="h-can" className="px-5 pb-6 pt-20 sm:px-10 lg:px-16">
+          <Reveal>
+            <h2 id="h-can" className="display-l text-[30px] sm:text-[44px]">
+              What you can do
+            </h2>
+            <p className="mt-2 max-w-[56ch] text-[15px] leading-6 text-muted">Each one opens on a real pair: Mount Tambora in Indonesia against Shackleton rim on the Moon.</p>
+          </Reveal>
+          <ul className="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+            {(
+              [
+                ['matches', 'Find matches', 'Every land square of Earth scored against a Moon or Mars place, as a map and a ranked list.'],
+                ['compare', 'Compare factor by factor', 'Rock, terrain, climate, bare ground and sunlight, each with both values and a verdict.'],
+                ['terrain', 'Fly the terrain', 'Both places as 3D terrain at one scale, with surfaces, contours and a low sun.'],
+                ['route', 'Plan a rover route', 'A route over the real elevation grid that avoids slopes the rover cannot climb.'],
+                ['explore', 'Explore the data', 'Every Earth square on any two factors, with the target and the best matches marked.'],
+              ] as const
+            ).map(([kind, title, line], i) => (
+              <li key={kind}>
+                <Reveal i={i}>
+                  <button type="button" onClick={() => p.onFeature(kind)} className="group block text-left">
+                    <span className="block border-t-2 border-line pt-4 transition-colors group-hover:border-accent">
+                      <span className="display block text-[22px] leading-7 text-text">{title}</span>
+                      <span className="mt-2 block text-[14px] leading-[22px] text-muted">{line}</span>
+                      <span className="link-rule mt-4 inline-block text-[14px] font-medium text-text">Try it</span>
+                    </span>
+                  </button>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* 2. Featured sites, the team's candidates first. */}

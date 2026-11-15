@@ -29,6 +29,7 @@ import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import type { HeroLink, HeroPick, HeroSite } from './components/HeroGlobes';
 import { HomePair, type PairInfo } from './components/HomePair';
 import { countryKey, useCountries } from './lib/where';
+import { storiesFor, useStories } from './data/stories';
 import { GuidedTour } from './components/GuidedTour';
 import { Home } from './components/Home';
 import { SavedPage } from './components/SavedPage';
@@ -480,6 +481,7 @@ function Orbit({ data }: { data: DataBundle }) {
   );
 
   // The guided tour: the first visit starts it, the Tour button replays it. Each step moves the app to what it is about.
+  const storiesFile = useStories();
   const [tour, setTour] = useState<number | null>(null);
   const tourGo = (n: number) => {
     setTour(n);
@@ -502,7 +504,20 @@ function Orbit({ data }: { data: DataBundle }) {
     } else if (n === 4) {
       window.setTimeout(() => document.getElementById('h-why')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
     } else if (n === 5) {
-      window.setTimeout(() => (document.querySelector('main.scroll') as HTMLElement | null)?.scrollTo({ top: 0, behavior: 'smooth' }), 300);
+      window.setTimeout(() => document.getElementById('sec-data')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+    } else if (n === 6) {
+      window.setTimeout(() => document.getElementById('sec-tests')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+    } else if (n === 7) {
+      window.setTimeout(() => document.getElementById('sec-3d')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+    } else if (n === 8) {
+      if (tambora) {
+        const i = index.nearest(tambora.lat, tambora.lon, 2);
+        if (i >= 0) {
+          setSelected(i);
+          setStep(4);
+          transition(() => setView('terrain'));
+        }
+      }
     } else {
       transition(() => setView('home'));
     }
@@ -1117,6 +1132,24 @@ function Orbit({ data }: { data: DataBundle }) {
             tourGo(0);
           }}
           onAiUse={() => setView('aiuse')}
+          onFeature={(kind) => {
+            userTouch();
+            const tambora = featuredSites?.sites.find((x) => x.id === 'id-tambora-caldera');
+            setTargetId('moon-shackleton-rim');
+            if (kind === 'matches') return goToEarth();
+            if (kind === 'explore') return transition(() => setView('explore'));
+            if (!tambora) return goToEarth();
+            const i = index.nearest(tambora.lat, tambora.lon, 2);
+            if (i < 0) return goToEarth();
+            if (kind === 'compare') {
+              select(i);
+              window.setTimeout(() => document.getElementById('sec-data')?.scrollIntoView({ behavior: 'smooth' }), 700);
+              return;
+            }
+            setSelected(i);
+            setStep(4);
+            transition(() => setView('terrain'));
+          }}
           onExplore={() => transition(() => setView('explore'))}
           onCustom={() => transition(() => { setView('custom'); setStep(2); })}
           onClearPick={() => {
@@ -1426,6 +1459,16 @@ function Orbit({ data }: { data: DataBundle }) {
             stability={stabNow}
             warnings={pointProfile?.notes ?? []}
             onSelect={openFromGlobe}
+            available={(i) => {
+              const cell = earth.cells[i];
+              const named = sites.find((s) => s.index === i)?.analog;
+              const hasEarth = extractIndex?.items.some((x) => x.id === (named?.id ?? siteCode(cell)) && x.elevation);
+              const hasTarget = extractIndex?.items.some((x) => x.id === target.id && x.elevation);
+              const out: string[] = [];
+              if (flags.terrain && hasEarth && hasTarget) out.push('3D terrain', 'Route planner');
+              if (named && storiesFor(storiesFile, named.id).length > 0) out.push('Site story');
+              return out;
+            }}
             strip={previewPair ? <HomePair pair={previewPair} chips={previewChips} active={Math.max(-1, topIdx.indexOf(preview ?? -1))} onActive={(i) => previewFromGlobe(topIdx[i])} presets={PRESETS} presetId={presetId} onPreset={choosePreset} onOpen={() => preview !== null && select(preview)} onAll={null} onClose={() => setPreview(null)} /> : undefined}
           />
         </>

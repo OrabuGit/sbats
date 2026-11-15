@@ -32,6 +32,8 @@ interface Props {
   countries: Map<string, string | null>;
   mode: ListMode;
   onMode: (m: ListMode) => void;
+  /** Quiet labels for what is available for a cell: 3D terrain, route planner, site story. */
+  available?: (index: number) => string[];
   onSelect: (index: number) => void;
 }
 
@@ -131,6 +133,16 @@ export function CandidateList(p: Props) {
                       <span className="block text-[15px] font-medium leading-5 text-text">{named ? named.analog.name.split(',')[0] : (country ?? 'Open land')}</span>
                       <span className="num mt-0.5 block text-[12px] text-muted">{formatCoords(cell.lat, cell.lon)}</span>
                       <span className="mt-1.5 block text-[12px] leading-[18px] text-muted">{reasonLine(p.explain(c.index))}</span>
+                      {p.available && p.available(c.index).length > 0 && (
+                        <span className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[12px] text-muted">
+                          {p.available(c.index).map((t) => (
+                            <span key={t} className="inline-flex items-center gap-1.5">
+                              <span className="block h-1 w-1 rounded-full bg-muted" aria-hidden="true" />
+                              {t}
+                            </span>
+                          ))}
+                        </span>
+                      )}
                       {(c.isNew || st) && (
                         <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-muted">
                           {c.isNew && (

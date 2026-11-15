@@ -48,8 +48,8 @@ const SURFACES: [Surface, string][] = [
   ['height', 'Height'],
 ];
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section aria-label={title} className="min-w-0">
+const Section = ({ title, children, wide = false }: { title: string; children: React.ReactNode; wide?: boolean }) => (
+  <section aria-label={title} className={`min-w-0 ${wide ? 'col-span-2 lg:col-span-1' : ''}`}>
     <h4 className="label">{title}</h4>
     <div className="mt-1">{children}</div>
   </section>
@@ -66,8 +66,8 @@ export function TerrainPanel({ surface, onSurface, contours, onContours, exagger
       <h3 id="h-view" className="display text-[17px] text-text">
         View
       </h3>
-      <div className="mt-3 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-1">
-        <Section title="Surface">
+      <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 lg:mt-3 lg:grid-cols-1 lg:gap-y-5">
+        <Section title="Surface" wide>
           <div className="-ml-2.5 flex flex-wrap" role="group" aria-label="Surface">
             {SURFACES.map(([id, label]) => (
               <button key={id} type="button" aria-pressed={surface === id} onClick={() => onSurface(id)} className="tab !px-2.5">
@@ -103,7 +103,7 @@ export function TerrainPanel({ surface, onSurface, contours, onContours, exagger
           </label>
         </Section>
 
-        <Section title="Sun">
+        <Section title="Sun" wide>
           <div className="-ml-2.5 flex flex-wrap" role="group" aria-label="Sun position">
             <button type="button" aria-pressed={sun === SUN_DEFAULT} onClick={() => onSun(SUN_DEFAULT)} className="tab !px-2.5">
               Default {SUN_DEFAULT}°
@@ -117,7 +117,7 @@ export function TerrainPanel({ surface, onSurface, contours, onContours, exagger
           </p>
         </Section>
 
-        <div className="min-w-0 sm:col-span-2 lg:col-span-1">
+        <div className="col-span-2 min-w-0 lg:col-span-1">
           <Section title="Route">
             <button type="button" className="btn btn-accent" aria-expanded={planner.open} aria-controls="route-planner" onClick={() => planner.onOpen(!planner.open)}>
               Plan route {planner.open ? <ChevronUp size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
@@ -136,7 +136,7 @@ export function TerrainPanel({ surface, onSurface, contours, onContours, exagger
                   {planner.rovers.length === 0 && <option value="">no data</option>}
                   {planner.rovers.map((o) => (
                     <option key={o.id} value={o.id}>
-                      {o.name}, {o.body === 'moon' ? 'Moon' : 'Mars'}, limit {o.slopeLimit?.value != null ? `${o.slopeLimit.value}°` : 'no data'}
+                      {o.name.replace(/\s*\(.*\)/, '')}, {o.body === 'moon' ? 'Moon' : 'Mars'}, limit {o.slopeLimit?.value != null ? `${o.slopeLimit.value}°` : 'no data'}
                     </option>
                   ))}
                 </select>

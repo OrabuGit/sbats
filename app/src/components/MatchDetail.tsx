@@ -13,6 +13,7 @@ import { Locator } from './Locator';
 import { ActivityArt, type Activity } from './ActivityArt';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
 import { ScoreDial } from './ScoreDial';
+import { SunlightCompare } from './SunlightCompare';
 import { PlainResults } from './PlainResults';
 import { FieldLogistics, logisticsFromRecord } from './FieldLogistics';
 import { CompareSlider } from './CompareSlider';
@@ -487,6 +488,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               </div>
             </section>
           )}
+          <SunlightCompare record={record} earthName={name} targetName={target.name} />
           </div>
 
           <div id="sec-tests" className="scroll-mt-28">

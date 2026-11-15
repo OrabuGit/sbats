@@ -48,8 +48,7 @@ function CapabilityCard({ c }: { c: Capability }) {
       {c.basis && (
         <p className="mt-2 flex flex-wrap items-center gap-x-2 text-[12px] leading-5 text-muted">
           <span>
-            Rated from {c.basis}
-            {c.score !== null ? `: ${c.score.toFixed(0)} / 100` : ''}
+            {c.score !== null ? `${c.score.toFixed(0)} / 100, rated` : 'Rated'} from {c.basis}
           </span>
           <ComputedBadge title="Computed in the browser from the match record's dimension similarities, by the fixed rules in lib/plainResults.ts." />
         </p>
