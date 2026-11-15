@@ -1,4 +1,5 @@
 import type { SiteClimate } from '../data/sandbox';
+import { shortName } from '../lib/format';
 import { niceTicks, tickText } from './ExploreStats';
 import { SourceBadge } from './Badges';
 import { ACCENT, DASH, GREY, INK, LINE, Legend, MONO, MUTED } from './FullDataCharts';
@@ -60,7 +61,7 @@ export function ClimateSection({ climate, siteId, name }: { climate: SiteClimate
   if (panels.length === 0) return <p className="text-[14px] leading-[22px] text-muted">No data: this site has no monthly values.</p>;
 
   const H = TOP + panels.length * (PH + GAP) + 6;
-  const reading = climateReading(months, name.split(',')[0]);
+  const reading = climateReading(months, shortName(name));
   const label = `Monthly climate of ${name}: temperature, precipitation and sunlight by month. ${reading}`;
 
   return (

@@ -122,7 +122,7 @@ export function siteFromEarthCell(cell: CellLike, file: ModulesFile, options: { 
   let ice: number | null;
   if (options.iceAvailability === undefined) {
     ice = 0;
-    notes.push('earth.json has no ground-ice data, so the ice miner is treated as idle on Earth.');
+    notes.push('The Earth grid has no ground-ice data, so the ice miner is treated as idle on Earth.');
   } else ice = options.iceAvailability;
   return {
     id: `earth:${cell.lat},${cell.lon}`,

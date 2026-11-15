@@ -112,7 +112,7 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
               )}
               {/* One verdict line and the key figures; the rest opens on request. */}
               <p className="mt-3 text-[15px] leading-6 text-text">
-                {ready ? `Ready. Measured values exist for ${picked.name.split(',')[0]}, so Earth can be searched for it.` : 'Not ready. No measured values exist for this place yet.'}
+                {ready ? `Ready. Measured values exist for ${picked.name}, so Earth can be searched for it.` : 'Not ready. No measured values exist for this place yet.'}
               </p>
               {ready && (
                 <dl className="mt-3 grid grid-cols-3 gap-x-4">

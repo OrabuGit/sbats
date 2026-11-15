@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { ElementIcon, type ElementId } from './ElementIcon';
+import { AiMark } from './AiMark';
 import { CountUp, Meter, Rv, useSeen } from './ValidationParts';
 import { MATCH, MISS, VERDICT_WORD, verdictOf } from '../lib/verdict';
 
@@ -20,6 +21,7 @@ const sim = (v: number | null) => (v === null ? 'no data' : v.toFixed(2));
 /** The five dimensions as five tiles: icon, similarity, a bar with the two cut-offs, the verdict in a word. */
 export function DimensionStrip({ tiles }: { tiles: DimTile[] }) {
   return (
+    <>
     <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
       {tiles.map((t, k) => (
         <li key={t.id}>
@@ -29,6 +31,8 @@ export function DimensionStrip({ tiles }: { tiles: DimTile[] }) {
         </li>
       ))}
     </ul>
+    <AiMark className="mt-4" />
+    </>
   );
 }
 

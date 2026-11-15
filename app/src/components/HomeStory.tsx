@@ -5,7 +5,7 @@ import { FACTOR_IDS } from '../types';
 import { useAsync } from '../lib/useAsync';
 import { useNear } from '../lib/useNear';
 import { loadExtra } from '../data/access';
-import { loadFrozen, loadReport, loadSources } from '../data/validation';
+import { holdSample, loadFrozen, loadReport, loadSources } from '../data/validation';
 import type { ExtractIndex } from '../data/sites';
 import { verdictOf, VERDICT_WORD } from '../lib/verdict';
 import { ActivityArt } from './ActivityArt';
@@ -429,7 +429,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
             <p className="display mt-8 max-w-[30ch] text-[26px] leading-9 text-text sm:text-[34px] sm:leading-[44px]">
               Known analog sites score higher than <span className="text-accent">{Math.round(hold.overall.meanPercentile * 100)}%</span> of all land squares.
             </p>
-            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Chance would be 50%. Measured on test sites that never set a weight.</p>
+            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Chance would be 50%. Measured on test sites that never set a weight ({holdSample(hold.overall)}; a small test).</p>
           </Reveal>
         )}
         <div className="mt-16 grid gap-x-16 gap-y-16 lg:grid-cols-3">
@@ -470,7 +470,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
             </p>
             {hold ? (
               <p className="mt-6 text-[14px] leading-[22px] text-text">
-                On those same sites, <span className="num">{pct(hold.overall.top10Share)}</span> of known analogs reach the top 10% of Earth cells.
+                On those same sites, <span className="num">{pct(hold.overall.top10Share)}</span> of known analogs reach the top 10% of Earth cells ({holdSample(hold.overall)}).
               </p>
             ) : (
               <p className="mt-6 text-[13px] text-muted">{report.status === 'loading' ? 'Loading validation' : 'No data. The validation report was not published with this build.'}</p>
@@ -495,7 +495,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
               ))}
               {hold && (
                 <li className="text-[14px] leading-[22px] text-muted">
-                  The Moon is the weak result: its known analogs land at {pct(hold.moon.meanPercentile)} of Earth on average and {pct(hold.moon.top10Share)} reach the top 10%, while Mars targets reach {pct(hold.mars.top10Share)}. Absolute scores are low.{' '}
+                  The Moon is the weak result: its known analogs land at {pct(hold.moon.meanPercentile)} of Earth on average and {pct(hold.moon.top10Share)} reach the top 10% ({holdSample(hold.moon)}), while Mars targets reach {pct(hold.mars.top10Share)} ({holdSample(hold.mars)}). Absolute scores are low.{' '}
                   <button type="button" onClick={onValidation} className="link-rule font-medium text-text">
                     See Validation
                   </button>

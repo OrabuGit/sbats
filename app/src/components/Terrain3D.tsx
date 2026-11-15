@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { shortName } from '../lib/format';
 import {
   AmbientLight,
   BoxGeometry,
@@ -559,7 +560,7 @@ function Terrain3DView({ earth, target, windowKm, layer, cols, rows, slope = fal
         {state === 'ready' &&
           sides.map((s, i) => (
             <p key={s.item.id} className={`label pointer-events-none absolute left-3 bg-bg px-1.5 py-1 !text-text ${i === 0 ? 'top-3' : 'top-[calc(50%+12px)] sm:left-[calc(50%+12px)] sm:top-3'}`}>
-              {s.item.name.split(',')[0]}
+              {shortName(s.item.name)}
               {s.note ? <span className="ml-2 text-muted">{s.note}</span> : null}
             </p>
           ))}

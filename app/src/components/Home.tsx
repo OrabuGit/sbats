@@ -10,6 +10,7 @@ import { StoryPairs } from './StoryPairs';
 import { useAsync } from '../lib/useAsync';
 import { countryKey, useCountries } from '../lib/where';
 import { HeroStill } from './HeroStill';
+import { rankOf, stabilityLine } from '../lib/rankText';
 import type { HeroGlobes as HeroGlobesType, HeroLink, HeroPick, HeroPlace, HeroSite } from './HeroGlobes';
 import { HomePair, type PairInfo } from './HomePair';
 import { HomeStory, Reveal } from './HomeStory';
@@ -99,7 +100,7 @@ interface DiscPick {
   stability: { rankP05: number; rankP95: number; shareInTop10: number } | null;
 }
 interface Discoveries {
-  targets: { target: string; name: string; top: DiscPick[] }[];
+  targets: { target: string; name: string; scoredCells: number; top: DiscPick[] }[];
 }
 
 /** The three best new Earth places for Shackleton rim, from data/discoveries.json. */
@@ -117,7 +118,7 @@ function TopScan({ note, onOpen }: { note: Props['scanNote']; onOpen: (lat: numb
           Best new places: far from any known analog
         </h2>
         <p className="mt-1 max-w-[72ch] text-[13px] leading-5 text-muted">
-          Against {targetName}, Base weights. Ranks skip numbers because only high and medium confidence places count, only one place is kept in any 250 km, and only places more than 500 km from every known analog are listed here.
+          Against {targetName}, Base weights. "No." is the position in this list. "Rank" is the position among all scored squares, so it skips numbers: only high and medium confidence places count, only one place is kept in any 250 km, and only places more than 500 km from every known analog are listed here.
           {note?.excluded && note.near && (
             <>
               {' '}
@@ -141,7 +142,9 @@ function TopScan({ note, onOpen }: { note: Props['scanNote']; onOpen: (lat: numb
         {picks.map((p, i) => (
           <li key={`${p.lat},${p.lon}`}>
             <Reveal i={i}>
-              <p className="text-[12px] text-muted">Rank {p.rank.toLocaleString('en-US')}</p>
+              <p className="text-[12px] text-muted">
+                No. {i + 1} in this list{entry ? ` · ${rankOf(p.rank, entry.scoredCells)} squares` : ''}
+              </p>
               <p className="display mt-1 text-[28px] leading-none text-text">
                 {p.score.toFixed(0)}
                 <span className="ml-1.5 text-[12px] font-normal text-muted">/ 100</span>
@@ -158,7 +161,7 @@ function TopScan({ note, onOpen }: { note: Props['scanNote']; onOpen: (lat: numb
               </div>
               <p className="mt-2 text-[13px] leading-5 text-muted">
                 {p.stability
-                  ? `Stable: rank ${p.stability.rankP05} to ${p.stability.rankP95} in nine of ten redraws of the weights, in the top 10 in ${Math.round(p.stability.shareInTop10 * 100)}% of them.`
+                  ? stabilityLine(p.stability.rankP05, p.stability.rankP95, p.stability.shareInTop10)
                   : 'No stability figure for this place.'}
               </p>
               <button type="button" onClick={() => onOpen(p.lat, p.lon, SCAN_TARGET)} className="link-rule mt-3 inline-flex min-h-11 items-center text-[14px] font-medium text-text">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Radiation, Weight, Wind } from 'lucide-react';
 import type { Target } from '../types';
+import { shortName } from '../lib/format';
 import { SourceBadge } from './Badges';
 import { MChip } from './MethodParts';
 
@@ -10,7 +11,7 @@ const KINDS = [
   { match: /^Radiation/, Icon: Radiation, name: 'Radiation' },
 ];
 
-const short = (n: string) => n.split(',')[0];
+const short = shortName;
 
 /** Three things no place on Earth can copy, never part of the score. The lines are the dossier's own, per target. */
 export function MethodCannotCopy({ targets }: { targets: Target[] }) {

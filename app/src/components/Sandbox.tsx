@@ -408,7 +408,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         </p>
         {modules.fixture && (
           <p className="mb-3 border border-accent p-2 text-[12px] text-accent" role="note">
-            Fixture module numbers, not real. data/modules.json is not published with this build, so every result here is a placeholder.
+            Fixture module numbers, not real. The module numbers are not published with this build, so every result here is a placeholder.
           </p>
         )}
         {modules.problems.length > 0 && (

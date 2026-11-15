@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowLeftRight } from 'lucide-react';
 import type { Analog, EarthFile, FactorKey, Target } from '../types';
 import { formatCoords, siteCode } from '../lib/geo';
-import { formatValue, keyLabel, metaByKey } from '../lib/format';
+import { formatValue, keyLabel, metaByKey, shortName as shortNameOf } from '../lib/format';
 import { ComputedBadge, SourceBadge } from './Badges';
 import { ExploreChart, MarkGlyph, type Mark, type MarkKind, type Sel } from './ExploreChart';
 import { availableKeys, defaultAxes, keyStats, noun, pairSentence, unitOf } from './ExploreStats';
@@ -176,7 +176,7 @@ export function ExplorePage({ earth, target, candidates, analogs, onOpenCell, on
     return `${keyLabel(k, meta)}${u ? ` (${u})` : ''}`;
   };
   const skewShown = [sx, sy].some((s) => s.skewed);
-  const shortName = target.name.split(',')[0];
+  const shortName = shortNameOf(target.name);
   const legend: { kind: MarkKind; text: string }[] = [
     { kind: 'target', text: 'Target' },
     ...(matchesPlaced.length ? [{ kind: 'match' as const, text: 'Top match, by rank' }] : []),

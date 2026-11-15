@@ -3,11 +3,12 @@ import { ArrowLeft } from 'lucide-react';
 import type { CellSummary, EarthCell, EarthFile, Target } from '../types';
 import { downloadText, toCsv } from '../lib/download';
 import { formatCoords, siteCode } from '../lib/geo';
+import { shortName } from '../lib/format';
 import { countryKey, useCountries } from '../lib/where';
 const Locator = lazy(() => import('./Locator').then((m) => ({ default: m.Locator })));
 import { buildReport, type CellStability, type KnownSite, type MatchRecord, type SharedMinerals, type ReportText, type RouteResult, type StabilityResult } from '../lib/matchAdapter';
 import { useAsync } from '../lib/useAsync';
-import { loadFrozen, loadReport } from '../data/validation';
+import { holdSample, loadFrozen, loadReport } from '../data/validation';
 
 interface Props {
   cell: EarthCell;
@@ -43,7 +44,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
     const [r, f] = await Promise.all([loadReport('base'), loadFrozen()]);
     const h = r?.sets.holdout.overall;
     if (!h || !f || h.rocAuc === null || h.top10Share === null || h.meanPercentile === null) return null;
-    return { holdoutAuc: h.rocAuc, holdoutTop10: h.top10Share, holdoutMeanPercentile: h.meanPercentile, frozenAt: f.frozenAt };
+    return { holdoutAuc: h.rocAuc, holdoutTop10: h.top10Share, holdoutMeanPercentile: h.meanPercentile, frozenAt: f.frozenAt, sample: holdSample(r.sets.holdout.overall) };
   }, 'report-validation');
   const country = useCountries([cell]).get(countryKey(cell.lat, cell.lon)) ?? null;
   const report = buildReport({ record, minerals, knownSite, stability, routes, validation: validation.status === 'ready' ? validation.value : null });
@@ -146,7 +147,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
             <Locator
               points={[
                 { world: 'earth', lat: cell.lat, lon: cell.lon, name: country ?? 'This cell', where: null },
-                { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+                { world: target.body, lat: target.lat, lon: target.lon, name: shortName(target.name), where: null },
               ]}
             />
           </Suspense>

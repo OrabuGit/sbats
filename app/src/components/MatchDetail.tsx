@@ -4,7 +4,7 @@ import type { CellScore, EarthCell, EarthFile, Target } from '../types';
 import type { MatchDimension, MatchRecord, MatchSide, SharedMinerals } from '../lib/matchAdapter';
 import type { ExtractItem } from '../data/sites';
 import { formatCoords, siteCode } from '../lib/geo';
-import { formatScore, formatSim, unscoredText, type MetaByKey } from '../lib/format';
+import { formatScore, formatSim, unscoredText, type MetaByKey, shortName } from '../lib/format';
 import { MATCH, MISS, VERDICT_WORD, fromRecord, type Verdict } from '../lib/verdict';
 import { matchWord, type PurposeDef } from '../lib/scoringAdapter';
 import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
@@ -280,7 +280,7 @@ function TopFactors({ dims, targetName }: { dims: MatchDimension[]; targetName: 
               {r.earth.text}
             </span>
             <span className="num order-4 text-[14px] text-text md:order-none">
-              <span className="text-muted">{targetName.split(',')[0]} </span>
+              <span className="text-muted">{shortName(targetName)} </span>
               {r.target.text}
             </span>
             <span className="display text-[20px] text-text">{formatSim(r.similarity)}</span>
@@ -338,7 +338,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
           <header className={`${pad} grid gap-x-12 gap-y-8 pb-12 pt-6 ${terrain ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,640px)]' : 'lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)]'}`}>
             <div className="min-w-0">
               <p className="text-[14px] text-muted">
-                {rank !== null ? `Match number ${rank}` : 'Match'}
+                {rank !== null ? `No. ${rank} in this list` : 'Match'}
                 {kindLabel ? ` · ${kindLabel}` : ''}
               </p>
               <h2 id="h-match" className="display-l mt-2 text-[36px] sm:text-[52px]">
@@ -442,8 +442,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 <Suspense fallback={<div className="h-[300px] w-full sm:h-[340px]" role="status" aria-label="Loading globes" />}>
                 <Locator
                   points={[
-                    { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
-                    { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+                    { world: 'earth', lat: cell.lat, lon: cell.lon, name: (placeName ? shortName(placeName) : undefined) ?? country ?? 'This cell', where: placeName ? country : null },
+                    { world: target.body, lat: target.lat, lon: target.lon, name: shortName(target.name), where: null },
                   ]}
                 />
                 </Suspense>
@@ -460,7 +460,10 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 One ring for each thing the two places are compared on. A ring fills the more alike they are; the gaps mark where a match starts.
               </p>
               <div className="mt-8 grid items-start gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
-                <ScoreDial dims={core} score={scored ? (score as number) : null} selected={sel} onSelect={setPicked} />
+                <div>
+                  <ScoreDial dims={core} score={scored ? (score as number) : null} selected={sel} onSelect={setPicked} />
+                  <AiMark className="mt-2" />
+                </div>
                 <ul>
                   {core.map((d, i) => {
                     const v = fromRecord(d.verdict);

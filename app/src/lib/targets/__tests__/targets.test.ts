@@ -176,7 +176,7 @@ describe('targetFromPoint: built from the global grid', () => {
     deepEqual(q.missing, ['lithology']);
     equal(q.coverage, 0.85);
     equal(q.confidence, 'low');
-    ok(q.notes.some((n) => n.includes('lithology')));
+    ok(q.notes.some((n) => n.includes('rock type')));
   });
 
   it('does not use a grid value whose factor has no stated source', () => {

@@ -3,6 +3,7 @@ import { ActivityArt, activityOf } from './ActivityArt';
 import { ElementIcon, isElement } from './ElementIcon';
 import { PRESET_WORDS } from './MatchControls';
 import { MATCH, MISS } from '../lib/verdict';
+import { AiMark } from './AiMark';
 
 export interface PairInfo {
   mode: 'place' | 'site';
@@ -117,6 +118,7 @@ export function HomePair({ pair, chips, active, onActive, presets, presetId, onP
           </button>
         </div>
       </div>
+      <AiMark className="mt-3" />
     </section>
   );
 }

@@ -1,7 +1,9 @@
 import type { Analog, CellSummary, EarthFile, Target } from '../types';
 import type { Candidate } from '../lib/rank';
+import { stabilityLine } from '../lib/rankText';
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatShare } from '../lib/format';
+import { AiMark } from './AiMark';
 import { DIMENSIONS, PURPOSES } from '../lib/scoringAdapter';
 import { useAsync } from '../lib/useAsync';
 import { countryKey, useCountries } from '../lib/where';
@@ -168,7 +170,9 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
   onSitePage: Props['onSitePage'];
   onMatch: Props['onMatch'];
 }) {
-  const result = pick(scored, analog);
+  // A site with a team story is shown against the target the story pairs it with, as on the home page.
+  const storyTarget = story[0]?.target.inTool?.id ?? story[0]?.target.targetId ?? null;
+  const result = (storyTarget ? scored?.results.find((r) => r.target === storyTarget) : null) ?? pick(scored, analog);
   const target = targets.find((t) => t.id === result?.target);
   const sources = [...new Set(Object.values(site.values).flatMap((v) => (v?.source ? [v.source] : [])))];
   const best = result
@@ -204,7 +208,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           {scored?.provisional && <Tag tone="accent" title={scored.caveat ?? undefined}>Provisional footprint</Tag>}
           {best && best.score !== null && (
             <Tag>
-              Best purpose: {best.label} {best.score.toFixed(0)}
+              Best purpose{target ? ` against ${target.name}` : ''}: {best.label} {best.score.toFixed(0)}
             </Tag>
           )}
           {typeof scored?.bareFrac === 'number' && <Tag>{formatShare(scored.bareFrac)} bare</Tag>}
@@ -385,6 +389,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
         </Reveal>
         <Reveal i={1}>
           <p className="mt-4 max-w-[48ch] text-[18px] leading-7 text-muted">Places we propose, places the world already uses, and the best the scan found.</p>
+          <AiMark className="mt-2" />
         </Reveal>
         <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-4">
           {[
@@ -403,7 +408,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           {findings.status === 'loading'
             ? 'Loading findings'
             : fd
-              ? `The "strong for" and "falls short on" lines are the sentences of validation/sites/FINDINGS.md${fd.written ? `, written ${fd.written}` : ''}, printed as they are.`
+              ? `The "strong for" and "falls short on" lines are the team's findings${fd.written ? `, written ${fd.written}` : ''}, printed as they are.`
               : 'No data. The written findings were not published with this build, so no claim is made here beyond the numbers.'}
         </p>
       </header>
@@ -417,7 +422,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
             Loading sites
           </p>
         )}
-        {sitesState !== 'loading' && proposed.length === 0 && <p className="py-6 text-[13px] text-muted">No data. data/sites.json is not published with this build.</p>}
+        {sitesState !== 'loading' && proposed.length === 0 && <p className="py-6 text-[13px] text-muted">No data. The site list is not published with this build.</p>}
         {proposed.length > 0 && (
           <div className="-mx-5 mt-6 overflow-x-auto px-6 py-1 pb-4 sm:-mx-10 sm:px-11" role="tablist" aria-label="Proposed sites">
             <div className="flex snap-x gap-4">
@@ -610,7 +615,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
             </ul>
           </>
         ) : (
-          <p className="mt-1 text-[13px] text-muted">{bench.status === 'loading' ? 'Loading benchmarks' : 'No data. data/benchmarks.json is not published with this build.'}</p>
+          <p className="mt-1 text-[13px] text-muted">{bench.status === 'loading' ? 'Loading benchmarks' : 'No data. The benchmark figures are not published with this build.'}</p>
         )}
       </section>
 
@@ -651,7 +656,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                     return pk ? (
                       <p className="mt-1 text-[12px] text-muted">
                         {pk.isNew && pk.nearestKnown ? `New: ${Math.round(pk.nearestKnown.km).toLocaleString('en-US')} km from the nearest known analog. ` : ''}
-                        {pk.stability ? `Rank ${pk.stability.rankP05} to ${pk.stability.rankP95} in nine of ten redraws of the weights.` : ''}
+                        {pk.stability ? stabilityLine(pk.stability.rankP05, pk.stability.rankP95, pk.stability.shareInTop10) : ''}
                       </p>
                     ) : null;
                   })()}

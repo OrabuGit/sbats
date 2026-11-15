@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import type { SiteStory, StoryValue } from '../data/stories';
 import { loadSiteScores } from '../data/sites';
 import { PURPOSES } from '../lib/scoringAdapter';
@@ -9,6 +9,7 @@ import { ComputedBadge, SourceBadge } from './Badges';
 import { More } from './ValidationParts';
 import { Reveal } from './HomeStory';
 import { fromSite, logisticsLines } from './FieldLogisticsData';
+import { shortName } from '../lib/format';
 
 // A team story from data/site_stories.json, kept apart from what the tool computes. The left column is the
 // team's text ("Team story", credited); the right column is the tool's scores ("Computed by the tool") and
@@ -35,7 +36,7 @@ const VALUE_LABEL: Record<string, string> = {
 const fmtValue = (v: StoryValue) => {
   if (v.value === null || v.value === undefined) return 'no data';
   const val = typeof v.value === 'number' ? String(v.value).replace('-', '−') : v.value;
-  return v.unit ? `${val} ${v.unit}` : val;
+  return v.unit && v.unit !== 'class code' ? `${val} ${v.unit}` : val;
 };
 
 function Sub({ children }: { children: React.ReactNode }) {
@@ -52,7 +53,7 @@ function ToolScores({ story }: { story: SiteStory }) {
       <p className="label text-accent">Computed by the tool</p>
       {t.targetId === null ? (
         <p className="mt-2 text-[14px] leading-[22px] text-muted">
-          No tool target for this place, so the tool gives no score. {t.note}
+          {t.note ?? 'No tool target for this place, so the tool gives no score.'}
         </p>
       ) : (
         <>
@@ -193,7 +194,6 @@ function Logistics({ story }: { story: SiteStory }) {
 export function TeamStory({ story, headingLevel = 3 }: { story: SiteStory; headingLevel?: 3 | 4 }) {
   const H = headingLevel === 3 ? 'h3' : 'h4';
   const t = story.target;
-  const review = story.needsTeamReview ?? [];
   const pairs = story.limitation.map((l, i) => ({ l, w: story.workaround[i] ?? null }));
   const extraWork = story.workaround.slice(story.limitation.length);
   return (
@@ -213,27 +213,11 @@ export function TeamStory({ story, headingLevel = 3 }: { story: SiteStory; headi
         </p>
         <p className="mt-1 text-[12px] leading-[18px] text-muted">
           {t.targetId === null
-            ? `No tool target for this place. ${t.note ?? ''}`
+            ? (t.note ?? 'No tool target for this place.')
             : t.inTool
               ? `The tool's point differs from the team's rounded position. ${t.note ?? ''}`
               : (t.note ?? '')}
         </p>
-
-        {review.length > 0 && (
-          <div className="mt-5 border-l-2 border-accent pl-4" role="note">
-            <p className="flex items-center gap-2 text-[13px] font-semibold text-accent">
-              <AlertTriangle size={14} aria-hidden="true" />
-              Needs team review
-            </p>
-            <ul className="mt-1 space-y-1">
-              {review.map((r) => (
-                <li key={r} className="text-[14px] leading-[22px] text-text">
-                  {r} Shown as the team wrote it until the team reviews it.
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {story.whyItStandsOut && (
           <>
@@ -440,8 +424,8 @@ export function TeamStories({ stories, initial }: { stories: SiteStory[]; initia
                 onClick={() => setSel(s.id)}
                 className={`min-h-11 px-3 text-left text-[14px] ${active ? 'border-b-2 border-accent text-text' : 'border-b-2 border-transparent text-muted hover:text-text'}`}
               >
-                {s.earth.name.split(',')[0]}
-                <span className="text-muted"> / {s.target.name.split(',')[0]}</span>
+                {shortName(s.earth.name)}
+                <span className="text-muted"> / {shortName(s.target.name)}</span>
               </button>
             );
           })}

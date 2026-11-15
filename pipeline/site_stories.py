@@ -29,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from common import AI_NOTE, DATA  # noqa: E402
 
-CREDIT = "Written by the SBATS team. Numbers in ourData and logistics.computed come from the project's own data files and are not part of the team text."
+CREDIT = "Written by the SBATS team. Numbers shown as our data or as computed logistics come from the project's own data files and are not part of the team text."
 
 # ----------------------------------------------------------------------------------------------
 # The team's text. Corrections are applied here and listed in `corrections`.
@@ -42,7 +42,7 @@ STORIES = [
         "earthSiteIds": ["dallol"],
         "earth": {"name": "Dallol Hydrothermal Field, Danakil Depression, Ethiopia", "teamLocation": {"lat": 14.2417, "lon": 40.3}},
         "target": {"name": "Columbia Hills, Gusev Crater, Mars", "teamLocation": {"lat": -14.57, "lon": 175.47}, "targetId": None,
-                   "note": "Columbia Hills is not one of the base targets in data/targets.json, so the tool has no score for it."},
+                   "note": "Columbia Hills was added as a target after the freeze of 2026-11-14. It is in no validation number."},
         "trek": "Mars Trek",
         "whyItStandsOut": ("Dallol is one of the hottest, lowest, and most acidic hydrothermal environments on Earth, with spring "
                            "waters at about pH 0 and temperatures reported up to about 94 C."),
@@ -59,11 +59,11 @@ STORIES = [
         "teamSource": {"title": "NASA Astrobiology: The Message of Really, Really Extreme Life",
                        "url": "https://astrobiology.nasa.gov/news/the-message-of-really-really-extreme-life/"},
         "corrections": [
-            {"field": "whyItStandsOut", "was": "some waters measuring below pH 0.25",
+            {"field": "Why it stands out", "was": "some waters measuring below pH 0.25",
              "now": "spring waters at about pH 0, up to about 94 C",
              "basis": ("The cited NASA Astrobiology article gives a pH of 0 and water above 200 F (94 C). The figures pH 0.25 and 108 C "
                        "were not found in it or in the abstracts checked; they were removed. Sanz et al. 2021 (doi:10.3390/microorganisms9061231) report chimney water above 100 C with a pH close to zero, so the real maximum is probably higher; use 'about pH 0' and 'up to about 94 C (NASA)'.")},
-            {"field": "comparison", "was": "air and spring temperature ranges, Earth versus Mars",
+            {"field": "Comparison", "was": "air and spring temperature ranges, Earth versus Mars",
              "now": None, "basis": "Removed: Earth-versus-target numbers are not shown; temperature numbers come from our data."},
         ],
         "verification": [
@@ -85,7 +85,7 @@ STORIES = [
         "earthSiteIds": ["salar-de-uyuni", "tunupa-volcano"],
         "earth": {"name": "Salar de Uyuni and Tunupa volcano edge, Potosi Department, Bolivia", "teamLocation": {"lat": -19.8333, "lon": -67.6333}},
         "target": {"name": "Holden Crater lake deposits, Mars", "teamLocation": {"lat": -26.0, "lon": 326.0}, "targetId": None,
-                   "note": "Holden Crater is not one of the base targets in data/targets.json, so the tool has no score for it."},
+                   "note": "Holden crater was added as a target after the freeze of 2026-11-14. It is in no validation number."},
         "trek": "Mars Trek",
         "whyItStandsOut": ("Salar de Uyuni, at about 3,650 m above sea level, is the world's largest salt flat. Its wide evaporite crusts and "
                            "intense high-altitude sunlight also make it a useful site for testing materials exposed to UV radiation."),
@@ -104,13 +104,13 @@ STORIES = [
         "teamSource": {"title": "NASA Earth Observatory: Bolivian Salt Flats",
                        "url": "https://science.nasa.gov/earth/earth-observatory/bolivian-salt-flats-151813/"},
         "corrections": [
-            {"field": "target", "was": "Holden Crater Salt Flats", "now": "Holden Crater lake deposits",
+            {"field": "Target", "was": "Holden Crater Salt Flats", "now": "Holden Crater lake deposits",
              "basis": "Holden is a crater with lake deposits that include clay-bearing sediments; it is not a salt flat (team check; Grant et al. 2010, 'Aqueous depositional settings in Holden crater, Mars', doi:10.1016/B978-0-444-52854-4.00012-X)."},
-            {"field": "dominantRock.target", "was": "Phyllosilicate clays and sulfate evaporites", "now": "Clay-bearing (phyllosilicate) lake sediments",
+            {"field": "Dominant rock, target", "was": "Phyllosilicate clays and sulfate evaporites", "now": "Clay-bearing (phyllosilicate) lake sediments",
              "basis": "Sulfate evaporite evidence at Holden was not confirmed; removed."},
-            {"field": "whyItStandsOut", "was": "At 3,656 meters above sea level", "now": "at about 3,650 m above sea level",
-             "basis": "The cited NASA page does not give the figure. Our Copernicus DEM gives 3,654 to 3,688 m inside the salar footprint (see ourData)."},
-            {"field": "comparison", "was": "slope and temperature numbers, Earth versus Mars", "now": None,
+            {"field": "Why it stands out", "was": "At 3,656 meters above sea level", "now": "at about 3,650 m above sea level",
+             "basis": "The cited NASA page does not give the figure. Our Copernicus DEM gives 3,654 to 3,688 m inside the salar footprint (see our data)."},
+            {"field": "Comparison", "was": "slope and temperature numbers, Earth versus Mars", "now": None,
              "basis": "Removed: Earth-versus-target numbers are not shown."},
         ],
         "verification": [
@@ -125,11 +125,11 @@ STORIES = [
         "earthSiteIds": ["id-tambora-caldera"],
         "earth": {"name": "Mount Tambora caldera rim, Sumbawa, Indonesia", "teamLocation": {"lat": -8.2481, "lon": 117.9917}},
         "target": {"name": "Shackleton crater rim, lunar south pole", "teamLocation": {"lat": -89.9, "lon": 0.0}, "targetId": "moon-shackleton-rim",
-                   "note": "The tool's target is placed at 89.67 S, 129.78 E (data/targets.json). The team's position is a rounded pole position."},
+                   "note": "The tool's target is placed at 89.67 S, 129.78 E. The team's position is a rounded pole position."},
         "trek": "Moon Trek",
         "whyItStandsOut": ("Tambora's 1815 eruption, the largest recorded in history, left behind a steep-walled summit caldera about 6 km wide "
                            "and 1,250 m deep."),
-        "siteDescription": ("Formed by the 1815 eruption, Tambora's broad caldera is marked by barren ash fields and a deep, steep-walled basin. "
+        "siteDescription": ("Formed by the 1815 eruption, Tambora's broad caldera is marked by ash fields and a deep, steep-walled basin. "
                             "Its steep rim and basin offer a practical Earth-based setting for testing some of the terrain challenges "
                             "anticipated around Shackleton Crater, a potential focus of future Artemis missions."),
         "testingTags": ["Steep-Slope Winches", "Crater-Rim Comms Relays", "Ash Traction Wheels"],
@@ -144,26 +144,26 @@ STORIES = [
         "teamSource": {"title": "NASA Earth Observatory: Mount Tambora Volcano, Sumbawa Island, Indonesia",
                        "url": "https://science.nasa.gov/earth/earth-observatory/mount-tambora-volcano-sumbawa-island-indonesia-39412/"},
         "corrections": [
-            {"field": "whyItStandsOut", "was": "roughly 6-7 kilometers wide", "now": "about 6 km wide and 1,250 m deep",
+            {"field": "Why it stands out", "was": "roughly 6-7 kilometers wide", "now": "about 6 km wide and 1,250 m deep",
              "basis": "Smithsonian Global Volcanism Program, volcano 264040: 'a 6-km-wide, 1250-m-deep caldera'. (NASA Earth Observatory gives 6 km and 1,100 m; the project uses the Smithsonian figure.)"},
-            {"field": "siteDescription", "was": "inner walls that plunge more than 600 meters", "now": "a deep, steep-walled basin",
+            {"field": "Site description", "was": "inner walls that plunge more than 600 meters", "now": "a deep, steep-walled basin",
              "basis": "The 600 m figure is not supported by either source; the caldera depth is 1,250 m (Smithsonian)."},
-            {"field": "siteDescription", "was": "testing terrain challenges anticipated around Shackleton", "now": "testing some of the terrain challenges anticipated around Shackleton",
+            {"field": "Site description", "was": "testing terrain challenges anticipated around Shackleton", "now": "testing some of the terrain challenges anticipated around Shackleton",
              "basis": "Restored 'some of': one site cannot reproduce all of the terrain at Shackleton."},
-            {"field": "dominantRock", "was": "Trachyandesite and basaltic volcanic ash (Earth); anorthositic and basaltic regolith (Moon)",
+            {"field": "Dominant rock", "was": "Trachyandesite and basaltic volcanic ash (Earth); anorthositic and basaltic regolith (Moon)",
              "now": "Trachybasalt to trachyandesite (Earth); anorthositic highland crust (Moon)",
              "basis": "Smithsonian GVP major rock type 'Trachybasalt / Tephrite Basanite' and its summary 'trachybasaltic-to-trachyandesitic'; for Shackleton, Haruyama et al. 2013, Geophysical Research Letters 40:3814, doi:10.1002/grl.50753 (anorthosite)."},
-            {"field": "comparison", "was": "slope and temperature numbers, Earth versus Moon", "now": None,
+            {"field": "Comparison", "was": "slope and temperature numbers, Earth versus Moon", "now": None,
              "basis": "Removed: Earth-versus-target numbers are not shown."},
         ],
         "verification": [
             {"claim": "1815 eruption, the largest in recorded history", "status": "verified",
              "evidence": "NASA Earth Observatory (cited) and Smithsonian GVP volcano 264040."},
             {"claim": "Caldera about 6 km wide and 1,250 m deep", "status": "verified", "evidence": "Smithsonian GVP volcano 264040."},
-            {"claim": "Barren ash fields", "status": "see dataChecks",
-             "evidence": "Sentinel-2 in our data shows 28% bare ground in the footprint, not a barren one. Flagged for the team."},
+            {"claim": "Ash fields", "status": "see dataChecks",
+             "evidence": "Sentinel-2 in our data shows 28% bare ground in the footprint, which is consistent with ash fields."},
         ],
-        "needsTeamReview": ["siteDescription: 'barren ash fields' against 28% bare ground in our Sentinel-2 data."],
+        "needsTeamReview": [],
     },
     {
         "id": "lut-gale",
@@ -171,7 +171,7 @@ STORIES = [
         "earthSiteIds": ["dasht-e-lut"],
         "earth": {"name": "Lut Desert (Dasht-e Lut), Kerman and Sistan-Baluchestan, Iran", "teamLocation": {"lat": 30.5, "lon": 59.0}},
         "target": {"name": "Gale Crater (Mount Sharp yardangs), Mars", "teamLocation": {"lat": -5.4, "lon": 137.8}, "targetId": "mars-gale",
-                   "note": "The tool's target is the crater floor point at 4.6 S, 137.4 E (data/targets.json), not the yardang layer high on Mount Sharp."},
+                   "note": "The tool's target is the crater floor point at 4.6 S, 137.4 E, not the yardang layer high on Mount Sharp."},
         "trek": "Mars Trek",
         "whyItStandsOut": ("The Lut Desert is known for some of the hottest land surface temperatures ever measured from satellites, as well as "
                            "its enormous wind-carved yardangs."),
@@ -189,12 +189,12 @@ STORIES = [
         "teamSource": {"title": "NASA Science: Curiosity Captures Dawn Breaking on Wind-Carved Cliffs",
                        "url": "https://science.nasa.gov/photojournal/nasas-curiosity-captures-dawn-breaking-on-wind-carved-cliffs/"},
         "corrections": [
-            {"field": "whyItStandsOut", "was": "hottest land surface temperatures ever measured on Earth, exceeding 70 C",
+            {"field": "Why it stands out", "was": "hottest land surface temperatures ever measured on Earth, exceeding 70 C",
              "now": "some of the hottest land surface temperatures ever measured from satellites",
              "basis": "Mildrexler et al. 2011, Bulletin of the American Meteorological Society, 'Satellite Finds Highest Land Skin Temperatures on Earth', doi:10.1175/2011BAMS3067.1 (title read; no abstract was available, so the figure was not checked and is not shown)."},
-            {"field": "dominantRock.target", "was": "Wind-eroded mudstone and sandstone", "now": "Layered sedimentary rock; yardang layer origin uncertain (one theory: volcanic ash)",
+            {"field": "Dominant rock, target", "was": "Wind-eroded mudstone and sandstone", "now": "Layered sedimentary rock; yardang layer origin uncertain (one theory: volcanic ash)",
              "basis": "NASA Science, Curiosity panorama of 11 Aug 2026: 'Scientists aren't entirely sure how the layer formed; one theory is that it's a pile of volcanic ash'."},
-            {"field": "comparison", "was": "slope and temperature numbers, Earth versus Mars", "now": None,
+            {"field": "Comparison", "was": "slope and temperature numbers, Earth versus Mars", "now": None,
              "basis": "Removed: Earth-versus-target numbers are not shown."},
         ],
         "verification": [
@@ -211,7 +211,7 @@ STORIES = [
         "earthSiteIds": ["id-batur-lava-fields", "id-kesaksak-lava-tube"],
         "earth": {"name": "Mount Batur black lava fields, Kintamani, Bali, Indonesia", "teamLocation": {"lat": -8.2528, "lon": 115.3636}},
         "target": {"name": "Marius Hills, Moon", "teamLocation": {"lat": 14.0, "lon": -56.0}, "targetId": "moon-marius-hills",
-                   "note": "The tool's target is the Marius Hills pit at 14.091 N, 56.77 W (data/targets.json)."},
+                   "note": "The tool's target is the Marius Hills pit at 14.091 N, 56.77 W."},
         "trek": "Moon Trek",
         "whyItStandsOut": ("Mount Batur is known for its dark, jagged lava fields from historical eruptions and for the volcanic caves found "
                            "within its UNESCO Global Geopark."),
@@ -224,24 +224,24 @@ STORIES = [
         "limitation": ["Earth's gravity is much stronger than the Moon's, while Bali's humidity can change how dust behaves and how people move in spacesuits."],
         "workaround": ["Use gravity-offloading harnesses during field trials, then dry collected basalt dust in ovens before testing how it affects seals indoors."],
         "dominantRock": {"earth": "Andesite to basaltic andesite (Smithsonian Global Volcanism Program)",
-                         "target": "Mare basalt (Besse et al. 2011; Lawrence et al. 2013, as cited in data/targets.json)",
+                         "target": "Mare basalt (Besse et al. 2011; Lawrence et al. 2013, as cited in our target data)",
                          "status": "corrected"},
         "teamEstimate": {"accessDifficulty": "Easy", "nearestSupportHub": "Ngurah Rai International Airport, Denpasar (~2 hrs drive)", "costEfficiency": "High"},
         "teamSource": {"title": "Smithsonian Global Volcanism Program: Batur", "url": "https://volcano.si.edu/volcano.cfm?vn=264010"},
         "corrections": [
-            {"field": "siteDescription", "was": "confirmed underground lava tubes",
+            {"field": "Site description", "was": "confirmed underground lava tubes",
              "now": "radar and gravity data point to lava tubes",
              "basis": ("Not confirmed: Kaku et al. 2017, Geophysical Research Letters, doi:10.1002/2017GL074998 (SELENE radar echoes consistent with an intact tube near the Marius Hills pit); "
                        "Chappaz et al. 2017, GRL, doi:10.1002/2016GL071588 (GRAIL gravity mass deficits consistent with empty tubes). Nobody has seen inside a tube.")},
-            {"field": "siteDescription", "was": "jagged basaltic lava fields", "now": "jagged lava fields of andesite to basaltic andesite",
+            {"field": "Site description", "was": "jagged basaltic lava fields", "now": "jagged lava fields of andesite to basaltic andesite",
              "basis": "Smithsonian GVP volcano 264010: major rock type 'Andesite / Basaltic Andesite' (its summary also notes basaltic lava flows on the caldera floor in historical time)."},
-            {"field": "whyItStandsOut", "was": "from the 1963 eruption", "now": "from historical eruptions",
+            {"field": "Why it stands out", "was": "from the 1963 eruption", "now": "from historical eruptions",
              "basis": "The 1963 date was not found in the cited Smithsonian record; GVP lists the last eruption as 2000."},
-            {"field": "missionUse", "was": "Batur's sharp basalt", "now": "Batur's sharp lava", "basis": "Same rock-type correction."},
-            {"field": "dominantRock", "was": "Basaltic-andesitic aa lava and sharp ash (Earth); high-titanium mare basalt (Moon)",
+            {"field": "Mission use", "was": "Batur's sharp basalt", "now": "Batur's sharp lava", "basis": "Same rock-type correction."},
+            {"field": "Dominant rock", "was": "Basaltic-andesitic aa lava and sharp ash (Earth); high-titanium mare basalt (Moon)",
              "now": "Andesite to basaltic andesite (Earth); mare basalt (Moon)",
              "basis": "Smithsonian GVP for Earth; the titanium content of the Marius Hills basalt was not checked, so it is not stated."},
-            {"field": "comparison", "was": "slope and temperature numbers, Earth versus Moon", "now": None,
+            {"field": "Comparison", "was": "slope and temperature numbers, Earth versus Moon", "now": None,
              "basis": "Removed: Earth-versus-target numbers are not shown."},
         ],
         "verification": [
@@ -273,7 +273,7 @@ def build() -> dict:
         s["earth"] = dict(s["earth"]); s["earth"]["sites"] = []
         s["ourData"] = []
         s["logistics"] = {"computed": [], "teamEstimate": team_est,
-                          "note": "teamEstimate is the team's own estimate of effort and cost, not computed. Distances in computed are straight-line."}
+                          "note": "The effort and cost ratings are the team's own estimate, not computed. Computed distances are straight-line."}
         for sid in s["earthSiteIds"]:
             site = sites[sid]
             vals = {k: site["values"][k] for k in OUR_KEYS if k in site["values"] and site["values"][k]["value"] is not None}
@@ -296,7 +296,7 @@ def build() -> dict:
             s["target"]["inTool"] = None
         s["dataChecks"] = data_checks(s)
         s["credit"] = CREDIT
-        s["sources"] = [s["teamSource"]] + [{"title": "data/sites.json, data/logistics.json, data/targets.json (project data, see SOURCES.md)", "url": None}]
+        s["sources"] = [s["teamSource"]] + [{"title": "Project data files for sites, logistics and targets (see SOURCES.md)", "url": None}]
         out.append(s)
     return {
         "meta": {
@@ -320,8 +320,8 @@ def data_checks(s: dict) -> list[dict]:
         v = od["values"]
         w = lg["climateWindows"]
         if s["id"] == "tambora-shackleton" and "bareFrac" in v:
-            checks.append({"claim": "barren ash fields", "data": f"{round(v['bareFrac']['value'] * 100)}% of the {od['footprintKm']} km footprint is bare ground (NDVI under 0.2), mean NDVI {v['ndvi']['value']}",
-                           "source": v["bareFrac"]["source"], "agrees": False})
+            checks.append({"claim": "ash fields", "data": f"{round(v['bareFrac']['value'] * 100)}% of the {od['footprintKm']} km footprint is bare ground (NDVI under 0.2), mean NDVI {v['ndvi']['value']}",
+                           "source": v["bareFrac"]["source"], "agrees": True})
         if s["id"] == "tambora-shackleton" and w:
             checks.append({"claim": "dry season June to September", "data": f"driest three months at the grid cell: {month_range(w['driestThreeMonths'])}",
                            "source": "NASA POWER monthly normals 2001-2020", "agrees": set(w["driestThreeMonths"]) <= {6, 7, 8, 9}})

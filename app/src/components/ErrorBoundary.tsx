@@ -1,5 +1,8 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
+/** A page file that could not be fetched (a flaky network or a new deploy): retrying in place cannot help, a reload can. */
+const CHUNK_FAILURE = /dynamically imported module|Failed to fetch|Importing a module script failed|ChunkLoadError/i;
+
 interface Props {
   /** Names the part that failed, in the message. */
   what: string;
@@ -41,7 +44,7 @@ export class ErrorBoundary extends Component<Props, { error: Error | null }> {
         </p>
         <p className="num max-w-[70ch] break-words text-[12px] text-muted">{error.message}</p>
         <div className="flex flex-wrap gap-3">
-          <button type="button" className="btn btn-primary" onClick={() => this.setState({ error: null })}>
+          <button type="button" className="btn btn-primary" onClick={() => (CHUNK_FAILURE.test(error.message) ? window.location.reload() : this.setState({ error: null }))}>
             Try again
           </button>
           {this.props.onHome && (

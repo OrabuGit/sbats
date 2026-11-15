@@ -143,7 +143,7 @@
    }
   }
  },
- "note": "Each row removes one scoring dimension, renormalises the other weights and scores again with the frozen formula. With all six, known analogs beat on average 73% of scored land squares and 29% reach the top 10%. Removing Bare ground hurts the most: the mean percentile falls to 52%. Removing Temperature (to 74%) or Terrain (to 78%) slightly raises it: in this validation set that dimension does not help to separate known analogs from other land. The best Earth place for a target stays the same for 1 to 3 of 7 targets, depending on what is removed, so the single top square is fragile; the top ten is steadier (see STABILITY.md). This is a finding about the validation set, not a reason to change the frozen weights.",
+ "note": "Each row removes one scoring dimension, renormalises the other weights and scores again with the frozen formula. With all six, known analogs beat on average 73% of scored land squares and 29% reach the top 10%. Removing Bare ground hurts the most: the mean percentile falls to 52%. Removing Temperature (to 74%) or Terrain (to 78%) slightly raises it: in this validation set that dimension does not help to separate known analogs from other land. The best Earth place for a target stays the same for 1 to 3 of 7 targets, depending on what is removed, so the single top square is fragile; the top ten is steadier. This is a finding about the validation set, not a reason to change the frozen weights.",
  "removals": [
   {
    "removed": "terrain",

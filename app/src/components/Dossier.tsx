@@ -261,7 +261,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           {month ? (
             <BestMonthSummary result={month.result} targetName={target.name} source={month.source} />
           ) : (
-            <p className="mt-1 text-[13px] text-muted">No data. Monthly climate exists for the sites in analogs.json only.</p>
+            <p className="mt-1 text-[13px] text-muted">No data. Monthly climate exists for the named sites only.</p>
           )}
         </section>
       )}

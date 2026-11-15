@@ -4,6 +4,7 @@ import { ChapterHead, LearnReveal, SourceLine, TEX, WorldDisc, useSeen } from '.
 import { PLANNED, STATIONS, WORLD_TEX } from './LearnData';
 import { WORLD_CREDIT } from './worldInfo';
 import { ActivityArt } from './ActivityArt';
+import { AiMark } from './AiMark';
 
 /** Equirectangular position on a 2:1 map, in percent. */
 const pos = (lat: number, lon: number) => ({ left: `${((lon + 180) / 360) * 100}%`, top: `${((90 - lat) / 180) * 100}%` });
@@ -119,7 +120,8 @@ export function LearnBases() {
           </LearnReveal>
         ))}
       </ul>
-      <p className="readout mt-6">Imagery: {WORLD_CREDIT}</p>
+      <AiMark className="mt-4" />
+      <p className="readout mt-2">Imagery: {WORLD_CREDIT}</p>
     </section>
   );
 }

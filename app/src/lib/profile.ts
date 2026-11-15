@@ -45,6 +45,8 @@ export function verdictLine(dims: ProfileDim[]): string {
   return parts.length > 0 ? parts.join(' ') : 'No dimension could be compared.';
 }
 
+const windowOf = (rec: MatchRecord) => (rec.earth.scale === 'site' ? '(inside the site footprint)' : '(over the 55 km square)');
+
 export function profileOf(rec: MatchRecord): Profile {
   const dims: ProfileDim[] = rec.dimensions
     .filter((d) => d.inScore)
@@ -53,7 +55,10 @@ export function profileOf(rec: MatchRecord): Profile {
       label: d.label,
       noun: NOUN[d.id] ?? d.label.toLowerCase(),
       verdict: fromRecord(d.verdict),
-      rows: d.rows.filter((r) => r.earth.text !== 'no data' || r.target.text !== 'no data').map((r) => ({ label: r.label, earth: r.earth.text, target: r.target.text })),
+      rows: d.rows
+        .filter((r) => r.earth.text !== 'no data' || r.target.text !== 'no data')
+        // Slope and roughness depend on the size of the window they are measured over, so each says which one.
+        .map((r) => ({ label: r.key === 'slope' || r.key === 'roughness' ? `${r.label} ${windowOf(rec)}` : r.label, earth: r.earth.text, target: r.target.text })),
     }));
   return { dims, line: verdictLine(dims) };
 }

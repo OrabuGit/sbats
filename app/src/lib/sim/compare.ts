@@ -96,7 +96,7 @@ export function deployTwice(layout: Layout, earthSite: SiteConditions, targetSit
     if (rt.net === null || re.net === null) continue;
     if (rt.net < 0) {
       const each = perPerson[id];
-      const cut = each !== null && each > 0 ? ` Deliver it as cargo, or cut ${n0(Math.min(target.crew, Math.ceil(-rt.net / each)))} crew.` : '';
+      const cut = each !== null && each > 0 ? ' Deliver it as cargo, or reduce the crew.' : '';
       const same = re.net < 0 ? ` (${n1(-re.net)} kg short at ${E} too)` : ` (in balance at ${E})`;
       lines.push(`${rt.label} runs ${n1(-rt.net)} kg a day short at ${T}${same}.${cut}`);
     } else if (re.net < 0) {

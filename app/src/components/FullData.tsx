@@ -2,7 +2,7 @@ import type { CellScore, EarthCell, EarthFile, Target } from '../types';
 import type { MatchRecord, SharedMinerals } from '../lib/matchAdapter';
 import type { ExtractItem } from '../data/sites';
 import type { SiteClimate } from '../data/sandbox';
-import type { MetaByKey } from '../lib/format';
+import { shortName, type MetaByKey } from '../lib/format';
 import { Reveal } from './HomeStory';
 import { FullDataTable } from './FullDataTable';
 import { ElevationSection, SlopeSection } from './FullDataCharts';
@@ -42,8 +42,8 @@ export function FullData({ record, explained, cell, target, meta, placeName, sca
   const climate = climateProp !== undefined ? climateProp : files.status === 'ready' ? files.value : null;
   const lines = useMemo(() => factorLines(record, earth, explained), [record, earth, explained]);
   const site = scale === 'site';
-  const earthName = placeName.split(',')[0];
-  const targetName = target.name.split(',')[0];
+  const earthName = shortName(placeName);
+  const targetName = shortName(target.name);
   const pad = 'mx-auto w-full max-w-[1200px] px-5 sm:px-10';
   return (
     <section className={`${pad} py-10`} aria-labelledby="h-full">

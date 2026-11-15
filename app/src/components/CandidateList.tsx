@@ -166,7 +166,7 @@ export function CandidateList(p: Props) {
                           )}
                           {st && (
                             <span>
-                              In the top {p.stability?.topN} in {Math.round(st.shareInTopN * 100)}% of redraws
+                              Raw rank in the top {p.stability?.topN} in {Math.round(st.shareInTopN * 100)}% of redraws
                             </span>
                           )}
                         </span>
@@ -233,7 +233,7 @@ export function CandidateList(p: Props) {
               </section>
             );
           })}
-          {sites.length === 0 && <p className="px-6 text-[14px] text-muted">No data. analogs.json lists no sites.</p>}
+          {sites.length === 0 && <p className="px-6 text-[14px] text-muted">No data. No sites are listed.</p>}
         </div>
       )}
     </div>

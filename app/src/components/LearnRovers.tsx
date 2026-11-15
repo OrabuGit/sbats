@@ -235,7 +235,7 @@ export function LearnRovers() {
       />
       <AiMark className="mt-6" />
       {data.status === 'loading' && <p className="mt-10 text-[14px] text-muted">Loading rover data…</p>}
-      {data.status !== 'loading' && rovers.length === 0 && <p className="mt-10 text-[14px] text-muted">No data: rovers.json is not available.</p>}
+      {data.status !== 'loading' && rovers.length === 0 && <p className="mt-10 text-[14px] text-muted">No data: the rover figures are not available.</p>}
       {rovers.length > 0 && (
         <>
           <ul className="mt-14 grid gap-x-10 gap-y-14 md:grid-cols-2 xl:grid-cols-3">

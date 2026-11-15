@@ -419,7 +419,7 @@ describe('Deploy twice and the gap report', () => {
 
   it('suggests cargo or fewer crew when a consumable is short at the target', () => {
     const r = deployTwice(layoutOf({ habitat: 1, solar: 3, battery: 2 }), earthSite(), marsSite(), file);
-    ok(r.lines.some((l) => l.startsWith('Food runs 4 kg a day short at Mars fixture (4 kg short at Earth fixture too). Deliver it as cargo, or cut 4 crew.')));
+    ok(r.lines.some((l) => l.startsWith('Food runs 4 kg a day short at Mars fixture (4 kg short at Earth fixture too). Deliver it as cargo, or reduce the crew.')));
   });
 
   it('always ends with what the Earth rehearsal cannot test', () => {

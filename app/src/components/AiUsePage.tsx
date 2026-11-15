@@ -19,7 +19,7 @@ const AI = [
   'Drew the line icons and drawings in code.',
 ];
 const NOT = [
-  'No data value comes from an AI model. Every value traces to a source in SOURCES.md.',
+  'No data value comes from an AI model. Every value traces to a source in the sources list.',
   'No AI-generated photographs, images or video are used.',
   'The featured site ideas and descriptions are the team’s.',
 ];

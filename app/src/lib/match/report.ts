@@ -11,6 +11,7 @@ import { listLabels } from './minerals';
 import type { SharedMinerals } from './minerals';
 import type { MatchRecord, MatchSide, Verdict } from './types';
 import { VERDICT_LABEL } from './verdict';
+import { plainKeys } from '../format';
 
 export interface ReportCitation {
   /** 1-based number, in order of first use. */
@@ -59,6 +60,8 @@ export interface ValidationFigures {
   /** Mean percentile of known analogs, hold-out set. */
   holdoutMeanPercentile: number;
   frozenAt: string;
+  /** Size of the hold-out set, for example "8 hold-out analogs, 2 controls". */
+  sample?: string;
 }
 
 export interface ReportInput {
@@ -137,7 +140,7 @@ export function buildReport(input: ReportInput): MatchReport {
       : record.target.origin === 'grid'
         ? 'Target values come from a global grid cell around the point, not from a study of the place.'
         : 'No target values exist for this point beyond those every place on the body shares.';
-  targetParagraphs.push(plain(`${originText} Confidence in the target profile: ${record.target.confidence}.${record.target.missing.length > 0 ? ` No value for: ${record.target.missing.join(', ')}.` : ''}`));
+  targetParagraphs.push(plain(`${originText} Confidence in the target profile: ${record.target.confidence}.${record.target.missing.length > 0 ? ` No value for: ${plainKeys(record.target.missing)}.` : ''}`));
   sections.push({ id: 'target', title: 'The target', paragraphs: targetParagraphs, table: null });
 
   // 2. The Earth place
@@ -158,7 +161,7 @@ export function buildReport(input: ReportInput): MatchReport {
   if (input.validation) {
     scoreParagraphs.push(
       plain(
-        `How far to trust it: on sites kept aside for testing, the score ranked a known analog above a control site ${pct(input.validation.holdoutAuc)} of the time, and known analogs beat ${pct(input.validation.holdoutMeanPercentile)} of all land cells on average; ${pct(input.validation.holdoutTop10)} of them reached the top tenth. Formula, tolerances and weights were frozen on ${input.validation.frozenAt}.`,
+        `How far to trust it: on sites kept aside for testing${input.validation.sample ? ` (${input.validation.sample})` : ''}, the score ranked a known analog above a control site ${pct(input.validation.holdoutAuc)} of the time, and known analogs beat ${pct(input.validation.holdoutMeanPercentile)} of all land cells on average; ${pct(input.validation.holdoutTop10)} of them reached the top tenth. Formula, tolerances and weights were frozen on ${input.validation.frozenAt}.`,
       ),
     );
   }

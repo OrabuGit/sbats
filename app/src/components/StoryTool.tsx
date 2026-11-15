@@ -86,6 +86,12 @@ export function StoryTool({
       <div className="mt-3">
         <AnalogProfile profile={ss.profile} compact wide={wide} />
       </div>
+      {ss.bestPurpose && (
+        <p className="mt-3 text-[14px] leading-5 text-text">
+          Best purpose against {targetName}: {ss.bestPurpose.label} <span className="num">{ss.bestPurpose.score.toFixed(0)}</span>
+          <span className="block text-[12px] text-muted">Not validated: the best of five purposes for this pair, chosen after the fact.</span>
+        </p>
+      )}
       <button type="button" onClick={onSite} className="link-rule mt-2 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium text-text">
         Every value on the site page <ArrowRight size={14} aria-hidden="true" />
       </button>

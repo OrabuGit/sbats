@@ -83,7 +83,7 @@ function otherText(key: string, v: SiteValue): string {
   if (v.value === null) return 'no data';
   if (typeof v.value === 'string') return v.value;
   if (key.endsWith('Frac') || key.endsWith('Share')) return formatShare(v.value);
-  return `${v.value.toFixed(1)}${v.unit === 'degrees' ? '°' : ` ${v.unit}`}`;
+  return `${v.value.toFixed(1)}${v.unit === 'degrees' ? '°' : v.unit === 'class code' ? '' : ` ${v.unit}`}`;
 }
 
 const GROUPS: { kind: FeaturedSite['kind']; label: string }[] = [
@@ -246,6 +246,10 @@ export function SitePage({ recordFor, sites, siteId, onSite, earth, index, meta,
 
   const extract = extracts?.items.find((i) => i.id === site.id) ?? null;
   const targetExtract = extracts?.items.find((i) => i.id === target.id) ?? null;
+  // The page may show a target that is not the app's chosen one (a picked point). Make it the chosen one before the planner or the 3D view opens.
+  const useThisTarget = () => {
+    if (targets.some((t) => t.id === target.id)) onTarget(target.id);
+  };
   const windowKm = extracts?.meta.windowKm ?? 20;
 
   const lines = COMPARED.map((key) => ({ key, k: siteKeys.get(key) }))
@@ -341,12 +345,12 @@ export function SitePage({ recordFor, sites, siteId, onSite, earth, index, meta,
                   </button>
                 )}
                 {cellIndex >= 0 && onTerrain && (
-                  <button type="button" onClick={() => onTerrain(cellIndex)} className="btn btn-primary">
+                  <button type="button" onClick={() => { useThisTarget(); onTerrain(cellIndex); }} className="btn btn-primary">
                     Open full 3D view
                   </button>
                 )}
                 {cellIndex >= 0 && onBuild && (
-                  <button type="button" onClick={() => onBuild(cellIndex)} className="btn btn-primary">
+                  <button type="button" onClick={() => { useThisTarget(); onBuild(cellIndex); }} className="btn btn-primary">
                     Build a base here
                   </button>
                 )}
@@ -391,7 +395,7 @@ export function SitePage({ recordFor, sites, siteId, onSite, earth, index, meta,
 
           <Rv className="mt-16">
             <h4 className="display text-[26px] leading-8 text-text">Value by value</h4>
-            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Footprint values against the target, with the similarity on the right.</p>
+            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Footprint values against the target, with the similarity on the right. The target&rsquo;s slope and roughness here are measured over the 55 km square, as in the finder; the profile at the top measures the target in a window the size of the footprint, so those two numbers differ.</p>
             {lines.length === 0 ? (
               <p className="mt-4 text-[14px] text-muted">No data. Nothing at this site could be compared with {target.name}.</p>
             ) : (

@@ -1,6 +1,6 @@
 import type { EarthFile, FactorKey, Target } from '../types';
 import { FACTOR_KEYS } from '../types';
-import { formatValue, keyLabel, type MetaByKey } from '../lib/format';
+import { formatValue, keyLabel, type MetaByKey, shortName } from '../lib/format';
 
 // Statistics behind the Explore chart. Everything is computed from the cells in earth.json and
 // the values in targets.json when the page opens. No number here is typed in.
@@ -194,7 +194,7 @@ export function positionPhrase(s: KeyStats, v: number, meta: MetaByKey): string 
 
 /** The one sentence under the chart. */
 export function pairSentence(earth: EarthFile, target: Target, xKey: FactorKey, yKey: FactorKey, meta: MetaByKey): string {
-  const name = target.name.split(',')[0];
+  const name = shortName(target.name);
   const parts = [xKey, yKey].map((k) => {
     const v = target.values[k]?.value;
     return { k, v: v === null || v === undefined || !Number.isFinite(v) ? null : v };

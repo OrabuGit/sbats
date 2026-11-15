@@ -139,7 +139,7 @@ export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief
         {lg.status === 'loading' ? (
           <p className="mt-3 text-[14px] text-muted">Loading field logistics…</p>
         ) : !lg.place ? (
-          <p className="mt-3 text-[14px] text-muted">No data. data/logistics.json has no row for this place.</p>
+          <p className="mt-3 text-[14px] text-muted">No data. The field-logistics figures have no row for this place.</p>
         ) : (
           <dl className="mt-2">
             {logisticsLines(lg.place, lg.file).map((l) => (

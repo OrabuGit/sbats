@@ -18,6 +18,11 @@ export interface SetStats {
   limitingFactorShare: Partial<Record<FactorId, number>>;
 }
 
+/** The size of the hold-out set behind a figure, for printing beside it: "(8 hold-out analogs, 2 controls)". */
+export function holdSample(s: SetStats): string {
+  return `${s.knownSites} hold-out analog${s.knownSites === 1 ? '' : 's'}, ${s.negativeSites} control${s.negativeSites === 1 ? '' : 's'}`;
+}
+
 export interface SiteResult {
   target: string;
   score: number | null;

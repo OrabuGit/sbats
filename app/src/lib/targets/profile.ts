@@ -15,6 +15,7 @@ import { FACTORS, FACTOR_KEYS, MEDIUM_CONFIDENCE_COVERAGE, PRESETS } from '../sc
 import type { Badge, Confidence, FactorKey, Target, TargetValue } from '../scoring/index';
 import { distanceKm, formatPoint, kmPerDegree, normaliseLon, validPoint } from './geo';
 import type { BodyGrid, BodyGridCell, KnownSite, ProfileEnvironmentValue, TargetBody, TargetProfile } from './types';
+import { plainKeys } from '../format';
 
 /**
  * A curated target is used for any point inside the window its values were measured over:
@@ -229,7 +230,7 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
   }
   if (curated) {
     const { coverage, missing } = targetCoverage(curated.target);
-    const notes = [`Curated target: every value is cited or measured for this place (data/targets.json). It lies ${curated.distanceKm.toFixed(1)} km from the point picked.`];
+    const notes = [`Curated target: every value is cited or measured for this place (the target list). It lies ${curated.distanceKm.toFixed(1)} km from the point picked.`];
     if (missing.length > 0) notes.push(`No published value for: ${missing.join(', ')}.`);
     if (!scoresComparable(curated.target)) notes.push(NO_TEMPERATURE_WARNING);
     return {
@@ -313,7 +314,7 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
     cannotCopy: sharedCannotCopy(options.curated, body),
   };
   const { coverage, missing } = targetCoverage(target);
-  if (missing.length > 0) notes.push(`No value for: ${missing.join(', ')}. Scores leave these out, and with too little left they show "no data".`);
+  if (missing.length > 0) notes.push(`No value for: ${plainKeys(missing)}. Scores leave these out, and with too little left they show "no data".`);
   if (knownSite) notes.push(`Nearest named place: ${knownSite.site.name}, ${knownSite.distanceKm.toFixed(1)} km away (${knownSite.site.source}).`);
   // With no temperature the confidence is low whatever else is known, and the scores carry a warning.
   const comparable = scoresComparable(target);
@@ -346,7 +347,7 @@ export function targetFromKnownSite(site: KnownSite, options: TargetFromPointOpt
       missing,
       coverage,
       scoresComparable: scoresComparable(linked),
-      notes: [`Curated target for this place (data/targets.json), centred ${d.toFixed(1)} km from the listed coordinates.`],
+      notes: [`Curated target for this place (the target list), centred ${d.toFixed(1)} km from the listed coordinates.`],
       cell: null,
       curated: { id: linked.id, distanceKm: round(d, 2) },
       knownSite: { site, distanceKm: 0 },

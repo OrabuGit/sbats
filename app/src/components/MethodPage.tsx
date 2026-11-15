@@ -31,8 +31,8 @@ interface Props {
 const GLOSSARY: [string, string][] = [
   ['Target', 'A place on the Moon or Mars where a base is planned or proposed.'],
   ['Cell', 'One 0.5° square of the Earth grid, about 55 km on a side at the equator. Every score describes a whole cell.'],
-  ['Site', 'A named place on Earth from analogs.json: a known analog, a proposed site or a negative control.'],
-  ['Proposed site', 'A site put forward by the SBATS team. The six in the data are in Indonesia. Not used in validation.'],
+  ['Site', 'A named place on Earth: a known analog, a proposed site or a negative control.'],
+  ['Proposed site', 'A site put forward by the SBATS team. The eight in the data are in Indonesia. Not used in validation.'],
   ['Candidate', 'A cell in the ranked list for the selected target.'],
   ['Factor', 'One of the six things compared: terrain, bare ground, dryness, temperature, sunlight, rock type.'],
   ['Measurement', 'A data value behind a factor, for example mean slope. Terrain and Temperature have two each.'],
@@ -44,7 +44,7 @@ const GLOSSARY: [string, string][] = [
   ['Verdict', 'A similarity read as matches (0.75 or more), partly (0.30 to 0.75) or does not match (below 0.30). A display rule: it changes no number.'],
   ['Stability', 'How far a rank moves when every weight is redrawn within 25% of its value, 200 times.'],
   ['Coverage', 'The share of the weight that had data, from 0 to 1. It sets the confidence: high, medium or low.'],
-  ['Footprint', 'The 2 to 5 km square around a featured site in which its fine-scale values are measured.'],
+  ['Footprint', 'The 2 to 7.4 km square around a featured site in which its fine-scale values are measured.'],
   ['Readiness', 'GREEN, AMBER or RED: whether a base layout keeps every resource balance at or above zero.'],
   ['Measured, Mission, Literature', 'Where a value comes from: a gridded dataset, a spacecraft or rover, or a paper. Computed marks a value worked out in the browser.'],
 ];
@@ -378,7 +378,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
 
       <MSection id="m-sites" kicker="Reading the results" title="Featured sites, verdicts, stability, routes and terrain">
         <div className="grid gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-          <MRule name="Footprint" value="2 to 5 km">
+          <MRule name="Footprint" value="2 to 7.4 km">
             A featured site is measured again inside a small square: slope and roughness on the same 463 m posts as the grid, NDVI from Sentinel-2 at
             10 m. The site page shows these next to the cell values. The ranking uses the cell values only.
           </MRule>
@@ -423,7 +423,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             `The grid is ${earth.meta.resolutionDeg}°, about ${Math.round(cellKm)} km per cell. A score describes the whole cell. A small site inside a different landscape, such as a volcano in a forested cell or an ice-free valley in an ice cell, is scored as its surroundings.`,
             'Rock class is the single dominant class of the cell on a global map. Outcrops are far smaller than a cell.',
             "The Moon and Mars are colder than anywhere on Earth. Target temperatures are moved to Earth's coldest cell before scoring, so the temperature match is always better than the real gap. The dossier shows the real value next to the one used.",
-            `Scores use annual means. Monthly normals exist for the ${siteCount} sites in analogs.json only. They feed "Best month to test" and never a score.`,
+            `Scores use annual means. Monthly normals exist for the ${siteCount} sites only. They feed "Best month to test" and never a score.`,
             'Absolute scores are low and known Moon analogs rank mid-table. The numbers are on the Validation page.',
             'Atacama, Antarctica, Iceland, Hawaii, Mojave, Death Valley and Haughton are the seven well-known analog places. The tool treats them as known, and its job is to find places beyond them. Our data holds footprint-scale values for some of them only.',
             'The base simulation is a daily balance of power, water, oxygen and food. It has no thermal model, no dust on panels outside a storm and no transit. A module with an unsourced number is tagged Illustrative and its effect is left out.',
@@ -453,7 +453,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
               </dl>
             </MDetails>
             <div id="m-sources">
-              <p className={`${PM} mb-2 mt-6`}>Data sources: every row of SOURCES.md, as it stands in this build.</p>
+              <p className={`${PM} mb-2 mt-6`}>Data sources: every dataset in the sources list, as it stands in this build.</p>
               {sources.status === 'loading' && <p className="label">Loading sources</p>}
               {sources.status === 'error' && <p className="text-muted">The sources table could not be loaded: {sources.message}</p>}
               {sources.status === 'ready' && sources.value === null && <p className="text-muted">No data. The sources table was not published with this build.</p>}

@@ -4,7 +4,7 @@ import { loadData, loadExtra, onEarthProgress, type DataBundle } from './data/ac
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Target, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
 import { buildIndex, distanceKm, formatCoords, siteCode } from './lib/geo';
-import { keyLabel, metaByKey, reasonLine } from './lib/format';
+import { keyLabel, metaByKey, reasonLine, shortName } from './lib/format';
 import { NEW_DISTANCE_KM, isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { TopBar, type Step } from './components/Chrome';
 import type { MatchMode } from './components/LeftPanel';
@@ -12,6 +12,7 @@ import { activityOf } from './components/ActivityArt';
 import type { Tool } from './components/MatchDetail';
 import { MatchesStep } from './components/MatchesStep';
 import { DEFAULT_TARGET_ID } from './lib/defaults';
+import { rankOf, stabilityWord } from './lib/rankText';
 import { profileOf, type Profile } from './lib/profile';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PickWorld } from './components/PickWorld';
@@ -62,6 +63,14 @@ const LearnPage = lazy(learnModule);
 // Once the first screen is drawn, fetch the globe and the Learn page while the browser is idle, so opening them is not a wait.
 const prefetchLater = () => (window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 2500)))(() => { prefetchGlobe(); void learnModule(); }, { timeout: 8000 });
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
+
+const PAGE_HASH: Partial<Record<View, string>> = { explore: 'explore', validation: 'validation', method: 'method', learn: 'learn', saved: 'saved', featured: 'featured', custom: 'custom', aiuse: 'ai-assistance', orbit: 'find' };
+/** The page named by the address, or home. Pages that need a chosen match or site are not restorable and open home. */
+function viewFromHash(): View {
+  const h = window.location.hash.replace(/^#\/?/, '');
+  const hit = (Object.entries(PAGE_HASH) as [View, string][]).find(([, v]) => v === h);
+  return hit ? hit[0] : 'home';
+}
 
 type View = 'home' | 'custom' | 'aiuse' | 'explore' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
@@ -215,7 +224,25 @@ function Orbit({ data }: { data: DataBundle }) {
   const [demo, setDemo] = useState<string | null>(null);
   // Steps: 1 world, 2 place, 3 matches, 4 match. Home and the reference pages are views outside the steps.
   const [step, setStep] = useState<Step>(1);
-  const [view, setView] = useState<View>('home');
+  const [view, setView] = useState<View>(() => viewFromHash());
+  // Page-level state lives in the address (#/explore, #/validation ...), so Back moves within the app and a reload stays on the page.
+  useEffect(() => {
+    const h = view === 'home' ? '' : (PAGE_HASH[view] ?? null);
+    if (h === null) return;
+    const want = h === '' ? `${window.location.pathname}${window.location.search}` : `#/${h}`;
+    const have = window.location.hash;
+    if ((h === '' && have === '') || (h !== '' && have === `#/${h}`)) return;
+    try {
+      window.history.pushState(null, '', want);
+    } catch {
+      /* the address cannot be changed here; the app still works */
+    }
+  }, [view]);
+  useEffect(() => {
+    const on = () => setView(viewFromHash());
+    window.addEventListener('popstate', on);
+    return () => window.removeEventListener('popstate', on);
+  }, []);
   const [siteId, setSiteId] = useState<string | null>(null);
   const [worldPage, setWorldPage] = useState<WorldId>('moon');
   const [sharedLayout, setSharedLayout] = useState<SavedLayout | null>(null);
@@ -271,7 +298,7 @@ function Orbit({ data }: { data: DataBundle }) {
       const names = unbuilt.map((k) => keyLabel(k, meta));
       const noTarget = FACTOR_KEYS.filter((k) => target.values[k]?.value == null && !unbuilt.includes(k)).map((k) => keyLabel(k, meta));
       const why = [
-        names.length > 0 ? `${names.join(', ')} ${names.length > 1 ? 'are' : 'is'} not in earth.json yet` : '',
+        names.length > 0 ? `${names.join(', ')} ${names.length > 1 ? 'are' : 'is'} not in the Earth grid yet` : '',
         noTarget.length > 0 ? `${target.name} has no published value for ${noTarget.join(', ')}` : '',
       ].filter(Boolean);
       return `All ${counts.scored.toLocaleString('en-US')} scored cells are low confidence${why.length > 0 ? `: ${why.join(', and ')}` : ''}. Tick "Include low confidence cells" to list them.`;
@@ -283,7 +310,7 @@ function Orbit({ data }: { data: DataBundle }) {
     const parts = ['No cell can be scored yet.'];
     if (requiredUnbuilt.length > 0)
       parts.push(
-        `${requiredUnbuilt.join(' and ')} ${requiredUnbuilt.length > 1 ? 'have' : 'has'} no data in any cell of earth.json, and bare ground and precipitation are both required before a cell gets a score.`,
+        `${requiredUnbuilt.join(' and ')} ${requiredUnbuilt.length > 1 ? 'have' : 'has'} no data in any cell of the Earth grid, and bare ground and precipitation are both required before a cell gets a score.`,
       );
     if (requiredNoTarget.length > 0) parts.push(`${target.name} has no published value for ${requiredNoTarget.join(' and ')}, which is required.`);
     if (requiredUnbuilt.length === 0 && requiredNoTarget.length === 0)
@@ -964,7 +991,7 @@ function Orbit({ data }: { data: DataBundle }) {
     preview !== null && step === 3 && view === 'orbit'
       ? {
           mode: 'place',
-          from: target.name.split(',')[0],
+          from: shortName(target.name),
           to: placeName(preview),
           toSub: `${formatCoords(earth.cells[preview].lat, earth.cells[preview].lon)} on Earth`,
           score: results[preview].score,
@@ -1011,7 +1038,7 @@ function Orbit({ data }: { data: DataBundle }) {
       const r = c ? results[c.index] : null;
       return {
         mode: 'place',
-        from: homePlace.name.split(',')[0],
+        from: shortName(homePlace.name),
         to: cell ? (homeCountries.get(countryKey(cell.lat, cell.lon)) ?? 'Open land') : 'no Earth place yet',
         toSub: cell ? `${formatCoords(cell.lat, cell.lon)} on Earth` : '',
         score: r?.score ?? null,
@@ -1103,7 +1130,7 @@ function Orbit({ data }: { data: DataBundle }) {
     cta: 'Open the base planner',
     art: 'base',
     onClick: reconReady ? () => openRecon() : null,
-    why: 'The base planner needs data/modules.json, which is not published with this build.',
+    why: 'The base planner needs the module numbers, which are not published with this build.',
   };
   const roverTool: Tool = {
     title: 'Drive a rover in 3D',
@@ -1188,7 +1215,7 @@ function Orbit({ data }: { data: DataBundle }) {
           {[
             ...data.warnings,
             saved.error,
-            data.fixtureFiles.length > 0 ? `Fixture data, not real: ${data.fixtureFiles.map((f) => `${f}.json`).join(', ')}.` : null,
+            data.fixtureFiles.length > 0 ? `Fixture data, not real: ${data.fixtureFiles.map((f) => f).join(', ')}.` : null,
             view === 'recon' && modules.status === 'ready' && modules.value.fixture ? 'Fixture module numbers, not real.' : null,
           ]
             .filter(Boolean)
@@ -1393,7 +1420,7 @@ function Orbit({ data }: { data: DataBundle }) {
           stability={
             stabSelected && stabNow && stabSelected.baseRank !== null
               ? {
-                  text: `Ranks ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells. Change every weight by up to ${Math.round(stabNow.spread * 100)}% and the rank stays between ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')} and ${Math.round(stabSelected.rankP95 ?? 0).toLocaleString('en-US')}. It reaches the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of ${stabNow.draws} tries.`
+                  text: `${rankOf(stabSelected.baseRank, stabNow.scoredCells)} squares. ${stabilityWord(stabSelected.shareInTopN)}: change every weight by up to ${Math.round(stabNow.spread * 100)}% and the rank ${Math.round(stabSelected.rankP05 ?? 0) === Math.round(stabSelected.rankP95 ?? 0) ? `stays at ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')}` : `runs from ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')} to ${Math.round(stabSelected.rankP95 ?? 0).toLocaleString('en-US')}`}. It is in the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of ${stabNow.draws} redraws.`
                 }
               : null
           }
@@ -1490,7 +1517,7 @@ function Orbit({ data }: { data: DataBundle }) {
               recordFor={siteRecord}
             />
           ) : (
-            <Absent what={sitesFile.status === 'error' ? `data/sites.json could not be read: ${sitesFile.message}` : 'data/sites.json is not published with this build.'} />
+            <Absent what={sitesFile.status === 'error' ? `The site data could not be read: ${sitesFile.message}` : 'The site data is not published with this build.'} />
           )}
         </InfoShell>
       )}
@@ -1541,7 +1568,7 @@ function Orbit({ data }: { data: DataBundle }) {
             onExplore={() => transition(() => setView('explore'))}
             globe={
               <Suspense fallback={<p className="absolute left-5 top-5 text-[13px] text-muted" role="status">Loading globe</p>}>
-                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={previewFromGlobe} focus={focus} links={topLinks} anchor={target.id !== 'custom-conditions' && (target.body === 'moon' || target.body === 'mars') ? { name: target.name.split(',')[0], body: target.body } : undefined} activeLink={Math.max(-1, topIdx.indexOf(preview ?? -1))} active={showEarth} />
+                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={previewFromGlobe} focus={focus} links={topLinks} anchor={target.id !== 'custom-conditions' && (target.body === 'moon' || target.body === 'mars') ? { name: shortName(target.name), body: target.body } : undefined} activeLink={Math.max(-1, topIdx.indexOf(preview ?? -1))} active={showEarth} />
               </Suspense>
             }
             controls={{

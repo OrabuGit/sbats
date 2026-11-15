@@ -181,7 +181,7 @@ async function loadOne(name: FileName, warnings: string[]): Promise<{ data: unkn
   if (real !== undefined) {
     const problem = checks[name](real);
     if (problem === null) return { data: real, origin: 'real' };
-    warnings.push(`data/${name}.json does not match the contract (${problem}). Using the fixture.`);
+    warnings.push(`The ${name} data does not match the contract (${problem}). Using the fixture.`);
   }
   return { data: (await fixtures[name]()).default, origin: 'fixture' };
 }

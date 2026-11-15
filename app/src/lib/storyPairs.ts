@@ -12,6 +12,12 @@ import { fromRecord, type Verdict } from './verdict';
 import { profileOf, type Profile } from './profile';
 import type { FeaturedSite } from '../data/sites';
 
+function bestPurposeOf(rec: MatchRecord): { label: string; score: number } | null {
+  let best: { label: string; score: number } | null = null;
+  for (const p of rec.purposes) if (p.score !== null && (best === null || p.score > best.score)) best = { label: p.label, score: p.score };
+  return best;
+}
+
 export interface PairVerdict {
   /** 0 to 100, or null when the cell has too little data for a score. */
   score: number | null;
@@ -37,6 +43,8 @@ export interface SiteScale {
   confidence: string | null;
   /** The five dimensions with both values and the one-line verdict. */
   profile: Profile;
+  /** The purpose this site scores best for against this target, with its score (not validated: chosen after the fact). */
+  bestPurpose: { label: string; score: number } | null;
 }
 
 export interface EarthOwnValue {
@@ -102,7 +110,7 @@ export function pairVerdict(
       if (!v || v.value === null || v.value === undefined) return [];
       const num = typeof v.value === 'number' ? (Math.abs(v.value) >= 100 ? Math.round(v.value) : Math.round(v.value * 100) / 100) : v.value;
       if (k === 'bareFrac' && typeof v.value === 'number') return [{ label, text: `${Math.round(v.value * 100)}% of land pixels`, badge: v.badge ?? null }];
-      return [{ label, text: `${num}${v.unit ? ` ${v.unit}` : ''}`, badge: v.badge ?? null }];
+      return [{ label, text: `${num}${v.unit && v.unit !== 'class code' ? ` ${v.unit}` : ''}`, badge: v.badge ?? null }];
     });
     const afterFreeze = AFTER_FREEZE_TARGET_IDS.includes(targetId ?? '');
     const none = { storyId: story.id, afterFreeze, earthSiteId, verdict: null, siteScale: null, earthOwn };
@@ -129,7 +137,7 @@ export function pairVerdict(
             .flatMap((d) => d.rows.map((r) => ({ label: r.label, earth: r.earth.text, target: r.target.text, verdict: fromRecord(r.verdict) })))
             .filter((r) => r.earth !== 'no data' || r.target !== 'no data');
           const sc = rec.score.value;
-          siteScale = { footprintKm: rec.earth.footprintKm ?? null, rows, score: sc, word: sc === null ? 'no data' : matchWord(sc), confidence: rec.score.confidence ?? null, profile: profileOf(rec) };
+          siteScale = { footprintKm: rec.earth.footprintKm ?? null, rows, score: sc, word: sc === null ? 'no data' : matchWord(sc), confidence: rec.score.confidence ?? null, profile: profileOf(rec), bestPurpose: bestPurposeOf(rec) };
         }
       } catch {
         siteScale = null;

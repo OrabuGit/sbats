@@ -82,3 +82,34 @@ export function unscoredText(e: CellScore, meta: MetaByKey): string {
 }
 
 export const formatShare = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : `${(v * 100).toFixed(v > 0 && v < 0.1 ? 1 : 0)}%`);
+
+// A place or target name cut at its first comma, except a comma inside brackets, so
+// "Perseverance (Octavia E. Butler Landing, Jezero crater)" never loses its closing bracket.
+export function shortName(name: string): string {
+  let depth = 0;
+  for (let i = 0; i < name.length; i++) {
+    const c = name[i];
+    if (c === '(') depth++;
+    else if (c === ')') depth = Math.max(0, depth - 1);
+    else if (c === ',' && depth === 0) return name.slice(0, i);
+  }
+  return name;
+}
+
+const PLAIN_KEY: Record<string, string> = {
+  ndvi: 'vegetation (NDVI)',
+  precip: 'precipitation',
+  tempMean: 'mean temperature',
+  tempRange: 'day-night swing',
+  slope: 'slope',
+  roughness: 'roughness',
+  lithology: 'rock type',
+  sunElevation: 'sun elevation',
+  sunSeason: 'sun season',
+  wind: 'wind',
+  dust: 'dust',
+  ice: 'ground ice',
+  minerals: 'minerals',
+};
+/** Plain words for a list of value keys, for sentences a visitor reads. */
+export const plainKeys = (keys: readonly string[]): string => keys.map((k) => PLAIN_KEY[k] ?? k).join(', ');

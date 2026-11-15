@@ -20,7 +20,7 @@ Earth, tested against known analogs, with its weak results shown.
 ## What it does
 
 1. **World and place.** Pick the Moon or Mars, then a place: one of 71 named landing sites and candidate
-   regions, or any point on the globe. Eight targets have hand-checked values; the rest take the values
+   regions, or any point on the globe. Ten targets have hand-checked values; the rest take the values
    of the grid cell around them, at lower confidence. Ten lunar places have no temperature in the grid:
    their scores run high and the app says so wherever one is shown.
 2. **Matches.** All 91,894 land cells of Earth are scored in the browser and shown as a heatmap and a
@@ -109,7 +109,7 @@ split once, by a fixed seed, into a tuning set (24 sites: 20 analogs, 4 controls
 (10 sites: 8 analogs, 2 controls) that was never used for tuning. Every site is scored at its cell among
 91,894 land cells.
 
-| Measure | Tuning set (n = 24) | Hold-out set (n = 10) | All (n = 34) |
+| Measure | Tuning set (n = 24) | Hold-out set (n = 10: 8 analogs, 2 controls) | All (n = 34) |
 | --- | --- | --- | --- |
 | Chance that a known analog outranks a control (ROC AUC; 0.5 is chance) | 0.853 | 0.979 | 0.883 |
 | Share of all land cells a known analog beats (0.5 is chance) | 0.731 | 0.716 | 0.727 |
@@ -120,12 +120,15 @@ What holds:
 
 - On the hold-out set a known analog outranks a control 98% of the time (8 analogs, 2 controls).
 - The one tuning pass tried 68 changes and kept none. With every weight moved by up to a quarter, 200
-  times, 81 to 91% of each target's top ten stays in the top ten.
-- For each target, 4 to 6 of its eight best places are more than 500 km from every known analog.
-- At site scale (21 sites measured inside their own footprint), Mauna Kea, Atacama, Haughton and
-  Lanzarote score 95 to 98 out of 100 for rover mobility against their best target.
+  times, 81 to 100% of each target's top ten stays in the top ten (all ten targets).
+- For each target, 2 to 6 of its eight best places are more than 500 km from every known analog.
 
 What does not:
+
+- Development numbers, not a test: at site scale (sites measured inside their own footprint), six of
+  the eight known analogs that have a rover mobility score reach 95 to 98 out of 100 against their best
+  target (Mauna Kea, Atacama, Haughton, Timanfaya, Dallol, Dasht-e Lut); Tunupa scores 87 and Kilauea
+  47. The best target was chosen after every site had been seen.
 
 - Absolute scores are low: a known analog averages about 10 out of 100, because Earth is far warmer
   than the targets. Read the rank, not the score.
@@ -143,7 +146,14 @@ What does not:
 
 ## Findings
 
-<!-- To be filled in by the team. -->
+- Scored the same way for all 91,894 land cells, the best places on Earth for the lunar poles and for Mars are not in Indonesia: they lie in the Canadian High Arctic (about 82 N, 83 W) and on the northern Tibetan Plateau (about 34 to 37 N, 83 to 87 E). For each target, 2 to 6 of its eight best places are more than 500 km from every one of the 28 known analogs.
+- On the hold-out set (8 analogs, 2 controls) a known analog outranks a control 98% of the time, and known analogs beat 72% of all land cells; only 29% of them reach the top tenth of Earth.
+- The proposed Indonesian sites score about zero as full base rehearsals (hot, wet and vegetated: 25 to 27 C and 1,300 to 2,400 mm of rain a year). They were never part of tuning or validation.
+- Tambora caldera carries the same rock class as Jezero and Marius Hills, and its steepness (20.7 degrees) is close to Shackleton's, but it is about one third of Shackleton's size and its climate and vegetation do not match.
+- At Merapi, a 2026-09-20 EMIT scene shares three mineral families with Gale crater (hematite, jarosite and smectite clay); Tambora shares two. Five of the eight candidates have no mineral result. Minerals are never part of the score.
+- The Moon is the weak result: on the hold-out set, lunar analogs (3 analogs, 2 controls) beat 62% of land cells against 77% for Mars (6 analogs, 2 controls), and no lunar analog reaches the top tenth.
+
+The details are in [validation/sites/FINDINGS.md](validation/sites/FINDINGS.md).
 
 ## Limits
 
@@ -216,4 +226,4 @@ Union and ESA; all rights reserved", and "Contains modified Copernicus Sentinel 
 
 ## Team
 
-<!-- To be filled in by the team. -->
+Team: Prabu, Eliana, Mubashir, Eibee. Local event: Jakarta.
