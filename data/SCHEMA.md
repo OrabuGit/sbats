@@ -503,6 +503,24 @@ Minerals reported at the targets, and the families used to compare them with EMI
   by EMIT and is "not comparable".
 - Every target of `targets.json` has an entry; one with no published minerals has an empty list and a note.
 
+### data/target_environment.json
+
+The target side of the dimensions added after the freeze: wind, dust and ground ice.
+Built by `validation/build/make_target_environment.py`. Never part of the all-round score.
+
+```
+{ "meta": { "generatedAt", "note", "definitions": { "wind", "dust", "ice" } },
+  "targets": { "<target id>": { "wind": Value, "dust": Value, "ice": Value } } }
+Value = { "value": number | null, "unit", "source": string | null, "badge": string | null, "note"? }
+```
+
+- `wind`: mean wind speed 10 m above the surface, m/s. `dust`: mean optical depth of the air column in
+  visible light. `ice`: share of the ground where water ice is stable at or near the surface, 0 to 1.
+- For the Earth side to be compared, a cell or site needs the same three quantities in the same units
+  (for example NASA POWER `WS10M`, an aerosol optical depth at about 550 nm, and a permafrost or ground-ice
+  share). Until then the match record shows the target value and "no data" for the Earth place.
+- Read with `targetEnvironment(file, targetId)` (app/src/lib/match).
+
 ### data/rovers.json
 
 Published slope limits and speeds for the route calculation. Built by `validation/build/make_rovers.py`.

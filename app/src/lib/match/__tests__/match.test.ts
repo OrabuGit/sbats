@@ -23,10 +23,11 @@ import {
   sharedMinerals,
   sitePosts,
   targetAtSiteWindow,
+  targetEnvironment,
   verdictOf,
   verdictOfScore,
 } from '../index';
-import type { ExtraValue, MatchRecord, TargetWindowsFile } from '../index';
+import type { ExtraValue, MatchRecord, TargetEnvironmentFile, TargetWindowsFile } from '../index';
 import { CLASSES, EARTH, FAMILIES, META, RANGES, SITE, TABLE, TARGET, TARGET_MINERALS, cell, val } from './fixtures';
 
 const record = (over: Partial<Parameters<typeof buildMatchRecord>[0]> = {}): MatchRecord =>
@@ -398,6 +399,49 @@ describe('Dimensions added after the freeze', () => {
     ok(Math.abs((d.similarity as number) - Math.exp(-0.5)) < 1e-12);
     equal(d.verdict, 'partly');
     equal(d.reason, 'Wind 5 m/s against 7 m/s: lower than the target.');
+  });
+});
+
+describe('The target side of wind, dust and ice', () => {
+  const file: TargetEnvironmentFile = {
+    meta: { generatedAt: 'x', note: 'x', definitions: {} },
+    targets: {
+      'mars-test': {
+        wind: { value: 5.06, unit: 'm/s', source: 'a climate model', badge: 'Literature', note: 'Model.' },
+        dust: { value: 0.48, unit: 'optical depth', source: 'a climate model', badge: 'Literature' },
+        ice: { value: null, unit: 'share of ground', source: null, badge: null, note: 'No mapped value yet.' },
+      },
+      'moon-test': { wind: { value: 0, unit: 'm/s', source: 'fact sheet', badge: 'Literature' }, ice: { value: 0.111, unit: 'share of ground', source: 'Diviner', badge: 'Mission' } },
+    },
+  };
+
+  it('turns the file into target extras, with units and sources', () => {
+    const t = targetEnvironment(file, 'mars-test');
+    equal(t.wind?.text, '5.06 m/s');
+    equal(t.wind?.source, 'a climate model');
+    equal(t.wind?.scale, 'target');
+    equal(t.dust?.text, '0.48 optical depth');
+    equal(t.ice?.value, null);
+    equal(t.ice?.note, 'No mapped value yet.');
+    equal(targetEnvironment(file, 'moon-test').ice?.text, '11.1% of the ground');
+    equal(targetEnvironment(file, 'moon-test').wind?.text, '0 m/s');
+    deepEqual(targetEnvironment(file, 'unknown'), {});
+    deepEqual(targetEnvironment(null, 'mars-test'), {});
+  });
+
+  it('shows the target value in the record and says the Earth value is missing', () => {
+    const r = record({ targetExtras: targetEnvironment(file, 'mars-test') });
+    const wind = dim(r, 'wind');
+    equal(wind.verdict, 'no-data');
+    equal(wind.rows[0]?.target.text, '5.06 m/s');
+    equal(wind.rows[0]?.target.badge, 'Literature');
+    equal(wind.reason, 'No wind data for the Earth place.');
+    equal(dim(r, 'ice').reason, 'No ice and permafrost data on either side yet.');
+    equal(dim(r, 'ice').rows[0]?.target.note, 'No mapped value yet.');
+  });
+
+  it('leaves the all-round score alone', () => {
+    deepEqual(record({ targetExtras: targetEnvironment(file, 'mars-test') }).score, record().score);
   });
 });
 

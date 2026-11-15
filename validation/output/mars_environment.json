@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-15T06:03:43Z",
+  "targets": {
+    "mars-jezero": {
+      "wind": {
+        "mean": 5.062,
+        "lowestSeason": 3.138,
+        "highestSeason": 6.961,
+        "seasons": 24
+      },
+      "dod": {
+        "mean": 0.48,
+        "lowestSeason": 0.258,
+        "highestSeason": 0.89,
+        "seasons": 24
+      }
+    },
+    "mars-gale": {
+      "wind": {
+        "mean": 12.552,
+        "lowestSeason": 10.711,
+        "highestSeason": 13.862,
+        "seasons": 24
+      },
+      "dod": {
+        "mean": 0.561,
+        "lowestSeason": 0.284,
+        "highestSeason": 1.069,
+        "seasons": 24
+      }
+    },
+    "mars-arcadia-planitia": {
+      "wind": {
+        "mean": 4.214,
+        "lowestSeason": 3.194,
+        "highestSeason": 5.777,
+        "seasons": 24
+      },
+      "dod": {
+        "mean": 0.401,
+        "lowestSeason": 0.236,
+        "highestSeason": 0.729,
+        "seasons": 24
+      }
+    }
+  },
+  "headers": {
+    "wind": [
+      "",
+      "MCD_v6.2 with climatology average solar scenario.",
+      "Latitude 39.8N. Longitude 202.1E. Altitude 10.0 m ALS.",
+      "--------------------------------------------------------------------------------------",
+      "Column 1 is Areocentric longitude (degrees)",
+      "Columns 2+ are Horizontal wind speed (m/s)",
+      "Line 1 is Local time (Martian hour)",
+      "--------------------------------------------------------------------------------------",
+      "Retrieved on: 2026-11-15T07:04:57.323526",
+      "Mars Climate Database (c) LMD/OU/IAA/ESA/CNES",
+      ""
+    ],
+    "dod": [
+      "",
+      "MCD_v6.2 with climatology average solar scenario.",
+      "Latitude 39.8N. Longitude 202.1E. Altitude 10.0 m ALS.",
+      "--------------------------------------------------------------------------------------",
+      "Column 1 is Areocentric longitude (degrees)",
+      "Columns 2+ are Monthly mean dust column visible optical depth above surface",
+      "Line 1 is Local time (Martian hour)",
+      "--------------------------------------------------------------------------------------",
+      "Retrieved on: 2026-11-15T07:05:14.450352",
+      "Mars Climate Database (c) LMD/OU/IAA/ESA/CNES",
+      ""
+    ]
+  }
+}

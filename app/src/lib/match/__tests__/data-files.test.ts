@@ -10,8 +10,8 @@ import type { EarthCell, LithologyClass, LithologyTable, Target } from '../../sc
 import { measureRoute, tileFromFloat32 } from '../../route/index';
 import { CURATED_RADIUS_KM, distanceKm, targetFromKnownSite, targetFromPoint, tolerancesFrom } from '../../targets/index';
 import type { KnownSitesFile } from '../../targets/index';
-import { EXTRA_DIMENSION_IDS, buildMatchRecord, buildReport, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, familiesOfEmitName, sharedMinerals, sitePosts, targetAtSiteWindow } from '../index';
-import type { EarthMetaLike, SiteEntryLike, TargetMineralsFile, TargetWindowsFile } from '../index';
+import { EXTRA_DIMENSION_IDS, buildMatchRecord, buildReport, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, familiesOfEmitName, sharedMinerals, sitePosts, targetAtSiteWindow, targetEnvironment } from '../index';
+import type { EarthMetaLike, SiteEntryLike, TargetEnvironmentFile, TargetMineralsFile, TargetWindowsFile } from '../index';
 
 const DATA = fileURLToPath(new URL('../../../../../data/', import.meta.url));
 const load = <T>(name: string): T | null => (existsSync(`${DATA}${name}`) ? (JSON.parse(readFileSync(`${DATA}${name}`, 'utf8')) as T) : null);
@@ -159,6 +159,30 @@ describe('data/target_minerals.json', () => {
     const shared = sharedMinerals(emitFamilies(site.mineralogy, minerals.families), minerals.targets['moon-shackleton-rim']?.minerals, minerals.families);
     equal(shared?.similarity, null);
     equal(shared?.notComparable.length, 1);
+  });
+});
+
+describe('data/target_environment.json', () => {
+  it('gives every target a wind, dust and ice entry, each number with a source', () => {
+    const env = load<TargetEnvironmentFile>('target_environment.json');
+    if (!env || !targets) return skip('needs target_environment.json and targets.json');
+    deepEqual(Object.keys(env.targets).sort(), targets.map((t) => t.id).sort());
+    for (const t of targets) {
+      const e = env.targets[t.id];
+      for (const key of ['wind', 'dust', 'ice'] as const) {
+        const v = e?.[key];
+        ok(v, `${t.id}: ${key}`);
+        if (!v) continue;
+        equal(v.value === null, v.source === null, `${t.id}.${key}: value and source are null together`);
+        if (v.value !== null) ok(v.value >= 0 && ['Measured', 'Mission', 'Literature'].includes(v.badge ?? ''), `${t.id}.${key}`);
+        else ok(v.note && v.note.length > 10, `${t.id}.${key}: a missing value must say why`);
+      }
+      // No atmosphere, no wind: the Moon is exactly zero. Mars has wind everywhere.
+      if (t.body === 'moon') equal(e?.wind?.value, 0, t.id);
+      else ok((e?.wind?.value ?? 0) > 0, t.id);
+      const extras = targetEnvironment(env, t.id);
+      ok(extras.wind && extras.dust && extras.ice, t.id);
+    }
   });
 });
 

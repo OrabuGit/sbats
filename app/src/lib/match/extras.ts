@@ -193,3 +193,44 @@ export function purposesOfExtra(id: ExtraDimensionId): PurposeId[] {
   const set = new Set(extraDimension(id).purposes);
   return PURPOSES.map((p) => p.id).filter((p) => set.has(p));
 }
+
+/** One value of data/target_environment.json. */
+export interface EnvironmentValue {
+  value: number | null;
+  unit: string;
+  source: string | null;
+  badge: 'Measured' | 'Mission' | 'Literature' | null;
+  note?: string | null;
+}
+
+/** data/target_environment.json: the target side of wind, dust and ground ice. */
+export interface TargetEnvironmentFile {
+  meta: { generatedAt: string; note: string; definitions: Record<string, string> };
+  targets: Record<string, Partial<Record<'wind' | 'dust' | 'ice', EnvironmentValue>>>;
+}
+
+function printNumber(value: number, unit: string): string {
+  const text = Math.abs(value) >= 10 ? value.toFixed(1) : value.toFixed(2).replace(/\.?0+$/, '') || '0';
+  if (unit === 'share of ground') return `${Math.round(value * 1000) / 10}% of the ground`;
+  return unit === '' ? text : `${text} ${unit}`;
+}
+
+/** An environment value as one side of an extra dimension. `scale` says what it describes. */
+export function extraFromEnvironment(v: EnvironmentValue | null | undefined, scale: ExtraValue['scale']): ExtraValue | undefined {
+  if (!v) return undefined;
+  if (v.value === null) return { value: null, unit: v.unit, text: 'no data', source: null, badge: null, scale, ...(v.note ? { note: v.note } : {}) };
+  return { value: v.value, unit: v.unit, text: printNumber(v.value, v.unit), source: v.source, badge: v.badge, scale, ...(v.note ? { note: v.note } : {}) };
+}
+
+/** The target-side wind, dust and ice values of one target, ready for `MatchInput.targetExtras`. */
+export function targetEnvironment(file: TargetEnvironmentFile | null | undefined, targetId: string): Partial<Record<ExtraDimensionId, ExtraValue>> {
+  const entry = file?.targets[targetId];
+  const out: Partial<Record<ExtraDimensionId, ExtraValue>> = {};
+  if (!entry) return out;
+  for (const id of ['wind', 'dust', 'ice'] as const) {
+    const value = extraFromEnvironment(entry[id], 'target');
+    if (value) out[id] = value;
+  }
+  return out;
+}
+

@@ -88,8 +88,11 @@ Minerals, ice or permafrost, dust and wind were added after the score was frozen
 - Which purposes each belongs to is written in `extras.ts`, with a one-line reason, before any site
   was looked at: minerals in geology, astrobiology and base; ice in ice, astrobiology and base; dust
   in mobility and base; wind in base.
-- Ice, dust and wind have no data yet. They stay in the record as `no-data` until Session B publishes
-  both sides and a tolerance is written down (`sigma` in `EXTRA_DIMENSIONS`).
+- Ice, dust and wind have a target side (`data/target_environment.json`: Mars wind and dust from a climate
+  model, zero on the airless Moon, lunar ice stability from Diviner) and no Earth side yet. Pass
+  `targetExtras: targetEnvironment(envFile, target.id)` and the record shows the target value with its source
+  and says the Earth value is missing. They are compared once Session B publishes the Earth side and a
+  tolerance is written down (`sigma` in `EXTRA_DIMENSIONS`).
 
 ## Minerals
 
@@ -132,4 +135,5 @@ superscripts and `citations` as the reference list.
 | `data/sites.json` | site values and EMIT minerals |
 | `data/target_windows.json` | target terrain in site-sized windows |
 | `data/target_minerals.json` | mineral families and target mineralogy |
+| `data/target_environment.json` | target-side wind, dust and ground ice |
 | `data/rovers.json` | slope limits and speeds for routes (see `app/src/lib/route`) |

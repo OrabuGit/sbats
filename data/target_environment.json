@@ -1,0 +1,198 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-15T06:06:24Z",
+  "note": "Target-side values for the dimensions added after the freeze of 2026-11-14: wind, dust and ground ice. Never part of the all-round score. A dimension is compared only when the Earth side is published too and a tolerance has been written down.",
+  "definitions": {
+   "wind": "Mean wind speed 10 m above the surface, m/s.",
+   "dust": "Mean dust or aerosol optical depth of the air column in visible light.",
+   "ice": "Share of the ground where water ice is stable at or near the surface, 0 to 1."
+  },
+  "generatedBy": "validation/build/make_target_environment.py"
+ },
+ "targets": {
+  "moon-malapert-massif": {
+   "wind": {
+    "value": 0,
+    "unit": "m/s",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. There is no wind."
+   },
+   "dust": {
+    "value": 0,
+    "unit": "optical depth",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. No dust hangs in the air. Lunar dust is a hazard on the ground and on equipment, which an optical depth does not describe."
+   },
+   "ice": {
+    "value": 0.015,
+    "unit": "share of ground",
+    "source": "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0 (validation/build/moon_temperature.py)",
+    "badge": "Mission",
+    "note": "Share of the 55.6 km window that never warms above 110 K, where water ice is stable at the surface. Stability, not a detection of ice."
+   }
+  },
+  "moon-mons-mouton": {
+   "wind": {
+    "value": 0,
+    "unit": "m/s",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. There is no wind."
+   },
+   "dust": {
+    "value": 0,
+    "unit": "optical depth",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. No dust hangs in the air. Lunar dust is a hazard on the ground and on equipment, which an optical depth does not describe."
+   },
+   "ice": {
+    "value": 0.005,
+    "unit": "share of ground",
+    "source": "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0 (validation/build/moon_temperature.py)",
+    "badge": "Mission",
+    "note": "Share of the 55.6 km window that never warms above 110 K, where water ice is stable at the surface. Stability, not a detection of ice."
+   }
+  },
+  "moon-haworth": {
+   "wind": {
+    "value": 0,
+    "unit": "m/s",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. There is no wind."
+   },
+   "dust": {
+    "value": 0,
+    "unit": "optical depth",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. No dust hangs in the air. Lunar dust is a hazard on the ground and on equipment, which an optical depth does not describe."
+   },
+   "ice": {
+    "value": 0.354,
+    "unit": "share of ground",
+    "source": "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0 (validation/build/moon_temperature.py)",
+    "badge": "Mission",
+    "note": "Share of the 55.6 km window that never warms above 110 K, where water ice is stable at the surface. Stability, not a detection of ice."
+   }
+  },
+  "moon-shackleton-rim": {
+   "wind": {
+    "value": 0,
+    "unit": "m/s",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. There is no wind."
+   },
+   "dust": {
+    "value": 0,
+    "unit": "optical depth",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. No dust hangs in the air. Lunar dust is a hazard on the ground and on equipment, which an optical depth does not describe."
+   },
+   "ice": {
+    "value": 0.111,
+    "unit": "share of ground",
+    "source": "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0 (validation/build/moon_temperature.py)",
+    "badge": "Mission",
+    "note": "Share of the 55.6 km window that never warms above 110 K, where water ice is stable at the surface. Stability, not a detection of ice."
+   }
+  },
+  "moon-marius-hills": {
+   "wind": {
+    "value": 0,
+    "unit": "m/s",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. There is no wind."
+   },
+   "dust": {
+    "value": 0,
+    "unit": "optical depth",
+    "source": "NASA NSSDCA Moon Fact Sheet: surface pressure about 3 x 10^-15 bar at night",
+    "badge": "Literature",
+    "note": "The Moon has no atmosphere. No dust hangs in the air. Lunar dust is a hazard on the ground and on equipment, which an optical depth does not describe."
+   },
+   "ice": {
+    "value": 0,
+    "unit": "share of ground",
+    "source": "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py)",
+    "badge": "Mission",
+    "note": "The open surface reaches 392 K at midday: water ice is not stable anywhere on it. The inside of the pit has not been measured."
+   }
+  },
+  "mars-jezero": {
+   "wind": {
+    "value": 5.06,
+    "unit": "m/s",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean wind speed 10 m above the surface over the Mars year. Seasonal means run from 3.14 to 6.96 m/s. Climate model on a coarse grid: local slope winds are not resolved. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."
+   },
+   "dust": {
+    "value": 0.48,
+    "unit": "optical depth",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.258 to 0.89. Climate model."
+   },
+   "ice": {
+    "value": null,
+    "unit": "share of ground",
+    "source": null,
+    "badge": null,
+    "note": "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."
+   }
+  },
+  "mars-gale": {
+   "wind": {
+    "value": 12.55,
+    "unit": "m/s",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean wind speed 10 m above the surface over the Mars year. Seasonal means run from 10.71 to 13.86 m/s. Climate model on a coarse grid: local slope winds are not resolved. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."
+   },
+   "dust": {
+    "value": 0.561,
+    "unit": "optical depth",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.284 to 1.069. Climate model."
+   },
+   "ice": {
+    "value": null,
+    "unit": "share of ground",
+    "source": null,
+    "badge": null,
+    "note": "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."
+   }
+  },
+  "mars-arcadia-planitia": {
+   "wind": {
+    "value": 4.21,
+    "unit": "m/s",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean wind speed 10 m above the surface over the Mars year. Seasonal means run from 3.19 to 5.78 m/s. Climate model on a coarse grid: local slope winds are not resolved. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."
+   },
+   "dust": {
+    "value": 0.401,
+    "unit": "optical depth",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.236 to 0.729. Climate model."
+   },
+   "ice": {
+    "value": null,
+    "unit": "share of ground",
+    "source": null,
+    "badge": null,
+    "note": "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."
+   }
+  }
+ }
+}
