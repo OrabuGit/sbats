@@ -1,5 +1,6 @@
 {
  "meta": {
+  "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
   "generatedAt": "2026-11-15T06:49:20Z",
   "windowKm": 20.0,
   "pairs": [
