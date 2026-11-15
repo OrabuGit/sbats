@@ -26,6 +26,7 @@ import {
   sitePosts,
   targetAtSiteWindow,
   targetEnvironment,
+  targetExtrasForProfile,
   verdictOf,
   verdictOfScore,
 } from '../index';
@@ -571,6 +572,17 @@ describe('The target side of wind, dust and ice', () => {
 
   it('leaves the all-round score alone', () => {
     deepEqual(record({ targetExtras: targetEnvironment(file, 'mars-test') }).score, record().score);
+  });
+
+  it('takes the curated file for a curated target and the grid cell for a point picked on the map', () => {
+    const curated = targetExtrasForProfile({ origin: 'curated', target: { id: 'mars-test' } }, file);
+    equal(curated.wind?.text, '5.06 m/s');
+    const picked = targetExtrasForProfile({ origin: 'grid', target: { id: 'mars-point-1n-2e' }, environment: { wind: { value: 4.2, unit: 'm/s', source: 'grid model', badge: 'Literature' }, ice: { value: null, unit: 'share of ground', source: null, badge: null, note: 'Not mapped.' } } }, file);
+    equal(picked.wind?.text, '4.2 m/s');
+    equal(picked.wind?.source, 'grid model');
+    equal(picked.ice?.value, null);
+    equal(picked.dust, undefined);
+    deepEqual(targetExtrasForProfile({ origin: 'none', target: { id: 'x' } }, file), {});
   });
 });
 

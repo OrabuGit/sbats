@@ -5,7 +5,7 @@ export { EARTH_EXTRA_KEYS, earthPlaceFromCell, earthPlaceFromSite, extraRanges, 
 export type { EarthMetaLike, SiteEntryLike, SiteValueLike, TargetWindowsFile } from './place';
 export { DEFAULT_EMIT_MINIMUM_SHARE, emitFamilies, familiesOfEmitName, familyOfEmitName, listLabels, sharedMinerals } from './minerals';
 export type { EarthMineral, EmitEntry, EmitMineralogy, EmitSummary, MineralFamily, SharedMinerals, TargetMineral, TargetMineralsFile } from './minerals';
-export { EXTRA_DIMENSIONS, EXTRA_DIMENSION_IDS, compareExtra, extendedPurposeScore, MINERALS_BLEND_FLOOR, extraDimension, extraFromEnvironment, formatExtra, purposesOfExtra, targetEnvironment } from './extras';
+export { EXTRA_DIMENSIONS, EXTRA_DIMENSION_IDS, compareExtra, extendedPurposeScore, MINERALS_BLEND_FLOOR, extraDimension, extraFromEnvironment, formatExtra, purposesOfExtra, targetEnvironment, targetExtrasForProfile } from './extras';
 export type { EnvironmentValue, ExtraDimensionDef, TargetEnvironmentFile } from './extras';
 export { CORE_KEYS, buildMatchRecord, sunElevations, targetMineralsFromShared } from './record';
 export type { MatchInput } from './record';

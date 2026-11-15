@@ -57,8 +57,24 @@ export interface BodyGridFactor {
 
 /** A global grid of one body, as Session B publishes it (data/SCHEMA.md). */
 export interface BodyGrid {
-  meta: { body: TargetBody; resolutionDeg: number; generatedAt?: string; factors: BodyGridFactor[] };
+  meta: {
+    body: TargetBody;
+    resolutionDeg: number;
+    generatedAt?: string;
+    factors: BodyGridFactor[];
+    /** Keys that are not in the file because the answer is a fact, with the reason ("No atmosphere, so no wind"). */
+    notInFile?: Record<string, string>;
+  };
   cells: BodyGridCell[];
+}
+
+/** One target-side value for a dimension added after the freeze (wind, dust, ice). Same shape as data/target_environment.json. */
+export interface ProfileEnvironmentValue {
+  value: number | null;
+  unit: string;
+  source: string | null;
+  badge: Badge | null;
+  note?: string | null;
 }
 
 /** Where a target profile's values came from. */
@@ -90,4 +106,9 @@ export interface TargetProfile {
   curated: { id: string; distanceKm: number } | null;
   /** The nearest named place within the search radius, if any. */
   knownSite: { site: KnownSite; distanceKm: number } | null;
+  /**
+   * Wind, dust and ground ice at the point, read from the grid cell, for the dimensions added after the
+   * freeze. Empty for a curated target (use data/target_environment.json for those) and when there is no cell.
+   */
+  environment: Partial<Record<'wind' | 'dust' | 'ice', ProfileEnvironmentValue>>;
 }

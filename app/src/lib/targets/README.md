@@ -48,6 +48,16 @@ The grid shape (`BodyGrid`) is the one Session B publishes: `{ meta: { body, res
 [{ key, source, badge }] }, cells: [{ lat, lon, slope, roughness, tempMean, tempRange, lithology }] }`.
 Any resolution works.
 
+## Wind, dust and ice for a point picked on the map
+
+`profile.environment` carries the target side of the dimensions added after the freeze, read from the grid
+cell: `wind` from `windSpeed`, `dust` from `dustOpticalDepth`, `ice` from `psrFrac` (the share of the cell in
+permanent shadow: where ice can survive, not ice itself). On the Moon the grid file states "no atmosphere" as
+a fact (`meta.notInFile`), so wind and dust are 0 with that statement as the source. A Mars water content by
+weight (`waterH2O`) is a different quantity from a share of ground: it is quoted in the note and not used.
+For a curated target `environment` is empty: use `data/target_environment.json`. The match library's
+`targetExtrasForProfile(profile, envFile)` picks the right one.
+
 ## Named places (`data/known_sites.json`)
 
 ```

@@ -8,6 +8,7 @@ import {
   CURATED_RADIUS_KM,
   distanceKm,
   formatPoint,
+  gridEnvironment,
   kmPerDegree,
   nearestGridCell,
   nearestKnownSite,
@@ -283,6 +284,65 @@ describe('Named places', () => {
     equal(unlinked.origin, 'grid');
     equal(unlinked.target.name, 'Site viking');
     equal(targetFromKnownSite(SITES[2] as KnownSite, { grid: null, curated: CURATED }).origin, 'none');
+  });
+});
+
+describe('Wind, dust and ice from the grid cell', () => {
+  const moon: BodyGrid = {
+    meta: {
+      body: 'moon', resolutionDeg: 2,
+      factors: [
+        { key: 'slope', source: 'LOLA', badge: 'Mission' },
+        { key: 'psrFrac', source: 'LOLA shadow maps', badge: 'Mission' },
+      ],
+      notInFile: { windSpeed: 'No atmosphere, so no wind (0 m/s): a fact, not missing data.', dustOpticalDepth: 'No atmosphere, so no dust suspended in air (0): a fact, not missing data.', ndvi: 'No vegetation.' },
+    },
+    cells: [
+      { lat: -89, lon: 129, slope: 9.8, psrFrac: 0.131 },
+      { lat: 15, lon: -57, slope: 1.2, psrFrac: null },
+    ],
+  };
+  const mars: BodyGrid = {
+    meta: { body: 'mars', resolutionDeg: 1, factors: [
+      { key: 'windSpeed', source: 'climate model', badge: 'Literature' },
+      { key: 'dustOpticalDepth', source: 'climate model', badge: 'Literature' },
+      { key: 'waterH2O', source: 'Odyssey GRS', badge: 'Mission' },
+    ] },
+    cells: [{ lat: 40.5, lon: -157.5, windSpeed: 4.2, dustOpticalDepth: 0.4, waterH2O: 7.5 }],
+  };
+
+  it('reads zero wind and dust as stated facts on an airless body, and shadow as the ice share', () => {
+    const e = gridEnvironment(moon, moon.cells[0] as BodyGrid['cells'][number]);
+    equal(e.wind?.value, 0);
+    ok(e.wind?.source?.includes('No atmosphere, so no wind'));
+    equal(e.dust?.value, 0);
+    equal(e.ice?.value, 0.131);
+    equal(e.ice?.badge, 'Mission');
+    ok(e.ice?.source?.startsWith('LOLA shadow maps (2 degree grid cell centred 89.00 S, 129.00 E)'));
+    ok(e.ice?.note?.includes('shadow, not ice'));
+  });
+
+  it('keeps a null shadow share null: not mapped is not zero', () => {
+    const e = gridEnvironment(moon, moon.cells[1] as BodyGrid['cells'][number]);
+    equal(e.ice?.value, null);
+    equal(e.ice?.source, null);
+  });
+
+  it('reads Mars wind and dust from the cell, and quotes the water content without using it as a share', () => {
+    const e = gridEnvironment(mars, mars.cells[0] as BodyGrid['cells'][number]);
+    equal(e.wind?.value, 4.2);
+    equal(e.wind?.unit, 'm/s');
+    equal(e.dust?.value, 0.4);
+    equal(e.ice?.value, null);
+    ok(e.ice?.note?.includes('7.5 percent water by weight') && e.ice.note.includes('not compared'));
+  });
+
+  it('puts them on a grid profile and leaves a curated profile empty', () => {
+    const p = targetFromPoint('mars', 40.4, -157.4, { grid: { ...mars, meta: { ...mars.meta, factors: [...mars.meta.factors, { key: 'slope', source: 'MOLA' }] }, cells: [{ ...mars.cells[0], slope: 0.3 }] as BodyGrid['cells'] }, curated: CURATED });
+    equal(p.origin, 'grid');
+    equal(p.environment.wind?.value, 4.2);
+    deepEqual(targetFromPoint('mars', 18.44, 77.45, { grid: mars, curated: CURATED }).environment, {});
+    deepEqual(targetFromPoint('mars', 0, 0, { grid: null, curated: CURATED }).environment, {});
   });
 });
 

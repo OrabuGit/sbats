@@ -259,6 +259,23 @@ export function extraFromEnvironment(v: EnvironmentValue | null | undefined, sca
   return { value: v.value, unit: v.unit, text: formatExtra(v.value, v.unit), source: v.source, badge: v.badge, scale, ...(v.note ? { note: v.note } : {}) };
 }
 
+/**
+ * The target-side wind, dust and ice for any target profile: the curated file for a curated target,
+ * the grid cell's own values for a point picked on the map.
+ */
+export function targetExtrasForProfile(
+  profile: { origin: string; target: { id: string }; environment?: Partial<Record<'wind' | 'dust' | 'ice', EnvironmentValue>> },
+  file: TargetEnvironmentFile | null | undefined,
+): Partial<Record<ExtraDimensionId, ExtraValue>> {
+  if (profile.origin === 'curated') return targetEnvironment(file, profile.target.id);
+  const out: Partial<Record<ExtraDimensionId, ExtraValue>> = {};
+  for (const id of ['wind', 'dust', 'ice'] as const) {
+    const value = extraFromEnvironment(profile.environment?.[id], 'target');
+    if (value) out[id] = value;
+  }
+  return out;
+}
+
 /** The target-side wind, dust and ice values of one target, ready for `MatchInput.targetExtras`. */
 export function targetEnvironment(file: TargetEnvironmentFile | null | undefined, targetId: string): Partial<Record<ExtraDimensionId, ExtraValue>> {
   const entry = file?.targets[targetId];

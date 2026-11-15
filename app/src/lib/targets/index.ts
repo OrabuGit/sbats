@@ -8,6 +8,7 @@ export {
   KNOWN_SITE_RADIUS_KM,
   ROUGHNESS_SIGMA_FLOOR,
   SLOPE_SIGMA_FLOOR,
+  gridEnvironment,
   nearestGridCell,
   nearestKnownSite,
   sharedCannotCopy,
@@ -17,4 +18,4 @@ export {
   tolerancesFrom,
 } from './profile';
 export type { TargetFromPointOptions, Tolerances } from './profile';
-export type { BodyGrid, BodyGridCell, BodyGridFactor, KnownSite, KnownSitesFile, ProfileOrigin, TargetBody, TargetProfile } from './types';
+export type { BodyGrid, BodyGridCell, BodyGridFactor, KnownSite, KnownSitesFile, ProfileEnvironmentValue, ProfileOrigin, TargetBody, TargetProfile } from './types';

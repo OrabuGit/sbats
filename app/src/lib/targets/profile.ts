@@ -14,7 +14,7 @@
 import { FACTORS, FACTOR_KEYS, MEDIUM_CONFIDENCE_COVERAGE, PRESETS } from '../scoring/index';
 import type { Badge, Confidence, FactorKey, Target, TargetValue } from '../scoring/index';
 import { distanceKm, formatPoint, kmPerDegree, normaliseLon, validPoint } from './geo';
-import type { BodyGrid, BodyGridCell, KnownSite, TargetBody, TargetProfile } from './types';
+import type { BodyGrid, BodyGridCell, KnownSite, ProfileEnvironmentValue, TargetBody, TargetProfile } from './types';
 
 /**
  * A curated target is used for any point inside the window its values were measured over:
@@ -129,6 +129,50 @@ export function nearestKnownSite(
   return best;
 }
 
+/**
+ * Wind, dust and ground ice of a grid cell, as target-side values for the dimensions added after the freeze.
+ *   wind  `windSpeed` (m/s at 10 m). On a body whose grid says it has no atmosphere, 0 by fact.
+ *   dust  `dustOpticalDepth` (column, visible light). 0 by fact on an airless body.
+ *   ice   `psrFrac`: the share of the cell in permanent shadow, where ice can survive (shadow, not ice).
+ *         A water content by weight (`waterH2O`) is a different quantity from a share of ground: it is
+ *         quoted in the note and not used as the value.
+ */
+export function gridEnvironment(grid: BodyGrid, cell: BodyGridCell): TargetProfile['environment'] {
+  const where = `${grid.meta.resolutionDeg} degree grid cell centred ${formatPoint(cell.lat, cell.lon)}`;
+  const factor = (key: string) => grid.meta.factors.find((f) => f.key === key);
+  const read = (key: string, unit: string): ProfileEnvironmentValue | null => {
+    const f = factor(key);
+    const raw = cell[key];
+    if (f && typeof raw === 'number' && Number.isFinite(raw)) return { value: raw, unit, source: `${f.source} (${where})`, badge: f.badge ?? 'Mission', note: 'Grid value for the cell that holds the point.' };
+    const fact = grid.meta.notInFile?.[key];
+    if (fact && /\(0\b|\b0 m\/s/.test(fact)) return { value: 0, unit, source: `Stated as a fact in the grid file: ${fact}`, badge: 'Literature', note: fact };
+    if (f) return { value: null, unit, source: null, badge: null, note: 'The grid has no value for this cell.' };
+    return null;
+  };
+  const out: TargetProfile['environment'] = {};
+  const wind = read('windSpeed', 'm/s');
+  if (wind) out.wind = wind;
+  const dust = read('dustOpticalDepth', 'optical depth');
+  if (dust) out.dust = dust;
+  const shadow = read('psrFrac', 'share of ground');
+  if (shadow) {
+    out.ice = shadow.value === null ? shadow : { ...shadow, note: 'Share of the cell in permanent shadow, where water ice can survive. The map shows shadow, not ice.' };
+  } else {
+    const water = factor('waterH2O');
+    const w = cell.waterH2O;
+    if (water) {
+      out.ice = {
+        value: null,
+        unit: 'share of ground',
+        source: null,
+        badge: null,
+        note: typeof w === 'number' ? `No share of icy ground is mapped here. The top metre holds ${w} percent water by weight (${water.source}), which is a different quantity and is not compared.` : 'No share of icy ground is mapped here.',
+      };
+    }
+  }
+  return out;
+}
+
 export interface TargetFromPointOptions {
   /** The body's global grid, or null when it is not loaded or not published yet. */
   grid: BodyGrid | null;
@@ -188,6 +232,7 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
       cell: null,
       curated: { id: curated.target.id, distanceKm: round(curated.distanceKm, 2) },
       knownSite,
+      environment: {},
     };
   }
 
@@ -269,6 +314,7 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
     cell,
     curated: null,
     knownSite,
+    environment: hit && options.grid ? gridEnvironment(options.grid, hit.cell) : {},
   };
 }
 
@@ -288,6 +334,7 @@ export function targetFromKnownSite(site: KnownSite, options: TargetFromPointOpt
       cell: null,
       curated: { id: linked.id, distanceKm: round(d, 2) },
       knownSite: { site, distanceKm: 0 },
+      environment: {},
     };
   }
   const profile = targetFromPoint(site.body, site.lat, site.lon, { ...options, name: options.name ?? site.name, knownSites: [site] });
