@@ -81,7 +81,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
       'application/geo+json',
       JSON.stringify({
         type: 'FeatureCollection',
-        name: `SBATS-26 match scores for ${target.name}`,
+        name: `SBATS match scores for ${target.name}`,
         features: ranked().map((x, i) => {
           const c = earth.cells[x.index];
           return {
@@ -120,7 +120,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
       </p>
 
       <article className="report mx-auto max-w-[820px] px-4 py-8 sm:px-8">
-        <p className="label">SBATS-26 · analog match report · {report.generatedAt.slice(0, 10)}</p>
+        <p className="label">SBATS · analog match report · {report.generatedAt.slice(0, 10)}</p>
         <h2 id="h-report" className="mt-2 text-[22px] font-semibold leading-7 text-text">
           {report.title}
         </h2>

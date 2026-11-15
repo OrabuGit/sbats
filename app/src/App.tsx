@@ -531,6 +531,23 @@ function Orbit({ data }: { data: DataBundle }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // The full 3D view of a cell against the current target. Only offered where both places have an elevation extract.
+  const openTerrainFor = (i: number) => {
+    const cell = earth.cells[i];
+    const named = sites.find((s) => s.index === i)?.analog.id;
+    const eItem = extractIndex?.items.find((x) => x.id === (named ?? siteCode(cell)));
+    const tItem = extractIndex?.items.find((x) => x.id === target.id);
+    if (!eItem?.elevation || !tItem?.elevation) {
+      setSelected(i);
+      setStep(4);
+      setView('match');
+      return;
+    }
+    setSelected(i);
+    setStep(4);
+    transition(() => setView('terrain'));
+  };
+
   const runDemo = () => {
     if (demo) return stopDemo();
     const at = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
@@ -997,7 +1014,7 @@ function Orbit({ data }: { data: DataBundle }) {
 
   useEffect(() => {
     const where = view === 'home' ? '' : view === 'match' && selectedCell ? `${named?.name.split(',')[0] ?? siteCode(selectedCell)} and ${target.name} · ` : view === 'orbit' && step >= 2 ? `${(step === 2 && place ? place.name : target.name)} · ` : '';
-    document.title = `${where}SBATS-26`;
+    document.title = `${where}SBATS`;
   }, [view, step, target, named, selectedCell]);
 
   return (
@@ -1305,6 +1322,7 @@ function Orbit({ data }: { data: DataBundle }) {
               extracts={extractIndex}
               onDossier={(i) => select(i)}
               onBuild={reconReady ? (i) => openRecon(i) : null}
+              onTerrain={flags.terrain ? openTerrainFor : null}
             />
           ) : (
             <Absent what={sitesFile.status === 'error' ? `data/sites.json could not be read: ${sitesFile.message}` : 'data/sites.json is not published with this build.'} />

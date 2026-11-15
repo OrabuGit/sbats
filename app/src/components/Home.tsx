@@ -71,7 +71,7 @@ function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRig
   return (
     <header className={`absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between px-3 transition-colors duration-300 sm:h-[72px] sm:px-8 ${solid ? 'bg-bg' : 'bg-transparent'}`}>
       <h1 className="m-0 flex items-center">
-        <span className="sr-only">SBATS-26</span>
+        <span className="sr-only">SBATS</span>
         <Logo height={28} />
       </h1>
       <NavRight {...nav} />
@@ -220,7 +220,7 @@ export function Home(p: Props) {
           onDemo: p.onDemo,
         }}
       />
-      <main ref={scroller} className="scroll min-h-0 flex-1 bg-bg" aria-label="SBATS-26 home">
+      <main ref={scroller} className="scroll min-h-0 flex-1 bg-bg" aria-label="SBATS home">
         {/* 1. Hero: three globes on the left three quarters, the two actions on the right. */}
         <section className="relative flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
           <div className="h-[60svh] min-h-[380px] lg:order-2 lg:h-auto lg:min-h-[640px]">

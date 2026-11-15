@@ -316,8 +316,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                   </Suspense>
                   <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[13px] text-muted">
                     <span>The two places as 3D terrain, at one scale. Drag to turn it.</span>
-                    <button type="button" onClick={terrain.onOpen} className="link-rule font-medium text-text">
-                      Drive a rover on it
+                    <button type="button" onClick={terrain.onOpen} className="btn btn-primary !px-5">
+                      Open full 3D view
                     </button>
                   </figcaption>
                 </figure>

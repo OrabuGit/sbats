@@ -37,6 +37,8 @@ interface Props {
   onDossier: (cellIndex: number) => void;
   /** Opens the base sandbox on the site's grid cell. null while the sandbox is not available. */
   onBuild: ((cellIndex: number) => void) | null;
+  /** Opens the full 3D terrain view of this site against the current target, when both have an elevation extract. */
+  onTerrain?: ((cellIndex: number) => void) | null;
 }
 
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
@@ -97,7 +99,7 @@ function ScoreTile({ label, e, note }: { label: string; e: CellScore | null; not
   );
 }
 
-export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild }: Props) {
+export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild, onTerrain }: Props) {
   const site: FeaturedSite = sites.sites.find((s) => s.id === siteId) ?? sites.sites[0];
   const analog = analogs.find((a) => a.id === site.id) ?? null;
   const cellIndex = useMemo(() => index.nearest(site.lat, site.lon, 2), [index, site]);
@@ -276,6 +278,11 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
                 {cellIndex >= 0 && (
                   <button type="button" onClick={() => onDossier(cellIndex)} className="btn">
                     Open the grid cell dossier
+                  </button>
+                )}
+                {cellIndex >= 0 && onTerrain && (
+                  <button type="button" onClick={() => onTerrain(cellIndex)} className="btn btn-primary">
+                    Open full 3D view
                   </button>
                 )}
                 {cellIndex >= 0 && onBuild && (

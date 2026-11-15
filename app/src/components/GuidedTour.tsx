@@ -29,7 +29,7 @@ export function GuidedTour({ step, onStep, onClose }: { step: number; onStep: (n
   }, [onClose]);
   const s = TOUR_STEPS[step];
   return (
-    <section aria-label="Guided tour" className="fixed inset-x-3 bottom-3 z-50 border border-line bg-panel p-4 sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[360px]">
+    <section aria-label="Guided tour" className="fixed inset-x-3 bottom-3 z-50 max-w-[calc(100vw-1.5rem)] overflow-hidden border border-line bg-panel p-4 sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[360px]">
       <div className="flex items-start justify-between gap-3">
         <p className="text-[12px] text-muted">
           Step {step + 1} of {TOUR_STEPS.length}
@@ -42,13 +42,13 @@ export function GuidedTour({ step, onStep, onClose }: { step: number; onStep: (n
         <h2 className="display mt-1 text-[20px] leading-6 text-text">{s.title}</h2>
         <p className="mt-1.5 text-[14px] leading-[22px] text-text">{s.text}</p>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <div className="flex gap-1.5" aria-hidden="true">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-3">
+        <div className="flex gap-1" aria-hidden="true">
           {TOUR_STEPS.map((_, i) => (
-            <span key={i} className={`h-1 w-5 ${i === step ? 'bg-accent' : 'bg-line'}`} />
+            <span key={i} className={`h-1 w-3 ${i === step ? 'bg-accent' : 'bg-line'}`} />
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           {step > 0 && (
             <button type="button" onClick={() => onStep(step - 1)} className="btn !px-3">
               <ArrowLeft size={14} aria-hidden="true" /> Back

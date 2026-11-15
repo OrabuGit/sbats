@@ -1,4 +1,4 @@
-# SBATS-26: Space Base Analog Terrain System
+# SBATS: Space Base Analog Terrain System
 
 **Live site: https://orabugit.github.io/sbats/**
 
