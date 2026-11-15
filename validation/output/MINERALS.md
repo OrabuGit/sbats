@@ -1,5 +1,7 @@
 # Minerals on both sides: what each Earth site shares with each target
 
+> **Provisional, 2026-11-15 14:00 WIB.** The EMIT mineral values this file was built from were not screened with every cloud flag (Session B's warning). Mineral results for scenes dated after 2023, which includes every Indonesian site, are withdrawn until the corrected `data/sites.json` is re-run. Do not quote them.
+
 Written 2026-11-15T06:49:54.809Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T06:42:20Z (Session B).
 
 **Site-level result only. Added after the score was frozen on 2026-11-14: it is not part of any score and has not been validated.**

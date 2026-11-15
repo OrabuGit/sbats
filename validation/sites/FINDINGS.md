@@ -157,6 +157,15 @@ no factor for water chemistry or alteration minerals.
 
 ## Minerals on both sides (added after the freeze, site-level only)
 
+> **Provisional, 2026-11-15 14:00 WIB. Do not quote the numbers in this section.** Session B found that
+> the EMIT mineral values in `data/sites.json` built between 12:30 and 13:59 today were not screened
+> with every cloud flag: newer EMIT scenes carry cloud in mask bands the pipeline did not read, so some
+> "identifications" are cloud, not ground. Scenes from 2023 (Mauna Kea, Kilauea, Atacama, Dallol,
+> Dasht-e Lut, Tunupa, Craters of the Moon) are probably unaffected. Every Indonesian scene is newer
+> (Merapi 2026, Tambora and Batur 2024) and is at risk. The Merapi and Tambora rows and the two
+> bullets about them below are **withdrawn until the corrected file is re-run**. This section will be
+> rewritten to whatever the corrected data shows, including nothing.
+
 Tables: `validation/output/MINERALS.md`, from `npx tsx validation/minerals.ts`. Earth side: NASA EMIT
 mineral identifications inside each footprint, on one date. Target side: minerals reported by rovers
 and orbiters in cited papers (`data/target_minerals.json`). Not part of any score, not validated.
@@ -297,7 +306,8 @@ score over every land cell, listed from the top.
 
 So the tool's own answer to "where on Earth is most like these targets, all round" is not Indonesia.
 The Indonesian sites are put forward for specific things the all-round score does not reward: basalt
-rock, crater and lava shapes, lava tubes, and at Merapi a mineral overlap with Gale. That distinction
+rock, crater and lava shapes, and lava tubes (the Merapi mineral overlap with Gale is withdrawn
+pending a re-run, see the minerals section). That distinction
 should be said out loud, not hidden.
 
 ## What this view cannot tell you

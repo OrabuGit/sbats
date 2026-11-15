@@ -1,5 +1,7 @@
 # Benchmarks: established analogs and our candidates, scored the same way
 
+> **Provisional, 2026-11-15 14:00 WIB.** The EMIT mineral values this file was built from were not screened with every cloud flag (Session B's warning). Mineral results for scenes dated after 2023, which includes every Indonesian site, are withdrawn until the corrected `data/sites.json` is re-run. Do not quote them.
+
 Written 2026-11-15T06:50:20.058Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
 
 - One procedure for every site: site-scale terrain, vegetation and rock; the 0.5 degree cell's temperature and rainfall; the target's terrain measured in a window of the site's size.

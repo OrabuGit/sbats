@@ -34,7 +34,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **The Indonesian candidates score 0 all round.** Hot, wet, vegetated; the best cell in the region
   beats 40 to 49% of Earth. Beside established analogs scored the same way they match on rock (0.44
   against 0.45) and fall far short on bare ground (0.01 against 0.70). What they offer is narrower:
-  basalt, crater and lava shapes, and at Merapi three mineral families shared with Gale crater.
+  basalt, crater and lava shapes. A mineral overlap between Merapi and Gale was reported earlier
+  today and is **withdrawn pending a re-run**: part of the satellite mineral data was cloud.
 - **Tambora is not a Shackleton:** the same steepness, about a third of the size.
 - **Ten lunar landing sites have no temperature in the grid** (Apollo 11, 16, 17 among them). Their
   scores jump to about 95 and are flagged "not comparable".
@@ -56,7 +57,7 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 | Similarity and verdict | Match on one dimension: matches (0.75 up), partly (0.30 up), does not | Per dimension |
 | Purpose score | The same formula on the dimensions one use needs | Not validated |
 | Site-scale score | The same formula on a 2 to 7 km footprint. Climate stays the 55 km value | 21 sites |
-| Shared minerals | Mineral families seen from orbit on Earth and reported at the target | Merapi and Gale: 3 of 9 |
+| Shared minerals | Mineral families seen from orbit on Earth and reported at the target | Under re-check, do not quote |
 | Rank stability | Share of the top ten that survives nudged weights | 81 to 91% |
 | Readiness | Sandbox colour for power, water, oxygen and food | "No data" where a number has no source |
 
@@ -66,8 +67,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
    tuned on, and its top ten holds when the weights are nudged."
 2. "It ranks, it does not pinpoint: seven in ten known analogs fall outside the top tenth, and it is
    weaker for the Moon and for rock type."
-3. "Our Indonesian sites do not pass as full base rehearsals. We offer them for their rock, their
-   shape and, at Merapi, their minerals, at a third of the scale for Tambora, and we say so."
+3. "Our Indonesian sites do not pass as full base rehearsals. We offer them for their rock and
+   their shape, at a third of the scale for Tambora, and we say so."
 
 ## Limits of the test
 
