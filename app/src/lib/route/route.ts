@@ -43,6 +43,16 @@ export interface RoverSpeed {
   source: string;
 }
 
+/** A published, measured energy rate for one vehicle on one body. The only kind of energy figure this library accepts. */
+export interface EnergyRate {
+  rover: string;
+  whPerKm: number;
+  kind: string;
+  source: string;
+  /** The body the rate was measured on. It is not applied to a route on another body. */
+  body: 'moon' | 'mars' | 'earth';
+}
+
 export interface RouteSample {
   /** Horizontal distance from the start, metres. */
   distanceM: number;
@@ -92,6 +102,13 @@ export interface RouteResult {
   /** Driving time at a published rover speed, hours. A lower bound: no stops, no slowing on slopes. null when no speed was given. */
   drivingTimeH: number | null;
   speed: RoverSpeed | null;
+  /**
+   * Energy for the route at a published, measured rate per km, in watt-hours. null unless a rate was
+   * given and the route is on the body the rate was measured on. Not adjusted for slope: no cited
+   * model of energy against slope exists.
+   */
+  energyWh: number | null;
+  energy: EnergyRate | null;
   /** Plain sentences that must be shown with the numbers. */
   notes: string[];
 }
@@ -163,6 +180,9 @@ export interface RouteOptions {
   stepM?: number;
   limit?: SlopeLimit | null;
   speed?: RoverSpeed | null;
+  /** A measured energy rate, and the body this tile is on. Energy is given only when the two bodies agree. */
+  energy?: EnergyRate | null;
+  body?: 'moon' | 'mars' | 'earth';
 }
 
 const deg = (rise: number, run: number): number => (Math.atan2(rise, run) * 180) / Math.PI;
@@ -251,7 +271,15 @@ export function measureRoute(tile: ElevationTile, waypoints: readonly TilePoint[
   if (options.limit) notes.push(`Slope limit: ${options.limit.limitDeg} degrees, ${options.limit.kind} for ${options.limit.rover} (${options.limit.source}). The share above it uses the steepest slope of the ground, whichever way the rover faces.`);
   const drivingTimeH = options.speed && options.speed.metresPerHour > 0 ? travelled / options.speed.metresPerHour : null;
   if (options.speed && drivingTimeH !== null) notes.push(`Driving time uses ${options.speed.metresPerHour} m per hour, ${options.speed.kind} for ${options.speed.rover} (${options.speed.source}). It is a lower bound: no stops, no slowing on slopes, no planning time.`);
-  notes.push('No energy figure is given: no published, citable model of rover energy against slope was found that could be applied to a route.');
+  let energyWh: number | null = null;
+  if (options.energy && options.body && options.energy.body === options.body && options.energy.whPerKm > 0) {
+    energyWh = (travelled / 1000) * options.energy.whPerKm;
+    notes.push(`Energy uses ${options.energy.whPerKm} Wh per km, ${options.energy.kind} for ${options.energy.rover} (${options.energy.source}). It is a mission average for that vehicle and is not adjusted for the slopes of this route.`);
+  } else if (options.energy && options.body && options.energy.body !== options.body) {
+    notes.push(`No energy figure: the only published rate is for ${options.energy.rover} on ${options.energy.body === 'moon' ? 'the Moon' : options.energy.body === 'mars' ? 'Mars' : 'Earth'}, and this route is not there.`);
+  } else {
+    notes.push('No energy figure is given: no published, citable model of rover energy against slope was found that could be applied to a route.');
+  }
 
   return {
     distanceM: round(travelled, 1),
@@ -276,6 +304,8 @@ export function measureRoute(tile: ElevationTile, waypoints: readonly TilePoint[
     noDataShare: travelled > 0 ? round(noDataLen / travelled, 4) : 0,
     drivingTimeH: drivingTimeH === null ? null : round(drivingTimeH, 2),
     speed: options.speed ?? null,
+    energyWh: energyWh === null ? null : round(energyWh, 1),
+    energy: options.energy ?? null,
     notes,
   };
 }

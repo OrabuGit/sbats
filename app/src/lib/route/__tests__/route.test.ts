@@ -169,6 +169,19 @@ describe('measureRoute: gaps, speed and notes', () => {
     equal(r.limit, LIMIT);
   });
 
+  it('gives energy only from a measured rate, and only on the body it was measured on', () => {
+    const rate = { rover: 'Apollo rover', whPerKm: 75.6, kind: 'measured mission rate', source: 'a NASA report', body: 'moon' as const };
+    const way = [{ col: 0, row: 0 }, { col: 10, row: 0 }];
+    const moon = measureRoute(FLAT, way, { energy: rate, body: 'moon' });
+    equal(moon.energyWh, 22.7); // 0.3 km x 75.6 Wh per km
+    ok(moon.notes.some((n) => n.includes('75.6 Wh per km') && n.includes('not adjusted for the slopes')));
+    const earth = measureRoute(FLAT, way, { energy: rate, body: 'earth' });
+    equal(earth.energyWh, null);
+    ok(earth.notes.some((n) => n.includes('on the Moon, and this route is not there')));
+    equal(measureRoute(FLAT, way, { energy: rate }).energyWh, null); // body not stated: no figure
+    equal(measureRoute(FLAT, way).energyWh, null);
+  });
+
   it('samples no finer than half a pixel', () => {
     equal(measureRoute(FLAT, [{ col: 0, row: 0 }, { col: 10, row: 0 }], { stepM: 1 }).stepM, 15);
     equal(measureRoute(FLAT, [{ col: 0, row: 0 }, { col: 10, row: 0 }], { stepM: 60 }).samples.length, 6);

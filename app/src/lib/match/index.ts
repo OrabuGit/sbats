@@ -3,7 +3,7 @@
 export { MATCH_AT, PARTLY_AT, VERDICT_LABEL, verdictOf, verdictOfScore } from './verdict';
 export { earthPlaceFromCell, earthPlaceFromSite, sitePosts, targetAtSiteWindow } from './place';
 export type { EarthMetaLike, SiteEntryLike, SiteValueLike, TargetWindowsFile } from './place';
-export { DEFAULT_EMIT_MINIMUM_SHARE, emitFamilies, familyOfEmitName, listLabels, sharedMinerals } from './minerals';
+export { DEFAULT_EMIT_MINIMUM_SHARE, emitFamilies, familiesOfEmitName, familyOfEmitName, listLabels, sharedMinerals } from './minerals';
 export type { EarthMineral, EmitEntry, EmitMineralogy, EmitSummary, MineralFamily, SharedMinerals, TargetMineral, TargetMineralsFile } from './minerals';
 export { EXTRA_DIMENSIONS, EXTRA_DIMENSION_IDS, compareExtra, extendedPurposeScore, extraDimension, purposesOfExtra } from './extras';
 export type { ExtraDimensionDef } from './extras';

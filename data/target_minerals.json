@@ -1,0 +1,585 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-15T05:45:39Z",
+  "note": "Minerals reported at the targets in cited papers, and the mineral families used to compare them with NASA EMIT identifications at Earth sites (data/sites.json, mineralogy). Site-level result only, added after the freeze of 2026-11-14: never part of the all-round score. An EMIT identification is a spectral match in a 60 m pixel, not an abundance; a rover result is a laboratory measurement of one sample. A shared family is a pointer, not proof.",
+  "emitMinimumShare": 0.01,
+  "emitMinimumShareNote": "An EMIT family counts when it is matched in at least 1% of the clear pixels of the footprint. A display rule.",
+  "emitSource": "NASA EMIT L2B Estimated Mineral Identification and Band Depth (EMITL2BMIN), LP DAAC; method: Brodrick et al. 2023, EMIT L2b ATBD, JPL D-104479",
+  "access": {
+   "FT": "full text of the paper was read",
+   "ABS": "abstract only"
+  },
+  "generatedBy": "validation/build/make_target_minerals.py"
+ },
+ "families": [
+  {
+   "id": "olivine",
+   "label": "Olivine",
+   "emitPatterns": [
+    "olivine",
+    "forsterite",
+    "fayalite"
+   ],
+   "note": null
+  },
+  {
+   "id": "pyroxene",
+   "label": "Pyroxene",
+   "emitPatterns": [
+    "pyroxene",
+    "augite",
+    "pigeonite",
+    "diopside",
+    "hypersthene",
+    "bronzite",
+    "enstatite",
+    "hedenbergite"
+   ],
+   "note": null
+  },
+  {
+   "id": "plagioclase",
+   "label": "Plagioclase feldspar",
+   "emitPatterns": [],
+   "note": "Plain feldspar has no absorption that EMIT's mineral product identifies, so it cannot be compared."
+  },
+  {
+   "id": "magnetite",
+   "label": "Magnetite",
+   "emitPatterns": [
+    "magnetite"
+   ],
+   "note": null
+  },
+  {
+   "id": "hematite",
+   "label": "Hematite",
+   "emitPatterns": [
+    "hematite"
+   ],
+   "note": null
+  },
+  {
+   "id": "goethite",
+   "label": "Goethite",
+   "emitPatterns": [
+    "goethite",
+    "goeth."
+   ],
+   "note": null
+  },
+  {
+   "id": "akaganeite",
+   "label": "Akaganeite",
+   "emitPatterns": [],
+   "note": "Not in EMIT's spectral library."
+  },
+  {
+   "id": "jarosite",
+   "label": "Jarosite",
+   "emitPatterns": [
+    "jarosite"
+   ],
+   "note": null
+  },
+  {
+   "id": "calcium-sulfate",
+   "label": "Calcium sulfate (gypsum, bassanite, anhydrite)",
+   "emitPatterns": [
+    "gypsum",
+    "bassanite",
+    "anhydrite"
+   ],
+   "note": null
+  },
+  {
+   "id": "magnesium-sulfate",
+   "label": "Magnesium sulfate",
+   "emitPatterns": [
+    "kieserite",
+    "epsomite",
+    "hexahydrite"
+   ],
+   "note": null
+  },
+  {
+   "id": "iron-sulfate",
+   "label": "Iron sulfate",
+   "emitPatterns": [
+    "szomolnokite",
+    "copiapite",
+    "coquimbite",
+    "schwertmannite",
+    "butlerite"
+   ],
+   "note": null
+  },
+  {
+   "id": "smectite",
+   "label": "Smectite clay",
+   "emitPatterns": [
+    "smectite",
+    "smect.",
+    "nontronite",
+    "montmorillonite",
+    "saponite",
+    "beidellite",
+    "hectorite",
+    "na-mont",
+    "mont_"
+   ],
+   "note": null
+  },
+  {
+   "id": "kaolinite",
+   "label": "Kaolinite",
+   "emitPatterns": [
+    "kaolinite",
+    "kaolin",
+    "kaol",
+    "halloysite",
+    "dickite",
+    "nacrite"
+   ],
+   "note": null
+  },
+  {
+   "id": "mica-illite",
+   "label": "Mica and illite",
+   "emitPatterns": [
+    "illite",
+    "muscov",
+    "musc."
+   ],
+   "note": null
+  },
+  {
+   "id": "carbonate-mgfe",
+   "label": "Magnesium-iron carbonate (magnesite, siderite)",
+   "emitPatterns": [
+    "magnesite",
+    "siderite"
+   ],
+   "note": null
+  },
+  {
+   "id": "carbonate-ca",
+   "label": "Calcium carbonate (calcite, aragonite, dolomite)",
+   "emitPatterns": [
+    "calcite",
+    "aragonite",
+    "dolomite"
+   ],
+   "note": null
+  },
+  {
+   "id": "silica",
+   "label": "Silica (tridymite, cristobalite, opal)",
+   "emitPatterns": [
+    "opal",
+    "chalcedony"
+   ],
+   "note": "EMIT's library has opal and chalcedony, not tridymite or cristobalite."
+  },
+  {
+   "id": "perchlorate",
+   "label": "Perchlorate",
+   "emitPatterns": [
+    "perchlorate"
+   ],
+   "note": null
+  },
+  {
+   "id": "phosphate",
+   "label": "Phosphate",
+   "emitPatterns": [],
+   "note": "Not in EMIT's mineral groups."
+  },
+  {
+   "id": "hydrated-glass",
+   "label": "Hydrated volcanic glass",
+   "emitPatterns": [
+    "basaltic_glass",
+    "basaltglass"
+   ],
+   "note": null
+  },
+  {
+   "id": "gibbsite",
+   "label": "Gibbsite",
+   "emitPatterns": [
+    "gibbsite"
+   ],
+   "note": null
+  },
+  {
+   "id": "serpentine",
+   "label": "Serpentine",
+   "emitPatterns": [
+    "serpentine",
+    "chrysotile",
+    "cronstedtite",
+    "lizardite",
+    "antigorite"
+   ],
+   "note": null
+  }
+ ],
+ "targets": {
+  "mars-gale": {
+   "minerals": [
+    {
+     "family": "plagioclase",
+     "name": "plagioclase feldspar",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "6 to 56% by weight of the crystalline part, by sample",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "pyroxene",
+     "name": "pyroxene",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "2 to 42% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "olivine",
+     "name": "olivine",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "1 to 8% of the crystalline part; 20.5% in the Rocknest sand",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Tables 2 and 7",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "magnetite",
+     "name": "magnetite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "1 to 16% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "hematite",
+     "name": "hematite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "1 to 28% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "hematite",
+     "name": "crystalline hematite",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Fraeman et al. 2013, Geology 41:1103",
+     "url": "https://doi.org/10.1130/G34613.1",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "akaganeite",
+     "name": "akaganeite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "1 to 11% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "jarosite",
+     "name": "jarosite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "1 to 8% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "calcium-sulfate",
+     "name": "anhydrite, bassanite and gypsum",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "anhydrite 1 to 21%, bassanite 1 to 7%, gypsum 1 to 7% of the crystalline part",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "smectite",
+     "name": "iron saponite; smectite resembling montmorillonite or nontronite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "clay minerals 3 to 28% by weight of the sample",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 5 and text",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "smectite",
+     "name": "iron-magnesium smectite",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Fraeman et al. 2013, Geology 41:1103",
+     "url": "https://doi.org/10.1130/G34613.1",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "silica",
+     "name": "tridymite, cristobalite and opal-CT",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "tridymite 34% of the crystalline part in one sample; cristobalite 6 to 12%; opal-CT 4 to 11% of the sample",
+     "source": "Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Tables 2 and 5",
+     "url": "https://doi.org/10.1016/j.chemer.2020.125605",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "carbonate-mgfe",
+     "name": "siderite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "about 1 to 3% by weight in three samples",
+     "source": "Thorpe et al. 2022, JGR Planets 127:e2021JE007099, section 4",
+     "url": "https://doi.org/10.1029/2021JE007099",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "carbonate-mgfe",
+     "name": "siderite",
+     "method": "in-place",
+     "instrument": "Curiosity CheMin",
+     "abundance": "4.8 to 10.5% by weight, in a higher part of the section",
+     "source": "Tutolo et al. 2025, Science 388:292",
+     "url": "https://doi.org/10.1126/science.ado9966",
+     "badge": "Literature",
+     "access": "ABS"
+    }
+   ],
+   "note": "Drilled samples along Curiosity's route up Mount Sharp. Abundances vary a great deal from sample to sample; the ranges are across samples in which the mineral was detected."
+  },
+  "mars-jezero": {
+   "minerals": [
+    {
+     "family": "olivine",
+     "name": "olivine",
+     "method": "in-place",
+     "instrument": "Perseverance PIXL",
+     "abundance": "65% of the analysed surface of one abraded rock (Dourbes, Seitah)",
+     "source": "Farley et al. 2022, Science 377:eabo2196",
+     "url": "https://doi.org/10.1126/science.abo2196",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "olivine",
+     "name": "olivine with magnesium-rich carbonate",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Goudge et al. 2015, JGR Planets 120:775",
+     "url": "https://doi.org/10.1002/2014JE004782",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "pyroxene",
+     "name": "augite",
+     "method": "in-place",
+     "instrument": "Perseverance PIXL",
+     "abundance": "13% of the analysed surface of the same rock",
+     "source": "Farley et al. 2022, Science 377:eabo2196",
+     "url": "https://doi.org/10.1126/science.abo2196",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "plagioclase",
+     "name": "plagioclase (andesine)",
+     "method": "in-place",
+     "instrument": "Perseverance SuperCam",
+     "abundance": null,
+     "source": "Wiens et al. 2022, Science Advances 8:eabo3399",
+     "url": "https://doi.org/10.1126/sciadv.abo3399",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "carbonate-mgfe",
+     "name": "iron-magnesium carbonate (magnesite to siderite)",
+     "method": "in-place",
+     "instrument": "Perseverance SuperCam and PIXL",
+     "abundance": "a very small fraction, likely under 5%, of the Seitah rock",
+     "source": "Wiens et al. 2022, Science Advances 8:eabo3399; Tice et al. 2022, Science Advances 8:eabp9084",
+     "url": "https://doi.org/10.1126/sciadv.abo3399",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "carbonate-mgfe",
+     "name": "magnesium-rich carbonate",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Goudge et al. 2015, JGR Planets 120:775",
+     "url": "https://doi.org/10.1002/2014JE004782",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "calcium-sulfate",
+     "name": "hydrous calcium sulfate",
+     "method": "in-place",
+     "instrument": "Perseverance SHERLOC and PIXL",
+     "abundance": null,
+     "source": "Farley et al. 2022, Science 377:eabo2196; Tice et al. 2022, Science Advances 8:eabp9084",
+     "url": "https://doi.org/10.1126/science.abo2196",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "magnesium-sulfate",
+     "name": "magnesium sulfate",
+     "method": "in-place",
+     "instrument": "Perseverance PIXL",
+     "abundance": null,
+     "source": "Tice et al. 2022, Science Advances 8:eabp9084",
+     "url": "https://doi.org/10.1126/sciadv.abp9084",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "perchlorate",
+     "name": "sodium perchlorate",
+     "method": "in-place",
+     "instrument": "Perseverance SHERLOC and SuperCam",
+     "abundance": null,
+     "source": "Farley et al. 2022, Science 377:eabo2196; Wiens et al. 2022, Science Advances 8:eabo3399",
+     "url": "https://doi.org/10.1126/science.abo2196",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "smectite",
+     "name": "iron-rich clay such as nontronite",
+     "method": "in-place",
+     "instrument": "Perseverance SuperCam",
+     "abundance": null,
+     "source": "Wiens et al. 2022, Science Advances 8:eabo3399",
+     "url": "https://doi.org/10.1126/sciadv.abo3399",
+     "badge": "Literature",
+     "access": "FT"
+    },
+    {
+     "family": "smectite",
+     "name": "iron-magnesium smectite (saponite or nontronite) in the western fan",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Goudge et al. 2015, JGR Planets 120:775",
+     "url": "https://doi.org/10.1002/2014JE004782",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "phosphate",
+     "name": "merrillite",
+     "method": "in-place",
+     "instrument": "Perseverance PIXL",
+     "abundance": null,
+     "source": "Tice et al. 2022, Science Advances 8:eabp9084",
+     "url": "https://doi.org/10.1126/sciadv.abp9084",
+     "badge": "Literature",
+     "access": "FT"
+    }
+   ],
+   "note": "Abraded rocks of the crater floor (Seitah and Maaz) and orbital spectra of the fans. Serpentine was looked for and not found (Farley et al. 2022)."
+  },
+  "moon-shackleton-rim": {
+   "minerals": [
+    {
+     "family": "plagioclase",
+     "name": "plagioclase of very pure anorthosite",
+     "method": "orbital",
+     "instrument": "SELENE (Kaguya) Multiband Imager",
+     "abundance": null,
+     "source": "Haruyama et al. 2013, Geophysical Research Letters 40:3814",
+     "url": "https://doi.org/10.1002/grl.50753",
+     "badge": "Literature",
+     "access": "ABS"
+    }
+   ],
+   "note": "One mineral, seen from orbit on the crater's inner wall. EMIT cannot identify plain feldspar, so no Earth site can be compared on minerals with this target."
+  },
+  "moon-marius-hills": {
+   "minerals": [
+    {
+     "family": "pyroxene",
+     "name": "high-calcium pyroxene",
+     "method": "orbital",
+     "instrument": "Chandrayaan-1 M3",
+     "abundance": null,
+     "source": "Besse et al. 2011, JGR 116:E00G13",
+     "url": "https://doi.org/10.1029/2010JE003725",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "olivine",
+     "name": "olivine, in some flows",
+     "method": "orbital",
+     "instrument": "Chandrayaan-1 M3",
+     "abundance": null,
+     "source": "Besse et al. 2011, JGR 116:E00G13",
+     "url": "https://doi.org/10.1029/2010JE003725",
+     "badge": "Literature",
+     "access": "ABS"
+    }
+   ],
+   "note": "Orbital spectra of the mare basalts. No abundances are given."
+  },
+  "mars-arcadia-planitia": {
+   "minerals": [],
+   "note": "No lander has been here and no mineral study of the site was found. A study of domes several hundred kilometres west (Farrand et al. 2021, Icarus 357:114111) is not the site."
+  },
+  "moon-malapert-massif": {
+   "minerals": [],
+   "note": "No published mineral result for this site was found."
+  },
+  "moon-mons-mouton": {
+   "minerals": [],
+   "note": "No published mineral result for this site was found."
+  },
+  "moon-haworth": {
+   "minerals": [],
+   "note": "No published mineral result for this site was found."
+  }
+ }
+}

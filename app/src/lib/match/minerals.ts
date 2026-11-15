@@ -49,7 +49,7 @@ export interface TargetMineralsFile {
 /** One entry of sites.json `mineralogy.value.group1.top` (Session B). */
 export interface EmitEntry {
   libraryName: string;
-  libraryTitle: string;
+  libraryTitle: string | null;
   shareOfValidPixels: number;
   meanBandDepth: number;
 }
@@ -83,16 +83,18 @@ function isNonMineral(libraryName: string): boolean {
   return n.startsWith('organic') || n.includes('vegetation') || n.includes('plastic') || n.includes('snow') || n.includes('ice_');
 }
 
-/** The family of an EMIT library name, or null when no family claims it. The longest matching pattern wins. */
-export function familyOfEmitName(libraryName: string, families: readonly MineralFamily[]): MineralFamily | null {
+/**
+ * The families an EMIT library name belongs to. A library entry can be a mixture ("kaolin.5+smect.5",
+ * "hematite.1+goeth.4+qtz"): it then counts for every family named in it.
+ */
+export function familiesOfEmitName(libraryName: string, families: readonly MineralFamily[]): MineralFamily[] {
   const n = libraryName.toLowerCase();
-  let best: { family: MineralFamily; length: number } | null = null;
-  for (const family of families) {
-    for (const p of family.emitPatterns) {
-      if (p.length > 0 && n.includes(p.toLowerCase()) && (!best || p.length > best.length)) best = { family, length: p.length };
-    }
-  }
-  return best ? best.family : null;
+  return families.filter((family) => family.emitPatterns.some((p) => p.length > 0 && n.includes(p.toLowerCase())));
+}
+
+/** The first family of an EMIT library name, or null when no family claims it. */
+export function familyOfEmitName(libraryName: string, families: readonly MineralFamily[]): MineralFamily | null {
+  return familiesOfEmitName(libraryName, families)[0] ?? null;
 }
 
 export interface EmitSummary {
@@ -120,15 +122,17 @@ export function emitFamilies(
       nonMineralShare += e.shareOfValidPixels;
       continue;
     }
-    const family = familyOfEmitName(e.libraryName, families);
-    if (!family) {
+    const matched = familiesOfEmitName(e.libraryName, families);
+    if (matched.length === 0) {
       unassigned.push(e);
       continue;
     }
-    const row = byFamily.get(family.id) ?? { family: family.id, label: family.label, shareOfValidPixels: 0, libraryTitles: [] };
-    row.shareOfValidPixels += e.shareOfValidPixels;
-    row.libraryTitles.push(e.libraryTitle);
-    byFamily.set(family.id, row);
+    for (const family of matched) {
+      const row = byFamily.get(family.id) ?? { family: family.id, label: family.label, shareOfValidPixels: 0, libraryTitles: [] };
+      row.shareOfValidPixels += e.shareOfValidPixels;
+      row.libraryTitles.push(e.libraryTitle ?? e.libraryName);
+      byFamily.set(family.id, row);
+    }
   }
   const kept = [...byFamily.values()]
     .map((m) => ({ ...m, shareOfValidPixels: Math.round(m.shareOfValidPixels * 1000) / 1000 }))

@@ -17,6 +17,7 @@ import {
   emitFamilies,
   extendedPurposeScore,
   extraDimension,
+  familiesOfEmitName,
   familyOfEmitName,
   purposesOfExtra,
   sharedMinerals,
@@ -293,7 +294,15 @@ describe('The target in a site-sized window', () => {
 describe('Minerals on both sides', () => {
   const earth = emitFamilies(SITE.mineralogy, FAMILIES);
 
-  it('reduces EMIT library names to families, longest pattern first', () => {
+  it('counts a mixture for every family named in it', () => {
+    deepEqual(familiesOfEmitName('fe3+_hematite-nano+goethite-fg-amix', FAMILIES).map((f) => f.id), ['hematite', 'goethite']);
+    deepEqual(familiesOfEmitName('calcite+0.2Na-mont', [...FAMILIES, { id: 'x', label: 'X', emitPatterns: ['-mont'] }]).map((f) => f.id), ['carbonate', 'x']);
+    deepEqual(familiesOfEmitName('organic_plastic-vinyl', FAMILIES), []);
+    const mixed = emitFamilies({ value: { group1: { identifiedShare: 1, top: [{ libraryName: 'fe3+_hematite-nano+goethite-fg-amix', libraryTitle: 'mix', shareOfValidPixels: 0.2, meanBandDepth: 0.1 }] }, group2: null }, source: 's', badge: 'Measured' }, FAMILIES);
+    deepEqual(mixed?.families.map((m) => [m.family, m.shareOfValidPixels]), [['goethite', 0.2], ['hematite', 0.2]]);
+  });
+
+  it('reduces EMIT library names to families', () => {
     equal(familyOfEmitName('fe3+_hematite.thincoat', FAMILIES)?.id, 'hematite');
     equal(familyOfEmitName('smectite_nontronite_swelling', FAMILIES)?.id, 'smectite');
     equal(familyOfEmitName('carbonate_aragonite', FAMILIES)?.id, 'carbonate');
