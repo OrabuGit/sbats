@@ -50,17 +50,26 @@ RANGE_LT = list(range(0, 24, 3))
 KELVIN = 273.15
 
 
-def fetch(ls: int, localtime: int | None) -> str:
+VARSETS = {
+    # tag: (altitude m above the surface, var1, var2, header text of var1, header text of var2)
+    "temp": ("2", "t", "tsurf", "Temperature (K)", "Surface temperature (K)"),
+    "env": ("10", "wind", "dod", "Horizontal wind speed (m/s)", "Monthly mean dust column visible optical depth"),
+}
+
+
+def fetch(ls: int, localtime: int | None, varset: str = "temp") -> str:
     """Text of one map request (two variables). localtime None = diurnal mean."""
-    name = OUT / (f"ls{ls:03d}_mean.txt" if localtime is None else f"ls{ls:03d}_lt{localtime:02d}.txt")
+    alt, v1, v2, _h1, _h2 = VARSETS[varset]
+    pre = "" if varset == "temp" else varset + "_"
+    name = OUT / (f"{pre}ls{ls:03d}_mean.txt" if localtime is None else f"{pre}ls{ls:03d}_lt{localtime:02d}.txt")
     if name.exists():
         return name.read_text()
     params = {
         "datekeyhtml": "1", "ls": str(ls), "localtime": str(localtime or 0), "latitude": "all", "longitude": "all",
-        "altitude": "2", "zkey": "3", "isfixedlt": "off" if localtime is None else "on", "dust": "1", "hrkey": "1",
+        "altitude": alt, "zkey": "3", "isfixedlt": "off" if localtime is None else "on", "dust": "1", "hrkey": "1",
         "averaging": "loct" if localtime is None else "off", "dpi": "80", "islog": "off", "colorm": "jet",
         "minval": "", "maxval": "", "proj": "cyl", "plat": "", "plon": "", "trans": "", "iswind": "off",
-        "latpoint": "", "lonpoint": "", "var1": "t", "var2": "tsurf", "var3": "none", "var4": "none",
+        "latpoint": "", "lonpoint": "", "var1": v1, "var2": v2, "var3": "none", "var4": "none",
     }
     last = None
     for attempt in range(4):
@@ -71,7 +80,7 @@ def fetch(ls: int, localtime: int | None) -> str:
             if not m:
                 raise RuntimeError("no data file in the reply")
             text = requests.get(f"{MCD}/{m.group(1)}", headers={"User-Agent": USER_AGENT}, timeout=120).text
-            parse(text, ls, localtime)
+            parse(text, ls, localtime, varset)
             name.write_text(text)
             time.sleep(2)   # one request at a time, with a pause: this is a shared research server
             return text
@@ -81,15 +90,16 @@ def fetch(ls: int, localtime: int | None) -> str:
     raise RuntimeError(f"MCD request failed (Ls {ls}, local time {localtime}): {last}")
 
 
-def parse(text: str, ls: int, localtime: int | None):
-    """(lats, lons, air[lat, lon], surface[lat, lon]) in kelvin, after checking the header says what was asked."""
+def parse(text: str, ls: int, localtime: int | None, varset: str = "temp"):
+    """(lats, lons, first variable [lat, lon], second variable [lat, lon]), after checking the header says what was asked."""
+    alt, _v1, _v2, h1, h2 = VARSETS[varset]
     blocks = [b for b in re.split(r"(?=#{60,}\n### MCD_v)", text) if "### MCD_v" in b]
     assert len(blocks) == 2, len(blocks)
     out = []
-    for b, want in zip(blocks, ("Temperature (K)", "Surface temperature (K)")):
+    for b, want in zip(blocks, (h1, h2)):
         head = [l for l in b.splitlines() if l.startswith("###")]
         assert any(f"Columns 2+ are {want}" in h for h in head), head
-        assert any(f"Ls {float(ls):.1f}deg" in h and "Altitude 2.0 m ALS" in h for h in head), head
+        assert any(f"Ls {float(ls):.1f}deg" in h and f"Altitude {float(alt):.1f} m ALS" in h for h in head), head
         if localtime is None:
             assert any("Diurnal mean over all local times" in h for h in head), head
         else:
@@ -125,7 +135,20 @@ def maps():
     return lats, lons, air - KELVIN, trange, surf - KELVIN
 
 
+def env_maps():
+    """(lats, lons, wind speed m/s at 10 m, dust column visible optical depth): season-weighted means of 12 diurnal-mean maps."""
+    w = np.array([weight(l) for l in MEAN_LS]); w /= w.sum()
+    wind = dust = None
+    for l, wi in zip(MEAN_LS, w):
+        lats, lons, a, d = parse(fetch(l, None, "env"), l, None, "env")
+        wind = a * wi if wind is None else wind + a * wi
+        dust = d * wi if dust is None else dust + d * wi
+    return lats, lons, wind, dust
+
+
 if __name__ == "__main__":
+    for l in MEAN_LS:
+        fetch(l, None, "env"); print("env", l, flush=True)
     for l in MEAN_LS:
         fetch(l, None); print("mean", l, flush=True)
     for l in RANGE_LS:

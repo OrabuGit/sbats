@@ -36,7 +36,8 @@ KELVIN = 273.15
 
 
 def band_name(south: int) -> str:
-    tag = lambda x: f"{abs(x):02d}{'n' if x >= 0 else 's'}"  # noqa: E731
+    hemi = "n" if south >= 0 else "s"          # the equator is written 00s in southern bands, 00n in northern ones
+    tag = lambda x: f"{abs(x):02d}{hemi}"  # noqa: E731
     return f"global_cumul_avg_cyl_{tag(south)}{tag(south + 10)}_002.tab"
 
 

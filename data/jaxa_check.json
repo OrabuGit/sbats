@@ -1,0 +1,2956 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-15T06:17:16Z",
+  "description": "Cross-check of NASA values against JAXA data for every named site. A check only: no JAXA value replaces a NASA value.",
+  "sources": {
+   "jaxaPrecip": "GSMaP gauge-adjusted monthly normals 2012-2021, 0.1 degree (JAXA EORC; Kubota et al. 2007, IEEE TGRS 45:2259), read from the JAXA Earth API archive, collection JAXA.EORC_GSMaP_standard.Gauge.00Z-23Z.v6_monthly-normal",
+   "jaxaNdvi": "GCOM-C SGLI Level-3 NDVI, monthly, version 3, 2025 (JAXA; doi:10.57746/EO.01gs73bfw51k88w7j9recfk6dv), read from the JAXA Earth API archive, collection JAXA.G-Portal_GCOM-C.SGLI_standard.L3-NDVI.daytime.v3_global_monthly",
+   "nasaPrecip": "NASA POWER monthly normals 2001-2020, PRECTOTCORR (data/site_climate.json)",
+   "nasaNdvi": "MODIS MOD13C2 v061 NDVI, 2025, 0.5 degree cell mean (data/earth.json)",
+   "attribution": "JAXA data: (c) JAXA, used under the JAXA Earth API terms of use (https://earth.jaxa.jp/policy/)."
+  },
+  "method": {
+   "precip": "GSMaP pixel holding the site; mm/h x hours in the month; 12 months summed. Different years and grid size from POWER.",
+   "ndvi": "Mean of valid SGLI pixels in the site's 0.5 degree cell per month; mean of the months with data."
+  },
+  "agreement": {
+   "precipMmPerYear": {
+    "n": 40,
+    "pearsonR": 0.975,
+    "spearmanR": 0.968,
+    "meanDifferenceJaxaMinusNasa": 1.095,
+    "meanAbsoluteDifference": 135.135
+   },
+   "ndvi": {
+    "n": 43,
+    "pearsonR": 0.992,
+    "spearmanR": 0.992,
+    "meanDifferenceJaxaMinusNasa": -0.012,
+    "meanAbsoluteDifference": 0.03
+   }
+  },
+  "badge": "Measured"
+ },
+ "sites": [
+  {
+   "id": "atacama-yungay",
+   "name": "Atacama Desert hyperarid core (Yungay), Chile",
+   "lat": -24.0,
+   "lon": -70.0,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     0.6,
+     1.7,
+     0.9,
+     0.3,
+     0.3,
+     1.5,
+     0.6,
+     1.2,
+     0.0,
+     0.3,
+     0.3,
+     0.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     0.5,
+     0.3,
+     1.3,
+     0.5,
+     0.0,
+     2.1,
+     0.1,
+     1.2,
+     0.0,
+     0.3,
+     0.3,
+     1.8
+    ],
+    "nasaPowerMmPerYear": 8.3,
+    "jaxaGsmapMmPerYear": 8.4,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -24.25,
+     "lon": -69.75
+    },
+    "nasaModis": 0.081,
+    "jaxaSgli": 0.056,
+    "jaxaSgliMonthly": [
+     0.054,
+     0.053,
+     0.055,
+     0.056,
+     0.057,
+     0.057,
+     0.059,
+     0.058,
+     0.058,
+     0.058,
+     0.055,
+     0.053
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "haughton-crater",
+   "name": "Haughton impact structure, Devon Island, Canada",
+   "lat": 75.3833,
+   "lon": -89.6667,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     12.1,
+     11.6,
+     15.8,
+     16.2,
+     22.3,
+     35.1,
+     50.5,
+     53.3,
+     35.1,
+     28.2,
+     16.5,
+     15.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "nasaPowerMmPerYear": 312.5,
+    "jaxaGsmapMmPerYear": null,
+    "note": "GSMaP has no value here (it covers 60 S to 60 N)."
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 75.25,
+     "lon": -89.75
+    },
+    "nasaModis": 0.037,
+    "jaxaSgli": 0.045,
+    "jaxaSgliMonthly": [
+     null,
+     null,
+     null,
+     -0.049,
+     -0.051,
+     -0.023,
+     0.148,
+     0.164,
+     0.081,
+     null,
+     null,
+     null
+    ],
+    "jaxaMonthsWithData": 6
+   }
+  },
+  {
+   "id": "beacon-valley",
+   "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+   "lat": -77.8167,
+   "lon": 160.65,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     13.6,
+     10.7,
+     8.4,
+     12.0,
+     13.6,
+     12.6,
+     8.4,
+     13.6,
+     10.5,
+     14.9,
+     10.2,
+     14.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "nasaPowerMmPerYear": 143.1,
+    "jaxaGsmapMmPerYear": null,
+    "note": "GSMaP has no value here (it covers 60 S to 60 N)."
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -77.75,
+     "lon": 160.75
+    },
+    "nasaModis": null,
+    "jaxaSgli": -0.082,
+    "jaxaSgliMonthly": [
+     -0.087,
+     -0.074,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     -0.081,
+     -0.089,
+     -0.078
+    ],
+    "jaxaMonthsWithData": 5
+   }
+  },
+  {
+   "id": "don-juan-pond",
+   "name": "Don Juan Pond, Wright Valley, Antarctica",
+   "lat": -77.5644,
+   "lon": 161.1722,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     8.7,
+     10.7,
+     6.8,
+     7.8,
+     6.8,
+     7.8,
+     4.7,
+     9.3,
+     7.2,
+     8.4,
+     5.7,
+     8.1
+    ],
+    "jaxaGsmapMmPerMonth": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "nasaPowerMmPerYear": 92.0,
+    "jaxaGsmapMmPerYear": null,
+    "note": "GSMaP has no value here (it covers 60 S to 60 N)."
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -77.75,
+     "lon": 161.25
+    },
+    "nasaModis": null,
+    "jaxaSgli": -0.089,
+    "jaxaSgliMonthly": [
+     -0.09,
+     -0.078,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     -0.093,
+     -0.097,
+     -0.085
+    ],
+    "jaxaMonthsWithData": 5
+   }
+  },
+  {
+   "id": "mauna-kea",
+   "name": "Mauna Kea, Hawaii, USA",
+   "lat": 19.8206,
+   "lon": -155.4681,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     125.5,
+     137.9,
+     193.8,
+     165.3,
+     121.8,
+     92.4,
+     110.0,
+     124.3,
+     106.2,
+     129.0,
+     152.1,
+     151.0
+    ],
+    "jaxaGsmapMmPerMonth": [
+     131.1,
+     130.7,
+     176.1,
+     203.9,
+     178.1,
+     102.2,
+     120.1,
+     142.7,
+     137.6,
+     161.9,
+     159.1,
+     159.8
+    ],
+    "nasaPowerMmPerYear": 1609.3,
+    "jaxaGsmapMmPerYear": 1803.3,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 19.75,
+     "lon": -155.25
+    },
+    "nasaModis": 0.589,
+    "jaxaSgli": 0.633,
+    "jaxaSgliMonthly": [
+     0.675,
+     0.662,
+     0.652,
+     0.641,
+     0.631,
+     0.608,
+     0.621,
+     0.609,
+     0.606,
+     0.624,
+     0.623,
+     0.643
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "kilauea",
+   "name": "Kilauea, Hawaii, USA",
+   "lat": 19.421,
+   "lon": -155.287,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     194.1,
+     181.4,
+     272.5,
+     241.8,
+     175.2,
+     132.3,
+     152.2,
+     166.8,
+     165.0,
+     184.8,
+     214.8,
+     219.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     130.7,
+     134.1,
+     180.0,
+     206.7,
+     180.3,
+     103.6,
+     122.9,
+     145.1,
+     137.9,
+     166.4,
+     157.3,
+     161.0
+    ],
+    "nasaPowerMmPerYear": 2300.7,
+    "jaxaGsmapMmPerYear": 1826.0,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 19.25,
+     "lon": -155.25
+    },
+    "nasaModis": 0.485,
+    "jaxaSgli": 0.425,
+    "jaxaSgliMonthly": [
+     0.459,
+     0.452,
+     0.435,
+     0.43,
+     0.426,
+     0.41,
+     0.412,
+     0.392,
+     0.4,
+     0.417,
+     0.429,
+     0.434
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "craters-of-the-moon",
+   "name": "Craters of the Moon, Idaho, USA",
+   "lat": 43.4617,
+   "lon": -113.5627,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     44.3,
+     36.2,
+     46.8,
+     39.6,
+     43.4,
+     27.9,
+     13.0,
+     15.5,
+     22.8,
+     33.8,
+     35.4,
+     58.9
+    ],
+    "jaxaGsmapMmPerMonth": [
+     44.1,
+     36.8,
+     42.9,
+     26.3,
+     42.4,
+     16.1,
+     11.5,
+     15.4,
+     27.3,
+     31.5,
+     32.0,
+     50.1
+    ],
+    "nasaPowerMmPerYear": 417.6,
+    "jaxaGsmapMmPerYear": 376.4,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 43.25,
+     "lon": -113.75
+    },
+    "nasaModis": 0.237,
+    "jaxaSgli": 0.216,
+    "jaxaSgliMonthly": [
+     -0.039,
+     -0.055,
+     0.022,
+     0.25,
+     0.381,
+     0.373,
+     0.299,
+     0.256,
+     0.234,
+     0.273,
+     0.292,
+     0.301
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "lanzarote-timanfaya",
+   "name": "Timanfaya, Lanzarote, Spain",
+   "lat": 28.9942,
+   "lon": -13.7933,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     13.0,
+     17.8,
+     9.3,
+     5.4,
+     3.7,
+     0.9,
+     1.2,
+     3.4,
+     2.1,
+     16.4,
+     19.5,
+     17.4
+    ],
+    "jaxaGsmapMmPerMonth": [
+     8.1,
+     12.1,
+     6.7,
+     2.2,
+     0.7,
+     0.2,
+     0.3,
+     0.8,
+     1.9,
+     14.7,
+     17.4,
+     4.4
+    ],
+    "nasaPowerMmPerYear": 110.1,
+    "jaxaGsmapMmPerYear": 69.5,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 28.75,
+     "lon": -13.75
+    },
+    "nasaModis": 0.103,
+    "jaxaSgli": 0.049,
+    "jaxaSgliMonthly": [
+     0.045,
+     0.057,
+     0.056,
+     0.056,
+     0.064,
+     0.049,
+     0.042,
+     0.039,
+     0.038,
+     0.043,
+     0.037,
+     0.06
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "ries-crater",
+   "name": "Noerdlinger Ries impact crater, Germany",
+   "lat": 48.8833,
+   "lon": 10.5667,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     59.2,
+     42.9,
+     49.3,
+     43.8,
+     84.9,
+     73.8,
+     86.8,
+     81.2,
+     55.5,
+     55.2,
+     55.8,
+     59.5
+    ],
+    "jaxaGsmapMmPerMonth": [
+     64.5,
+     42.3,
+     33.8,
+     34.3,
+     84.7,
+     92.0,
+     87.0,
+     81.4,
+     48.8,
+     50.8,
+     49.5,
+     52.8
+    ],
+    "nasaPowerMmPerYear": 747.9,
+    "jaxaGsmapMmPerYear": 721.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 48.75,
+     "lon": 10.75
+    },
+    "nasaModis": 0.619,
+    "jaxaSgli": 0.67,
+    "jaxaSgliMonthly": [
+     0.535,
+     0.562,
+     0.522,
+     0.625,
+     0.755,
+     0.792,
+     0.759,
+     0.746,
+     0.744,
+     0.711,
+     0.622,
+     null
+    ],
+    "jaxaMonthsWithData": 11
+   }
+  },
+  {
+   "id": "askja",
+   "name": "Askja caldera, Iceland highlands",
+   "lat": 65.033,
+   "lon": -16.783,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     71.3,
+     59.9,
+     65.1,
+     57.9,
+     62.0,
+     52.2,
+     76.3,
+     74.4,
+     84.6,
+     86.5,
+     87.3,
+     84.0
+    ],
+    "jaxaGsmapMmPerMonth": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "nasaPowerMmPerYear": 861.5,
+    "jaxaGsmapMmPerYear": null,
+    "note": "GSMaP has no value here (it covers 60 S to 60 N)."
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 65.25,
+     "lon": -16.75
+    },
+    "nasaModis": 0.004,
+    "jaxaSgli": -0.004,
+    "jaxaSgliMonthly": [
+     null,
+     null,
+     -0.079,
+     -0.086,
+     -0.019,
+     -0.001,
+     0.033,
+     0.039,
+     0.04,
+     0.04,
+     null,
+     null
+    ],
+    "jaxaMonthsWithData": 8
+   }
+  },
+  {
+   "id": "mdrs-utah",
+   "name": "Mars Desert Research Station, Hanksville, Utah, USA",
+   "lat": 38.4065,
+   "lon": -110.7919,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     17.7,
+     17.2,
+     19.2,
+     18.3,
+     18.3,
+     11.4,
+     25.7,
+     23.9,
+     25.8,
+     27.0,
+     17.1,
+     20.2
+    ],
+    "jaxaGsmapMmPerMonth": [
+     16.8,
+     12.9,
+     19.4,
+     11.5,
+     17.3,
+     9.1,
+     30.3,
+     25.0,
+     29.1,
+     22.2,
+     12.5,
+     15.1
+    ],
+    "nasaPowerMmPerYear": 241.8,
+    "jaxaGsmapMmPerYear": 221.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 38.25,
+     "lon": -110.75
+    },
+    "nasaModis": 0.146,
+    "jaxaSgli": 0.127,
+    "jaxaSgliMonthly": [
+     0.133,
+     0.13,
+     0.125,
+     0.12,
+     0.126,
+     0.127,
+     0.128,
+     0.124,
+     0.128,
+     0.127,
+     0.126,
+     0.128
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "rio-tinto",
+   "name": "Rio Tinto, Huelva, Spain",
+   "lat": 37.21,
+   "lon": -6.938,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     46.8,
+     52.3,
+     63.2,
+     56.4,
+     29.5,
+     6.0,
+     0.6,
+     3.1,
+     20.7,
+     72.2,
+     84.0,
+     64.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     40.0,
+     32.0,
+     54.4,
+     51.4,
+     28.1,
+     3.2,
+     1.7,
+     0.6,
+     10.9,
+     59.5,
+     74.0,
+     46.4
+    ],
+    "nasaPowerMmPerYear": 499.6,
+    "jaxaGsmapMmPerYear": 402.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 37.25,
+     "lon": -6.75
+    },
+    "nasaModis": 0.454,
+    "jaxaSgli": 0.45,
+    "jaxaSgliMonthly": [
+     0.526,
+     0.558,
+     0.566,
+     0.571,
+     0.512,
+     0.411,
+     0.358,
+     0.339,
+     0.334,
+     0.343,
+     0.416,
+     0.471
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "dallol",
+   "name": "Dallol, Danakil Depression, Ethiopia",
+   "lat": 14.242,
+   "lon": 40.3,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     8.4,
+     12.1,
+     22.6,
+     60.0,
+     27.3,
+     24.0,
+     103.5,
+     111.9,
+     29.7,
+     22.3,
+     9.9,
+     15.2
+    ],
+    "jaxaGsmapMmPerMonth": [
+     3.5,
+     10.5,
+     7.8,
+     31.4,
+     25.6,
+     18.5,
+     112.3,
+     120.6,
+     35.8,
+     10.4,
+     4.3,
+     7.9
+    ],
+    "nasaPowerMmPerYear": 446.9,
+    "jaxaGsmapMmPerYear": 388.6,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 14.25,
+     "lon": 40.25
+    },
+    "nasaModis": 0.079,
+    "jaxaSgli": 0.05,
+    "jaxaSgliMonthly": [
+     0.055,
+     0.054,
+     0.054,
+     0.054,
+     0.049,
+     0.05,
+     0.05,
+     0.045,
+     0.043,
+     0.053,
+     0.052,
+     0.039
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "sp-crater",
+   "name": "SP Crater, San Francisco Volcanic Field, Arizona, USA",
+   "lat": 35.5822,
+   "lon": -111.6318,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     35.3,
+     32.8,
+     24.5,
+     15.9,
+     14.3,
+     6.3,
+     56.4,
+     62.0,
+     31.5,
+     27.6,
+     24.9,
+     40.9
+    ],
+    "jaxaGsmapMmPerMonth": [
+     41.7,
+     32.8,
+     36.2,
+     15.5,
+     19.9,
+     7.7,
+     76.4,
+     72.7,
+     34.1,
+     29.4,
+     32.1,
+     42.0
+    ],
+    "nasaPowerMmPerYear": 372.4,
+    "jaxaGsmapMmPerYear": 440.5,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 35.75,
+     "lon": -111.75
+    },
+    "nasaModis": 0.241,
+    "jaxaSgli": 0.231,
+    "jaxaSgliMonthly": [
+     0.235,
+     0.221,
+     0.202,
+     0.212,
+     0.232,
+     0.225,
+     0.229,
+     0.227,
+     0.249,
+     0.248,
+     0.243,
+     0.245
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "meteor-crater",
+   "name": "Meteor Crater, Arizona, USA",
+   "lat": 35.0281,
+   "lon": -111.0233,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     42.5,
+     42.1,
+     27.6,
+     15.0,
+     14.6,
+     6.3,
+     62.3,
+     66.0,
+     34.2,
+     26.7,
+     29.4,
+     49.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     33.3,
+     25.7,
+     26.3,
+     9.7,
+     13.5,
+     7.2,
+     65.5,
+     63.6,
+     25.6,
+     25.5,
+     27.5,
+     35.2
+    ],
+    "nasaPowerMmPerYear": 416.3,
+    "jaxaGsmapMmPerYear": 358.6,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 35.25,
+     "lon": -111.25
+    },
+    "nasaModis": 0.192,
+    "jaxaSgli": 0.173,
+    "jaxaSgliMonthly": [
+     0.166,
+     0.155,
+     0.141,
+     0.144,
+     0.166,
+     0.179,
+     0.178,
+     0.17,
+     0.2,
+     0.207,
+     0.195,
+     0.181
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "death-valley-ubehebe",
+   "name": "Ubehebe Crater, Death Valley, California, USA",
+   "lat": 37.0097,
+   "lon": -117.4503,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     30.4,
+     25.1,
+     16.7,
+     12.3,
+     8.7,
+     3.6,
+     9.6,
+     8.4,
+     7.2,
+     11.8,
+     10.8,
+     20.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     21.4,
+     16.5,
+     13.1,
+     7.6,
+     7.4,
+     2.1,
+     7.7,
+     7.0,
+     4.1,
+     10.1,
+     6.7,
+     12.0
+    ],
+    "nasaPowerMmPerYear": 165.4,
+    "jaxaGsmapMmPerYear": 115.7,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 37.25,
+     "lon": -117.25
+    },
+    "nasaModis": 0.127,
+    "jaxaSgli": 0.101,
+    "jaxaSgliMonthly": [
+     0.11,
+     0.104,
+     0.096,
+     0.096,
+     0.094,
+     0.09,
+     0.088,
+     0.088,
+     0.095,
+     0.11,
+     0.115,
+     0.124
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "pilbara-north-pole-dome",
+   "name": "North Pole Dome, Pilbara, Australia",
+   "lat": -21.0483,
+   "lon": 119.3931,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     105.1,
+     98.6,
+     82.8,
+     15.6,
+     15.5,
+     24.0,
+     15.2,
+     1.2,
+     3.9,
+     2.8,
+     7.5,
+     32.5
+    ],
+    "jaxaGsmapMmPerMonth": [
+     112.4,
+     59.8,
+     69.6,
+     14.4,
+     21.0,
+     35.1,
+     7.0,
+     1.3,
+     1.2,
+     1.8,
+     5.1,
+     28.4
+    ],
+    "nasaPowerMmPerYear": 404.7,
+    "jaxaGsmapMmPerYear": 357.1,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -21.25,
+     "lon": 119.25
+    },
+    "nasaModis": 0.23,
+    "jaxaSgli": 0.197,
+    "jaxaSgliMonthly": [
+     0.188,
+     0.209,
+     0.241,
+     0.248,
+     0.229,
+     0.22,
+     0.205,
+     0.191,
+     0.175,
+     0.158,
+     0.149,
+     0.153
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "arkaroola",
+   "name": "Arkaroola, Flinders Ranges, Australia",
+   "lat": -30.3117,
+   "lon": 139.3361,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     18.6,
+     27.7,
+     12.1,
+     13.2,
+     13.0,
+     13.8,
+     10.8,
+     9.6,
+     14.7,
+     11.5,
+     18.0,
+     15.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     24.8,
+     19.8,
+     13.5,
+     14.9,
+     14.6,
+     9.5,
+     6.2,
+     9.5,
+     8.5,
+     6.2,
+     8.7,
+     7.3
+    ],
+    "nasaPowerMmPerYear": 178.8,
+    "jaxaGsmapMmPerYear": 143.5,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -30.25,
+     "lon": 139.25
+    },
+    "nasaModis": 0.181,
+    "jaxaSgli": 0.15,
+    "jaxaSgliMonthly": [
+     0.14,
+     0.137,
+     0.135,
+     0.171,
+     0.174,
+     0.168,
+     0.162,
+     0.166,
+     0.158,
+     0.141,
+     0.129,
+     0.125
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "qaidam-basin",
+   "name": "Qaidam Basin, China",
+   "lat": 37.2667,
+   "lon": 94.45,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     1.5,
+     0.8,
+     1.5,
+     2.4,
+     6.8,
+     15.0,
+     15.5,
+     9.3,
+     7.2,
+     1.9,
+     0.9,
+     0.9
+    ],
+    "jaxaGsmapMmPerMonth": [
+     1.4,
+     0.9,
+     0.8,
+     3.0,
+     6.2,
+     18.1,
+     17.0,
+     9.5,
+     6.0,
+     1.6,
+     2.9,
+     1.0
+    ],
+    "nasaPowerMmPerYear": 63.7,
+    "jaxaGsmapMmPerYear": 68.4,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 37.25,
+     "lon": 94.25
+    },
+    "nasaModis": 0.049,
+    "jaxaSgli": 0.019,
+    "jaxaSgliMonthly": [
+     0.017,
+     0.019,
+     0.014,
+     0.014,
+     0.02,
+     0.022,
+     0.022,
+     0.025,
+     0.019,
+     0.019,
+     0.013,
+     0.021
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "makhtesh-ramon",
+   "name": "Makhtesh Ramon, Negev, Israel",
+   "lat": 30.5786,
+   "lon": 34.8178,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     34.7,
+     28.2,
+     14.9,
+     9.9,
+     2.8,
+     0.0,
+     0.3,
+     0.0,
+     2.4,
+     7.1,
+     13.8,
+     19.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     17.5,
+     13.1,
+     7.7,
+     3.9,
+     3.1,
+     0.0,
+     0.0,
+     0.0,
+     0.7,
+     5.4,
+     5.8,
+     13.7
+    ],
+    "nasaPowerMmPerYear": 133.9,
+    "jaxaGsmapMmPerYear": 70.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 30.75,
+     "lon": 34.75
+    },
+    "nasaModis": 0.099,
+    "jaxaSgli": 0.073,
+    "jaxaSgliMonthly": [
+     0.075,
+     0.075,
+     0.076,
+     0.076,
+     0.074,
+     0.073,
+     0.072,
+     0.07,
+     0.07,
+     0.069,
+     0.07,
+     0.076
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "lonar-crater",
+   "name": "Lonar crater, Maharashtra, India",
+   "lat": 19.975,
+   "lon": 76.5075,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     4.3,
+     4.5,
+     14.6,
+     7.5,
+     14.6,
+     148.8,
+     210.8,
+     188.5,
+     171.9,
+     54.9,
+     18.6,
+     3.7
+    ],
+    "jaxaGsmapMmPerMonth": [
+     4.4,
+     6.6,
+     15.7,
+     6.4,
+     9.2,
+     185.1,
+     244.0,
+     172.6,
+     185.8,
+     63.2,
+     10.3,
+     6.8
+    ],
+    "nasaPowerMmPerYear": 842.7,
+    "jaxaGsmapMmPerYear": 910.1,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 19.75,
+     "lon": 76.75
+    },
+    "nasaModis": 0.487,
+    "jaxaSgli": 0.467,
+    "jaxaSgliMonthly": [
+     0.528,
+     0.417,
+     0.292,
+     0.242,
+     0.223,
+     0.289,
+     0.405,
+     0.62,
+     0.743,
+     0.682,
+     0.611,
+     0.547
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "ladakh-tso-kar",
+   "name": "Tso Kar, Ladakh, India",
+   "lat": 33.3,
+   "lon": 77.9833,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     18.6,
+     16.9,
+     22.3,
+     14.1,
+     12.4,
+     15.9,
+     38.4,
+     44.3,
+     15.6,
+     5.6,
+     12.3,
+     10.8
+    ],
+    "jaxaGsmapMmPerMonth": [
+     36.0,
+     27.1,
+     45.2,
+     34.9,
+     22.3,
+     21.5,
+     61.9,
+     60.3,
+     27.6,
+     10.6,
+     22.3,
+     21.2
+    ],
+    "nasaPowerMmPerYear": 227.2,
+    "jaxaGsmapMmPerYear": 390.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 33.25,
+     "lon": 77.75
+    },
+    "nasaModis": 0.047,
+    "jaxaSgli": 0.037,
+    "jaxaSgliMonthly": [
+     0.018,
+     0.001,
+     -0.011,
+     -0.008,
+     0.019,
+     0.059,
+     0.085,
+     0.089,
+     0.068,
+     0.045,
+     0.037,
+     0.043
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "makgadikgadi-pans",
+   "name": "Makgadikgadi Pans, Botswana",
+   "lat": -20.8,
+   "lon": 25.3333,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     85.9,
+     79.7,
+     50.2,
+     19.8,
+     2.5,
+     5.4,
+     0.3,
+     0.3,
+     3.3,
+     17.4,
+     47.4,
+     79.4
+    ],
+    "jaxaGsmapMmPerMonth": [
+     110.4,
+     110.0,
+     66.7,
+     34.5,
+     1.1,
+     0.9,
+     1.2,
+     3.4,
+     2.1,
+     26.9,
+     54.8,
+     113.3
+    ],
+    "nasaPowerMmPerYear": 391.6,
+    "jaxaGsmapMmPerYear": 525.3,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -20.75,
+     "lon": 25.25
+    },
+    "nasaModis": 0.206,
+    "jaxaSgli": 0.226,
+    "jaxaSgliMonthly": [
+     0.29,
+     0.331,
+     0.402,
+     0.303,
+     0.225,
+     0.172,
+     0.158,
+     0.132,
+     0.125,
+     0.124,
+     0.169,
+     0.276
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "teide",
+   "name": "Teide and Las Canadas, Tenerife, Spain",
+   "lat": 28.2731,
+   "lon": -16.6394,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     29.1,
+     33.3,
+     24.2,
+     16.2,
+     8.1,
+     4.2,
+     2.5,
+     5.6,
+     10.8,
+     27.9,
+     41.7,
+     44.3
+    ],
+    "jaxaGsmapMmPerMonth": [
+     19.5,
+     34.9,
+     21.4,
+     14.4,
+     3.6,
+     3.2,
+     1.0,
+     5.3,
+     4.9,
+     33.9,
+     33.8,
+     36.9
+    ],
+    "nasaPowerMmPerYear": 247.9,
+    "jaxaGsmapMmPerYear": 212.8,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 28.25,
+     "lon": -16.75
+    },
+    "nasaModis": 0.346,
+    "jaxaSgli": 0.32,
+    "jaxaSgliMonthly": [
+     0.322,
+     0.345,
+     0.328,
+     0.349,
+     0.337,
+     0.321,
+     0.307,
+     0.273,
+     0.281,
+     0.285,
+     0.316,
+     0.38
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "etna",
+   "name": "Mount Etna, Sicily, Italy",
+   "lat": 37.748,
+   "lon": 14.999,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     67.3,
+     61.0,
+     50.8,
+     35.4,
+     15.5,
+     13.2,
+     6.5,
+     11.2,
+     52.8,
+     70.1,
+     82.8,
+     80.0
+    ],
+    "jaxaGsmapMmPerMonth": [
+     66.6,
+     71.0,
+     58.7,
+     27.0,
+     15.4,
+     13.4,
+     10.1,
+     16.7,
+     52.2,
+     95.7,
+     90.8,
+     59.5
+    ],
+    "nasaPowerMmPerYear": 546.6,
+    "jaxaGsmapMmPerYear": 577.1,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 37.75,
+     "lon": 14.75
+    },
+    "nasaModis": 0.55,
+    "jaxaSgli": 0.581,
+    "jaxaSgliMonthly": [
+     0.614,
+     0.655,
+     0.686,
+     0.72,
+     0.678,
+     0.567,
+     0.494,
+     0.457,
+     0.453,
+     0.499,
+     0.565,
+     0.583
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "sudbury",
+   "name": "Sudbury Basin, Ontario, Canada",
+   "lat": 46.6,
+   "lon": -81.1833,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     50.5,
+     44.4,
+     48.7,
+     69.9,
+     74.1,
+     78.0,
+     76.0,
+     81.5,
+     78.0,
+     87.7,
+     66.6,
+     61.1
+    ],
+    "jaxaGsmapMmPerMonth": [
+     53.7,
+     42.3,
+     42.7,
+     60.6,
+     63.6,
+     69.4,
+     74.9,
+     92.4,
+     70.9,
+     97.3,
+     61.9,
+     58.8
+    ],
+    "nasaPowerMmPerYear": 816.5,
+    "jaxaGsmapMmPerYear": 788.5,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 46.75,
+     "lon": -81.25
+    },
+    "nasaModis": 0.539,
+    "jaxaSgli": 0.562,
+    "jaxaSgliMonthly": [
+     0.272,
+     0.286,
+     0.271,
+     0.268,
+     0.574,
+     0.768,
+     0.834,
+     0.831,
+     0.792,
+     0.659,
+     0.6,
+     0.595
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "kangerlussuaq",
+   "name": "Kangerlussuaq, Greenland",
+   "lat": 67.0086,
+   "lon": -50.6892,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     14.9,
+     13.6,
+     15.8,
+     29.1,
+     38.4,
+     44.1,
+     51.2,
+     56.7,
+     55.5,
+     37.8,
+     33.3,
+     26.7
+    ],
+    "jaxaGsmapMmPerMonth": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "nasaPowerMmPerYear": 417.1,
+    "jaxaGsmapMmPerYear": null,
+    "note": "GSMaP has no value here (it covers 60 S to 60 N)."
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 67.25,
+     "lon": -50.75
+    },
+    "nasaModis": 0.247,
+    "jaxaSgli": 0.342,
+    "jaxaSgliMonthly": [
+     null,
+     null,
+     0.003,
+     -0.008,
+     0.191,
+     0.492,
+     0.661,
+     0.616,
+     0.441,
+     null,
+     null,
+     null
+    ],
+    "jaxaMonthsWithData": 7
+   }
+  },
+  {
+   "id": "mistastin-crater",
+   "name": "Mistastin crater, Labrador, Canada",
+   "lat": 55.8833,
+   "lon": -63.3,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     55.2,
+     43.8,
+     49.9,
+     70.5,
+     68.5,
+     103.5,
+     135.2,
+     113.2,
+     93.9,
+     92.7,
+     71.1,
+     53.0
+    ],
+    "jaxaGsmapMmPerMonth": [
+     62.0,
+     49.8,
+     51.6,
+     59.9,
+     42.3,
+     38.7,
+     88.3,
+     76.3,
+     66.5,
+     55.6,
+     62.4,
+     49.7
+    ],
+    "nasaPowerMmPerYear": 950.5,
+    "jaxaGsmapMmPerYear": 703.1,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 55.75,
+     "lon": -63.25
+    },
+    "nasaModis": 0.237,
+    "jaxaSgli": 0.317,
+    "jaxaSgliMonthly": [
+     null,
+     0.007,
+     -0.029,
+     -0.061,
+     -0.041,
+     0.37,
+     0.669,
+     0.729,
+     0.65,
+     0.557,
+     null,
+     null
+    ],
+    "jaxaMonthsWithData": 9
+   }
+  },
+  {
+   "id": "neg-kalimantan-betung-kerihun",
+   "name": "Betung Kerihun National Park, Kalimantan, Indonesia",
+   "lat": 1.2208,
+   "lon": 113.3531,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     355.9,
+     298.0,
+     343.8,
+     338.1,
+     289.2,
+     263.7,
+     224.8,
+     245.5,
+     237.9,
+     332.6,
+     392.1,
+     421.3
+    ],
+    "jaxaGsmapMmPerMonth": [
+     386.8,
+     363.0,
+     395.5,
+     388.9,
+     349.3,
+     286.8,
+     210.2,
+     336.5,
+     324.9,
+     358.2,
+     477.6,
+     418.2
+    ],
+    "nasaPowerMmPerYear": 3742.9,
+    "jaxaGsmapMmPerYear": 4295.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 1.25,
+     "lon": 113.25
+    },
+    "nasaModis": 0.839,
+    "jaxaSgli": 0.834,
+    "jaxaSgliMonthly": [
+     0.715,
+     0.754,
+     0.837,
+     0.843,
+     0.88,
+     0.873,
+     0.89,
+     0.883,
+     0.83,
+     0.843,
+     0.83,
+     0.825
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "neg-amazon-jau",
+   "name": "Jau National Park, central Amazon, Brazil",
+   "lat": -2.3,
+   "lon": -63.05,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     208.9,
+     219.2,
+     284.6,
+     296.1,
+     253.3,
+     184.5,
+     124.6,
+     96.1,
+     111.3,
+     131.4,
+     167.7,
+     230.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     182.9,
+     180.9,
+     257.6,
+     322.9,
+     257.1,
+     175.9,
+     144.5,
+     106.9,
+     85.6,
+     101.8,
+     148.9,
+     189.5
+    ],
+    "nasaPowerMmPerYear": 2308.3,
+    "jaxaGsmapMmPerYear": 2154.5,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -2.25,
+     "lon": -63.25
+    },
+    "nasaModis": 0.842,
+    "jaxaSgli": 0.847,
+    "jaxaSgliMonthly": [
+     0.843,
+     0.83,
+     0.843,
+     0.733,
+     0.795,
+     0.866,
+     0.886,
+     0.883,
+     0.888,
+     0.865,
+     0.877,
+     0.85
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "neg-congo-salonga",
+   "name": "Salonga National Park, Congo basin, DR Congo",
+   "lat": -2.0,
+   "lon": 21.0,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     118.1,
+     152.0,
+     158.7,
+     138.6,
+     160.0,
+     93.9,
+     80.6,
+     142.0,
+     181.5,
+     195.6,
+     197.1,
+     185.4
+    ],
+    "jaxaGsmapMmPerMonth": [
+     37.3,
+     63.4,
+     89.4,
+     102.6,
+     96.3,
+     53.0,
+     67.8,
+     84.5,
+     102.1,
+     125.1,
+     105.0,
+     55.4
+    ],
+    "nasaPowerMmPerYear": 1803.5,
+    "jaxaGsmapMmPerYear": 981.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -2.25,
+     "lon": 21.25
+    },
+    "nasaModis": 0.818,
+    "jaxaSgli": 0.8,
+    "jaxaSgliMonthly": [
+     0.755,
+     0.785,
+     0.865,
+     0.883,
+     0.872,
+     0.838,
+     0.722,
+     0.61,
+     0.79,
+     0.868,
+     0.845,
+     0.768
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "neg-jakarta",
+   "name": "Jakarta, Indonesia",
+   "lat": -6.18,
+   "lon": 106.83,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     355.3,
+     383.1,
+     245.8,
+     198.6,
+     140.1,
+     94.8,
+     89.3,
+     49.0,
+     66.3,
+     134.5,
+     198.3,
+     247.1
+    ],
+    "jaxaGsmapMmPerMonth": [
+     388.7,
+     443.9,
+     243.6,
+     201.5,
+     145.4,
+     99.2,
+     102.4,
+     56.8,
+     82.2,
+     131.5,
+     182.8,
+     247.2
+    ],
+    "nasaPowerMmPerYear": 2202.2,
+    "jaxaGsmapMmPerYear": 2325.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -6.25,
+     "lon": 106.75
+    },
+    "nasaModis": 0.524,
+    "jaxaSgli": 0.441,
+    "jaxaSgliMonthly": [
+     0.407,
+     0.41,
+     0.439,
+     0.462,
+     0.455,
+     0.456,
+     0.462,
+     0.454,
+     0.438,
+     0.436,
+     0.44,
+     0.433
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "neg-singapore",
+   "name": "Singapore",
+   "lat": 1.2833,
+   "lon": 103.8333,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     232.8,
+     102.8,
+     168.6,
+     193.5,
+     198.7,
+     162.9,
+     174.2,
+     172.4,
+     167.4,
+     211.1,
+     282.3,
+     301.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     196.0,
+     108.3,
+     132.6,
+     206.5,
+     228.7,
+     169.1,
+     152.4,
+     172.8,
+     165.2,
+     180.5,
+     282.6,
+     278.5
+    ],
+    "nasaPowerMmPerYear": 2368.3,
+    "jaxaGsmapMmPerYear": 2273.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 1.25,
+     "lon": 103.75
+    },
+    "nasaModis": 0.617,
+    "jaxaSgli": 0.502,
+    "jaxaSgliMonthly": [
+     0.493,
+     0.458,
+     0.48,
+     0.521,
+     0.543,
+     0.53,
+     0.519,
+     0.509,
+     0.471,
+     0.508,
+     0.499,
+     0.496
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "neg-paris",
+   "name": "Paris, France",
+   "lat": 48.8567,
+   "lon": 2.3522,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     53.9,
+     50.0,
+     52.1,
+     39.3,
+     63.5,
+     60.0,
+     54.9,
+     58.6,
+     42.0,
+     57.0,
+     60.9,
+     69.4
+    ],
+    "jaxaGsmapMmPerMonth": [
+     46.7,
+     42.0,
+     42.2,
+     33.1,
+     75.4,
+     66.8,
+     42.3,
+     45.9,
+     45.0,
+     51.2,
+     51.0,
+     64.1
+    ],
+    "nasaPowerMmPerYear": 661.6,
+    "jaxaGsmapMmPerYear": 605.7,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 48.75,
+     "lon": 2.25
+    },
+    "nasaModis": 0.523,
+    "jaxaSgli": 0.546,
+    "jaxaSgliMonthly": [
+     0.32,
+     0.452,
+     0.476,
+     0.572,
+     0.668,
+     0.65,
+     0.599,
+     0.599,
+     0.58,
+     0.579,
+     0.508,
+     null
+    ],
+    "jaxaMonthsWithData": 11
+   }
+  },
+  {
+   "id": "id-kawah-ijen",
+   "name": "Kawah Ijen, East Java, Indonesia",
+   "lat": -8.058,
+   "lon": 114.242,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     312.5,
+     277.1,
+     247.7,
+     166.2,
+     111.9,
+     66.3,
+     43.7,
+     27.6,
+     23.4,
+     59.8,
+     149.1,
+     265.7
+    ],
+    "jaxaGsmapMmPerMonth": [
+     294.8,
+     240.4,
+     173.9,
+     124.5,
+     91.2,
+     89.7,
+     62.4,
+     36.5,
+     31.5,
+     50.9,
+     122.6,
+     211.4
+    ],
+    "nasaPowerMmPerYear": 1751.0,
+    "jaxaGsmapMmPerYear": 1529.8,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -8.25,
+     "lon": 114.25
+    },
+    "nasaModis": 0.761,
+    "jaxaSgli": 0.764,
+    "jaxaSgliMonthly": [
+     0.708,
+     0.754,
+     0.783,
+     0.807,
+     0.802,
+     0.786,
+     0.774,
+     0.783,
+     0.757,
+     0.749,
+     0.7,
+     0.759
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-merapi",
+   "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+   "lat": -7.54,
+   "lon": 110.446,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     345.7,
+     346.1,
+     207.1,
+     185.1,
+     137.0,
+     90.0,
+     53.3,
+     31.9,
+     69.9,
+     131.1,
+     217.2,
+     282.1
+    ],
+    "jaxaGsmapMmPerMonth": [
+     373.8,
+     398.1,
+     192.0,
+     203.2,
+     127.4,
+     106.5,
+     70.9,
+     46.6,
+     100.5,
+     124.0,
+     212.0,
+     291.6
+    ],
+    "nasaPowerMmPerYear": 2096.5,
+    "jaxaGsmapMmPerYear": 2246.6,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -7.75,
+     "lon": 110.25
+    },
+    "nasaModis": 0.734,
+    "jaxaSgli": 0.723,
+    "jaxaSgliMonthly": [
+     0.714,
+     0.735,
+     0.746,
+     0.736,
+     0.736,
+     0.753,
+     0.738,
+     0.723,
+     0.713,
+     0.706,
+     0.67,
+     0.708
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-gua-lawa",
+   "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+   "lat": -7.2314,
+   "lon": 109.3175,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     328.6,
+     337.0,
+     252.0,
+     194.4,
+     154.4,
+     99.6,
+     66.0,
+     29.5,
+     65.1,
+     122.8,
+     215.4,
+     306.0
+    ],
+    "jaxaGsmapMmPerMonth": [
+     340.5,
+     384.1,
+     259.2,
+     206.6,
+     144.4,
+     125.6,
+     107.5,
+     38.6,
+     85.1,
+     155.2,
+     261.9,
+     359.5
+    ],
+    "nasaPowerMmPerYear": 2170.8,
+    "jaxaGsmapMmPerYear": 2468.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -7.25,
+     "lon": 109.25
+    },
+    "nasaModis": 0.739,
+    "jaxaSgli": 0.738,
+    "jaxaSgliMonthly": [
+     0.727,
+     0.719,
+     0.743,
+     0.742,
+     0.759,
+     0.787,
+     0.77,
+     0.75,
+     0.74,
+     0.725,
+     0.675,
+     0.716
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-goa-pandan",
+   "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+   "lat": -5.364,
+   "lon": 105.664,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     311.2,
+     314.4,
+     243.0,
+     185.1,
+     128.0,
+     100.2,
+     93.9,
+     53.0,
+     66.6,
+     108.5,
+     169.5,
+     267.5
+    ],
+    "jaxaGsmapMmPerMonth": [
+     315.9,
+     319.3,
+     237.0,
+     203.5,
+     120.1,
+     91.2,
+     83.6,
+     52.5,
+     65.4,
+     103.0,
+     163.0,
+     295.4
+    ],
+    "nasaPowerMmPerYear": 2040.9,
+    "jaxaGsmapMmPerYear": 2049.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -5.25,
+     "lon": 105.75
+    },
+    "nasaModis": 0.738,
+    "jaxaSgli": 0.703,
+    "jaxaSgliMonthly": [
+     0.635,
+     0.641,
+     0.74,
+     0.731,
+     0.716,
+     0.724,
+     0.744,
+     0.744,
+     0.719,
+     0.719,
+     0.645,
+     0.682
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-kesaksak-lava-tube",
+   "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+   "lat": -8.2403,
+   "lon": 115.3775,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     319.6,
+     257.6,
+     211.7,
+     119.4,
+     72.5,
+     42.3,
+     25.4,
+     13.0,
+     22.2,
+     45.3,
+     129.6,
+     302.2
+    ],
+    "jaxaGsmapMmPerMonth": [
+     371.6,
+     266.9,
+     230.8,
+     89.7,
+     73.9,
+     74.9,
+     40.8,
+     22.8,
+     54.0,
+     43.7,
+     179.8,
+     287.0
+    ],
+    "nasaPowerMmPerYear": 1560.8,
+    "jaxaGsmapMmPerYear": 1735.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -8.25,
+     "lon": 115.25
+    },
+    "nasaModis": 0.795,
+    "jaxaSgli": 0.78,
+    "jaxaSgliMonthly": [
+     0.683,
+     0.709,
+     0.762,
+     0.816,
+     0.833,
+     0.827,
+     0.822,
+     0.823,
+     0.791,
+     0.783,
+     0.76,
+     0.747
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-maros-pangkep-karst",
+   "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+   "lat": -5.0031,
+   "lon": 119.6944,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     380.7,
+     285.9,
+     242.7,
+     169.5,
+     108.5,
+     93.0,
+     45.0,
+     20.5,
+     32.7,
+     67.3,
+     157.2,
+     381.6
+    ],
+    "jaxaGsmapMmPerMonth": [
+     546.3,
+     346.4,
+     354.4,
+     183.3,
+     84.5,
+     98.1,
+     43.4,
+     14.1,
+     30.2,
+     85.3,
+     189.8,
+     513.4
+    ],
+    "nasaPowerMmPerYear": 1984.6,
+    "jaxaGsmapMmPerYear": 2489.2,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -5.25,
+     "lon": 119.75
+    },
+    "nasaModis": 0.759,
+    "jaxaSgli": 0.768,
+    "jaxaSgliMonthly": [
+     0.724,
+     0.722,
+     0.769,
+     0.768,
+     0.799,
+     0.833,
+     0.829,
+     0.784,
+     0.756,
+     0.755,
+     0.737,
+     0.743
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-tambora-caldera",
+   "name": "Mount Tambora caldera, Sumbawa, Indonesia",
+   "lat": -8.2438,
+   "lon": 117.9918,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     257.9,
+     214.7,
+     177.0,
+     96.0,
+     52.7,
+     33.9,
+     17.7,
+     14.0,
+     15.6,
+     33.8,
+     92.4,
+     249.5
+    ],
+    "jaxaGsmapMmPerMonth": [
+     291.4,
+     240.4,
+     198.0,
+     99.2,
+     44.9,
+     34.1,
+     13.9,
+     7.2,
+     15.6,
+     44.6,
+     140.6,
+     240.1
+    ],
+    "nasaPowerMmPerYear": 1255.2,
+    "jaxaGsmapMmPerYear": 1370.0,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -8.25,
+     "lon": 117.75
+    },
+    "nasaModis": 0.762,
+    "jaxaSgli": 0.73,
+    "jaxaSgliMonthly": [
+     0.696,
+     0.753,
+     0.777,
+     0.788,
+     0.79,
+     0.784,
+     0.76,
+     0.706,
+     0.651,
+     0.649,
+     0.686,
+     0.725
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "id-batur-lava-fields",
+   "name": "Mount Batur black lava fields, Bali, Indonesia",
+   "lat": -8.2556,
+   "lon": 115.3628,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     317.1,
+     250.6,
+     204.9,
+     123.0,
+     80.6,
+     45.9,
+     32.2,
+     15.5,
+     42.0,
+     62.0,
+     162.0,
+     297.3
+    ],
+    "jaxaGsmapMmPerMonth": [
+     371.6,
+     266.9,
+     230.8,
+     89.7,
+     73.9,
+     74.9,
+     40.8,
+     22.8,
+     54.0,
+     43.7,
+     179.8,
+     287.0
+    ],
+    "nasaPowerMmPerYear": 1633.1,
+    "jaxaGsmapMmPerYear": 1735.9,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -8.25,
+     "lon": 115.25
+    },
+    "nasaModis": 0.795,
+    "jaxaSgli": 0.78,
+    "jaxaSgliMonthly": [
+     0.683,
+     0.709,
+     0.762,
+     0.816,
+     0.833,
+     0.827,
+     0.822,
+     0.823,
+     0.791,
+     0.783,
+     0.76,
+     0.747
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "dasht-e-lut",
+   "name": "Dasht-e Lut (Lut Desert), Iran",
+   "lat": 30.2639,
+   "lon": 59.2411,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     12.4,
+     13.3,
+     15.2,
+     8.4,
+     2.5,
+     2.1,
+     0.9,
+     0.9,
+     0.0,
+     1.9,
+     5.1,
+     6.5
+    ],
+    "jaxaGsmapMmPerMonth": [
+     9.9,
+     10.8,
+     15.6,
+     11.2,
+     6.6,
+     0.0,
+     0.2,
+     0.2,
+     0.0,
+     1.6,
+     4.7,
+     5.9
+    ],
+    "nasaPowerMmPerYear": 69.2,
+    "jaxaGsmapMmPerYear": 66.7,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": 30.25,
+     "lon": 59.25
+    },
+    "nasaModis": 0.098,
+    "jaxaSgli": 0.059,
+    "jaxaSgliMonthly": [
+     0.063,
+     0.06,
+     0.062,
+     0.058,
+     0.056,
+     0.056,
+     0.055,
+     0.059,
+     0.058,
+     0.062,
+     0.062,
+     0.057
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "salar-de-uyuni",
+   "name": "Salar de Uyuni salt flat, Bolivia",
+   "lat": -20.3333,
+   "lon": -67.7,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     66.0,
+     60.5,
+     38.1,
+     8.7,
+     1.9,
+     0.9,
+     1.5,
+     1.5,
+     5.1,
+     11.8,
+     14.1,
+     43.4
+    ],
+    "jaxaGsmapMmPerMonth": [
+     66.5,
+     49.6,
+     26.5,
+     10.0,
+     2.5,
+     1.7,
+     1.9,
+     3.8,
+     8.1,
+     15.6,
+     12.9,
+     46.3
+    ],
+    "nasaPowerMmPerYear": 253.5,
+    "jaxaGsmapMmPerYear": 245.4,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -20.25,
+     "lon": -67.75
+    },
+    "nasaModis": 0.032,
+    "jaxaSgli": -0.027,
+    "jaxaSgliMonthly": [
+     0.012,
+     -0.003,
+     -0.154,
+     -0.158,
+     -0.046,
+     -0.024,
+     0.01,
+     0.026,
+     0.011,
+     0.004,
+     0.01,
+     -0.007
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  },
+  {
+   "id": "tunupa-volcano",
+   "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
+   "lat": -19.83,
+   "lon": -67.64,
+   "gsmapPixelDeg": 0.1,
+   "precip": {
+    "nasaPowerMmPerMonth": [
+     80.6,
+     74.0,
+     45.3,
+     12.9,
+     3.4,
+     3.9,
+     2.8,
+     3.1,
+     9.3,
+     18.0,
+     18.9,
+     58.3
+    ],
+    "jaxaGsmapMmPerMonth": [
+     92.8,
+     73.9,
+     35.4,
+     16.3,
+     5.9,
+     5.9,
+     3.8,
+     6.6,
+     15.7,
+     22.2,
+     17.6,
+     67.0
+    ],
+    "nasaPowerMmPerYear": 330.5,
+    "jaxaGsmapMmPerYear": 363.1,
+    "note": null
+   },
+   "sgliPixelDeg": 0.025,
+   "sgliPixelsInCell": 400,
+   "ndvi": {
+    "cell": {
+     "lat": -19.75,
+     "lon": -67.75
+    },
+    "nasaModis": 0.117,
+    "jaxaSgli": 0.102,
+    "jaxaSgliMonthly": [
+     0.103,
+     0.123,
+     0.142,
+     0.108,
+     0.104,
+     0.101,
+     0.11,
+     0.1,
+     0.085,
+     0.084,
+     0.084,
+     0.084
+    ],
+    "jaxaMonthsWithData": 12
+   }
+  }
+ ]
+}
