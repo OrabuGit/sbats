@@ -767,3 +767,11 @@ h2,
     animation: none;
   }
 }
+
+/* While the page is being scrolled fast, nothing animates: it snaps, so no stage is caught half-way. */
+.scroll-fast main *,
+.scroll-fast main *::before,
+.scroll-fast main *::after {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

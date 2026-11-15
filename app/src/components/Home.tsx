@@ -119,7 +119,16 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
         </h2>
       </Reveal>
       <ol className="mt-10 grid gap-x-10 gap-y-10 md:grid-cols-3">
-        {disc.status === 'loading' && <li className="text-[14px] text-muted">Loading the scan</li>}
+        {disc.status === 'loading' &&
+          [0, 1, 2].map((k) => (
+            <li key={k} className="min-h-[250px] animate-pulse" aria-hidden="true">
+              <div className="h-3 w-16 bg-line" />
+              <div className="mt-3 h-14 w-28 bg-line" />
+              <div className="mt-4 h-4 w-32 bg-line" />
+              <div className="mt-2 h-3 w-44 bg-line" />
+              <div className="mt-5 h-3 w-full bg-line" />
+            </li>
+          ))}
         {picks.map((p, i) => (
           <li key={`${p.lat},${p.lon}`}>
             <Reveal i={i}>

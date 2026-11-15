@@ -2,6 +2,8 @@ import { loadTexture } from '../lib/gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AmbientLight,
+  CanvasTexture,
+  PlaneGeometry,
   CircleGeometry,
   RingGeometry,
   Color,
@@ -249,6 +251,28 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     });
     let loaded = 0;
 
+    // A soft white halo behind each world, so it stands out from the page. It is the one glow on the home page.
+    const haloCanvas = document.createElement('canvas');
+    haloCanvas.width = haloCanvas.height = 256;
+    {
+      const g = haloCanvas.getContext('2d')!;
+      const grad = g.createRadialGradient(128, 128, 128 * 0.64, 128, 128, 128);
+      grad.addColorStop(0, 'rgba(255,255,255,0.34)');
+      grad.addColorStop(0.35, 'rgba(255,255,255,0.12)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 256, 256);
+    }
+    const haloTex = new CanvasTexture(haloCanvas);
+    const haloGeo = new PlaneGeometry(1, 1);
+    const haloMat = new MeshBasicMaterial({ map: haloTex, transparent: true, depthWrite: false });
+    const halos = globes.map((g) => {
+      const m = new Mesh(haloGeo, haloMat);
+      m.renderOrder = -1;
+      scene.add(m);
+      return { m, g };
+    });
+
     // One marker per named place on Mars and the Moon, and one per featured site on Earth.
     const up = new Vector3(0, 1, 0);
     const hits: { mesh: Mesh; g: Globe }[] = [];
@@ -305,6 +329,10 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         g.slot = s;
         g.group.scale.setScalar(s.r);
         g.group.position.set(s.cx - w / 2, h / 2 - s.cy, 0);
+      }
+      for (const { m, g } of halos) {
+        m.scale.setScalar(g.slot.r * 3.1);
+        m.position.set(g.group.position.x, g.group.position.y, -g.slot.r * 1.2);
       }
       // A pin can be hit within 14 px whatever the size of its globe (the hit mesh has radius 0.05).
       for (const { mesh, g } of hits) mesh.scale.setScalar(Math.max(1, 14 / (g.slot.r * 0.05)));
@@ -581,6 +609,9 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
       canvas.removeEventListener('pointercancel', onUp);
       canvas.removeEventListener('pointerleave', onLeave);
       geo.dispose();
+      haloGeo.dispose();
+      haloMat.dispose();
+      haloTex.dispose();
       ringBig.dispose();
       ringSmall.dispose();
       dome.dispose();

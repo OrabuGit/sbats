@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
-import { PerspectiveCamera, AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
+import { BufferAttribute, BufferGeometry, DoubleSide, PerspectiveCamera, AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
 import SlippyMap from 'three-slippy-map-globe';
 import { feature } from 'topojson-client';
 import type { MultiPolygon, Polygon } from 'geojson';
@@ -115,6 +115,8 @@ const GIBS_TILE = (x: number, y: number, level: number) =>
   `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/2004-08/GoogleMapsCompatible_Level8/${level}/${y}/${x}.jpeg`;
 const GIBS_MAX_LEVEL = 8;
 const GLOBE_RADIUS = 100;
+/** Below this camera altitude the heatmap is drawn as real quads on the globe instead of a texture, so cells stay sharp. */
+const PATCH_ALTITUDE = 0.85;
 
 /** Tile material with the same treatment as the bundled texture: less saturation, darker, unlit. */
 function tileMaterial(map: Texture): MeshBasicMaterial {
@@ -205,6 +207,11 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   const texRef = useRef<{ canvas: HTMLCanvasElement; texture: CanvasTexture; rings: { ring: Ring; wraps: boolean }[] } | null>(null);
   const onSelectRef = useRef(onSelect);
   const indexRef = useRef(index);
+  const earthRef = useRef(earth);
+  earthRef.current = earth;
+  const resultsRef = useRef(results);
+  resultsRef.current = results;
+  const patchApi = useRef<(() => void) | null>(null);
   onSelectRef.current = onSelect;
   indexRef.current = index;
 
@@ -322,6 +329,69 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     overlay.raycast = () => {};
     overlay.renderOrder = 1;
     globe.scene().add(tiles, overlay);
+    // Close in, every cell is a real square on the sphere, so its edges stay crisp at any zoom. The texture is for the whole-globe view.
+    let patch: Mesh | null = null;
+    let patchTimer = 0;
+    const dropPatch = () => {
+      if (patch) {
+        globe.scene().remove(patch);
+        patch.geometry.dispose();
+        (patch.material as MeshBasicMaterial).dispose();
+        patch = null;
+      }
+      overlay.visible = true;
+    };
+    const rebuildPatch = () => {
+      patchTimer = 0;
+      const pov = globe.pointOfView();
+      if (pov.altitude > PATCH_ALTITUDE) return dropPatch();
+      const f = earthRef.current;
+      const res = resultsRef.current;
+      const step = f.meta.resolutionDeg;
+      const h = step / 2;
+      const rad = Math.PI / 180;
+      const reach = Math.min(82, (Math.acos(1 / (1 + pov.altitude)) / rad) + 16);
+      const cosReach = Math.cos(reach * rad);
+      const sinP = Math.sin(pov.lat * rad);
+      const cosP = Math.cos(pov.lat * rad);
+      const pos: number[] = [];
+      const col: number[] = [];
+      f.cells.forEach((c, i) => {
+        const cos = sinP * Math.sin(c.lat * rad) + cosP * Math.cos(c.lat * rad) * Math.cos((c.lon - pov.lng) * rad);
+        if (cos < cosReach) return;
+        const score = res[i] ? res[i].score : null;
+        const a = score === null ? 0.2 : cellAlpha(score);
+        const rgb = score === null ? [0.17, 0.2, 0.23] : [1, 0.69, 0];
+        const q = [
+          globe.getCoords(c.lat + h, c.lon - h, 0.004),
+          globe.getCoords(c.lat + h, c.lon + h, 0.004),
+          globe.getCoords(c.lat - h, c.lon + h, 0.004),
+          globe.getCoords(c.lat - h, c.lon - h, 0.004),
+        ];
+        for (const k of [0, 1, 2, 0, 2, 3]) {
+          pos.push(q[k].x, q[k].y, q[k].z);
+          col.push(rgb[0], rgb[1], rgb[2], a);
+        }
+      });
+      const geo = new BufferGeometry();
+      geo.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3));
+      geo.setAttribute('color', new BufferAttribute(new Float32Array(col), 4));
+      const next = new Mesh(geo, new MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, blending: AdditiveBlending, side: DoubleSide }));
+      next.renderOrder = 1;
+      next.raycast = () => {};
+      if (patch) {
+        globe.scene().remove(patch);
+        patch.geometry.dispose();
+        (patch.material as MeshBasicMaterial).dispose();
+      }
+      patch = next;
+      globe.scene().add(patch);
+      overlay.visible = false;
+    };
+    const schedulePatch = () => {
+      if (!patchTimer) patchTimer = window.setTimeout(rebuildPatch, 90);
+    };
+    patchApi.current = schedulePatch;
     const camera = globe.camera();
     // A nearer near-plane gives the depth buffer ten times the precision for the thin layers on the globe.
     if ('near' in camera && 'updateProjectionMatrix' in camera) {
@@ -332,6 +402,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       tiles.updatePov(camera);
     };
     controls.addEventListener('change', updateTiles);
+    controls.addEventListener('change', () => patchApi.current?.());
     globe.pointOfView({ lat: 5, lng: 105, altitude: small ? 2.3 : 2.2 }, 0);
     globeRef.current = globe;
     updateTiles();
@@ -345,6 +416,9 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       img.onload = null;
       ro.disconnect();
       controls.removeEventListener('change', updateTiles);
+      window.clearTimeout(patchTimer);
+      patchApi.current = null;
+      dropPatch();
       tiles.clearTiles();
       overlay.geometry.dispose();
       (overlay.material as MeshBasicMaterial).dispose();
@@ -403,6 +477,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     // The drawn coastline is only needed until the imagery, which has its own coasts, is in place.
     if (imagery === 0) drawOutlines(g, w, h, rings);
     texture.needsUpdate = true;
+    patchApi.current?.();
   }, [earth, results, imagery]);
 
   // Markers: ranked candidates, named sites, and the selected cell.

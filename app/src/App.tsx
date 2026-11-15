@@ -142,6 +142,31 @@ function Orbit({ data }: { data: DataBundle }) {
   // The pair picked on the home globes, and which of its links is shown in the strip.
   const [homePick, setHomePick] = useState<HeroPick>(null);
   const [homeActive, setHomeActive] = useState(0);
+  // During a fast scroll every transition snaps (class on <html>), so nothing is caught half-way when the page stops.
+  useEffect(() => {
+    const root = document.documentElement;
+    const last = new WeakMap<EventTarget, { y: number; t: number }>();
+    let timer = 0;
+    const on = (e: Event) => {
+      const el = e.target as HTMLElement | Document;
+      const y = el instanceof Document ? window.scrollY : el.scrollTop;
+      const now = performance.now();
+      const prev = last.get(el);
+      last.set(el, { y, t: now });
+      if (prev && now - prev.t > 0 && Math.abs(y - prev.y) / (now - prev.t) > 2.2) {
+        root.classList.add('scroll-fast');
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => root.classList.remove('scroll-fast'), 180);
+      }
+    };
+    window.addEventListener('scroll', on, { capture: true, passive: true });
+    return () => {
+      window.removeEventListener('scroll', on, true);
+      window.clearTimeout(timer);
+      root.classList.remove('scroll-fast');
+    };
+  }, []);
+
   // While nobody is using the globes, the hero walks through the pairs by itself. A touch pauses it for half a minute.
   const [homeAuto, setHomeAuto] = useState(true);
   const resumeTimer = useRef<number>(0);
