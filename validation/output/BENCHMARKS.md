@@ -1,6 +1,6 @@
 # Benchmarks: established analogs and our candidates, scored the same way
 
-Written 2026-11-15T05:49:28.349Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
+Written 2026-11-15T05:55:25.003Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
 
 - One procedure for every site: site-scale terrain, vegetation and rock; the 0.5 degree cell's temperature and rainfall; the target's terrain measured in a window of the site's size.
 - "Best" is the best of all targets, chosen after the fact, and flatters. "Median" is the typical target.

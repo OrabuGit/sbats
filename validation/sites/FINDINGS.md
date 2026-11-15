@@ -23,6 +23,9 @@ Four limits apply to every number below:
 
 Nothing here was used to tune or validate the score.
 
+Updated 2026-11-15 with three additions made after the freeze: minerals, the comparison with
+established analogs, and rank stability. The all-round score did not change.
+
 ## The short version
 
 - **At site scale, every Indonesian candidate still scores about zero as a full base rehearsal, an
@@ -152,13 +155,104 @@ it is not.
 **Not scored at all:** what Kawah Ijen is cited for, the chemistry of a hyperacid lake. The tool has
 no factor for water chemistry or alteration minerals.
 
+## Minerals on both sides (added after the freeze, site-level only)
+
+Tables: `validation/output/MINERALS.md`, from `npx tsx validation/minerals.ts`. Earth side: NASA EMIT
+mineral identifications inside each footprint, on one date. Target side: minerals reported by rovers
+and orbiters in cited papers (`data/target_minerals.json`). Not part of any score, not validated.
+
+What an identification is: a spectral match in a 60 m pixel. The percentages below say how often a
+mineral's signature is matched in the cloud-free pixels, not how much of it is there.
+
+| Site | Minerals identified | Shared with Gale (of 9 comparable families) | Shared with Jezero (of 7) |
+| --- | --- | --- | --- |
+| Merapi | goethite 18%, jarosite 10%, smectite clay 10%, hematite 8% | **3: hematite, jarosite, smectite clay** | 1: smectite clay |
+| Tambora caldera | hematite 24%, goethite 12%, smectite clay 2% | 2: hematite, smectite clay | 1: smectite clay |
+| Batur lava fields | goethite 1% | none | none |
+| Kesaksak (Batur cone) | none | none | none |
+| Maros-Pangkep | none | none | none |
+| Kawah Ijen, Gua Lawa, Goa Pandan | no usable cloud-free EMIT scene | | |
+
+What this says:
+
+- **Merapi shares three mineral families with Gale crater**: hematite, jarosite and smectite clay,
+  all three measured in place by Curiosity. That is as many as Mauna Kea, Kilauea and Dallol share
+  with Gale by the same count. Merapi is the candidate the literature links to Gale, and this is the
+  first number in the project that supports that link.
+- **Tambora shares two with Gale** (hematite, and smectite clay in 2% of pixels).
+- **No site shares olivine or pyroxene**, the minerals that define the basalt targets (Jezero's crater
+  floor, Marius Hills). EMIT identified neither anywhere, including on Mauna Kea and Kilauea. So every
+  site shows "0 of 2" against Marius Hills. That is a limit of what this instrument reports on
+  weathered ground, not evidence about the rock.
+- **Shackleton cannot be compared at all.** Its one reported mineral is plain feldspar, which EMIT
+  cannot identify.
+
+Cautions, all of which apply:
+
+- Iron oxides and clays are ordinary weathering products on Earth. Sharing them with Mars says the
+  surface chemistry overlaps, not that the rocks formed the same way.
+- EMIT's own documentation says minerals outside its ten core ones still need validation. Jarosite
+  and nontronite, both in the Merapi result, are outside the ten.
+- One scene per site. Tambora and Batur show dry vegetation in 72% and 75% of pixels, which hides the
+  ground; Merapi 16%.
+- A family counts at 1% of clear pixels. Tambora's smectite, at 2%, is close to that line.
+
+## Beside the established analogs
+
+Tables: `validation/output/BENCHMARKS.md` and `data/benchmarks.json`, from
+`npx tsx validation/benchmarks.ts`. Every site of `data/sites.json` is scored by one procedure:
+8 candidates and 9 known analogs, each against all 8 targets, at site scale.
+
+Mean similarity over all targets:
+
+| Dimension | Candidates | Known analogs |
+| --- | --- | --- |
+| Geology | 0.44 | 0.53 |
+| Terrain | 0.28 | 0.46 |
+| Climate | 0.00 | 0.04 |
+| Bare ground | 0.01 | 0.85 |
+| Sunlight | 0.40 | 0.41 |
+
+Purpose scores out of 100, for the typical (median) target and for the best target:
+
+| Purpose | Candidates, typical | Known, typical | Candidates, best | Known, best |
+| --- | --- | --- | --- | --- |
+| Instrument and geology testing | 34 | 49 | 77 | 79 |
+| Rover mobility | 0.1 | 47 | 4 | 89 |
+| Ice and resources | 0 | 6 | 0 | 8 |
+| Astrobiology | 0 | 13 | 0 | 15 |
+| Full base rehearsal | 0 | 12 | 0.1 | 19 |
+
+Read plainly:
+
+- **On rock, the candidates stand beside the known analogs** (0.44 against 0.53; best-target geology
+  77 against 79).
+- **On bare ground they do not** (0.01 against 0.85). This one dimension is the whole gap in rover
+  mobility, 0.1 against 47.
+- **Climate is poor for everyone** (0.04 for the known analogs). No place on Earth is cold and dry
+  enough, which is why even established analogs score 12 out of 100 as a full base rehearsal.
+- "Best target" flatters every site, known or candidate: it is the best of eight, chosen afterwards.
+  The typical-target column is the fairer one.
+- The known analogs are the nine for which fine-scale data was built. A yardstick, not a test.
+
+## Rank stability
+
+`validation/output/STABILITY.md`, from `npx tsx validation/stability.ts`: 200 redraws of the weights
+(each moved by up to a quarter, fixed seed), all cells scored again each time.
+
+- For every target, 81% to 91% of the ten best cells stay in the top ten; in the worst single redraw,
+  50% to 70%. The list is stable; single ranks inside it are not.
+- The Indonesian candidates do not move: Tambora's cell stays near rank 59,000 of 92,000 and Merapi's
+  near 63,000, whatever the weights. Their low all-round rank is not an accident of the weights.
+
 ## What this view cannot tell you
 
 - Anything about climate at the site. A weather station on the crater floor would be needed.
 - Whether the bare part of a footprint is a good match. The score uses the footprint's mean NDVI,
   so Merapi's bare third and Tambora's bare quarter are averaged with forest. The bare share is
   printed next to the score for that reason.
-- Anything about caves, tubes, lakes or minerals.
+- Anything about caves, tubes or lake chemistry. Minerals are now compared, but only as families seen
+  from orbit (see the minerals section).
 - How a whole landform compares, except where a rim-to-rim window was measured (Tambora and
   Shackleton above).
 

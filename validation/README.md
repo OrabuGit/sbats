@@ -79,6 +79,11 @@ Both read the frozen values and change nothing.
   `target_terrain.py --posts N` command that measures the targets in a window of that size.
 - `npx tsx validation/geology.ts` takes apart the weak geology number of `output/PURPOSES.md` and adds
   a separate site-level rock comparison. Output: `output/GEOLOGY.md`. Reading: `purposes/GEOLOGY.md`.
+- `npx tsx validation/benchmarks.ts` scores every site of `data/sites.json`, known analogs and candidates
+  alike, with the match record, and writes `data/benchmarks.json` for the Featured page and
+  `output/BENCHMARKS.md`. Run it again after `sites.json`, `targets.json` or `target_minerals.json` change.
+- `npx tsx validation/minerals.ts` lists which mineral families each site shares with each target
+  (`output/MINERALS.md`). Site-level only, added after the freeze.
 - `SUMMARY.md` is the one-page plain-language account of all of it.
 
 Marius Hills (`moon-marius-hills`, added after the freeze) has no known analog listed, so
@@ -99,6 +104,10 @@ are unchanged.
 | `build/make_targets.py` | `data/targets.json` from hand-entered values | `python3 validation/build/make_targets.py` |
 | `build/make_analogs.py` | `data/analogs.json` | `python3 validation/build/make_analogs.py` |
 | `build/make_lithology.py` | `data/lithology_similarity.json` | `python3 validation/build/make_lithology.py` |
+| `build/make_known_sites.py` | `data/known_sites.json` from `build/known_sites_raw.json` | `python3 validation/build/make_known_sites.py` |
+| `build/make_target_minerals.py` | `data/target_minerals.json` | `python3 validation/build/make_target_minerals.py` |
+| `build/make_rovers.py` | `data/rovers.json` | `python3 validation/build/make_rovers.py` |
+| `build/make_target_windows.py` | `data/target_windows.json` from `output/target_terrain_windows.json` | `python3 validation/build/make_target_windows.py` |
 | `build/make_review.py` | `data/REVIEW_ME.md` | `python3 validation/build/make_review.py` |
 
 `target_terrain.py --only <id>` measures one target and keeps the others; `--posts 4 6 9 11 16` measures every

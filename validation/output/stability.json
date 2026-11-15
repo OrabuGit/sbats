@@ -1,0 +1,1896 @@
+{
+ "generatedAt": "2026-11-15T05:54:36.857Z",
+ "draws": 200,
+ "seed": 20261115,
+ "spread": 0.25,
+ "targets": [
+  {
+   "target": "moon-malapert-massif",
+   "scoredCells": 91892,
+   "meanTop10Overlap": 0.904,
+   "minTop10Overlap": 0.7,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 90% of the top 10 stayed in the top 10 on average (70% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 79.75,
+     "lon": -81.75,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 82.25,
+     "lon": -82.75,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 8,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 80.75,
+     "lon": -67.75,
+     "baseRank": 3,
+     "bestRank": 2,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 81.25,
+     "lon": -78.25,
+     "baseRank": 4,
+     "bestRank": 2,
+     "worstRank": 16,
+     "shareInTop10": 0.96
+    },
+    {
+     "lat": 81.25,
+     "lon": -63.75,
+     "baseRank": 5,
+     "bestRank": 3,
+     "worstRank": 10,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 78.75,
+     "lon": -87.25,
+     "baseRank": 6,
+     "bestRank": 2,
+     "worstRank": 12,
+     "shareInTop10": 0.96
+    },
+    {
+     "lat": 81.25,
+     "lon": -64.75,
+     "baseRank": 7,
+     "bestRank": 4,
+     "worstRank": 12,
+     "shareInTop10": 0.895
+    },
+    {
+     "lat": 80.75,
+     "lon": -79.75,
+     "baseRank": 8,
+     "bestRank": 4,
+     "worstRank": 14,
+     "shareInTop10": 0.8
+    },
+    {
+     "lat": 83.75,
+     "lon": -32.75,
+     "baseRank": 9,
+     "bestRank": 5,
+     "worstRank": 18,
+     "shareInTop10": 0.765
+    },
+    {
+     "lat": 81.25,
+     "lon": -85.25,
+     "baseRank": 10,
+     "bestRank": 6,
+     "worstRank": 18,
+     "shareInTop10": 0.655
+    }
+   ],
+   "sites": [
+    {
+     "id": "mauna-kea",
+     "kind": "known",
+     "baseRank": 58397,
+     "rankP05": 57235,
+     "rankP95": 59259.1,
+     "basePercentile": 0.365
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 56030,
+     "rankP05": 54409.6,
+     "rankP95": 57559.3,
+     "basePercentile": 0.39
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 19290,
+     "rankP05": 16168.4,
+     "rankP95": 22689.4,
+     "basePercentile": 0.79
+    },
+    {
+     "id": "ries-crater",
+     "kind": "known",
+     "baseRank": 48190,
+     "rankP05": 47373.1,
+     "rankP95": 48936.5,
+     "basePercentile": 0.476
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 14036,
+     "rankP05": 9854,
+     "rankP95": 17358.4,
+     "basePercentile": 0.847
+    },
+    {
+     "id": "sp-crater",
+     "kind": "known",
+     "baseRank": 19703,
+     "rankP05": 19357.5,
+     "rankP95": 20433.7,
+     "basePercentile": 0.786
+    },
+    {
+     "id": "meteor-crater",
+     "kind": "known",
+     "baseRank": 15263,
+     "rankP05": 13666.7,
+     "rankP95": 16955.2,
+     "basePercentile": 0.834
+    },
+    {
+     "id": "etna",
+     "kind": "known",
+     "baseRank": 43717,
+     "rankP05": 43046.9,
+     "rankP95": 44486.4,
+     "basePercentile": 0.524
+    },
+    {
+     "id": "sudbury",
+     "kind": "known",
+     "baseRank": 44102,
+     "rankP05": 43571.9,
+     "rankP95": 44609.1,
+     "basePercentile": 0.52
+    },
+    {
+     "id": "mistastin-crater",
+     "kind": "known",
+     "baseRank": 25801,
+     "rankP05": 21396.6,
+     "rankP95": 29650.5,
+     "basePercentile": 0.719
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60792,
+     "rankP05": 60714.7,
+     "rankP95": 60864.1,
+     "basePercentile": 0.338
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 63495,
+     "rankP05": 63207.4,
+     "rankP95": 63609.5,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63687,
+     "rankP05": 63448.9,
+     "rankP95": 63776.2,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 62374,
+     "rankP05": 62055.9,
+     "rankP95": 62592.2,
+     "basePercentile": 0.321
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61169,
+     "rankP05": 61006,
+     "rankP95": 61367.2,
+     "basePercentile": 0.334
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 62030,
+     "rankP05": 61859.8,
+     "rankP95": 62163.2,
+     "basePercentile": 0.325
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 59183,
+     "rankP05": 58764.3,
+     "rankP95": 59584.6,
+     "basePercentile": 0.356
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61169,
+     "rankP05": 61006,
+     "rankP95": 61367.2,
+     "basePercentile": 0.334
+    }
+   ]
+  },
+  {
+   "target": "moon-mons-mouton",
+   "scoredCells": 91892,
+   "meanTop10Overlap": 0.827,
+   "minTop10Overlap": 0.7,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 83% of the top 10 stayed in the top 10 on average (70% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 79.75,
+     "lon": -81.75,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 3,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 81.25,
+     "lon": -78.25,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 6,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 80.75,
+     "lon": -79.75,
+     "baseRank": 3,
+     "bestRank": 2,
+     "worstRank": 8,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 78.75,
+     "lon": -87.25,
+     "baseRank": 4,
+     "bestRank": 2,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 81.25,
+     "lon": -64.75,
+     "baseRank": 5,
+     "bestRank": 4,
+     "worstRank": 10,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 81.25,
+     "lon": -85.25,
+     "baseRank": 6,
+     "bestRank": 4,
+     "worstRank": 16,
+     "shareInTop10": 0.81
+    },
+    {
+     "lat": 82.25,
+     "lon": -48.25,
+     "baseRank": 7,
+     "bestRank": 4,
+     "worstRank": 16,
+     "shareInTop10": 0.86
+    },
+    {
+     "lat": 82.75,
+     "lon": -77.25,
+     "baseRank": 8,
+     "bestRank": 2,
+     "worstRank": 44,
+     "shareInTop10": 0.54
+    },
+    {
+     "lat": 80.75,
+     "lon": -66.25,
+     "baseRank": 9,
+     "bestRank": 6,
+     "worstRank": 19,
+     "shareInTop10": 0.495
+    },
+    {
+     "lat": 82.25,
+     "lon": -49.25,
+     "baseRank": 10,
+     "bestRank": 6,
+     "worstRank": 22,
+     "shareInTop10": 0.56
+    }
+   ],
+   "sites": [
+    {
+     "id": "mauna-kea",
+     "kind": "known",
+     "baseRank": 58285,
+     "rankP05": 57114.6,
+     "rankP95": 59168.7,
+     "basePercentile": 0.366
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 55785,
+     "rankP05": 54171.8,
+     "rankP95": 57379.7,
+     "basePercentile": 0.393
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 18977,
+     "rankP05": 15869.9,
+     "rankP95": 22345.7,
+     "basePercentile": 0.793
+    },
+    {
+     "id": "ries-crater",
+     "kind": "known",
+     "baseRank": 48180,
+     "rankP05": 47382.3,
+     "rankP95": 48931.2,
+     "basePercentile": 0.476
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 13480,
+     "rankP05": 9327.2,
+     "rankP95": 16787,
+     "basePercentile": 0.853
+    },
+    {
+     "id": "sp-crater",
+     "kind": "known",
+     "baseRank": 19275,
+     "rankP05": 18868.8,
+     "rankP95": 20105.3,
+     "basePercentile": 0.79
+    },
+    {
+     "id": "meteor-crater",
+     "kind": "known",
+     "baseRank": 15036,
+     "rankP05": 13271.6,
+     "rankP95": 16739.9,
+     "basePercentile": 0.836
+    },
+    {
+     "id": "etna",
+     "kind": "known",
+     "baseRank": 43356,
+     "rankP05": 42499.8,
+     "rankP95": 44193.2,
+     "basePercentile": 0.528
+    },
+    {
+     "id": "sudbury",
+     "kind": "known",
+     "baseRank": 44125,
+     "rankP05": 43586.2,
+     "rankP95": 44617,
+     "basePercentile": 0.52
+    },
+    {
+     "id": "mistastin-crater",
+     "kind": "known",
+     "baseRank": 25680,
+     "rankP05": 21343,
+     "rankP95": 29544.7,
+     "basePercentile": 0.721
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60722,
+     "rankP05": 60635.7,
+     "rankP95": 60807.1,
+     "basePercentile": 0.339
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 63469,
+     "rankP05": 63167.9,
+     "rankP95": 63594.4,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63654,
+     "rankP05": 63409,
+     "rankP95": 63757.3,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 62399,
+     "rankP05": 62068,
+     "rankP95": 62606.1,
+     "basePercentile": 0.321
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61118,
+     "rankP05": 60960.5,
+     "rankP95": 61310.5,
+     "basePercentile": 0.335
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 61962,
+     "rankP05": 61776.9,
+     "rankP95": 62107.1,
+     "basePercentile": 0.326
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 59099,
+     "rankP05": 58664.4,
+     "rankP95": 59486,
+     "basePercentile": 0.357
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61118,
+     "rankP05": 60960.5,
+     "rankP95": 61310.5,
+     "basePercentile": 0.335
+    }
+   ]
+  },
+  {
+   "target": "moon-haworth",
+   "scoredCells": 91892,
+   "meanTop10Overlap": 0.876,
+   "minTop10Overlap": 0.5,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 88% of the top 10 stayed in the top 10 on average (50% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 79.75,
+     "lon": -81.75,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 82.25,
+     "lon": -82.75,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 19,
+     "shareInTop10": 0.935
+    },
+    {
+     "lat": 81.25,
+     "lon": -78.25,
+     "baseRank": 3,
+     "bestRank": 1,
+     "worstRank": 16,
+     "shareInTop10": 0.95
+    },
+    {
+     "lat": 78.75,
+     "lon": -87.25,
+     "baseRank": 4,
+     "bestRank": 2,
+     "worstRank": 9,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 81.25,
+     "lon": -64.75,
+     "baseRank": 5,
+     "bestRank": 2,
+     "worstRank": 10,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 80.75,
+     "lon": -67.75,
+     "baseRank": 6,
+     "bestRank": 3,
+     "worstRank": 11,
+     "shareInTop10": 0.99
+    },
+    {
+     "lat": 80.75,
+     "lon": -79.75,
+     "baseRank": 7,
+     "bestRank": 2,
+     "worstRank": 11,
+     "shareInTop10": 0.935
+    },
+    {
+     "lat": 81.25,
+     "lon": -63.75,
+     "baseRank": 8,
+     "bestRank": 4,
+     "worstRank": 16,
+     "shareInTop10": 0.935
+    },
+    {
+     "lat": 81.25,
+     "lon": -85.25,
+     "baseRank": 9,
+     "bestRank": 5,
+     "worstRank": 18,
+     "shareInTop10": 0.71
+    },
+    {
+     "lat": 81.25,
+     "lon": -64.25,
+     "baseRank": 10,
+     "bestRank": 8,
+     "worstRank": 24,
+     "shareInTop10": 0.305
+    }
+   ],
+   "sites": [
+    {
+     "id": "mauna-kea",
+     "kind": "known",
+     "baseRank": 58377,
+     "rankP05": 57213.5,
+     "rankP95": 59241.1,
+     "basePercentile": 0.365
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 55997,
+     "rankP05": 54380.3,
+     "rankP95": 57534.8,
+     "basePercentile": 0.391
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 19170,
+     "rankP05": 16068.4,
+     "rankP95": 22589.6,
+     "basePercentile": 0.791
+    },
+    {
+     "id": "ries-crater",
+     "kind": "known",
+     "baseRank": 48188,
+     "rankP05": 47363.2,
+     "rankP95": 48926.5,
+     "basePercentile": 0.476
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 13938,
+     "rankP05": 9746.8,
+     "rankP95": 17240.9,
+     "basePercentile": 0.848
+    },
+    {
+     "id": "sp-crater",
+     "kind": "known",
+     "baseRank": 19633,
+     "rankP05": 19295.8,
+     "rankP95": 20383.9,
+     "basePercentile": 0.786
+    },
+    {
+     "id": "meteor-crater",
+     "kind": "known",
+     "baseRank": 15262,
+     "rankP05": 13638.7,
+     "rankP95": 16950,
+     "basePercentile": 0.834
+    },
+    {
+     "id": "etna",
+     "kind": "known",
+     "baseRank": 43650,
+     "rankP05": 42957.5,
+     "rankP95": 44436.8,
+     "basePercentile": 0.525
+    },
+    {
+     "id": "sudbury",
+     "kind": "known",
+     "baseRank": 44102,
+     "rankP05": 43566.4,
+     "rankP95": 44603.1,
+     "basePercentile": 0.52
+    },
+    {
+     "id": "mistastin-crater",
+     "kind": "known",
+     "baseRank": 25733,
+     "rankP05": 21343.9,
+     "rankP95": 29612,
+     "basePercentile": 0.72
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60784,
+     "rankP05": 60698,
+     "rankP95": 60855.1,
+     "basePercentile": 0.339
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 63490,
+     "rankP05": 63204.4,
+     "rankP95": 63607.5,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63682,
+     "rankP05": 63444.8,
+     "rankP95": 63774.1,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 62381,
+     "rankP05": 62058.9,
+     "rankP95": 62594.2,
+     "basePercentile": 0.321
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61159,
+     "rankP05": 60999.8,
+     "rankP95": 61361.1,
+     "basePercentile": 0.334
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 62021,
+     "rankP05": 61846.8,
+     "rankP95": 62153.2,
+     "basePercentile": 0.325
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 59169,
+     "rankP05": 58744,
+     "rankP95": 59569.6,
+     "basePercentile": 0.356
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61159,
+     "rankP05": 60999.8,
+     "rankP95": 61361.1,
+     "basePercentile": 0.334
+    }
+   ]
+  },
+  {
+   "target": "moon-shackleton-rim",
+   "scoredCells": 91892,
+   "meanTop10Overlap": 0.883,
+   "minTop10Overlap": 0.7,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 88% of the top 10 stayed in the top 10 on average (70% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 81.25,
+     "lon": -78.25,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 79.75,
+     "lon": -81.75,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 82.25,
+     "lon": -82.75,
+     "baseRank": 3,
+     "bestRank": 1,
+     "worstRank": 17,
+     "shareInTop10": 0.945
+    },
+    {
+     "lat": 80.75,
+     "lon": -67.75,
+     "baseRank": 4,
+     "bestRank": 3,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 80.75,
+     "lon": -79.75,
+     "baseRank": 5,
+     "bestRank": 2,
+     "worstRank": 12,
+     "shareInTop10": 0.965
+    },
+    {
+     "lat": 78.75,
+     "lon": -87.25,
+     "baseRank": 6,
+     "bestRank": 2,
+     "worstRank": 13,
+     "shareInTop10": 0.925
+    },
+    {
+     "lat": 81.25,
+     "lon": -85.25,
+     "baseRank": 7,
+     "bestRank": 5,
+     "worstRank": 16,
+     "shareInTop10": 0.93
+    },
+    {
+     "lat": 81.25,
+     "lon": -64.75,
+     "baseRank": 8,
+     "bestRank": 3,
+     "worstRank": 13,
+     "shareInTop10": 0.755
+    },
+    {
+     "lat": 81.25,
+     "lon": -63.75,
+     "baseRank": 9,
+     "bestRank": 5,
+     "worstRank": 13,
+     "shareInTop10": 0.795
+    },
+    {
+     "lat": 82.75,
+     "lon": -77.25,
+     "baseRank": 10,
+     "bestRank": 3,
+     "worstRank": 38,
+     "shareInTop10": 0.515
+    }
+   ],
+   "sites": [
+    {
+     "id": "mauna-kea",
+     "kind": "known",
+     "baseRank": 58316,
+     "rankP05": 57143.1,
+     "rankP95": 59194.1,
+     "basePercentile": 0.365
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 55797,
+     "rankP05": 54179.9,
+     "rankP95": 57386.9,
+     "basePercentile": 0.393
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 19113,
+     "rankP05": 16007.5,
+     "rankP95": 22488.5,
+     "basePercentile": 0.792
+    },
+    {
+     "id": "ries-crater",
+     "kind": "known",
+     "baseRank": 48205,
+     "rankP05": 47410.8,
+     "rankP95": 48955.8,
+     "basePercentile": 0.475
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 13563,
+     "rankP05": 9431,
+     "rankP95": 16836.6,
+     "basePercentile": 0.852
+    },
+    {
+     "id": "sp-crater",
+     "kind": "known",
+     "baseRank": 19288,
+     "rankP05": 18874.9,
+     "rankP95": 20123.9,
+     "basePercentile": 0.79
+    },
+    {
+     "id": "meteor-crater",
+     "kind": "known",
+     "baseRank": 15003,
+     "rankP05": 13232.7,
+     "rankP95": 16717.1,
+     "basePercentile": 0.837
+    },
+    {
+     "id": "etna",
+     "kind": "known",
+     "baseRank": 43366,
+     "rankP05": 42505.2,
+     "rankP95": 44202.1,
+     "basePercentile": 0.528
+    },
+    {
+     "id": "sudbury",
+     "kind": "known",
+     "baseRank": 44142,
+     "rankP05": 43600.9,
+     "rankP95": 44629.5,
+     "basePercentile": 0.52
+    },
+    {
+     "id": "mistastin-crater",
+     "kind": "known",
+     "baseRank": 25765,
+     "rankP05": 21468.4,
+     "rankP95": 29630.5,
+     "basePercentile": 0.72
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60725,
+     "rankP05": 60642.7,
+     "rankP95": 60809.2,
+     "basePercentile": 0.339
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 63466,
+     "rankP05": 63165.9,
+     "rankP95": 63594.4,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63655,
+     "rankP05": 63408.9,
+     "rankP95": 63762,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 62395,
+     "rankP05": 62069,
+     "rankP95": 62606.2,
+     "basePercentile": 0.321
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61120,
+     "rankP05": 60962.6,
+     "rankP95": 61312.7,
+     "basePercentile": 0.335
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 61958,
+     "rankP05": 61773.9,
+     "rankP95": 62106.3,
+     "basePercentile": 0.326
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 59100,
+     "rankP05": 58667.3,
+     "rankP95": 59489.9,
+     "basePercentile": 0.357
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61120,
+     "rankP05": 60962.6,
+     "rankP95": 61312.7,
+     "basePercentile": 0.335
+    }
+   ]
+  },
+  {
+   "target": "moon-marius-hills",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 0.912,
+   "minTop10Overlap": 0.7,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 91% of the top 10 stayed in the top 10 on average (70% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 34.75,
+     "lon": 84.75,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 2,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 86.25,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 2,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 36.25,
+     "lon": 88.75,
+     "baseRank": 3,
+     "bestRank": 3,
+     "worstRank": 3,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 89.25,
+     "baseRank": 4,
+     "bestRank": 4,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 89.75,
+     "baseRank": 5,
+     "bestRank": 5,
+     "worstRank": 8,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 88.75,
+     "baseRank": 6,
+     "bestRank": 5,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 89.25,
+     "baseRank": 7,
+     "bestRank": 7,
+     "worstRank": 12,
+     "shareInTop10": 0.995
+    },
+    {
+     "lat": 34.75,
+     "lon": 79.25,
+     "baseRank": 8,
+     "bestRank": 5,
+     "worstRank": 14,
+     "shareInTop10": 0.915
+    },
+    {
+     "lat": 35.25,
+     "lon": 83.75,
+     "baseRank": 9,
+     "bestRank": 6,
+     "worstRank": 17,
+     "shareInTop10": 0.69
+    },
+    {
+     "lat": 35.75,
+     "lon": 83.75,
+     "baseRank": 10,
+     "bestRank": 9,
+     "worstRank": 23,
+     "shareInTop10": 0.515
+    }
+   ],
+   "sites": [
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 59869,
+     "rankP05": 59574.1,
+     "rankP95": 60099.3,
+     "basePercentile": 0.349
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 61483,
+     "rankP05": 60524.8,
+     "rankP95": 62102.3,
+     "basePercentile": 0.331
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 62311,
+     "rankP05": 61673.6,
+     "rankP95": 62705.4,
+     "basePercentile": 0.322
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 60114,
+     "rankP05": 59124.6,
+     "rankP95": 60773.9,
+     "basePercentile": 0.346
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 60004,
+     "rankP05": 59555.7,
+     "rankP95": 60370.2,
+     "basePercentile": 0.347
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 61725,
+     "rankP05": 61484,
+     "rankP95": 61927.2,
+     "basePercentile": 0.328
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 58147,
+     "rankP05": 57726.3,
+     "rankP95": 58597,
+     "basePercentile": 0.367
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 60004,
+     "rankP05": 59555.7,
+     "rankP95": 60370.2,
+     "basePercentile": 0.347
+    }
+   ]
+  },
+  {
+   "target": "mars-jezero",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 0.847,
+   "minTop10Overlap": 0.5,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 85% of the top 10 stayed in the top 10 on average (50% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 34.75,
+     "lon": 84.75,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 1,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 36.25,
+     "lon": 88.75,
+     "baseRank": 2,
+     "bestRank": 2,
+     "worstRank": 2,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 86.25,
+     "baseRank": 3,
+     "bestRank": 3,
+     "worstRank": 3,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 89.25,
+     "baseRank": 4,
+     "bestRank": 4,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 88.75,
+     "baseRank": 5,
+     "bestRank": 5,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 36.75,
+     "lon": 93.25,
+     "baseRank": 6,
+     "bestRank": 6,
+     "worstRank": 37,
+     "shareInTop10": 0.88
+    },
+    {
+     "lat": 35.25,
+     "lon": 89.75,
+     "baseRank": 7,
+     "bestRank": 6,
+     "worstRank": 17,
+     "shareInTop10": 0.945
+    },
+    {
+     "lat": 35.75,
+     "lon": 90.25,
+     "baseRank": 8,
+     "bestRank": 7,
+     "worstRank": 26,
+     "shareInTop10": 0.5
+    },
+    {
+     "lat": -22.75,
+     "lon": -67.25,
+     "baseRank": 9,
+     "bestRank": 6,
+     "worstRank": 50,
+     "shareInTop10": 0.55
+    },
+    {
+     "lat": -23.25,
+     "lon": -67.25,
+     "baseRank": 10,
+     "bestRank": 7,
+     "worstRank": 62,
+     "shareInTop10": 0.595
+    }
+   ],
+   "sites": [
+    {
+     "id": "atacama-yungay",
+     "kind": "known",
+     "baseRank": 9540,
+     "rankP05": 7599.3,
+     "rankP95": 12391.7,
+     "basePercentile": 0.896
+    },
+    {
+     "id": "haughton-crater",
+     "kind": "known",
+     "baseRank": 8246,
+     "rankP05": 4829.9,
+     "rankP95": 11135.7,
+     "basePercentile": 0.91
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 55087,
+     "rankP05": 53360.2,
+     "rankP95": 56459.3,
+     "basePercentile": 0.401
+    },
+    {
+     "id": "craters-of-the-moon",
+     "kind": "known",
+     "baseRank": 1672,
+     "rankP05": 927,
+     "rankP95": 2640.3,
+     "basePercentile": 0.982
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 7157,
+     "rankP05": 3960,
+     "rankP95": 13184.4,
+     "basePercentile": 0.922
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 19348,
+     "rankP05": 14153.5,
+     "rankP95": 23399.6,
+     "basePercentile": 0.789
+    },
+    {
+     "id": "mdrs-utah",
+     "kind": "known",
+     "baseRank": 1184,
+     "rankP05": 1060.8,
+     "rankP95": 1397.1,
+     "basePercentile": 0.987
+    },
+    {
+     "id": "rio-tinto",
+     "kind": "known",
+     "baseRank": 34656,
+     "rankP05": 33423.8,
+     "rankP95": 35898.4,
+     "basePercentile": 0.623
+    },
+    {
+     "id": "dallol",
+     "kind": "known",
+     "baseRank": 5217,
+     "rankP05": 3452.9,
+     "rankP95": 8302.3,
+     "basePercentile": 0.943
+    },
+    {
+     "id": "death-valley-ubehebe",
+     "kind": "known",
+     "baseRank": 1135,
+     "rankP05": 1064.8,
+     "rankP95": 1276,
+     "basePercentile": 0.988
+    },
+    {
+     "id": "pilbara-north-pole-dome",
+     "kind": "known",
+     "baseRank": 16322,
+     "rankP05": 13758.8,
+     "rankP95": 19190,
+     "basePercentile": 0.822
+    },
+    {
+     "id": "arkaroola",
+     "kind": "known",
+     "baseRank": 2638,
+     "rankP05": 2247.1,
+     "rankP95": 3180.8,
+     "basePercentile": 0.971
+    },
+    {
+     "id": "qaidam-basin",
+     "kind": "known",
+     "baseRank": 2127,
+     "rankP05": 1508.9,
+     "rankP95": 2945,
+     "basePercentile": 0.977
+    },
+    {
+     "id": "makhtesh-ramon",
+     "kind": "known",
+     "baseRank": 1418,
+     "rankP05": 1128.6,
+     "rankP95": 1800.9,
+     "basePercentile": 0.985
+    },
+    {
+     "id": "lonar-crater",
+     "kind": "known",
+     "baseRank": 40106,
+     "rankP05": 39035,
+     "rankP95": 40996.4,
+     "basePercentile": 0.564
+    },
+    {
+     "id": "ladakh-tso-kar",
+     "kind": "known",
+     "baseRank": 42718,
+     "rankP05": 37202.7,
+     "rankP95": 47607.9,
+     "basePercentile": 0.535
+    },
+    {
+     "id": "makgadikgadi-pans",
+     "kind": "known",
+     "baseRank": 18660,
+     "rankP05": 15921.9,
+     "rankP95": 21089.4,
+     "basePercentile": 0.797
+    },
+    {
+     "id": "teide",
+     "kind": "known",
+     "baseRank": 42894,
+     "rankP05": 39560.4,
+     "rankP95": 46357.3,
+     "basePercentile": 0.533
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60135,
+     "rankP05": 59878,
+     "rankP95": 60380.7,
+     "basePercentile": 0.346
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 62515,
+     "rankP05": 61864.6,
+     "rankP95": 62925.8,
+     "basePercentile": 0.32
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 62989,
+     "rankP05": 62478.8,
+     "rankP95": 63310.2,
+     "basePercentile": 0.315
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 61499,
+     "rankP05": 60915.6,
+     "rankP95": 61865.2,
+     "basePercentile": 0.331
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 60329,
+     "rankP05": 59947.7,
+     "rankP95": 60696.3,
+     "basePercentile": 0.344
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 61817,
+     "rankP05": 61551.5,
+     "rankP95": 61999.2,
+     "basePercentile": 0.327
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 58277,
+     "rankP05": 57836.1,
+     "rankP95": 58723.3,
+     "basePercentile": 0.366
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 60329,
+     "rankP05": 59947.7,
+     "rankP95": 60696.3,
+     "basePercentile": 0.344
+    }
+   ]
+  },
+  {
+   "target": "mars-gale",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 0.806,
+   "minTop10Overlap": 0.6,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 81% of the top 10 stayed in the top 10 on average (60% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 35.25,
+     "lon": 80.25,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 31.75,
+     "lon": 79.75,
+     "baseRank": 2,
+     "bestRank": 1,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 34.75,
+     "lon": 80.75,
+     "baseRank": 3,
+     "bestRank": 2,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 82.25,
+     "baseRank": 4,
+     "bestRank": 3,
+     "worstRank": 11,
+     "shareInTop10": 0.995
+    },
+    {
+     "lat": 36.75,
+     "lon": 87.25,
+     "baseRank": 5,
+     "bestRank": 5,
+     "worstRank": 15,
+     "shareInTop10": 0.85
+    },
+    {
+     "lat": 35.75,
+     "lon": 78.25,
+     "baseRank": 6,
+     "bestRank": 4,
+     "worstRank": 22,
+     "shareInTop10": 0.68
+    },
+    {
+     "lat": -24.75,
+     "lon": -68.75,
+     "baseRank": 7,
+     "bestRank": 2,
+     "worstRank": 47,
+     "shareInTop10": 0.595
+    },
+    {
+     "lat": 32.25,
+     "lon": 79.25,
+     "baseRank": 8,
+     "bestRank": 5,
+     "worstRank": 18,
+     "shareInTop10": 0.815
+    },
+    {
+     "lat": 36.25,
+     "lon": 83.25,
+     "baseRank": 9,
+     "bestRank": 5,
+     "worstRank": 22,
+     "shareInTop10": 0.64
+    },
+    {
+     "lat": 34.25,
+     "lon": 80.75,
+     "baseRank": 10,
+     "bestRank": 5,
+     "worstRank": 23,
+     "shareInTop10": 0.48
+    }
+   ],
+   "sites": [
+    {
+     "id": "atacama-yungay",
+     "kind": "known",
+     "baseRank": 1400,
+     "rankP05": 975.8,
+     "rankP95": 2067,
+     "basePercentile": 0.985
+    },
+    {
+     "id": "haughton-crater",
+     "kind": "known",
+     "baseRank": 11539,
+     "rankP05": 7692.2,
+     "rankP95": 13657.4,
+     "basePercentile": 0.874
+    },
+    {
+     "id": "kilauea",
+     "kind": "known",
+     "baseRank": 55553,
+     "rankP05": 53649.1,
+     "rankP95": 57260.2,
+     "basePercentile": 0.395
+    },
+    {
+     "id": "craters-of-the-moon",
+     "kind": "known",
+     "baseRank": 13456,
+     "rankP05": 11942.3,
+     "rankP95": 14753.2,
+     "basePercentile": 0.854
+    },
+    {
+     "id": "lanzarote-timanfaya",
+     "kind": "known",
+     "baseRank": 13440,
+     "rankP05": 9875.4,
+     "rankP95": 19916.4,
+     "basePercentile": 0.854
+    },
+    {
+     "id": "askja",
+     "kind": "known",
+     "baseRank": 30333,
+     "rankP05": 27075.8,
+     "rankP95": 33521.3,
+     "basePercentile": 0.67
+    },
+    {
+     "id": "mdrs-utah",
+     "kind": "known",
+     "baseRank": 1192,
+     "rankP05": 1068.9,
+     "rankP95": 1347.3,
+     "basePercentile": 0.987
+    },
+    {
+     "id": "rio-tinto",
+     "kind": "known",
+     "baseRank": 36025,
+     "rankP05": 34548.2,
+     "rankP95": 37124.2,
+     "basePercentile": 0.608
+    },
+    {
+     "id": "dallol",
+     "kind": "known",
+     "baseRank": 7049,
+     "rankP05": 4679.6,
+     "rankP95": 9848.8,
+     "basePercentile": 0.923
+    },
+    {
+     "id": "death-valley-ubehebe",
+     "kind": "known",
+     "baseRank": 946,
+     "rankP05": 802.9,
+     "rankP95": 1139.1,
+     "basePercentile": 0.99
+    },
+    {
+     "id": "pilbara-north-pole-dome",
+     "kind": "known",
+     "baseRank": 14743,
+     "rankP05": 12490.7,
+     "rankP95": 18313,
+     "basePercentile": 0.84
+    },
+    {
+     "id": "arkaroola",
+     "kind": "known",
+     "baseRank": 8353,
+     "rankP05": 7250.7,
+     "rankP95": 10109.1,
+     "basePercentile": 0.909
+    },
+    {
+     "id": "qaidam-basin",
+     "kind": "known",
+     "baseRank": 1316,
+     "rankP05": 1006.9,
+     "rankP95": 1762.6,
+     "basePercentile": 0.986
+    },
+    {
+     "id": "makhtesh-ramon",
+     "kind": "known",
+     "baseRank": 2036,
+     "rankP05": 1704.9,
+     "rankP95": 2471.1,
+     "basePercentile": 0.978
+    },
+    {
+     "id": "lonar-crater",
+     "kind": "known",
+     "baseRank": 44669,
+     "rankP05": 44072.9,
+     "rankP95": 45308.1,
+     "basePercentile": 0.514
+    },
+    {
+     "id": "ladakh-tso-kar",
+     "kind": "known",
+     "baseRank": 597,
+     "rankP05": 422.7,
+     "rankP95": 877.1,
+     "basePercentile": 0.994
+    },
+    {
+     "id": "makgadikgadi-pans",
+     "kind": "known",
+     "baseRank": 15470,
+     "rankP05": 13105.5,
+     "rankP95": 18646.4,
+     "basePercentile": 0.832
+    },
+    {
+     "id": "teide",
+     "kind": "known",
+     "baseRank": 28024,
+     "rankP05": 24936.4,
+     "rankP95": 31000.6,
+     "basePercentile": 0.695
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 60501,
+     "rankP05": 60321.5,
+     "rankP95": 60608,
+     "basePercentile": 0.342
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 63481,
+     "rankP05": 63246.5,
+     "rankP95": 63580.3,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63644,
+     "rankP05": 63445,
+     "rankP95": 63740.2,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 62670,
+     "rankP05": 62421,
+     "rankP95": 62805.1,
+     "basePercentile": 0.318
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61263,
+     "rankP05": 61086.6,
+     "rankP95": 61503.2,
+     "basePercentile": 0.333
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 62074,
+     "rankP05": 61908,
+     "rankP95": 62216.1,
+     "basePercentile": 0.325
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 59115,
+     "rankP05": 58700,
+     "rankP95": 59554.6,
+     "basePercentile": 0.357
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61263,
+     "rankP05": 61086.6,
+     "rankP95": 61503.2,
+     "basePercentile": 0.333
+    }
+   ]
+  },
+  {
+   "target": "mars-arcadia-planitia",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 0.842,
+   "minTop10Overlap": 0.6,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 84% of the top 10 stayed in the top 10 on average (60% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 35.25,
+     "lon": 85.25,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 3,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.75,
+     "baseRank": 2,
+     "bestRank": 2,
+     "worstRank": 18,
+     "shareInTop10": 0.92
+    },
+    {
+     "lat": 35.25,
+     "lon": 85.75,
+     "baseRank": 3,
+     "bestRank": 3,
+     "worstRank": 20,
+     "shareInTop10": 0.855
+    },
+    {
+     "lat": 38.25,
+     "lon": 92.25,
+     "baseRank": 4,
+     "bestRank": 1,
+     "worstRank": 9,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 37.75,
+     "lon": 93.25,
+     "baseRank": 5,
+     "bestRank": 2,
+     "worstRank": 10,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.25,
+     "baseRank": 6,
+     "bestRank": 4,
+     "worstRank": 32,
+     "shareInTop10": 0.72
+    },
+    {
+     "lat": 38.25,
+     "lon": 92.75,
+     "baseRank": 7,
+     "bestRank": 4,
+     "worstRank": 12,
+     "shareInTop10": 0.975
+    },
+    {
+     "lat": 37.75,
+     "lon": 92.75,
+     "baseRank": 8,
+     "bestRank": 6,
+     "worstRank": 14,
+     "shareInTop10": 0.835
+    },
+    {
+     "lat": 37.25,
+     "lon": 93.75,
+     "baseRank": 9,
+     "bestRank": 5,
+     "worstRank": 21,
+     "shareInTop10": 0.52
+    },
+    {
+     "lat": 38.25,
+     "lon": 93.25,
+     "baseRank": 10,
+     "bestRank": 8,
+     "worstRank": 15,
+     "shareInTop10": 0.595
+    }
+   ],
+   "sites": [
+    {
+     "id": "haughton-crater",
+     "kind": "known",
+     "baseRank": 4274,
+     "rankP05": 2527.6,
+     "rankP95": 6537,
+     "basePercentile": 0.954
+    },
+    {
+     "id": "beacon-valley",
+     "kind": "known",
+     "baseRank": 49053,
+     "rankP05": 45591.2,
+     "rankP95": 51981,
+     "basePercentile": 0.466
+    },
+    {
+     "id": "don-juan-pond",
+     "kind": "known",
+     "baseRank": 57495,
+     "rankP05": 54924.8,
+     "rankP95": 59433.4,
+     "basePercentile": 0.374
+    },
+    {
+     "id": "ladakh-tso-kar",
+     "kind": "known",
+     "baseRank": 59593,
+     "rankP05": 56929.9,
+     "rankP95": 61230.4,
+     "basePercentile": 0.352
+    },
+    {
+     "id": "kangerlussuaq",
+     "kind": "known",
+     "baseRank": 33392,
+     "rankP05": 30404.7,
+     "rankP95": 36904.5,
+     "basePercentile": 0.637
+    },
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 63730,
+     "rankP05": 63557.9,
+     "rankP95": 63853,
+     "basePercentile": 0.306
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 61471,
+     "rankP05": 60805.4,
+     "rankP95": 62092,
+     "basePercentile": 0.331
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63524,
+     "rankP05": 63231.9,
+     "rankP95": 63768.2,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 57556,
+     "rankP05": 56139.1,
+     "rankP95": 58848.6,
+     "basePercentile": 0.374
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 62142,
+     "rankP05": 61829.6,
+     "rankP95": 62460.2,
+     "basePercentile": 0.324
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 63695,
+     "rankP05": 63564.9,
+     "rankP95": 63806.4,
+     "basePercentile": 0.307
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 62776,
+     "rankP05": 62369.3,
+     "rankP95": 63038,
+     "basePercentile": 0.317
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 62142,
+     "rankP05": 61829.6,
+     "rankP95": 62460.2,
+     "basePercentile": 0.324
+    }
+   ]
+  }
+ ]
+}

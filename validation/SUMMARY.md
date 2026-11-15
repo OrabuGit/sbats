@@ -15,6 +15,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **Known analogs sit high in the world ranking.** On the test sites they beat 72% of all land
   squares on average. Chance is 50%.
 - **It is not over-fitted.** The one tuning pass tried 68 changes. None beat noise, none was kept.
+- **The top ten does not hang on the exact weights.** With every weight moved by up to a quarter, 200
+  times, 81 to 91% of each target's ten best cells stay in the top ten.
 - **Measured at the site, known analogs score very high.** From a 5 km footprint, Mauna Kea, Atacama,
   Haughton and Lanzarote reach 95 to 98 out of 100 for rover mobility against their best target.
 
@@ -30,10 +32,14 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **Sites known for one thing are under-ranked.** An impact crater in farmland can score near zero.
 - **The Indonesian candidates score 0 on the all-round score.** Hot, wet, vegetated. At site scale
   they still score 0 as a full base rehearsal. What they offer is narrower: basalt rock (Tambora,
-  the lava caves) and crater and lava-field shapes.
+  the lava caves), crater and lava-field shapes, and at Merapi three mineral families shared with
+  Gale crater (hematite, jarosite, smectite clay), as many as Mauna Kea shares.
+- **Beside established analogs, scored the same way:** the candidates match them on rock (0.44
+  against 0.53) and fall far short on bare ground (0.01 against 0.85).
 - **Tambora is not a Shackleton.** Same steepness (21 and 22 degrees), about a third of the size
   (roughly 7 against 21 km wide, 1.3 against 4.1 km deep).
 - **It cannot see** caves, lava tubes, lake chemistry, ground ice, gravity, vacuum or radiation.
+  Minerals are seen only from orbit, as families: olivine and pyroxene were found at no site.
 
 ## What each number means
 
@@ -47,6 +53,10 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 | Confidence | How much of the score's weight had data | On every score |
 | Similarity, 0 to 1 | Match on one dimension only (the analog profile) | Per dimension |
 | Purpose score | The same formula on the dimensions one use needs | Not validated |
+| Verdict | Matches (similarity 0.75 or more), partly (0.30 or more), does not match | Per dimension |
+| Shared minerals | Mineral families seen from orbit on Earth and reported at the target | Merapi and Gale: 3 of 9 |
+| Rank stability | Share of the top ten that survives nudged weights | 81 to 91% |
+| Target confidence | High for a curated target, lower for a point picked on the map | Per target |
 | Site-scale score | The same formula on a 2 to 7 km footprint. Climate stays the 55 km value | 17 sites |
 | Readiness | Sandbox colour for power, water, oxygen and food | "No data" where a number has no source |
 
@@ -64,9 +74,11 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - Thirty-four sites is a small test; 8 test analogs is smaller.
 - The test sites were scored once before the split, on incomplete data. Nothing was changed in
   response, but they were not unseen.
-- Purpose rankings and site-scale scores were made after every site had been seen: development
-  numbers, not tests.
+- Purpose rankings, site-scale scores, minerals and the comparison with established analogs were made
+  after every site had been seen: development numbers, not tests.
+- Minerals, and any ice, dust or wind figure, were added after the freeze and are never in the score.
 - Marius Hills was added after the freeze, has no known analog, and is in none of these numbers.
 
 Detail: `output/REPORT.md`, `tuning/FROZEN.md`, `output/PURPOSES.md`, `purposes/GEOLOGY.md`,
-`sites/FINDINGS.md`, `../data/REVIEW_ME.md`.
+`sites/FINDINGS.md`, `output/MINERALS.md`, `output/BENCHMARKS.md`, `output/STABILITY.md`,
+`../data/REVIEW_ME.md`.

@@ -1,6 +1,7 @@
 # REVIEW_ME: values to check by hand
 
-Part 1 covers `data/targets.json`. Part 2, further down, covers `data/modules.json`.
+Part 1 covers `data/targets.json`. Part 2, further down, covers `data/modules.json`. Part 3 covers the named
+places, target minerals and rover figures added on 2026-11-15.
 
 # Part 1: target values (`data/targets.json`)
 
@@ -379,3 +380,129 @@ reported by a research sub-agent (B).
 - Piqueux et al. 2019: https://doi.org/10.1029/2019GL083947
 - 2018 dust storm (NASA SVS): https://svs.gsfc.nasa.gov/30983
 - NSSDCA fact sheets: https://nssdc.gsfc.nasa.gov/planetary/factsheet/
+
+
+# Part 3: named places, target minerals and rover figures (added 2026-11-15)
+
+Three files compiled with research sub-agents under one rule: every value must be read in a source opened in
+that session, never typed from memory. The main session then checked the items below. None of these files
+enters the all-round score.
+
+## `data/known_sites.json`: places on the Moon and Mars a user can pick
+
+66 places: 27 lunar and 10 Mars landing sites, 17 lunar and 12 Mars candidate regions. Each row has its citation, URL and the
+quoted line the coordinates were read from (`quote`). Built by `validation/build/make_known_sites.py`.
+
+Checked in the main session: the coordinates of Apollo 11, Chang'e 3, 4, 5 and 6, Chandrayaan-3, Viking 1 and 2,
+Pathfinder, Spirit, Opportunity, Curiosity, InSight, Perseverance and Zhurong agree with the values the team already
+held; Curiosity, Perseverance, Marius Hills, Shackleton and Arcadia AP-1 fall within 3 km of the curated targets.
+The other rows are check level B (sub-agent only). Please spot-check before the demo.
+
+Decisions a human should make:
+
+1. Artemis III regions. NASA published no coordinates for the nine regions of October 2024. The file uses the
+   centre of the LROC image mosaic made for each region, rounded by LROC to 0.1 degree (about 3 km). 'Nobile Rim 1'
+   and 'Mons Mouton' share one mosaic and are one entry. 'de Gerlache Rim 2' uses LROC's single 'de Gerlache Rim'
+   mosaic. 'Slater Plain' has no published point and is left out.
+2. Surveyor positions are the newer LROC-imaged ones in NASA's table; NASA's older Surveyor page differs by up to
+   0.12 degrees (Surveyor 7).
+3. Luna 9 is low confidence: NASA says the coordinates are from the original press report and may be 10 km off.
+4. Phoenix is NASA's 'nominal' position. Opportunity uses the stated touchdown point; the same NASA page prints the
+   ellipse centre with what looks like a W/E typo.
+5. Oxia Planum has four published centres up to about 100 km apart (Harris 2024 is used).
+6. Schrodinger is the IAU basin centre, not a landing point. Compton-Belkovich is the LROC image centre.
+7. Mars sources do not always say whether latitude is planetocentric. At most 0.4 degrees apart.
+8. Not found, so not listed: a Chang'e 7 or ILRS site, Mars Sample Return or Ice Mapper regions.
+9. `targetId` is computed: the curated target within 27.8 km. 'Midway' (a Mars 2020 finalist beside Jezero) and
+   the VIPER area therefore resolve to the Jezero and Mons Mouton targets. Is that the wanted behaviour?
+
+## `data/target_minerals.json`: minerals reported at the targets
+
+Built by `validation/build/make_target_minerals.py`. FT = the paper's full text was read by the sub-agent; ABS =
+abstract only. Re-read in the saved texts in the main session: the Jezero olivine and carbonate figures (Farley,
+Wiens), the Gale clay names (Rampe) and the EMIT library names. The Gale abundance ranges are check level B.
+
+| Target | Mineral | Family | How | Instrument | Abundance | Source | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| mars-gale | plagioclase feldspar | plagioclase | in-place | Curiosity CheMin | 6 to 56% by weight of the crystalline part, by sample | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | pyroxene | pyroxene | in-place | Curiosity CheMin | 2 to 42% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | olivine | olivine | in-place | Curiosity CheMin | 1 to 8% of the crystalline part; 20.5% in the Rocknest sand | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Tables 2 and 7 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | magnetite | magnetite | in-place | Curiosity CheMin | 1 to 16% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | hematite | hematite | in-place | Curiosity CheMin | 1 to 28% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | crystalline hematite | hematite | orbital | MRO CRISM |  | Fraeman et al. 2013, Geology 41:1103 https://doi.org/10.1130/G34613.1 | ABS |
+| mars-gale | akaganeite | akaganeite | in-place | Curiosity CheMin | 1 to 11% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | jarosite | jarosite | in-place | Curiosity CheMin | 1 to 8% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | anhydrite, bassanite and gypsum | calcium-sulfate | in-place | Curiosity CheMin | anhydrite 1 to 21%, bassanite 1 to 7%, gypsum 1 to 7% of the crystalline part | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 2 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | iron saponite; smectite resembling montmorillonite or nontronite | smectite | in-place | Curiosity CheMin | clay minerals 3 to 28% by weight of the sample | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Table 5 and text https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | iron-magnesium smectite | smectite | orbital | MRO CRISM |  | Fraeman et al. 2013, Geology 41:1103 https://doi.org/10.1130/G34613.1 | ABS |
+| mars-gale | tridymite, cristobalite and opal-CT | silica | in-place | Curiosity CheMin | tridymite 34% of the crystalline part in one sample; cristobalite 6 to 12%; opal-CT 4 to 11% of the sample | Rampe et al. 2020, Geochemistry 80:125605 (CheMin X-ray diffraction, review of six years in Gale), Tables 2 and 5 https://doi.org/10.1016/j.chemer.2020.125605 | FT |
+| mars-gale | siderite | carbonate-mgfe | in-place | Curiosity CheMin | about 1 to 3% by weight in three samples | Thorpe et al. 2022, JGR Planets 127:e2021JE007099, section 4 https://doi.org/10.1029/2021JE007099 | FT |
+| mars-gale | siderite | carbonate-mgfe | in-place | Curiosity CheMin | 4.8 to 10.5% by weight, in a higher part of the section | Tutolo et al. 2025, Science 388:292 https://doi.org/10.1126/science.ado9966 | ABS |
+| mars-jezero | olivine | olivine | in-place | Perseverance PIXL | 65% of the analysed surface of one abraded rock (Dourbes, Seitah) | Farley et al. 2022, Science 377:eabo2196 https://doi.org/10.1126/science.abo2196 | FT |
+| mars-jezero | olivine with magnesium-rich carbonate | olivine | orbital | MRO CRISM |  | Goudge et al. 2015, JGR Planets 120:775 https://doi.org/10.1002/2014JE004782 | ABS |
+| mars-jezero | augite | pyroxene | in-place | Perseverance PIXL | 13% of the analysed surface of the same rock | Farley et al. 2022, Science 377:eabo2196 https://doi.org/10.1126/science.abo2196 | FT |
+| mars-jezero | plagioclase (andesine) | plagioclase | in-place | Perseverance SuperCam |  | Wiens et al. 2022, Science Advances 8:eabo3399 https://doi.org/10.1126/sciadv.abo3399 | FT |
+| mars-jezero | iron-magnesium carbonate (magnesite to siderite) | carbonate-mgfe | in-place | Perseverance SuperCam and PIXL | a very small fraction, likely under 5%, of the Seitah rock | Wiens et al. 2022, Science Advances 8:eabo3399; Tice et al. 2022, Science Advances 8:eabp9084 https://doi.org/10.1126/sciadv.abo3399 | FT |
+| mars-jezero | magnesium-rich carbonate | carbonate-mgfe | orbital | MRO CRISM |  | Goudge et al. 2015, JGR Planets 120:775 https://doi.org/10.1002/2014JE004782 | ABS |
+| mars-jezero | hydrous calcium sulfate | calcium-sulfate | in-place | Perseverance SHERLOC and PIXL |  | Farley et al. 2022, Science 377:eabo2196; Tice et al. 2022, Science Advances 8:eabp9084 https://doi.org/10.1126/science.abo2196 | FT |
+| mars-jezero | magnesium sulfate | magnesium-sulfate | in-place | Perseverance PIXL |  | Tice et al. 2022, Science Advances 8:eabp9084 https://doi.org/10.1126/sciadv.abp9084 | FT |
+| mars-jezero | sodium perchlorate | perchlorate | in-place | Perseverance SHERLOC and SuperCam |  | Farley et al. 2022, Science 377:eabo2196; Wiens et al. 2022, Science Advances 8:eabo3399 https://doi.org/10.1126/science.abo2196 | FT |
+| mars-jezero | iron-rich clay such as nontronite | smectite | in-place | Perseverance SuperCam |  | Wiens et al. 2022, Science Advances 8:eabo3399 https://doi.org/10.1126/sciadv.abo3399 | FT |
+| mars-jezero | iron-magnesium smectite (saponite or nontronite) in the western fan | smectite | orbital | MRO CRISM |  | Goudge et al. 2015, JGR Planets 120:775 https://doi.org/10.1002/2014JE004782 | ABS |
+| mars-jezero | merrillite | phosphate | in-place | Perseverance PIXL |  | Tice et al. 2022, Science Advances 8:eabp9084 https://doi.org/10.1126/sciadv.abp9084 | FT |
+| moon-shackleton-rim | plagioclase of very pure anorthosite | plagioclase | orbital | SELENE (Kaguya) Multiband Imager |  | Haruyama et al. 2013, Geophysical Research Letters 40:3814 https://doi.org/10.1002/grl.50753 | ABS |
+| moon-marius-hills | high-calcium pyroxene | pyroxene | orbital | Chandrayaan-1 M3 |  | Besse et al. 2011, JGR 116:E00G13 https://doi.org/10.1029/2010JE003725 | ABS |
+| moon-marius-hills | olivine, in some flows | olivine | orbital | Chandrayaan-1 M3 |  | Besse et al. 2011, JGR 116:E00G13 https://doi.org/10.1029/2010JE003725 | ABS |
+
+Decisions a human should make:
+
+1. The mineral families and the EMIT name fragments that define them are SBATS's own grouping. 'Smectite clay' on
+   the Earth side is mostly EMIT's nontronite; at Gale it is saponite and a montmorillonite-like clay. Is one
+   family for all smectites acceptable?
+2. An EMIT family counts when matched in at least 1% of the clear pixels. A display rule, not tuned.
+3. Gale's siderite: 1 to 3% (Thorpe 2022) and 4.8 to 10.5% (Tutolo 2025) are different parts of the section.
+   Tridymite is 34% of the crystalline part (Rampe 2020) and about 14% of the whole sample (Morris 2016): the same
+   sample, two ways of counting. The file quotes Rampe.
+4. Arcadia Planitia and three lunar polar targets have no published mineral result and are empty on purpose.
+5. EMIT's own documentation says validation is still needed for minerals outside its ten core ones (jarosite,
+   nontronite and the hematite grain-size variants are outside). Treat every 'shared' as a pointer.
+
+## `data/rovers.json`: slope limits and speeds
+
+Built by `validation/build/make_rovers.py`. A = the quoted words were found again in the saved source text in the
+main session; B = sub-agent only.
+
+| Rover | Figure | Value | Unit | Source | Check | Note |
+| --- | --- | --- | --- | --- | --- | --- |
+| perseverance | slopeLimit | 30 | degrees | NASA, Mars 2020 Perseverance rover components page https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/ | A | 'rover drivers avoid terrains that would tilt the rover more than 30 degrees'. |
+| perseverance | otherSlope | 45 | degrees | NASA, Mars 2020 Perseverance rover components page https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/ | A |  |
+| perseverance | speed | 152 | m per hour | NASA, Mars 2020 Perseverance rover components page https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/ | A |  |
+| perseverance | otherSpeed | 110 | m per hour | NASA/JPL Robotics, Mars 2020 rover mobility page https://robotics.jpl.nasa.gov/what-we-do/flight-projects/mars-2020-rover/m2020mobility/ | A |  |
+| curiosity | slopeLimit | 30 | degrees | Rankin, Maimone, Biesiadecki, Patel, Levine and Toupet 2020, Driving Curiosity: Mars Rover Mobility Trends During the First Seven Years (JPL) https://www-robotics.jpl.nasa.gov/media/documents/2020-mobility-trending.pdf | A | 'the nominal flight tilt limit is 30 degrees. However, the tilt limit is typically lowered for each drive'. The largest tilt in the first seven years was 25.3 degrees. |
+| curiosity | speed | 150 | m per hour | NASA/JPL Robotics, Mars 2020 rover mobility page https://robotics.jpl.nasa.gov/what-we-do/flight-projects/mars-2020-rover/m2020mobility/ | A | 'maximum wheel speed is just 4.2 cm/sec (or approximately 150 meters per hour)'. |
+| curiosity | otherSpeed | 18 | m per hour | NASA/JPL Robotics, Mars 2020 rover mobility page https://robotics.jpl.nasa.gov/what-we-do/flight-projects/mars-2020-rover/m2020mobility/ | B |  |
+| mer | slopeLimit | 25 | degrees | Biesiadecki, Leger and Maimone 2007, International Journal of Robotics Research 26(1):91, doi:10.1177/0278364907073777 https://doi.org/10.1177/0278364907073777 | A | 'driving on slopes greater than 25 degrees requires special planning'. The rovers drove on hard slopes of up to 31 degrees and are statically stable to 45. |
+| mer | otherSlope | 31 | degrees | Biesiadecki, Leger and Maimone 2007, International Journal of Robotics Research 26(1):91, doi:10.1177/0278364907073777 https://doi.org/10.1177/0278364907073777 | B |  |
+| mer | otherSlope | 10 | degrees | Leger et al. 2005, Mars Exploration Rover Surface Operations: Driving Spirit at Gusev Crater (JPL) https://www-robotics.jpl.nasa.gov/media/documents/leger_driving05.pdf | B |  |
+| mer | speed | 124 | m per hour | Biesiadecki, Leger and Maimone 2007, International Journal of Robotics Research 26(1):91, doi:10.1177/0278364907073777 https://doi.org/10.1177/0278364907073777 | A |  |
+| mer | otherSpeed | 36 | m per hour | Biesiadecki, Leger and Maimone 2007, International Journal of Robotics Research 26(1):91, doi:10.1177/0278364907073777 https://doi.org/10.1177/0278364907073777 | B |  |
+| sojourner | speed (derived) | 24 | m per hour | NASA PDS, Mars Pathfinder rover instrument host description https://pds.nasa.gov/data/mpfr-m-apxs-2-edr-v1.0/mprv_0001/document/insthost.htm | A | Derived: 'top speed of 0.4 m/min' x 60. |
+| viper | slopeLimit | 15 | degrees | Bluethmann 2024, VIPER Rover Overview and Mobility and Hardware (NASA NTRS 20240013903) https://ntrs.nasa.gov/citations/20240013903 | A | 'Slopes up to 15 deg (reqt)'. NASA's operations page adds that it can tackle 25 or 30 degrees when necessary. |
+| viper | otherSlope | 30 | degrees | NASA, VIPER lunar operations page https://science.nasa.gov/mission/viper/lunar-operations/ | B |  |
+| viper | speed (derived) | 720 | m per hour | NASA 2025, VIPER updated technical briefing https://assets.science.nasa.gov/content/dam/science/psd/lunar-science/documents/2025-02-13_VIPER_Updated_Technical_Briefing_Presentation-Shared.pdf | A | Derived: 'Top Speed: 20cm/s' x 3600 / 100. |
+| viper | otherSpeed (derived) | 360 | m per hour | NASA 2025, VIPER updated technical briefing https://assets.science.nasa.gov/content/dam/science/psd/lunar-science/documents/2025-02-13_VIPER_Updated_Technical_Briefing_Presentation-Shared.pdf | B | Derived: 10 cm/s x 3600 / 100. |
+| lrv | slopeLimit | 25 | degrees | Costes, Farmer and George 1972, Mobility Performance of the Lunar Roving Vehicle, NASA TR R-401 (NTRS 19730008090) https://ntrs.nasa.gov/citations/19730008090 | B | The same report puts the wheel's climbing ability on simulated lunar soil at 18 to 23 degrees; the Apollo 17 crew found slopes of up to 20 degrees easy. |
+| lrv | otherSlope | 20 | degrees | Apollo 17 Mission Report, JSC-07904 (NASA NTRS 19730015117) https://ntrs.nasa.gov/citations/19730015117 | B |  |
+| lrv | speed | 7600 | m per hour | Apollo Program Summary Report, JSC-09423, 1975, Table 4-IX and section 4.8 (NASA NTRS 19750013242) https://ntrs.nasa.gov/citations/19750013242 | B | Mission averages were 9.2, 7.7 and 7.6 km per hour. |
+| lrv | otherSpeed | 9200 | m per hour | Apollo Program Summary Report, JSC-09423, 1975, Table 4-IX and section 4.8 (NASA NTRS 19750013242) https://ntrs.nasa.gov/citations/19750013242 | B |  |
+| lrv | energy (derived) | 75.6 | Wh per km | Apollo Program Summary Report, JSC-09423, 1975, Table 4-IX and section 4.8 (NASA NTRS 19750013242) https://ntrs.nasa.gov/citations/19750013242 | B | Derived: 2.1 ampere-hours per km x 36 volts. The three missions used 1.9, 2.1 and 1.64 ampere-hours per km. Measured on the Moon, at one sixth of Earth's gravity, for this vehicle with two astronauts. It is a mission average, not a function of slope. |
+
+Decisions a human should make:
+
+1. Which limit is 'the' limit. The file uses the operating rule where one is published (Perseverance and
+   Curiosity 30 degrees, the Mars Exploration Rovers 25) and the design requirement otherwise (VIPER 15, the
+   Apollo rover 25). The other published figures are kept beside it.
+2. The Apollo rover's energy rate (75.6 Wh per km) is 2.1 ampere-hours per km times 36 volts: the multiplication
+   is ours. It is used only for a lunar route and never adjusted for slope.
+3. Not found in a primary source and left out: Zhurong, Yutu, Lunokhod, the Artemis terrain vehicle, and any
+   energy figure for a Mars rover.

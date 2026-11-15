@@ -1,0 +1,1307 @@
+{
+ "generatedAt": "2026-11-15T05:50:38.434Z",
+ "sitesGeneratedAt": "2026-11-15T05:30:37Z",
+ "emitMinimumShare": 0.01,
+ "sites": [
+  {
+   "id": "id-kawah-ijen",
+   "name": "Kawah Ijen, East Java, Indonesia",
+   "kind": "candidate",
+   "date": null,
+   "reason": "EMIT has 1 granules over the site, but none of the 1 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "id-merapi",
+   "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+   "kind": "candidate",
+   "date": "2026-09-20",
+   "reason": null,
+   "vegetationShare": 0.157,
+   "identified": [
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.182
+    },
+    {
+     "family": "jarosite",
+     "label": "Jarosite",
+     "shareOfValidPixels": 0.104
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.098
+    },
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.081
+    },
+    {
+     "family": "gibbsite",
+     "label": "Gibbsite",
+     "shareOfValidPixels": 0.034
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe3+bearing1",
+     "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+     "shareOfValidPixels": 0.08
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.333,
+     "shared": [
+      "Hematite",
+      "Jarosite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Gibbsite"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Hematite",
+      "Gibbsite"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Smectite clay",
+      "Hematite",
+      "Gibbsite"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Smectite clay",
+      "Hematite",
+      "Gibbsite"
+     ]
+    }
+   }
+  },
+  {
+   "id": "id-gua-lawa",
+   "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+   "kind": "candidate",
+   "date": null,
+   "reason": "EMIT has 2 granules over the site, but none of the 2 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "id-goa-pandan",
+   "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+   "kind": "candidate",
+   "date": null,
+   "reason": "EMIT has 4 granules over the site, but none of the 4 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "id-kesaksak-lava-tube",
+   "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+   "kind": "candidate",
+   "date": "2024-09-29",
+   "reason": null,
+   "vegetationShare": 0.387,
+   "identified": [],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Hematite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": []
+    },
+    "mars-jezero": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate",
+      "Smectite clay"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": []
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": []
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": []
+    }
+   }
+  },
+  {
+   "id": "id-maros-pangkep-karst",
+   "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+   "kind": "candidate",
+   "date": "2025-02-22",
+   "reason": null,
+   "vegetationShare": 0,
+   "identified": [],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Hematite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": []
+    },
+    "mars-jezero": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate",
+      "Smectite clay"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": []
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": []
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": []
+    }
+   }
+  },
+  {
+   "id": "id-tambora-caldera",
+   "name": "Mount Tambora caldera, Sumbawa, Indonesia",
+   "kind": "candidate",
+   "date": "2024-10-28",
+   "reason": null,
+   "vegetationShare": 0.715,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.238
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.119
+    },
+    {
+     "family": "carbonate-ca",
+     "label": "Calcium carbonate (calcite, aragonite, dolomite)",
+     "shareOfValidPixels": 0.04
+    },
+    {
+     "family": "hydrated-glass",
+     "label": "Hydrated volcanic glass",
+     "shareOfValidPixels": 0.027
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.016
+    }
+   ],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.222,
+     "shared": [
+      "Hematite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass",
+      "Smectite clay"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass",
+      "Smectite clay"
+     ]
+    }
+   }
+  },
+  {
+   "id": "id-batur-lava-fields",
+   "name": "Mount Batur black lava fields, Bali, Indonesia",
+   "kind": "candidate",
+   "date": "2024-09-29",
+   "reason": null,
+   "vegetationShare": 0.746,
+   "identified": [
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.011
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe3+mn_desert.varnish1",
+     "libraryTitle": "Desert_Varnish GDS141 W1R1Ba",
+     "shareOfValidPixels": 0.041
+    },
+    {
+     "libraryName": "fe3+bearing1",
+     "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+     "shareOfValidPixels": 0.013
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Hematite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate",
+      "Smectite clay"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Goethite"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Goethite"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite"
+     ]
+    }
+   }
+  },
+  {
+   "id": "mauna-kea",
+   "name": "Mauna Kea, Hawaii, USA",
+   "kind": "known",
+   "date": "2023-11-25",
+   "reason": null,
+   "vegetationShare": 0,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.817
+    },
+    {
+     "family": "hydrated-glass",
+     "label": "Hydrated volcanic glass",
+     "shareOfValidPixels": 0.807
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.526
+    },
+    {
+     "family": "jarosite",
+     "label": "Jarosite",
+     "shareOfValidPixels": 0.088
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.017
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe3+mix_AMD.assemb1",
+     "libraryTitle": "Acid_Mine_Dr Assemb1-Fe3+ W1R1Fb",
+     "shareOfValidPixels": 0.076
+    },
+    {
+     "libraryName": "fe3+bearing1",
+     "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+     "shareOfValidPixels": 0.03
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.333,
+     "shared": [
+      "Hematite",
+      "Jarosite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Hydrated volcanic glass",
+      "Goethite"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Hydrated volcanic glass",
+      "Goethite",
+      "Jarosite"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Hydrated volcanic glass",
+      "Goethite",
+      "Jarosite",
+      "Smectite clay"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Hydrated volcanic glass",
+      "Goethite",
+      "Jarosite",
+      "Smectite clay"
+     ]
+    }
+   }
+  },
+  {
+   "id": "kilauea",
+   "name": "Kilauea, Hawaii, USA",
+   "kind": "known",
+   "date": "2023-08-01",
+   "reason": null,
+   "vegetationShare": 0.237,
+   "identified": [
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.306
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.155
+    },
+    {
+     "family": "jarosite",
+     "label": "Jarosite",
+     "shareOfValidPixels": 0.15
+    },
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.111
+    },
+    {
+     "family": "hydrated-glass",
+     "label": "Hydrated volcanic glass",
+     "shareOfValidPixels": 0.049
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe3+bearing1",
+     "libraryTitle": "Fe-Hydroxide SU93-106 amorph W1R1Bb",
+     "shareOfValidPixels": 0.059
+    },
+    {
+     "libraryName": "fe3+mix_AMD.assemb1",
+     "libraryTitle": "Acid_Mine_Dr Assemb1-Fe3+ W1R1Fb",
+     "shareOfValidPixels": 0.041
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.333,
+     "shared": [
+      "Hematite",
+      "Jarosite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Hematite",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Smectite clay",
+      "Jarosite",
+      "Hematite",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Smectite clay",
+      "Jarosite",
+      "Hematite",
+      "Hydrated volcanic glass"
+     ]
+    }
+   }
+  },
+  {
+   "id": "atacama-yungay",
+   "name": "Atacama Desert hyperarid core (Yungay), Chile",
+   "kind": "known",
+   "date": "2023-01-26",
+   "reason": null,
+   "vegetationShare": 0,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.98
+    },
+    {
+     "family": "mica-illite",
+     "label": "Mica and illite",
+     "shareOfValidPixels": 0.882
+    },
+    {
+     "family": "kaolinite",
+     "label": "Kaolinite",
+     "shareOfValidPixels": 0.657
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.028
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.025
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe2+generic_vbroad_br20",
+     "libraryTitle": "Phlogopite_Sand_Mix BR93-20 W1R1Ba",
+     "shareOfValidPixels": 0.013
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.222,
+     "shared": [
+      "Hematite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Mica and illite",
+      "Kaolinite",
+      "Goethite"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Kaolinite",
+      "Goethite"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Kaolinite",
+      "Smectite clay",
+      "Goethite"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Kaolinite",
+      "Smectite clay",
+      "Goethite"
+     ]
+    }
+   }
+  },
+  {
+   "id": "haughton-crater",
+   "name": "Haughton impact structure, Devon Island, Canada",
+   "kind": "known",
+   "date": null,
+   "reason": "No EMIT L2B mineral granule contains the site.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "lanzarote-timanfaya",
+   "name": "Timanfaya, Lanzarote, Spain",
+   "kind": "known",
+   "date": null,
+   "reason": "EMIT has 2 granules over the site, but none of the 2 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "dallol",
+   "name": "Dallol, Danakil Depression, Ethiopia",
+   "kind": "known",
+   "date": "2023-01-20",
+   "reason": null,
+   "vegetationShare": 0,
+   "identified": [
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.629
+    },
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.541
+    },
+    {
+     "family": "jarosite",
+     "label": "Jarosite",
+     "shareOfValidPixels": 0.522
+    },
+    {
+     "family": "iron-sulfate",
+     "label": "Iron sulfate",
+     "shareOfValidPixels": 0.162
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.042
+    }
+   ],
+   "unassigned": [
+    {
+     "libraryName": "fe2+fe3+_water_RTsludge",
+     "libraryTitle": "Renyolds_TnlSldgWet SM93-15w W1R1Ba",
+     "shareOfValidPixels": 0.116
+    }
+   ],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.333,
+     "shared": [
+      "Hematite",
+      "Jarosite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Iron sulfate"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Hematite",
+      "Jarosite",
+      "Iron sulfate"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Hematite",
+      "Jarosite",
+      "Iron sulfate",
+      "Smectite clay"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Hematite",
+      "Jarosite",
+      "Iron sulfate",
+      "Smectite clay"
+     ]
+    }
+   }
+  },
+  {
+   "id": "dasht-e-lut",
+   "name": "Dasht-e Lut (Lut Desert), Iran",
+   "kind": "known",
+   "date": "2023-08-19",
+   "reason": null,
+   "vegetationShare": 0,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 1
+    },
+    {
+     "family": "mica-illite",
+     "label": "Mica and illite",
+     "shareOfValidPixels": 0.909
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.719
+    },
+    {
+     "family": "carbonate-ca",
+     "label": "Calcium carbonate (calcite, aragonite, dolomite)",
+     "shareOfValidPixels": 0.09
+    },
+    {
+     "family": "smectite",
+     "label": "Smectite clay",
+     "shareOfValidPixels": 0.09
+    }
+   ],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.222,
+     "shared": [
+      "Hematite",
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Mica and illite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0.143,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Smectite clay"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Smectite clay"
+     ]
+    }
+   }
+  },
+  {
+   "id": "salar-de-uyuni",
+   "name": "Salar de Uyuni salt flat, Bolivia",
+   "kind": "known",
+   "date": null,
+   "reason": "EMIT has 15 granules over the site, but none of the 6 least cloudy ones gave a usable footprint.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "tunupa-volcano",
+   "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
+   "kind": "known",
+   "date": "2023-12-31",
+   "reason": null,
+   "vegetationShare": 0.468,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.799
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.251
+    },
+    {
+     "family": "kaolinite",
+     "label": "Kaolinite",
+     "shareOfValidPixels": 0.126
+    },
+    {
+     "family": "carbonate-ca",
+     "label": "Calcium carbonate (calcite, aragonite, dolomite)",
+     "shareOfValidPixels": 0.047
+    }
+   ],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.111,
+     "shared": [
+      "Hematite"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite",
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate",
+      "Smectite clay"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    }
+   }
+  }
+ ]
+}
