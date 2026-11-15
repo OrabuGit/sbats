@@ -1,7 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Color, CircleGeometry, DoubleSide, Mesh, MeshBasicMaterial, OrthographicCamera, RingGeometry, SRGBColorSpace, Scene, SphereGeometry, TextureLoader, WebGLRenderer } from 'three';
-import { formatCoords } from '../lib/geo';
-import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './Worlds';
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Color,
+  CircleGeometry,
+  DoubleSide,
+  Mesh,
+  MeshBasicMaterial,
+  OrthographicCamera,
+  RingGeometry,
+  SRGBColorSpace,
+  Scene,
+  SphereGeometry,
+  TextureLoader,
+  WebGLRenderer,
+} from "three";
+import { formatCoords } from "../lib/geo";
+import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from "./Worlds";
 
 export interface LocatorPoint {
   world: WorldId;
@@ -13,8 +26,12 @@ export interface LocatorPoint {
   where: string | null;
 }
 
-const TEXTURE: Record<WorldId, string> = { earth: 'blue-marble-2048', moon: 'moon-wac-2048', mars: 'mars-viking-2048' };
-const AMBER = '#FFB000';
+const TEXTURE: Record<WorldId, string> = {
+  earth: "blue-marble-2048",
+  moon: "moon-wac-2048",
+  mars: "mars-viking-2048",
+};
+const AMBER = "#FFB000";
 
 /**
  * Two worlds side by side at their true relative size, each turned so the place is in the middle and
@@ -22,9 +39,12 @@ const AMBER = '#FFB000';
  */
 export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
   const holder = useRef<HTMLDivElement>(null);
-  const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
-  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
-  const key = points.map((p) => `${p.world}:${p.lat}:${p.lon}`).join('|');
+  const reduced = useMemo(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    [],
+  );
+  const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const key = points.map((p) => `${p.world}:${p.lat}:${p.lon}`).join("|");
 
   useEffect(() => {
     const el = holder.current;
@@ -35,15 +55,15 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
     try {
       renderer = new WebGLRenderer({ antialias: true });
     } catch {
-      setState('error');
+      setState("error");
       return;
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.domElement.className = 'absolute inset-0 h-full w-full';
-    renderer.domElement.setAttribute('aria-hidden', 'true');
+    renderer.domElement.className = "absolute inset-0 h-full w-full";
+    renderer.domElement.setAttribute("aria-hidden", "true");
     el.prepend(renderer.domElement);
     const scene = new Scene();
-    scene.background = new Color('#0B0D0F');
+    scene.background = new Color("#0B0D0F");
     const camera = new OrthographicCamera(-1, 1, 1, -1, -2000, 2000);
     const sphere = new SphereGeometry(1, 72, 36);
     const ring = new RingGeometry(0.075, 0.1, 40);
@@ -53,7 +73,9 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
     let pending = points.length;
     const draw = () => renderer.render(scene, camera);
     const bodies = points.map((p) => {
-      const material = new MeshBasicMaterial({ color: new Color(0.82, 0.82, 0.82) });
+      const material = new MeshBasicMaterial({
+        color: new Color(0.82, 0.82, 0.82),
+      });
       loader.load(
         `${import.meta.env.BASE_URL}textures/${TEXTURE[p.world]}.jpg`,
         (tex) => {
@@ -62,11 +84,11 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
           tex.anisotropy = 4;
           material.map = tex;
           material.needsUpdate = true;
-          if (--pending === 0) setState('ready');
+          if (--pending === 0) setState("ready");
           draw();
         },
         undefined,
-        () => alive && setState('error'),
+        () => alive && setState("error"),
       );
       const mesh = new Mesh(sphere, material);
       // Bring the place to the middle of the disc, north up: turn about the polar axis, then tilt.
@@ -74,12 +96,19 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
       const lon = (p.lon * Math.PI) / 180;
       const x = Math.cos(lon) * Math.cos(lat);
       const z = -Math.sin(lon) * Math.cos(lat);
-      mesh.rotation.set(lat, Math.atan2(-x, z), 0, 'XYZ');
+      mesh.rotation.set(lat, Math.atan2(-x, z), 0, "XYZ");
       scene.add(mesh);
       // The pin sits on the near side, in the middle: a dark halo for contrast, an amber ring and a dot.
-      const dark = new MeshBasicMaterial({ color: '#0B0D0F', side: DoubleSide });
+      const dark = new MeshBasicMaterial({
+        color: "#0B0D0F",
+        side: DoubleSide,
+      });
       const amber = new MeshBasicMaterial({ color: AMBER, side: DoubleSide });
-      const pin = [new Mesh(halo, dark), new Mesh(ring, amber), new Mesh(dot, amber)];
+      const pin = [
+        new Mesh(halo, dark),
+        new Mesh(ring, amber),
+        new Mesh(dot, amber),
+      ];
       pin.forEach((m) => {
         m.position.z = 1.01;
         scene.add(m);
@@ -149,21 +178,35 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
 
   return (
     <figure className="m-0">
-      <div ref={holder} className="relative h-[300px] w-full bg-bg sm:h-[340px]" role="img" aria-label={`${points[0].name} on ${WORLD_NAME[points[0].world]} and ${points[1].name} on ${WORLD_NAME[points[1].world]}, each marked with a pin`}>
-        {state !== 'ready' && (
-          <p className="absolute left-0 top-0 text-[12px] text-muted" role="status">
-            {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn'}
+      <div
+        ref={holder}
+        className="relative h-[300px] w-full bg-bg sm:h-[340px]"
+        role="img"
+        aria-label={`${points[0].name} on ${WORLD_NAME[points[0].world]} and ${points[1].name} on ${WORLD_NAME[points[1].world]}, each marked with a pin`}
+      >
+        {state !== "ready" && (
+          <p
+            className="absolute left-0 top-0 text-[12px] text-muted"
+            role="status"
+          >
+            {state === "loading"
+              ? "Loading globes"
+              : "Globes could not be drawn"}
           </p>
         )}
         <div className="absolute inset-x-0 bottom-0 grid grid-cols-2">
           {points.map((p) => (
             <div key={p.world + p.name} className="min-w-0 px-1 text-center">
-              <p className="truncate text-[14px] font-medium text-text">{p.name}</p>
+              <p className="truncate text-[14px] font-medium text-text">
+                {p.name}
+              </p>
               <p className="truncate text-[12px] text-muted">
                 {WORLD_NAME[p.world]}
-                {p.where ? `, ${p.where}` : ''}
+                {p.where ? `, ${p.where}` : ""}
               </p>
-              <p className="num truncate text-[11px] text-muted">{formatCoords(p.lat, p.lon)}</p>
+              <p className="num truncate text-[11px] text-muted">
+                {formatCoords(p.lat, p.lon)}
+              </p>
             </div>
           ))}
         </div>

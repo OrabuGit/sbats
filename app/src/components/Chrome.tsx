@@ -11,7 +11,7 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 4, label: 'Match' },
 ];
 
-const NAV = 'inline-flex min-h-11 items-center gap-2 px-2.5 text-[14px] font-medium transition-colors sm:px-3.5 sm:text-[15px]';
+const NAV = 'inline-flex min-h-11 whitespace-nowrap items-center gap-2 px-2.5 text-[14px] font-medium transition-colors sm:px-3.5 sm:text-[15px]';
 
 /** The right-hand navigation, the same on every page. Text only: no bar, no border. */
 export function NavRight({
@@ -58,7 +58,7 @@ export function NavRight({
       </button>
       <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
         {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-        <span className="hidden md:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
+        <span className="hidden lg:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
     </nav>
   );
@@ -84,7 +84,7 @@ export function TopBar({
         <Logo height={26} />
       </button>
       {step !== null && (
-        <nav aria-label="Steps" className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex">
+        <nav aria-label="Steps" className="mr-auto hidden items-center md:ml-2 md:flex xl:absolute xl:left-1/2 xl:m-0 xl:-translate-x-1/2">
           <ol className="flex items-center gap-1">
             {STEPS.map(({ n, label }) => {
               const locked = n === 4 && !canMatch;
@@ -97,7 +97,7 @@ export function TopBar({
                     aria-disabled={locked || undefined}
                     title={locked ? 'Open a match from the list first' : undefined}
                     onClick={() => !locked && onStep(n)}
-                    className={`inline-flex min-h-11 items-center border-b-2 px-3 text-[14px] font-medium ${
+                    className={`inline-flex min-h-11 items-center border-b-2 px-2 text-[14px] font-medium lg:px-3 ${
                       active ? 'border-accent text-text' : locked ? 'border-transparent text-text/25' : 'border-transparent text-text/60 hover:text-text'
                     }`}
                   >

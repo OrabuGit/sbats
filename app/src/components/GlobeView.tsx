@@ -464,9 +464,9 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
             <div className="num mt-1 text-[10px] leading-3 text-muted">no data</div>
           </div>
         </div>
-        <p className="mt-1.5 text-[11px] text-muted">A cell&rsquo;s brightness is its match score. The best cells glow.</p>
+        <p className="mt-1.5 hidden text-[11px] text-muted sm:block">A cell&rsquo;s brightness is its match score. The best cells glow.</p>
         <p className="sr-only">Seven steps from 0 to 100. Brighter, glowing amber is a closer match. Grey cells have no score.</p>
-        <p className="readout mt-1.5 !text-[10px]">Imagery: NASA Blue Marble, GIBS</p>
+        <p className="readout mt-1.5 hidden !text-[10px] sm:block">Imagery: NASA Blue Marble, GIBS</p>
       </div>
       <div className="absolute bottom-3 right-3 flex flex-col border border-line bg-panel">
         <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="tool !px-0">

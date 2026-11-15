@@ -74,7 +74,7 @@ Add a row BEFORE a feature that uses the dataset is marked done.
 | Tailwind CSS 4 | MIT | Styling with the DESIGN.md tokens |
 | globe.gl, three.js | MIT | ORBIT 3D globe |
 | topojson-client | ISC | Decoding the coastline file |
-| d3-geo | ISC | Land test when generating UI fixtures (dev only) |
+| d3-geo | ISC | Which country a point is in (`geoContains` on the Natural Earth outline), in the browser, and the land test for UI fixtures |
 | lucide-react | ISC | Icons |
 | Inter (via @fontsource/inter) | SIL Open Font License 1.1 | Sentence text |
 | Archivo variable, width and weight axes (via @fontsource-variable/archivo) | SIL Open Font License 1.1 | Headings, the wordmark and large numbers |

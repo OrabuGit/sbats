@@ -4,6 +4,7 @@ import { formatCoords, siteCode } from '../lib/geo';
 import { formatShare } from '../lib/format';
 import { DIMENSIONS, PURPOSES } from '../lib/scoringAdapter';
 import { useAsync } from '../lib/useAsync';
+import { countryKey, useCountries } from '../lib/where';
 import { loadExtra } from '../data/access';
 import { mineralsWithheld } from '../lib/matchAdapter';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
@@ -84,7 +85,7 @@ function pick(s: Scored | undefined, analog: Analog | undefined) {
 function Profile({ result, targetName }: { result: NonNullable<ReturnType<typeof pick>>; targetName: string }) {
   return (
     <div>
-      <p className="label mb-1.5">
+      <p className="mb-2 text-[14px] font-semibold text-text">
         Profile against {targetName}, footprint scale <ComputedBadge title="Computed by validation/score_sites.ts from the footprint values with the frozen formula." />
       </p>
       <dl>
@@ -108,7 +109,7 @@ function Profile({ result, targetName }: { result: NonNullable<ReturnType<typeof
 function Lines({ title, items, empty }: { title: string; items: string[]; empty: string }) {
   return (
     <div>
-      <h4 className="label mb-1.5">{title}</h4>
+      <h4 className="mb-2 text-[14px] font-semibold text-text">{title}</h4>
       {items.length === 0 ? (
         <p className="text-[13px] text-muted">{empty}</p>
       ) : (
@@ -146,9 +147,9 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
         .sort((a, b) => (b.score as number) - (a.score as number))[0]
     : null;
   return (
-    <article className={`grid gap-x-8 gap-y-5 border-b border-line py-8 last:border-b-0 ${lead ? 'lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]' : 'lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]'}`} aria-labelledby={`f-${site.id}`}>
+    <article className={`grid gap-x-12 gap-y-6 py-12 ${lead ? 'lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]' : 'lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]'}`} aria-labelledby={`f-${site.id}`}>
       <figure className="m-0">
-        <div className={`overflow-hidden border border-line bg-bg ${lead ? 'aspect-[4/3]' : 'aspect-[3/2]'}`}>
+        <div className={`overflow-hidden bg-bg ${lead ? 'aspect-[4/3]' : 'aspect-[3/2]'}`}>
           {image ? (
             <img src={dataUrl(image.file)} alt={`${short(site.name)} from Sentinel-2, 20 km across, north up`} loading="lazy" className="h-full w-full object-cover" />
           ) : (
@@ -162,8 +163,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
         )}
       </figure>
       <div className="min-w-0">
-        <p className="label">{region(site.name)}</p>
-        <h3 id={`f-${site.id}`} className={`mt-1 font-semibold text-text ${lead ? 'text-[32px] leading-9' : 'text-[22px] leading-7'}`}>
+        <p className="text-[14px] text-muted">{region(site.name)}</p>
+        <h3 id={`f-${site.id}`} className={`display mt-1 text-text ${lead ? 'text-[44px] leading-[48px]' : 'text-[32px] leading-9'}`}>
           {short(site.name)}
         </h3>
         <p className="num mt-1 text-[12px] text-muted">
@@ -186,7 +187,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
 
         <div className="mt-5 grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <div>
-            <h4 className="label mb-1.5">Process</h4>
+            <h4 className="mb-2 text-[14px] font-semibold text-text">Process</h4>
             {analog?.process ? (
               <>
                 <p className="text-[13px] leading-5 text-text">
@@ -209,7 +210,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
             {analog?.note && <p className="mt-1.5 text-[12px] text-muted">{analog.note}</p>}
           </div>
           <div>
-            <h4 className="label mb-1.5">What a team could test here</h4>
+            <h4 className="mb-2 text-[14px] font-semibold text-text">What a team could test here</h4>
             {tested && tested.could.length > 0 ? (
               <ul className="space-y-1.5">
                 {tested.could.map((t) => (
@@ -223,7 +224,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
             )}
             {tested && tested.cannot.length > 0 && (
               <>
-                <h4 className="label mb-1.5 mt-4">What it cannot test</h4>
+                <h4 className="mb-2 mt-5 text-[14px] font-semibold text-text">What it cannot test</h4>
                 <ul className="space-y-1.5">
                   {tested.cannot.map((t) => (
                     <li key={t.text} title={`From ${t.basis}`} className="border-l-2 border-line pl-3 text-[13px] leading-5 text-muted">
@@ -258,7 +259,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           </div>
         )}
 
-        <h4 className="label mb-1.5 mt-5">Scale</h4>
+        <h4 className="mb-2 mt-6 text-[14px] font-semibold text-text">Scale</h4>
         <p className="max-w-[60ch] text-[13px] leading-5 text-text">
           {site.footprintNote} Terrain and vegetation are measured inside the footprint. Climate is the value of the 55 km grid cell.
           {scored?.caveat ? ` ${scored.caveat}` : ''}
@@ -310,6 +311,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
   const fd = findings.status === 'ready' ? findings.value : null;
   const sc = scores.status === 'ready' ? scores.value : null;
   const findingOf = (id: string) => fd?.sections.find((s) => s.strong.length > 0 && id.includes(s.slug)) ?? null;
+  const countries = useCountries(top.slice(0, 3).map((c) => earth.cells[c.index]));
   const all = sites?.sites ?? [];
   // Sites with a written finding and an image lead; the rest follow in file order.
   const LEAD = ['tambora', 'batur'];
@@ -326,13 +328,14 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
   const limits = fd?.sections.find((s) => s.slug === 'the-short-version')?.bullets ?? [];
 
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-featured">
-      <header className="border-b border-line px-4 pb-6 pt-8 sm:px-6">
-        <p className="label">Featured sites</p>
-        <h2 id="h-featured" className="mt-1 max-w-[26ch] text-[32px] font-semibold leading-9 text-text">
-          Proposed sites in Indonesia, the benchmarks, and the top of the scan
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-featured">
+      <div className="mx-auto w-full max-w-[1200px] [&_section]:px-5 sm:[&_section]:px-10">
+      <header className="px-5 pb-8 pt-10 sm:px-10 sm:pt-16">
+        <h2 id="h-featured" className="display-l max-w-[18ch] text-[40px] sm:text-[64px]">
+          Featured sites
         </h2>
-        {claim && <p className="mt-4 max-w-[64ch] text-[17px] leading-7 text-text">{claim}</p>}
+        <p className="mt-3 max-w-[52ch] text-[18px] leading-7 text-muted">The team&rsquo;s proposed sites in Indonesia, the established analogs they are measured against, and the top of the global scan.</p>
+        {claim && <p className="mt-6 max-w-[60ch] text-[18px] leading-8 text-text">{claim}</p>}
         <p className="mt-3 max-w-[72ch] text-[12px] text-muted">
           {findings.status === 'loading'
             ? 'Loading findings'
@@ -342,12 +345,12 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
         </p>
       </header>
 
-      <section className="border-b border-line px-4 sm:px-6" aria-labelledby="h-proposed">
-        <h2 id="h-proposed" className="label pt-6">
+      <section aria-labelledby="h-proposed">
+        <h2 id="h-proposed" className="display pt-6 text-[32px] leading-9 text-text">
           Proposed by the team
         </h2>
         {sitesState === 'loading' && (
-          <p className="label py-6" role="status">
+          <p className="py-6 text-[13px] text-muted" role="status">
             Loading sites
           </p>
         )}
@@ -378,8 +381,8 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
       </section>
 
       {limits.length > 0 && (
-        <section className="border-b border-line px-4 py-8 sm:px-6" aria-labelledby="h-read">
-          <h2 id="h-read" className="label">
+        <section className="py-10" aria-labelledby="h-read">
+          <h2 id="h-read" className="display text-[32px] leading-9 text-text">
             How to read the proposed sites
           </h2>
           <ul className="mt-3 grid max-w-[1100px] gap-x-8 gap-y-3 md:grid-cols-2">
@@ -392,8 +395,8 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
         </section>
       )}
 
-      <section className="border-b border-line px-4 py-8 sm:px-6" aria-labelledby="h-known">
-        <h2 id="h-known" className="label">
+      <section className="py-10" aria-labelledby="h-known">
+        <h2 id="h-known" className="display text-[32px] leading-9 text-text">
           Established analog sites, as benchmarks
         </h2>
         <p className="mt-2 max-w-[72ch] text-[13px] text-muted">
@@ -447,7 +450,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
         </div>
         {scores.status === 'ready' && !sc && <p className="mt-2 text-[12px] text-muted">No data. Site-scale scores were not published with this build.</p>}
 
-        <h3 className="mt-8 text-[14px] font-semibold text-text">Proposed sites against the benchmarks</h3>
+        <h3 className="display mt-12 text-[26px] leading-8 text-text">Proposed sites against the benchmarks</h3>
         {bm ? (
           <>
             <p className="mt-1 max-w-[72ch] text-[13px] text-muted">
@@ -509,8 +512,8 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
         )}
       </section>
 
-      <section className="px-4 py-8 sm:px-6" aria-labelledby="h-scan">
-        <h2 id="h-scan" className="label">
+      <section className="pb-16 pt-10" aria-labelledby="h-scan">
+        <h2 id="h-scan" className="display text-[32px] leading-9 text-text">
           Top of the global scan for {target.name}
         </h2>
         <p className="mt-2 max-w-[72ch] text-[13px] text-muted">
@@ -530,14 +533,14 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
               const cell = earth.cells[c.index];
               const r = results[c.index];
               return (
-                <li key={c.index} className="border-t border-line pt-3">
-                  <p className="num text-[11px] text-muted">RANK {c.rank}</p>
-                  <p className="num mt-1 text-[32px] font-semibold leading-none text-text">
+                <li key={c.index} className="border-t border-line pt-4">
+                  <p className="text-[13px] text-muted">Number {c.rank}</p>
+                  <p className="display mt-1 text-[56px] leading-none text-text">
                     {r.score === null ? 'no data' : r.score.toFixed(0)}
-                    <span className="ml-1.5 text-[13px] font-normal text-muted">/ 100</span>
+                    <span className="ml-2 text-[14px] font-normal text-muted">out of 100</span>
                   </p>
-                  <p className="num mt-2 text-[13px] text-text">{siteCode(cell)}</p>
-                  <p className="num text-[11px] text-muted">{formatCoords(cell.lat, cell.lon)}</p>
+                  <p className="mt-3 text-[16px] font-medium text-text">{countries.get(countryKey(cell.lat, cell.lon)) ?? 'Open land'}</p>
+                  <p className="num text-[11px] text-muted">{formatCoords(cell.lat, cell.lon)} · {siteCode(cell)}</p>
                   <p className="mt-1 flex items-center gap-3 text-[12px] text-muted">
                     {reason(c.index)} <ConfidenceBadge confidence={r.confidence} coverage={r.coverage} />
                   </p>
@@ -576,6 +579,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           </ul>
         )}
       </section>
+      </div>
     </main>
   );
 }

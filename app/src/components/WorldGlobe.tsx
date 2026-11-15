@@ -123,7 +123,7 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
     if (!globe) return;
     globe.htmlElementsData(places.filter((t) => t.body === body).map((t) => ({ ...t, on: t.id === target.id })));
     // Close enough to tell neighbouring sites apart: the lunar targets are within a few degrees of each other.
-    globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 1.6 : 1.9 }, reduced ? 0 : 900);
+    globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: (body === 'moon' ? 1.6 : 1.9) * ((holder.current?.clientHeight ?? 999) < 420 ? 1.5 : 1) }, reduced ? 0 : 900);
   }, [places, body, target, reduced]);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
     if (active) {
       globe.resumeAnimation();
       // A flight started while the globe was hidden never ran: put the camera where it belongs.
-      globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 1.6 : 1.9 }, 0);
+      globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: (body === 'moon' ? 1.6 : 1.9) * ((holder.current?.clientHeight ?? 999) < 420 ? 1.5 : 1) }, 0);
     } else globe.pauseAnimation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
