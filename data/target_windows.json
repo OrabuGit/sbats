@@ -1,0 +1,194 @@
+{
+ "meta": {
+  "generatedAt": "2026-11-15T04:50:09Z",
+  "note": "Slope and roughness of each target in a square of N x N posts of 463 m centred on the target's coordinates, for the window sizes used by data/sites.json. Same elevation models and the same function as data/targets.json. For site-level comparison only: a small window describes the ground at that point, not the whole landform. A window size that holds one target only (48: Shackleton, rim to rim) was measured for a scale comparison.",
+  "postM": 463,
+  "terrainFraction": 0.5,
+  "slopeSigmaFloor": 1,
+  "roughnessSigmaFloor": 50,
+  "source": {
+   "moon": "LRO LOLA gridded elevation (NASA PDS): LDEM_80S_80M at the south pole, LDEM_512 elsewhere",
+   "mars": "MGS MOLA MEGDR 128 pixels per degree (NASA PDS)"
+  },
+  "badge": "Mission",
+  "generatedBy": "validation/target_terrain.py --posts, copied by validation/build/make_target_windows.py"
+ },
+ "windows": {
+  "4": {
+   "moon-malapert-massif": {
+    "slope": 5.94,
+    "roughness": 52.9
+   },
+   "moon-mons-mouton": {
+    "slope": 6.919,
+    "roughness": 62.6
+   },
+   "moon-haworth": {
+    "slope": 3.88,
+    "roughness": 33.2
+   },
+   "moon-shackleton-rim": {
+    "slope": 1.522,
+    "roughness": 14.5
+   },
+   "mars-jezero": {
+    "slope": 1.153,
+    "roughness": 10.1
+   },
+   "mars-gale": {
+    "slope": 0.285,
+    "roughness": 2.9
+   },
+   "mars-arcadia-planitia": {
+    "slope": 0.085,
+    "roughness": 1.0
+   },
+   "moon-marius-hills": {
+    "slope": 1.665,
+    "roughness": 15.4
+   }
+  },
+  "6": {
+   "moon-malapert-massif": {
+    "slope": 8.022,
+    "roughness": 77.5
+   },
+   "moon-mons-mouton": {
+    "slope": 6.359,
+    "roughness": 82.5
+   },
+   "moon-haworth": {
+    "slope": 3.354,
+    "roughness": 43.8
+   },
+   "moon-shackleton-rim": {
+    "slope": 2.812,
+    "roughness": 36.2
+   },
+   "mars-jezero": {
+    "slope": 1.083,
+    "roughness": 14.4
+   },
+   "mars-gale": {
+    "slope": 0.369,
+    "roughness": 4.4
+   },
+   "mars-arcadia-planitia": {
+    "slope": 0.095,
+    "roughness": 1.1
+   },
+   "moon-marius-hills": {
+    "slope": 1.495,
+    "roughness": 17.7
+   }
+  },
+  "9": {
+   "moon-malapert-massif": {
+    "slope": 10.007,
+    "roughness": 133.6
+   },
+   "moon-mons-mouton": {
+    "slope": 4.927,
+    "roughness": 90.6
+   },
+   "moon-haworth": {
+    "slope": 3.276,
+    "roughness": 56.9
+   },
+   "moon-shackleton-rim": {
+    "slope": 4.679,
+    "roughness": 68.9
+   },
+   "mars-jezero": {
+    "slope": 1.209,
+    "roughness": 28.3
+   },
+   "mars-gale": {
+    "slope": 0.467,
+    "roughness": 7.4
+   },
+   "mars-arcadia-planitia": {
+    "slope": 0.075,
+    "roughness": 1.0
+   },
+   "moon-marius-hills": {
+    "slope": 1.12,
+    "roughness": 20.3
+   }
+  },
+  "11": {
+   "moon-malapert-massif": {
+    "slope": 11.275,
+    "roughness": 178.0
+   },
+   "moon-mons-mouton": {
+    "slope": 4.349,
+    "roughness": 88.9
+   },
+   "moon-haworth": {
+    "slope": 3.193,
+    "roughness": 59.2
+   },
+   "moon-shackleton-rim": {
+    "slope": 5.206,
+    "roughness": 88.7
+   },
+   "mars-jezero": {
+    "slope": 1.391,
+    "roughness": 36.8
+   },
+   "mars-gale": {
+    "slope": 0.545,
+    "roughness": 10.0
+   },
+   "mars-arcadia-planitia": {
+    "slope": 0.088,
+    "roughness": 1.4
+   },
+   "moon-marius-hills": {
+    "slope": 1.026,
+    "roughness": 22.2
+   }
+  },
+  "16": {
+   "moon-malapert-massif": {
+    "slope": 14.205,
+    "roughness": 310.9
+   },
+   "moon-mons-mouton": {
+    "slope": 4.25,
+    "roughness": 86.6
+   },
+   "moon-haworth": {
+    "slope": 2.724,
+    "roughness": 59.6
+   },
+   "moon-shackleton-rim": {
+    "slope": 10.092,
+    "roughness": 246.8
+   },
+   "mars-jezero": {
+    "slope": 1.393,
+    "roughness": 49.4
+   },
+   "mars-gale": {
+    "slope": 0.816,
+    "roughness": 22.5
+   },
+   "mars-arcadia-planitia": {
+    "slope": 0.13,
+    "roughness": 2.6
+   },
+   "moon-marius-hills": {
+    "slope": 0.947,
+    "roughness": 27.6
+   }
+  },
+  "48": {
+   "moon-shackleton-rim": {
+    "slope": 22.319,
+    "roughness": 1299.8
+   }
+  }
+ }
+}

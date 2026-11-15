@@ -51,6 +51,7 @@ export const EARTH: EarthCell[] = [
   cell({ lat: -5, tempMean: 26, tempRange: 6, precip: 2400, ndvi: 0.8, slope: 6, roughness: 500, lithology: 1 }),
   cell({ lat: 70, tempMean: -40, tempRange: 20, precip: 150, ndvi: 0.1, slope: 1, roughness: 40, lithology: 10 }),
   cell({ lat: 40, tempMean: 10, tempRange: 12, precip: 600, ndvi: 0.4, slope: 12, roughness: 900, lithology: 2 }),
+  cell({ lat: 25, tempMean: 28, tempRange: 16, precip: 0, ndvi: 0.02, slope: 0.5, roughness: 15, lithology: 1 }),
 ];
 export const RANGES = computeEarthRanges(EARTH);
 
