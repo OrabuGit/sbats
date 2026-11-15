@@ -232,6 +232,23 @@ describe('targetFromPoint: no grid, or no cell', () => {
     equal(nearestGridCell(MARS_GRID, -60, 10), null);
   });
 
+  it('does not say "grid values" when there are none', () => {
+    const p = targetFromPoint('mars', 10, 20, { grid: null, curated: CURATED });
+    ok(!p.target.summary.includes('grid values'), p.target.summary);
+    ok(p.target.summary.includes('cannot be matched'));
+    ok(targetFromPoint('mars', 40.2, 202.3, { grid: MARS_GRID, curated: CURATED }).target.summary.includes('grid values'));
+  });
+
+  it('leaves out a grid rock class the rock table does not list, instead of failing later', () => {
+    const odd = grid('mars', [{ lat: 40.25, lon: -157.75, tempMean: -74, tempRange: 53, slope: 0.3, roughness: 17, lithology: 99 }]);
+    const p = targetFromPoint('mars', 40.2, 202.3, { grid: odd, curated: CURATED, rockClasses: [1, 2, 3, 10] });
+    equal(p.target.values.lithology.value, null);
+    deepEqual(p.missing, ['lithology']);
+    ok(p.notes.some((n) => n.includes('rock class code 99')));
+    // A listed class is kept.
+    equal(targetFromPoint('mars', 40.2, 202.3, { grid: MARS_GRID, curated: CURATED, rockClasses: [1, 2, 3, 10] }).target.values.lithology.value, 2);
+  });
+
   it('rejects coordinates that are not a place', () => {
     throws(() => targetFromPoint('mars', 91, 0, { grid: null, curated: CURATED }), RangeError);
     throws(() => targetFromPoint('mars', Number.NaN, 0, { grid: null, curated: CURATED }), RangeError);

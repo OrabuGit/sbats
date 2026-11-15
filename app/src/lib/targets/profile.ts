@@ -138,6 +138,12 @@ export interface TargetFromPointOptions {
   knownSites?: readonly KnownSite[];
   /** A name for the target. Defaults to the named place nearby, else the coordinates. */
   name?: string;
+  /**
+   * The rock class codes the scoring library knows (the legend of data/earth.json, which
+   * data/lithology_similarity.json covers). A grid rock class outside this list is left out as "no data",
+   * with a note, because scoring a class the table does not list would throw. Pass it whenever a grid is passed.
+   */
+  rockClasses?: readonly number[];
 }
 
 function pointId(body: TargetBody, lat: number, lon: number): string {
@@ -220,6 +226,10 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
       const f = factor(key);
       // A value with no stated source is not used: "no data" is better than an unsourced number.
       if (typeof raw !== 'number' || !Number.isFinite(raw) || !f) continue;
+      if (key === 'lithology' && options.rockClasses && !options.rockClasses.includes(raw)) {
+        notes.push(`The grid gives rock class code ${raw} here, which the rock-class table does not list, so rock type is left out.`);
+        continue;
+      }
       values[key] = { value: raw, sigma: sigma(key, raw), source: f.source, badge: f.badge, note: 'Grid value for the cell that holds the point, not a value measured for this place.' };
     }
     cell = { lat: hit.cell.lat, lon: hit.cell.lon, distanceKm: round(hit.distanceKm, 2) };
@@ -238,9 +248,11 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
     body,
     lat,
     lon: l,
-    summary: knownSite
-      ? `${knownSite.site.name}: ${knownSite.site.status}${knownSite.site.mission ? `, ${knownSite.site.mission}` : ''}. Target values are grid values for the surrounding cell, not measurements at the site.`
-      : 'A point picked on the map. Target values are grid values for the surrounding cell, not those of a studied site.',
+    summary: `${knownSite ? `${knownSite.site.name}: ${knownSite.site.status}${knownSite.site.mission ? `, ${knownSite.site.mission}` : ''}.` : 'A point picked on the map.'} ${
+      hit
+        ? 'Target values are grid values for the surrounding cell, not measurements at the place.'
+        : 'No measured values are available for this place yet, so it cannot be matched.'
+    }`,
     values,
     cannotCopy: sharedCannotCopy(options.curated, body),
   };

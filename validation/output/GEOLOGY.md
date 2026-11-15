@@ -1,6 +1,6 @@
 # Geology dimension: where the number comes from
 
-Generated 2026-11-15T06:07:33.554Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:06:00Z. Score frozen 2026-11-14; nothing here changes it.
+Generated 2026-11-15T06:42:16.644Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:06:00Z. Score frozen 2026-11-14; nothing here changes it.
 The cause, in words, is in `validation/purposes/GEOLOGY.md`. Percentiles are tie-fair (0.5 is chance).
 
 ## 1. The dimension has three possible values per target
@@ -71,8 +71,8 @@ For scale: over the same sites and targets, the mean percentile would be 0.97 if
 
 **Separate from every number above and from the frozen score.** `data/sites.json` (Session B) gives, for a few named sites, the rock type of the regional map unit at the site, or the major rock type of the whole volcano. Five known analogs are covered: too few to validate anything, enough to show what the grid does to a named site.
 
-Of the 9 known analogs: the cell and the site carry the same class at 0, a different class at 2, and 7 cannot be compared because one side has no class.
-Mean geology percentile of those sites against their own targets: 0.51 with the cell's class, 0.77 with the site's class.
+Of the 13 known analogs: the cell and the site carry the same class at 3, a different class at 2, and 8 cannot be compared because one side has no class.
+Mean geology percentile of those sites against their own targets: 0.59 with the cell's class, 0.79 with the site's class.
 
 ### Known analogs (against the targets they are listed for)
 
@@ -101,8 +101,18 @@ Mean geology percentile of those sites against their own targets: 0.51 with the 
 | Dallol, Danakil Depression, Ethiopia | volcanic | no rock class (site) | 1 Unconsolidated sediments | mars-jezero (listed) | unrelated, p 0.47 | no data |
 | Dallol, Danakil Depression, Ethiopia | volcanic | no rock class (site) | 1 Unconsolidated sediments | mars-gale (listed) | related, p 0.71 | no data |
 | Dasht-e Lut (Lut Desert), Iran | no data | no rock class (site) | 1 Unconsolidated sediments | none listed | | |
-| Salar de Uyuni salt flat, Bolivia | Evaporite | no rock class (site) | 14 Evaporites | none listed | | |
-| Tunupa volcano, north shore of Salar de Uyuni, Bolivia | Andesite and related volcanic | no rock class (site) | 10 Intermediate volcanic rocks | none listed | | |
+| Salar de Uyuni salt flat, Bolivia | Evaporite | 14 Evaporites (site) | 14 Evaporites | none listed | | |
+| Tunupa volcano, north shore of Salar de Uyuni, Bolivia | Andesite and related volcanic | 10 Intermediate volcanic rocks (site) | 10 Intermediate volcanic rocks | none listed | | |
+| Beacon Valley, McMurdo Dry Valleys, Antarctica | till, breccia, gravel, tillite | no rock class (site) | 3 Siliciclastic sedimentary rocks | none listed | | |
+| Don Juan Pond, Wright Valley, Antarctica | gravel, sand, breccia | no rock class (site) | 3 Siliciclastic sedimentary rocks | none listed | | |
+| Craters of the Moon, Idaho, USA | basalt, latite | no rock class (site) | 2 Basic volcanic rocks | mars-jezero (listed) | same, p 0.98 | no data |
+| Craters of the Moon, Idaho, USA | basalt, latite | no rock class (site) | 2 Basic volcanic rocks | mars-gale (listed) | unrelated, p 0.28 | no data |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | moon-malapert-massif (listed) | related, p 0.98 | related, p 0.98 |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | moon-mons-mouton (listed) | related, p 0.98 | related, p 0.98 |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | moon-haworth (listed) | related, p 0.98 | related, p 0.98 |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | moon-shackleton-rim (listed) | related, p 0.98 | related, p 0.98 |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | mars-jezero (listed) | same, p 0.98 | same, p 0.98 |
+| Askja caldera, Iceland highlands | volcanic: mafic rocks | 2 Basic volcanic rocks (volcano) | 2 Basic volcanic rocks | mars-gale (listed) | unrelated, p 0.28 | unrelated, p 0.28 |
 
 ### Candidate sites (against every target with a rock class; never part of a validation number)
 

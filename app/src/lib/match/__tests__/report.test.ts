@@ -154,6 +154,18 @@ describe('Optional sections', () => {
     ok(s?.paragraphs.some((p) => p.text.includes('No energy figure')));
   });
 
+  it('gives route and named-place citations a badge', () => {
+    for (const c of full.citations) ok(c.badge !== null, `citation ${c.n} has no badge: ${c.text}`);
+  });
+
+  it('says so when only part of the route could be judged', () => {
+    const holed = { size: 11, pixelM: 30, data: Float32Array.from({ length: 121 }, (_v, i) => (i % 11 === 5 ? Number.NaN : 5 * (i % 11))) };
+    const partial = measureRoute(holed, [{ col: 1, row: 5 }, { col: 9, row: 5 }], { limit: { rover: 'Test rover', limitDeg: 5, kind: 'operating rule', source: 'Rover fact sheet' } });
+    const r = buildReport({ record, routes: [{ label: 'Across a gap', result: partial }] });
+    const text = section(r, 'route-1')?.paragraphs[1]?.text ?? '';
+    ok(text.includes('m of route that has elevation data'), text);
+  });
+
   it('names the place the target was picked from, with its source, and the validation figures', () => {
     const t = section(full, 'target');
     const named = t?.paragraphs.find((p) => p.text.includes('Bradbury Landing'));

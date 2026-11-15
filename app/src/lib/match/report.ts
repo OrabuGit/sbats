@@ -128,7 +128,7 @@ export function buildReport(input: ReportInput): MatchReport {
   if (input.knownSite) {
     targetParagraphs.push({
       text: `Picked from the list of named places: ${input.knownSite.name} (${input.knownSite.status}${input.knownSite.date ? `, ${input.knownSite.date}` : ''}).`,
-      cites: c.cite(`${input.knownSite.source}${input.knownSite.url ? `, ${input.knownSite.url}` : ''}`),
+      cites: c.cite(`${input.knownSite.source}${input.knownSite.url ? `, ${input.knownSite.url}` : ''}`, input.knownSite.kind === 'landing-site' ? 'Mission' : 'Literature'),
     });
   }
   const originText =
@@ -255,10 +255,14 @@ export function buildReport(input: ReportInput): MatchReport {
       ),
     ];
     if (r.limit && r.shareAboveLimit !== null) {
-      paragraphs.push({ text: `${pct(r.shareAboveLimit)} of the route (${fixed(r.distanceAboveLimitM, 0)} m) crosses ground steeper than ${r.limit.limitDeg} degrees, the ${r.limit.kind} for ${r.limit.rover}.`, cites: c.cite(r.limit.source) });
+      const partial = r.noDataShare > 0;
+      paragraphs.push({
+        text: `${pct(r.shareAboveLimit)} of ${partial ? `the ${fixed(r.judgedDistanceM, 0)} m of route that has elevation data` : 'the route'} (${fixed(r.distanceAboveLimitM, 0)} m) crosses ground steeper than ${r.limit.limitDeg} degrees, the ${r.limit.kind} for ${r.limit.rover}.`,
+        cites: c.cite(r.limit.source, 'Literature'),
+      });
     }
     if (r.speed && r.drivingTimeH !== null) {
-      paragraphs.push({ text: `Driving time at ${r.speed.metresPerHour} m per hour (${r.speed.kind}, ${r.speed.rover}): at least ${r.drivingTimeH.toFixed(1)} hours.`, cites: c.cite(r.speed.source) });
+      paragraphs.push({ text: `Driving time at ${r.speed.metresPerHour} m per hour (${r.speed.kind}, ${r.speed.rover}): at least ${r.drivingTimeH.toFixed(1)} hours.`, cites: c.cite(r.speed.source, 'Literature') });
     }
     paragraphs.push(...r.notes.filter((n) => !n.startsWith('Slope limit:') && !n.startsWith('Driving time')).map(plain));
     sections.push({ id: `route-${i + 1}`, title: `Route: ${route.label}`, paragraphs, table: null });

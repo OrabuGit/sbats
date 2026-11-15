@@ -9,6 +9,7 @@ import {
   EXTRA_DIMENSIONS,
   EXTRA_DIMENSION_IDS,
   MATCH_AT,
+  MINERALS_BLEND_FLOOR,
   PARTLY_AT,
   buildMatchRecord,
   compareExtra,
@@ -181,6 +182,28 @@ describe('Rows explain themselves', () => {
     ok(row(icy, 'ndvi').earth.note?.includes('90% of the cell is permanent ice'));
     const forest = record({ place: earthPlaceFromCell(cell({ ndvi: 0.7 }), META) });
     equal(row(forest, 'ndvi').reason, 'Vegetation cover (NDVI 0.70) where the target is bare ground.');
+  });
+
+  it('keeps the bare-ground sentence in step with the verdict', () => {
+    const at = (over: Parameters<typeof cell>[0]) => row(record({ place: earthPlaceFromCell(cell(over), META) }), 'ndvi');
+    // NDVI 0.12 is within the tolerance of the 0.05 reference: it matches, and must say so.
+    equal(at({ ndvi: 0.12 }).verdict, 'matches');
+    equal(at({ ndvi: 0.12 }).reason, 'Bare ground, like the target (NDVI 0.12).');
+    equal(at({ ndvi: 0.18 }).verdict, 'partly');
+    equal(at({ ndvi: 0.18 }).reason, 'Some vegetation (NDVI 0.18) where the target is bare ground.');
+    equal(at({ ndvi: 0.5 }).verdict, 'does-not-match');
+    // Bare by NDVI, but 40% permanent ice: the ice is what costs the match.
+    equal(at({ ndvi: 0.05, snowIceFrac: 0.4 }).verdict, 'partly');
+    equal(at({ ndvi: 0.05, snowIceFrac: 0.4 }).reason, 'Permanent ice covers 40% of the cell: ice is not bare ground.');
+    equal(at({ ndvi: 0.05, snowIceFrac: 0.1 }).reason, 'Mostly bare ground (NDVI 0.05), with permanent ice on 10% of the cell.');
+    // Well below the reference (1.5 tolerances): not vegetation, and not "bare ground like the target" either.
+    equal(at({ ndvi: -0.1 }).verdict, 'partly');
+    ok(at({ ndvi: -0.1 }).reason.startsWith('NDVI -0.10 is below the bare-ground reference of 0.05'));
+  });
+
+  it('never prints a negative zero', () => {
+    const r = record({ place: earthPlaceFromCell(cell({ tempMean: -0.3 }), META) });
+    equal(row(r, 'tempMean').earth.text, '0 °C');
   });
 
   it('labels the computed Sun elevation as computed, with a source', () => {
@@ -357,6 +380,33 @@ describe('Minerals on both sides', () => {
     equal(m.rows[0]?.earth.badge, 'Measured');
     equal(m.rows[0]?.target.source, 'papers');
     ok(m.addedAfterFreeze && !m.inScore);
+  });
+
+  it('builds the target side from the shared-minerals result when the caller does not pass one', () => {
+    const place = earthPlaceFromSite(SITE, cell(), META, { families: FAMILIES });
+    const shared = sharedMinerals(earth, TARGET_MINERALS, FAMILIES);
+    const r = record({ place, minerals: shared });
+    const m = dim(r, 'minerals');
+    equal(m.similarity, 1 / 3);
+    equal(m.verdict, 'partly');
+    equal(m.rows[0]?.target.text, 'hematite, smectite clay, carbonate and plagioclase feldspar');
+    equal(m.rows[0]?.target.source, 'a paper');
+    equal(m.rows[0]?.target.badge, 'Mission');
+    ok(m.reason.startsWith('Shares hematite'));
+    deepEqual(r.purposes.find((p) => p.id === 'geology')?.extraDimensions, ['minerals']);
+  });
+
+  it('treats an EMIT scene with no mineral identified as no observation, not a mismatch', () => {
+    const nothing = { ...SITE, mineralogy: { value: { group1: { identifiedShare: 0, top: [] }, group2: { identifiedShare: 0.8, top: [{ libraryName: 'organic_vegetation-dry-grass-golden', libraryTitle: 'Dry grass', shareOfValidPixels: 0.8, meanBandDepth: 0.07 }] } }, source: 'NASA EMIT L2B', badge: 'Measured' as const, date: '2025-02-22' } };
+    const summary = emitFamilies(nothing.mineralogy, FAMILIES);
+    deepEqual(summary?.families, []);
+    equal(sharedMinerals(summary, TARGET_MINERALS, FAMILIES), null);
+    const place = earthPlaceFromSite(nothing, cell(), META, { families: FAMILIES });
+    equal(place.extras.minerals?.value, null);
+    ok(place.extras.minerals?.note?.includes('no observation, not a mismatch'));
+    const r = record({ place, minerals: null });
+    equal(dim(r, 'minerals').verdict, 'no-data');
+    equal(r.purposes.find((p) => p.id === 'geology')?.extendedScore, null);
   });
 
   it('does not change the all-round score', () => {
@@ -543,7 +593,18 @@ describe('Extended purpose scores', () => {
   it('cannot rescue a place the frozen rules do not score, and keep a zero a zero', () => {
     equal(extendedPurposeScore('geology', null, ['rockType'], [{ id: 'minerals', similarity: 1 }]).score, null);
     equal(extendedPurposeScore('geology', 0, ['rockType'], [{ id: 'minerals', similarity: 1 }]).score, 0);
-    equal(extendedPurposeScore('geology', 80, ['rockType'], [{ id: 'minerals', similarity: 0 }]).score, 0);
+    equal(extendedPurposeScore('base', 80, ['rockType'], [{ id: 'wind', similarity: 0 }]).score, 0);
+  });
+
+  it('let a mineral miss lower a purpose score, never veto it', () => {
+    // EMIT seeing none of the target's minerals counts as the rock table's "unrelated" level, 0.15.
+    equal(MINERALS_BLEND_FLOOR, 0.15);
+    const none = extendedPurposeScore('geology', 100, ['rockType'], [{ id: 'minerals', similarity: 0 }]);
+    ok(Math.abs((none.score as number) - 100 * Math.sqrt(0.15)) < 1e-9);
+    const low = extendedPurposeScore('geology', 100, ['rockType'], [{ id: 'minerals', similarity: 0.1 }]);
+    equal(low.score, none.score);
+    const above = extendedPurposeScore('geology', 100, ['rockType'], [{ id: 'minerals', similarity: 0.5 }]);
+    ok(Math.abs((above.score as number) - 100 * Math.sqrt(0.5)) < 1e-9);
   });
 
   it('appear in the record beside the frozen purpose score, never instead of it', () => {

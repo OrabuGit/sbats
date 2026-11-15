@@ -4,13 +4,15 @@ Pure TypeScript, no UI, no file or network access. Owner: Session C. Tests:
 `npx tsx --test app/src/lib/route/__tests__/*.test.ts`.
 
 ```ts
-import { tileFromFloat32, measureRoute, pointFromLatLon } from './lib/route';
+import { tileFromFloat32, measureRoute, slopeLimitOf, speedOf, energyRateOf } from './lib/route';
 
 const tile = tileFromFloat32(buffer, item.elevation.size, item.elevation.pixelM);  // a data/extracts tile
+const rover = rovers.rovers.find((r) => r.id === 'perseverance');                 // data/rovers.json
 const result = measureRoute(tile, [{ col: 100, row: 300 }, { col: 240, row: 310 }, { col: 400, row: 180 }], {
-  limit: { rover: r.name, limitDeg: r.slopeLimit.value, kind: r.slopeLimit.kind, source: r.slopeLimit.source },
-  speed: { rover: r.name, metresPerHour: r.speed.value, kind: r.speed.kind, source: r.speed.source },   // optional
-  // r is one entry of data/rovers.json `rovers`
+  limit: slopeLimitOf(rover),     // { rover, limitDeg, kind, source }, or null when none is published
+  speed: speedOf(rover),          // optional
+  energy: energyRateOf(rover),    // null for every rover but the Apollo one
+  body: 'earth',                  // the body the tile is on: energy is given only on the rate's own body
 });
 ```
 
@@ -27,7 +29,7 @@ local orthographic projection centred on the item, north up).
 | `ascentM`, `descentM`, `minElevationM`, `maxElevationM` | sums of climbs and descents, and the range |
 | `maxUphillDeg`, `maxDownhillDeg`, `meanAlongSlopeDeg` | slope of the route itself |
 | `maxTerrainSlopeDeg` | steepest ground crossed, whichever way the rover faces |
-| `shareAboveLimit`, `distanceAboveLimitM` | share and length of the route on ground steeper than the limit |
+| `shareAboveLimit`, `distanceAboveLimitM` | share and length of the route on ground steeper than the limit. The share is of `judgedDistanceM`, the part of the route that has elevation data |
 | `shareAlongAboveLimit` | the same for the slope of the route itself |
 | `drivingTimeH` | distance divided by a published speed: a lower bound. null without a speed |
 | `energyWh` | distance times a measured rate per km, on the right body only. Usually null |
@@ -42,6 +44,6 @@ local orthographic projection centred on the item, north up).
 - **Energy is almost never given.** No published, citable model of rover energy against slope was found.
   `energyWh` is filled only from a measured rate in `data/rovers.json` (today: the Apollo rover on the
   Moon), only when `body` says the route is on the body the rate was measured on, and never adjusted
-  for slope. Pass `{ energy: rover.energy, body: 'moon' }`.
+  for slope. Use `energyRateOf(rover)` and pass the tile's `body`.
 - The slope limit and the speed are never typed in the code. They come from `data/rovers.json`, each
   with its source.

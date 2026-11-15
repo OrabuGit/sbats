@@ -169,8 +169,7 @@ mineral's signature is matched in the cloud-free pixels, not how much of it is t
 | Merapi | goethite 18%, jarosite 10%, smectite clay 10%, hematite 8% | **3: hematite, jarosite, smectite clay** | 1: smectite clay |
 | Tambora caldera | hematite 24%, goethite 12%, smectite clay 2% | 2: hematite, smectite clay | 1: smectite clay |
 | Batur lava fields | goethite 1% | none | none |
-| Kesaksak (Batur cone) | none | none | none |
-| Maros-Pangkep | none | none | none |
+| Kesaksak (Batur cone), Maros-Pangkep | EMIT identified no mineral: no observation, so not compared | | |
 | Kawah Ijen, Gua Lawa, Goa Pandan | no usable cloud-free EMIT scene | | |
 
 What this says:
@@ -237,39 +236,40 @@ Read with care:
 
 Tables: `validation/output/BENCHMARKS.md` and `data/benchmarks.json`, from
 `npx tsx validation/benchmarks.ts`. Every site of `data/sites.json` is scored by one procedure:
-8 candidates and 9 known analogs, each against all 8 targets, at site scale.
+8 candidates and 13 known analogs, each against all 8 targets, at site scale. Numbers as of the site file built
+2026-11-15T06:40Z; `BENCHMARKS.md` is regenerated whenever sites are added and is the one to quote.
 
 Mean similarity over all targets:
 
 | Dimension | Candidates | Known analogs |
 | --- | --- | --- |
-| Geology | 0.44 | 0.53 |
-| Terrain | 0.28 | 0.46 |
-| Climate | 0.00 | 0.04 |
-| Bare ground | 0.01 | 0.85 |
-| Sunlight | 0.40 | 0.41 |
+| Geology | 0.44 | 0.45 |
+| Terrain | 0.28 | 0.41 |
+| Climate | 0.00 | 0.10 |
+| Bare ground | 0.01 | 0.70 |
+| Sunlight | 0.40 | 0.39 |
 
 Purpose scores out of 100, for the typical (median) target and for the best target:
 
 | Purpose | Candidates, typical | Known, typical | Candidates, best | Known, best |
 | --- | --- | --- | --- | --- |
-| Instrument and geology testing | 34 | 49 | 77 | 79 |
-| Rover mobility | 0.1 | 47 | 4 | 89 |
-| Ice and resources | 0 | 6 | 0 | 8 |
-| Astrobiology | 0 | 13 | 0 | 15 |
-| Full base rehearsal | 0 | 12 | 0.1 | 19 |
+| Instrument and geology testing | 34 | 41 | 77 | 70 |
+| Rover mobility | 0.1 | 41 | 4 | 75 |
+| Ice and resources | 0 | 5 | 0 | 10 |
+| Astrobiology | 0 | 14 | 0 | 16 |
+| Full base rehearsal | 0 | 10 | 0.1 | 20 |
 
 Read plainly:
 
-- **On rock, the candidates stand beside the known analogs** (0.44 against 0.53; best-target geology
-  77 against 79).
-- **On bare ground they do not** (0.01 against 0.85). This one dimension is the whole gap in rover
-  mobility, 0.1 against 47.
-- **Climate is poor for everyone** (0.04 for the known analogs). No place on Earth is cold and dry
-  enough, which is why even established analogs score 12 out of 100 as a full base rehearsal.
+- **On rock, the candidates stand beside the known analogs** (0.44 against 0.45; best-target geology
+  77 against 70).
+- **On bare ground they do not** (0.01 against 0.70). This one dimension is the whole gap in rover
+  mobility, 0.1 against 41.
+- **Climate is poor for everyone** (0.10 for the known analogs). No place on Earth is cold and dry
+  enough, which is why even established analogs score 10 out of 100 as a full base rehearsal.
 - "Best target" flatters every site, known or candidate: it is the best of eight, chosen afterwards.
   The typical-target column is the fairer one.
-- The known analogs are the nine for which fine-scale data was built. A yardstick, not a test.
+- The known analogs are the thirteen for which fine-scale data was built. A yardstick, not a test.
 
 ## Rank stability
 
@@ -312,7 +312,8 @@ should be said out loud, not hidden.
 
 ## Check on known analogs
 
-The same procedure on nine known analogs, best target each, rover mobility purpose:
+The same procedure on the nine known analogs measured first, best target each, rover mobility purpose
+(four more were added later; all thirteen are in `output/BENCHMARKS.md`):
 
 | Site | Site scale | Its 55 km cell |
 | --- | --- | --- |

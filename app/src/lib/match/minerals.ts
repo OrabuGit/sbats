@@ -160,7 +160,8 @@ export interface SharedMinerals {
  * not a measure of abundance.
  */
 export function sharedMinerals(earth: EmitSummary | null, target: readonly TargetMineral[] | null | undefined, families: readonly MineralFamily[]): SharedMinerals | null {
-  if (!earth || !target || target.length === 0) return null;
+  // EMIT identifying no mineral at all (cloud, vegetation, water) is no observation, not a mismatch.
+  if (!earth || earth.families.length === 0 || !target || target.length === 0) return null;
   const byId = new Map(families.map((f) => [f.id, f]));
   const targetByFamily = new Map<string, TargetMineral[]>();
   for (const m of target) targetByFamily.set(m.family, [...(targetByFamily.get(m.family) ?? []), m]);

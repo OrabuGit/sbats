@@ -34,6 +34,7 @@ import type {
 import { targetCoverage } from '../targets/index';
 import type { TargetProfile } from '../targets/index';
 import { EXTRA_DIMENSIONS, compareExtra, extendedPurposeScore } from './extras';
+import { listLabels } from './minerals';
 import type { SharedMinerals } from './minerals';
 import type { EarthPlace, ExtraDimensionId, ExtraValue, MatchDimension, MatchPurpose, MatchRecord, MatchRow, MatchSide, ValueScale } from './types';
 import { verdictOf, verdictOfScore } from './verdict';
@@ -74,7 +75,9 @@ const NO_SIDE: MatchSide = { value: null, text: 'no data', source: null, badge: 
 
 function printValue(value: number, key: ScoreKey): string {
   const info = KEY_INFO[key];
-  const text = formatValue(value, info.decimals);
+  // Round first, so that a value just under zero prints as 0 and not as -0.
+  const rounded = Math.round(value * 10 ** info.decimals) / 10 ** info.decimals;
+  const text = formatValue(rounded === 0 ? 0 : rounded, info.decimals);
   if (info.unit === '') return text;
   return info.unit === '°' ? `${text}°` : `${text} ${info.unit}`;
 }
@@ -131,7 +134,8 @@ function rowFor(k: KeyBreakdown, input: MatchInput, prepared: PreparedTarget): M
     if (k.key === 'lithology') {
       target = { value: k.targetValue, text: className(k.targetValue, input.classes), source: tv?.source ?? null, badge: tv?.badge ?? null, scale, ...(tv?.note ? { note: tv.note } : {}) };
     } else if (k.key === 'sunElevation') {
-      target = { value: k.targetValue, text: printValue(k.targetValue, k.key), source: SUN_SOURCE, badge: 'Literature', scale: 'computed' };
+      const text = clamped ? `${printValue(k.targetValue, k.key)} (Earth's closest: ${printValue(k.targetClamped as number, k.key)})` : printValue(k.targetValue, k.key);
+      target = { value: k.targetValue, text, source: SUN_SOURCE, badge: 'Literature', scale: 'computed' };
     } else {
       const text = clamped ? `${printValue(k.targetValue, k.key)} (Earth's closest: ${printValue(k.targetClamped as number, k.key)})` : printValue(k.targetValue, k.key);
       target = { value: k.targetValue, text, source: tv?.source ?? null, badge: tv?.badge ?? null, scale, ...(tv?.note ? { note: tv.note } : {}) };
@@ -161,14 +165,38 @@ function rowFor(k: KeyBreakdown, input: MatchInput, prepared: PreparedTarget): M
     const shown = printValue(Math.abs(diff), k.key);
     const zero = printValue(0, k.key);
     if (k.key === 'ndvi') {
-      reason = diff > 0.05 ? `Vegetation cover (NDVI ${formatValue(k.earthValue as number, 2)}) where the target is bare ground.` : `Bare ground, like the target (NDVI ${formatValue(k.earthValue as number, 2)}).`;
+      // The sentence follows the verdict, and names whichever costs more: vegetation or permanent ice.
+      const ndvi = formatValue(k.earthValue as number, 2);
       const ice = k.bareGround?.snowIceFrac ?? 0;
-      if (ice > 0.5) reason = `Permanent ice covers ${formatValue(ice * 100, 0)}% of the cell: ice is not bare ground.`;
+      const vegetationMatch = ice < 1 ? k.similarity / (1 - ice) : 1;
+      const verdict = verdictOf(k.similarity);
+      if (ice > 0.005 && 1 - ice < vegetationMatch) {
+        reason = verdict === 'matches'
+          ? `Mostly bare ground (NDVI ${ndvi}), with permanent ice on ${formatValue(ice * 100, 0)}% of the cell.`
+          : `Permanent ice covers ${formatValue(ice * 100, 0)}% of the cell: ice is not bare ground.`;
+      } else if (verdict === 'matches') reason = `Bare ground, like the target (NDVI ${ndvi}).`;
+      else if (diff > 0) reason = verdict === 'partly' ? `Some vegetation (NDVI ${ndvi}) where the target is bare ground.` : `Vegetation cover (NDVI ${ndvi}) where the target is bare ground.`;
+      else reason = `NDVI ${ndvi} is below the bare-ground reference of ${formatValue(k.targetClamped as number, 2)}: water, snow or wet ground rather than bare rock.`;
     } else if (shown === zero) reason = `${info.label} ${earth.text}: the same as the target${clamped ? "'s closest value on Earth" : ''}.`;
     else reason = `${info.label} ${earth.text}: ${shown} ${diff > 0 ? words[0] : words[1]} ${than}.`;
   }
 
   return { key: k.key, label: info.label, unit: info.unit, earth, target, similarity: k.similarity, verdict: verdictOf(k.similarity), reason };
+}
+
+/** The target side of the minerals dimension, from what sharedMinerals() already holds about the target. */
+export function targetMineralsFromShared(shared: SharedMinerals): ExtraValue {
+  const groups = [...shared.shared, ...shared.targetOnly, ...shared.notComparable];
+  const sources = [...new Set(groups.flatMap((g) => g.target.map((m) => m.source)))];
+  return {
+    value: groups.map((g) => g.family),
+    unit: '',
+    text: groups.length > 0 ? listLabels(groups.map((g) => g.label)) : 'no mineral reported',
+    source: sources.join('; ') || null,
+    badge: groups[0]?.target[0]?.badge ?? null,
+    scale: 'target',
+    note: 'Minerals reported by rover or orbiter instruments in the cited papers.',
+  };
 }
 
 /** Builds the match record. Pure: the same input gives the same record (pass `generatedAt` to fix the timestamp). */
@@ -210,7 +238,11 @@ export function buildMatchRecord(input: MatchInput): MatchRecord {
     };
   });
 
-  const extraDims = EXTRA_DIMENSIONS.map((def) => compareExtra(def, place.extras[def.id], input.targetExtras?.[def.id], def.id === 'minerals' ? input.minerals : null, input.extraRanges?.[def.id] ?? null));
+  // The target side of the minerals dimension: given by the caller, or built from the shared-minerals result itself.
+  const targetExtras: Partial<Record<ExtraDimensionId, ExtraValue>> = { ...(input.targetExtras ?? {}) };
+  if (!targetExtras.minerals && input.minerals) targetExtras.minerals = targetMineralsFromShared(input.minerals);
+
+  const extraDims = EXTRA_DIMENSIONS.map((def) => compareExtra(def, place.extras[def.id], targetExtras[def.id], def.id === 'minerals' ? input.minerals : null, input.extraRanges?.[def.id] ?? null));
   const extraSims = extraDims.map((d) => ({ id: d.id as ExtraDimensionId, similarity: d.similarity }));
 
   const purposes: MatchPurpose[] = PURPOSES.map((p) => {

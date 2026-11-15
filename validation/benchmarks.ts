@@ -21,13 +21,13 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DIMENSIONS, PRESETS, PURPOSES, buildProfileIndex, nearestCell, prepareTarget, rankIn, scoreCells } from '../app/src/lib/scoring/index';
 import type { DimensionId, PurposeId, Target } from '../app/src/lib/scoring/index';
-import { buildMatchRecord, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, extraRanges, listLabels, sharedMinerals, sitePosts, targetAtSiteWindow, targetEnvironment } from '../app/src/lib/match/index';
-import type { ExtraValue, MatchRecord, SiteEntryLike, TargetEnvironmentFile, TargetMineralsFile, TargetWindowsFile, Verdict } from '../app/src/lib/match/index';
+import { buildMatchRecord, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, extraRanges, sharedMinerals, sitePosts, targetAtSiteWindow, targetEnvironment } from '../app/src/lib/match/index';
+import type { MatchRecord, SiteEntryLike, TargetEnvironmentFile, TargetMineralsFile, TargetWindowsFile, Verdict } from '../app/src/lib/match/index';
 import { DATA, MAX_SNAP_KM, OUT, fail, loadData, loadFrozen, readJson } from './lib';
 
 interface SitesFile {
   meta: { generatedAt: string };
-  sites: (SiteEntryLike & { kind: 'candidate' | 'known'; inAnalogsJson?: boolean; analogSource?: string | null })[];
+  sites: (SiteEntryLike & { kind: 'candidate' | 'known'; inAnalogsJson?: boolean; analogSource?: string | null; gridCell?: { lat: number; lon: number } | null })[];
 }
 
 const frozen = loadFrozen();
@@ -148,7 +148,11 @@ function side(record: MatchRecord, sorted: Float64Array): Side {
 const generatedAt = new Date().toISOString();
 const rows: SiteRow[] = [];
 for (const s of sitesFile.sites) {
-  const hit = nearestCell(data.cells, s.lat, s.lon);
+  // The cell sites.json took the site's climate from, when it names one: a site on a cell corner has four
+  // equally near cells, and the site and its cell must be the same one.
+  const named = s.gridCell ? data.cells.find((c) => c.lat === s.gridCell?.lat && c.lon === s.gridCell?.lon) : undefined;
+  const nearest = nearestCell(data.cells, s.lat, s.lon);
+  const hit = named ? { cell: named, distanceKm: 0 } : nearest;
   if (!hit || hit.distanceKm > MAX_SNAP_KM) fail(`"${s.id}" has no Earth cell within ${MAX_SNAP_KM} km`);
   const families = minerals?.families;
   const sitePlace = earthPlaceFromSite(s, hit.cell, meta, families ? { families, emitMinimumShare: minerals?.meta.emitMinimumShare } : {});
@@ -161,15 +165,10 @@ for (const s of sitesFile.sites) {
     const like = targetAtSiteWindow(pt.target, posts, windows);
     const targetMinerals = minerals?.targets[pt.target.id]?.minerals ?? null;
     const shared = minerals ? sharedMinerals(earthMinerals, targetMinerals, minerals.families) : null;
-    const famLabel = (id: string): string => minerals?.families.find((f) => f.id === id)?.label ?? id;
-    const targetExtra: ExtraValue | undefined =
-      targetMinerals && targetMinerals.length > 0
-        ? { value: [...new Set(targetMinerals.map((m) => m.family))], unit: '', text: listLabels([...new Set(targetMinerals.map((m) => famLabel(m.family)))]), source: [...new Set(targetMinerals.map((m) => m.source))].join('; '), badge: 'Literature', scale: 'target' }
-        : undefined;
     const env = targetEnvironment(environment, pt.target.id);
     const siteRecord = buildMatchRecord({
       target: like ?? pt.target, place: sitePlace, ranges: data.ranges, table: data.table, classes, terrainLikeForLike: like !== null, generatedAt,
-      targetExtras: { ...env, ...(targetExtra ? { minerals: targetExtra } : {}) },
+      targetExtras: env,
       extraRanges: ranges,
       minerals: shared,
     });

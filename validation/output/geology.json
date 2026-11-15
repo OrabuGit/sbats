@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-15T06:07:33.554Z",
+  "generatedAt": "2026-11-15T06:42:16.644Z",
   "frozenAt": "2026-11-14",
   "earthGeneratedAt": "2026-11-15T06:06:00Z",
-  "sitesGeneratedAt": "2026-11-15T06:06:23Z",
+  "sitesGeneratedAt": "2026-11-15T06:40:44Z",
   "levels": {
     "same": 1,
     "related": 0.6,
@@ -1174,12 +1174,12 @@
   ],
   "siteLevel": {
     "note": "Separate site-level result. Rock class mapped at the site or for the whole volcano (data/sites.json), against the class of the 0.5 degree cell. Five known analogs only: an illustration, not a validation.",
-    "knownSites": 9,
-    "knownSitesWhereCellAndSiteClassAgree": 0,
+    "knownSites": 13,
+    "knownSitesWhereCellAndSiteClassAgree": 3,
     "knownSitesWhereTheyDiffer": 2,
-    "knownSitesNotComparable": 7,
-    "knownMeanPercentileWithCellClass": 0.511,
-    "knownMeanPercentileWithSiteClass": 0.77,
+    "knownSitesNotComparable": 8,
+    "knownMeanPercentileWithCellClass": 0.59,
+    "knownMeanPercentileWithSiteClass": 0.788,
     "rows": [
       {
         "id": "id-kawah-ijen",
@@ -2004,11 +2004,11 @@
         "name": "Salar de Uyuni salt flat, Bolivia",
         "kind": "known",
         "rockType": "Evaporite",
-        "siteClass": null,
+        "siteClass": 14,
         "siteScale": "site",
         "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
         "cellClass": 14,
-        "agrees": null,
+        "agrees": true,
         "pairs": []
       },
       {
@@ -2016,12 +2016,126 @@
         "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
         "kind": "known",
         "rockType": "Andesite and related volcanic",
-        "siteClass": null,
+        "siteClass": 10,
         "siteScale": "site",
         "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
         "cellClass": 10,
+        "agrees": true,
+        "pairs": []
+      },
+      {
+        "id": "beacon-valley",
+        "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+        "kind": "known",
+        "rockType": "till, breccia, gravel, tillite",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Antarctica (GeoMAP) (medium-scale map) via Macrostrat: GeoMAP: SCAR Antarctic geological map dataset",
+        "cellClass": 3,
         "agrees": null,
         "pairs": []
+      },
+      {
+        "id": "don-juan-pond",
+        "name": "Don Juan Pond, Wright Valley, Antarctica",
+        "kind": "known",
+        "rockType": "gravel, sand, breccia",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Antarctica (GeoMAP) (medium-scale map) via Macrostrat: GeoMAP: SCAR Antarctic geological map dataset",
+        "cellClass": 3,
+        "agrees": null,
+        "pairs": []
+      },
+      {
+        "id": "craters-of-the-moon",
+        "name": "Craters of the Moon, Idaho, USA",
+        "kind": "known",
+        "rockType": "basalt, latite",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Geologic map of Idaho: Idaho Geological Survey (medium-scale map) via Macrostrat: 2012 Lewis, R.S., Link, P.K., Stanford, L.R., and Long, S.P., 2012, Geologic map of Idaho: Idaho Geological Survey, Map M-9, scale 1:750,000.",
+        "cellClass": 2,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "same",
+            "cellPercentile": 0.985,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          }
+        ]
+      },
+      {
+        "id": "askja",
+        "name": "Askja caldera, Iceland highlands",
+        "kind": "known",
+        "rockType": "volcanic: mafic rocks",
+        "siteClass": 2,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 373060 (Askja)",
+        "cellClass": 2,
+        "agrees": true,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "same",
+            "cellPercentile": 0.985,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
       }
     ]
   }

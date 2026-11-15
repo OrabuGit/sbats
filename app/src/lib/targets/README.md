@@ -15,6 +15,7 @@ const profile = targetFromPoint('mars', 40.2, 202.3, {
   grid: marsGrid,          // data/mars.json (Session B), or null if not loaded
   curated: targets,        // data/targets.json
   knownSites: known.sites, // data/known_sites.json, optional: names the place
+  rockClasses: legend.map((c) => c.code),  // rock class codes of data/earth.json: pass it whenever a grid is passed
 });
 profile.target      // a full Target: pass it to prepareTarget() and score as usual
 profile.origin      // 'curated' | 'grid' | 'none'
@@ -37,7 +38,8 @@ Order of preference:
 3. **None.** With no grid, or no cell at the point, only the shared values are filled. Scores built
    on it fall under the minimum coverage and show "no data". Nothing is made up.
 
-A grid value whose factor has no stated source in `meta.factors` is not used.
+A grid value whose factor has no stated source in `meta.factors` is not used. A grid rock class that is not in
+`rockClasses` is left out with a note: scoring a class the rock table does not list would throw.
 
 `targetFromKnownSite(site, options)` returns the curated target a named place is linked to
 (`site.targetId`), else builds the profile from its coordinates.

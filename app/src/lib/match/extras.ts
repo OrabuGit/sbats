@@ -203,6 +203,15 @@ export function compareExtra(
  * Returns null when the frozen purpose score is null (the extras cannot rescue a place the frozen
  * rules do not score) or when no extra dimension has a similarity.
  */
+/**
+ * In a blend, the minerals similarity is never taken below this. A site where EMIT saw none of the
+ * target's minerals is a poor match on minerals, not a place with no geology at all: EMIT cannot see
+ * olivine or pyroxene on weathered ground even at Mauna Kea. The value is the "unrelated" level of the
+ * rock-class table (0.15), which exists for the same reason: rock type lowers a score and never vetoes it.
+ * The similarity shown in the record is not changed.
+ */
+export const MINERALS_BLEND_FLOOR = 0.15;
+
 export function extendedPurposeScore(
   purposeId: PurposeId,
   frozenScore: number | null,
@@ -214,9 +223,11 @@ export function extendedPurposeScore(
   const weights = PRESETS.base.weights;
   const core = purposeFactors.reduce((sum, f) => sum + weights[f], 0);
   const each = core / purposeFactors.length;
-  if (frozenScore <= 0 || mine.some((x) => (x.similarity as number) <= 0)) return { score: 0, used: mine.map((x) => x.id) };
+  const blend = (x: { id: ExtraDimensionId; similarity: number | null }): number =>
+    x.id === 'minerals' ? Math.max(MINERALS_BLEND_FLOOR, x.similarity as number) : (x.similarity as number);
+  if (frozenScore <= 0 || mine.some((x) => blend(x) <= 0)) return { score: 0, used: mine.map((x) => x.id) };
   let logSum = core * Math.log(frozenScore / 100);
-  for (const x of mine) logSum += each * Math.log(x.similarity as number);
+  for (const x of mine) logSum += each * Math.log(blend(x));
   return { score: 100 * Math.exp(logSum / (core + each * mine.length)), used: mine.map((x) => x.id) };
 }
 

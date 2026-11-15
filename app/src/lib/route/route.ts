@@ -96,6 +96,8 @@ export interface RouteResult {
   shareAlongAboveLimit: number | null;
   /** Metres of route above the limit (by ground slope). */
   distanceAboveLimitM: number | null;
+  /** Metres of route that had elevation data and could be judged against the limit. The shares above are shares of this length. */
+  judgedDistanceM: number | null;
   limit: SlopeLimit | null;
   /** Share of the route with no elevation data, 0 to 1. */
   noDataShare: number;
@@ -300,6 +302,7 @@ export function measureRoute(tile: ElevationTile, waypoints: readonly TilePoint[
     shareAboveLimit: limitDeg === null || judgedLen === 0 ? null : round(aboveTerrainLen / judgedLen, 4),
     shareAlongAboveLimit: limitDeg === null || judgedLen === 0 ? null : round(aboveAlongLen / judgedLen, 4),
     distanceAboveLimitM: limitDeg === null || judgedLen === 0 ? null : round(aboveTerrainLen, 1),
+    judgedDistanceM: limitDeg === null ? null : round(judgedLen, 1),
     limit: options.limit ?? null,
     noDataShare: travelled > 0 ? round(noDataLen / travelled, 4) : 0,
     drivingTimeH: drivingTimeH === null ? null : round(drivingTimeH, 2),
@@ -308,6 +311,42 @@ export function measureRoute(tile: ElevationTile, waypoints: readonly TilePoint[
     energy: options.energy ?? null,
     notes,
   };
+}
+
+/** One figure of data/rovers.json. */
+export interface RoverFigure {
+  value: number;
+  unit: string;
+  kind: string;
+  source: string;
+}
+
+/** One entry of data/rovers.json `rovers`, as far as this library reads it. */
+export interface RoverEntry {
+  id: string;
+  name: string;
+  body: string;
+  slopeLimit: RoverFigure | null;
+  speed: RoverFigure | null;
+  energy: RoverFigure | null;
+}
+
+const shortRover = (name: string): string => name.split(' (')[0] as string;
+
+/** The slope limit of a rover of data/rovers.json, ready for measureRoute. null when none is published. */
+export function slopeLimitOf(rover: RoverEntry): SlopeLimit | null {
+  return rover.slopeLimit ? { rover: shortRover(rover.name), limitDeg: rover.slopeLimit.value, kind: rover.slopeLimit.kind, source: rover.slopeLimit.source } : null;
+}
+
+/** The speed of a rover of data/rovers.json, ready for measureRoute. null when none is published. */
+export function speedOf(rover: RoverEntry): RoverSpeed | null {
+  return rover.speed ? { rover: shortRover(rover.name), metresPerHour: rover.speed.value, kind: rover.speed.kind, source: rover.speed.source } : null;
+}
+
+/** The measured energy rate of a rover of data/rovers.json, tied to the body it was measured on. null for every rover but one. */
+export function energyRateOf(rover: RoverEntry): EnergyRate | null {
+  if (!rover.energy || (rover.body !== 'moon' && rover.body !== 'mars')) return null;
+  return { rover: shortRover(rover.name), whPerKm: rover.energy.value, kind: rover.energy.kind, source: rover.energy.source, body: rover.body };
 }
 
 /** Reads a raw little-endian float32 elevation file of data/extracts into a tile. */

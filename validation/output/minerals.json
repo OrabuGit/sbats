@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-11-15T06:07:37.878Z",
- "sitesGeneratedAt": "2026-11-15T06:06:23Z",
+ "generatedAt": "2026-11-15T06:42:14.479Z",
+ "sitesGeneratedAt": "2026-11-15T06:40:44Z",
  "emitMinimumShare": 0.01,
  "sites": [
   {
@@ -184,63 +184,10 @@
    "identified": [],
    "unassigned": [],
    "targets": {
-    "mars-gale": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Pyroxene",
-      "Olivine",
-      "Magnetite",
-      "Hematite",
-      "Jarosite",
-      "Calcium sulfate (gypsum, bassanite, anhydrite)",
-      "Smectite clay",
-      "Silica (tridymite, cristobalite, opal)",
-      "Magnesium-iron carbonate (magnesite, siderite)"
-     ],
-     "notComparable": [
-      "Plagioclase feldspar",
-      "Akaganeite"
-     ],
-     "earthOnly": []
-    },
-    "mars-jezero": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Olivine",
-      "Pyroxene",
-      "Magnesium-iron carbonate (magnesite, siderite)",
-      "Calcium sulfate (gypsum, bassanite, anhydrite)",
-      "Magnesium sulfate",
-      "Perchlorate",
-      "Smectite clay"
-     ],
-     "notComparable": [
-      "Plagioclase feldspar",
-      "Phosphate"
-     ],
-     "earthOnly": []
-    },
-    "moon-shackleton-rim": {
-     "similarity": null,
-     "shared": [],
-     "targetOnly": [],
-     "notComparable": [
-      "Plagioclase feldspar"
-     ],
-     "earthOnly": []
-    },
-    "moon-marius-hills": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Pyroxene",
-      "Olivine"
-     ],
-     "notComparable": [],
-     "earthOnly": []
-    }
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
    }
   },
   {
@@ -253,63 +200,10 @@
    "identified": [],
    "unassigned": [],
    "targets": {
-    "mars-gale": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Pyroxene",
-      "Olivine",
-      "Magnetite",
-      "Hematite",
-      "Jarosite",
-      "Calcium sulfate (gypsum, bassanite, anhydrite)",
-      "Smectite clay",
-      "Silica (tridymite, cristobalite, opal)",
-      "Magnesium-iron carbonate (magnesite, siderite)"
-     ],
-     "notComparable": [
-      "Plagioclase feldspar",
-      "Akaganeite"
-     ],
-     "earthOnly": []
-    },
-    "mars-jezero": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Olivine",
-      "Pyroxene",
-      "Magnesium-iron carbonate (magnesite, siderite)",
-      "Calcium sulfate (gypsum, bassanite, anhydrite)",
-      "Magnesium sulfate",
-      "Perchlorate",
-      "Smectite clay"
-     ],
-     "notComparable": [
-      "Plagioclase feldspar",
-      "Phosphate"
-     ],
-     "earthOnly": []
-    },
-    "moon-shackleton-rim": {
-     "similarity": null,
-     "shared": [],
-     "targetOnly": [],
-     "notComparable": [
-      "Plagioclase feldspar"
-     ],
-     "earthOnly": []
-    },
-    "moon-marius-hills": {
-     "similarity": 0,
-     "shared": [],
-     "targetOnly": [
-      "Pyroxene",
-      "Olivine"
-     ],
-     "notComparable": [],
-     "earthOnly": []
-    }
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
    }
   },
   {
@@ -1301,6 +1195,146 @@
       "Calcium carbonate (calcite, aragonite, dolomite)"
      ]
     }
+   }
+  },
+  {
+   "id": "beacon-valley",
+   "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+   "kind": "known",
+   "date": null,
+   "reason": "No EMIT L2B mineral granule contains the site.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "don-juan-pond",
+   "name": "Don Juan Pond, Wright Valley, Antarctica",
+   "kind": "known",
+   "date": null,
+   "reason": "No EMIT L2B mineral granule contains the site.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
+   }
+  },
+  {
+   "id": "craters-of-the-moon",
+   "name": "Craters of the Moon, Idaho, USA",
+   "kind": "known",
+   "date": "2023-08-17",
+   "reason": null,
+   "vegetationShare": 0.611,
+   "identified": [
+    {
+     "family": "hematite",
+     "label": "Hematite",
+     "shareOfValidPixels": 0.214
+    },
+    {
+     "family": "goethite",
+     "label": "Goethite",
+     "shareOfValidPixels": 0.14
+    }
+   ],
+   "unassigned": [],
+   "targets": {
+    "mars-gale": {
+     "similarity": 0.111,
+     "shared": [
+      "Hematite"
+     ],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine",
+      "Magnetite",
+      "Jarosite",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Smectite clay",
+      "Silica (tridymite, cristobalite, opal)",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Akaganeite"
+     ],
+     "earthOnly": [
+      "Goethite"
+     ]
+    },
+    "mars-jezero": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Calcium sulfate (gypsum, bassanite, anhydrite)",
+      "Magnesium sulfate",
+      "Perchlorate",
+      "Smectite clay"
+     ],
+     "notComparable": [
+      "Plagioclase feldspar",
+      "Phosphate"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite"
+     ]
+    },
+    "moon-shackleton-rim": {
+     "similarity": null,
+     "shared": [],
+     "targetOnly": [],
+     "notComparable": [
+      "Plagioclase feldspar"
+     ],
+     "earthOnly": [
+      "Hematite",
+      "Goethite"
+     ]
+    },
+    "moon-marius-hills": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Pyroxene",
+      "Olivine"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Goethite"
+     ]
+    }
+   }
+  },
+  {
+   "id": "askja",
+   "name": "Askja caldera, Iceland highlands",
+   "kind": "known",
+   "date": null,
+   "reason": "No EMIT L2B mineral granule contains the site.",
+   "vegetationShare": null,
+   "identified": null,
+   "unassigned": null,
+   "targets": {
+    "mars-gale": null,
+    "mars-jezero": null,
+    "moon-shackleton-rim": null,
+    "moon-marius-hills": null
    }
   }
  ]

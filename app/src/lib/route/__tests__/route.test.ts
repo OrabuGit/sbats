@@ -2,7 +2,7 @@
 
 import { deepEqual, equal, ok, throws } from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { elevationAt, measureRoute, pointFromLatLon, pointFromMetres, terrainSlopeAt, tileFromFloat32 } from '../index';
+import { elevationAt, energyRateOf, measureRoute, pointFromLatLon, pointFromMetres, slopeLimitOf, speedOf, terrainSlopeAt, tileFromFloat32 } from '../index';
 import type { ElevationTile, SlopeLimit } from '../index';
 
 /** A tile whose height is a function of column and row. */
@@ -180,6 +180,36 @@ describe('measureRoute: gaps, speed and notes', () => {
     ok(earth.notes.some((n) => n.includes('on the Moon, and this route is not there')));
     equal(measureRoute(FLAT, way, { energy: rate }).energyWh, null); // body not stated: no figure
     equal(measureRoute(FLAT, way).energyWh, null);
+  });
+
+  it('says how much of the route could be judged against the limit', () => {
+    const holed = tile(21, 30, (c) => (c >= 8 && c <= 9 ? Number.NaN : 10 * c));
+    const r = measureRoute(holed, [{ col: 2, row: 10 }, { col: 14, row: 10 }], { limit: LIMIT });
+    equal(r.distanceM, 360);
+    ok(r.judgedDistanceM !== null && r.judgedDistanceM < r.distanceM);
+    equal(r.shareAboveLimit, 1); // all of the part with data
+    equal(r.distanceAboveLimitM, r.judgedDistanceM);
+    equal(measureRoute(FLAT, [{ col: 0, row: 0 }, { col: 10, row: 0 }]).judgedDistanceM, null);
+  });
+
+  it('turns an entry of rovers.json into a limit, a speed and an energy rate', () => {
+    const rover = {
+      id: 'lrv', name: 'Apollo Lunar Roving Vehicle', body: 'moon',
+      slopeLimit: { value: 25, unit: 'degrees', kind: 'specified maximum slope', source: 'NASA TR R-401' },
+      speed: { value: 7600, unit: 'm per hour', kind: 'average speed while driving', source: 'JSC-09423' },
+      energy: { value: 75.6, unit: 'Wh per km', kind: 'measured mission rate', source: 'JSC-09423' },
+    };
+    deepEqual(slopeLimitOf(rover), { rover: 'Apollo Lunar Roving Vehicle', limitDeg: 25, kind: 'specified maximum slope', source: 'NASA TR R-401' });
+    equal(speedOf(rover)?.metresPerHour, 7600);
+    deepEqual(energyRateOf(rover), { rover: 'Apollo Lunar Roving Vehicle', whPerKm: 75.6, kind: 'measured mission rate', source: 'JSC-09423', body: 'moon' });
+    const way = [{ col: 0, row: 0 }, { col: 10, row: 0 }];
+    equal(measureRoute(FLAT, way, { energy: energyRateOf(rover), body: 'moon' }).energyWh, 22.7);
+    equal(measureRoute(FLAT, way, { energy: energyRateOf(rover), body: 'earth' }).energyWh, null);
+    const mars = { id: 'x', name: 'Perseverance (Mars 2020)', body: 'mars', slopeLimit: null, speed: null, energy: null };
+    equal(slopeLimitOf(mars), null);
+    equal(speedOf(mars), null);
+    equal(energyRateOf(mars), null);
+    equal(slopeLimitOf({ ...mars, slopeLimit: { value: 30, unit: 'degrees', kind: 'k', source: 's' } })?.rover, 'Perseverance');
   });
 
   it('samples no finer than half a pixel', () => {

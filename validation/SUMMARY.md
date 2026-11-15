@@ -40,7 +40,7 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
   the lava caves), crater and lava-field shapes, and at Merapi three mineral families shared with
   Gale crater (hematite, jarosite, smectite clay), as many as Mauna Kea shares.
 - **Beside established analogs, scored the same way:** the candidates match them on rock (0.44
-  against 0.53) and fall far short on bare ground (0.01 against 0.85).
+  against 0.45) and fall far short on bare ground (0.01 against 0.70).
 - **Tambora is not a Shackleton.** Same steepness (21 and 22 degrees), about a third of the size
   (roughly 7 against 21 km wide, 1.3 against 4.1 km deep).
 - **It cannot see** caves, lava tubes, lake chemistry, ground ice, gravity, vacuum or radiation.
@@ -62,7 +62,7 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 | Shared minerals | Mineral families seen from orbit on Earth and reported at the target | Merapi and Gale: 3 of 9 |
 | Rank stability | Share of the top ten that survives nudged weights | 81 to 91% |
 | Target confidence | High for a curated target, lower for a point picked on the map | Per target |
-| Site-scale score | The same formula on a 2 to 7 km footprint. Climate stays the 55 km value | 17 sites |
+| Site-scale score | The same formula on a 2 to 7 km footprint. Climate stays the 55 km value | 21 sites |
 | Readiness | Sandbox colour for power, water, oxygen and food | "No data" where a number has no source |
 
 ## Three sentences to say out loud

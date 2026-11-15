@@ -115,6 +115,11 @@ shared.earthOnly      // identified on Earth, not reported at the target
 shared.similarity     // shared / (shared + targetOnly), or null
 ```
 
+Pass `minerals: shared` to `buildMatchRecord`: the target side of the dimension is built from it. `sharedMinerals`
+returns null when EMIT identified no mineral at the site (no observation, not a mismatch). In an extended
+purpose score a minerals similarity is never taken below 0.15 (`MINERALS_BLEND_FLOOR`, the rock table's
+"unrelated" level), so a miss lowers the score and does not zero it.
+
 Site-level only. An EMIT identification is a spectral match in a 60 m pixel: how often a mineral's
 signature is seen, not how much is there, and it is weak under vegetation. A shared family is a pointer
 for a geologist, not proof of the same rock.

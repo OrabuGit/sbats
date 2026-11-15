@@ -1,6 +1,6 @@
 # Minerals on both sides: what each Earth site shares with each target
 
-Written 2026-11-15T06:07:37.878Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T06:06:23Z (Session B).
+Written 2026-11-15T06:42:14.478Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T06:40:44Z (Session B).
 
 **Site-level result only. Added after the score was frozen on 2026-11-14: it is not part of any score and has not been validated.**
 
@@ -47,14 +47,18 @@ How to read it:
 | Dasht-e Lut (Lut Desert), Iran | known | 2023-08-19 | 0% | Hematite 100%, Mica and illite 91%, Goethite 72%, Calcium carbonate 9%, Smectite clay 9% | none |
 | Salar de Uyuni salt flat, Bolivia | known | | | no data: EMIT has 15 granules over the site, but none of the 6 least cloudy ones gave a usable footprint. | |
 | Tunupa volcano, north shore of Salar de Uyuni, Bolivia | known | 2023-12-31 | 47% | Hematite 80%, Goethite 25%, Kaolinite 13%, Calcium carbonate 5% | none |
+| Beacon Valley, McMurdo Dry Valleys, Antarctica | known | | | no data: No EMIT L2B mineral granule contains the site. | |
+| Don Juan Pond, Wright Valley, Antarctica | known | | | no data: No EMIT L2B mineral granule contains the site. | |
+| Craters of the Moon, Idaho, USA | known | 2023-08-17 | 61% | Hematite 21%, Goethite 14% | none |
+| Askja caldera, Iceland highlands | known | | | no data: No EMIT L2B mineral granule contains the site. | |
 
 ## Shared minerals, site by target
 
 | Site | mars-gale | mars-jezero | moon-shackleton-rim | moon-marius-hills |
 | --- | --- | --- | --- | --- |
 | Mount Merapi and the Opak River, Central Java, Indonesia | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Kesaksak lava tube, Batur caldera, Bali, Indonesia | 0 of 9: none | 0 of 7: none | not comparable | 0 of 2: none |
-| Maros-Pangkep karst caves, South Sulawesi, Indonesia | 0 of 9: none | 0 of 7: none | not comparable | 0 of 2: none |
+| Kesaksak lava tube, Batur caldera, Bali, Indonesia | not comparable | not comparable | not comparable | not comparable |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | not comparable | not comparable | not comparable | not comparable |
 | Mount Tambora caldera, Sumbawa, Indonesia | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
 | Mount Batur black lava fields, Bali, Indonesia | 0 of 9: none | 0 of 7: none | not comparable | 0 of 2: none |
 | Mauna Kea, Hawaii, USA | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
@@ -63,6 +67,7 @@ How to read it:
 | Dallol, Danakil Depression, Ethiopia | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
 | Dasht-e Lut (Lut Desert), Iran | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
 | Tunupa volcano, north shore of Salar de Uyuni, Bolivia | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
+| Craters of the Moon, Idaho, USA | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
 
 Each cell: how many of the target's comparable mineral families EMIT also identified at the site, and which.
 

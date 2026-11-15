@@ -174,11 +174,13 @@ export function earthPlaceFromSite(
   });
   if (options.families && site.mineralogy) {
     const summary = emitFamilies(site.mineralogy, options.families, options.emitMinimumShare);
-    if (summary) {
+    if (summary && summary.families.length === 0) {
+      extras.minerals = { value: null, unit: '', text: 'no data', source: null, badge: null, scale: 'site', note: `EMIT identified no mineral here on ${site.mineralogy.date ?? 'the date used'}${summary.nonMineralShare > 0.3 ? `: dry vegetation is matched in ${Math.round(summary.nonMineralShare * 100)}% of the pixels` : ''}. That is no observation, not a mismatch.` };
+    } else if (summary) {
       const value: ExtraValue = {
         value: summary.families.map((m) => m.family),
         unit: '',
-        text: summary.families.length > 0 ? listLabels(summary.families.map((m) => m.label)) : 'no mineral identified',
+        text: listLabels(summary.families.map((m) => m.label)),
         source: site.mineralogy.source,
         badge: site.mineralogy.badge,
         scale: 'site',
