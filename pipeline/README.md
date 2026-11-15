@@ -56,9 +56,9 @@ uv run --project pipeline pipeline/extracts.py       # data/extracts/, about 15 
 
 | Script | Output | What it holds |
 | --- | --- | --- |
-| `site_climate.py` | `data/site_climate.json` | 12 monthly normals (NASA POWER, 2001-2020) of temperature, day-night range, precipitation and surface solar irradiance for every site in `analogs.json`. Grid-cell values, not site measurements |
-| `sites.py` | `data/sites.json` | Fine-scale values in a 2 to 5 km footprint for the candidate sites and five known analogs: terrain from Copernicus DEM GLO-30, NDVI and bare-ground share from Sentinel-2 at 10 m, rock type from regional geologic maps (Macrostrat), the Smithsonian volcano list or a cited paper. Climate is copied from the grid and labelled so |
-| `extracts.py` | `data/extracts/` | 20 km elevation and image extracts, all at one ground scale, for the featured Indonesian sites and every target: Copernicus DEM and Sentinel-2 for Earth, LOLA and LROC WAC for the Moon, MOLA for Mars |
+| `site_climate.py` | `data/site_climate.json` | 12 monthly normals (NASA POWER, 2001-2020) of temperature, day-night range, precipitation and surface solar irradiance for every site in `analogs.json` and the extra comparison sites defined in `sites.py`. Grid-cell values, not site measurements |
+| `sites.py` | `data/sites.json` | Fine-scale values in a 2 to 7.4 km footprint for the candidate sites (now with the Tambora caldera and the Batur lava fields) and nine known analogs: terrain from Copernicus DEM GLO-30, NDVI and bare-ground share from Sentinel-2 at 10 m, rock type from regional geologic maps (Macrostrat), the Smithsonian volcano list or a cited paper, and mineral matches from NASA EMIT (`emit_minerals.py`, needs `EARTHDATA_TOKEN`). Climate is copied from the grid and labelled so. Footprints proposed by a team member are marked `provisional` |
+| `extracts.py` | `data/extracts/` | 20 km elevation and image extracts, all at one ground scale, for the featured Indonesian sites and every target: Copernicus DEM and Sentinel-2 for Earth, LOLA and LROC WAC for the Moon, MOLA for Mars. `meta.pairs` lists the pairs the team asked for (Tambora with Shackleton, Batur lava with Marius Hills) |
 
 Limits of the site files:
 
@@ -130,5 +130,12 @@ values only with values made the same way.
   sea included. NDVI and terrain use the land pixels only.
 - Lithology is `null` for cells that the GLiM grid marks as sea, water or no data. This is
   mostly coast and small islands.
+- Site footprints marked `provisional` in `sites.json` were set by the pipeline from a traced rim
+  (Tambora), a mapped polygon (Batur lava) or a single published point (Dallol, Dasht-e Lut, Salar de
+  Uyuni, Tunupa). A team member should check them.
+- The Salar de Uyuni footprint is 96% "water" in the Copernicus DEM mask and its salt reads as snow
+  in Sentinel-2, so its site values rest on a few pixels (see the site's `caveat`).
+- EMIT mineral matches are the best spectral-library match per 60 m pixel on one date. They say what a
+  pixel most resembles, not how much of a mineral is there, and they are weak under vegetation.
 - The two rows of cells nearest the South Pole (south of 89 S) are under 1 km wide, too narrow for a
   3 x 3 slope window at 463 m posts, so their `slope` is `null`.

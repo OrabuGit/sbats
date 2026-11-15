@@ -21,6 +21,9 @@ site in FOOTPRINTS below and written to the file.
                "large", "medium" or "small" scale, never the generalized world map), and
                the major rock type of the volcano from the Smithsonian Global Volcanism
                Program. Where neither exists the value is null.
+  Minerals     NASA EMIT L2B mineral identification (60 m) inside the footprint, from the least
+               cloudy granule that leaves at least half of the footprint free of cloud, cirrus
+               and water (see emit_minerals.py). Null with the reason where no granule qualifies.
   Climate      Not recomputed. Copied from the site's 0.5 degree cell in data/earth.json
                and labelled scale "grid".
 
@@ -48,6 +51,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from common import CACHE, DATA, LATS, LONS, USER_AGENT, cell_index  # noqa: E402
 from terrain_metrics import SPACING_M, terrain_metrics  # noqa: E402
+import emit_minerals  # noqa: E402
 
 YEAR = 2025
 M_PER_DEG = 111194.9
@@ -510,6 +514,11 @@ def build() -> dict:
         t = cached(f"terrain2_{sid}_{side}", lambda: site_terrain(lat, lon, side))
         v = cached(f"s2b_{sid}_{side}_{YEAR}", lambda: site_vegetation(sid, lat, lon, side))
         rk = site_rock(sid, lat, lon)
+        try:
+            em = cached(f"emit_{sid}_{side}", lambda: emit_minerals.site_minerals(lat, lon, side))
+        except RuntimeError as e:   # a failed download is not cached, so the next run tries again
+            em = {"covered": None, "reason": f"EMIT data could not be read on this run: {e}"}
+        print(f"   EMIT: {em.get('date') or em.get('reason')}")
         i, j = cell_index(lat, lon)
         cell = cells.get((float(LATS[i]), float(LONS[j])))
         g = cell or {}
@@ -588,6 +597,22 @@ def build() -> dict:
                 "errors": [e for e in (t.get("error"), v.get("error")) if e],
             },
         }
+        has = "group1" in em
+        site["mineralogy"] = {
+            "value": {"group1": em["group1"], "group2": em["group2"]} if has else None,
+            "scale": "site",
+            "source": (f"NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m ({em['collection']}), granule {em['granule']}; "
+                       f"cloud, cirrus and water removed with {em['mask']}. NASA LP DAAC.") if has else None,
+            "badge": "Measured" if has else None,
+            "date": em.get("date"), "validShare": em.get("validShare"), "pixels": em.get("pixels"),
+            "emitCovers": em.get("covered"), "granulesAvailable": em.get("granulesAvailable"), "granulesTried": em.get("tried"),
+            "note": (("Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups "
+                      "(group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). "
+                      "shareOfValidPixels is how often a match occurs, not how much of the mineral is there. "
+                      "The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the "
+                      "product gives them. Matches are weak where plants cover the ground: read them with bareFrac.")
+                     if has else em.get("reason")),
+        }
         sites.append(site)
     meta = {
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -611,6 +636,10 @@ def build() -> dict:
                      "maps only). If there is none, the volcano's major rock type from the Smithsonian Global Volcanism "
                      "Program. If there is neither, a rock type stated in the abstract of a paper about the feature. "
                      "Otherwise null."),
+            "minerals": ("NASA EMIT L2B mineral identification, 60 m. Per site, the least cloudy granule (of at most "
+                         f"{emit_minerals.MAX_TRIES} tried) in which the footprint is wholly inside the scene and at least "
+                         f"{emit_minerals.MIN_VALID:.0%} of its pixels are free of cloud, cirrus and water in the EMIT L2A mask. "
+                         "One date, nothing merged. Null where no granule qualifies."),
             "climate": "Copied from the site's 0.5 degree cell in earth.json (scale: grid).",
         },
     }
