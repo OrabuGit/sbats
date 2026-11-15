@@ -196,3 +196,15 @@ Papers, agency pages and reference pages behind `data/targets.json`, `data/analo
 | Bluethmann 2024 (NASA NTRS 20240013903) and NASA VIPER pages; Costes et al. 1972 (NASA TR R-401); Apollo 17 Mission Report; Apollo Program Summary Report (JSC-09423); NASA PDS Mars Pathfinder rover description | per figure in data/rovers.json | 2026-11-15 | rovers.json: slope limits, speeds and the one measured energy rate (Apollo rover) | Literature |
 | Mars Climate Database v6.2, web interface, climatology scenario: horizontal wind speed 10 m above the surface, and monthly mean dust column visible optical depth | https://www-mars.lmd.jussieu.fr/mcd_python/ | 2026-11-15 | target_environment.json: target-side wind and dust at the Mars targets (`validation/build/mars_environment.py`). A climate model, not a measurement. Reuse terms not checked | Literature |
 
+
+## Learn page and in-app text (Session A)
+
+| Source | URL | Accessed | Used for | Badge |
+| --- | --- | --- | --- | --- |
+| NASA Analog Missions; NEEMO; CHAPEA (NASA pages) | https://www.nasa.gov/analog-missions/ | 2026-11-15 | Learn page: where and when the NEEMO and CHAPEA analog missions ran | Literature |
+| The Mars Society, Mars Desert Research Station and Flashline Mars Arctic Research Station; Mars Institute, Haughton-Mars Project; HI-SEAS | https://mdrs.marssociety.org/ and https://hi-seas.org/ | 2026-11-15 | Learn page: analog station places and start years | Literature |
+| ESA, Concordia station and Mars500 | https://www.esa.int/ | 2026-11-15 | Learn page: Concordia and Mars500 dates and durations | Literature |
+| NASA, Artemis program, Apollo mission pages and Apollo 11 mission page; NASA Science mission pages (Lunar Reconnaissance Orbiter, Viking 1, Mars Exploration Rovers, Curiosity, Perseverance, Ingenuity); NASA NSSDCA Master Catalog | https://www.nasa.gov/humans-in-space/artemis/ and https://science.nasa.gov/ and https://nssdc.gsfc.nasa.gov/nmc/ | 2026-11-15 | Learn page: dates and names of landings, rovers and missions in the timeline | Mission |
+| CNSA (Chang'e missions); ISRO (Chandrayaan-3); JAXA (SLIM) | https://www.cnsa.gov.cn/ and https://www.isro.gov.in/ and https://www.jaxa.jp/ | 2026-11-15 | Learn page: dates of the Chang'e, Chandrayaan-3 and SLIM landings in the timeline | Mission |
+| data/rovers.json (sources per figure in the file, rows above) | data/rovers.json | 2026-11-15 | Learn page: rover slope limits and speeds; the field-logistics sentence on slope | Literature |
+| Standard astronomical formula for day length from latitude and the Sun's declination (Computed in the browser, no dataset) | not applicable | 2026-11-15 | Field logistics: longest and shortest day at a latitude | Computed |

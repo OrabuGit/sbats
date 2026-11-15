@@ -56,5 +56,5 @@ Space Apps requires teams to state where and how AI was used. Keep this current.
 | 2026-11-15 | Claude Code | Plain-language results (verdict sentence, good for, not for, tags, what could be tested) and field logistics (day length from latitude, climate, slope, roughness, relief) built by fixed rules from values the app already computes; a loader and renderer for site stories that shows nothing until the file exists; a compare slider between the Earth and target pictures | app/src/lib/plainResults.ts, app/src/components/PlainResults.tsx, FieldLogistics.tsx, CompareSlider.tsx, MatchDetail.tsx, SitePage.tsx, FeaturedPage.tsx, app/src/data/stories.ts |
 
 Notes:
-- No AI-generated images or video are used unless listed here with a visible watermark.
+- No AI-generated photographs, images or video are used. The line drawings in the app (the four purpose drawings, the nine element icons, the rover and tool drawings) were drawn in code with AI assistance; they carry a small visible "AI-generated drawings" mark where they appear in groups, and every row above that built them is listed.
 - All data values come from the sources in SOURCES.md, not from an AI model.
