@@ -185,6 +185,9 @@ Session C adds them to a preset.
 
 `sites.json` carries the same three keys in each site's `values`, with `scale: "grid"`.
 
+Every file built by the pipeline carries `meta.aiUse`, one sentence acknowledging that the pipeline code
+was written with AI assistance (added 2026-11-15, a submission rule). Readers can ignore it.
+
 ## data/earth.bin
 
 Owner: Session B. Written by the same build step as `earth.json`, never edited by hand.
@@ -210,6 +213,57 @@ Header: `{ "format": "SBE1", "cellCount", "resolutionDeg", "meta", "columns": [ 
   `stored == nullValue`. `dtype` is `uint8`, `uint16` or `int16`.
 - Decode with the reference function in `pipeline/earth_bin_decoder.ts` (copy it into `/app`). It returns
   the same `{ meta, cells }` object as parsing `earth.json`.
+
+## data/moon.json and data/mars.json
+
+Owner: Session B. Built by `pipeline/planets.py`. Added 2026-11-15. Compact copies `data/moon.bin` and
+`data/mars.bin` are in the `SBE1` format of `earth.bin` and decode with the same decoder.
+
+Global grids so that any point on the Moon or Mars can be a target. Same shape as `earth.json`:
+
+```
+{
+  "meta": { "body": "moon" | "mars", "resolutionDeg": 2 | 1, "cellKmAtEquator": number, "generatedAt",
+            "cellCount", "grid": { ... },
+            "factors": [ { "key", "label", "unit", "source", "badge", "note", "unitTable"? } ],
+            "notInFile": { "<key>": "why this key is not in the file" } },
+  "cells": [ { "lat", "lon", "<key>": number | null, ... } ]
+}
+```
+
+- Every cell of the body is listed (no mask), north to south then west to east. `lat`, `lon` are cell
+  centres; `lon` runs -180 to 180 east. Moon cells are 2 degrees (60.6 km), Mars cells 1 degree (59.3 km):
+  about the ground size of an Earth 0.5 degree cell.
+- A value that the source does not have is `null`. Every key has a row in `meta.factors` with its source
+  and badge. Keys:
+
+  | Key | Moon | Mars | Unit |
+  | --- | --- | --- | --- |
+  | `slope`, `roughness` | LOLA, 474 m posts | MOLA, 463 m posts | degrees, m |
+  | `tempMean` | Diviner, mean surface temperature over a lunar day | Mars Climate Database, air temperature at 2 m (a model) | °C |
+  | `tempRange` | Diviner, highest minus lowest over a lunar day | Mars Climate Database, day-night range of air temperature at 2 m (a lower bound) | °C |
+  | `surfTempMean` | not present | Mars Climate Database, ground surface | °C |
+  | `lithology` | USGS Unified Geologic Map of the Moon | USGS Geologic Map of Mars (SIM 3292) | GLiM class code |
+  | `psrFrac` | share of the cell in permanent shadow (LOLA); `null` for cells that reach below 65 degrees latitude | not present | fraction, 0 to 1 |
+  | `waterH2O` | not present | water in the top metre, Mars Odyssey GRS, 5 degree bins; `null` poleward of the map | weight percent |
+  | `windSpeed` | not present: no atmosphere, the value is 0 by fact (`meta.notInFile`) | Mars Climate Database, 10 m above the surface | m/s |
+  | `dustOpticalDepth` | not present: no atmosphere, 0 by fact | Mars Climate Database, dust column optical depth in visible light | none |
+
+- Terrain is the target method: a 55.6 km square window centred on the cell centre, the shared
+  `terrain_metrics()` function. A cell value and the value of a target at the same place agree to a few
+  percent (the grid uses a coarser lunar elevation model than the targets).
+- `lithology` comes from the map unit through the explicit table in the factor's `unitTable`
+  (`[ { "unit", "description", "class": code | null } ]`). A unit has a class only where its type states the
+  material; a cell has a class only if classed units cover at least half of it. Lunar highland units are
+  class 4 (basic plutonic) and Martian volcanic units class 2 (basic volcanic) by the project's reading:
+  say so wherever the class is shown.
+- Mars temperature, wind and dust come from a climate model on a grid of about 3.8 by 5.6 degrees; each
+  1 degree cell takes the nearest node, so neighbouring cells often share a value. Badge "Literature".
+- The lunar polar targets in `targets.json` carry a different temperature statistic (a modelled annual mean
+  at 2 cm depth), so they differ from their grid cells. Marius Hills uses the same statistic as the grid.
+- `precip` and `ndvi` are not in these files (`meta.notInFile` says why).
+- The SWIM subsurface ice maps for Mars could not be downloaded (the site returned HTTP 523 on 2026-11-15);
+  `waterH2O` is a different, coarser measurement and is labelled as such.
 
 ## data/site_climate.json
 
@@ -339,8 +393,8 @@ inside a small square footprint centred on the site's coordinates instead of ove
 
 Owner: Session B. Built by `pipeline/extracts.py`.
 
-Same-scale elevation and imagery for the split view and the 3D shot: the featured Indonesian sites and
-every target. `data/extracts/index.json`:
+Same-scale elevation and imagery for the split view and the 3D terrain view: every candidate site of
+`analogs.json` and every target of `targets.json`. `data/extracts/index.json`:
 
 ```
 {
@@ -364,11 +418,15 @@ every target. `data/extracts/index.json`:
 - `meta.pairs` (added 2026-11-15) lists `{ "earth", "other" }` pairs the team asked to show side by
   side (Tambora caldera with Shackleton, Batur lava fields with Marius Hills). `pairedWith` on an item
   repeats it. A pair is a display choice, not an analog score.
-- `pixelM` differs per dataset (30 m Earth, 80 m Moon at the south pole, 60 m Moon elsewhere, 463 m Mars). Nothing is upsampled: scale each
-  layer by `pixelM` when drawing. The Mars elevation is 43 x 43 pixels and will look coarse; say so.
+- `pixelM` differs per dataset. Elevation: 30 m Earth (Copernicus DEM), 20 m Moon at the south pole (LOLA),
+  60 m Moon elsewhere (LOLA), 200 m Mars (HRSC and MOLA blend; only MOLA detail where HRSC has no stereo).
+  Images: 10 m Earth (Sentinel-2 true colour), 100 m Moon (LROC WAC), 100 m Mars (THEMIS daytime
+  infrared, grey-scale: not visible light, label it so). Nothing is upsampled: scale each
+  layer by `pixelM` when drawing. The Mars elevation is 100 x 100 pixels and looks coarser than Earth and Moon; say so.
 - Elevation datums differ per body (see each `note`). Compare relief, not absolute height.
 - `attribution` must be shown wherever the image or terrain is displayed.
-- `image` is `null` for Mars targets (no Mars image was requested).
+- `image` is `null` where there is nothing to show: a lunar image that is almost entirely permanent shadow
+  (Haworth), or a Mars window where the infrared mosaic has no data.
 
 ## data/targets.json
 
