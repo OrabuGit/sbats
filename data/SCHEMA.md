@@ -171,6 +171,20 @@ Additive rule: Session B may add other keys to `meta` (for example data date ran
 Consumers ignore keys they do not know. A finer Indonesia grid, if built, is a separate file with this same
 shape and its own `resolutionDeg`; add it to this document before another session reads it.
 
+### Atmosphere and permafrost keys (added 2026-11-15, requested by the team)
+
+Three more keys on every cell of `earth.json`, described in `meta.extraKeys`
+(`[ { "key", "label", "unit", "badge", "source", "note"? } ]`). They are not scoring factors until
+Session C adds them to a preset.
+
+| Key | Meaning | Unit | Badge | Null when |
+| --- | --- | --- | --- | --- |
+| `windSpeed` | Annual mean wind speed 10 m above the surface (NASA POWER, MERRA-2, `WS10M`, 2001-2020) | m/s | Measured | never |
+| `aod` | Annual mean aerosol optical depth at 550 nm (NASA POWER, CERES SYN1deg, `AOD_55`, 2001-2020). All airborne particles, not dust alone | none | Measured | never |
+| `permafrostFrac` | Share of the cell's land underlain by permafrost: mean permafrost probability of Obu et al. 2018 (ESA GlobPermafrost, 1 km) | fraction, 0 to 1 | Literature (modelled) | the cell is south of 25 N: the map covers Northern Hemisphere land only. Null there means "not mapped", not "no permafrost". Antarctica is null |
+
+`sites.json` carries the same three keys in each site's `values`, with `scale: "grid"`.
+
 ## data/earth.bin
 
 Owner: Session B. Written by the same build step as `earth.json`, never edited by hand.
