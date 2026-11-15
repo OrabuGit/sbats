@@ -418,8 +418,8 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           03 Modules
         </h2>
         <p className="mb-3 text-[12px] text-muted">
-          Pick a module, then click squares on the Earth grid, or use the plus and minus buttons. One square is{' '}
-          <span className="num">{((ground.windowKm / COLS) * 1000).toFixed(0)} m</span> of ground. Modules are far smaller, so positions are schematic.
+          Select a module and click the Earth grid, or use plus and minus. One square is{' '}
+          <span className="num">{((ground.windowKm / COLS) * 1000).toFixed(0)} m</span>, so positions are schematic.
         </p>
         {modules.fixture && (
           <p className="mb-3 border border-accent p-2 text-[12px] text-accent" role="note">
@@ -431,7 +431,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             modules.json has {modules.problems.length} problem{modules.problems.length > 1 ? 's' : ''}: {modules.problems.slice(0, 2).join('; ')}
           </p>
         )}
-        <ul className="border border-line">
+        <ul className="-mx-4 border-y border-line">
           {MODULE_TYPES.map((type) => {
             const entry = file.modules[type];
             const missing = missingParams(file, type);
@@ -443,28 +443,31 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
                     type="button"
                     aria-pressed={on}
                     onClick={() => setTool(type)}
-                    className={`flex min-h-11 min-w-0 flex-1 items-center gap-3 px-3 text-left ${on ? 'bg-bg text-accent' : 'text-text hover:bg-bg'}`}
+                    className={`row min-w-0 flex-1 !border-b-0 ${on ? 'row-on' : ''}`}
                   >
-                    <span className={`num flex h-5 w-5 shrink-0 items-center justify-center text-[11px] font-semibold ${on ? 'bg-accent text-bg' : 'bg-text text-bg'}`} aria-hidden="true">
+                    <span className="num flex h-5 w-5 shrink-0 items-center justify-center bg-text text-[11px] font-semibold text-bg" aria-hidden="true">
                       {LETTER[type]}
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{entry.label}</span>
+                    <span className={`min-w-0 flex-1 text-[14px] ${on ? 'font-medium' : ''}`}>{entry.label}</span>
                   </button>
-                  <button type="button" onClick={() => step(type, -1)} disabled={counts[type] === 0} aria-label={`Remove one ${entry.label}`} className="flex h-11 w-11 items-center justify-center border-l border-line text-text hover:text-accent disabled:text-line">
+                  <button type="button" onClick={() => step(type, -1)} disabled={counts[type] === 0} aria-label={`Remove one ${entry.label}`} className="tool !px-0 border-l border-line">
                     <Minus size={14} aria-hidden="true" />
                   </button>
                   <output className="num flex w-8 items-center justify-center border-l border-line text-[13px] text-text" aria-label={`${entry.label} count`}>
                     {counts[type]}
                   </output>
-                  <button type="button" onClick={() => step(type, 1)} aria-label={`Add one ${entry.label}`} className="flex h-11 w-11 items-center justify-center border-l border-line text-text hover:text-accent">
+                  <button type="button" onClick={() => step(type, 1)} aria-label={`Add one ${entry.label}`} className="tool !px-0 border-l border-line">
                     <Plus size={14} aria-hidden="true" />
                   </button>
                 </div>
                 <details className="border-t border-line">
-                  <summary className="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-[12px] text-muted hover:text-text">
-                    <span className="flex-1">{entry.description}</span>
+                  <summary className="flex min-h-9 cursor-pointer items-center gap-2 px-3 text-[12px] text-muted hover:text-text">
+                    <span className="flex-1">
+                      <span className="num">{MODULE_PARAMS[type].length}</span> numbers and sources
+                    </span>
                     {missing.length > 0 && <Tag tone="accent" title={`No sourced value for: ${missing.join(', ')}`}>Illustrative</Tag>}
                   </summary>
+                  <p className="px-3 pb-2 text-[12px] text-text">{entry.description}</p>
                   <dl className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 px-3 pb-3">
                     {MODULE_PARAMS[type].map((key) => {
                       const p = entry.params[key];
@@ -486,14 +489,14 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             );
           })}
         </ul>
-        <div className="mt-2 grid grid-cols-3 gap-px border border-line bg-line">
-          <button type="button" aria-pressed={tool === 'erase'} onClick={() => setTool('erase')} className={`label flex min-h-11 items-center justify-center gap-1.5 ${tool === 'erase' ? 'bg-bg !text-accent' : 'bg-panel !text-text hover:bg-bg'}`}>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          <button type="button" aria-pressed={tool === 'erase'} onClick={() => setTool('erase')} className={`btn !px-2 ${tool === 'erase' ? 'btn-accent' : ''}`}>
             <Eraser size={13} aria-hidden="true" /> Erase
           </button>
-          <button type="button" onClick={() => change(EXAMPLE_LAYOUT)} className="label min-h-11 bg-panel !text-text hover:bg-bg">
+          <button type="button" onClick={() => change(EXAMPLE_LAYOUT)} className="btn !px-2">
             Example
           </button>
-          <button type="button" onClick={() => change({ modules: [], resupplyEveryDays: layout.resupplyEveryDays })} className="label flex min-h-11 items-center justify-center gap-1.5 bg-panel !text-text hover:bg-bg">
+          <button type="button" onClick={() => change({ modules: [], resupplyEveryDays: layout.resupplyEveryDays })} className="btn !px-2">
             <Trash2 size={13} aria-hidden="true" /> Clear
           </button>
         </div>
@@ -511,17 +514,17 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <div className="flex items-center justify-between gap-2">
           <span className="text-[13px] text-text">Crew on site</span>
           <div className="flex items-stretch border border-line">
-            <button type="button" onClick={() => setCrew((layout.crew ?? capacity ?? 0) - 1)} aria-label="One crew member fewer" className="flex h-11 w-11 items-center justify-center text-text hover:text-accent">
+            <button type="button" onClick={() => setCrew((layout.crew ?? capacity ?? 0) - 1)} aria-label="One crew member fewer" className="tool !px-0">
               <Minus size={14} aria-hidden="true" />
             </button>
             <output className="num flex w-14 items-center justify-center border-x border-line text-[13px] text-text">{n0(layout.crew ?? capacity ?? 0)}</output>
-            <button type="button" onClick={() => setCrew((layout.crew ?? capacity ?? 0) + 1)} aria-label="One crew member more" className="flex h-11 w-11 items-center justify-center text-text hover:text-accent">
+            <button type="button" onClick={() => setCrew((layout.crew ?? capacity ?? 0) + 1)} aria-label="One crew member more" className="tool !px-0">
               <Plus size={14} aria-hidden="true" />
             </button>
           </div>
         </div>
         <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[13px] text-text">
-          <input type="checkbox" checked={layout.crew === undefined} onChange={(e) => setCrew(e.target.checked ? undefined : (capacity ?? 0))} className="h-4 w-4 appearance-none border border-muted bg-bg checked:border-accent checked:bg-accent" />
+          <input type="checkbox" checked={layout.crew === undefined} onChange={(e) => setCrew(e.target.checked ? undefined : (capacity ?? 0))} className="check" />
           Fill every habitat place
         </label>
         <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[13px] text-text">
@@ -529,7 +532,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             type="checkbox"
             checked={layout.resupplyEveryDays !== null}
             onChange={(e) => change({ ...layout, resupplyEveryDays: e.target.checked ? 10 : null })}
-            className="h-4 w-4 appearance-none border border-muted bg-bg checked:border-accent checked:bg-accent"
+            className="check"
           />
           Cargo deliveries
         </label>
@@ -556,14 +559,14 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <h2 id="h-save" className="label mb-2">
           Save and share
         </h2>
-        <div className="grid grid-cols-3 gap-px border border-line bg-line">
-          <button type="button" onClick={save} className="label flex min-h-11 items-center justify-center gap-1.5 bg-panel !text-text hover:bg-bg">
+        <div className="grid grid-cols-3 gap-2">
+          <button type="button" onClick={save} className="btn !px-2">
             <Save size={13} aria-hidden="true" /> Save
           </button>
-          <button type="button" onClick={load} className="label flex min-h-11 items-center justify-center gap-1.5 bg-panel !text-text hover:bg-bg">
+          <button type="button" onClick={load} className="btn !px-2">
             <FolderOpen size={13} aria-hidden="true" /> Load
           </button>
-          <button type="button" onClick={share} className="label flex min-h-11 items-center justify-center gap-1.5 bg-panel !text-text hover:bg-bg">
+          <button type="button" onClick={share} className="btn !px-2">
             <Link2 size={13} aria-hidden="true" /> Link
           </button>
         </div>
@@ -632,7 +635,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             <p className="mt-2 text-[13px] text-text">
               Runs the same layout under the conditions at {target.name} and lists each difference from the Earth site.
             </p>
-            <button type="button" onClick={() => setDeployed(true)} className="label mt-3 flex min-h-11 w-full items-center justify-center gap-2 bg-accent font-semibold !text-bg hover:bg-text">
+            <button type="button" onClick={() => setDeployed(true)} className="btn btn-primary mt-3 w-full">
               Deploy at {target.name}
             </button>
           </>
@@ -663,14 +666,14 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <h2 id="h-time" className="label">
           {DAYS} days
         </h2>
-        <dl className="mt-2 grid grid-cols-2 gap-2">
-          <div className="border border-line bg-bg p-2">
+        <dl className="mt-2 grid grid-cols-2 gap-4">
+          <div className="border-t border-line pt-2">
             <dt className="label text-[10px]">Days without cargo, Earth</dt>
             <dd className="num mt-1 text-[17px] font-semibold text-text">{sustainText(simEarth.sustainability)}</dd>
           </div>
-          <div className="border border-line bg-bg p-2">
+          <div className="border-t border-line pt-2">
             <dt className="label text-[10px]">Days without cargo, target</dt>
-            <dd className={`num mt-1 text-[17px] font-semibold ${deployed ? 'text-accent' : 'text-muted'}`}>{deployed ? sustainText(simTarget.sustainability) : 'not deployed'}</dd>
+            <dd className={`num mt-1 text-[17px] font-semibold ${deployed ? 'text-text' : 'text-muted'}`}>{deployed ? sustainText(simTarget.sustainability) : 'not deployed'}</dd>
           </div>
         </dl>
         <label htmlFor="sim-day" className="mt-3 flex items-baseline justify-between text-[13px] text-text">
@@ -698,7 +701,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           </p>
         )}
         <label className="mt-2 flex min-h-11 cursor-pointer items-center gap-3 text-[13px] text-text">
-          <input type="checkbox" checked={event} onChange={(e) => setEvent(e.target.checked)} className="h-4 w-4 appearance-none border border-muted bg-bg checked:border-accent checked:bg-accent" />
+          <input type="checkbox" checked={event} onChange={(e) => setEvent(e.target.checked)} className="check" />
           {eventEntry.label} at the target
         </label>
         {event && (
@@ -734,25 +737,25 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
     <div className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
       {left}
       <div className="scroll order-1 shrink-0 border-b border-line bg-bg lg:order-2 lg:min-h-0 lg:border-b-0">
-        <div className="flex flex-wrap items-stretch border-b border-line bg-panel">
-          <button type="button" onClick={onBack} className="label min-h-11 border-r border-line px-4 !text-text hover:!text-accent">
+        <div className="flex flex-wrap items-stretch border-b border-line bg-panel [&_.tab]:-mb-px">
+          <button type="button" onClick={onBack} className="tool border-r border-line">
             Back to dossier
           </button>
-          <p className="label hidden min-w-0 flex-1 items-center px-4 md:flex">One layout, two sites</p>
+          <p className="hidden min-w-0 flex-1 items-center px-4 text-[13px] text-muted md:flex">One layout, two sites</p>
           <span className="flex-1 md:hidden" />
           {flags.boots && (
-            <div className="flex" role="group" aria-label="View">
+            <div className="flex border-l border-line px-1" role="group" aria-label="View">
               {(['plan', '3d'] as const).map((m) => (
-                <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)} className={`label min-h-11 border-l border-line px-4 ${mode === m ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}>
+                <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)} className="tab">
                   {m === 'plan' ? 'Plan' : '3D terrain'}
                 </button>
               ))}
             </div>
           )}
           {(ground.earth || ground.target) && (
-            <div className="flex" role="group" aria-label="Ground layer">
+            <div className="flex border-l border-line px-1" role="group" aria-label="Ground layer">
               {(['image', 'relief'] as const).map((l) => (
-                <button key={l} type="button" aria-pressed={layer === l} onClick={() => setLayer(l)} className={`label min-h-11 border-l border-line px-4 ${layer === l ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}>
+                <button key={l} type="button" aria-pressed={layer === l} onClick={() => setLayer(l)} className="tab">
                   {l === 'image' ? 'Image' : 'Relief'}
                 </button>
               ))}
@@ -815,7 +818,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             }
           >
             {!deployed && (
-              <button type="button" onClick={() => setDeployed(true)} className="label mt-3 flex min-h-11 items-center justify-center gap-2 border border-accent !text-accent hover:bg-panel">
+              <button type="button" onClick={() => setDeployed(true)} className="btn btn-accent mt-3">
                 Deploy the same layout here
               </button>
             )}
@@ -841,9 +844,9 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
           </div>
         )}
       </div>
-      <div className="order-2 grid shrink-0 grid-cols-2 border-b border-line bg-panel lg:hidden" role="group" aria-label="Panel">
+      <div className="tabs tabs-fill order-2 shrink-0 bg-panel lg:hidden" role="group" aria-label="Panel">
         {(['setup', 'results'] as const).map((t) => (
-          <button key={t} type="button" aria-pressed={tab === t} onClick={() => onTab(t)} className={`label min-h-11 border-r border-line last:border-r-0 ${tab === t ? 'bg-bg !text-accent' : '!text-text'}`}>
+          <button key={t} type="button" aria-pressed={tab === t} onClick={() => onTab(t)} className="tab">
             {t === 'setup' ? 'Modules' : 'Resources'}
           </button>
         ))}

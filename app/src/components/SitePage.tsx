@@ -192,12 +192,12 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {cellIndex >= 0 && (
-              <button type="button" onClick={() => onDossier(cellIndex)} className="label min-h-11 border border-line px-4 !text-text hover:!text-accent">
+              <button type="button" onClick={() => onDossier(cellIndex)} className="btn">
                 Open the grid cell dossier
               </button>
             )}
             {cellIndex >= 0 && onBuild && (
-              <button type="button" onClick={() => onBuild(cellIndex)} className="label min-h-11 border border-accent px-4 !text-accent hover:bg-bg">
+              <button type="button" onClick={() => onBuild(cellIndex)} className="btn btn-primary">
                 Build a base here
               </button>
             )}
@@ -206,15 +206,15 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
       </div>
 
       <Section id="s-score" title={`All-round match to ${target.name}, Base weights`} wide>
-        <dl className="grid max-w-[720px] gap-px border border-line bg-line sm:grid-cols-2">
+        <dl className="grid max-w-[720px] gap-x-6 gap-y-5 sm:grid-cols-2">
           {[
             { label: `Footprint, ${site.footprintKm} km`, e: atSite, note: 'The same formula on the footprint values. Not used in the ranking.' },
             { label: 'Grid cell, 0.5°', e: atCell, note: 'The score in the heatmap and the candidates list.' },
           ].map(({ label, e, note }) => (
-            <div key={label} className="bg-bg p-3">
+            <div key={label} className="border-t border-line pt-3">
               <dt className="label">{label}</dt>
               <dd className="mt-1 flex items-end justify-between gap-3">
-                <span className={`num text-[32px] font-semibold leading-none ${e && e.score !== null ? 'text-accent' : 'text-muted'}`}>
+                <span className={`num font-semibold leading-none ${e && e.score !== null ? 'text-[32px] text-text' : 'text-[17px] text-muted'}`}>
                   {e && e.score !== null ? formatScore(e.score) : 'NO DATA'}
                   {e && e.score !== null && <span className="ml-1 text-[13px] font-normal text-muted">/ 100</span>}
                 </span>
@@ -250,7 +250,9 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
             const targetVal = sk?.targetValue ?? ck?.targetValue ?? tv?.value ?? null;
             return (
               <tr key={key} className="border-b border-line">
-                <Td>{name(key)}</Td>
+                <Td>
+                  <span className="whitespace-nowrap">{name(key)}</span>
+                </Td>
                 <Td num muted={siteVal === null}>
                   {formatValue(key, siteVal, meta)} {siteVal !== null && (sun ? <ComputedBadge /> : <SourceBadge badge={sv?.badge ?? null} source={sv?.source} />)}
                 </Td>

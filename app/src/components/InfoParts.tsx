@@ -26,28 +26,28 @@ export function InfoShell({
   return (
     <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-info">
       <header className="border-b border-line">
-        <div className="flex items-stretch border-b border-line">
-          <button type="button" onClick={onBack} className="label flex min-h-11 items-center gap-2 border-r border-line px-4 !text-text hover:!text-accent sm:px-6">
+        <div className="flex items-stretch border-b border-line [&_.tab]:-mb-px">
+          <button type="button" onClick={onBack} className="tool border-r border-line sm:!px-6">
             <ArrowLeft size={14} aria-hidden="true" /> <span className="hidden sm:inline">Back to the globe</span>
             <span className="sm:hidden">Globe</span>
           </button>
-          <div className="flex" role="group" aria-label="Page">
+          <div className="flex pl-2" role="group" aria-label="Page">
             {TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 aria-pressed={view === t.id}
                 onClick={() => onView(t.id)}
-                className={`label min-h-11 border-r border-line px-4 sm:px-6 ${view === t.id ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}
+                className="tab sm:!px-5"
               >
                 {t.label}
               </button>
             ))}
           </div>
         </div>
-        <div className="px-4 py-4 sm:px-6">
+        <div className="px-4 pb-5 pt-6 sm:px-6">
           <p className="label">{view === 'method' ? 'Method' : view === 'validation' ? 'Validation' : 'Featured site'}</p>
-          <h2 id="h-info" className="mt-1 max-w-[60ch] text-[17px] font-semibold text-text">
+          <h2 id="h-info" className="mt-1 max-w-[60ch] text-[22px] font-semibold leading-7 text-text">
             {title}
           </h2>
         </div>
@@ -59,8 +59,8 @@ export function InfoShell({
 
 export function Section({ id, title, wide, children }: { id: string; title: string; wide?: boolean; children: React.ReactNode }) {
   return (
-    <section aria-labelledby={id} className="border-b border-line px-4 py-5 sm:px-6">
-      <h3 id={id} className="label mb-2 !text-text">
+    <section aria-labelledby={id} className="border-b border-line px-4 py-6 sm:px-6">
+      <h3 id={id} className="mb-3 text-[14px] font-semibold text-text">
         {title}
       </h3>
       <div className={`${wide ? 'max-w-[1100px]' : 'max-w-[72ch]'} space-y-2 text-[14px] text-text`}>{children}</div>
@@ -70,12 +70,12 @@ export function Section({ id, title, wide, children }: { id: string; title: stri
 
 export function Rule({ name, value, children }: { name: string; value: string; children: React.ReactNode }) {
   return (
-    <div className="border border-line bg-bg p-3">
+    <div className="border-t border-line pt-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-        <span className="label !text-text">{name}</span>
-        <span className="num text-[17px] font-semibold text-accent">{value}</span>
+        <span className="text-[13px] font-medium text-text">{name}</span>
+        <span className="num text-[14px] font-semibold text-text">{value}</span>
       </div>
-      <p className="mt-1.5 text-[13px] text-text">{children}</p>
+      <p className="mt-1.5 text-[13px] text-muted">{children}</p>
     </div>
   );
 }

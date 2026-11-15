@@ -24,9 +24,9 @@ const STEPS: { n: Step; label: string }[] = [
 export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod, reconLocked }: TopBarProps) {
   return (
     <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
-      <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
-        <span className="block h-3 w-3 bg-accent" aria-hidden="true" />
-        <h1 className="num text-[14px] font-semibold tracking-[0.08em] text-text">SBATS-26</h1>
+      <div className="flex items-center gap-2.5 border-r border-line px-3 sm:px-4">
+        <span className="block h-2.5 w-2.5 bg-accent" aria-hidden="true" />
+        <h1 className="num text-[13px] font-semibold tracking-[0.12em] text-text">SBATS-26</h1>
       </div>
       <nav aria-label="Steps" className="flex min-w-0 flex-1 items-stretch">
         <ol className="flex items-stretch">
@@ -34,20 +34,20 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
             const locked = n === 3 && reconLocked;
             const active = step === n && !methodOpen;
             return (
-              <li key={n} className="flex items-stretch border-r border-line">
+              <li key={n} className="flex items-stretch">
                 <button
                   type="button"
                   aria-current={active ? 'step' : undefined}
                   aria-disabled={locked || undefined}
                   title={locked ? 'Locked: data/modules.json is not published with this build' : undefined}
                   onClick={() => !locked && onStep(n)}
-                  className={`flex min-w-11 items-center gap-2 px-3 sm:px-4 ${
-                    active ? 'bg-bg text-accent' : locked ? 'text-muted' : 'text-text hover:bg-bg'
+                  className={`flex min-w-11 items-center gap-2 border-b-2 px-3 pt-0.5 sm:px-4 ${
+                    active ? 'border-accent text-text' : locked ? 'border-transparent text-line' : 'border-transparent text-muted hover:text-text'
                   }`}
                 >
-                  <span className={`num text-[12px] font-semibold ${active ? 'text-accent' : 'text-muted'}`}>0{n}</span>
-                  <span className="label hidden !text-inherit md:inline">{label}</span>
-                  {locked && <span className="label hidden text-[10px] lg:inline">no data</span>}
+                  <span className={`num text-[11px] ${active ? 'text-accent' : ''}`}>0{n}</span>
+                  <span className="hidden text-[13px] font-medium md:inline">{label}</span>
+                  {locked && <span className="num hidden text-[10px] uppercase tracking-wider lg:inline">no data</span>}
                 </button>
               </li>
             );
@@ -60,9 +60,7 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
           onClick={onMethod}
           aria-pressed={methodOpen}
           aria-label="Method and validation"
-          className={`label flex min-w-11 items-center justify-center gap-2 border-l border-line px-3 sm:px-4 ${
-            methodOpen ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'
-          }`}
+          className={`tool border-b-2 pt-0.5 ${methodOpen ? 'border-accent !text-text' : 'border-transparent'}`}
         >
           <BookOpen size={14} aria-hidden="true" />
           <span className="hidden sm:inline">Method</span>
@@ -73,9 +71,9 @@ export function TopBar({ step, onStep, demoRunning, onDemo, methodOpen, onMethod
         onClick={onDemo}
         aria-pressed={demoRunning}
         aria-label={demoRunning ? 'Stop demo' : 'Run demo'}
-        className="label flex min-w-11 items-center justify-center gap-2 bg-accent px-3 font-semibold !text-bg hover:bg-text sm:px-4"
+        className="btn btn-primary h-full min-w-11 !rounded-none !px-3 sm:!px-4"
       >
-        {demoRunning ? <Square size={13} aria-hidden="true" /> : <Play size={13} aria-hidden="true" />}
+        {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
         <span className="hidden whitespace-nowrap sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
     </header>

@@ -212,7 +212,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
           A measurement with no value, on Earth or for the target, is left out and the other weights are scaled up to fill the gap. The share of
           the weight that had data is the coverage.
         </p>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           <Rule name="Required" value="Bare ground and Dryness">
             A cell without both has no score, because they carry the veto.
           </Rule>
@@ -259,7 +259,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
           The list shows the {listLimit} best cells, highest score first. Two rules shape it. Neither changes a score: both act only on which cells
           are listed and how they are tagged.
         </p>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           <Rule name="List spacing" value={`${MIN_SEPARATION_KM} km`}>
             A cell is listed only if it is at least this far from every cell ranked above it, so one desert does not fill the list. If{' '}
             {MIN_SEPARATION_CELLS} cell widths is more than that, the spacing is {MIN_SEPARATION_CELLS} cell widths instead. With the current{' '}
@@ -274,7 +274,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
       </Section>
 
       <Section id="m-sites" title="Featured sites, best month and terrain">
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           <Rule name="Footprint" value="2 to 5 km">
             A featured site is measured again inside a small square: slope and roughness on the same 463 m posts as the grid, NDVI from
             Sentinel-2 at 10 m. The site page shows these next to the cell values. The ranking uses the cell values only.

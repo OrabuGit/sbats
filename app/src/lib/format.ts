@@ -8,7 +8,8 @@ export function metaByKey(earth: EarthFile): MetaByKey {
   return out;
 }
 
-const FALLBACK_LABELS: Record<string, string> = {
+/** One short name per measurement, used everywhere. The dataset's own label, with its method, is the tooltip. */
+const SHORT_LABELS: Record<string, string> = {
   tempMean: 'Mean temperature',
   tempRange: 'Day-night temperature range',
   precip: 'Precipitation',
@@ -27,7 +28,7 @@ const FALLBACK_UNITS: Record<string, string> = { tempMean: '°C', tempRange: '°
 export const isSunKey = (key: string) => key === 'sunElevation' || key === 'sunSeason';
 
 export function keyLabel(key: string, meta: MetaByKey): string {
-  return meta[key as FactorKey]?.label ?? FALLBACK_LABELS[key] ?? key;
+  return SHORT_LABELS[key] ?? meta[key as FactorKey]?.label ?? key;
 }
 
 const minus = (s: string) => s.replace('-', '\u2212');
@@ -54,15 +55,15 @@ export const formatSim = (s: number | null) => (s === null ? 'no data' : s.toFix
 
 /** One short line for the candidates list, built from the breakdown. */
 export function reasonLine(e: CellScore): string {
-  if (e.score === null) return 'Not scored.';
+  if (e.score === null) return 'Not scored';
   const fs = e.breakdown
     .filter((f) => f.similarity !== null && f.coveredWeight > 0)
     .sort((a, b) => (b.similarity as number) - (a.similarity as number));
-  if (fs.length === 0) return 'Not scored.';
+  if (fs.length === 0) return 'Not scored';
   const best = fs[0];
   const limit = e.breakdown.find((f) => f.factor === e.limitingFactor) ?? fs[fs.length - 1];
-  if (best.factor === limit.factor) return `Strongest: ${best.label.toLowerCase()}.`;
-  return `Strongest: ${best.label.toLowerCase()}. Limited by: ${limit.label.toLowerCase()}.`;
+  if (best.factor === limit.factor) return `Best: ${best.label.toLowerCase()}`;
+  return `Best: ${best.label.toLowerCase()} · Limit: ${limit.label.toLowerCase()}`;
 }
 
 const list = (xs: string[]) =>

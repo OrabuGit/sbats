@@ -178,7 +178,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
   return (
     <article aria-labelledby="h-dossier">
       <header className="border-b border-line">
-        <button type="button" onClick={onBack} className="label flex min-h-11 w-full items-center gap-2 border-b border-line px-4 !text-text hover:!text-accent">
+        <button type="button" onClick={onBack} className="tool w-full !justify-start border-b border-line">
           <ArrowLeft size={14} aria-hidden="true" /> Back to candidates
         </button>
         <div className="p-4">
@@ -200,31 +200,45 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
             {rank !== null && <Tag>Rank {rank}</Tag>}
           </div>
 
-          <div className="mt-4 flex items-end justify-between gap-4 border border-line bg-bg p-3">
-            <div>
-              <p className="label">{purpose ? `${purpose.label}: match to ${target.name}` : `All-round match to ${target.name}`}</p>
-              <p className={`num mt-1 text-[44px] font-semibold leading-none ${scored ? 'text-accent' : 'text-muted'}`}>
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="label">{purpose ? `${purpose.label}: match to ${target.name}` : `All-round match to ${target.name}`}</p>
+            <div className="mt-2 flex items-end justify-between gap-4">
+              <p className={`num font-semibold leading-none ${scored ? 'text-[44px] text-text' : 'text-[22px] text-muted'}`}>
                 {scored ? formatScore(e.score) : 'NO DATA'}
-                {scored && <span className="ml-1 text-[14px] font-normal text-muted">/ 100</span>}
+                {scored && <span className="ml-1.5 text-[13px] font-normal text-muted">/ 100</span>}
               </p>
+              <dl className="kv w-[168px]">
+                <div>
+                  <dt>Confidence</dt>
+                  <dd>
+                    <ConfidenceBadge confidence={e.confidence} coverage={e.coverage} />
+                  </dd>
+                </div>
+                <div>
+                  <dt>Coverage</dt>
+                  <dd>{(e.coverage * 100).toFixed(0)}%</dd>
+                </div>
+                <div>
+                  <dt>Above</dt>
+                  <dd className={percentile === null ? '!text-muted' : ''}>{percentile === null ? 'no data' : `${percentile.toFixed(0)}% of cells`}</dd>
+                </div>
+              </dl>
             </div>
-            <div className="flex flex-col items-end gap-1 pb-0.5">
-              <ConfidenceBadge confidence={e.confidence} coverage={e.coverage} />
-              <span className="num text-[11px] text-muted">coverage {(e.coverage * 100).toFixed(0)}%</span>
-              {percentile !== null && <span className="num text-[11px] text-muted">above {percentile.toFixed(0)}% of cells</span>}
-            </div>
+            <span className="mt-3 block h-0.5 w-full bg-line" aria-hidden="true">
+              {scored && <span className="block h-full bg-accent" style={{ width: `${Math.max(0, Math.min(100, e.score as number))}%` }} />}
+            </span>
           </div>
-          <p className="mt-3 text-[14px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
+          <p className="mt-3 text-[14px] leading-[21px] text-text">{scored ? e.reason : unscoredText(e, meta)}</p>
           {(onSitePage || onBuild) && (
-            <div className="mt-3 grid gap-2">
-              {onSitePage && (
-                <button type="button" onClick={onSitePage} className="label min-h-11 w-full border border-line !text-text hover:!text-accent">
-                  Open the site page
+            <div className="mt-4 flex gap-2">
+              {onBuild && (
+                <button type="button" onClick={onBuild} className="btn btn-primary flex-1">
+                  Build a base here
                 </button>
               )}
-              {onBuild && (
-                <button type="button" onClick={onBuild} className="label min-h-11 w-full border border-accent !text-accent hover:bg-bg">
-                  Build a base here
+              {onSitePage && (
+                <button type="button" onClick={onSitePage} className="btn flex-1">
+                  Site page
                 </button>
               )}
             </div>
@@ -342,15 +356,14 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
               if (!def) return null;
               const on = purpose?.id === id;
               return (
-                <li key={id} className="border-b border-line last:border-b-0">
+                <li key={id}>
                   <button
                     type="button"
                     aria-pressed={on}
                     onClick={() => onPurpose(id)}
-                    className={`flex min-h-11 w-full items-center gap-3 px-4 py-2 text-left hover:bg-bg ${on ? 'bg-bg' : ''}`}
+                    className={`row w-full !pl-[14px] !pr-4 ${on ? 'row-on' : ''}`}
                   >
-                    <span className={`block h-2.5 w-2.5 shrink-0 border ${on ? 'border-accent bg-accent' : 'border-muted'}`} aria-hidden="true" />
-                    <span className={`flex-1 text-[13px] ${on ? 'text-accent' : 'text-text'}`}>{def.label}</span>
+                    <span className={`flex-1 text-[13px] ${on ? 'font-medium' : ''}`}>{def.label}</span>
                     <ConfidenceBadge confidence={result.confidence} coverage={result.coverage} />
                     <span className={`num w-14 text-right font-semibold ${result.score === null ? 'text-[11px] text-muted' : 'text-[14px] text-text'}`}>
                       {formatScore(result.score)}

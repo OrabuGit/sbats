@@ -282,7 +282,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
           type="button"
           onClick={() => setOrbit((o) => !o)}
           aria-pressed={orbit}
-          className="label absolute bottom-3 right-3 flex min-h-11 items-center gap-2 border border-line bg-panel px-3 !text-text hover:!text-accent"
+          className="btn absolute bottom-3 right-3 !bg-panel"
         >
           {orbit ? <Pause size={13} aria-hidden="true" /> : <Play size={13} aria-hidden="true" />} {orbit ? 'Pause orbit' : 'Orbit'}
         </button>

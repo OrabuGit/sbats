@@ -7,7 +7,7 @@ import type { MultiPolygon, Polygon } from 'geojson';
 import { Minus, Plus } from 'lucide-react';
 import landTopo from 'world-atlas/land-110m.json';
 import type { Analog, EarthFile, CellSummary } from '../types';
-import type { CellIndex } from '../lib/geo';
+import { formatCoords, type CellIndex } from '../lib/geo';
 import type { Candidate } from '../lib/rank';
 
 // Score classes. Six flat steps of the one accent colour over the land colour, so the map and
@@ -205,6 +205,11 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   const indexRef = useRef(index);
   onSelectRef.current = onSelect;
   indexRef.current = index;
+  const resultsRef = useRef(results);
+  resultsRef.current = results;
+  // Readouts are written straight to the DOM: they change on every pointer move and camera step.
+  const cursorRef = useRef<HTMLSpanElement>(null);
+  const altRef = useRef<HTMLSpanElement>(null);
 
   // Bumped when the imagery has been drawn into the base canvas, to repaint the heatmap over it.
   const [imagery, setImagery] = useState(0);
@@ -318,8 +323,25 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     overlay.renderOrder = 1;
     globe.scene().add(tiles, overlay);
     const camera = globe.camera();
-    const updateTiles = () => tiles.updatePov(camera);
+    const updateTiles = () => {
+      tiles.updatePov(camera);
+      if (altRef.current) altRef.current.textContent = `${Math.round(globe.pointOfView().altitude * 6371).toLocaleString('en-US')} km`;
+    };
     controls.addEventListener('change', updateTiles);
+    const onMove = (ev: PointerEvent) => {
+      const out = cursorRef.current;
+      if (!out) return;
+      const box = el.getBoundingClientRect();
+      const at = globe.toGlobeCoords(ev.clientX - box.left, ev.clientY - box.top);
+      if (!at) {
+        out.textContent = 'off globe';
+        return;
+      }
+      const i = indexRef.current.nearest(at.lat, at.lng, 0);
+      const score = i >= 0 ? resultsRef.current[i]?.score : undefined;
+      out.textContent = `${formatCoords(at.lat, at.lng)} · ${i < 0 ? 'sea' : score === null || score === undefined ? 'no data' : `score ${score.toFixed(0)}`}`;
+    };
+    el.addEventListener('pointermove', onMove);
     globe.pointOfView({ lat: 5, lng: 105, altitude: small ? 2.3 : 2.2 }, 0);
     globeRef.current = globe;
     updateTiles();
@@ -333,6 +355,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       img.onload = null;
       ro.disconnect();
       controls.removeEventListener('change', updateTiles);
+      el.removeEventListener('pointermove', onMove);
       tiles.clearTiles();
       overlay.geometry.dispose();
       (overlay.material as MeshBasicMaterial).dispose();
@@ -421,10 +444,17 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   return (
     <section className="relative h-full min-h-0 w-full overflow-hidden bg-bg" aria-label="Globe with match score heatmap">
       <div ref={holder} className="absolute inset-0" />
-      <div className="pointer-events-none absolute left-3 top-3 hidden sm:block">
-        <p className="label bg-bg px-1.5 py-1">Drag to rotate. Click land to open a cell.</p>
-      </div>
-      <div className="absolute bottom-3 left-3 border border-line bg-panel px-3 py-2">
+      <dl className="readout pointer-events-none absolute left-3 top-3 hidden grid-cols-[auto_auto] gap-x-3 bg-bg px-2 py-1.5 sm:grid" title="Drag to rotate. Click land to open a cell.">
+        <dt>Cursor</dt>
+        <dd>
+          <b ref={cursorRef}>off globe</b>
+        </dd>
+        <dt>Altitude</dt>
+        <dd>
+          <b ref={altRef}>no data</b>
+        </dd>
+      </dl>
+      <div className="absolute bottom-3 left-3 bg-bg px-2 py-2">
         <p className="label mb-1.5">Match score, 0 to 100</p>
         <div className="flex items-end gap-px" aria-hidden="true">
           {SCORE_CLASSES.map((c) => (
@@ -439,13 +469,13 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
           </div>
         </div>
         <p className="sr-only">Six steps from 0 to 100. Brighter amber is a closer match. Grey cells have no score.</p>
-        <p className="mt-1.5 text-[10px] leading-3 text-muted">Imagery: NASA Blue Marble, GIBS</p>
+        <p className="readout mt-1.5 !text-[10px]">Imagery: NASA Blue Marble, GIBS</p>
       </div>
       <div className="absolute bottom-3 right-3 flex flex-col border border-line bg-panel">
-        <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="flex h-11 w-11 items-center justify-center text-text hover:text-accent">
+        <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="tool !px-0">
           <Plus size={16} aria-hidden="true" />
         </button>
-        <button type="button" onClick={() => zoom(1.4)} aria-label="Zoom out" className="flex h-11 w-11 items-center justify-center border-t border-line text-text hover:text-accent">
+        <button type="button" onClick={() => zoom(1.4)} aria-label="Zoom out" className="tool !px-0 border-t border-line">
           <Minus size={16} aria-hidden="true" />
         </button>
       </div>

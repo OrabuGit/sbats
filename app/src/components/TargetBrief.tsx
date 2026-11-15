@@ -30,7 +30,7 @@ export function TargetBrief({
         <p className="num mt-0.5 text-[12px] text-muted">
           {BODY_LABEL[target.body]} · {formatCoords(target.lat, target.lon)}
         </p>
-        <button type="button" onClick={onFind} className="label mt-4 flex min-h-11 w-full items-center justify-center gap-2 bg-accent font-semibold !text-bg hover:bg-text">
+        <button type="button" onClick={onFind} className="btn btn-primary mt-4 w-full">
           Find analogs on Earth <ArrowRight size={14} aria-hidden="true" />
         </button>
       </header>

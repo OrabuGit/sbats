@@ -73,7 +73,7 @@ export default function App() {
                 <p className="label !text-fail">Data could not be loaded</p>
                 <p className="mt-2 text-[14px] text-text">{load.message}</p>
                 <p className="mt-2 text-[13px] text-muted">The app reads its data files from the data folder next to this page. Check the connection and try again.</p>
-                <button type="button" onClick={() => window.location.reload()} className="label mt-4 min-h-11 border border-line px-4 !text-text hover:!text-accent">
+                <button type="button" onClick={() => window.location.reload()} className="btn mt-4">
                   Reload
                 </button>
               </div>
@@ -555,14 +555,14 @@ function Orbit({ data }: { data: DataBundle }) {
           </Suspense>
         </div>
 
-        <div className="order-2 grid shrink-0 grid-cols-2 border-b border-line bg-panel lg:hidden" role="group" aria-label="Panel">
+        <div className="tabs tabs-fill order-2 shrink-0 bg-panel lg:hidden" role="group" aria-label="Panel">
           {(['setup', 'results'] as const).map((t) => (
             <button
               key={t}
               type="button"
               aria-pressed={tab === t}
               onClick={() => setTab(t)}
-              className={`label min-h-11 border-r border-line last:border-r-0 ${tab === t ? 'bg-bg !text-accent' : '!text-text'}`}
+              className="tab"
             >
               {t === 'setup' ? (step === 1 ? 'Targets' : 'Target and weights') : step === 1 ? 'This target' : selected !== null ? 'Dossier' : 'Candidates'}
             </button>

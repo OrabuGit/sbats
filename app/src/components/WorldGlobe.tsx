@@ -123,7 +123,7 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
   return (
     <section className="relative h-full min-h-0 w-full overflow-hidden bg-bg" aria-label={`${BODY_LABEL[body]} globe with target sites`}>
       <div ref={holder} className="absolute inset-0" />
-      <div className="absolute left-3 top-3 flex border border-line bg-panel" role="group" aria-label="World">
+      <div className="absolute left-3 top-3 flex border border-line bg-panel px-1" role="group" aria-label="World">
         {bodies.map((b) => (
           <button
             key={b}
@@ -133,18 +133,18 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
               const first = targets.find((t) => t.body === b);
               if (first && b !== body) onTarget(first.id);
             }}
-            className={`label min-h-11 border-r border-line px-4 last:border-r-0 ${b === body ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}
+            className="tab"
           >
             {BODY_LABEL[b]}
           </button>
         ))}
       </div>
-      <p className="label pointer-events-none absolute bottom-3 left-3 max-w-[60%] bg-bg px-1.5 py-1 normal-case tracking-normal">{TEXTURE[body].credit}</p>
+      <p className="readout pointer-events-none absolute bottom-3 left-3 max-w-[60%] bg-bg px-1.5 py-1">{TEXTURE[body].credit}</p>
       <div className="absolute bottom-3 right-3 flex flex-col border border-line bg-panel">
-        <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="flex h-11 w-11 items-center justify-center text-text hover:text-accent">
+        <button type="button" onClick={() => zoom(0.7)} aria-label="Zoom in" className="tool !px-0">
           <Plus size={16} aria-hidden="true" />
         </button>
-        <button type="button" onClick={() => zoom(1.4)} aria-label="Zoom out" className="flex h-11 w-11 items-center justify-center border-t border-line text-text hover:text-accent">
+        <button type="button" onClick={() => zoom(1.4)} aria-label="Zoom out" className="tool !px-0 border-t border-line">
           <Minus size={16} aria-hidden="true" />
         </button>
       </div>

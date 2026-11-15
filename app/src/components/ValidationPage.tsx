@@ -27,9 +27,9 @@ function topLimiting(s: SetStats): string {
 
 function Stat({ label, value, sub, note }: { label: string; value: string; sub: string; note: string }) {
   return (
-    <div className="border border-line bg-bg p-3">
+    <div className="border-t border-line pt-3">
       <p className="label">{label}</p>
-      <p className="num mt-1 text-[32px] font-semibold leading-none text-accent">{value}</p>
+      <p className="num mt-2 text-[32px] font-semibold leading-none text-text">{value}</p>
       <p className="num mt-1.5 text-[11px] uppercase tracking-wider text-muted">{sub}</p>
       <p className="mt-2 text-[12px] text-text">{note}</p>
     </div>
@@ -86,14 +86,14 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
   const iceCells = earth.cells.filter((c) => c.ndvi === null && c.barrenFrac === 0).length;
 
   const presetPicker = (
-    <div className="flex flex-wrap border-b border-line" role="group" aria-label="Mission preset for these numbers">
+    <div className="tabs flex-wrap px-2 sm:px-3" role="group" aria-label="Mission preset for these numbers">
       {PRESETS.map((p) => (
         <button
           key={p.id}
           type="button"
           aria-pressed={preset === p.id}
           onClick={() => setPreset(p.id)}
-          className={`label min-h-11 border-r border-line px-4 sm:px-6 ${preset === p.id ? 'bg-bg !text-accent' : '!text-text hover:bg-bg'}`}
+          className="tab sm:!px-5"
         >
           {p.label}
         </button>
@@ -147,7 +147,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
         <Prose>
           <p>The hold-out sites were never used to choose a tolerance or a weight. These are the numbers to quote.</p>
         </Prose>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
           <Stat
             label="ROC AUC"
             value={f3(hold.overall.rocAuc)}

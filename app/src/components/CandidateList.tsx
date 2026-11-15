@@ -33,15 +33,20 @@ const KIND_NOTE = {
   negative: 'Forests and cities. They must score low.',
 } as const;
 
+/** Score, a rule whose length is the score, and the confidence under it. */
 function ScoreBlock({ r }: { r: CellSummary | undefined }) {
+  const has = !!r && r.score !== null;
   return (
-    <div className="flex w-16 shrink-0 flex-col items-end">
-      {r && r.score !== null ? (
+    <div className="flex w-[76px] shrink-0 flex-col items-end">
+      {has ? (
         <span className="num text-[22px] font-semibold leading-6 text-text">{formatScore(r.score)}</span>
       ) : (
         <span className="num text-[11px] uppercase leading-6 tracking-wider text-muted">no data</span>
       )}
-      <span className="mt-1">
+      <span className="mt-1.5 block h-0.5 w-full bg-line" aria-hidden="true">
+        {has && <span className="block h-full bg-accent" style={{ width: `${Math.max(0, Math.min(100, r.score as number))}%` }} />}
+      </span>
+      <span className="mt-1.5">
         <ConfidenceBadge confidence={r?.confidence ?? null} coverage={r?.coverage} />
       </span>
     </div>
@@ -55,39 +60,39 @@ export function CandidateList(p: Props) {
   const tied = topScore === null ? 0 : results.reduce((n, r) => n + (r.score === topScore ? 1 : 0), 0);
   return (
     <div className="flex min-h-0 flex-col">
-      <header className="border-b border-line p-4">
-        <h2 className="label mb-2">02 Candidates</h2>
-        <p className="text-[13px] text-text">
-          {p.purpose ? 'Match by purpose' : 'All-round match'} to <span className="font-semibold">{target.name}</span>
-          {p.purpose ? <>, for <span className="font-semibold">{p.purpose.label.toLowerCase()}</span></> : ''}.
-        </p>
-        <p className="num mt-2 text-[11px] uppercase tracking-wider text-muted">
-          {t.scored.toLocaleString('en-US')} scored · {t.low.toLocaleString('en-US')} low confidence · {t.noData.toLocaleString('en-US')} no data
-        </p>
-        <div className="mt-3 grid grid-cols-2 gap-px border border-line bg-line" role="group" aria-label="List">
+      <header className="border-b border-line">
+        <div className="px-4 pt-4">
+          <h2 className="label">02 Candidates</h2>
+          <p className="mt-1 text-[14px] text-text">
+            {p.purpose ? 'Match by purpose' : 'All-round match'} to <span className="font-semibold">{target.name}</span>
+            {p.purpose ? <>, for {p.purpose.label.toLowerCase()}</> : ''}
+          </p>
+          <dl className="num mt-2 flex gap-4 text-[11px] text-muted">
+            {[
+              ['scored', t.scored],
+              ['low confidence', t.low],
+              ['no data', t.noData],
+            ].map(([k, v]) => (
+              <div key={k as string} className="flex items-baseline gap-1.5">
+                <dd className="text-text">{(v as number).toLocaleString('en-US')}</dd>
+                <dt>{k}</dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div className="tabs mt-2 px-4" role="group" aria-label="List">
           {(['ranked', 'sites'] as const).map((m) => (
-            <button
-              key={m}
-              type="button"
-              aria-pressed={p.mode === m}
-              onClick={() => p.onMode(m)}
-              className={`label min-h-11 px-3 ${p.mode === m ? 'bg-bg !text-accent' : 'bg-panel !text-text hover:bg-bg'}`}
-            >
+            <button key={m} type="button" aria-pressed={p.mode === m} onClick={() => p.onMode(m)} className="tab !pl-0 !pr-0 mr-5">
               {m === 'ranked' ? 'Top cells' : 'Sites'}
             </button>
           ))}
+          {p.mode === 'ranked' && (
+            <label className="ml-auto flex min-h-11 cursor-pointer items-center gap-2 text-[12px] text-muted">
+              <input type="checkbox" checked={p.includeLow} onChange={(e) => p.onIncludeLow(e.target.checked)} className="check" />
+              Low confidence
+            </label>
+          )}
         </div>
-        {p.mode === 'ranked' && (
-          <label className="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[13px] text-text">
-            <input
-              type="checkbox"
-              checked={p.includeLow}
-              onChange={(e) => p.onIncludeLow(e.target.checked)}
-              className="h-4 w-4 appearance-none border border-muted bg-bg checked:border-accent checked:bg-accent"
-            />
-            Include low confidence cells
-          </label>
-        )}
       </header>
 
       {p.mode === 'ranked' ? (
