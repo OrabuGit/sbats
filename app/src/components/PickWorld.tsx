@@ -42,7 +42,7 @@ export function PickWorld({ moonPlaces, marsPlaces, onPick, onCustom }: { moonPl
               <SlidersHorizontal size={26} aria-hidden="true" />
             </span>
             <span>
-              <span className="display block text-[22px] leading-6 text-text">Custom</span>
+              <span className="display block text-[22px] leading-6 text-text">Custom conditions</span>
               <span className="mt-1 block text-[13px] leading-5 text-muted">Set the ground and climate yourself, then search Earth. Advanced and exploratory.</span>
             </span>
           </button>
