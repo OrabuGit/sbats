@@ -68,6 +68,12 @@ Each known site counts once. A site listed for several targets is split equally 
 - `analogFor` was assigned by SBATS from each site's cited characteristic. The sources name the body
   (Moon or Mars), not the specific target.
 
+## One command
+
+`sh validation/build_all.sh` rebuilds every data file and report Session C owns, in order, and runs all the
+tests. `sh validation/build_all.sh --measure` first measures the targets again from NASA's archive and the Mars
+Climate Database (network, about 20 minutes). Nothing in it tunes anything.
+
 ## Site-level scores and the geology diagnosis (added 2026-11-15)
 
 Both read the frozen values and change nothing.
