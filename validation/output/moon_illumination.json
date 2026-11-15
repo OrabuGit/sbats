@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-11-15T04:57:22Z",
+  "source": "LOLA average solar illumination map AVGVISIB_85S_060M_201608 (NASA PDS, LRO LOLA extras; Mazarico et al. 2011)",
+  "method": "Value at the point, and the highest value within 2.0 km. 0 is permanent shadow, 1 is always lit.",
+  "orientationCheck": {
+    "shackletonCentre": {
+      "inMap": true,
+      "atPoint": 0.0,
+      "permanentShadowAtPoint": true,
+      "bestWithinRadius": 0.0,
+      "bestDistanceKm": 2.0,
+      "shareOfDiscInPermanentShadow": 1.0
+    },
+    "shackletonRimGlaser2018": {
+      "inMap": true,
+      "atPoint": 0.855,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.855,
+      "bestDistanceKm": 0.02,
+      "shareOfDiscInPermanentShadow": 0.006
+    }
+  },
+  "targets": {
+    "moon-malapert-massif": {
+      "inMap": true,
+      "atPoint": 0.383,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.776,
+      "bestDistanceKm": 1.37,
+      "shareOfDiscInPermanentShadow": 0.003
+    },
+    "moon-mons-mouton": {
+      "inMap": true,
+      "atPoint": 0.316,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.448,
+      "bestDistanceKm": 1.89,
+      "shareOfDiscInPermanentShadow": 0.003
+    },
+    "moon-haworth": {
+      "inMap": true,
+      "atPoint": 0.0,
+      "permanentShadowAtPoint": true,
+      "bestWithinRadius": 0.0,
+      "bestDistanceKm": 1.99,
+      "shareOfDiscInPermanentShadow": 1.0
+    },
+    "moon-shackleton-rim": {
+      "inMap": true,
+      "atPoint": 0.0,
+      "permanentShadowAtPoint": true,
+      "bestWithinRadius": 0.0,
+      "bestDistanceKm": 2.0,
+      "shareOfDiscInPermanentShadow": 1.0
+    }
+  },
+  "otherPoints": {
+    "bryant-malapert-alpha": {
+      "label": "Malapert alpha peak, Bryant 2009 site MA",
+      "lat": -86.037,
+      "lon": 1.704,
+      "inMap": true,
+      "atPoint": 0.383,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.819,
+      "bestDistanceKm": 1.32,
+      "shareOfDiscInPermanentShadow": 0.015
+    },
+    "bryant-leibnitz-beta": {
+      "label": "Leibnitz beta peak (Mons Mouton), Bryant 2009 site LB",
+      "lat": -84.722,
+      "lon": 39.47,
+      "inMap": true,
+      "atPoint": 0.286,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.753,
+      "bestDistanceKm": 1.12,
+      "shareOfDiscInPermanentShadow": 0.002
+    },
+    "glaser-shackleton-rim": {
+      "label": "Best-lit Shackleton rim point at the surface, Glaser et al. 2018 Table 1",
+      "lat": -89.7849,
+      "lon": 203.97,
+      "inMap": true,
+      "atPoint": 0.855,
+      "permanentShadowAtPoint": false,
+      "bestWithinRadius": 0.855,
+      "bestDistanceKm": 0.02,
+      "shareOfDiscInPermanentShadow": 0.006
+    }
+  }
+}

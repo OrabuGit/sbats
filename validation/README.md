@@ -92,6 +92,7 @@ are unchanged.
 | `target_terrain.py` | `slope` and `roughness` of every target from LOLA and MOLA, using `pipeline/terrain_metrics.py` | `pipeline/.venv/bin/python validation/target_terrain.py` |
 | `build/moon_temperature.py` | `tempMean` of the Moon targets from the Diviner Polar Resource Product | `python3 validation/build/moon_temperature.py` |
 | `build/moon_global_temperature.py` | `tempMean` and `tempRange` of a Moon target away from the poles (Marius Hills) from the Diviner Global Cumulative Products | `python3 validation/build/moon_global_temperature.py` |
+| `build/moon_illumination.py` | Average sunlight at the lunar polar targets from the LOLA illumination map: a cross-check for `data/modules.json`, and the source of Haworth's value | `python3 validation/build/moon_illumination.py` |
 | `build/mars_temperature.py` | `tempMean` and `tempRange` of the Mars targets from the Mars Climate Database, and the REMS check at Gale | `python3 validation/build/mars_temperature.py` |
 | `build/mars_sunlight.py` | Sunlight, night length and dust-storm factor at the Mars targets, from the Mars Climate Database, for `data/modules.json` | `python3 validation/build/mars_sunlight.py` |
 | `build/make_modules.py` | `data/modules.json` from hand-entered, sourced values | `python3 validation/build/make_modules.py` |

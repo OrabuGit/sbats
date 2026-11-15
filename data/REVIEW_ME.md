@@ -222,7 +222,7 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 
 ## Decisions a human should make
 
-1. Seven values are derived, not printed in the source (one multiplication or division each). They are
+1. 11 values are derived, not printed in the source (one multiplication or division each). They are
    listed below. If the team wants only printed numbers, set them to null: the module becomes illustrative.
 2. The modules are sized on real hardware or studies, but for other settings: the habitat is a Mars
    design, the solar array and battery are International Space Station units, the ice miner is a lunar
@@ -230,10 +230,21 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 3. Greenhouse power is 2.6 kW per m2, NASA's figure for high-pressure sodium lamps. BVAD itself says it has
    not been updated for LEDs. It makes one greenhouse draw 130 kW, ten times a habitat. It is NASA's
    published number, so it stands, but it will dominate any layout with a greenhouse.
-4. Lit fraction on the Moon uses the upper end of a published range (Shackleton 87%, Malapert 82%), on the
-   assumption that arrays go at the best-lit spot. Mons Mouton and Haworth have no figure and stay null.
-5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero and Gale (inferred from latitude), and null at
-   every lunar site. So any lunar layout with an ice miner shows "no data". That is honest but limiting.
+4. Lit fraction on the Moon assumes the arrays stand at the best-lit spot near the target: the upper end of a
+   published range (Shackleton 87%, Malapert 82%), and for Mons Mouton the 2009 figure for its summit (77%),
+   24 km from the target's centre point. Haworth is 0: its target point is the crater centre, in permanent
+   shadow. Is 'best-lit spot nearby' the right rule, and is Haworth better moved to the landing region?
+5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero, Gale and Marius Hills (inferred), and null at
+   the four polar lunar sites. So a polar layout with an ice miner shows "no data". Ice is detected at the
+   surface in Haworth and inside Shackleton, but no source gives a grade a miner could be scaled by.
+9. Shackleton's longest dark period changed on 2026-11-15 from 36 to 66 hours. The earlier figure could not
+   be confirmed in its stated source on a second search. The new one is read from Glaser et al. 2018,
+   Table 2 (array 2 m above ground). At ground level the same study gives 221 hours.
+10. The Malapert and Mons Mouton dark periods and the Mons Mouton lit fraction come from a 2009 JPL study on
+    a radar elevation model made before LOLA. The LOLA illumination map agrees with its lit fractions to
+    within a few percent (validation/build/moon_illumination.py), but has no dark-period figure to check.
+11. Marius Hills is lit half the time with a 354-hour night (derived from the length of the lunar day).
+    Nothing about the inside of the pit is modelled.
 6. The Mars sunlight, night length and dust-storm figures are from a climate model (Mars Climate Database),
    not from landers.
 7. Crew water is drinking, food preparation and exercise only (3.217 kg). Hygiene water and recycling are
@@ -241,24 +252,48 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 8. Earth sites use top-of-atmosphere sunlight, an upper bound, because `earth.json` has no surface
    sunlight. Adding NASA POWER surface sunlight to `earth.json` would fix it (Session B's file).
 
+## Null values ranked by how much they matter to the sandbox (review of 2026-11-15)
+
+On 2026-11-14 the file held the word `null` 43 times. That was 14 values: each stores a null value, a null
+source and a null badge (42), and the word appears once in the file's own description. The 14 are ranked below by what they block in the
+sandbox. The top 10 were searched for a second time in NASA technical reports and mission papers. Four
+could be filled. The rest stay null, as do ranks 11 to 14, which were not searched again.
+
+| Rank | Value | What it blocks in the sandbox | Second search | Now |
+| --- | --- | --- | --- | --- |
+| 1 | `sites.moon-mons-mouton.litFraction` | Solar power is "no data", so no layout at this target gets a power balance or a readiness colour | Found: Bryant 2009, JPL IPN Progress Report 42-176, Table 3 (summit, 77.43%). Cross-checked on the LOLA illumination map (0.75) | 0.77 |
+| 2 | `sites.moon-haworth.litFraction` | Same, at Haworth | No paper gives a figure. Measured instead on the LOLA illumination map: the target point is in permanent shadow | 0 |
+| 3 | `sites.moon-shackleton-rim.iceAvailability` | An ice miner placed here makes water and oxygen "no data". The miner is the only water source in the model | Not found. Surface ice is detected inside the crater (Lemelin et al. 2021: 34 detections, at most 0.17% water-equivalent hydrogen), none on the rim, and no mined grade anywhere | null |
+| 4 | `sites.moon-haworth.iceAvailability` | Same, at Haworth | Not found. Surface ice is detected (80 detections; 0.31% or 0.44% water-equivalent hydrogen, two instruments), but that is not a grade for the top metre of ground | null |
+| 5 | `sites.moon-mons-mouton.iceAvailability` | Same, at Mons Mouton | Not found. No direct detection in the VIPER area (Beyer et al. 2025); ice-stability maps are models | null |
+| 6 | `sites.moon-malapert-massif.iceAvailability` | Same, at Malapert Massif | Not found. No statement about the massif itself; the nearest shadowed area is in Malapert crater | null |
+| 7 | `sites.moon-malapert-massif.longestDarkHours` | The battery check against the longest dark period shows "no data", and the lunar night event falls back to 14 days | Found: Bryant 2009, Table 3 (12.86 days at the Malapert alpha peak) | 309 (derived) |
+| 8 | `sites.moon-mons-mouton.longestDarkHours` | Same, at Mons Mouton | Found: Bryant 2009, Table 3 (9.48 days at the summit) | 228 (derived) |
+| 9 | `sites.moon-haworth.longestDarkHours` | Same, at Haworth | Not applicable: the target point is in permanent shadow. No figure for the landing region beside it | null |
+| 10 | `modules.habitat.heatingKwPerDegC` | Heating is left out of habitat power at every target, and the habitat is marked illustrative | Not found in a usable form. Schunk et al. 2022 give 1,550 W for a 100-hour lunar eclipse, with no outside temperature to divide by | null |
+| 11 | `modules.habitat.comfortTempC` | Nothing while rank 10 is null | Not searched again. A source exists (BVAD Rev 2, Table 4-73: 295.15 K nominal) | null |
+| 12 | `modules.greenhouse.waterKgPerM2Day` | Greenhouse water demand is left out, with a note | Not searched again. BVAD gives uptake (11.79 kg per m2 per day for wheat), not net make-up water | null |
+| 13 | `modules.landingPad.massKg` | Only the delivered-mass total; the pad is marked illustrative | Not searched again. Published figures range from 0.5 t to 282 t by building method | null |
+| 14 | `events.marsDustStorm.solarFactor` | Nothing: every Mars site carries its own factor | Not searched again | null |
+
+Check levels for this review: the Bryant 2009 table, the Glaser 2018 tables and the Lemelin 2021 rows were
+read in the saved source texts in the main session (A). Everything else in the 'Second search' column was
+reported by a research sub-agent (B).
+
 ## Values with no source (null): these make a module illustrative
 
 | Value | What was looked for and not found |
 | --- | --- |
-| `modules.habitat.heatingKwPerDegC` | No published heat-loss figure per degree was found for a surface habitat. The heating load is not modelled. |
-| `modules.habitat.comfortTempC` | Only needed for the heating load, which is not modelled. |
+| `modules.habitat.heatingKwPerDegC` | No published heat-loss figure per degree was found for a surface habitat, so the heating load is not modelled. The nearest figure: 1,550 W of heater power to hold a lunar surface habitat at 283 K through a 100-hour eclipse (Schunk et al. 2022, NASA NTRS 20210026557), with no outside temperature to divide by. Searched twice (2026-11-14 and 2026-11-15). |
+| `modules.habitat.comfortTempC` | Only needed for the heating load, which is not modelled. Left null on purpose. A source exists if the load is ever modelled: BVAD Rev 2, Table 4-73, nominal cabin air temperature 295.15 K. |
 | `modules.greenhouse.waterKgPerM2Day` | Wheat takes up 11.79 kg per m2 per day (BVAD Rev 2, Table 4-91), but transpires nearly all of it, and a closed chamber recovers it. No net make-up figure was found, so greenhouse water is left out. |
-| `modules.landingPad.massKg` | No published mass for a prepared lunar or Martian landing pad was found. |
+| `modules.landingPad.massKg` | Left null: no single mass fits. Published figures depend on the building method: 0.5 to 7.6 t of equipment or material brought from Earth for a 27 m radius pad (Metzger and Autry, arXiv:2205.00378, Table 1), and 3 to 282 t of imported polymer for pads of 15 to 200 m (Gelino et al. 2022, NASA NTRS 20220000334, Table 1). |
 | `events.marsDustStorm.solarFactor` | No single figure: each Mars site carries its own in sites.<id>.dustStormSolarFactor, from the Mars Climate Database. |
-| `sites.moon-shackleton-rim.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 11.1% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
-| `sites.moon-malapert-massif.longestDarkHours` | No published longest dark period for this site was found. |
-| `sites.moon-malapert-massif.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 1.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
-| `sites.moon-mons-mouton.litFraction` | No published share of time in sunlight for this site was found. |
-| `sites.moon-mons-mouton.longestDarkHours` | No published longest dark period for this site was found. |
-| `sites.moon-mons-mouton.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 0.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
-| `sites.moon-haworth.litFraction` | The crater floor is in permanent shadow. No published figure for the landing region beside it was found. |
-| `sites.moon-haworth.longestDarkHours` | No published longest dark period for the landing region was found. |
-| `sites.moon-haworth.iceAvailability` | No measurement of extractable ice exists for this site. Diviner shows 35.4% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. |
+| `sites.moon-shackleton-rim.iceAvailability` | No measurement of extractable ice in the ground exists for this site, so the miner's output cannot be scaled. Ice has been detected on the surface inside the crater, not on the rim: 34 detections on the walls of the permanently shadowed interior, with at most 0.17% water-equivalent hydrogen by mass (Lemelin et al. 2021, Planetary Science Journal 2:103, Table 2). Zuber et al. 2012 offer about 20% ice in a one-micrometre surface layer of the floor only as an alternative reading. No detection on the rim was found. Diviner shows 11.1% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The miner is sized for 5% ice by mass; the one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. Searched twice (2026-11-14 and 2026-11-15). |
+| `sites.moon-malapert-massif.iceAvailability` | No measurement of extractable ice in the ground exists for this site, so the miner's output cannot be scaled. No statement of ice detected, or looked for and not found, at the massif itself was found. The nearest catalogued shadowed area, in Malapert crater, has 17 surface detections and at most 0.05% water-equivalent hydrogen (Lemelin et al. 2021, Tables 2 and 5). Diviner shows 1.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The miner is sized for 5% ice by mass; the one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. Searched twice (2026-11-14 and 2026-11-15). |
+| `sites.moon-mons-mouton.iceAvailability` | No measurement of extractable ice in the ground exists for this site, so the miner's output cannot be scaled. No direct detection in the VIPER mission area on Mons Mouton was found: the site analysis says only that the extended area may hold one surface detection (Beyer et al. 2025, Planetary Science Journal 6:236). Ice-stability maps there are models, not detections. Diviner shows 0.5% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The miner is sized for 5% ice by mass; the one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. Searched twice (2026-11-14 and 2026-11-15). |
+| `sites.moon-haworth.longestDarkHours` | No value: the target point is in permanent shadow, so there is no longest dark period to give. No published figure for the landing region beside the crater was found. Searched twice (2026-11-14 and 2026-11-15). |
+| `sites.moon-haworth.iceAvailability` | No measurement of extractable ice in the ground exists for this site, so the miner's output cannot be scaled. Ice has been detected on the surface here: 80 detections in the permanently shadowed floor (Lemelin et al. 2021, Table 2; also listed by Li et al. 2018, PNAS). The amount is small and uncertain: at most 0.31% water-equivalent hydrogen by mass from Lunar Prospector (Lemelin et al. 2021), 0.44% from LEND as quoted by Krasilnikov et al. 2023. That is the top metre seen from orbit, not a mined grade. Diviner shows 35.4% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The miner is sized for 5% ice by mass; the one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. Searched twice (2026-11-14 and 2026-11-15). |
 
 ## Derived values
 
@@ -271,6 +306,8 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 | `modules.iceMiner.waterKgPerDay` | 66.7 | kg per day | Derived: 15 t of water collected and processed in 225 days (15,000 / 225). The study assumes 5% ice by mass and 75% extraction. | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
 | `modules.iceMiner.electrolysisKwhPerKgOxygen` | 8.31 | kWh per kg oxygen | Derived: the electrolysis subsystem draws approximately 20 kW and makes 13 t of oxygen in 225 days (20 kW x 24 h / 57.8 kg per day). | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
 | `events.marsDustStorm.durationDays` | 54 | days | Derived: the 2018 storm was first detected on 30 May and by 23 July more dust was falling out than being raised (54 days). Dust took until mid-September to clear. | NASA Scientific Visualization Studio 30983 and JPL Opportunity status, 2018 global dust storm | A |
+| `sites.moon-malapert-massif.longestDarkHours` | 309 | hours | Derived: 12.86 days x 24 hours, the longest continuous period with less than half the solar disk visible at the Malapert alpha peak (86.037 S, 1.704 E). Computed in 2009 on a radar elevation model made before LOLA. For comparison, an idealised study gives 159 to 199 hours (Fincannon 2007, NASA/TM-2007-215025, reporting Sharpe and Schrunk). | Bryant 2009, Lunar Pole Illumination and Communications Maps Computed from Goldstone Solar System Radar Elevation Data, JPL IPN Progress Report 42-176, Table 3 | A |
+| `sites.moon-mons-mouton.longestDarkHours` | 228 | hours | Derived: 9.48 days x 24 hours, the longest continuous period with less than half the solar disk visible at the Leibnitz beta peak. Computed in 2009 on a radar elevation model made before LOLA. | Bryant 2009, Lunar Pole Illumination and Communications Maps Computed from Goldstone Solar System Radar Elevation Data, JPL IPN Progress Report 42-176, Table 3 | A |
 | `sites.moon-marius-hills.litFraction` | 0.5 | fraction | Derived: away from the poles, open ground is in daylight for half of each lunar day of 29.53 Earth days (synodic period, NSSDC). Hills that shade the site are not modelled. Arrays on the surface; nothing inside the pit is lit. | NASA NSSDCA Moon Fact Sheet | A |
 | `sites.moon-marius-hills.longestDarkHours` | 354 | hours | Derived: half of the 29.53-day lunar day (29.53 x 24 / 2 = 354 hours). The same night the LRO lithograph rounds to 14 Earth days. | NASA NSSDCA Moon Fact Sheet | A |
 
@@ -299,12 +336,14 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 | `events.lunarNight.durationDays` | 14 | days | NASA LRO lithograph LG-2013-11-084-GSFC, Temperature Variation on the Moon | A | 'a lunar night lasts 14 Earth days'. |
 | `events.lunarNight.solarFactor` | 0 | fraction of normal sunlight | NASA LRO lithograph LG-2013-11-084-GSFC, Temperature Variation on the Moon | A | Night: the Sun is below the horizon. |
 | `sites.moon-shackleton-rim.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
-| `sites.moon-shackleton-rim.litFraction` | 0.87 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | A | Upper end of the published range for the Shackleton rim (50% to 87% of the time): assumes the arrays stand at the best-lit spot. |
-| `sites.moon-shackleton-rim.longestDarkHours` | 36 | hours | Mazarico et al. 2011, Icarus 211:1066, doi:10.1016/j.icarus.2010.10.030 | B | 'longest total darkness about 1.5 days' at the best-lit rim location (1.5 x 24 hours). From the paper's abstract. |
+| `sites.moon-shackleton-rim.litFraction` | 0.87 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | B | Upper end of the published range for the Shackleton rim (50% to 87% of the time): assumes the arrays stand at the best-lit spot. Cross-check: the LOLA illumination map gives 0.86 at the best-lit rim point of Glaser et al. 2018 (validation/build/moon_illumination.py). The target's own centre point is the crater floor, in permanent shadow. |
+| `sites.moon-shackleton-rim.longestDarkHours` | 66 | hours | Glaser et al. 2018, Planetary and Space Science 162:170, doi:10.1016/j.pss.2017.07.006 (manuscript NASA NTRS 20170007365), Table 2 | A | 'Max. time in shadow' 66 hours at the best-lit rim cluster, for an array 2 m above the ground, over twenty years. At ground level the same study gives 221 hours (its Table 1). Replaces 36 hours, which a second search on 2026-11-15 could not confirm in its stated source. |
 | `sites.moon-malapert-massif.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
-| `sites.moon-malapert-massif.litFraction` | 0.82 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | A | Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot. |
+| `sites.moon-malapert-massif.litFraction` | 0.82 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | B | Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot. Cross-check: the LOLA illumination map gives 0.82 at the best point within 2 km of the Malapert alpha peak; Bryant 2009 gives 78% for that peak. |
 | `sites.moon-mons-mouton.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-mons-mouton.litFraction` | 0.77 | fraction | Bryant 2009, Lunar Pole Illumination and Communications Maps Computed from Goldstone Solar System Radar Elevation Data, JPL IPN Progress Report 42-176, Table 3 | A | 'Multiyear average illumination' 77.43% with at least half the solar disk visible (79.06% for any part, 75.82% for the whole disk) at the Leibnitz beta peak (84.722 S, 39.470 E), the earlier name of this mountain's summit, about 24 km from the target's centre point. Computed in 2009 on a radar elevation model made before LOLA. Cross-check: the LOLA illumination map gives 0.75 at the best point within 2 km of that peak, and 0.32 at the target's centre point (validation/build/moon_illumination.py). Assumes the arrays stand at the best-lit spot. |
 | `sites.moon-haworth.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-haworth.litFraction` | 0 | fraction | LOLA average solar illumination map AVGVISIB_85S_060M_201608, NASA PDS (method of Mazarico et al. 2011), read by validation/build/moon_illumination.py | A | Measured from the map: the target point (the crater centre) and all ground within 2 km of it are in permanent shadow. Solar arrays here produce nothing. The landing region beside the crater is lit part of the time; no figure for it was found. |
 | `sites.moon-marius-hills.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. |
 | `sites.moon-marius-hills.iceAvailability` | 0 | fraction of nominal miner output | LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py); Horvath, Hayne and Paige 2022, Geophysical Research Letters 49:e2022GL099710, doi:10.1029/2022GL099710 | A | Inferred, not measured: Diviner measures the open surface here at 392 K at midday, far above the 110 K below which water ice stays put, and a model of a similar pit gives about 290 K in its shadowed interior (Horvath et al. 2022). No one has looked for ice inside this pit. |
 | `sites.mars-jezero.irradianceWm2` | 295.2 | W/m2 | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up. |

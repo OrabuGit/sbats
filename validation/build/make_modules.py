@@ -38,6 +38,9 @@ LEONE = "Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853"
 MAZARICO = "Mazarico et al. 2011, Icarus 211:1066, doi:10.1016/j.icarus.2010.10.030"
 PIQUEUX = "Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947"
 BRAMSON = "Bramson et al. 2015, Geophysical Research Letters 42, doi:10.1002/2015GL064844; Golombek et al. 2021, LPSC abstract 2420"
+BRYANT = "Bryant 2009, Lunar Pole Illumination and Communications Maps Computed from Goldstone Solar System Radar Elevation Data, JPL IPN Progress Report 42-176, Table 3"
+GLASER = "Glaser et al. 2018, Planetary and Space Science 162:170, doi:10.1016/j.pss.2017.07.006 (manuscript NASA NTRS 20170007365), Table 2"
+LOLA_ILLUM = "LOLA average solar illumination map AVGVISIB_85S_060M_201608, NASA PDS (method of Mazarico et al. 2011), read by validation/build/moon_illumination.py"
 DIVINER_GCP = "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py)"
 HORVATH = "Horvath, Hayne and Paige 2022, Geophysical Research Letters 49:e2022GL099710, doi:10.1029/2022GL099710"
 SVS = "NASA Scientific Visualization Studio 30983 and JPL Opportunity status, 2018 global dust storm"
@@ -59,18 +62,22 @@ def v(path, value, unit, source, badge="Literature", note=None, derived=False, c
     return out
 
 
-def moon_site(target, lit, lit_note, dark, dark_note, cold_trap_share, lit_check="A", dark_check="B"):
+def moon_site(target, lit, lit_source, lit_note, dark, dark_source, dark_note, cold_trap_share, ice_evidence,
+              lit_check="A", dark_check="A", lit_badge="Literature", dark_derived=False):
     ice_note = (
-        f"No measurement of extractable ice exists for this site. Diviner shows {cold_trap_share}% of the 55.6 km window never "
-        "warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar "
-        "polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater."
+        f"No measurement of extractable ice in the ground exists for this site, so the miner's output cannot be scaled. {ice_evidence} "
+        f"Diviner shows {cold_trap_share}% of the 55.6 km window never warms above 110 K, where water ice is stable "
+        "(validation/build/moon_temperature.py). The miner is sized for 5% ice by mass; the one direct measurement of lunar polar water, "
+        "5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater. "
+        "Searched twice (2026-11-14 and 2026-11-15)."
     )
     p = f"sites.{target}"
     return {
         "irradianceWm2": v(f"{p}.irradianceWm2", 1361.0, "W/m2", NSSDC_MOON,
                            note="Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright."),
-        "litFraction": v(f"{p}.litFraction", lit, "fraction", LEONE if lit is not None else None, note=lit_note, check=lit_check),
-        "longestDarkHours": v(f"{p}.longestDarkHours", dark, "hours", MAZARICO if dark is not None else None, note=dark_note, check=dark_check),
+        "litFraction": v(f"{p}.litFraction", lit, "fraction", lit_source if lit is not None else None, badge=lit_badge, note=lit_note, check=lit_check),
+        "longestDarkHours": v(f"{p}.longestDarkHours", dark, "hours", dark_source if dark is not None else None, note=dark_note,
+                              derived=dark_derived, check=dark_check),
         "iceAvailability": v(f"{p}.iceAvailability", None, "fraction of nominal miner output", None, note=ice_note),
     }
 
@@ -127,9 +134,9 @@ def build():
                 "crewCapacity": v("modules.habitat.crewCapacity", 6, "people", DRA5, note="The architecture sends six crew members, housed in one habitat."),
                 "powerKw": v("modules.habitat.powerKw", 12.1, "kW", DRA5, note="'using 12.1 kWe of electrical power'. Whatever thermal control that figure includes is not broken out."),
                 "heatingKwPerDegC": v("modules.habitat.heatingKwPerDegC", None, "kW per degree C", None,
-                                      note="No published heat-loss figure per degree was found for a surface habitat. The heating load is not modelled."),
+                                      note="No published heat-loss figure per degree was found for a surface habitat, so the heating load is not modelled. The nearest figure: 1,550 W of heater power to hold a lunar surface habitat at 283 K through a 100-hour eclipse (Schunk et al. 2022, NASA NTRS 20210026557), with no outside temperature to divide by. Searched twice (2026-11-14 and 2026-11-15)."),
                 "comfortTempC": v("modules.habitat.comfortTempC", None, "degrees C", None,
-                                  note="Only needed for the heating load, which is not modelled."),
+                                  note="Only needed for the heating load, which is not modelled. Left null on purpose. A source exists if the load is ever modelled: BVAD Rev 2, Table 4-73, nominal cabin air temperature 295.15 K."),
             },
         },
         "solar": {
@@ -181,7 +188,7 @@ def build():
             "label": "Landing pad",
             "description": "A place where a large cargo lander can set down. Cargo per landing is the lower figure NASA gives for its Artemis cargo landers.",
             "params": {
-                "massKg": v("modules.landingPad.massKg", None, "kg", None, note="No published mass for a prepared lunar or Martian landing pad was found."),
+                "massKg": v("modules.landingPad.massKg", None, "kg", None, note="Left null: no single mass fits. Published figures depend on the building method: 0.5 to 7.6 t of equipment or material brought from Earth for a 27 m radius pad (Metzger and Autry, arXiv:2205.00378, Table 1), and 3 to 282 t of imported polymer for pads of 15 to 200 m (Gelino et al. 2022, NASA NTRS 20220000334, Table 1)."),
                 "cargoKgPerDelivery": v("modules.landingPad.cargoKgPerDelivery", 12000, "kg", CARGO, note="'approximately 26,000 - 33,000 pounds (12 to 15 metric tons) of payload'. The lower figure is used. A lunar lander; no Mars figure was looked for."),
                 "maxSlopeDeg": v("modules.landingPad.maxSlopeDeg", 10, "degrees", HLS,
                                  note="'Surface slope for landing (100m): <10 deg', from a seminar slide of Artemis III requirements, not the requirements document. The site slopes it is compared with are means over a 55 km window at 463 m spacing."),
@@ -212,19 +219,55 @@ def build():
     }
     sites = {
         "moon-shackleton-rim": moon_site(
-            "moon-shackleton-rim", 0.87,
-            "Upper end of the published range for the Shackleton rim (50% to 87% of the time): assumes the arrays stand at the best-lit spot.",
-            36, "'longest total darkness about 1.5 days' at the best-lit rim location (1.5 x 24 hours). From the paper's abstract.", 11.1),
+            "moon-shackleton-rim", 0.87, LEONE,
+            "Upper end of the published range for the Shackleton rim (50% to 87% of the time): assumes the arrays stand at the best-lit spot. "
+            "Cross-check: the LOLA illumination map gives 0.86 at the best-lit rim point of Glaser et al. 2018 (validation/build/moon_illumination.py). "
+            "The target's own centre point is the crater floor, in permanent shadow.",
+            66, GLASER,
+            "'Max. time in shadow' 66 hours at the best-lit rim cluster, for an array 2 m above the ground, over twenty years. At ground level the same "
+            "study gives 221 hours (its Table 1). Replaces 36 hours, which a second search on 2026-11-15 could not confirm in its stated source.",
+            11.1,
+            "Ice has been detected on the surface inside the crater, not on the rim: 34 detections on the walls of the permanently shadowed interior, "
+            "with at most 0.17% water-equivalent hydrogen by mass (Lemelin et al. 2021, Planetary Science Journal 2:103, Table 2). Zuber et al. 2012 "
+            "offer about 20% ice in a one-micrometre surface layer of the floor only as an alternative reading. No detection on the rim was found.",
+            lit_check="B"),
         "moon-malapert-massif": moon_site(
-            "moon-malapert-massif", 0.82,
-            "Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot.",
-            None, "No published longest dark period for this site was found.", 1.5),
+            "moon-malapert-massif", 0.82, LEONE,
+            "Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot. Cross-check: the LOLA "
+            "illumination map gives 0.82 at the best point within 2 km of the Malapert alpha peak; Bryant 2009 gives 78% for that peak.",
+            309, BRYANT,
+            "Derived: 12.86 days x 24 hours, the longest continuous period with less than half the solar disk visible at the Malapert alpha peak "
+            "(86.037 S, 1.704 E). Computed in 2009 on a radar elevation model made before LOLA. For comparison, an idealised study gives 159 to 199 hours "
+            "(Fincannon 2007, NASA/TM-2007-215025, reporting Sharpe and Schrunk).",
+            1.5,
+            "No statement of ice detected, or looked for and not found, at the massif itself was found. The nearest catalogued shadowed area, in "
+            "Malapert crater, has 17 surface detections and at most 0.05% water-equivalent hydrogen (Lemelin et al. 2021, Tables 2 and 5).",
+            lit_check="B", dark_derived=True),
         "moon-mons-mouton": moon_site(
-            "moon-mons-mouton", None, "No published share of time in sunlight for this site was found.",
-            None, "No published longest dark period for this site was found.", 0.5),
+            "moon-mons-mouton", 0.77, BRYANT,
+            "'Multiyear average illumination' 77.43% with at least half the solar disk visible (79.06% for any part, 75.82% for the whole disk) at the "
+            "Leibnitz beta peak (84.722 S, 39.470 E), the earlier name of this mountain's summit, about 24 km from the target's centre point. Computed in "
+            "2009 on a radar elevation model made before LOLA. Cross-check: the LOLA illumination map gives 0.75 at the best point within 2 km of that "
+            "peak, and 0.32 at the target's centre point (validation/build/moon_illumination.py). Assumes the arrays stand at the best-lit spot.",
+            228, BRYANT,
+            "Derived: 9.48 days x 24 hours, the longest continuous period with less than half the solar disk visible at the Leibnitz beta peak. "
+            "Computed in 2009 on a radar elevation model made before LOLA.",
+            0.5,
+            "No direct detection in the VIPER mission area on Mons Mouton was found: the site analysis says only that the extended area may hold one "
+            "surface detection (Beyer et al. 2025, Planetary Science Journal 6:236). Ice-stability maps there are models, not detections.",
+            dark_derived=True),
         "moon-haworth": moon_site(
-            "moon-haworth", None, "The crater floor is in permanent shadow. No published figure for the landing region beside it was found.",
-            None, "No published longest dark period for the landing region was found.", 35.4),
+            "moon-haworth", 0, LOLA_ILLUM,
+            "Measured from the map: the target point (the crater centre) and all ground within 2 km of it are in permanent shadow. Solar arrays here "
+            "produce nothing. The landing region beside the crater is lit part of the time; no figure for it was found.",
+            None, None,
+            "No value: the target point is in permanent shadow, so there is no longest dark period to give. No published figure for the landing "
+            "region beside the crater was found. Searched twice (2026-11-14 and 2026-11-15).",
+            35.4,
+            "Ice has been detected on the surface here: 80 detections in the permanently shadowed floor (Lemelin et al. 2021, Table 2; also listed by "
+            "Li et al. 2018, PNAS). The amount is small and uncertain: at most 0.31% water-equivalent hydrogen by mass from Lunar Prospector "
+            "(Lemelin et al. 2021), 0.44% from LEND as quoted by Krasilnikov et al. 2023. That is the top metre seen from orbit, not a mined grade.",
+            lit_badge="Mission"),
         "moon-marius-hills": moon_low_latitude_site("moon-marius-hills", 392, f"{DIVINER_GCP}; {HORVATH}"),
         "mars-jezero": mars_site("mars-jezero", 295.2, 0.501, 13.4, 0.170, 0, PIQUEUX,
                                  "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Jezero is at 18 N.", "B"),

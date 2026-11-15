@@ -142,6 +142,25 @@ DESIGN = [
 ]
 
 
+# The 14 null values of 2026-11-14, ranked by what they block. (rank, value, effect, second search, now)
+NULL_RANKING = [
+    ("1", "`sites.moon-mons-mouton.litFraction`", "Solar power is \"no data\", so no layout at this target gets a power balance or a readiness colour", "Found: Bryant 2009, JPL IPN Progress Report 42-176, Table 3 (summit, 77.43%). Cross-checked on the LOLA illumination map (0.75)", "0.77"),
+    ("2", "`sites.moon-haworth.litFraction`", "Same, at Haworth", "No paper gives a figure. Measured instead on the LOLA illumination map: the target point is in permanent shadow", "0"),
+    ("3", "`sites.moon-shackleton-rim.iceAvailability`", "An ice miner placed here makes water and oxygen \"no data\". The miner is the only water source in the model", "Not found. Surface ice is detected inside the crater (Lemelin et al. 2021: 34 detections, at most 0.17% water-equivalent hydrogen), none on the rim, and no mined grade anywhere", "null"),
+    ("4", "`sites.moon-haworth.iceAvailability`", "Same, at Haworth", "Not found. Surface ice is detected (80 detections; 0.31% or 0.44% water-equivalent hydrogen, two instruments), but that is not a grade for the top metre of ground", "null"),
+    ("5", "`sites.moon-mons-mouton.iceAvailability`", "Same, at Mons Mouton", "Not found. No direct detection in the VIPER area (Beyer et al. 2025); ice-stability maps are models", "null"),
+    ("6", "`sites.moon-malapert-massif.iceAvailability`", "Same, at Malapert Massif", "Not found. No statement about the massif itself; the nearest shadowed area is in Malapert crater", "null"),
+    ("7", "`sites.moon-malapert-massif.longestDarkHours`", "The battery check against the longest dark period shows \"no data\", and the lunar night event falls back to 14 days", "Found: Bryant 2009, Table 3 (12.86 days at the Malapert alpha peak)", "309 (derived)"),
+    ("8", "`sites.moon-mons-mouton.longestDarkHours`", "Same, at Mons Mouton", "Found: Bryant 2009, Table 3 (9.48 days at the summit)", "228 (derived)"),
+    ("9", "`sites.moon-haworth.longestDarkHours`", "Same, at Haworth", "Not applicable: the target point is in permanent shadow. No figure for the landing region beside it", "null"),
+    ("10", "`modules.habitat.heatingKwPerDegC`", "Heating is left out of habitat power at every target, and the habitat is marked illustrative", "Not found in a usable form. Schunk et al. 2022 give 1,550 W for a 100-hour lunar eclipse, with no outside temperature to divide by", "null"),
+    ("11", "`modules.habitat.comfortTempC`", "Nothing while rank 10 is null", "Not searched again. A source exists (BVAD Rev 2, Table 4-73: 295.15 K nominal)", "null"),
+    ("12", "`modules.greenhouse.waterKgPerM2Day`", "Greenhouse water demand is left out, with a note", "Not searched again. BVAD gives uptake (11.79 kg per m2 per day for wheat), not net make-up water", "null"),
+    ("13", "`modules.landingPad.massKg`", "Only the delivered-mass total; the pad is marked illustrative", "Not searched again. Published figures range from 0.5 t to 282 t by building method", "null"),
+    ("14", "`events.marsDustStorm.solarFactor`", "Nothing: every Mars site carries its own factor", "Not searched again", "null"),
+]
+
+
 def modules_section(w) -> None:
     """Every number in data/modules.json, read from the generator so it cannot drift from the file."""
     import make_modules
@@ -157,7 +176,8 @@ def modules_section(w) -> None:
     w("")
     w("## Decisions a human should make")
     w("")
-    w("1. Seven values are derived, not printed in the source (one multiplication or division each). They are")
+    derived_count = sum(1 for r in rows if r[5] == "derived")
+    w(f"1. {derived_count} values are derived, not printed in the source (one multiplication or division each). They are")
     w("   listed below. If the team wants only printed numbers, set them to null: the module becomes illustrative.")
     w("2. The modules are sized on real hardware or studies, but for other settings: the habitat is a Mars")
     w("   design, the solar array and battery are International Space Station units, the ice miner is a lunar")
@@ -165,16 +185,43 @@ def modules_section(w) -> None:
     w("3. Greenhouse power is 2.6 kW per m2, NASA's figure for high-pressure sodium lamps. BVAD itself says it has")
     w("   not been updated for LEDs. It makes one greenhouse draw 130 kW, ten times a habitat. It is NASA's")
     w("   published number, so it stands, but it will dominate any layout with a greenhouse.")
-    w("4. Lit fraction on the Moon uses the upper end of a published range (Shackleton 87%, Malapert 82%), on the")
-    w("   assumption that arrays go at the best-lit spot. Mons Mouton and Haworth have no figure and stay null.")
-    w("5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero and Gale (inferred from latitude), and null at")
-    w("   every lunar site. So any lunar layout with an ice miner shows \"no data\". That is honest but limiting.")
+    w("4. Lit fraction on the Moon assumes the arrays stand at the best-lit spot near the target: the upper end of a")
+    w("   published range (Shackleton 87%, Malapert 82%), and for Mons Mouton the 2009 figure for its summit (77%),")
+    w("   24 km from the target's centre point. Haworth is 0: its target point is the crater centre, in permanent")
+    w("   shadow. Is 'best-lit spot nearby' the right rule, and is Haworth better moved to the landing region?")
+    w("5. Ice availability is 1 at Arcadia Planitia, 0 at Jezero, Gale and Marius Hills (inferred), and null at")
+    w("   the four polar lunar sites. So a polar layout with an ice miner shows \"no data\". Ice is detected at the")
+    w("   surface in Haworth and inside Shackleton, but no source gives a grade a miner could be scaled by.")
+    w("9. Shackleton's longest dark period changed on 2026-11-15 from 36 to 66 hours. The earlier figure could not")
+    w("   be confirmed in its stated source on a second search. The new one is read from Glaser et al. 2018,")
+    w("   Table 2 (array 2 m above ground). At ground level the same study gives 221 hours.")
+    w("10. The Malapert and Mons Mouton dark periods and the Mons Mouton lit fraction come from a 2009 JPL study on")
+    w("    a radar elevation model made before LOLA. The LOLA illumination map agrees with its lit fractions to")
+    w("    within a few percent (validation/build/moon_illumination.py), but has no dark-period figure to check.")
+    w("11. Marius Hills is lit half the time with a 354-hour night (derived from the length of the lunar day).")
+    w("    Nothing about the inside of the pit is modelled.")
     w("6. The Mars sunlight, night length and dust-storm figures are from a climate model (Mars Climate Database),")
     w("   not from landers.")
     w("7. Crew water is drinking, food preparation and exercise only (3.217 kg). Hygiene water and recycling are")
     w("   not modelled.")
     w("8. Earth sites use top-of-atmosphere sunlight, an upper bound, because `earth.json` has no surface")
     w("   sunlight. Adding NASA POWER surface sunlight to `earth.json` would fix it (Session B's file).")
+    w("")
+    w("## Null values ranked by how much they matter to the sandbox (review of 2026-11-15)")
+    w("")
+    w("On 2026-11-14 the file held the word `null` 43 times. That was 14 values: each stores a null value, a null")
+    w("source and a null badge (42), and the word appears once in the file's own description. The 14 are ranked below by what they block in the")
+    w("sandbox. The top 10 were searched for a second time in NASA technical reports and mission papers. Four")
+    w("could be filled. The rest stay null, as do ranks 11 to 14, which were not searched again.")
+    w("")
+    w("| Rank | Value | What it blocks in the sandbox | Second search | Now |")
+    w("| --- | --- | --- | --- | --- |")
+    for row in NULL_RANKING:
+        w("| " + " | ".join(row) + " |")
+    w("")
+    w("Check levels for this review: the Bryant 2009 table, the Glaser 2018 tables and the Lemelin 2021 rows were")
+    w("read in the saved source texts in the main session (A). Everything else in the 'Second search' column was")
+    w("reported by a research sub-agent (B).")
     w("")
     w("## Values with no source (null): these make a module illustrative")
     w("")

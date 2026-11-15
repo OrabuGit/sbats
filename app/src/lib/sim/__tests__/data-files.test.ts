@@ -68,6 +68,39 @@ describe('data/modules.json', () => {
   });
 });
 
+describe('The null values left after the review of 2026-11-15', () => {
+  it('gives every target a sunlight figure, so solar power is never "no data"', () => {
+    if (!file || !targets) return skip('needs modules.json and targets.json');
+    for (const t of targets) {
+      const site = siteFromTarget(t, file);
+      ok(site.litFraction !== null && site.litFraction >= 0 && site.litFraction <= 1, `${t.id}: lit fraction`);
+    }
+    // The Haworth target point is the crater centre, in permanent shadow.
+    equal(file.sites['moon-haworth']?.litFraction.value, 0);
+  });
+
+  it('leaves ice null at the four polar lunar targets and nowhere else', () => {
+    if (!file || !targets) return skip('needs modules.json and targets.json');
+    const noIce = targets.filter((t) => siteFromTarget(t, file).iceAvailability === null).map((t) => t.id).sort();
+    deepEqual(noIce, ['moon-haworth', 'moon-malapert-massif', 'moon-mons-mouton', 'moon-shackleton-rim']);
+  });
+
+  it('never stores a number without a source, or a source without a number', () => {
+    if (!file) return skip('needs modules.json');
+    const walk = (node: unknown, path: string): void => {
+      if (node === null || typeof node !== 'object') return;
+      const o = node as Record<string, unknown>;
+      if ('value' in o && 'source' in o) {
+        equal(o.value === null, o.source === null, `${path}: value and source must be null together`);
+        equal(o.value === null, o.badge === null, `${path}: value and badge must be null together`);
+        return;
+      }
+      for (const [k, v] of Object.entries(o)) walk(v, `${path}.${k}`);
+    };
+    walk(file, 'modules.json');
+  });
+});
+
 describe('The engine on the real data', () => {
   const layout = layoutOf({ habitat: 1, solar: 12, battery: 12, iceMiner: 1, landingPad: 1 });
 
