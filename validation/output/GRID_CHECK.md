@@ -1,6 +1,6 @@
 # Targets from anywhere, checked on the real Moon and Mars grids
 
-Written 2026-11-15T06:47:43.829Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json missing.
+Written 2026-11-15T06:48:22.482Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json (1 degree, 64800 cells, built 2026-11-15T06:47:52Z).
 
 ## 1. Does the grid agree with the curated targets?
 
@@ -33,54 +33,54 @@ The curated value is measured over a 55.6 km window centred on the target; the g
 | moon-marius-hills | 15.00 N, 57.00 W (28.4 km) | tempMean | -54.6 | -54.86 | 0.02 |
 | moon-marius-hills | 15.00 N, 57.00 W (28.4 km) | tempRange | 297.5 | 296.45 | 0.21 |
 | moon-marius-hills | 15.00 N, 57.00 W (28.4 km) | lithology | 2 | no value | n/a |
-| mars-jezero | grid not loaded | slope | 2.63 | no value | n/a |
-| mars-jezero | grid not loaded | roughness | 287.4 | no value | n/a |
-| mars-jezero | grid not loaded | tempMean | -56.6 | no value | n/a |
-| mars-jezero | grid not loaded | tempRange | 48.8 | no value | n/a |
-| mars-jezero | grid not loaded | lithology | 2 | no value | n/a |
-| mars-gale | grid not loaded | slope | 6.11 | no value | n/a |
-| mars-gale | grid not loaded | roughness | 1262.8 | no value | n/a |
-| mars-gale | grid not loaded | tempMean | -57.7 | no value | n/a |
-| mars-gale | grid not loaded | tempRange | 62.1 | no value | n/a |
-| mars-gale | grid not loaded | lithology | 3 | no value | n/a |
-| mars-arcadia-planitia | grid not loaded | slope | 0.27 | no value | n/a |
-| mars-arcadia-planitia | grid not loaded | roughness | 16.8 | no value | n/a |
-| mars-arcadia-planitia | grid not loaded | tempMean | -74.5 | no value | n/a |
-| mars-arcadia-planitia | grid not loaded | tempRange | 53.2 | no value | n/a |
-| mars-arcadia-planitia | grid not loaded | lithology | no value | no value | n/a |
+| mars-jezero | 18.50 N, 77.50 E (4.5 km) | slope | 2.63 | 2.39 | 0.18 |
+| mars-jezero | 18.50 N, 77.50 E (4.5 km) | roughness | 287.4 | 284.2 | 0.02 |
+| mars-jezero | 18.50 N, 77.50 E (4.5 km) | tempMean | -56.6 | -56.89 | 0.02 |
+| mars-jezero | 18.50 N, 77.50 E (4.5 km) | tempRange | 48.8 | 48.23 | 0.11 |
+| mars-jezero | 18.50 N, 77.50 E (4.5 km) | lithology | 2 | no value | n/a |
+| mars-gale | 4.50 S, 137.50 E (8.4 km) | slope | 6.11 | 6.4 | 0.09 |
+| mars-gale | 4.50 S, 137.50 E (8.4 km) | roughness | 1262.8 | 1145.1 | 0.19 |
+| mars-gale | 4.50 S, 137.50 E (8.4 km) | tempMean | -57.7 | -59.33 | 0.11 |
+| mars-gale | 4.50 S, 137.50 E (8.4 km) | tempRange | 62.1 | 54.65 | 1.49 |
+| mars-gale | 4.50 S, 137.50 E (8.4 km) | lithology | 3 | no value | n/a |
+| mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | slope | 0.27 | 0.29 | 0.02 |
+| mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | roughness | 16.8 | 18.5 | 0.03 |
+| mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | tempMean | -74.5 | -75.48 | 0.07 |
+| mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | tempRange | 53.2 | 50.35 | 0.57 |
+| mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | lithology | no value | 2 | n/a |
 
-More than one tolerance apart, or a different rock class: moon-malapert-massif tempMean: curated -159.5, grid -141.83.
+More than one tolerance apart, or a different rock class: moon-malapert-massif tempMean: curated -159.5, grid -141.83; mars-gale tempRange: curated 62.1, grid 54.65.
 
 ## 2. What a user gets for each named place
 
-66 named places. By origin: 18 none, 12 curated, 36 grid. By confidence: 32 low, 4 high, 30 medium. Missing factors: tempMean at 28, tempRange at 35, slope at 18, roughness at 18, lithology at 26.
+66 named places. By origin: 54 grid, 12 curated. By confidence: 28 low, 4 high, 34 medium. Missing factors: lithology at 22, tempRange at 17, tempMean at 10.
 
 Places with no temperature value: 10. Their scores leave temperature out, run much higher, and are marked "not comparable" below.
 
 | Place | Body | Profile from | Confidence | Missing | Best-ranked Earth cell | Score |
 | --- | --- | --- | --- | --- | --- | --- |
-| Deuteronilus Mensae exploration zone (DBDM EZ) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Mawrth Vallis (ExoMars candidate landing site) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
+| Deuteronilus Mensae exploration zone (DBDM EZ) | mars | grid cell 39.50 N, 23.50 E | low | lithology | 35.75 N, 83.75 E | 60.1 |
+| Mawrth Vallis (ExoMars candidate landing site) | mars | grid cell 22.50 N, 17.50 W | low | lithology | 37.25 N, 88.25 E | 55.0 |
 | Midway (Mars 2020 finalist) | mars | curated target mars-jezero | high | none | 34.75 N, 84.75 E | 55.5 |
-| Northeast Syrtis Major (Mars 2020 finalist) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Oxia Planum (ExoMars Rosalind Franklin landing site) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
+| Northeast Syrtis Major (Mars 2020 finalist) | mars | grid cell 17.50 N, 77.50 E | low | lithology | 35.25 N, 80.25 E | 55.5 |
+| Oxia Planum (ExoMars Rosalind Franklin landing site) | mars | grid cell 18.50 N, 24.50 W | low | lithology | 35.25 N, 85.25 E | 53.5 |
 | Starship candidate: Arcadia Planitia AP-1 | mars | curated target mars-arcadia-planitia | medium | lithology | 35.25 N, 85.25 E | 51.5 |
-| Starship candidate: Arcadia Planitia AP-8 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Starship candidate: Arcadia Planitia AP-9 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Starship candidate: Erebus Montes EM-15 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Starship candidate: Erebus Montes EM-16 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Starship candidate: Phlegra Montes PM-1 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Starship candidate: Phlegra Montes PM-7 | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Viking 1 Lander (Chryse Planitia) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Viking 2 Lander (Utopia Planitia) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Mars Pathfinder (Ares Vallis) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Spirit landing site (Gusev crater) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Opportunity landing site (Meridiani) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
-| Phoenix (north polar plains) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
+| Starship candidate: Arcadia Planitia AP-8 | mars | grid cell 40.50 N, 158.50 W | medium | none | 35.75 N, 86.25 E | 45.3 |
+| Starship candidate: Arcadia Planitia AP-9 | mars | grid cell 40.50 N, 156.50 W | medium | none | 35.75 N, 86.25 E | 47.5 |
+| Starship candidate: Erebus Montes EM-15 | mars | grid cell 39.50 N, 164.50 W | low | lithology | 35.25 N, 82.75 E | 60.7 |
+| Starship candidate: Erebus Montes EM-16 | mars | grid cell 39.50 N, 167.50 W | medium | none | 35.75 N, 86.25 E | 51.1 |
+| Starship candidate: Phlegra Montes PM-1 | mars | grid cell 35.50 N, 163.50 E | low | lithology | 34.75 N, 79.25 E | 59.0 |
+| Starship candidate: Phlegra Montes PM-7 | mars | grid cell 36.50 N, 162.50 E | low | lithology | 35.25 N, 80.25 E | 57.8 |
+| Viking 1 Lander (Chryse Planitia) | mars | grid cell 22.50 N, 47.50 W | low | lithology | 35.25 N, 85.25 E | 51.4 |
+| Viking 2 Lander (Utopia Planitia) | mars | grid cell 47.50 N, 134.50 E | low | lithology | 35.25 N, 85.25 E | 53.9 |
+| Mars Pathfinder (Ares Vallis) | mars | grid cell 19.50 N, 33.50 W | low | lithology | 35.25 N, 85.25 E | 52.3 |
+| Spirit landing site (Gusev crater) | mars | grid cell 14.50 S, 175.50 E | medium | none | 35.75 N, 86.25 E | 48.3 |
+| Opportunity landing site (Meridiani) | mars | grid cell 1.50 S, 5.50 W | low | lithology | 35.25 N, 85.25 E | 49.0 |
+| Phoenix (north polar plains) | mars | grid cell 68.50 N, 125.50 W | low | lithology | 72.25 N, 115.25 W | 45.5 |
 | Curiosity (Bradbury Landing, Gale crater) | mars | curated target mars-gale | high | none | 35.25 N, 80.25 E | 51.8 |
-| InSight (Elysium Planitia) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
+| InSight (Elysium Planitia) | mars | grid cell 4.50 N, 135.50 E | low | lithology | 35.25 N, 85.25 E | 49.4 |
 | Perseverance (Octavia E. Butler Landing, Jezero crater) | mars | curated target mars-jezero | high | none | 34.75 N, 84.75 E | 55.5 |
-| Zhurong (Tianwen-1, southern Utopia Planitia) | mars | no data | low | tempMean, tempRange, slope, roughness, lithology | no score |  |
+| Zhurong (Tianwen-1, southern Utopia Planitia) | mars | grid cell 25.50 N, 109.50 E | low | lithology | 35.25 N, 85.25 E | 55.0 |
 | Artemis III candidate: Haworth | moon | grid cell 87.00 S, 23.00 W | low | lithology | 82.25 N, 68.25 W | 39.5 |
 | Artemis III candidate: Malapert Massif | moon | curated target moon-malapert-massif | medium | tempRange | 82.25 N, 82.75 W | 53.0 |
 | Artemis III candidate: Mons Mouton Plateau | moon | curated target moon-mons-mouton | medium | tempRange | 82.75 N, 77.25 W | 51.1 |

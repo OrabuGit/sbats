@@ -20,6 +20,10 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **It finds new places.** For each target, 4 to 6 of its eight best-ranked places are more than
   500 km from every known analog we listed: high, cold desert around 35 N, 85 E for Mars and Marius
   Hills, and the far north of the Canadian Arctic for the lunar poles.
+- **Any point on the Moon or Mars can be a target, and the grid agrees with our measured targets.** At the
+  eight curated targets the grid cell's slope, roughness and temperature are within one tolerance of the
+  curated values, with two explained exceptions. All 66 named places (landing sites, candidate regions) get a
+  target profile; a grid profile is never high confidence.
 - **Measured at the site, known analogs score very high.** From a 5 km footprint, Mauna Kea, Atacama,
   Haughton and Lanzarote reach 95 to 98 out of 100 for rover mobility against their best target.
 
@@ -43,6 +47,9 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
   against 0.45) and fall far short on bare ground (0.01 against 0.70).
 - **Tambora is not a Shackleton.** Same steepness (21 and 22 degrees), about a third of the size
   (roughly 7 against 21 km wide, 1.3 against 4.1 km deep).
+- **Ten lunar landing sites have no temperature in the grid** (Apollo 11, 16 and 17 among them). Their scores
+  leave temperature out and jump to about 95. They are flagged "not comparable" and must not be ranked
+  beside other targets.
 - **It cannot see** caves, lava tubes, lake chemistry, ground ice, gravity, vacuum or radiation.
   Minerals are seen only from orbit, as families: olivine and pyroxene were found at no site.
 
@@ -87,5 +94,5 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 
 Detail: `output/REPORT.md`, `tuning/FROZEN.md`, `output/PURPOSES.md`, `purposes/GEOLOGY.md`,
 `sites/FINDINGS.md`, `MOON.md`, `output/DISCOVERIES.md`, `output/MINERALS.md`, `output/BENCHMARKS.md`,
-`output/STABILITY.md`,
+`output/STABILITY.md`, `output/GRID_CHECK.md`,
 `../data/REVIEW_ME.md`.

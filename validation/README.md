@@ -92,6 +92,9 @@ Both read the frozen values and change nothing.
   app's rules for spacing and for "new", and the best cells of the Indonesian region (`data/discoveries.json`,
   `output/DISCOVERIES.md`). `npx tsx validation/stability.ts` writes `output/STABILITY.md`. `MOON.md` explains why
   known lunar analogs rank lower than Mars analogs.
+- `npx tsx validation/grid_check.ts` checks "targets from anywhere" on Session B's Moon and Mars grids: how far
+  each grid cell is from the curated target inside it, what profile every named place gets, and its best-ranked
+  Earth cells (`output/GRID_CHECK.md`, `data/place_matches.json`).
 - `npx tsx validation/minerals.ts` lists which mineral families each site shares with each target
   (`output/MINERALS.md`). Site-level only, added after the freeze.
 - `SUMMARY.md` is the one-page plain-language account of all of it.

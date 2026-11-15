@@ -46,6 +46,7 @@ npx tsx validation/minerals.ts > /dev/null
 npx tsx validation/stability.ts > /dev/null
 npx tsx validation/discoveries.ts > /dev/null
 npx tsx validation/benchmarks.ts > /dev/null
+npx tsx validation/grid_check.ts > /dev/null
 
 # Tests
 npx tsx --test app/src/lib/scoring/__tests__/*.test.ts app/src/lib/sim/__tests__/*.test.ts \

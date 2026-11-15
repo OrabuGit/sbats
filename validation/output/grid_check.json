@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T06:47:43.829Z",
+ "generatedAt": "2026-11-15T06:48:22.482Z",
  "agreement": [
   {
    "target": "moon-malapert-massif",
@@ -264,39 +264,43 @@
   {
    "target": "mars-jezero",
    "body": "mars",
-   "gridLoaded": false,
-   "cell": null,
+   "gridLoaded": true,
+   "cell": {
+    "lat": 18.5,
+    "lon": 77.5,
+    "distanceKm": 4.5
+   },
    "rows": [
     {
      "key": "slope",
      "curated": 2.63,
-     "grid": null,
+     "grid": 2.39,
      "sigma": 1.31,
-     "sigmasApart": null,
+     "sigmasApart": 0.18,
      "same": null
     },
     {
      "key": "roughness",
      "curated": 287.4,
-     "grid": null,
+     "grid": 284.2,
      "sigma": 143.7,
-     "sigmasApart": null,
+     "sigmasApart": 0.02,
      "same": null
     },
     {
      "key": "tempMean",
      "curated": -56.6,
-     "grid": null,
+     "grid": -56.89,
      "sigma": 15,
-     "sigmasApart": null,
+     "sigmasApart": 0.02,
      "same": null
     },
     {
      "key": "tempRange",
      "curated": 48.8,
-     "grid": null,
+     "grid": 48.23,
      "sigma": 5,
-     "sigmasApart": null,
+     "sigmasApart": 0.11,
      "same": null
     },
     {
@@ -312,39 +316,43 @@
   {
    "target": "mars-gale",
    "body": "mars",
-   "gridLoaded": false,
-   "cell": null,
+   "gridLoaded": true,
+   "cell": {
+    "lat": -4.5,
+    "lon": 137.5,
+    "distanceKm": 8.4
+   },
    "rows": [
     {
      "key": "slope",
      "curated": 6.11,
-     "grid": null,
+     "grid": 6.4,
      "sigma": 3.06,
-     "sigmasApart": null,
+     "sigmasApart": 0.09,
      "same": null
     },
     {
      "key": "roughness",
      "curated": 1262.8,
-     "grid": null,
+     "grid": 1145.1,
      "sigma": 631.4,
-     "sigmasApart": null,
+     "sigmasApart": 0.19,
      "same": null
     },
     {
      "key": "tempMean",
      "curated": -57.7,
-     "grid": null,
+     "grid": -59.33,
      "sigma": 15,
-     "sigmasApart": null,
+     "sigmasApart": 0.11,
      "same": null
     },
     {
      "key": "tempRange",
      "curated": 62.1,
-     "grid": null,
+     "grid": 54.65,
      "sigma": 5,
-     "sigmasApart": null,
+     "sigmasApart": 1.49,
      "same": null
     },
     {
@@ -360,45 +368,49 @@
   {
    "target": "mars-arcadia-planitia",
    "body": "mars",
-   "gridLoaded": false,
-   "cell": null,
+   "gridLoaded": true,
+   "cell": {
+    "lat": 39.5,
+    "lon": -157.5,
+    "distanceKm": 25.4
+   },
    "rows": [
     {
      "key": "slope",
      "curated": 0.27,
-     "grid": null,
+     "grid": 0.29,
      "sigma": 1,
-     "sigmasApart": null,
+     "sigmasApart": 0.02,
      "same": null
     },
     {
      "key": "roughness",
      "curated": 16.8,
-     "grid": null,
+     "grid": 18.5,
      "sigma": 50,
-     "sigmasApart": null,
+     "sigmasApart": 0.03,
      "same": null
     },
     {
      "key": "tempMean",
      "curated": -74.5,
-     "grid": null,
+     "grid": -75.48,
      "sigma": 15,
-     "sigmasApart": null,
+     "sigmasApart": 0.07,
      "same": null
     },
     {
      "key": "tempRange",
      "curated": 53.2,
-     "grid": null,
+     "grid": 50.35,
      "sigma": 5,
-     "sigmasApart": null,
+     "sigmasApart": 0.57,
      "same": null
     },
     {
      "key": "lithology",
      "curated": null,
-     "grid": null,
+     "grid": 2,
      "sigma": null,
      "sigmasApart": null,
      "same": null
@@ -409,21 +421,18 @@
  "coverage": {
   "places": 66,
   "byOrigin": {
-   "none": 18,
-   "curated": 12,
-   "grid": 36
+   "grid": 54,
+   "curated": 12
   },
   "byConfidence": {
-   "low": 32,
+   "low": 28,
    "high": 4,
-   "medium": 30
+   "medium": 34
   },
   "missing": {
-   "tempMean": 28,
-   "tempRange": 35,
-   "slope": 18,
-   "roughness": 18,
-   "lithology": 26
+   "lithology": 22,
+   "tempRange": 17,
+   "tempMean": 10
   },
   "byBody": {
    "moon": {
@@ -431,7 +440,7 @@
     "curated": 8
    },
    "mars": {
-    "none": 18,
+    "grid": 18,
     "curated": 4
    }
   }
