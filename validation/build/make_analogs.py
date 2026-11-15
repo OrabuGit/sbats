@@ -115,12 +115,12 @@ CANDIDATE = [
      "UNESCO Global Geoparks, 'Maros Pangkep', unesco.org/en/iggp/geoparks/maros-pangkep (572 caves)",
      "Limestone karst, not a lava tube. Listed as a verified cave system only. No source links it to planetary research. analogFor is empty."),
     # Added 2026-11-15. Proposed by a team member and measured at site scale by Session B (data/sites.json).
-    # Ids, names and coordinates are Session B's (pipeline/sites.py, decisions/B.md), so the two files agree.
+    # Ids, names and coordinates are the pipeline's (pipeline/sites.py), so the two files agree.
     ("id-tambora-caldera", "Mount Tambora caldera, Sumbawa, Indonesia", -8.2438, 117.9918, [],
-     "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced by Session B on Copernicus DEM GLO-30 (decisions/B.md)",
+     "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced on the Copernicus DEM GLO-30 elevation model",
      "Proposed by a team member as an Earth counterpart to a deep polar crater such as Shackleton. No source links it to planetary research: the analog idea is SBATS's own, so analogFor is empty. Shackleton is 21 km wide and 4.1 km deep (Zuber et al. 2012, Nature), about three times Tambora in both directions: see validation/sites/FINDINGS.md."),
     ("id-batur-lava-fields", "Mount Batur black lava fields, Bali, Indonesia", -8.2556, 115.3628, [],
-     "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL, read by Session B (decisions/B.md)",
+     "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL",
      "Proposed by a team member as a young lava field to set beside Marius Hills. No source links it to planetary research: the analog idea is SBATS's own, so analogFor is empty. The Kesaksak lava tube entry above is in the same caldera."),
 ]
 
@@ -222,6 +222,70 @@ USED_FOR = {
 }
 
 
+# --------------------------------------------------------------------------------------------
+# The process each candidate site stands for (added 2026-11-15), one sentence each, resting on the
+# sources already cited for the site. `links` name the target process it could stand in for, with the
+# source for the target side. Where the process differs from the target's, that is said.
+# --------------------------------------------------------------------------------------------
+KAKU = "Kaku et al. 2017, Geophysical Research Letters 44:10155, doi:10.1002/2017GL074998"
+FARLEY = "Farley et al. 2022, Science 377:eabo2196"
+RAMPE = "Rampe et al. 2020, Geochemistry 80:125605"
+ZUBER = "Zuber et al. 2012, Nature 486:378"
+PROCESS = {
+    "id-kawah-ijen": {
+        "text": "Acid-sulfate alteration: a crater lake with a pH below 0.3 alters the volcanic rock around it.",
+        "source": "Loehr et al. 2005, doi:10.1065/espr2004.09.118 (lake pH); Rodriguez and van Bergen 2016, doi:10.1017/njg.2015.12 (hyperacid volcanic lakes as analogues of Martian sulphate-rich terrains)",
+        "links": [{"target": "mars-gale", "text": "Gale's lake mudstones hold jarosite, an iron sulfate, measured by Curiosity.", "source": f"{RAMPE}, Table 2"}],
+        "differs": "Kawah Ijen is an active, hot, wet system today. Gale's lake is ancient and long dry.",
+    },
+    "id-merapi": {
+        "text": "Volcanic sediment carried and sorted by rivers: the minerals of Merapi's river sediments were compared with rocks at Gale crater.",
+        "source": "Argadestya et al. 2022, Earth and Space Science 9(11), doi:10.1029/2022EA002279",
+        "links": [{"target": "mars-gale", "text": "Gale's sandstones and mudstones are made of basaltic grains laid down by water.", "source": "Grotzinger et al. 2014, Science 343:1242777"}],
+        "differs": "The study is about river sediments below the volcano, not the summit that the footprint covers.",
+    },
+    "id-gua-lawa": {
+        "text": "Lava tube formation: a cave left behind by flowing basalt lava.",
+        "source": "Widagdo and Setijadi 2007, Dinamika Rekayasa 3(2):57-60; Siswandi et al. 2024, doi:10.20884/2.procicma.2024.3.1.10237 (basalt, SiO2 50.5 to 51.4 percent)",
+        "links": [{"target": "moon-marius-hills", "text": "Radar found echo patterns that fit intact lava tubes at Marius Hills.", "source": KAKU}],
+        "differs": "A lunar tube formed in one sixth of Earth's gravity. Its size at Marius Hills has not been measured.",
+    },
+    "id-goa-pandan": {
+        "text": "A cave in basalt lava.",
+        "source": "Al Farishi et al. 2024, doi:10.25299/jgeet.2024.9.2.16848; Sirait et al. 2023, doi:10.25299/jgeet.2023.8.2.12118",
+        "links": [{"target": "moon-marius-hills", "text": "Radar found echo patterns that fit intact lava tubes at Marius Hills.", "source": KAKU}],
+        "differs": "The coordinates are those of the village, not the cave entrance.",
+    },
+    "id-kesaksak-lava-tube": {
+        "text": "Lava tube formation: a tube in the basaltic lava flow that Batur erupted in 1888.",
+        "source": "Agastya et al. 2023, Jurnal Geominerba 8(1):44-61, doi:10.58522/ppsdm22.v8i1.134",
+        "links": [{"target": "moon-marius-hills", "text": "Radar found echo patterns that fit intact lava tubes at Marius Hills.", "source": KAKU}],
+        "differs": "The tube's position inside the caldera is not published, so the footprint is centred on the volcano.",
+    },
+    "id-maros-pangkep-karst": {
+        "text": "Karst: caves formed in limestone.",
+        "source": "UNESCO Global Geoparks, 'Maros Pangkep' (572 caves)",
+        "links": [],
+        "differs": "Limestone caves form by water dissolving rock. No cave on the Moon or Mars targets listed here is known to have formed that way: this site is a cave-operations place, not a geological analog.",
+    },
+    "id-tambora-caldera": {
+        "text": "Caldera collapse: the 1815 eruption left a caldera 6 km wide and 1,250 m deep.",
+        "source": "Smithsonian GVP volcano 264040",
+        "links": [{"target": "moon-shackleton-rim", "text": "Shackleton is a crater 21 km wide and 4.1 km deep with steep walls.", "source": ZUBER}],
+        "differs": "Shackleton is an impact crater; Tambora collapsed after an eruption. The shapes are alike, the process is not, and Tambora is about a third of the size.",
+    },
+    "id-batur-lava-fields": {
+        "text": "Basaltic lava flows: lava from summit and flank vents has reached the caldera floor in historical time.",
+        "source": "Smithsonian GVP volcano 264010",
+        "links": [
+            {"target": "moon-marius-hills", "text": "Marius Hills is a field of mare basalt domes and flows.", "source": "Besse et al. 2011, JGR 116:E00G13; Lawrence et al. 2013, JGR Planets 118:615"},
+            {"target": "mars-jezero", "text": "The floor of Jezero that Perseverance landed on is igneous, with lava flows.", "source": FARLEY},
+        ],
+        "differs": "The lava is young and already carries moss and grass: only 8% of the footprint reads as bare. The target surfaces are bare.",
+    },
+}
+
+
 def entry(id_, name, lat, lon, kind, analog_for, source, note):
     e = {"id": id_, "name": name, "lat": lat, "lon": lon, "kind": kind, "analogFor": analog_for, "source": source}
     if note:
@@ -231,6 +295,9 @@ def entry(id_, name, lat, lon, kind, analog_for, source, note):
         e["usedFor"] = list(uses)
         e["usedForPrimary"] = primary
         e["usedForSource"] = uses
+    if kind == "candidate":
+        assert id_ in PROCESS, f"candidate {id_} needs a process statement"
+        e["process"] = PROCESS[id_]
     return e
 
 

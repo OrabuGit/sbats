@@ -37,6 +37,19 @@ const sitesFile = readJson<SitesFile>(join(DATA, 'sites.json'));
 const windows = readJson<TargetWindowsFile>(join(DATA, 'target_windows.json'));
 const mineralsPath = join(DATA, 'target_minerals.json');
 const minerals = existsSync(mineralsPath) ? readJson<TargetMineralsFile>(mineralsPath) : null;
+interface RoversFile {
+  rovers: { id: string; name: string; body: string; slopeLimit: { value: number; kind: string; source: string } | null }[];
+}
+const roversPath = join(DATA, 'rovers.json');
+const rovers = existsSync(roversPath) ? readJson<RoversFile>(roversPath) : null;
+interface AnalogProcess {
+  text: string;
+  source: string;
+  links: { target: string; text: string; source: string }[];
+  differs: string;
+}
+const processOf = new Map<string, AnalogProcess>();
+for (const a of readJson<{ id: string; process?: AnalogProcess }[]>(join(DATA, 'analogs.json'))) if (a.process) processOf.set(a.id, a.process);
 const classes = data.earth.meta.factors.find((f) => f.key === 'lithology')?.classes ?? [];
 const meta = data.earth.meta as unknown as Parameters<typeof earthPlaceFromCell>[1];
 
@@ -89,6 +102,12 @@ interface SiteRow {
   summary: Record<PurposeId, { best: number | null; bestTarget: string | null; median: number | null }>;
   /** Per dimension: mean similarity over all targets, at site scale. */
   dimensionMean: Record<DimensionId, number | null>;
+  /** The process the site stands for, with its source (candidates only; from data/analogs.json). */
+  process: AnalogProcess | null;
+  /** What a mission team could test here: each sentence is built from measured values named in `basis`. */
+  couldTest: { text: string; basis: string }[];
+  /** What a rehearsal here cannot test, from the same values. */
+  cannotTest: { text: string; basis: string }[];
 }
 
 function side(record: MatchRecord, sorted: Float64Array): Side {
@@ -157,7 +176,67 @@ for (const s of sitesFile.sites) {
     const v = results.map((r) => r.site.dimensions[d.id].similarity).filter((x): x is number => x !== null);
     dimensionMean[d.id] = v.length > 0 ? r3(v.reduce((a, b) => a + b, 0) / v.length) : null;
   }
+  // What a team could test here, and could not. Every sentence comes from a measured value and a stated rule.
+  const couldTest: SiteRow['couldTest'] = [];
+  const cannotTest: SiteRow['cannotTest'] = [];
+  const join = (items: string[]): string => (items.length <= 1 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1] ?? ''}`);
+  const names = (ids: string[]): string => join(ids.map((id) => data.targets.find((t) => t.id === id)?.name ?? id));
+  const shortName = (name: string): string => name.split(' (')[0] as string;
+  const fine = s.values.slopeFine;
+  const fineSlope = fine && typeof fine.value === 'number' ? fine.value : null;
+  if (fineSlope !== null && rovers) {
+    const limits = rovers.rovers.filter((r) => r.slopeLimit).map((r) => ({ name: shortName(r.name), deg: (r.slopeLimit as { value: number }).value }));
+    const above = limits.filter((l) => fineSlope > l.deg);
+    const below = limits.filter((l) => fineSlope <= l.deg);
+    if (above.length > 0 && below.length === 0) {
+      couldTest.push({
+        text: `Foot traverses on very steep ground, not rover driving: the mean slope is ${fineSlope.toFixed(0)} degrees on 31 m posts, above the published slope limit of every rover listed (${Math.min(...limits.map((l) => l.deg))} to ${Math.max(...limits.map((l) => l.deg))} degrees).`,
+        basis: 'data/sites.json slopeFine; data/rovers.json slopeLimit',
+      });
+    } else if (above.length > 0) {
+      couldTest.push({
+        text: `Driving and walking on steep ground: the mean slope is ${fineSlope.toFixed(0)} degrees on 31 m posts, above the published slope limit of ${join(above.map((l) => `${l.name} (${l.deg})`))}${below.length > 0 ? `, and within that of ${join(below.map((l) => `${l.name} (${l.deg})`))}` : ''}.`,
+        basis: 'data/sites.json slopeFine; data/rovers.json slopeLimit',
+      });
+    } else {
+      couldTest.push({ text: `Routine traverses: the mean slope is ${fineSlope.toFixed(0)} degrees on 31 m posts, within the published slope limit of every rover listed (${Math.min(...limits.map((l) => l.deg))} degrees and up).`, basis: 'data/sites.json slopeFine; data/rovers.json slopeLimit' });
+    }
+  }
+  const sameRock = results.filter((r) => r.site.dimensions.geology.verdict === 'matches').map((r) => r.target);
+  const relatedRock = results.filter((r) => r.site.dimensions.geology.verdict === 'partly').map((r) => r.target);
+  if (sameRock.length > 0) couldTest.push({ text: `Sampling and instrument work on the same class of rock as ${names(sameRock)}${sitePlace.rockName ? ` (${sitePlace.rockName.toLowerCase()})` : ''}.`, basis: 'data/sites.json rockType and lithology; data/targets.json lithology; data/lithology_similarity.json' });
+  else if (relatedRock.length > 0) couldTest.push({ text: `Sampling and instrument work on a rock class related to that of ${names(relatedRock)}${sitePlace.rockName ? ` (${sitePlace.rockName.toLowerCase()})` : ''}: related, not the same.`, basis: 'data/sites.json rockType and lithology; data/targets.json lithology; data/lithology_similarity.json' });
+  const terrainMatch = results.filter((r) => r.site.terrainLikeForLike && r.site.dimensions.terrain.verdict === 'matches').map((r) => r.target);
+  if (terrainMatch.length > 0) couldTest.push({ text: `Route planning on slopes and relief close to those of ${names(terrainMatch)}, measured in a window of the same size.`, basis: 'data/sites.json slope and roughness; data/target_windows.json' });
+  const mineralHits = results.filter((r) => r.site.minerals && r.site.minerals.shared.length > 0).sort((a, b) => (b.site.minerals?.shared.length ?? 0) - (a.site.minerals?.shared.length ?? 0));
+  const bestMinerals = mineralHits[0];
+  if (bestMinerals?.site.minerals) {
+    couldTest.push({
+      text: `Checking mineral identifications made from orbit against samples on the ground: NASA's EMIT instrument identifies ${join(bestMinerals.site.minerals.shared.map((x) => (x.split(' (')[0] as string).toLowerCase()))} here, ${bestMinerals.site.minerals.shared.length === 1 ? 'a mineral family' : 'mineral families'} also reported at ${names([bestMinerals.target])}.`,
+      basis: 'data/sites.json mineralogy (EMIT); data/target_minerals.json',
+    });
+  }
+  if (sitePlace.bareShare !== null && sitePlace.bareShare >= 0.2 && sitePlace.bareShare < 0.9) couldTest.push({ text: `${Math.round(sitePlace.bareShare * 100)}% of the footprint is bare ground: a rehearsal has to be laid out inside that part.`, basis: 'data/sites.json bareFrac' });
+
+  const t = sitePlace.cell.tempMean;
+  const rain = sitePlace.cell.precip;
+  const climateMean = dimensionMean.climate;
+  if (climateMean !== null && climateMean < 0.3 && t !== null && rain !== null) {
+    // 250 mm a year is the dryness tolerance of the frozen score (the arid limit): wetter than that is not a dry site.
+    const wet = rain > 250;
+    cannotTest.push({
+      text: wet
+        ? `Cold, dryness and thermal design: the surrounding cell averages ${t.toFixed(0)} C with ${Math.round(rain).toLocaleString('en-US')} mm of rain a year. No target here has rain, and all are far colder.`
+        : `Cold and thermal design: the surrounding cell averages ${t.toFixed(0)} C. Every target here is far colder. It is dry, with ${Math.round(rain).toLocaleString('en-US')} mm of rain a year.`,
+      basis: 'data/earth.json tempMean and precip (0.5 degree cell)',
+    });
+  }
+  if (sitePlace.bareShare !== null && sitePlace.bareShare < 0.2) cannotTest.push({ text: `Open-ground operations over the whole site: ${sitePlace.bareShare < 0.01 ? 'almost none' : `only ${Math.round(sitePlace.bareShare * 100)}%`} of the footprint is bare; the rest is vegetated.`, basis: 'data/sites.json bareFrac' });
+  if (results.every((r) => r.site.dimensions.geology.verdict !== 'matches' && r.site.dimensions.geology.verdict !== 'partly') && sitePlace.cell.lithology !== null) cannotTest.push({ text: 'Rock-specific instrument tests: the rock class is unrelated to that of every target.', basis: 'data/sites.json lithology; data/lithology_similarity.json' });
+  cannotTest.push({ text: 'Gravity, vacuum or thin air, and radiation: no place on Earth can.', basis: 'data/targets.json cannotCopy' });
+
   rows.push({
+    process: processOf.get(s.id) ?? null, couldTest, cannotTest,
     id: s.id, name: s.name, kind: s.kind, lat: s.lat, lon: s.lon, footprintKm: s.footprintKm,
     provisional: s.footprintStatus === 'provisional', rockName: sitePlace.rockName, bareShare: sitePlace.bareShare, caveat: s.caveat ?? null,
     mineralsIdentified: earthMinerals ? earthMinerals.families.map((f) => f.label) : null,
@@ -226,7 +305,21 @@ md.push(`| --- | --- | ${DIMENSIONS.map(() => '---').join(' | ')} | ${PURPOSES.m
 for (const r of [...rows].sort((a, b) => a.kind.localeCompare(b.kind) || a.name.localeCompare(b.name))) {
   md.push(`| ${r.name}${r.provisional ? ' (provisional footprint)' : ''} | ${r.kind} | ${DIMENSIONS.map((d) => f2(r.dimensionMean[d.id])).join(' | ')} | ${PURPOSES.map((p) => `${f1(r.summary[p.id].best)} / ${f1(r.summary[p.id].median)}`).join(' | ')} | ${r.mineralsIdentified === null ? 'no EMIT data' : r.mineralsIdentified.join(', ') || 'none'} |`);
 }
-md.push('');
+md.push('', '## What a team could test at each candidate site', '');
+md.push('Each sentence is built by a fixed rule from measured values (slope against published rover limits, rock class, same-window terrain, minerals seen from orbit, bare share, the cell\'s climate). The process line is from the cited literature (data/analogs.json).', '');
+for (const r of rows.filter((x) => x.kind === 'candidate')) {
+  md.push(`### ${r.name}`, '');
+  if (r.process) {
+    md.push(`Process: ${r.process.text} (${r.process.source})`, '');
+    for (const l of r.process.links) md.push(`- Link to ${data.targets.find((t) => t.id === l.target)?.name ?? l.target}: ${l.text} (${l.source})`);
+    md.push(`- Where the analogy breaks: ${r.process.differs}`, '');
+  }
+  md.push('Could test:', '');
+  for (const t of r.couldTest) md.push(`- ${t.text}`);
+  md.push('', 'Could not test:', '');
+  for (const t of r.cannotTest) md.push(`- ${t.text}`);
+  md.push('');
+}
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'BENCHMARKS.md'), `${md.join('\n')}\n`);
 console.log(`Benchmarks: ${rows.length} sites x ${data.targets.length} targets. Minerals included: ${minerals !== null}.`);

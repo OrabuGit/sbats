@@ -1,6 +1,6 @@
 # Benchmarks: established analogs and our candidates, scored the same way
 
-Written 2026-11-15T05:55:25.003Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
+Written 2026-11-15T06:01:50.572Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
 
 - One procedure for every site: site-scale terrain, vegetation and rock; the 0.5 degree cell's temperature and rainfall; the target's terrain measured in a window of the site's size.
 - "Best" is the best of all targets, chosen after the fact, and flatters. "Median" is the typical target.
@@ -51,4 +51,159 @@ Purpose scores, 0 to 100, mean over sites of the typical (median) target and of 
 | Salar de Uyuni salt flat, Bolivia (provisional footprint) | known | n/a | n/a | 0.07 | 0.95 | 0.41 | n/a / n/a | n/a / n/a | 16.9 / 16.7 | 23.7 / 21.2 | 30.1 / 29.8 | no EMIT data |
 | Timanfaya, Lanzarote, Spain | known | 0.65 | 0.54 | 0.01 | 0.95 | 0.37 | 100.0 / 60.0 | 96.2 / 70.4 | 8.3 / 3.2 | 16.7 / 14.5 | 22.6 / 15.3 | no EMIT data |
 | Tunupa volcano, north shore of Salar de Uyuni, Bolivia (provisional footprint) | known | n/a | 0.12 | 0.06 | 0.77 | 0.42 | n/a / n/a | 86.6 / 0.1 | 14.9 / 14.7 | 19.6 / 17.3 | 11.6 / 0.1 | Hematite, Goethite, Kaolinite, Calcium carbonate (calcite, aragonite, dolomite) |
+
+## What a team could test at each candidate site
+
+Each sentence is built by a fixed rule from measured values (slope against published rover limits, rock class, same-window terrain, minerals seen from orbit, bare share, the cell's climate). The process line is from the cited literature (data/analogs.json).
+
+### Kawah Ijen, East Java, Indonesia
+
+Process: Acid-sulfate alteration: a crater lake with a pH below 0.3 alters the volcanic rock around it. (Loehr et al. 2005, doi:10.1065/espr2004.09.118 (lake pH); Rodriguez and van Bergen 2016, doi:10.1017/njg.2015.12 (hyperacid volcanic lakes as analogues of Martian sulphate-rich terrains))
+
+- Link to Gale crater: Gale's lake mudstones hold jarosite, an iron sulfate, measured by Curiosity. (Rampe et al. 2020, Geochemistry 80:125605, Table 2)
+- Where the analogy breaks: Kawah Ijen is an active, hot, wet system today. Gale's lake is ancient and long dry.
+
+Could test:
+
+- Driving and walking on steep ground: the mean slope is 23 degrees on 31 m posts, above the published slope limit of VIPER (15), and within that of Perseverance (30), Curiosity (30), Spirit and Opportunity (25) and Apollo Lunar Roving Vehicle (25).
+- Sampling and instrument work on a rock class related to that of Marius Hills pit and Jezero crater (andesite / basaltic andesite): related, not the same.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 25 C with 1,655 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: only 9% of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Mount Merapi and the Opak River, Central Java, Indonesia
+
+Process: Volcanic sediment carried and sorted by rivers: the minerals of Merapi's river sediments were compared with rocks at Gale crater. (Argadestya et al. 2022, Earth and Space Science 9(11), doi:10.1029/2022EA002279)
+
+- Link to Gale crater: Gale's sandstones and mudstones are made of basaltic grains laid down by water. (Grotzinger et al. 2014, Science 343:1242777)
+- Where the analogy breaks: The study is about river sediments below the volcano, not the summit that the footprint covers.
+
+Could test:
+
+- Foot traverses on very steep ground, not rover driving: the mean slope is 31 degrees on 31 m posts, above the published slope limit of every rover listed (15 to 30 degrees).
+- Sampling and instrument work on a rock class related to that of Marius Hills pit and Jezero crater (andesite / basaltic andesite): related, not the same.
+- Checking mineral identifications made from orbit against samples on the ground: NASA's EMIT instrument identifies hematite, jarosite and smectite clay here, mineral families also reported at Gale crater.
+- 35% of the footprint is bare ground: a rehearsal has to be laid out inside that part.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 25 C with 2,338 mm of rain a year. No target here has rain, and all are far colder.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Gua Lawa lava tube, Purbalingga, Central Java, Indonesia
+
+Process: Lava tube formation: a cave left behind by flowing basalt lava. (Widagdo and Setijadi 2007, Dinamika Rekayasa 3(2):57-60; Siswandi et al. 2024, doi:10.20884/2.procicma.2024.3.1.10237 (basalt, SiO2 50.5 to 51.4 percent))
+
+- Link to Marius Hills pit: Radar found echo patterns that fit intact lava tubes at Marius Hills. (Kaku et al. 2017, Geophysical Research Letters 44:10155, doi:10.1002/2017GL074998)
+- Where the analogy breaks: A lunar tube formed in one sixth of Earth's gravity. Its size at Marius Hills has not been measured.
+
+Could test:
+
+- Routine traverses: the mean slope is 13 degrees on 31 m posts, within the published slope limit of every rover listed (15 degrees and up).
+- Sampling and instrument work on the same class of rock as Marius Hills pit and Jezero crater (basalt / picro-basalt).
+- Route planning on slopes and relief close to those of Malapert Massif and Mons Mouton, measured in a window of the same size.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 25 C with 2,403 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: only 3% of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia
+
+Process: A cave in basalt lava. (Al Farishi et al. 2024, doi:10.25299/jgeet.2024.9.2.16848; Sirait et al. 2023, doi:10.25299/jgeet.2023.8.2.12118)
+
+- Link to Marius Hills pit: Radar found echo patterns that fit intact lava tubes at Marius Hills. (Kaku et al. 2017, Geophysical Research Letters 44:10155, doi:10.1002/2017GL074998)
+- Where the analogy breaks: The coordinates are those of the village, not the cave entrance.
+
+Could test:
+
+- Routine traverses: the mean slope is 4 degrees on 31 m posts, within the published slope limit of every rover listed (15 degrees and up).
+- Sampling and instrument work on the same class of rock as Marius Hills pit and Jezero crater (basalt).
+- Route planning on slopes and relief close to those of Shackleton rim, Marius Hills pit and Jezero crater, measured in a window of the same size.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 27 C with 2,049 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: almost none of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Kesaksak lava tube, Batur caldera, Bali, Indonesia
+
+Process: Lava tube formation: a tube in the basaltic lava flow that Batur erupted in 1888. (Agastya et al. 2023, Jurnal Geominerba 8(1):44-61, doi:10.58522/ppsdm22.v8i1.134)
+
+- Link to Marius Hills pit: Radar found echo patterns that fit intact lava tubes at Marius Hills. (Kaku et al. 2017, Geophysical Research Letters 44:10155, doi:10.1002/2017GL074998)
+- Where the analogy breaks: The tube's position inside the caldera is not published, so the footprint is centred on the volcano.
+
+Could test:
+
+- Routine traverses: the mean slope is 11 degrees on 31 m posts, within the published slope limit of every rover listed (15 degrees and up).
+- Sampling and instrument work on a rock class related to that of Marius Hills pit and Jezero crater (andesite / basaltic andesite): related, not the same.
+- Route planning on slopes and relief close to those of Malapert Massif, measured in a window of the same size.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 27 C with 1,615 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: only 5% of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Maros-Pangkep karst caves, South Sulawesi, Indonesia
+
+Process: Karst: caves formed in limestone. (UNESCO Global Geoparks, 'Maros Pangkep' (572 caves))
+
+- Where the analogy breaks: Limestone caves form by water dissolving rock. No cave on the Moon or Mars targets listed here is known to have formed that way: this site is a cave-operations place, not a geological analog.
+
+Could test:
+
+- Routine traverses: the mean slope is 15 degrees on 31 m posts, within the published slope limit of every rover listed (15 degrees and up).
+- Route planning on slopes and relief close to those of Mons Mouton, Haworth and Shackleton rim, measured in a window of the same size.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 26 C with 1,939 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: almost none of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Mount Tambora caldera, Sumbawa, Indonesia
+
+Process: Caldera collapse: the 1815 eruption left a caldera 6 km wide and 1,250 m deep. (Smithsonian GVP volcano 264040)
+
+- Link to Shackleton rim: Shackleton is a crater 21 km wide and 4.1 km deep with steep walls. (Zuber et al. 2012, Nature 486:378)
+- Where the analogy breaks: Shackleton is an impact crater; Tambora collapsed after an eruption. The shapes are alike, the process is not, and Tambora is about a third of the size.
+
+Could test:
+
+- Driving and walking on steep ground: the mean slope is 26 degrees on 31 m posts, above the published slope limit of Spirit and Opportunity (25), VIPER (15) and Apollo Lunar Roving Vehicle (25), and within that of Perseverance (30) and Curiosity (30).
+- Sampling and instrument work on the same class of rock as Marius Hills pit and Jezero crater (trachybasalt / tephrite basanite).
+- Route planning on slopes and relief close to those of Malapert Massif, measured in a window of the same size.
+- Checking mineral identifications made from orbit against samples on the ground: NASA's EMIT instrument identifies hematite and smectite clay here, mineral families also reported at Gale crater.
+- 28% of the footprint is bare ground: a rehearsal has to be laid out inside that part.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 27 C with 1,282 mm of rain a year. No target here has rain, and all are far colder.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
+
+### Mount Batur black lava fields, Bali, Indonesia
+
+Process: Basaltic lava flows: lava from summit and flank vents has reached the caldera floor in historical time. (Smithsonian GVP volcano 264010)
+
+- Link to Marius Hills pit: Marius Hills is a field of mare basalt domes and flows. (Besse et al. 2011, JGR 116:E00G13; Lawrence et al. 2013, JGR Planets 118:615)
+- Link to Jezero crater: The floor of Jezero that Perseverance landed on is igneous, with lava flows. (Farley et al. 2022, Science 377:eabo2196)
+- Where the analogy breaks: The lava is young and already carries moss and grass: only 8% of the footprint reads as bare. The target surfaces are bare.
+
+Could test:
+
+- Routine traverses: the mean slope is 11 degrees on 31 m posts, within the published slope limit of every rover listed (15 degrees and up).
+- Sampling and instrument work on a rock class related to that of Marius Hills pit and Jezero crater (andesite / basaltic andesite): related, not the same.
+- Route planning on slopes and relief close to those of Malapert Massif, Mons Mouton and Shackleton rim, measured in a window of the same size.
+
+Could not test:
+
+- Cold, dryness and thermal design: the surrounding cell averages 27 C with 1,615 mm of rain a year. No target here has rain, and all are far colder.
+- Open-ground operations over the whole site: only 8% of the footprint is bare; the rest is vegetated.
+- Gravity, vacuum or thin air, and radiation: no place on Earth can.
 

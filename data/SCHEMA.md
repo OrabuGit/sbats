@@ -521,13 +521,18 @@ Built by `validation/benchmarks.ts` with `app/src/lib/match`.
                                         "minerals": { "similarity", "verdict", "shared", "targetOnly", "reason" } | null },
                               "cell": { "score", "scorePercentile", "dimensions", "purposes" } } ],
                "summary": { "<purpose>": { "best", "bestTarget", "median" } },
-               "dimensionMean": { "<dimension>": number | null } } ] }
+               "dimensionMean": { "<dimension>": number | null },
+               "process": { "text", "source", "links": [ { "target", "text", "source" } ], "differs" } | null,
+               "couldTest": [ { "text", "basis" } ], "cannotTest": [ { "text", "basis" } ] } ] }
 ```
 
 - `site` is the site scale (footprint terrain, vegetation and rock; the cell's climate; target terrain in a
   window of the site's size). `cell` is the site's 0.5 degree cell, as the global ranking sees it.
 - `summary.best` is the best of all targets and flatters; `median` is the typical target. Show both.
 - Show `meta.caveats` with the table.
+- `process` (candidates only) is the cited process the site stands for, copied from `analogs.json`, with the
+  target process it links to and where the analogy breaks. `couldTest` and `cannotTest` are sentences built by
+  fixed rules from measured values; `basis` names the files and keys behind each.
 
 ### data/discoveries.json
 

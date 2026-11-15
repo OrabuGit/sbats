@@ -279,4 +279,17 @@ describe('data/benchmarks.json', () => {
     }
     ok(benchmarks.sites.some((s) => s.kind === 'candidate') && benchmarks.sites.some((s) => s.kind === 'known'));
   });
+
+  it('says for every site what could and could not be tested there, each sentence with its basis', () => {
+    if (!benchmarks) return skip('benchmarks.json does not exist yet');
+    interface Card { id: string; kind: string; process: { text: string; source: string; differs: string } | null; couldTest: { text: string; basis: string }[]; cannotTest: { text: string; basis: string }[] }
+    for (const s of benchmarks.sites as unknown as Card[]) {
+      ok(s.cannotTest.length >= 1 && s.cannotTest.some((t) => t.text.includes('Gravity')), `${s.id} must say what cannot be tested`);
+      for (const t of [...s.couldTest, ...s.cannotTest]) ok(t.text.length > 20 && t.basis.includes('data/'), `${s.id}: ${t.text}`);
+      if (s.kind === 'candidate') {
+        ok(s.process && s.process.text.length > 10 && s.process.source.length > 8 && s.process.differs.length > 20, `${s.id} needs a cited process`);
+        ok(s.couldTest.length >= 1, `${s.id} must offer at least one thing to test`);
+      }
+    }
+  });
 });

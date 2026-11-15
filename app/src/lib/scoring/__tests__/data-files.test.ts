@@ -193,6 +193,27 @@ describe('What each known analog is used for', () => {
     }
   });
 
+  it('gives every candidate a process statement with a source, and says where the analogy breaks', () => {
+    if (!analogs) return skip('analogs.json does not exist yet');
+    interface WithProcess { id: string; kind: string; source: string; process?: { text: string; source: string; links: { target: string; text: string; source: string }[]; differs: string } }
+    const targetIds = new Set((targets ?? []).map((t) => t.id));
+    for (const a of analogs as unknown as WithProcess[]) {
+      if (a.kind !== 'candidate') {
+        equal(a.process, undefined, `${a.id}: only candidates carry a process statement`);
+        continue;
+      }
+      ok(a.process, `${a.id} needs a process statement`);
+      if (!a.process) continue;
+      ok(a.process.text.length > 15 && a.process.source.length > 10 && a.process.differs.length > 20, a.id);
+      for (const l of a.process.links) {
+        if (targets) ok(targetIds.has(l.target), `${a.id}: unknown target ${l.target}`);
+        ok(l.text.length > 15 && l.source.length > 8, `${a.id}: a link needs a sentence and a source`);
+      }
+      // Wording meant for the team must not reach the page.
+      ok(!/Session [ABC]|decisions\//.test(`${a.source} ${a.process.text} ${a.process.source}`), `${a.id}: internal wording in a source string`);
+    }
+  });
+
   it('labels no negative control and no candidate: candidates took no part in this view', () => {
     if (!analogs) return skip('analogs.json does not exist yet');
     for (const a of analogs.filter((x) => x.kind !== 'known')) {
