@@ -3,6 +3,8 @@ import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, reasonLine } from '../lib/format';
 import { NEW_DISTANCE_KM, type Candidate, type Tally } from '../lib/rank';
 import type { PurposeDef } from '../lib/scoringAdapter';
+import type { StabilityResult } from '../lib/matchAdapter';
+import { flags } from '../flags';
 import { ConfidenceBadge, Tag } from './Badges';
 
 export type ListMode = 'ranked' | 'sites';
@@ -21,6 +23,8 @@ interface Props {
   emptyReason: string | null;
   includeLow: boolean;
   onIncludeLow: (v: boolean) => void;
+  /** Rank stability for the listed cells, or null while it is being computed or switched off. */
+  stability: StabilityResult | null;
   mode: ListMode;
   onMode: (m: ListMode) => void;
   onSelect: (index: number) => void;
@@ -80,6 +84,14 @@ export function CandidateList(p: Props) {
             ))}
           </dl>
         </div>
+        {flags.stability && p.mode === 'ranked' && candidates.length > 0 && (
+          <p className="px-4 pt-2 text-[12px] text-muted" role="status">
+            <span className="label mr-2">Stability</span>
+            {p.stability
+              ? `The top ${p.stability.topN} keeps ${Math.round(p.stability.meanTopNOverlap * 100)}% of its cells on average when each weight is redrawn within ±${Math.round(p.stability.spread * 100)}% (${p.stability.draws} redraws, at worst ${Math.round(p.stability.minTopNOverlap * 100)}%).`
+              : 'Computing 200 redraws of the weights'}
+          </p>
+        )}
         <div className="tabs mt-2 px-4" role="group" aria-label="List">
           {(['ranked', 'sites'] as const).map((m) => (
             <button key={m} type="button" aria-pressed={p.mode === m} onClick={() => p.onMode(m)} className="tab !pl-0 !pr-0 mr-5">
@@ -133,6 +145,15 @@ export function CandidateList(p: Props) {
                         {formatCoords(cell.lat, cell.lon)}
                       </span>
                       <span className="mt-1 block text-[12px] text-muted">{reasonLine(p.explain(c.index))}</span>
+                      {flags.stability &&
+                        (() => {
+                          const st = p.stability?.followed.find((f) => f.index === c.index);
+                          return st ? (
+                            <span className="num mt-0.5 block text-[11px] text-muted">
+                              In the top {p.stability?.topN} in {Math.round(st.shareInTopN * 100)}% of redraws
+                            </span>
+                          ) : null;
+                        })()}
                     </span>
                     <ScoreBlock r={r} />
                   </button>

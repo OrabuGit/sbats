@@ -28,6 +28,6 @@ export const flags = {
    * base sites only. Turn on when Session B publishes values for arbitrary points.
    */
   anyPoint: false,
-  /** Stability of a rank in the results list. Off until the scoring library publishes it. */
-  stability: false,
+  /** Stability of a rank in the results list and on the match page (Session C's rankStability). */
+  stability: true,
 } as const;

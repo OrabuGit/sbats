@@ -26,6 +26,7 @@ import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
+import { loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
 import { decodeLayout, type SavedLayout } from './lib/simAdapter';
@@ -134,6 +135,9 @@ function Orbit({ data }: { data: DataBundle }) {
   const sitesFile = useAsync(loadSites, 'sites');
   const extracts = useAsync(loadExtracts, 'extracts');
   const saved = useSaved();
+  const targetWindows = useAsync(loadTargetWindows, 'target-windows');
+  const [scale, setScale] = useState<'grid' | 'site'>('grid');
+  const [stab, setStab] = useState<{ key: string; result: StabilityResult } | null>(null);
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
   const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
@@ -428,6 +432,45 @@ function Orbit({ data }: { data: DataBundle }) {
     [analogs, targetId, targets],
   );
 
+  // The match record (Session C's library): at footprint scale for a featured site, else for the grid cell.
+  const siteEntry = named ? (featuredSites?.sites.find((x) => x.id === named.id) ?? null) : null;
+  useEffect(() => setScale(siteEntry ? 'site' : 'grid'), [siteEntry]);
+  const match = useMemo(
+    () =>
+      selectedCell
+        ? matchRecord({
+            earth,
+            lithology,
+            target,
+            cell: selectedCell,
+            name: named?.name ?? siteCode(selectedCell),
+            site: scale === 'site' && siteEntry ? (siteEntry as unknown as Parameters<typeof matchRecord>[0]['site']) : null,
+            targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
+          })
+        : null,
+    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows],
+  );
+
+  // Rank stability: 200 redraws of the weights, computed after the screen has settled (about 0.7 s).
+  const stabKey = `${target.id}|${FACTOR_IDS.map((k) => liveWeights[k].toFixed(3)).join(',')}|${candidates.map((c) => c.index).join(',')}|${selected ?? ''}`;
+  useEffect(() => {
+    if (!flags.stability || !(view === 'match' || (view === 'orbit' && step === 3))) return;
+    if (stab?.key === stabKey) return;
+    const timer = window.setTimeout(() => {
+      try {
+        const follow = [...new Set([...candidates.map((c) => c.index), ...(selected !== null ? [selected] : [])])];
+        setStab({ key: stabKey, result: rankStability(earth, lithology, target, liveWeights, follow) });
+      } catch {
+        setStab(null);
+      }
+    }, 500);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stabKey, view, step]);
+  const stabNow = stab?.key === stabKey ? stab.result : null;
+  const stabOf = (i: number) => stabNow?.followed.find((f) => f.index === i) ?? null;
+  const stabSelected = selected !== null ? stabOf(selected) : null;
+
   const selectedSavedId = selectedCell ? savedId(target.id, selectedCell.lat, selectedCell.lon) : null;
   const isSaved = !!selectedSavedId && saved.list.some((x) => x.id === selectedSavedId);
   const toggleSaved = () => {
@@ -600,7 +643,7 @@ function Orbit({ data }: { data: DataBundle }) {
         />
       )}
 
-      {view === 'match' && selectedCell && explained && (
+      {view === 'match' && selectedCell && explained && match && (
         <MatchDetail
           cell={selectedCell}
           placeName={named?.name ?? null}
@@ -608,10 +651,18 @@ function Orbit({ data }: { data: DataBundle }) {
           target={target}
           explained={explained}
           meta={meta}
-          landCover={earth.meta.landCover ?? null}
           purpose={purpose}
-          gaps={ts.prepared.gaps}
-          notes={ts.notes}
+          record={match!.record}
+          scale={scale === 'site' && siteEntry ? 'site' : 'grid'}
+          onScale={siteEntry ? setScale : null}
+          stability={
+            stabSelected && stabNow && stabSelected.baseRank !== null
+              ? {
+                  text: `Rank ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells with these weights. With each weight redrawn within ±${Math.round(stabNow.spread * 100)}% (${stabNow.draws} times), nine in ten ranks fall between ${stabSelected.rankP05?.toLocaleString('en-US')} and ${stabSelected.rankP95?.toLocaleString('en-US')}, and it is in the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of them.`,
+                }
+              : null
+          }
+          notes={[...ts.notes, ...(match?.note ? [match.note] : [])]}
           rank={rank}
           ground={{ earth: earthExtract, target: targetExtract, windowKm, state: extracts.status }}
           saved={isSaved}
@@ -825,6 +876,7 @@ function Orbit({ data }: { data: DataBundle }) {
               emptyReason={emptyReason}
               includeLow={includeLow}
               onIncludeLow={setIncludeLow}
+              stability={stabNow}
               mode={mode}
               onMode={setMode}
               onSelect={select}

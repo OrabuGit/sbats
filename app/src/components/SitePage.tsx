@@ -5,6 +5,7 @@ import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatShare, formatSim, formatValue, isSunKey, type MetaByKey } from '../lib/format';
 import { PRESETS, PURPOSES, type TargetScorer } from '../lib/scoringAdapter';
 import { bestMonth } from '../lib/bestMonth';
+import { MATCH, MISS } from '../lib/verdict';
 import type { ExtractIndex, FeaturedSite, SiteValue, SitesFile } from '../data/sites';
 import type { SiteClimate } from '../data/sandbox';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
@@ -68,8 +69,6 @@ function otherText(key: string, v: SiteValue): string {
 }
 
 /** Similarity bands for the plain-language lists. The numbers are shown next to every line. */
-const MATCH = 0.6;
-const MISS = 0.3;
 
 export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, target, onTarget, scorer, analogs, climate, extracts, onDossier, onBuild }: Props) {
   const site: FeaturedSite = sites.sites.find((s) => s.id === siteId) ?? sites.sites[0];
@@ -321,8 +320,8 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
           </p>
         )}
         <p className="text-[12px] text-muted">
-          Footprint values against the target, with the similarity on the right. {MATCH.toFixed(1)} and above counts as a match, below{' '}
-          {MISS.toFixed(1)} as no match.
+          Footprint values against the target, with the similarity on the right. {MATCH.toFixed(2)} and above counts as a match, below{' '}
+          {MISS.toFixed(2)} as no match.
         </p>
         <h4 className="label mt-3">What Earth cannot copy</h4>
         <ul className="mt-1.5 space-y-1.5">
