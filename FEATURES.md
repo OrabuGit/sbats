@@ -26,8 +26,8 @@ button or tab. "Nav" means the word in the top bar, which is on every page.
 | Base planner | Match, tab "3D terrain", "Work with this place" | 5 |
 | Report, CSV, GeoJSON | Match, tab "Report" | 5 |
 | Save a match or base | "Save" on the match page; nav "Saved" lists them | 5 to save, 1 to list |
-| Explore the data (two-factor chart of every Earth cell) | Home card "Explore the data", or "Open the chart" on the ranked matches | 1 |
-| Custom conditions | Find analog, step 1, the card "Custom" | 2 |
+| Explore the data (two-factor chart of every Earth cell) | Home, scroll to "What you can do", card "Explore the data"; also "Open the chart" on the ranked matches (step 3) | 1 click after scrolling the home page; 4 from the ranked matches |
+| Custom conditions | Nav "Find analog", then the card "Custom" beside the Moon and Mars (it is labelled "Custom: set the ground and climate yourself, then search Earth") | 2 |
 | Five team story pairs with the tool's own verdict, the Earth site beside its Moon or Mars target | Home, section "Featured sites · proposed by the team" | 0 (scroll) |
 | Featured sites, benchmarks and team stories | Nav "Featured sites" | 1 |
 | Site pages, with a row of all the other sites at the top | Featured sites, then a site, or a pair on the home page | 1 to 2 |
