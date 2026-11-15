@@ -677,6 +677,27 @@ Pick = { "lat", "lon", "score", "rank", "percentile", "confidence", "isNew",
   `rules.indonesiaBox`, which also covers parts of neighbouring countries.
 - Coordinates are cell centres. No place name is stored.
 
+### data/place_matches.json
+
+For every named place of `known_sites.json`: the target profile a user gets and its best-ranked Earth cells.
+Built by `validation/grid_check.ts` from `moon.json`, `mars.json` and `targets.json`.
+
+```
+{ "meta": { "generatedAt", "frozenAt", "note", "grids": { "moon": { "resolutionDeg", "generatedAt" } | null, "mars": ... } },
+  "places": [ { "id", "name", "body", "kind",
+                "origin": "curated" | "grid" | "none", "confidence", "missing": [ string ],
+                "scoresComparable": boolean, "environment": { "wind", "dust", "ice" },
+                "targetId", "cell": { "lat", "lon", "distanceKm" } | null,
+                "values": { "slope", "roughness", "tempMean", "tempRange", "lithology" },
+                "best": [ { "lat", "lon", "score", "confidence" } ] | null, "scorable": boolean } ] }
+```
+
+- `best` holds up to three Earth cells by the frozen all-round score (Base weights, high and medium confidence,
+  250 km apart). Coordinates are cell centres; no place name is stored.
+- `scoresComparable: false` marks a place whose grid cell has no temperature. Its scores leave temperature out
+  and run far higher than those of other places: show them with that warning, or not at all.
+- `origin: "none"` means the body's grid is not loaded or has no cell there: the place cannot be matched yet.
+
 ## Missing values and confidence
 
 Approved by the team on 2026-11-14. Implemented in `/app/src/lib/scoring` (Session C), shown by Session A.

@@ -1,0 +1,439 @@
+{
+ "generatedAt": "2026-11-15T06:47:43.829Z",
+ "agreement": [
+  {
+   "target": "moon-malapert-massif",
+   "body": "moon",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -85,
+    "lon": -1,
+    "distanceKm": 29.8
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 12.3,
+     "grid": 11.19,
+     "sigma": 6.15,
+     "sigmasApart": 0.18,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 1571.3,
+     "grid": 1592.2,
+     "sigma": 785.6,
+     "sigmasApart": 0.03,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -159.5,
+     "grid": -141.83,
+     "sigma": 15,
+     "sigmasApart": 1.18,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": null,
+     "grid": 176.57,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 4,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  },
+  {
+   "target": "moon-mons-mouton",
+   "body": "moon",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -85,
+    "lon": 31,
+    "distanceKm": 12.1
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 9.42,
+     "grid": 10.71,
+     "sigma": 4.71,
+     "sigmasApart": 0.27,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 1018.6,
+     "grid": 1341,
+     "sigma": 509.3,
+     "sigmasApart": 0.63,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -141.3,
+     "grid": -145.68,
+     "sigma": 15,
+     "sigmasApart": 0.29,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": null,
+     "grid": 124.44,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 4,
+     "grid": 4,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": true
+    }
+   ]
+  },
+  {
+   "target": "moon-haworth",
+   "body": "moon",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -87,
+    "lon": -5,
+    "distanceKm": 13.6
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 11.04,
+     "grid": 10.38,
+     "sigma": 5.52,
+     "sigmasApart": 0.12,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 1552.3,
+     "grid": 2073.8,
+     "sigma": 776.1,
+     "sigmasApart": 0.67,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -211.9,
+     "grid": -201.04,
+     "sigma": 15,
+     "sigmasApart": 0.72,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": null,
+     "grid": 90.25,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 4,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  },
+  {
+   "target": "moon-shackleton-rim",
+   "body": "moon",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -89,
+    "lon": 129,
+    "distanceKm": 20.3
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 10.78,
+     "grid": 9.76,
+     "sigma": 5.39,
+     "sigmasApart": 0.19,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 910.9,
+     "grid": 869.6,
+     "sigma": 455.4,
+     "sigmasApart": 0.09,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -176.2,
+     "grid": -167.35,
+     "sigma": 15,
+     "sigmasApart": 0.59,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": null,
+     "grid": 110.48,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 4,
+     "grid": 4,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": true
+    }
+   ]
+  },
+  {
+   "target": "moon-marius-hills",
+   "body": "moon",
+   "gridLoaded": true,
+   "cell": {
+    "lat": 15,
+    "lon": -57,
+    "distanceKm": 28.4
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 1.74,
+     "grid": 1.23,
+     "sigma": 1,
+     "sigmasApart": 0.51,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 228.9,
+     "grid": 236.6,
+     "sigma": 114.5,
+     "sigmasApart": 0.07,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -54.6,
+     "grid": -54.86,
+     "sigma": 15,
+     "sigmasApart": 0.02,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 297.5,
+     "grid": 296.45,
+     "sigma": 5,
+     "sigmasApart": 0.21,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 2,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  },
+  {
+   "target": "mars-jezero",
+   "body": "mars",
+   "gridLoaded": false,
+   "cell": null,
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 2.63,
+     "grid": null,
+     "sigma": 1.31,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 287.4,
+     "grid": null,
+     "sigma": 143.7,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -56.6,
+     "grid": null,
+     "sigma": 15,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 48.8,
+     "grid": null,
+     "sigma": 5,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 2,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  },
+  {
+   "target": "mars-gale",
+   "body": "mars",
+   "gridLoaded": false,
+   "cell": null,
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 6.11,
+     "grid": null,
+     "sigma": 3.06,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 1262.8,
+     "grid": null,
+     "sigma": 631.4,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -57.7,
+     "grid": null,
+     "sigma": 15,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 62.1,
+     "grid": null,
+     "sigma": 5,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 3,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  },
+  {
+   "target": "mars-arcadia-planitia",
+   "body": "mars",
+   "gridLoaded": false,
+   "cell": null,
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 0.27,
+     "grid": null,
+     "sigma": 1,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 16.8,
+     "grid": null,
+     "sigma": 50,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -74.5,
+     "grid": null,
+     "sigma": 15,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 53.2,
+     "grid": null,
+     "sigma": 5,
+     "sigmasApart": null,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": null,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
+  }
+ ],
+ "coverage": {
+  "places": 66,
+  "byOrigin": {
+   "none": 18,
+   "curated": 12,
+   "grid": 36
+  },
+  "byConfidence": {
+   "low": 32,
+   "high": 4,
+   "medium": 30
+  },
+  "missing": {
+   "tempMean": 28,
+   "tempRange": 35,
+   "slope": 18,
+   "roughness": 18,
+   "lithology": 26
+  },
+  "byBody": {
+   "moon": {
+    "grid": 36,
+    "curated": 8
+   },
+   "mars": {
+    "none": 18,
+    "curated": 4
+   }
+  }
+ }
+}
