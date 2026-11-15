@@ -70,15 +70,15 @@ const ICON: Record<Verdict, React.ReactNode> = {
 };
 // Shape and weight carry the verdict as well as the words: solid, outlined, hollow.
 const CHIP: Record<Verdict, string> = {
-  match: 'bg-text text-bg border-text',
-  partial: 'text-text border-text',
-  miss: 'text-muted border-muted',
-  none: 'text-muted border-line border-dashed',
+  match: 'text-text',
+  partial: 'text-text/80',
+  miss: 'text-muted',
+  none: 'text-muted',
 };
 
 function VerdictChip({ v }: { v: Verdict }) {
   return (
-    <span className={`inline-flex h-7 items-center gap-1.5 whitespace-nowrap border px-2 text-[12px] font-semibold ${CHIP[v]}`}>
+    <span className={`inline-flex h-7 items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold ${CHIP[v]}`}>
       {ICON[v]}
       {VERDICT_WORD[v]}
     </span>

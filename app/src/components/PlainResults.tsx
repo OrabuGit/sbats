@@ -14,10 +14,10 @@ const ICON: Record<PurposeStatus, React.ReactNode> = {
 };
 // Solid, outlined, hollow: shape and weight carry the status as well as the word.
 const CHIP: Record<PurposeStatus, string> = {
-  ready: 'bg-text text-bg border-text',
-  partial: 'text-text border-text',
-  'not-suited': 'text-muted border-muted',
-  'no-data': 'text-muted border-line border-dashed',
+  ready: 'text-accent',
+  partial: 'text-text/80',
+  'not-suited': 'text-muted',
+  'no-data': 'text-muted',
 };
 
 /** Icon per purpose: an element drawing where one fits, else the activity line art. */
@@ -32,7 +32,7 @@ function PurposeCard({ p }: { p: PlainPurpose }) {
     <li className={`border-t-2 pt-3 ${p.status === 'ready' ? 'border-accent' : 'border-line'}`}>
       <div className="flex items-start justify-between gap-3">
         <PurposeIcon id={p.id} />
-        <span className={`inline-flex h-7 items-center gap-1.5 whitespace-nowrap border px-2 text-[12px] font-semibold ${CHIP[p.status]}`}>
+        <span className={`inline-flex h-7 items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold ${CHIP[p.status]}`}>
           {ICON[p.status]}
           {STATUS_WORD[p.status]}
         </span>
@@ -70,9 +70,9 @@ export function PlainResults({ record, score, placeName }: { record: MatchRecord
             </div>
           </dl>
           {r.tags.length > 0 && (
-            <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Testing tags">
+            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1" aria-label="Testing tags">
               {r.tags.map((t) => (
-                <li key={t.label} className={`border px-2 py-0.5 text-[12px] font-semibold ${t.verdict === 'match' ? 'border-text bg-text text-bg' : 'border-text text-text'}`}>
+                <li key={t.label} className={`text-[14px] ${t.verdict === 'match' ? 'font-semibold text-text' : 'text-muted'}`}>
                   {t.label}
                   {t.verdict === 'partial' ? ', partly' : ''}
                 </li>

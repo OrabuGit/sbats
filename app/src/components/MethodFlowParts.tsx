@@ -74,18 +74,21 @@ export const move = (rm: boolean, prop: string, ms: number, delay = 0) => (rm ? 
 /** The frame of one stage: a flat panel with the step number and a short title. */
 export function StageFrame({ n, total, title, children }: { n: number; total: number; title: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col border border-line bg-panel p-4 sm:p-5 lg:h-full">
-      <div className="flex items-center justify-between gap-4">
-        <p className="label">
-          Step {n + 1} of {total} · {title}
-        </p>
-        <span className="flex gap-1" aria-hidden="true">
+    <div className="flex flex-col lg:h-full">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[13px] text-muted">
+            Step {n + 1} of {total}
+          </p>
+          <p className="display text-[26px] leading-8 text-text">{title}</p>
+        </div>
+        <span className="flex gap-1 pb-2" aria-hidden="true">
           {Array.from({ length: total }, (_, i) => (
             <span key={i} className={`block h-1 w-4 ${i === n ? 'bg-accent' : 'bg-line'}`} />
           ))}
         </span>
       </div>
-      <div className="mt-4 flex min-h-0 flex-1 flex-col">{children}</div>
+      <div className="mt-6 flex min-h-0 flex-1 flex-col">{children}</div>
     </div>
   );
 }

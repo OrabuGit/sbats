@@ -40,15 +40,15 @@ export function StageTwoPlaces({ d, on, rm }: StageProps) {
       <div className="grid grid-cols-[88px_minmax(0,1fr)_minmax(0,1fr)] gap-x-3 sm:grid-cols-[120px_minmax(0,1fr)_minmax(0,1fr)] sm:gap-x-4" style={fade(on, rm, 0)}>
         <span />
         <div>
-          <p className="label">Target</p>
-          <p className="display mt-1 text-[16px] leading-5 text-text">{t.name}</p>
+          <p className="text-[13px] text-muted">Target</p>
+          <p className="display mt-0.5 text-[20px] leading-6 text-text">{t.name}</p>
           <p className="num text-[12px] text-muted">
             {t.body === 'moon' ? 'Moon' : 'Mars'} · {t.lat.toFixed(1)}°, {t.lon.toFixed(1)}°
           </p>
         </div>
         <div>
-          <p className="label">Earth cell</p>
-          <p className="display mt-1 text-[16px] leading-5 text-text">{d.where ?? 'Open land'}</p>
+          <p className="text-[13px] text-muted">Earth cell</p>
+          <p className="display mt-0.5 text-[20px] leading-6 text-text">{d.where ?? 'Open land'}</p>
           <p className="num text-[12px] text-muted">
             {d.cell.lat.toFixed(2)}°, {d.cell.lon.toFixed(2)}°
           </p>
@@ -56,14 +56,14 @@ export function StageTwoPlaces({ d, on, rm }: StageProps) {
       </div>
       <ul className="mt-3 divide-y divide-line border-t border-line">
         {d.keys.map((k, i) => (
-          <li key={k.key} className="grid grid-cols-[88px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-x-3 py-2 sm:grid-cols-[120px_minmax(0,1fr)_minmax(0,1fr)] sm:gap-x-4" style={fade(on, rm, i + 1)}>
+          <li key={k.key} className="grid grid-cols-[88px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-x-3 py-3 sm:grid-cols-[120px_minmax(0,1fr)_minmax(0,1fr)] sm:gap-x-4" style={fade(on, rm, i + 1)}>
             <span className="text-[13px] text-text">{keyLabel(k.key, d.meta)}</span>
             <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              {k.targetValue === null ? <NoData>no data</NoData> : <span className="num text-[13px] text-text">{formatValue(k.key, k.targetValue, d.meta)}</span>}
+              {k.targetValue === null ? <NoData>no data</NoData> : <span className="num text-[17px] font-medium text-text">{formatValue(k.key, k.targetValue, d.meta)}</span>}
               {k.targetValue !== null && <TargetBadge d={d} k={k} />}
             </span>
             <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              {earthText(d, k) === 'no data' ? <NoData>no data</NoData> : <span className="num text-[13px] text-text">{earthText(d, k)}</span>}
+              {earthText(d, k) === 'no data' ? <NoData>no data</NoData> : <span className="num text-[17px] font-medium text-text">{earthText(d, k)}</span>}
               <EarthBadge d={d} k={k} />
             </span>
           </li>
