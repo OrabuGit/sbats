@@ -114,6 +114,14 @@ CANDIDATE = [
     ("id-maros-pangkep-karst", "Maros-Pangkep karst caves, South Sulawesi, Indonesia", -5.0031, 119.6944, [],
      "UNESCO Global Geoparks, 'Maros Pangkep', unesco.org/en/iggp/geoparks/maros-pangkep (572 caves)",
      "Limestone karst, not a lava tube. Listed as a verified cave system only. No source links it to planetary research. analogFor is empty."),
+    # Added 2026-11-15. Proposed by a team member and measured at site scale by Session B (data/sites.json).
+    # Ids, names and coordinates are Session B's (pipeline/sites.py, decisions/B.md), so the two files agree.
+    ("id-tambora-caldera", "Mount Tambora caldera, Sumbawa, Indonesia", -8.2438, 117.9918, [],
+     "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced by Session B on Copernicus DEM GLO-30 (decisions/B.md)",
+     "Proposed by a team member as an Earth counterpart to a deep polar crater such as Shackleton. No source links it to planetary research: the analog idea is SBATS's own, so analogFor is empty. Shackleton is 21 km wide and 4.1 km deep (Zuber et al. 2012, Nature), about three times Tambora in both directions: see validation/sites/FINDINGS.md."),
+    ("id-batur-lava-fields", "Mount Batur black lava fields, Bali, Indonesia", -8.2556, 115.3628, [],
+     "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL, read by Session B (decisions/B.md)",
+     "Proposed by a team member as a young lava field to set beside Marius Hills. No source links it to planetary research: the analog idea is SBATS's own, so analogFor is empty. The Kesaksak lava tube entry above is in the same caldera."),
 ]
 
 

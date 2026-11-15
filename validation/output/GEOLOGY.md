@@ -1,6 +1,6 @@
 # Geology dimension: where the number comes from
 
-Generated 2026-11-15T04:44:55.827Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-14T13:02:33Z. Score frozen 2026-11-14; nothing here changes it.
+Generated 2026-11-15T04:53:20.069Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-14T13:02:33Z. Score frozen 2026-11-14; nothing here changes it.
 The cause, in words, is in `validation/purposes/GEOLOGY.md`. Percentiles are tie-fair (0.5 is chance).
 
 ## 1. The dimension has three possible values per target
@@ -13,6 +13,7 @@ Geology similarity is 1 for the same rock class, 0.6 for a related class and 0.1
 | moon-mons-mouton | 4 Basic plutonic rocks | 0.7% | 3.3% | 96.1% | 1.00 | 0.98 | 0.48 |
 | moon-haworth | 4 Basic plutonic rocks | 0.7% | 3.3% | 96.1% | 1.00 | 0.98 | 0.48 |
 | moon-shackleton-rim | 4 Basic plutonic rocks | 0.7% | 3.3% | 96.1% | 1.00 | 0.98 | 0.48 |
+| moon-marius-hills | 2 Basic volcanic rocks | 2.9% | 2.6% | 94.5% | 0.99 | 0.96 | 0.47 |
 | mars-jezero | 2 Basic volcanic rocks | 2.9% | 2.6% | 94.5% | 0.99 | 0.96 | 0.47 |
 | mars-gale | 3 Siliciclastic sedimentary rocks | 13.4% | 30.4% | 56.2% | 0.93 | 0.71 | 0.28 |
 | mars-arcadia-planitia | no rock class | | | | | | |
@@ -111,48 +112,56 @@ Mean geology percentile of those sites against their own targets: 0.51 with the 
 | Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | moon-mons-mouton | unrelated, p 0.48 | unrelated, p 0.48 |
 | Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | moon-haworth | unrelated, p 0.48 | unrelated, p 0.48 |
 | Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | moon-shackleton-rim | unrelated, p 0.48 | unrelated, p 0.48 |
+| Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | moon-marius-hills | unrelated, p 0.47 | related, p 0.96 |
 | Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | mars-jezero | unrelated, p 0.47 | related, p 0.96 |
 | Kawah Ijen, East Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 1 Unconsolidated sediments | mars-gale (listed) | related, p 0.71 | unrelated, p 0.28 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | unrelated, p 0.48 |
+| Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | related, p 0.96 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | related, p 0.96 |
 | Mount Merapi and the Opak River, Central Java, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale (listed) | unrelated, p 0.28 | unrelated, p 0.28 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | related, p 0.98 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | related, p 0.98 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | related, p 0.98 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | related, p 0.98 |
+| Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | same, p 0.98 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | same, p 0.98 |
 | Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | Basalt / Picro-Basalt | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | moon-malapert-massif | related, p 0.98 | related, p 0.98 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | moon-mons-mouton | related, p 0.98 | related, p 0.98 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | moon-haworth | related, p 0.98 | related, p 0.98 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | moon-shackleton-rim | related, p 0.98 | related, p 0.98 |
+| Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | moon-marius-hills | same, p 0.98 | same, p 0.98 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | mars-jezero | same, p 0.98 | same, p 0.98 |
 | Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | basalt | 2 Basic volcanic rocks (site) | 2 Basic volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | unrelated, p 0.48 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | unrelated, p 0.48 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | unrelated, p 0.48 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | unrelated, p 0.48 |
+| Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | related, p 0.96 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | related, p 0.96 |
 | Kesaksak lava tube, Batur caldera, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | no data |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | no data |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | no data |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | no data |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | no data |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | no data |
 | Maros-Pangkep karst caves, South Sulawesi, Indonesia | no data | no rock class (site) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | no data |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | related, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | related, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | related, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | related, p 0.98 |
+| Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | same, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | same, p 0.98 |
 | Mount Tambora caldera, Sumbawa, Indonesia | Trachybasalt / Tephrite Basanite | 2 Basic volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-malapert-massif | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-mons-mouton | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-haworth | unrelated, p 0.48 | unrelated, p 0.48 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-shackleton-rim | unrelated, p 0.48 | unrelated, p 0.48 |
+| Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | moon-marius-hills | related, p 0.96 | related, p 0.96 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-jezero | related, p 0.96 | related, p 0.96 |
 | Mount Batur black lava fields, Bali, Indonesia | Andesite / Basaltic Andesite | 10 Intermediate volcanic rocks (volcano) | 10 Intermediate volcanic rocks | mars-gale | unrelated, p 0.28 | unrelated, p 0.28 |
 

@@ -2,7 +2,7 @@
 
 **Development numbers, not a clean test. All 28 known sites, including the 8 hold-out sites, had been scored and read before the dimensions and purposes were defined. Chance is a mean percentile of 0.5.**
 
-Generated 2026-11-14T12:43:30.652Z by `npx tsx validation/purposes.ts`. Earth grid built 2026-11-14T12:33:51Z.
+Generated 2026-11-15T04:53:11.828Z by `npx tsx validation/purposes.ts`. Earth grid built 2026-11-14T13:02:33Z.
 The all-round score is the one frozen on 2026-11-14 and is not changed by this view. Definitions and the
 reason this view exists: `validation/purposes/DEFINITIONS.md`. Candidate sites are not part of this report.
 
@@ -55,6 +55,7 @@ as each target (all of them share the top geology percentile):
 | moon-mons-mouton | 0.7% |
 | moon-haworth | 0.7% |
 | moon-shackleton-rim | 0.7% |
+| moon-marius-hills | 2.9% |
 | mars-jezero | 2.9% |
 | mars-gale | 13.4% |
 | mars-arcadia-planitia | no rock class for this target |

@@ -1,0 +1,663 @@
+{
+  "windows": {
+    "4": {
+      "posts": 4,
+      "windowKm": 1.85,
+      "targets": {
+        "moon-malapert-massif": {
+          "slope": 5.940287708863258,
+          "roughness": 52.897577156515155,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4759.48681640625,
+          "elevationMaxM": 4955.19189453125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -85.98,
+            "lon": -1.67
+          }
+        },
+        "moon-mons-mouton": {
+          "slope": 6.919475439640116,
+          "roughness": 62.61544898487138,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4964.166015625,
+          "elevationMaxM": 5183.650390625,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -84.6,
+            "lon": 31.0
+          }
+        },
+        "moon-haworth": {
+          "slope": 3.88038645978318,
+          "roughness": 33.204503464270545,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -3356.127197265625,
+          "elevationMaxM": -3249.37841796875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -87.45,
+            "lon": -5.17
+          }
+        },
+        "moon-shackleton-rim": {
+          "slope": 1.5220881894802036,
+          "roughness": 14.4721899850589,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2793.315673828125,
+          "elevationMaxM": -2743.600341796875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        },
+        "mars-jezero": {
+          "slope": 1.1534614289067189,
+          "roughness": 10.14913957014829,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2593.71728515625,
+          "elevationMaxM": -2558.590087890625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n000hb.img",
+          "windowCentre": {
+            "lat": 18.4375,
+            "lon": 77.45
+          }
+        },
+        "mars-gale": {
+          "slope": 0.28488932862746896,
+          "roughness": 2.8930591695831827,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -4492.60107421875,
+          "elevationMaxM": -4481.392578125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -4.60156,
+            "lon": 137.4
+          }
+        },
+        "mars-arcadia-planitia": {
+          "slope": 0.08536694786721177,
+          "roughness": 0.9888549681827189,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -3922.380859375,
+          "elevationMaxM": -3919.0,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n180hb.img",
+          "windowCentre": {
+            "lat": 39.79688,
+            "lon": -157.9
+          }
+        },
+        "moon-marius-hills": {
+          "slope": 1.6647511933747834,
+          "roughness": 15.443620681089804,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -1575.203369140625,
+          "elevationMaxM": -1526.4776611328125,
+          "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+          "windowCentre": {
+            "lat": 14.091,
+            "lon": -56.77
+          }
+        }
+      }
+    },
+    "6": {
+      "posts": 6,
+      "windowKm": 2.78,
+      "targets": {
+        "moon-malapert-massif": {
+          "slope": 8.02249342461472,
+          "roughness": 77.48306909695725,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4692.56591796875,
+          "elevationMaxM": 4971.154296875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -85.98,
+            "lon": -1.67
+          }
+        },
+        "moon-mons-mouton": {
+          "slope": 6.359356542266908,
+          "roughness": 82.54757378965638,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4942.072265625,
+          "elevationMaxM": 5220.41845703125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -84.6,
+            "lon": 31.0
+          }
+        },
+        "moon-haworth": {
+          "slope": 3.35404986687877,
+          "roughness": 43.83404871596469,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -3388.487060546875,
+          "elevationMaxM": -3234.1005859375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -87.45,
+            "lon": -5.17
+          }
+        },
+        "moon-shackleton-rim": {
+          "slope": 2.8121663614771535,
+          "roughness": 36.222508125602445,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2808.12109375,
+          "elevationMaxM": -2661.330078125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        },
+        "mars-jezero": {
+          "slope": 1.0827526346580307,
+          "roughness": 14.391237014913747,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2609.2900390625,
+          "elevationMaxM": -2551.267578125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n000hb.img",
+          "windowCentre": {
+            "lat": 18.4375,
+            "lon": 77.45
+          }
+        },
+        "mars-gale": {
+          "slope": 0.36934380234113373,
+          "roughness": 4.372556262758486,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -4492.60107421875,
+          "elevationMaxM": -4474.1591796875,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -4.60156,
+            "lon": 137.4
+          }
+        },
+        "mars-arcadia-planitia": {
+          "slope": 0.09486287419204364,
+          "roughness": 1.0900367533804867,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -3922.380859375,
+          "elevationMaxM": -3918.153564453125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n180hb.img",
+          "windowCentre": {
+            "lat": 39.79688,
+            "lon": -157.9
+          }
+        },
+        "moon-marius-hills": {
+          "slope": 1.4947572563960823,
+          "roughness": 17.735557893504208,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -1575.203369140625,
+          "elevationMaxM": -1517.2598876953125,
+          "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+          "windowCentre": {
+            "lat": 14.091,
+            "lon": -56.77
+          }
+        }
+      }
+    },
+    "9": {
+      "posts": 9,
+      "windowKm": 4.17,
+      "targets": {
+        "moon-malapert-massif": {
+          "slope": 10.006816822029132,
+          "roughness": 133.61764488009237,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4438.34375,
+          "elevationMaxM": 4980.2109375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -85.98,
+            "lon": -1.67
+          }
+        },
+        "moon-mons-mouton": {
+          "slope": 4.926863539886293,
+          "roughness": 90.60791450873246,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4939.71533203125,
+          "elevationMaxM": 5225.35107421875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -84.6,
+            "lon": 31.0
+          }
+        },
+        "moon-haworth": {
+          "slope": 3.2759185967247877,
+          "roughness": 56.923378235257054,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -3469.98193359375,
+          "elevationMaxM": -3232.454345703125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -87.45,
+            "lon": -5.17
+          }
+        },
+        "moon-shackleton-rim": {
+          "slope": 4.679001065799077,
+          "roughness": 68.94405427992665,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2836.13818359375,
+          "elevationMaxM": -2497.596435546875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        },
+        "mars-jezero": {
+          "slope": 1.2086349909805598,
+          "roughness": 28.266908987405944,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2625.579345703125,
+          "elevationMaxM": -2464.728759765625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n000hb.img",
+          "windowCentre": {
+            "lat": 18.44141,
+            "lon": 77.45
+          }
+        },
+        "mars-gale": {
+          "slope": 0.46707178157229173,
+          "roughness": 7.399108004149318,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -4496.84716796875,
+          "elevationMaxM": -4467.06103515625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -4.59766,
+            "lon": 137.4
+          }
+        },
+        "mars-arcadia-planitia": {
+          "slope": 0.07546880477157188,
+          "roughness": 0.9893951670430338,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -3922.811767578125,
+          "elevationMaxM": -3918.0,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n180hb.img",
+          "windowCentre": {
+            "lat": 39.80078,
+            "lon": -157.9
+          }
+        },
+        "moon-marius-hills": {
+          "slope": 1.1204746083868677,
+          "roughness": 20.329292722809033,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -1572.40966796875,
+          "elevationMaxM": -1501.1378173828125,
+          "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+          "windowCentre": {
+            "lat": 14.091,
+            "lon": -56.77
+          }
+        }
+      }
+    },
+    "11": {
+      "posts": 11,
+      "windowKm": 5.09,
+      "targets": {
+        "moon-malapert-massif": {
+          "slope": 11.275308203340057,
+          "roughness": 178.01048721220621,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4257.72021484375,
+          "elevationMaxM": 4980.2109375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -85.98,
+            "lon": -1.67
+          }
+        },
+        "moon-mons-mouton": {
+          "slope": 4.348990835439446,
+          "roughness": 88.90926125266233,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4939.71533203125,
+          "elevationMaxM": 5235.720703125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -84.6,
+            "lon": 31.0
+          }
+        },
+        "moon-haworth": {
+          "slope": 3.1930085224059086,
+          "roughness": 59.156737188319035,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -3469.98193359375,
+          "elevationMaxM": -3232.454345703125,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -87.45,
+            "lon": -5.17
+          }
+        },
+        "moon-shackleton-rim": {
+          "slope": 5.205706179526711,
+          "roughness": 88.66521116793444,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2836.927490234375,
+          "elevationMaxM": -2449.064208984375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        },
+        "mars-jezero": {
+          "slope": 1.3909341571322889,
+          "roughness": 36.81824385910941,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2636.012939453125,
+          "elevationMaxM": -2451.0,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n000hb.img",
+          "windowCentre": {
+            "lat": 18.44141,
+            "lon": 77.45
+          }
+        },
+        "mars-gale": {
+          "slope": 0.5446290674589364,
+          "roughness": 10.015227444797356,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -4501.57421875,
+          "elevationMaxM": -4458.41943359375,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -4.59766,
+            "lon": 137.4
+          }
+        },
+        "mars-arcadia-planitia": {
+          "slope": 0.08782954781783515,
+          "roughness": 1.3775995034543635,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -3924.736083984375,
+          "elevationMaxM": -3918.0,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n180hb.img",
+          "windowCentre": {
+            "lat": 39.80078,
+            "lon": -157.9
+          }
+        },
+        "moon-marius-hills": {
+          "slope": 1.026233327793491,
+          "roughness": 22.211485002837236,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -1587.6024169921875,
+          "elevationMaxM": -1489.103271484375,
+          "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+          "windowCentre": {
+            "lat": 14.091,
+            "lon": -56.77
+          }
+        }
+      }
+    },
+    "16": {
+      "posts": 16,
+      "windowKm": 7.41,
+      "targets": {
+        "moon-malapert-massif": {
+          "slope": 14.204617286525542,
+          "roughness": 310.8882199397573,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 3738.8466796875,
+          "elevationMaxM": 4971.154296875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -85.98,
+            "lon": -1.67
+          }
+        },
+        "moon-mons-mouton": {
+          "slope": 4.249606770985767,
+          "roughness": 86.60651513159972,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": 4939.357421875,
+          "elevationMaxM": 5323.32373046875,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -84.6,
+            "lon": 31.0
+          }
+        },
+        "moon-haworth": {
+          "slope": 2.724421326691906,
+          "roughness": 59.563321962142794,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -3486.485107421875,
+          "elevationMaxM": -3228.384521484375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -87.45,
+            "lon": -5.17
+          }
+        },
+        "moon-shackleton-rim": {
+          "slope": 10.091575274422016,
+          "roughness": 246.78956487413132,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2842.77978515625,
+          "elevationMaxM": -1606.4935302734375,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        },
+        "mars-jezero": {
+          "slope": 1.3933565703194515,
+          "roughness": 49.37871765772777,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2649.958251953125,
+          "elevationMaxM": -2417.789306640625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n000hb.img",
+          "windowCentre": {
+            "lat": 18.4375,
+            "lon": 77.45
+          }
+        },
+        "mars-gale": {
+          "slope": 0.8163273620585684,
+          "roughness": 22.468387560632618,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -4516.103515625,
+          "elevationMaxM": -4363.03369140625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -4.60156,
+            "lon": 137.4
+          }
+        },
+        "mars-arcadia-planitia": {
+          "slope": 0.12953339187220267,
+          "roughness": 2.603083776794248,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -3930.255859375,
+          "elevationMaxM": -3914.3095703125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt44n180hb.img",
+          "windowCentre": {
+            "lat": 39.79688,
+            "lon": -157.9
+          }
+        },
+        "moon-marius-hills": {
+          "slope": 0.9473187778594722,
+          "roughness": 27.60217467075416,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -1608.1365966796875,
+          "elevationMaxM": -1457.9947509765625,
+          "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+          "windowCentre": {
+            "lat": 14.091,
+            "lon": -56.77
+          }
+        }
+      }
+    },
+    "48": {
+      "posts": 48,
+      "windowKm": 22.22,
+      "targets": {
+        "moon-shackleton-rim": {
+          "slope": 22.319386371096986,
+          "roughness": 1299.8103081409927,
+          "validPixels": 2304,
+          "pixels": 2304,
+          "dxM": 463.0,
+          "dyM": 463.0,
+          "elevationMinM": -2842.77978515625,
+          "elevationMaxM": 1721.760009765625,
+          "product": "LRO LOLA polar gridded DEM LDEM_80S_80M (80 m per pixel)",
+          "windowCentre": {
+            "lat": -89.67,
+            "lon": 129.78
+          }
+        }
+      }
+    }
+  },
+  "generatedAt": "2026-11-15T04:50:09Z",
+  "method": "The same measurement as validation/output/target_terrain.json, in a square of N x N posts of 463 m centred on the target coordinates, for the window sizes used by data/sites.json. Used only for the site-level report. A window this small holds a few dozen posts and describes the ground at the stated coordinates, not the whole landform.",
+  "lolaOrientationCheck": {
+    "shackletonFloorM": -2787.5,
+    "shackletonMirrorM": 680.5,
+    "monsMoutonM": 5038.0,
+    "monsMoutonMirrorM": -723.0
+  }
+}

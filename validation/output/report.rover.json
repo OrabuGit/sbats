@@ -1,7 +1,7 @@
 {
   "status": "final",
   "statusNote": "Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.",
-  "generatedAt": "2026-11-14T12:03:29.069Z",
+  "generatedAt": "2026-11-15T04:53:05.838Z",
   "preset": "rover",
   "weights": {
     "terrain": 0.4,
@@ -12,7 +12,7 @@
     "rockType": 0.1
   },
   "earth": {
-    "generatedAt": "2026-11-14T11:56:02Z",
+    "generatedAt": "2026-11-14T13:02:33Z",
     "resolutionDeg": 0.5,
     "cells": 91894,
     "terrain": {
@@ -304,9 +304,12 @@
     "snapping": "Each site is scored at the nearest earth.json cell centre. Sites more than 60 km from any cell are unscored.",
     "candidates": "Indonesian candidate sites are never part of tuning or validation. Their scores are reported separately."
   },
-  "notes": [],
+  "notes": [
+    "Left out of validation, because no known analog is listed for them: moon-marius-hills."
+  ],
   "warnings": [
-    "On the hold-out set, Moon targets do worse: mean percentile 0.633 against 0.792."
+    "On the hold-out set, Moon targets do worse: mean percentile 0.633 against 0.792.",
+    "earth.json was rebuilt (2026-11-14T13:02:33Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule."
   ],
   "negativeControls": [
     {

@@ -2,8 +2,8 @@
 
 **Status: FINAL.** Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.
 
-Generated 2026-11-14T12:03:24.951Z by `npx tsx validation/validate.ts base`. Preset: Base.
-Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-14T11:56:02Z.
+Generated 2026-11-15T04:53:04.583Z by `npx tsx validation/validate.ts base`. Preset: Base.
+Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-14T13:02:33Z.
 Split: 24 tuning sites and 10 hold-out sites, seed 20261114 (validation/tuning/split.json).
 
 Numbers are reported as they came out. Indonesian candidate sites are not part of this report.
@@ -62,9 +62,11 @@ How to read the measures:
 ## Warnings
 
 - On the hold-out set, Moon targets do worse: mean percentile 0.617 against 0.774.
+- earth.json was rebuilt (2026-11-14T13:02:33Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule.
 
 ## What was left out of the scores
 
+- Left out of validation, because no known analog is listed for them: moon-marius-hills.
 - Target `moon-malapert-massif` has no usable value for: tempRange.
 - Target `moon-mons-mouton` has no usable value for: tempRange.
 - Target `moon-haworth` has no usable value for: tempRange.

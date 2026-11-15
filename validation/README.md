@@ -68,6 +68,23 @@ Each known site counts once. A site listed for several targets is split equally 
 - `analogFor` was assigned by SBATS from each site's cited characteristic. The sources name the body
   (Moon or Mars), not the specific target.
 
+## Site-level scores and the geology diagnosis (added 2026-11-15)
+
+Both read the frozen values and change nothing.
+
+- `npx tsx validation/score_sites.ts` scores every site in `data/sites.json` (Session B) from its
+  fine-scale values, with the analog profile and the purpose scores, against every target. Output:
+  `output/SITES.md` and `output/sites.json`. Reading: `sites/FINDINGS.md`. Run it again whenever
+  Session B publishes new sites. If a site uses a new footprint size, the script stops and prints the
+  `target_terrain.py --posts N` command that measures the targets in a window of that size.
+- `npx tsx validation/geology.ts` takes apart the weak geology number of `output/PURPOSES.md` and adds
+  a separate site-level rock comparison. Output: `output/GEOLOGY.md`. Reading: `purposes/GEOLOGY.md`.
+- `SUMMARY.md` is the one-page plain-language account of all of it.
+
+Marius Hills (`moon-marius-hills`, added after the freeze) has no known analog listed, so
+`validate.ts` leaves it out: `lib.ts` exposes `validationTargets` for that. The seven-target numbers
+are unchanged.
+
 ## Scripts that measure the targets
 
 | Script | Produces | Run with |
