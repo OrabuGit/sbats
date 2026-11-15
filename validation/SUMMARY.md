@@ -17,6 +17,9 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **It is not over-fitted.** The one tuning pass tried 68 changes. None beat noise, none was kept.
 - **The top ten does not hang on the exact weights.** With every weight moved by up to a quarter, 200
   times, 81 to 91% of each target's ten best cells stay in the top ten.
+- **It finds new places.** For each target, 4 to 6 of its eight best-ranked places are more than
+  500 km from every known analog we listed: high, cold desert around 35 N, 85 E for Mars and Marius
+  Hills, and the far north of the Canadian Arctic for the lunar poles.
 - **Measured at the site, known analogs score very high.** From a 5 km footprint, Mauna Kea, Atacama,
   Haughton and Lanzarote reach 95 to 98 out of 100 for rover mobility against their best target.
 
@@ -26,11 +29,13 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
   the lunar poles. Read the rank, not the score.
 - **It ranks, it does not pinpoint.** Only 29% of known analogs reach the top tenth of Earth.
 - **The Moon is harder than Mars.** Lunar analogs beat 62% of squares, Mars analogs 77%. No lunar
-  analog reaches the top tenth.
+  analog reaches the top tenth. The lunar training sites are craters and volcanoes in green, wet
+  places, chosen for landforms, not climate (`MOON.md`).
 - **Rock type barely works:** 59% for geology sites against 56% for the rest. A 55 km square has one
   rock class, often not the rock at the crater, and "geology site" usually means a landform.
 - **Sites known for one thing are under-ranked.** An impact crater in farmland can score near zero.
-- **The Indonesian candidates score 0 on the all-round score.** Hot, wet, vegetated. At site scale
+- **The Indonesian candidates score 0 on the all-round score.** Hot, wet, vegetated. The best cell in
+  the Indonesian region beats 40 to 49% of Earth's cells. At site scale
   they still score 0 as a full base rehearsal. What they offer is narrower: basalt rock (Tambora,
   the lava caves), crater and lava-field shapes, and at Merapi three mineral families shared with
   Gale crater (hematite, jarosite, smectite clay), as many as Mauna Kea shares.
@@ -80,5 +85,6 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - Marius Hills was added after the freeze, has no known analog, and is in none of these numbers.
 
 Detail: `output/REPORT.md`, `tuning/FROZEN.md`, `output/PURPOSES.md`, `purposes/GEOLOGY.md`,
-`sites/FINDINGS.md`, `output/MINERALS.md`, `output/BENCHMARKS.md`, `output/STABILITY.md`,
+`sites/FINDINGS.md`, `MOON.md`, `output/DISCOVERIES.md`, `output/MINERALS.md`, `output/BENCHMARKS.md`,
+`output/STABILITY.md`,
 `../data/REVIEW_ME.md`.

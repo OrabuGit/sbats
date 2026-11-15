@@ -82,6 +82,10 @@ Both read the frozen values and change nothing.
 - `npx tsx validation/benchmarks.ts` scores every site of `data/sites.json`, known analogs and candidates
   alike, with the match record, and writes `data/benchmarks.json` for the Featured page and
   `output/BENCHMARKS.md`. Run it again after `sites.json`, `targets.json` or `target_minerals.json` change.
+- `npx tsx validation/discoveries.ts` lists what the frozen score itself puts at the top for each target, with the
+  app's rules for spacing and for "new", and the best cells of the Indonesian region (`data/discoveries.json`,
+  `output/DISCOVERIES.md`). `npx tsx validation/stability.ts` writes `output/STABILITY.md`. `MOON.md` explains why
+  known lunar analogs rank lower than Mars analogs.
 - `npx tsx validation/minerals.ts` lists which mineral families each site shares with each target
   (`output/MINERALS.md`). Site-level only, added after the freeze.
 - `SUMMARY.md` is the one-page plain-language account of all of it.

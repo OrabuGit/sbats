@@ -245,6 +245,24 @@ Read plainly:
 - The Indonesian candidates do not move: Tambora's cell stays near rank 59,000 of 92,000 and Merapi's
   near 63,000, whatever the weights. Their low all-round rank is not an accident of the weights.
 
+## Where Indonesia stands in the world list
+
+`validation/output/DISCOVERIES.md`, from `npx tsx validation/discoveries.ts`: the frozen all-round
+score over every land cell, listed from the top.
+
+- The best-ranked cells in the Indonesian region are in East Nusa Tenggara by their coordinates
+  (9.75 S, 120.25 E and 10.75 S, 121.75 E; a person should confirm the islands). They beat 40% to 49%
+  of Earth's cells, depending on the target, with scores of 0 to 0.1. Vegetation holds them back.
+- The places the score puts first are elsewhere: around 34 to 37 N, 83 to 87 E (the northern Tibetan
+  Plateau by the coordinates) for the Mars targets and Marius Hills, with scores of 49 to 56; and
+  around 82 N, 83 W (the Canadian High Arctic) for the lunar polar targets, with scores of 51 to 54.
+  Most are more than 500 km from every site in our list of 28 known analogs.
+
+So the tool's own answer to "where on Earth is most like these targets, all round" is not Indonesia.
+The Indonesian sites are put forward for specific things the all-round score does not reward: basalt
+rock, crater and lava shapes, lava tubes, and at Merapi a mineral overlap with Gale. That distinction
+should be said out loud, not hidden.
+
 ## What this view cannot tell you
 
 - Anything about climate at the site. A weather station on the crater floor would be needed.

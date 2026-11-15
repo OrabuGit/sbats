@@ -529,6 +529,26 @@ Built by `validation/benchmarks.ts` with `app/src/lib/match`.
 - `summary.best` is the best of all targets and flatters; `median` is the typical target. Show both.
 - Show `meta.caveats` with the table.
 
+### data/discoveries.json
+
+What the frozen all-round score puts at the top for each target. Built by `validation/discoveries.ts`.
+
+```
+{ "meta": { "generatedAt", "frozenAt", "note", "rules": { "preset", "confidence", "minSeparationKm", "newDistanceKm", "top", "indonesiaBox" }, "caveats": [ string ] },
+  "targets": [ { "target", "name", "body", "scoredCells", "newInTop",
+                 "top": [ Pick ], "indonesia": [ Pick ] } ] }
+Pick = { "lat", "lon", "score", "rank", "percentile", "confidence", "isNew",
+         "nearestKnown": { "id", "name", "km" },
+         "dimensions": { "<id>": { "similarity", "verdict" } }, "limitingFactor", "reason",
+         "values": { "<factor key>": number | null },
+         "stability": { "rankP05", "rankP95", "shareInTop10" } | null }
+```
+
+- Same rules as the app's candidate list: Base weights, high and medium confidence, picks 250 km apart,
+  `isNew` when more than 500 km from every known analog. `indonesia` holds the best cells inside
+  `rules.indonesiaBox`, which also covers parts of neighbouring countries.
+- Coordinates are cell centres. No place name is stored.
+
 ## Missing values and confidence
 
 Approved by the team on 2026-11-14. Implemented in `/app/src/lib/scoring` (Session C), shown by Session A.
