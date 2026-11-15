@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import type { EarthFile } from '../types';
+import type { CellSummary, EarthFile } from '../types';
+import { loadExtra } from '../data/access';
+import { siteCode, formatCoords } from '../lib/geo';
+import { ConfidenceBadge } from './Badges';
 import { dataUrl, loadFindings, type ExtractIndex, type FeaturedSite, type Findings, type SitesFile } from '../data/sites';
 import { useAsync } from '../lib/useAsync';
 import { HeroGlobes, type HeroPlace } from './HeroGlobes';
@@ -11,6 +14,11 @@ import type { WorldId } from './Worlds';
 
 interface Props {
   earth: EarthFile;
+  /** Scores of every Earth cell for the current target. */
+  results: CellSummary[];
+  target: { id: string; name: string };
+  /** Opens the match page of the Earth cell at a point, against a target. */
+  onOpenMatch: (lat: number, lon: number, targetId: string) => void;
   places: HeroPlace[];
   sites: SitesFile | null;
   extracts: ExtractIndex | null;
@@ -60,6 +68,73 @@ function Tile({ site, extracts, onOpen }: { site: FeaturedSite; extracts: Extrac
         {region(site.name)} · <span className="num">{site.footprintKm}</span> km footprint
       </span>
     </button>
+  );
+}
+
+interface DiscPick {
+  lat: number;
+  lon: number;
+  score: number;
+  rank: number;
+  confidence: 'high' | 'medium' | 'low';
+  isNew: boolean;
+  nearestKnown: { name: string; km: number } | null;
+  stability: { rankP05: number; rankP95: number; shareInTop10: number } | null;
+}
+interface Discoveries {
+  targets: { target: string; name: string; top: DiscPick[] }[];
+}
+
+/** The three best-scoring Earth places for the current target, from data/discoveries.json. */
+function TopScan({ target, onOpen }: { target: { id: string; name: string }; onOpen: (lat: number, lon: number, id: string) => void }) {
+  const disc = useAsync(() => loadExtra<Discoveries>('discoveries.json'), 'home-top-scan');
+  const picks = disc.status === 'ready' ? (disc.value?.targets.find((t) => t.target === target.id)?.top.slice(0, 3) ?? []) : [];
+  if (disc.status === 'ready' && picks.length === 0) return null;
+  return (
+    <section aria-labelledby="h-top-scan" className="mt-24 px-5 sm:px-10 lg:px-16">
+      <Reveal>
+        <h2 id="h-top-scan" className="display-l text-[30px] sm:text-[44px]">
+          Top of the global scan for {target.name}
+        </h2>
+      </Reveal>
+      <ol className="mt-10 grid gap-x-10 gap-y-10 md:grid-cols-3">
+        {disc.status === 'loading' && <li className="text-[14px] text-muted">Loading the scan</li>}
+        {picks.map((p, i) => (
+          <li key={`${p.lat},${p.lon}`}>
+            <Reveal i={i}>
+              <p className="text-[13px] text-muted">Rank {p.rank.toLocaleString('en-US')}</p>
+              <p className="display-xl mt-1 text-[64px] text-text">
+                {p.score.toFixed(0)}
+                <span className="ml-2 text-[15px] font-normal text-muted">/ 100</span>
+              </p>
+              <p className="num mt-2 text-[13px] text-text">{siteCode({ lat: p.lat, lon: p.lon })}</p>
+              <p className="num text-[12px] text-muted">{formatCoords(p.lat, p.lon)}</p>
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <ConfidenceBadge confidence={p.confidence} />
+                {p.isNew && (
+                  <span className="border border-accent px-1.5 text-[11px] font-semibold leading-[18px] text-accent" title={p.nearestKnown ? `${Math.round(p.nearestKnown.km).toLocaleString('en-US')} km from ${p.nearestKnown.name}` : undefined}>
+                    New{p.nearestKnown ? `, ${Math.round(p.nearestKnown.km).toLocaleString('en-US')} km from any known analog` : ''}
+                  </span>
+                )}
+              </div>
+              <p className="mt-2 text-[13px] leading-5 text-muted">
+                {p.stability
+                  ? `Stable: rank ${p.stability.rankP05} to ${p.stability.rankP95} in nine of ten redraws of the weights, in the top 10 in ${Math.round(p.stability.shareInTop10 * 100)}% of them.`
+                  : 'No stability figure for this place.'}
+              </p>
+              <button type="button" onClick={() => onOpen(p.lat, p.lon, target.id)} className="link-rule mt-4 text-[15px] font-medium text-text">
+                Open the match
+              </button>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+      <Reveal className="mt-10">
+        <p className="max-w-[72ch] text-[14px] leading-[22px] text-muted">
+          These are the tool&rsquo;s own all-round picks. Our Indonesian candidates above are offered for specific properties, such as rock type and landform, not as all-round matches.
+        </p>
+      </Reveal>
+    </section>
   );
 }
 
@@ -114,9 +189,9 @@ export function Home(p: Props) {
             <HeroGlobes places={p.places} cells={p.earth.cells.length} onPlace={p.onPlace} onWorld={p.onWorld} />
           </div>
           <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:pb-0 lg:pl-4 lg:pr-12 lg:pt-14">
-            <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[38px]">Rehearse a Moon or Mars base on Earth.</h2>
+            <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[38px]">Find where on Earth to rehearse a Moon or Mars base.</h2>
             <p className="mt-3 max-w-[40ch] text-[14px] leading-[22px] text-muted lg:mt-4">
-              SBATS scores every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land against a base site on another world, and shows where each match holds and where it fails.
+              Pick a landing site or a planned base on the Moon or Mars. SBATS ranks every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.
             </p>
             <div className="mt-6 flex flex-col items-start gap-5 lg:mt-9">
               <button type="button" onClick={p.onFind} className="btn btn-primary !h-14 !min-h-14 w-full max-w-[320px] !justify-between !px-6 !text-[17px] !font-semibold">
@@ -192,8 +267,22 @@ export function Home(p: Props) {
           )}
         </section>
 
+        <TopScan target={p.target} onOpen={p.onOpenMatch} />
+
         {/* 3. How it works, the data, the method and its limits. */}
-        <HomeStory earth={p.earth} placeCount={p.places.length} onMethod={p.onMethod} onValidation={p.onValidation} onFind={p.onFind} />
+        <HomeStory
+          earth={p.earth}
+          results={p.results}
+          targetName={p.target.name}
+          targetId={p.target.id}
+          placeNames={p.places.filter((x) => x.hasValues).map((x) => x.name)}
+          placeCount={p.places.length}
+          extracts={p.extracts}
+          leadImage={leadImage ? dataUrl(leadImage.file) : null}
+          onMethod={p.onMethod}
+          onValidation={p.onValidation}
+          onFind={p.onFind}
+        />
 
       </main>
     </div>

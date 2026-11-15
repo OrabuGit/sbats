@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AmbientLight,
-  CylinderGeometry,
+  CircleGeometry,
+  RingGeometry,
   Color,
   DirectionalLight,
   Group,
@@ -133,11 +134,17 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
     scene.add(sun);
 
     const geo = new SphereGeometry(1, 96, 48);
-    const stalk = new CylinderGeometry(0.006, 0.006, 0.07, 6).translate(0, 0.035, 0);
-    const head = new SphereGeometry(1, 14, 10);
+    // A base marker: a flat ring on the ground, and for a place with measured values a small habitat
+    // dome in the middle. Drawn in pixel units, so the size on screen is the same on every globe.
+    const ringBig = new RingGeometry(8.6, 10.4, 40).rotateX(-Math.PI / 2);
+    const ringSmall = new RingGeometry(4.4, 5.8, 32).rotateX(-Math.PI / 2);
+    const dome = new SphereGeometry(5.6, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
+    const dot = new CircleGeometry(1.8, 16).rotateX(-Math.PI / 2);
     const hit = new SphereGeometry(0.05, 8, 6);
-    const white = new MeshBasicMaterial({ color: 0xd7dde3 });
-    const amber = new MeshBasicMaterial({ color: 0xffb000 });
+    const off = { polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 };
+    const white = new MeshBasicMaterial({ color: 0xd7dde3, ...off });
+    const amber = new MeshBasicMaterial({ color: 0xffb000, ...off });
+    const amberDome = new MeshStandardMaterial({ color: 0xffb000, roughness: 0.55, metalness: 0, emissive: 0x6b4a00, ...off });
     const ghost = new MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
     const loader = new TextureLoader();
 
@@ -175,26 +182,28 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
     });
     let loaded = 0;
 
-    // One pin per named place on Mars and the Moon.
+    // One marker per named place on Mars and the Moon.
     const up = new Vector3(0, 1, 0);
     const hits: { mesh: Mesh; g: Globe }[] = [];
+    const markers: { group: Group; g: Globe }[] = [];
     for (const p of placesRef.current) {
       const g = globes.find((x) => x.world === p.body);
       if (!g) continue;
       const n = toVec(p.lat, p.lon);
       const pin = new Group();
-      pin.position.copy(n);
+      pin.position.copy(n.clone().multiplyScalar(1.002));
       pin.quaternion.copy(new Quaternion().setFromUnitVectors(up, n));
-      const s = new Mesh(stalk, p.hasValues ? amber : white);
-      const h = new Mesh(head, p.hasValues ? amber : white);
-      const hs = p.hasValues ? 0.03 : 0.021;
-      h.scale.setScalar(hs);
-      h.position.y = 0.07 + hs * 0.6;
+      const m = new Group();
+      if (p.hasValues) {
+        m.add(new Mesh(ringBig, amber), new Mesh(dome, amberDome));
+      } else {
+        m.add(new Mesh(ringSmall, white), new Mesh(dot, white));
+      }
       const t = new Mesh(hit, ghost);
-      t.position.y = 0.07;
       t.userData.placeId = p.id;
       hits.push({ mesh: t, g });
-      pin.add(s, h, t);
+      markers.push({ group: m, g });
+      pin.add(m, t);
       g.group.add(pin);
     }
 
@@ -217,6 +226,8 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       }
       // A pin can be hit within 14 px whatever the size of its globe (the hit mesh has radius 0.05).
       for (const { mesh, g } of hits) mesh.scale.setScalar(Math.max(1, 14 / (g.slot.r * 0.05)));
+      // Markers are drawn in pixel units: one unit on a marker is one pixel on screen.
+      for (const { group, g } of markers) group.scale.setScalar(1 / g.slot.r);
       setSize({ w, h });
       draw();
     };
@@ -353,8 +364,11 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       canvas.removeEventListener('pointercancel', onUp);
       canvas.removeEventListener('pointerleave', onLeave);
       geo.dispose();
-      stalk.dispose();
-      head.dispose();
+      ringBig.dispose();
+      ringSmall.dispose();
+      dome.dispose();
+      dot.dispose();
+      amberDome.dispose();
       hit.dispose();
       white.dispose();
       amber.dispose();
@@ -405,9 +419,23 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
           </span>
         </button>
       ))}
-      <p className="readout absolute bottom-3 left-4 hidden max-w-[70%] sm:block">
-        Not to scale. Amber pins have measured values; white pins are cited places without. Drag a globe to turn it.
-      </p>
+      <div className="absolute bottom-4 left-4 hidden max-w-[80%] flex-wrap items-center gap-x-6 gap-y-1 text-[12px] text-muted sm:flex sm:left-8">
+        <span className="inline-flex items-center gap-2">
+          <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true">
+            <ellipse cx="11" cy="9" rx="10" ry="4" fill="none" stroke="#FFB000" strokeWidth="1.6" />
+            <path d="M5.5 9 A5.5 5.5 0 0 1 16.5 9 Z" fill="#FFB000" />
+          </svg>
+          Base site with measured values
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true">
+            <ellipse cx="11" cy="7" rx="6" ry="3" fill="none" stroke="#D7DDE3" strokeWidth="1.4" />
+            <circle cx="11" cy="7" r="1.4" fill="#D7DDE3" />
+          </svg>
+          Landing site or candidate region, no values yet
+        </span>
+        <span>Drag a globe. Not to scale.</span>
+      </div>
     </div>
   );
 }

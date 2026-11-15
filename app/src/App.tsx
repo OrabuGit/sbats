@@ -717,6 +717,9 @@ function Orbit({ data }: { data: DataBundle }) {
       {view === 'home' && (
         <Home
           earth={earth}
+          results={results}
+          target={{ id: target.id, name: target.name }}
+          onOpenMatch={openSite}
           places={heroPlaces}
           sites={featuredSites}
           extracts={extractIndex}
