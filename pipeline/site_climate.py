@@ -25,7 +25,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from common import CACHE, DATA  # noqa: E402
+from common import AI_NOTE, CACHE, DATA  # noqa: E402
 
 BASE = "https://nasa-power.s3.amazonaws.com/"
 SOURCES = {
@@ -105,6 +105,7 @@ def build() -> dict:
         fields.append(e)
     return {
         "meta": {
+            "aiUse": AI_NOTE,
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "description": ("Monthly climate normals for every site in analogs.json and the extra sites of sites.json. Each value is that of the source "
                             "grid cell containing the site, not a measurement at the site."),

@@ -37,7 +37,7 @@ from rasterio.windows import from_bounds
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from common import CACHE, DATA, LATS, LONS, USER_AGENT, cell_index  # noqa: E402
+from common import AI_NOTE, CACHE, DATA, LATS, LONS, USER_AGENT, cell_index  # noqa: E402
 
 BASE = "https://s3.ap-northeast-1.wasabisys.com/je-pds/cog/v1"
 GSMAP = "JAXA.EORC_GSMaP_standard.Gauge.00Z-23Z.v6_monthly-normal"
@@ -181,6 +181,7 @@ def main() -> None:
           if r_["ndvi"]["nasaModis"] is not None and r_["ndvi"]["jaxaSgli"] is not None]
     out = {
         "meta": {
+            "aiUse": AI_NOTE,
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "description": ("Cross-check of NASA values against JAXA data for every named site. A check only: no JAXA value "
                             "replaces a NASA value."),

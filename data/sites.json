@@ -1,6 +1,7 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:39:34Z",
+  "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
+  "generatedAt": "2026-11-15T06:42:20Z",
   "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json, two more candidate sites proposed by a team member, and thirteen already-known analogs for comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint.",
   "year": 2025,
   "bareNdviThreshold": 0.2,
@@ -6683,12 +6684,13 @@
      "mapUnit": "Quaternary Evaporitic"
     },
     "lithology": {
-     "value": null,
+     "value": 14,
      "unit": "class code",
      "scale": "site",
-     "source": null,
-     "badge": null,
-     "note": "The rock type has no exact GLiM class in the mapping table, or is unknown."
+     "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+     "badge": "Literature",
+     "label": "Evaporites",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
     },
     "tempMean": {
      "value": 7.6,
@@ -7124,12 +7126,13 @@
      "mapUnit": "Neogene Andesitic and related"
     },
     "lithology": {
-     "value": null,
+     "value": 10,
      "unit": "class code",
      "scale": "site",
-     "source": null,
-     "badge": null,
-     "note": "The rock type has no exact GLiM class in the mapping table, or is unknown."
+     "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+     "badge": "Literature",
+     "label": "Intermediate volcanic rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
     },
     "tempMean": {
      "value": 8.21,

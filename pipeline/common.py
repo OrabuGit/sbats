@@ -81,3 +81,7 @@ def cell_index(lat: float, lon: float) -> tuple[int, int]:
     i = min(NLAT - 1, max(0, int((90.0 - lat) / RES)))
     j = min(NLON - 1, max(0, int((lon + 180.0) / RES)))
     return i, j
+
+
+# Written into the meta block of every data file the pipeline builds (submission rule: acknowledge AI use in metadata).
+AI_NOTE = "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md."

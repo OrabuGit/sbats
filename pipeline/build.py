@@ -21,6 +21,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from common import CACHE, DATA, LATS, LONS, NLAT, NLON, RES, cell_index, load_grid  # noqa: E402
+from common import AI_NOTE
 import landmask  # noqa: E402
 
 STAGES = ["climate", "ndvi", "terrain", "lithology", "landcover", "atmosphere", "permafrost"]
@@ -148,6 +149,7 @@ def assemble() -> dict:
             cells.append(c)
     factors, provenance = factor_entries()
     meta = {
+        "aiUse": AI_NOTE,
         "resolutionDeg": RES,
         "factors": factors,
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

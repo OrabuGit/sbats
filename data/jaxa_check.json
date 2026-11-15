@@ -1,6 +1,7 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:17:16Z",
+  "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
+  "generatedAt": "2026-11-15T06:42:20Z",
   "description": "Cross-check of NASA values against JAXA data for every named site. A check only: no JAXA value replaces a NASA value.",
   "sources": {
    "jaxaPrecip": "GSMaP gauge-adjusted monthly normals 2012-2021, 0.1 degree (JAXA EORC; Kubota et al. 2007, IEEE TGRS 45:2259), read from the JAXA Earth API archive, collection JAXA.EORC_GSMaP_standard.Gauge.00Z-23Z.v6_monthly-normal",

@@ -10,7 +10,13 @@ See `AI_USE.md`.
 
 ## Rebuild everything
 
-From the repository root:
+From the repository root, one command rebuilds every file the pipeline owns under `/data`:
+
+```bash
+uv run --project pipeline pipeline/all.py
+```
+
+It runs the steps below in order and stops at the first failure. The Earth grid alone is:
 
 ```bash
 uv run --project pipeline pipeline/build.py
@@ -77,6 +83,26 @@ Limits of the site files:
 - The lunar and Mars extracts use the same LOLA and MOLA products as the target terrain values in
   `/validation`.
 
+## Moon and Mars grids, and checks
+
+```bash
+uv run --project pipeline pipeline/planets.py        # data/moon.json, data/mars.json and the .bin copies
+uv run --project pipeline pipeline/jaxa_check.py     # data/jaxa_check.json
+```
+
+| Script | Output | What it is |
+| --- | --- | --- |
+| `planets.py` | `data/moon.json`, `data/mars.json`, `.bin` copies | Global grids (Moon 2 degrees, Mars 1 degree) so any point can be a target. It calls the five stage files below and caches each result in `cache/planet/` |
+| `planet_terrain.py` | slope, roughness | LOLA (Moon) and MOLA (Mars) through the shared `terrain_metrics()`, 55.6 km window per cell |
+| `moon_temperature.py` | Moon tempMean, tempRange | LRO Diviner surface temperature by local time |
+| `mars_climate.py` | Mars tempMean, tempRange, surfTempMean, windSpeed, dustOpticalDepth | Mars Climate Database maps (a model), 56 requests, one at a time |
+| `planet_geology.py` | lithology | USGS global geologic maps and an explicit unit-to-class table |
+| `moon_shadow.py` | Moon psrFrac | LOLA permanently shadowed regions |
+| `jaxa_check.py` | `data/jaxa_check.json` | JAXA GSMaP precipitation and GCOM-C SGLI NDVI against our NASA values at the named sites |
+
+A cold run downloads about 6 GB (LOLA 0.5 GB, MOLA 2.1 GB, Diviner 2.8 GB, the two geologic map packages
+1 GB) and takes about an hour, most of it download. Everything downloads itself and is cached.
+
 ## What each stage does
 
 | Stage | File | Factors | Dataset | How the cell value is made |
@@ -86,6 +112,8 @@ Limits of the site files:
 | Vegetation | `ndvi.py` | `ndvi` | MODIS/Terra MOD13C2 v061, 12 months of 2025 | Mean of monthly cell means over land pixels with reliability 0, 1 or 2 |
 | Terrain | `terrain.py`, `terrain_metrics.py` | `slope`, `roughness` | Copernicus DEM GLO-90 and its water body mask | Elevation block-averaged to 463 m posts, water left out. Mean Horn slope (degrees) and elevation standard deviation (m) over the cell |
 | Land cover | `landcover.py` | `snowIceFrac`, `barrenFrac` (extra keys, not factors) | MODIS MCD12C1 v061, 2025 | Share of the cell's land in IGBP class 15 (snow and ice) and 16 (barren) |
+| Atmosphere | `atmosphere.py` | `windSpeed`, `aod` (extra keys) | NASA POWER climatology 2001-2020: WS10M (MERRA-2), AOD_55 (CERES SYN1deg) | Annual mean wind speed at 10 m and aerosol optical depth at 550 nm, regridded like the climate factors |
+| Permafrost | `permafrost.py` | `permafrostFrac` (extra key) | Obu et al. 2018 permafrost probability, 1 km, Northern Hemisphere (PANGAEA) | Mean permafrost probability over the cell; null south of 25 N |
 | Rock type | `lithology.py` | `lithology` | GLiM v1.0, 0.5 degree grid | Class code as published. Water bodies and no data become `null` |
 
 `build.py` runs the stages, writes `data/earth.json` in one atomic step, and prints the
@@ -130,6 +158,14 @@ values only with values made the same way.
   sea included. NDVI and terrain use the land pixels only.
 - Lithology is `null` for cells that the GLiM grid marks as sea, water or no data. This is
   mostly coast and small islands.
+- Moon and Mars rock classes are a reading of geologic map units, not rock measurements: lunar highland
+  units are classed as basic plutonic and Martian volcanic units as basic volcanic by the project's choice.
+  About a third of lunar cells and two thirds of Mars cells have no class.
+- Mars temperature, wind and dust are from a climate model (Mars Climate Database) on a grid of about 4 by
+  6 degrees. Mars `tempRange` is a lower bound (3-hour steps, 4 seasons).
+- Lunar `psrFrac` is permanent shadow, not ice. Mars `waterH2O` is a 5 degree gamma-ray map, not the SWIM
+  ice maps, which could not be downloaded.
+- `permafrostFrac` is modelled and covers land north of 25 N only. `aod` is all aerosol, not dust alone.
 - Site footprints marked `provisional` in `sites.json` were set by the pipeline from a traced rim
   (Tambora), a mapped polygon (Batur lava) or a single published point (Dallol, Dasht-e Lut, Salar de
   Uyuni, Tunupa). A team member should check them.

@@ -49,7 +49,7 @@ from rasterio.windows import Window, from_bounds
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from common import CACHE, DATA, LATS, LONS, USER_AGENT, cell_index  # noqa: E402
+from common import AI_NOTE, CACHE, DATA, LATS, LONS, USER_AGENT, cell_index  # noqa: E402
 from terrain_metrics import SPACING_M, terrain_metrics  # noqa: E402
 import emit_minerals  # noqa: E402
 
@@ -170,6 +170,8 @@ ROCK_TO_GLIM = {
     "Andesite / Basaltic Andesite": 10,
     "Granite": 9,
     "Trachybasalt / Tephrite Basanite": 2,
+    "Evaporite": 14,                       # GLiM class "Evaporites"
+    "Andesite and related volcanic": 10,   # andesite is the type intermediate volcanic rock
 }
 
 GDAL_ENV = dict(
@@ -623,6 +625,7 @@ def build() -> dict:
         }
         sites.append(site)
     meta = {
+        "aiUse": AI_NOTE,
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "description": ("Factors measured inside a small square footprint centred on each site, for the candidate sites of "
                         "analogs.json, two more candidate sites proposed by a team member, and thirteen already-known analogs for "
