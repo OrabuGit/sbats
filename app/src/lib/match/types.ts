@@ -123,6 +123,8 @@ export interface MatchRecord {
     origin: ProfileOrigin;
     confidence: Confidence;
     missing: FactorKey[];
+    /** False when the target has no temperature: its scores run high and must not be compared with other targets'. */
+    scoresComparable: boolean;
     notes: string[];
   };
   earth: {

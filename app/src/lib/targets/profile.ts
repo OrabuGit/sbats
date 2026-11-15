@@ -83,6 +83,15 @@ export function targetCoverage(target: Target): { coverage: number; missing: Fac
   return { coverage: round(covered / total, 9), missing: FACTOR_KEYS.filter((k) => target.values[k].value === null) };
 }
 
+/** The warning shown when a target has no temperature at all. */
+export const NO_TEMPERATURE_WARNING =
+  'This target has no temperature value, so scores leave temperature out. Temperature is what holds most Earth places back for every other target, so scores here run much higher and must not be compared with scores for other targets.';
+
+/** True when the target side has at least one temperature value, so its scores can be set beside those of other targets. */
+export function scoresComparable(target: Target): boolean {
+  return target.values.tempMean.value !== null || target.values.tempRange.value !== null;
+}
+
 function level(coverage: number): Confidence {
   if (coverage >= 1) return 'high';
   return coverage >= MEDIUM_CONFIDENCE_COVERAGE ? 'medium' : 'low';
@@ -222,12 +231,14 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
     const { coverage, missing } = targetCoverage(curated.target);
     const notes = [`Curated target: every value is cited or measured for this place (data/targets.json). It lies ${curated.distanceKm.toFixed(1)} km from the point picked.`];
     if (missing.length > 0) notes.push(`No published value for: ${missing.join(', ')}.`);
+    if (!scoresComparable(curated.target)) notes.push(NO_TEMPERATURE_WARNING);
     return {
       origin: 'curated',
       target: curated.target,
       confidence: level(coverage),
       missing,
       coverage,
+      scoresComparable: scoresComparable(curated.target),
       notes,
       cell: null,
       curated: { id: curated.target.id, distanceKm: round(curated.distanceKm, 2) },
@@ -304,12 +315,16 @@ export function targetFromPoint(body: TargetBody, lat: number, lon: number, opti
   const { coverage, missing } = targetCoverage(target);
   if (missing.length > 0) notes.push(`No value for: ${missing.join(', ')}. Scores leave these out, and with too little left they show "no data".`);
   if (knownSite) notes.push(`Nearest named place: ${knownSite.site.name}, ${knownSite.distanceKm.toFixed(1)} km away (${knownSite.site.source}).`);
+  // With no temperature the confidence is low whatever else is known, and the scores carry a warning.
+  const comparable = scoresComparable(target);
+  if (hit && !comparable) notes.push(NO_TEMPERATURE_WARNING);
   return {
     origin: hit ? 'grid' : 'none',
     target,
-    confidence: hit ? oneLower(level(coverage)) : 'low',
+    confidence: hit && comparable ? oneLower(level(coverage)) : 'low',
     missing,
     coverage,
+    scoresComparable: comparable,
     notes,
     cell,
     curated: null,
@@ -330,6 +345,7 @@ export function targetFromKnownSite(site: KnownSite, options: TargetFromPointOpt
       confidence: level(coverage),
       missing,
       coverage,
+      scoresComparable: scoresComparable(linked),
       notes: [`Curated target for this place (data/targets.json), centred ${d.toFixed(1)} km from the listed coordinates.`],
       cell: null,
       curated: { id: linked.id, distanceKm: round(d, 2) },

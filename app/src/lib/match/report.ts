@@ -154,7 +154,7 @@ export function buildReport(input: ReportInput): MatchReport {
     record.score.value === null
       ? `No all-round score: ${record.score.reason}`
       : `All-round score ${fixed(record.score.value, 1)} out of 100 (${record.score.preset} weights, ${record.score.confidence} confidence). ${record.score.reason}`;
-  const scoreParagraphs: ReportText[] = [plain(scoreText), plain('The all-round score is low for almost every place on Earth, because Earth is far warmer and wetter than the target. Read the rank and the single dimensions, not the score alone.')];
+  const scoreParagraphs: ReportText[] = [...(record.target.scoresComparable ? [] : [plain(record.caveats[0] ?? '')]), plain(scoreText), plain('The all-round score is low for almost every place on Earth, because Earth is far warmer and wetter than the target. Read the rank and the single dimensions, not the score alone.')];
   if (input.validation) {
     scoreParagraphs.push(
       plain(

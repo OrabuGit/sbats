@@ -11,6 +11,8 @@ export {
   gridEnvironment,
   nearestGridCell,
   nearestKnownSite,
+  NO_TEMPERATURE_WARNING,
+  scoresComparable,
   sharedCannotCopy,
   targetCoverage,
   targetFromKnownSite,

@@ -31,7 +31,7 @@ import type {
   ScoreKey,
   Target,
 } from '../scoring/index';
-import { targetCoverage } from '../targets/index';
+import { NO_TEMPERATURE_WARNING, scoresComparable, targetCoverage } from '../targets/index';
 import type { TargetProfile } from '../targets/index';
 import { EXTRA_DIMENSIONS, compareExtra, extendedPurposeScore } from './extras';
 import { listLabels } from './minerals';
@@ -258,7 +258,8 @@ export function buildMatchRecord(input: MatchInput): MatchRecord {
 
   const tc = targetCoverage(target);
   const profile = input.profile ?? null;
-  const caveats: string[] = [...place.notes];
+  const comparable = scoresComparable(target);
+  const caveats: string[] = comparable ? [...place.notes] : [NO_TEMPERATURE_WARNING, ...place.notes];
   if (place.scale === 'site') {
     caveats.push(
       input.terrainLikeForLike
@@ -266,7 +267,7 @@ export function buildMatchRecord(input: MatchInput): MatchRecord {
         : 'Terrain here is from a small footprint, but the target terrain is measured over 55.6 km. Roughness grows with the window, so the terrain comparison is not like for like.',
     );
   }
-  if (profile) caveats.push(...profile.notes);
+  if (profile) caveats.push(...profile.notes.filter((n) => n !== NO_TEMPERATURE_WARNING));
   for (const w of prepared.warnings) caveats.push(w);
   caveats.push('Dimensions marked as added after the freeze are not part of the all-round score and have not been validated.');
   caveats.push('Gravity, vacuum or thin air, and radiation are never scored. They are listed under what Earth cannot copy.');
@@ -284,6 +285,7 @@ export function buildMatchRecord(input: MatchInput): MatchRecord {
       origin: profile?.origin ?? 'curated',
       confidence: profile?.confidence ?? (tc.coverage >= 1 ? 'high' : tc.coverage >= 0.8 ? 'medium' : 'low'),
       missing: profile?.missing ?? tc.missing,
+      scoresComparable: comparable,
       notes: profile?.notes ?? [],
     },
     earth: {

@@ -22,6 +22,7 @@ profile.origin      // 'curated' | 'grid' | 'none'
 profile.confidence  // 'high' | 'medium' | 'low'
 profile.missing     // data keys with no value on the target side
 profile.notes       // sentences to show with it
+profile.scoresComparable  // false when the target has no temperature: see below
 ```
 
 Order of preference:
@@ -37,6 +38,13 @@ Order of preference:
    profile is `medium`, one with a missing factor is `low`.
 3. **None.** With no grid, or no cell at the point, only the shared values are filled. Scores built
    on it fall under the minimum coverage and show "no data". Nothing is made up.
+
+**A target with no temperature.** Some grid cells have no temperature value (gaps in the Moon's local-time
+coverage). Scores then leave temperature out, and because temperature is what holds most Earth places back,
+they run far higher: 95 out of 100 for Apollo 11's cell against 58 for a lunar site that has one.
+`scoresComparable` is false for such a target, its confidence is `low`, and `notes` carries the warning
+(`NO_TEMPERATURE_WARNING`). Show the warning wherever a score for that target is shown, and do not rank
+such targets beside others.
 
 A grid value whose factor has no stated source in `meta.factors` is not used. A grid rock class that is not in
 `rockClasses` is left out with a note: scoring a class the rock table does not list would throw.

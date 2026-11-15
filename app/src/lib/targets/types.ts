@@ -98,6 +98,12 @@ export interface TargetProfile {
   missing: FactorKey[];
   /** Share of the Base weights that the target side can supply, 0 to 1. */
   coverage: number;
+  /**
+   * False when the target has no temperature at all. Scores then leave temperature out, and since
+   * temperature is what holds most Earth places back for every other target, they run far higher and
+   * must not be set beside scores for other targets. Show the warning in `notes` wherever a score is shown.
+   */
+  scoresComparable: boolean;
   /** Plain sentences to show with the profile. */
   notes: string[];
   /** The grid cell used, for origin "grid". */

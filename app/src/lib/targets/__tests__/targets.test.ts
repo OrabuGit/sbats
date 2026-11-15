@@ -12,7 +12,9 @@ import {
   kmPerDegree,
   nearestGridCell,
   nearestKnownSite,
+  NO_TEMPERATURE_WARNING,
   normaliseLon,
+  scoresComparable,
   sharedCannotCopy,
   targetCoverage,
   targetFromKnownSite,
@@ -284,6 +286,35 @@ describe('Named places', () => {
     equal(unlinked.origin, 'grid');
     equal(unlinked.target.name, 'Site viking');
     equal(targetFromKnownSite(SITES[2] as KnownSite, { grid: null, curated: CURATED }).origin, 'none');
+  });
+});
+
+describe('A target with no temperature', () => {
+  const g = grid('mars', [{ lat: 40.25, lon: -157.75, tempMean: null, tempRange: null, slope: 0.3, roughness: 17, lithology: 2 }]);
+  const p = targetFromPoint('mars', 40.2, 202.3, { grid: g, curated: CURATED });
+
+  it('is flagged: its scores cannot be set beside those of other targets', () => {
+    equal(p.origin, 'grid');
+    equal(p.scoresComparable, false);
+    equal(p.confidence, 'low');
+    ok(p.notes.includes(NO_TEMPERATURE_WARNING));
+    deepEqual(p.missing, ['tempMean', 'tempRange']);
+  });
+
+  it('is not flagged when one temperature value is present, or for an ordinary target', () => {
+    const half = grid('mars', [{ lat: 40.25, lon: -157.75, tempMean: -70, tempRange: null, slope: 0.3, roughness: 17, lithology: 2 }]);
+    equal(targetFromPoint('mars', 40.2, 202.3, { grid: half, curated: CURATED }).scoresComparable, true);
+    equal(targetFromPoint('mars', 40.2, 202.3, { grid: MARS_GRID, curated: CURATED }).scoresComparable, true);
+    equal(targetFromPoint('mars', 18.44, 77.45, { grid: null, curated: CURATED }).scoresComparable, true);
+    equal(scoresComparable(CURATED[2] as Target), true); // a polar target with a mean and no swing
+  });
+
+  it('really does score higher, which is why the warning exists', () => {
+    const cell: EarthCell = { lat: 40, lon: 0, tempMean: 25, tempRange: 10, precip: 20, ndvi: 0.05, slope: 0.3, roughness: 17, lithology: 2 };
+    const ranges = computeEarthRanges([cell, { ...cell, tempMean: -50, tempRange: 20, precip: 3000, ndvi: 0.8, slope: 20, roughness: 900 }]);
+    const without = scoreCell(cell, prepareTarget(p.target, ranges, null), PRESETS.base.weights).score as number;
+    const withTemp = scoreCell(cell, prepareTarget(targetFromPoint('mars', 40.2, 202.3, { grid: MARS_GRID, curated: CURATED }).target, ranges, null), PRESETS.base.weights).score as number;
+    ok(without > withTemp + 20, `${without} against ${withTemp}`);
   });
 });
 

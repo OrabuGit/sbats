@@ -12,6 +12,7 @@ import {
   MINERALS_BLEND_FLOOR,
   PARTLY_AT,
   buildMatchRecord,
+  buildReport,
   compareExtra,
   earthPlaceFromCell,
   earthPlaceFromSite,
@@ -239,6 +240,18 @@ describe('What Earth cannot copy and the caveats', () => {
     equal(r.score.verdict, 'no-data');
     equal(r.score.unscoredReason, 'coverage-too-low');
     ok(r.caveats.some((c) => c.includes('No global grid of Mars')));
+  });
+
+  it('warns first, in the caveats and on the target, when the target has no temperature', () => {
+    const target: Target = { ...TARGET, values: { ...TARGET.values, tempMean: val(null, null), tempRange: val(null, null) } };
+    const r = record({ target });
+    equal(r.target.scoresComparable, false);
+    ok(r.caveats[0]?.startsWith('This target has no temperature value'));
+    equal(record().target.scoresComparable, true);
+    ok(!record().caveats.some((c) => c.startsWith('This target has no temperature value')));
+    // The report repeats it right above the score.
+    const report = buildReport({ record: r });
+    ok(report.sections.find((x) => x.id === 'score')?.paragraphs[0]?.text.startsWith('This target has no temperature value'));
   });
 
   it('reports a curated target as curated, with the confidence of its own coverage', () => {

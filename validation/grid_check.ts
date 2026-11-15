@@ -108,6 +108,9 @@ const matches = profiles.map(({ site, profile }) => ({
   origin: profile.origin,
   confidence: profile.confidence,
   missing: profile.missing,
+  /** False when the place has no temperature: its scores run high and must not be compared with other places'. */
+  scoresComparable: profile.scoresComparable,
+  environment: Object.fromEntries(Object.entries(profile.environment).map(([k, v]) => [k, v?.value ?? null])),
   targetId: profile.target.id,
   cell: profile.cell,
   values: Object.fromEntries(KEYS.map((k) => [k, profile.target.values[k].value])),
@@ -134,10 +137,11 @@ const gaps = agreement.flatMap((a) => a.rows.filter((r) => (r.sigmasApart ?? 0) 
 md.push('', gaps.length > 0 ? `More than one tolerance apart, or a different rock class: ${gaps.join('; ')}.` : 'No value is more than one tolerance from its curated counterpart.', '');
 md.push('## 2. What a user gets for each named place', '');
 md.push(`${coverage.places} named places. By origin: ${Object.entries(coverage.byOrigin).map(([k, v]) => `${v} ${k}`).join(', ')}. By confidence: ${Object.entries(coverage.byConfidence).map(([k, v]) => `${v} ${k}`).join(', ')}. Missing factors: ${Object.entries(coverage.missing).map(([k, v]) => `${k} at ${v}`).join(', ') || 'none'}.`, '');
+md.push(`Places with no temperature value: ${matches.filter((m) => m.origin !== 'none' && !m.scoresComparable).length}. Their scores leave temperature out, run much higher, and are marked "not comparable" below.`, '');
 md.push('| Place | Body | Profile from | Confidence | Missing | Best-ranked Earth cell | Score |', '| --- | --- | --- | --- | --- | --- | --- |');
 for (const m of matches) {
   const b = m.best?.[0];
-  md.push(`| ${m.name} | ${m.body} | ${m.origin === 'curated' ? `curated target ${m.targetId}` : m.origin === 'grid' && m.cell ? `grid cell ${at(m.cell.lat, m.cell.lon)}` : 'no data'} | ${m.confidence} | ${m.missing.join(', ') || 'none'} | ${b ? at(b.lat, b.lon) : 'no score'} | ${b ? b.score.toFixed(1) : ''} |`);
+  md.push(`| ${m.name} | ${m.body} | ${m.origin === 'curated' ? `curated target ${m.targetId}` : m.origin === 'grid' && m.cell ? `grid cell ${at(m.cell.lat, m.cell.lon)}` : 'no data'} | ${m.confidence} | ${m.missing.join(', ') || 'none'} | ${b ? at(b.lat, b.lon) : 'no score'} | ${b ? `${b.score.toFixed(1)}${m.scoresComparable ? '' : ' (not comparable: no temperature)'}` : ''} |`);
 }
 md.push('');
 mkdirSync(OUT, { recursive: true });
