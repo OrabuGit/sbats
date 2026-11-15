@@ -229,9 +229,10 @@ and for sunlight in the sandbox.
 
 Owner: Session B. Built by `pipeline/sites.py`.
 
-Fine-scale values for the `candidate` sites of `analogs.json` and five well-known analogs (Mauna Kea,
-Kilauea, Atacama Yungay, Haughton, Lanzarote), measured inside a small square footprint centred on the
-site's coordinates instead of over the 0.5 degree cell.
+Fine-scale values for the `candidate` sites of `analogs.json` and nine well-known analogs (Mauna Kea,
+Kilauea, Atacama Yungay, Haughton, Lanzarote, Dallol, Dasht-e Lut, Salar de Uyuni, Tunupa), measured
+inside a small square footprint centred on the site's coordinates instead of over the 0.5 degree cell.
+`kind: "known"` means an already-known analog shown for comparison, never a new finding.
 
 ```
 {
@@ -239,16 +240,33 @@ site's coordinates instead of over the 0.5 degree cell.
   "sites": [
     { "id", "name", "lat", "lon", "kind",
       "footprintKm": number, "footprintNote": string,
+      "footprintStatus": "set" | "provisional", "footprintBasis": string | null,
+      "inAnalogsJson": boolean, "coordinateSource": string | null, "analogSource": string | null,
+      "proposedBy": string | null, "caveat": string | null,
       "values": { "<key>": { "value", "unit", "scale", "source", "badge", ...extra } },
       "gridCell": { "lat", "lon", "ndvi", "slope", "roughness", "lithology", "snowIceFrac", "barrenFrac" } | null,
-      "detail": { ... }
+      "detail": { ... },
+      "mineralogy": { "value": { "group1": G, "group2": G } | null, "scale", "source", "badge", "date",
+                      "validShare", "pixels", "emitCovers", "granulesAvailable", "granulesTried", "note" }
     }
   ]
 }
 ```
 
-- `id`, `name`, `lat`, `lon`, `kind` are copied from `analogs.json`.
-- `footprintKm` is the side of the square in km (2 to 5). `footprintNote` says what it covers and what it
+- `id`, `name`, `lat`, `lon`, `kind` are copied from `analogs.json`. Sites with `inAnalogsJson: false`
+  (added 2026-11-15: Dasht-e Lut, Salar de Uyuni, Tunupa) are defined in `pipeline/sites.py` only, so the
+  global score and the app's site list do not know them.
+- `footprintStatus: "provisional"` (added 2026-11-15) marks a footprint the pipeline set for a site a
+  team member proposed; `footprintBasis` says how. Show the word "provisional" next to such a site.
+  `caveat`, when not null, is a known problem with the site's values and must be shown with them.
+- `mineralogy` (added 2026-11-15): NASA EMIT mineral matches inside the footprint on one date. `G` is
+  `{ "identifiedShare": number, "top": [ { "libraryName", "libraryTitle", "shareOfValidPixels", "meanBandDepth" } ] }`,
+  at most five entries, most frequent first. Shares are fractions of the footprint pixels left after the
+  cloud, cirrus and water mask (`validShare` of the footprint). They count how often a match occurs, not
+  how much of the mineral is present, and are weak under vegetation. `value` is `null` when no granule
+  qualified; `note` then gives the reason and `emitCovers` says whether EMIT has any granule there.
+  Not used by any score.
+- `footprintKm` is the side of the square in km (2 to 7.4). `footprintNote` says what it covers and what it
   misses. Show both next to the values.
 - Every entry in `values` has `value` (number, string or `null`), `unit`, `scale`, `source` and `badge`.
   `scale` says what the value describes:
@@ -287,6 +305,7 @@ every target. `data/extracts/index.json`:
   "meta": { "generatedAt", "windowKm", "projection", "description", "imageNote" },
   "items": [
     { "id", "name", "body": "earth" | "moon" | "mars", "lat", "lon", "matchedTargets"?: [ string ],
+      "pairedWith"?: string | [ string ] | null,
       "elevation": { "file", "format", "unit", "size", "pixelM", "min", "max", "noDataShare",
                      "product", "nativePixelM", "attribution", "badge", "note" } | null,
       "image": { "file", "size", "pixelM", "bands", "product", "attribution", "badge", ... } | null
@@ -300,7 +319,10 @@ every target. `data/extracts/index.json`:
   in a local orthographic projection. One kilometre is the same length in every extract.
 - `file` is relative to `/data`. `elevation` files are raw little-endian float32, `size` x `size` values,
   row-major, north row first, in metres; NaN is no data. `image` files are JPEG, `size` x `size` pixels.
-- `pixelM` differs per dataset (30 m Earth, 80 m Moon, 463 m Mars). Nothing is upsampled: scale each
+- `meta.pairs` (added 2026-11-15) lists `{ "earth", "other" }` pairs the team asked to show side by
+  side (Tambora caldera with Shackleton, Batur lava fields with Marius Hills). `pairedWith` on an item
+  repeats it. A pair is a display choice, not an analog score.
+- `pixelM` differs per dataset (30 m Earth, 80 m Moon at the south pole, 60 m Moon elsewhere, 463 m Mars). Nothing is upsampled: scale each
   layer by `pixelM` when drawing. The Mars elevation is 43 x 43 pixels and will look coarse; say so.
 - Elevation datums differ per body (see each `note`). Compare relief, not absolute height.
 - `attribution` must be shown wherever the image or terrain is displayed.
