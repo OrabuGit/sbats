@@ -316,7 +316,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             range, by the formula above with the Base weights for Dryness and Temperature. Grid-cell values, not measured at the site.
           </Rule>
           <Rule name="Ground extracts" value="20 km">
-            Every extract covers the same 20 km square, north up. Pixel size is 30 m on Earth, 80 m on the Moon and 463 m on Mars, and nothing
+            Every extract covers the same 20 km square, north up. Pixel size differs by world (30 m on Earth, 20 to 60 m on the Moon, 200 m on Mars) and is printed under each picture, and nothing
             is upsampled. Relief is shaded with one light on all three.
           </Rule>
           <Rule name="Verdict" value="0.75 and 0.30">
@@ -329,8 +329,9 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             No redraw is kept: the frozen weights are read, never changed.
           </Rule>
           <Rule name="Route" value="pixel size">
-            A route is straight legs between waypoints, sampled at the pixel size of the elevation grid (30 m on Earth, 60 to 80 m on the
-            Moon, 463 m on Mars). Slope is measured over that distance, so a coarser grid hides short steep steps. No driving time or energy
+            A route is straight legs between waypoints, sampled at the pixel size of the elevation grid (30 m on Earth, 20 to 60 m on the
+            Moon, 200 m on Mars). Slope is measured over that distance, so a coarser grid hides short steep steps and routes on grids of
+            different pixel size must not be compared by slope. No driving time or energy
             is shown.
           </Rule>
           <Rule name="3D terrain" value="1 : 1">

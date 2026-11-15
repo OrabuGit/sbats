@@ -33,12 +33,16 @@ interface Props {
   onTarget: (id: string) => void;
   /** A marker was clicked. */
   onPick: (id: string) => void;
+  /** The surface was clicked at this point. null when points cannot be picked on this world. */
+  onPoint: ((lat: number, lon: number) => void) | null;
   /** False while another view covers the globe, so it stops drawing. */
   active: boolean;
 }
 
 /** Step 1: the Moon or Mars as a globe, with the target sites as markers. */
-export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, active }: Props) {
+export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, onPoint, active }: Props) {
+  const pointRef = useRef(onPoint);
+  pointRef.current = onPoint;
   const holder = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeInstance | null>(null);
   const pickRef = useRef(onPick);
@@ -87,7 +91,8 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
       })
       .htmlElementVisibilityModifier((elm: HTMLElement, visible: boolean) => {
         elm.style.visibility = visible ? 'visible' : 'hidden';
-      });
+      })
+      .onGlobeClick(({ lat, lng }: { lat: number; lng: number }) => pointRef.current?.(lat, lng));
     const controls = globe.controls();
     controls.autoRotate = false;
     controls.enableDamping = !reduced;

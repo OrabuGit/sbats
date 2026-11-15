@@ -26,7 +26,7 @@ import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
-import type { KnownSitesFile } from './lib/matchAdapter';
+import { targetFromKnownSite, targetFromPoint, type BodyGrid, type KnownSitesFile, type TargetProfile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
 import { loadTargetEnvironment, loadTargetMinerals, loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
@@ -111,7 +111,14 @@ export default function App() {
 function Orbit({ data }: { data: DataBundle }) {
   const { earth, targets, analogs, lithology } = data;
 
-  const [targetId, setTargetId] = useState(targets[0].id);
+  const [targetId, setTargetIdRaw] = useState(targets[0].id);
+  // A target built from a clicked point or a named place with no curated target (lib/targets).
+  const [pointProfile, setPointProfile] = useState<TargetProfile | null>(null);
+  // Choosing a listed base site always leaves any picked point.
+  const setTargetId = useCallback((id: string) => {
+    setPointProfile(null);
+    setTargetIdRaw(id);
+  }, []);
   const [presetId, setPresetId] = useState<string | null>(PRESETS[0].id);
   const [sliderWeights, setWeights] = useState<Weights>(PRESETS[0].weights);
   const [matchMode, setMatchMode] = useState<MatchMode>('all');
@@ -140,6 +147,16 @@ function Orbit({ data }: { data: DataBundle }) {
   const targetWindows = useAsync(loadTargetWindows, 'target-windows');
   const knownSites = useAsync(() => loadExtra<KnownSitesFile>('known_sites.json'), 'known-sites');
   const [placeId, setPlaceId] = useState<string | null>(null);
+  // Global grids of the Moon and Mars, fetched when step 2 first opens. null for a body whose grid is not published.
+  const gridsWanted = flags.anyPoint && (view === 'orbit' || view === 'match') ? 'yes' : 'no';
+  const gridsLoaded = useRef(false);
+  if (gridsWanted === 'yes') gridsLoaded.current = true;
+  const grids = useAsync(
+    async () => (gridsLoaded.current ? { moon: await loadExtra<BodyGrid>('moon.json'), mars: await loadExtra<BodyGrid>('mars.json') } : { moon: null, mars: null }),
+    `grids-${gridsLoaded.current}`,
+  );
+  const gridOf = useCallback((b: 'moon' | 'mars') => (grids.status === 'ready' ? grids.value[b] : null), [grids]);
+  const rockClasses = useMemo(() => (earth.meta.factors.find((f) => f.key === 'lithology')?.classes ?? []).map((c) => c.code), [earth]);
   const rovers = useAsync(() => loadExtra<RoversFile>('rovers.json'), 'rovers');
   const targetMinerals = useAsync(loadTargetMinerals, 'target-minerals');
   const targetEnv = useAsync(loadTargetEnvironment, 'target-environment');
@@ -148,7 +165,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
   const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
-  const target = targets.find((t) => t.id === targetId) ?? targets[0];
+  const target = pointProfile?.target ?? targets.find((t) => t.id === targetId) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
   const index = useMemo(() => buildIndex(earth), [earth]);
   const scorer = useMemo(() => createScorer(earth, lithology), [earth, lithology]);
@@ -241,7 +258,7 @@ function Orbit({ data }: { data: DataBundle }) {
       setTargetId(id);
       select(i);
     },
-    [index, select],
+    [index, select, setTargetId],
   );
 
   // Step 2 places: the named places of known_sites.json, those with measured values first, then any
@@ -256,7 +273,7 @@ function Orbit({ data }: { data: DataBundle }) {
         body: k.body,
         lat: k.lat,
         lon: k.lon,
-        hasValues: !!k.targetId && targets.some((t) => t.id === k.targetId),
+        hasValues: (!!k.targetId && targets.some((t) => t.id === k.targetId)) || gridOf(k.body) !== null,
         targetId: k.targetId ?? null,
         sub: [k.mission ?? k.status, k.date].filter(Boolean).join(' · '),
         line: `${k.status.charAt(0).toUpperCase()}${k.status.slice(1)}${k.mission ? `, ${k.mission}` : ''}${k.date ? `, ${k.date}` : ''}.`,
@@ -267,17 +284,65 @@ function Orbit({ data }: { data: DataBundle }) {
         .filter((t) => !linked.has(t.id))
         .map((t) => ({ id: t.id, name: t.name, body: t.body, lat: t.lat, lon: t.lon, hasValues: true, targetId: t.id as string | null, sub: 'Base site in the data', line: '', source: '', url: null as string | null })),
     ];
-    return rows.sort((a, b) => Number(b.hasValues) - Number(a.hasValues));
-  }, [knownSites, targets]);
-  const place = places.find((p) => p.id === placeId) ?? places.find((p) => p.targetId === targetId) ?? null;
+    // A clicked point is a place of its own while it is the target.
+    if (pointProfile && !known.some((k) => k.id === placeId))
+      rows.push({
+        id: pointProfile.target.id,
+        name: pointProfile.target.name,
+        body: pointProfile.target.body,
+        lat: pointProfile.target.lat,
+        lon: pointProfile.target.lon,
+        hasValues: pointProfile.origin !== 'none',
+        targetId: null,
+        sub: 'Picked on the globe',
+        line: '',
+        source: '',
+        url: null,
+      });
+    // Places linked to a measured base site first, then the rest in file order.
+    return rows.sort((a, b) => Number(!!b.targetId) - Number(!!a.targetId));
+  }, [knownSites, targets, gridOf, pointProfile, placeId]);
+  const place = places.find((p) => p.id === placeId) ?? (pointProfile ? places.find((p) => p.id === pointProfile.target.id) : places.find((p) => p.targetId === targetId)) ?? null;
+  const profileOptions = useCallback(
+    (b: 'moon' | 'mars') => ({ grid: gridOf(b), curated: targets, knownSites: knownSites.status === 'ready' && knownSites.value ? knownSites.value.sites : [], rockClasses }),
+    [gridOf, targets, knownSites, rockClasses],
+  );
   const pickPlace = useCallback(
     (id: string) => {
       const p = places.find((x) => x.id === id);
       if (!p) return;
       setPlaceId(id);
-      if (p.targetId && p.hasValues) setTargetId(p.targetId);
+      if (p.targetId && targets.some((t) => t.id === p.targetId)) return setTargetId(p.targetId);
+      // A named place with no curated target: build its target from the body's grid, when there is one.
+      const site = knownSites.status === 'ready' ? knownSites.value?.sites.find((k) => k.id === id) : undefined;
+      if (!site || gridOf(site.body) === null) return;
+      try {
+        setPointProfile(targetFromKnownSite(site, profileOptions(site.body)));
+      } catch {
+        setPointProfile(null);
+      }
     },
-    [places],
+    [places, targets, knownSites, gridOf, profileOptions, setTargetId],
+  );
+  // Any point on the Moon or Mars: a target from the grid cell that holds it.
+  const pickPoint = useCallback(
+    (b: 'moon' | 'mars', lat: number, lon: number) => {
+      if (!flags.anyPoint || gridOf(b) === null) return false;
+      try {
+        const profile = targetFromPoint(b, lat, lon, profileOptions(b));
+        if (profile.origin === 'curated') {
+          setPlaceId(null);
+          setTargetId(profile.target.id);
+        } else {
+          setPlaceId(null);
+          setPointProfile(profile);
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [gridOf, profileOptions, setTargetId],
   );
 
   const pickWorld = useCallback(
@@ -491,9 +556,10 @@ function Orbit({ data }: { data: DataBundle }) {
             targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
             minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
             environment: targetEnv.status === 'ready' ? targetEnv.value : null,
+            profile: pointProfile,
           })
         : null,
-    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows, targetMinerals, targetEnv],
+    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows, targetMinerals, targetEnv, pointProfile],
   );
 
   // Rank stability: 200 redraws of the weights, computed after the screen has settled (about 0.7 s).
@@ -525,10 +591,12 @@ function Orbit({ data }: { data: DataBundle }) {
       id: selectedSavedId,
       targetId: target.id,
       targetName: target.name,
+      ...(pointProfile ? { targetPoint: { body: target.body, lat: target.lat, lon: target.lon } } : {}),
       lat: selectedCell.lat,
       lon: selectedCell.lon,
       name: named?.name ?? siteCode(selectedCell),
       score: explained.score,
+      ...(pointProfile && !pointProfile.scoresComparable ? { comparable: false } : {}),
       savedAt: new Date().toISOString(),
     });
   };
@@ -595,7 +663,23 @@ function Orbit({ data }: { data: DataBundle }) {
             setView('world');
           }}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
-          onOpenSaved={(s) => openSite(s.lat, s.lon, s.targetId)}
+          onOpenSaved={(s) => {
+            const i = index.nearest(s.lat, s.lon, 2);
+            if (i < 0) return;
+            if (s.targetPoint) {
+              // A saved match against a picked point: rebuild that target from the grid, which may still be loading.
+              loadExtra<BodyGrid>(`${s.targetPoint.body}.json`).then((grid) => {
+                if (!grid || !s.targetPoint) return;
+                try {
+                  setPlaceId(null);
+                  setPointProfile(targetFromPoint(s.targetPoint.body, s.targetPoint.lat, s.targetPoint.lon, { ...profileOptions(s.targetPoint.body), grid }));
+                  select(i);
+                } catch {
+                  // The point can no longer be built: leave the saved entry as it is.
+                }
+              });
+            } else openSite(s.lat, s.lon, s.targetId);
+          }}
           onRemoveSaved={saved.remove}
         />
       )}
@@ -633,6 +717,7 @@ function Orbit({ data }: { data: DataBundle }) {
           results={results}
           top={candidates}
           reason={(i) => reasonLine(explain(i))}
+          warnings={pointProfile?.notes ?? []}
           onSitePage={openSitePage}
           onMatch={openSite}
           onCell={(i) => select(i)}
@@ -703,7 +788,7 @@ function Orbit({ data }: { data: DataBundle }) {
                 }
               : null
           }
-          notes={[...ts.notes, ...(match?.note ? [match.note] : [])]}
+          notes={[...(pointProfile && !pointProfile.scoresComparable ? pointProfile.notes.slice(-1) : []), ...ts.notes, ...(match?.note ? [match.note] : [])]}
           rank={rank}
           ground={{ earth: earthExtract, target: targetExtract, windowKm, state: extracts.status }}
           saved={isSaved}
@@ -833,11 +918,11 @@ function Orbit({ data }: { data: DataBundle }) {
           <LeftPanel
             step={step === 2 ? 2 : 3}
             onChangePlace={() => onStep(2)}
-            targets={targets}
-            targetId={target.id}
+            target={target}
             places={places}
             placeId={place?.id ?? null}
             onPlace={pickPlace}
+            anyPoint={flags.anyPoint && gridOf(target.body) !== null}
             presets={PRESETS}
             presetId={presetId}
             onPreset={(id) => {
@@ -882,8 +967,9 @@ function Orbit({ data }: { data: DataBundle }) {
                 onPick={(id) => {
                   const p = places.find((x) => x.id === id);
                   pickPlace(id);
-                  if (p?.hasValues && p.targetId) goToEarth(p.targetId);
+                  if (p?.targetId && targets.some((t) => t.id === p.targetId)) goToEarth(p.targetId);
                 }}
+                onPoint={flags.anyPoint && gridOf(target.body) !== null ? (lat, lon) => pickPoint(target.body, lat, lon) : null}
                 active={showWorld}
               />
             </div>
@@ -917,7 +1003,7 @@ function Orbit({ data }: { data: DataBundle }) {
           className={`scroll order-3 bg-panel lg:order-3 lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
         >
           {step === 2 ? (
-            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} place={place && place.id !== target.id ? place : null} />
+            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} place={place && place.id !== target.id ? place : null} profile={pointProfile} />
           ) : (
             <CandidateList
               earth={earth}
@@ -932,6 +1018,7 @@ function Orbit({ data }: { data: DataBundle }) {
               includeLow={includeLow}
               onIncludeLow={setIncludeLow}
               stability={stabNow}
+              warnings={pointProfile?.notes ?? []}
               mode={mode}
               onMode={setMode}
               onSelect={select}

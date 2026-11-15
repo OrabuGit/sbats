@@ -19,6 +19,8 @@ interface Props {
   results: CellSummary[];
   top: Candidate[];
   reason: (index: number) => string;
+  /** Notes that must be shown with any score for the current target. */
+  warnings: string[];
   onSitePage: (id: string) => void;
   onMatch: (lat: number, lon: number, targetId: string) => void;
   onCell: (index: number) => void;
@@ -295,7 +297,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
 }
 
 /** Featured sites: the team's proposed sites first and largest, then benchmarks, then the top of the scan. */
-export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, target, earth, results, top, reason, onSitePage, onMatch, onCell }: Props) {
+export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, target, earth, results, top, reason, warnings, onSitePage, onMatch, onCell }: Props) {
   const findings = useAsync(loadFindings, 'findings');
   const scores = useAsync(loadSiteScores, 'site-scores');
   const bench = useAsync(() => loadExtra<Benchmarks>('benchmarks.json'), 'benchmarks');
@@ -512,6 +514,11 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           The three best 0.5° cells by all-round match, at least 250 km apart. Cell scale, about 55 km on a side. Pick another place in step 2 to
           change the target.
         </p>
+        {warnings.map((w) => (
+          <p key={w} className="mt-2 max-w-[72ch] border-l-2 border-accent pl-3 text-[12px] leading-[18px] text-text" role="note">
+            {w}
+          </p>
+        ))}
         {top.length === 0 ? (
           <p className="mt-3 text-[13px] text-muted">No data. No cell is scored for this target.</p>
         ) : (

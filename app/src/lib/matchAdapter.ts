@@ -12,6 +12,7 @@ import {
   extraRanges,
   sharedMinerals,
   targetEnvironment,
+  targetExtrasForProfile,
   sitePosts,
   targetAtSiteWindow,
   type MatchRecord,
@@ -32,7 +33,9 @@ export type { MatchRecord, RouteResult, ElevationTile, StabilityResult, SharedMi
 export type { MatchDimension, MatchRow, MatchSide, Verdict as RecordVerdict } from './match';
 export type { MatchReport, ReportText } from './match/report';
 export type { CellStability } from './scoring';
-export type { KnownSite, KnownSitesFile } from './targets';
+export type { BodyGrid, KnownSite, KnownSitesFile, TargetProfile } from './targets';
+export { targetFromKnownSite, targetFromPoint } from './targets';
+import type { TargetProfile } from './targets';
 
 /** Target terrain measured in windows the size of each site's footprint (Session C). null when not published. */
 export const loadTargetWindows = () => loadExtra<TargetWindowsFile>('target_windows.json');
@@ -65,6 +68,8 @@ export interface RecordInput {
   minerals?: TargetMineralsFile | null;
   /** data/target_environment.json: wind, dust and ice at the targets. */
   environment?: TargetEnvironmentFile | null;
+  /** The profile, when the target was built from a clicked point or a named place (lib/targets). */
+  profile?: TargetProfile | null;
 }
 
 /**
@@ -120,7 +125,8 @@ export function matchRecord(input: RecordInput): { record: MatchRecord; note: st
       minerals: shared,
       // Wind, dust and ice: the target side from target_environment.json, clamped to Earth's own range
       // the way the frozen score clamps (a windless Moon is compared with Earth's calmest cell).
-      targetExtras: targetEnvironment(input.environment ?? null, target.id),
+      profile: input.profile ?? null,
+      targetExtras: input.profile ? targetExtrasForProfile(input.profile, input.environment ?? null) : targetEnvironment(input.environment ?? null, target.id),
       extraRanges: xr,
     });
   try {

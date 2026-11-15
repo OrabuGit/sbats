@@ -5,10 +5,14 @@ export interface SavedLocation {
   id: string;
   targetId: string;
   targetName: string;
+  /** Set when the target is a picked point rather than a listed base site, so it can be rebuilt. */
+  targetPoint?: { body: 'moon' | 'mars'; lat: number; lon: number };
   lat: number;
   lon: number;
   name: string;
   score: number | null;
+  /** False when the target has no temperature: the score runs high and must not be read beside others. */
+  comparable?: boolean;
   savedAt: string;
 }
 

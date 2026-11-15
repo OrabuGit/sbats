@@ -25,6 +25,8 @@ interface Props {
   onIncludeLow: (v: boolean) => void;
   /** Rank stability for the listed cells, or null while it is being computed or switched off. */
   stability: StabilityResult | null;
+  /** Notes that must be shown with any score for this target, for example that it has no temperature. */
+  warnings: string[];
   mode: ListMode;
   onMode: (m: ListMode) => void;
   onSelect: (index: number) => void;
@@ -84,6 +86,11 @@ export function CandidateList(p: Props) {
             ))}
           </dl>
         </div>
+        {p.warnings.map((w) => (
+          <p key={w} className="mx-4 mt-2 border-l-2 border-accent pl-3 text-[12px] leading-[18px] text-text" role="note">
+            {w}
+          </p>
+        ))}
         {flags.stability && p.mode === 'ranked' && candidates.length > 0 && (
           <p className="px-4 pt-2 text-[12px] text-muted" role="status">
             <span className="label mr-2">Stability</span>

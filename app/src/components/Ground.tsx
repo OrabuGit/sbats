@@ -57,7 +57,7 @@ export function Ground({
         if (!alive || !cv) return;
         const g = cv.getContext('2d')!;
         const size = src.width;
-        // Coarse grids (Mars, 463 m) are drawn as the blocks they are, not smoothed into detail they lack.
+        // Coarse grids are drawn as the blocks they are, not smoothed into detail they lack.
         g.imageSmoothingEnabled = size >= cv.width / 4;
         g.clearRect(0, 0, cv.width, cv.height);
         if (band) g.drawImage(src, 0, size / 4, size, size / 2, 0, 0, cv.width, cv.height);
@@ -77,7 +77,7 @@ export function Ground({
   return (
     <figure className="m-0">
       <div className={`relative w-full overflow-hidden border border-line bg-panel [container-type:inline-size] ${band ? 'aspect-[2/1]' : 'aspect-square'}`}>
-        <canvas ref={ref} width={RES} height={band ? RES / 2 : RES} className="absolute inset-0 h-full w-full" role="img" aria-label={`${item.name}, ${shown === 'image' ? 'image' : 'shaded relief'}, north up`} />
+        <canvas ref={ref} width={RES} height={band ? RES / 2 : RES} className="absolute inset-0 h-full w-full" role="img" aria-label={`${item.name}, ${shown === 'image' ? (meta?.product ?? 'image') : 'shaded relief'}, north up`} />
         {state !== 'ready' && (
           <p className="label absolute inset-0 flex items-center px-3" role="status">
             {state === 'loading' ? 'Loading ground' : 'Ground could not be loaded'}
@@ -102,6 +102,7 @@ export function Ground({
           {item.elevation ? ` · ${(item.elevation.max - item.elevation.min).toLocaleString('en-US', { maximumFractionDigits: 0 })} m of relief` : ''}
         </span>
         {meta && <SourceBadge badge={meta.badge} source={meta.product} />}
+        {meta && <span className="basis-full text-text">{shown === 'image' ? meta.product : `Shaded relief from ${meta.product}`}</span>}
         {meta && <span className="basis-full">{meta.attribution}</span>}
       </figcaption>
     </figure>

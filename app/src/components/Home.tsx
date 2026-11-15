@@ -141,7 +141,13 @@ export function Home({ targets, cells, siteCount, sites, extracts, saved, onFind
                       {formatCoords(s.lat, s.lon)} · for {s.targetName}
                     </span>
                   </span>
-                  <span className={`num ${s.score === null ? 'text-[11px] uppercase text-muted' : 'text-[17px] font-semibold text-text'}`}>{s.score === null ? 'no data' : s.score.toFixed(0)}</span>
+                  {s.comparable === false ? (
+                    <span className="num max-w-[150px] text-right text-[11px] text-muted" title="This target has no temperature value, so its scores run high and cannot be set beside the others.">
+                      {s.score === null ? 'no data' : s.score.toFixed(0)}, not comparable
+                    </span>
+                  ) : (
+                    <span className={`num ${s.score === null ? 'text-[11px] uppercase text-muted' : 'text-[17px] font-semibold text-text'}`}>{s.score === null ? 'no data' : s.score.toFixed(0)}</span>
+                  )}
                 </button>
                 <button type="button" onClick={() => onRemoveSaved(s.id)} aria-label={`Remove ${s.name} from saved locations`} className="tool !px-0 border-l border-line">
                   <X size={14} aria-hidden="true" />

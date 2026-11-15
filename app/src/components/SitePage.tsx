@@ -414,7 +414,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
         {extract && (
           <p className="max-w-[72ch] text-[12px] text-muted">
             North is up. The amber square is the {site.footprintKm} km footprint. Relief is shaded from the elevation grid with the same light on
-            each body. Pixel size differs and nothing is upsampled: 30 m on Earth, 80 m on the Moon, 463 m on Mars, which looks coarse.
+            each body. Pixel size differs by world and is printed under each picture. Nothing is upsampled.
           </p>
         )}
       </Section>

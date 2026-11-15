@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import { flags } from '../flags';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Preset, type Target, type Weights } from '../types';
 import { DIMENSIONS, FACTOR_LABELS, PURPOSES, type PurposeId } from '../lib/scoringAdapter';
 import { formatLat, formatLon } from '../lib/geo';
@@ -8,8 +7,6 @@ import { formatValue, keyLabel, type MetaByKey } from '../lib/format';
 import { SourceBadge } from './Badges';
 
 interface Props {
-  targets: Target[];
-  targetId: string;
   presets: Preset[];
   presetId: string | null;
   onPreset: (id: string) => void;
@@ -28,6 +25,10 @@ interface Props {
   places: PlaceRow[];
   placeId: string | null;
   onPlace: (id: string) => void;
+  /** True when a click on the globe of this world can be turned into a target. */
+  anyPoint: boolean;
+  /** The target in use, which may be one built from a picked point and so not in `targets`. */
+  target: Target;
 }
 
 export interface PlaceRow {
@@ -51,13 +52,12 @@ const dimensionLabel = (id: string) => DIMENSIONS.find((d) => d.id === id)?.labe
 
 const BODY_LABEL = { moon: 'Moon', mars: 'Mars' } as const;
 
-export function LeftPanel({ targets, targetId, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace, places, placeId, onPlace }: Props) {
+export function LeftPanel({ presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace, places, placeId, onPlace, anyPoint, target }: Props) {
   const [query, setQuery] = useState('');
   const q = query.trim().toLowerCase();
-  const body = (places.find((p) => p.id === placeId) ?? targets.find((x) => x.id === targetId))?.body;
+  const body = (places.find((p) => p.id === placeId) ?? target).body;
   const onBody = places.filter((p) => p.body === body);
   const listed = onBody.filter((p) => q === '' || `${p.name} ${p.sub}`.toLowerCase().includes(q));
-  const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const total = FACTOR_IDS.reduce((a, id) => a + weights[id], 0) || 1;
   const unpublished = FACTOR_KEYS.filter((k) => target.values[k]?.value === null || target.values[k]?.value === undefined);
   const activePreset = presets.find((p) => p.id === presetId);
@@ -111,7 +111,7 @@ export function LeftPanel({ targets, targetId, presets, presetId, onPreset, weig
           </fieldset>
           <p className="border-t border-line px-4 py-3 text-[12px] text-muted">
             <span className="num">{onBody.filter((p) => p.hasValues).length}</span> of <span className="num">{onBody.length}</span> places have measured values and can be
-            matched. {flags.anyPoint ? 'Or click any point on the globe.' : 'The others, and a click on any point, need the global grid of this world, which is not published yet.'}
+            matched. {anyPoint ? 'Or click any point on the globe: its values are those of the 1° grid cell around it.' : 'The others, and a click on any point, need the global grid of this world, which is not published yet.'}
           </p>
         </section>
       ) : (
@@ -127,6 +127,7 @@ export function LeftPanel({ targets, targetId, presets, presetId, onPreset, weig
           </button>
         </section>
       )}
+
 
       {(step === 3 || places.find((p) => p.id === placeId)?.hasValues !== false) && (
       <section className="border-b border-line p-4" aria-label={`${target.name}: values`}>

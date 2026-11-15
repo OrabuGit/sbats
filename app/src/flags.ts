@@ -22,10 +22,10 @@ export const flags = {
   /** Terrain page: route, rover, slope colours. */
   terrain: true,
   /**
-   * Step 2 "click any point" on the Moon or Mars. Off: the data has measured values for the listed
-   * base sites only. Turn on when Session B publishes values for arbitrary points.
+   * Step 2 "click any point" and named places without a curated target: a target is built from the
+   * body's global grid (lib/targets). Works for a body whose grid file exists (data/moon.json today).
    */
-  anyPoint: false,
+  anyPoint: true,
   /** Stability of a rank in the results list and on the match page (Session C's rankStability). */
   stability: true,
 } as const;

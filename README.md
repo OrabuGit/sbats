@@ -11,7 +11,10 @@ Live site: not published yet. The repository has no remote at the time of writin
 
 ## What it does
 
-1. **World and place.** Pick the Moon or Mars, then a base site (eight are in the data).
+1. **World and place.** Pick the Moon or Mars, then a place: one of 66 named landing sites and candidate
+   regions, or any point on the globe. Eight places have hand-checked values; the rest take the values of
+   the 1 to 2 degree grid cell around them, at lower confidence. Ten lunar places have no temperature in
+   the grid: their scores run high and the app says so wherever one is shown.
 2. **Matches.** All 91,894 land cells of Earth are scored in the browser and shown as a heatmap and a
    ranked list, with confidence and rank stability.
 3. **Match.** One Earth place against one target: both at the same ground scale, every dimension with
