@@ -18,7 +18,7 @@ export const flags = {
   /** Featured site pages from data/sites.json. */
   sitePages: true,
   /** Print-ready report of a match, with CSV and GeoJSON export. */
-  report: false,
+  report: true,
   /** Terrain page: route, rover, slope colours. */
   terrain: false,
   /**

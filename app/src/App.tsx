@@ -19,6 +19,7 @@ import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
+import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
@@ -548,7 +549,27 @@ function Orbit({ data }: { data: DataBundle }) {
         />
       )}
 
-      {(view === 'world' || view === 'report' || view === 'terrain') && (
+      {view === 'report' && selectedCell && explained && (
+        <Report
+          cell={selectedCell}
+          placeName={named?.name ?? null}
+          target={target}
+          explained={explained}
+          meta={meta}
+          earth={earth}
+          purpose={purpose}
+          profile={profile}
+          purposeScores={purposeScores}
+          percentile={pct}
+          rank={rank}
+          gaps={ts.prepared.gaps}
+          month={month}
+          results={results}
+          onBack={() => setView('match')}
+        />
+      )}
+
+      {(view === 'world' || view === 'terrain') && (
         <main className="scroll min-h-0 flex-1 bg-panel p-6">
           <p className="label">Not built yet</p>
           <p className="mt-2 text-[14px] text-text">{view === 'world' ? `World page: ${worldPage}` : view}</p>

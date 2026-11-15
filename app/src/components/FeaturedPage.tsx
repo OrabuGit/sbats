@@ -28,10 +28,14 @@ const region = (name: string) => name.split(',').slice(1).join(',').trim();
 
 type Scored = SiteScores['sites'][number];
 
-/** The result to show for a site: against the target it is listed for, else its first. */
+/** The result to show for a site: against the target it is listed for, else the one it scores best against. */
 function pick(s: Scored | undefined, analog: Analog | undefined) {
   if (!s || s.results.length === 0) return null;
-  return s.results.find((r) => r.listed) ?? s.results.find((r) => r.target === analog?.analogFor[0]) ?? s.results[0];
+  const listed = s.results.find((r) => r.listed) ?? s.results.find((r) => r.target === analog?.analogFor[0]);
+  if (listed) return listed;
+  // Not listed for any target: show the one it does best against, on its best purpose.
+  const best = (r: Scored['results'][number]) => Math.max(0, ...Object.values(r.site.purposes).map((p) => p.score ?? 0));
+  return [...s.results].sort((a, b) => best(b) - best(a))[0];
 }
 
 /** Five dimensions as rows of flat bars, similarity 0 to 1 at footprint scale. */

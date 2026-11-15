@@ -465,3 +465,47 @@ input[type='checkbox'].check:focus-visible {
   color: var(--color-text);
 }
 }
+
+/* Print: the report as a document on white paper. The app frame is left out. */
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-panel: #ffffff;
+    --color-line: #b9c0c7;
+    --color-text: #0b0d0f;
+    --color-muted: #4b5560;
+    --color-accent: #0b0d0f;
+  }
+  html,
+  body,
+  #root,
+  #root > div {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  body {
+    background: #fff;
+  }
+  #root > div > header,
+  #root > div > footer,
+  .no-print {
+    display: none !important;
+  }
+  .scroll {
+    overflow: visible !important;
+  }
+  .report {
+    max-width: none;
+    padding: 0;
+  }
+  .report tr,
+  .report li {
+    break-inside: avoid;
+  }
+  .report h3 {
+    break-after: avoid;
+  }
+  @page {
+    margin: 16mm;
+  }
+}
