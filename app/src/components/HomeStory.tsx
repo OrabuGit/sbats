@@ -9,6 +9,7 @@ import { holdSample, loadFrozen, loadReport, loadSources } from '../data/validat
 import type { ExtractIndex } from '../data/sites';
 import { verdictOf, VERDICT_WORD } from '../lib/verdict';
 import { ActivityArt } from './ActivityArt';
+import { BasePlan } from './BasePlan';
 import { AiMark } from './AiMark';
 import { ElementIcon, isElement } from './ElementIcon';
 import type { HeroPlace } from './HeroGlobes';
@@ -355,7 +356,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
     </div>,
     // 4. Act: the three things to do with a match
     <div key="s4" className="flex h-full flex-col justify-center">
-      <div className="relative aspect-[16/9] overflow-hidden bg-panel">{leadImage && <img src={leadImage} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}</div>
+      <BasePlan image={leadImage} />
       <ul className="mt-6 grid grid-cols-3 gap-5">
         {([
           ['base', 'Plan a base', 'Modules, power, water, 30 days'],
