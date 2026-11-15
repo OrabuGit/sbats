@@ -110,8 +110,13 @@ export function SiteTile({
   // The relief is a large file: read it only when the tile is on or near the screen.
   const [nearRef, near] = useNear<HTMLSpanElement>('300px');
 
+  // A new picture starts as loading. This must not depend on `near`: that turns true after an image above the fold has
+  // already loaded, and would put it back to loading with no further load event.
   useEffect(() => {
     setState('loading');
+  }, [item, shown]);
+
+  useEffect(() => {
     if (!near || !item || shown !== 'relief' || !item.elevation) return;
     let alive = true;
     const ev = item.elevation;
@@ -132,6 +137,13 @@ export function SiteTile({
     };
   }, [item, shown, near]);
 
+  // An image that finished loading before React attached its handler (a cached one) fires no load event.
+  const img = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    const el = img.current;
+    if (el && el.complete && el.naturalWidth > 0) setState('ready');
+  }, [item, shown, near]);
+
   const at = item ?? { body, lat, lon, name };
   const where = { lat: at.lat, lon: at.lon };
   const label = name;
@@ -149,6 +161,7 @@ export function SiteTile({
         {state !== 'ready' && <MapPicture body={item?.body ?? body} lat={where.lat} lon={where.lon} />}
         {item && shown === 'image' && item.image && (
           <img
+            ref={img}
             src={dataUrl(item.image.file)}
             alt={`${label}, ${item.image.product}, north up`}
             loading="lazy"
