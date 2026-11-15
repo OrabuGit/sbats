@@ -32,6 +32,8 @@ MARS = {
     "mars-jezero": (5.06, 3.14, 6.96, 0.480, 0.258, 0.890),
     "mars-gale": (12.55, 10.71, 13.86, 0.561, 0.284, 1.069),
     "mars-arcadia-planitia": (4.21, 3.19, 5.78, 0.401, 0.236, 0.729),
+    "mars-gusev-columbia-hills": (6.11, 5.55, 6.77, 0.418, 0.198, 0.799),   # added 2026-11-15, after the freeze
+    "mars-holden": (8.61, 3.92, 12.15, 0.454, 0.200, 0.798),                 # added 2026-11-15, after the freeze
 }
 # Copied by hand from validation/output/moon_temperature.json: share of the window that never exceeds 110 K
 MOON_COLD = {"moon-malapert-massif": 0.015, "moon-mons-mouton": 0.005, "moon-haworth": 0.354, "moon-shackleton-rim": 0.111}

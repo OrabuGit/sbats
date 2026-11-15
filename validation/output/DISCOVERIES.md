@@ -1,6 +1,6 @@
 # What the search finds: the best-ranked places on Earth for each target
 
-Written 2026-11-15T06:50:17.799Z by `npx tsx validation/discoveries.ts`. Score frozen 2026-11-14. Data file for the app: `data/discoveries.json`.
+Written 2026-11-15T13:43:41.730Z by `npx tsx validation/discoveries.ts`. Score frozen 2026-11-14. Data file for the app: `data/discoveries.json`.
 
 Rules, the same as the app's candidate list: best all-round score first (Base weights), high and medium confidence only, each pick at least 250 km from the picks above it. **New** means more than 500 km from every one of our 28 known analogs.
 
@@ -22,6 +22,8 @@ Rules, the same as the app's candidate list: best all-round score first (Base we
 | Jezero crater | 4 | 55.5 | 34.75 N, 84.75 E (score 55.5, rank 1) |
 | Gale crater | 4 | 51.8 | 36.75 N, 87.25 E (score 48.9, rank 5) |
 | Arcadia Planitia (site AP-1) | 6 | 51.5 | 35.25 N, 85.25 E (score 51.5, rank 1) |
+| Columbia Hills, Gusev crater | 5 | 48.9 | 35.75 N, 86.25 E (score 48.9, rank 1) |
+| Holden crater lake deposits | 2 | 63.7 | 35.75 N, 85.25 E (score 63.7, rank 1) |
 
 ## Malapert Massif (`moon-malapert-massif`)
 
@@ -206,4 +208,50 @@ Best-ranked cells in the Indonesian region:
 | 10.75 S, 121.75 E | 0.1 | 46508 | 49.4% | bareGround | Poor match for Arcadia Planitia (site AP-1). Held back by bare ground: vegetation cover (NDVI 0.61) where the target is bare ground. Medium confidence: no data for rock class. |
 | 8.25 S, 128.25 E | 0.0 | 48961 | 46.7% | bareGround | Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.66) where the target is bare ground. Medium confidence: no data for rock class. |
 | 9.25 S, 119.75 E | 0.0 | 51359 | 44.1% | bareGround | Poor match for Arcadia Planitia (site AP-1). Held back by bare ground: vegetation cover (NDVI 0.60) where the target is bare ground. Medium confidence: no data for rock class. |
+
+## Columbia Hills, Gusev crater (`mars-gusev-columbia-hills`)
+
+91894 cells scored.
+
+| # | Cell centre | Score | Rank | New? | Nearest known analog | Geology | Terrain | Climate | Bare ground | Sunlight | Held back by | Rank in nine of ten redraws |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 35.75 N, 86.25 E | 48.9 | 1 | **new** | Qaidam Basin, China, 752 km | matches | partly | no | matches | partly | temperature | 1 to 1 |
+| 2 | 35.25 N, 89.25 E | 44.1 | 2 | **new** | Qaidam Basin, China, 517 km | partly | partly | no | matches | partly | temperature | 2 to 4 |
+| 3 | 44.25 N, 104.25 E | 39.6 | 12 | **new** | Qaidam Basin, China, 1132 km | matches | partly | no | matches | no | temperature | 4 to 18 |
+| 4 | 35.25 N, 82.75 E | 38.9 | 13 | known area | Tso Kar, Ladakh, India, 489 km | no | partly | no | matches | partly | temperature | 11 to 54.1 |
+| 5 | 46.25 N, 107.75 E | 38.7 | 14 | **new** | Qaidam Basin, China, 1485 km | matches | matches | no | partly | no | temperature | 7 to 34.1 |
+| 6 | 38.25 N, 92.75 E | 37.1 | 18 | known area | Qaidam Basin, China, 185 km | no | matches | no | matches | partly | temperature | 13 to 54 |
+| 7 | 33.25 N, 37.25 E | 36.8 | 22 | known area | Makhtesh Ramon, Negev, Israel, 375 km | matches | matches | no | matches | partly | temperature | 7 to 59.1 |
+| 8 | 42.25 N, 102.25 E | 36.4 | 29 | **new** | Qaidam Basin, China, 866 km | no data | matches | no | matches | no | temperature | 16.9 to 55 |
+
+Best-ranked cells in the Indonesian region:
+
+| Cell centre | Score | Rank | Beats this share of cells | Held back by | Why |
+| --- | --- | --- | --- | --- | --- |
+| 10.75 S, 121.75 E | 0.1 | 48787 | 46.9% | bareGround | Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.61) where the target is bare ground. Medium confidence: no data for rock class. |
+| 8.25 S, 128.25 E | 0.1 | 48876 | 46.8% | bareGround | Poor match for Columbia Hills, Gusev crater: close on sunlight and terrain. Held back by bare ground: vegetation cover (NDVI 0.66) where the target is bare ground. |
+| 7.25 S, 112.75 E | 0.0 | 51925 | 43.5% | dryness | Poor match for Columbia Hills, Gusev crater: close on terrain and sunlight. Held back by dryness: 1,832 mm/year wetter than the target. |
+
+## Holden crater lake deposits (`mars-holden`)
+
+91894 cells scored.
+
+| # | Cell centre | Score | Rank | New? | Nearest known analog | Geology | Terrain | Climate | Bare ground | Sunlight | Held back by | Rank in nine of ten redraws |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 35.75 N, 85.25 E | 63.7 | 1 | **new** | Tso Kar, Ladakh, India, 719 km | matches | matches | no | matches | matches | temperature | 1 to 1 |
+| 2 | 35.75 N, 88.25 E | 59.2 | 17 | **new** | Qaidam Basin, China, 579 km | matches | matches | no | matches | matches | temperature | 15 to 20 |
+| 3 | 34.75 N, 81.75 E | 58.4 | 23 | known area | Tso Kar, Ladakh, India, 383 km | matches | partly | no | matches | matches | temperature | 15 to 27 |
+| 4 | 34.75 N, 90.75 E | 50.3 | 41 | known area | Qaidam Basin, China, 435 km | matches | matches | no | partly | matches | temperature | 36 to 54 |
+| 5 | 32.75 N, 83.25 E | 50.2 | 44 | known area | Tso Kar, Ladakh, India, 495 km | matches | partly | no | matches | matches | temperature | 40 to 52 |
+| 6 | 37.75 N, 92.25 E | 49.0 | 52 | known area | Qaidam Basin, China, 201 km | matches | matches | no | matches | partly | temperature | 39 to 66 |
+| 7 | 21.25 S, 67.25 W | 47.4 | 61 | known area | Atacama Desert hyperarid core (Yungay), Chile, 416 km | matches | matches | no | matches | matches | temperature | 45 to 79 |
+| 8 | 35.25 N, 95.25 E | 45.8 | 71 | known area | Qaidam Basin, China, 235 km | matches | matches | no | partly | matches | temperature | 60 to 94 |
+
+Best-ranked cells in the Indonesian region:
+
+| Cell centre | Score | Rank | Beats this share of cells | Held back by | Why |
+| --- | --- | --- | --- | --- | --- |
+| 10.75 S, 121.75 E | 0.1 | 50103 | 45.5% | bareGround | Poor match for Holden crater lake deposits: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.61) where the target is bare ground. Medium confidence: no data for rock class. |
+| 8.25 S, 126.25 E | 0.1 | 52420 | 43.0% | bareGround | Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.64) where the target is bare ground. Medium confidence: no data for rock class. |
+| 7.25 S, 112.75 E | 0.0 | 54449 | 40.7% | dryness | Poor match for Holden crater lake deposits. Held back by dryness: 1,832 mm/year wetter than the target. |
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T06:49:48.109Z",
+  "generatedAt": "2026-11-15T13:42:55.146Z",
   "caveat": "Development numbers, not a clean test. All 28 known sites, including the 8 hold-out sites, had been scored and read before the dimensions and purposes were defined. Chance is a mean percentile of 0.5.",
   "frozenAt": "2026-11-14",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
@@ -487,7 +487,9 @@
     "moon-marius-hills": 0.029,
     "mars-jezero": 0.029,
     "mars-gale": 0.134,
-    "mars-arcadia-planitia": null
+    "mars-arcadia-planitia": null,
+    "mars-gusev-columbia-hills": 0.029,
+    "mars-holden": 0.134
   },
   "sites": [
     {

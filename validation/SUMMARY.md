@@ -17,8 +17,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - **It finds new places.** For each target, 4 to 6 of its eight best places are over 500 km from every
   known analog: high cold desert near 35 N, 85 E for Mars and Marius Hills, the far north of the
   Canadian Arctic for the lunar poles.
-- **Any point on the Moon or Mars can be a target.** At the eight measured targets the grid agrees
-  within one tolerance, with two explained exceptions. All 71 named places get a target profile.
+- **Any point on the Moon or Mars can be a target.** At the ten measured targets the grid agrees
+  within one tolerance, with three exceptions (`output/GRID_CHECK.md`). All 71 named places get a target profile.
 - **At site scale, known analogs score very high:** 95 to 98 out of 100 for rover mobility at Mauna
   Kea, Atacama, Haughton and Lanzarote, against their best target.
 
@@ -33,7 +33,7 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
   at the crater.
 - **The Indonesian candidates score 0 all round.** Hot, wet, vegetated; the best cell in the region
   beats 40 to 49% of Earth. Beside established analogs scored the same way they come close on rock
-  (0.40 against 0.45) and fall far short on bare ground (0.01 against 0.70). What they offer is
+  (0.41 against 0.45) and fall far short on bare ground (0.01 against 0.70). What they offer is
   narrower: basalt, crater and lava shapes, and at Merapi three mineral families shared with Gale
   crater. That result was re-checked after cloud was found in the mineral data, and it held.
 - **Minerals speak for two candidates only.** Five of the eight have no mineral result: no clear
@@ -79,7 +79,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
 - Purposes, site-scale scores, minerals and the comparison with established analogs were made after
   every site had been seen: development numbers, not tests.
 - Minerals, wind, haze and permafrost were added after the freeze and are never in the score.
-- Marius Hills and the points picked on the map have no known analog and are in none of these numbers.
+- Marius Hills, the points picked on the map, and the two Mars targets added after the freeze (Columbia
+  Hills in Gusev crater, Holden crater) have no known analog and are in none of the test numbers.
 
 Detail: `output/REPORT.md`, `tuning/FROZEN.md`, `output/PURPOSES.md`, `purposes/GEOLOGY.md`, `MOON.md`,
 `sites/FINDINGS.md`, `output/DISCOVERIES.md`, `output/MINERALS.md`, `output/BENCHMARKS.md`,

@@ -250,36 +250,37 @@ Read with care:
 
 Tables: `validation/output/BENCHMARKS.md` and `data/benchmarks.json`, from
 `npx tsx validation/benchmarks.ts`. Every site of `data/sites.json` is scored by one procedure:
-8 candidates and 13 known analogs, each against all 8 targets, at site scale. Numbers as of the site file built
-2026-11-15T07:23Z; `BENCHMARKS.md` is regenerated whenever sites are added and is the one to quote.
+8 candidates and 13 known analogs, each against all 10 targets, at site scale (two Mars targets, Columbia
+Hills in Gusev crater and Holden crater, were added after the freeze and shift these means slightly). Numbers
+as of the site file built 2026-11-15T07:23Z; `BENCHMARKS.md` is regenerated whenever sites are added and is the one to quote.
 
 Mean similarity over all targets:
 
 | Dimension | Candidates | Known analogs |
 | --- | --- | --- |
-| Geology | 0.40 | 0.45 |
-| Terrain | 0.28 | 0.41 |
+| Geology | 0.41 | 0.45 |
+| Terrain | 0.28 | 0.39 |
 | Climate | 0.00 | 0.10 |
 | Bare ground | 0.01 | 0.70 |
-| Sunlight | 0.40 | 0.39 |
+| Sunlight | 0.50 | 0.43 |
 
 Purpose scores out of 100, for the typical (median) target and for the best target:
 
 | Purpose | Candidates, typical | Known, typical | Candidates, best | Known, best |
 | --- | --- | --- | --- | --- |
 | Instrument and geology testing | 32 | 41 | 69 | 70 |
-| Rover mobility | 0.1 | 41 | 4 | 75 |
-| Ice and resources | 0 | 5 | 0 | 10 |
-| Astrobiology | 0 | 14 | 0 | 16 |
-| Full base rehearsal | 0 | 10 | 0.1 | 20 |
+| Rover mobility | 0.1 | 40 | 4 | 75 |
+| Ice and resources | 0 | 6 | 0 | 10 |
+| Astrobiology | 0 | 13 | 0 | 16 |
+| Full base rehearsal | 0 | 10 | 0.1 | 21 |
 
 Read plainly:
 
-- **On rock, the candidates come close to the known analogs** (0.40 against 0.45; best-target geology
+- **On rock, the candidates come close to the known analogs** (0.41 against 0.45; best-target geology
   69 against 70). The candidates' figure fell from 0.44 when Maros-Pangkep received a cited rock type:
   it is limestone, unrelated to every target.
 - **On bare ground they do not** (0.01 against 0.70). This one dimension is the whole gap in rover
-  mobility, 0.1 against 41.
+  mobility, 0.1 against 40.
 - **Climate is poor for everyone** (0.10 for the known analogs). No place on Earth is cold and dry
   enough, which is why even established analogs score 10 out of 100 as a full base rehearsal.
 - "Best target" flatters every site, known or candidate: it is the best of eight, chosen afterwards.

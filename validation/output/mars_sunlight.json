@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T12:46:02Z",
+  "generatedAt": "2026-11-15T13:34:56Z",
   "variable": "fluxsurf_dn_sw: Incident solar flux on horizontal surface (W/m2)",
   "solHours": 24.6597,
   "targets": {
@@ -51,6 +51,42 @@
         "270": 0.084,
         "300": 0.09,
         "330": 0.109
+      },
+      "scenarios": [
+        "MCD_v6.2 with climatology average solar scenario.",
+        "MCD_v6.2 with dust storm average solar scenario."
+      ]
+    },
+    "mars-gusev-columbia-hills": {
+      "meanFluxWm2": 154.6,
+      "litFraction": 0.492,
+      "irradianceWm2": 314.4,
+      "longestDarkHours": 13.4,
+      "dustStormFactor": 0.244,
+      "dustStormFactorBySeason": {
+        "210": 0.269,
+        "240": 0.243,
+        "270": 0.223,
+        "300": 0.232,
+        "330": 0.254
+      },
+      "scenarios": [
+        "MCD_v6.2 with climatology average solar scenario.",
+        "MCD_v6.2 with dust storm average solar scenario."
+      ]
+    },
+    "mars-holden": {
+      "meanFluxWm2": 141.3,
+      "litFraction": 0.492,
+      "irradianceWm2": 287.3,
+      "longestDarkHours": 13.4,
+      "dustStormFactor": 0.253,
+      "dustStormFactorBySeason": {
+        "210": 0.27,
+        "240": 0.254,
+        "270": 0.235,
+        "300": 0.247,
+        "330": 0.261
       },
       "scenarios": [
         "MCD_v6.2 with climatology average solar scenario.",

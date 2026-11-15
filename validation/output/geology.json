@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T07:27:36.045Z",
+  "generatedAt": "2026-11-15T13:42:58.768Z",
   "frozenAt": "2026-11-14",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
   "sitesGeneratedAt": "2026-11-15T07:23:39Z",
@@ -135,6 +135,38 @@
         "same": 0,
         "related": 0,
         "unrelated": 0
+      }
+    },
+    {
+      "id": "mars-gusev-columbia-hills",
+      "body": "mars",
+      "rockClass": 2,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.029,
+        "related": 0.026,
+        "unrelated": 0.945
+      },
+      "percentile": {
+        "same": 0.985,
+        "related": 0.958,
+        "unrelated": 0.473
+      }
+    },
+    {
+      "id": "mars-holden",
+      "body": "mars",
+      "rockClass": 3,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.134,
+        "related": 0.304,
+        "unrelated": 0.562
+      },
+      "percentile": {
+        "same": 0.933,
+        "related": 0.714,
+        "unrelated": 0.281
       }
     }
   ],
@@ -1247,6 +1279,22 @@
             "cellPercentile": 0.714,
             "siteLevel": "unrelated",
             "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.473,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-holden",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.714,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },
@@ -1316,6 +1364,22 @@
             "cellPercentile": 0.281,
             "siteLevel": "unrelated",
             "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-holden",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },
@@ -1380,6 +1444,22 @@
           },
           {
             "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-holden",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.281,
@@ -1454,6 +1534,22 @@
             "cellPercentile": 0.281,
             "siteLevel": "unrelated",
             "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "same",
+            "cellPercentile": 0.985,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-holden",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },
@@ -1518,6 +1614,22 @@
           },
           {
             "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-holden",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.281,
@@ -1592,6 +1704,22 @@
             "cellPercentile": 0.281,
             "siteLevel": "unrelated",
             "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.473
+          },
+          {
+            "target": "mars-holden",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },
@@ -1661,6 +1789,22 @@
             "cellPercentile": 0.281,
             "siteLevel": "unrelated",
             "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-holden",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
           }
         ]
       },
@@ -1725,6 +1869,22 @@
           },
           {
             "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          },
+          {
+            "target": "mars-gusev-columbia-hills",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-holden",
             "listed": false,
             "cellLevel": "unrelated",
             "cellPercentile": 0.281,

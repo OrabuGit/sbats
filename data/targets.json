@@ -501,5 +501,129 @@
       "Radiation: Curiosity's RAD instrument measured about 0.67 millisieverts per day on the surface from August 2012 to June 2013 (Southwest Research Institute release, 9 December 2013, on Hassler et al. 2014, Science).",
       "No liquid water: the atmosphere is too thin for liquid water to last on the surface (NASA Science, Mars Facts), so Earth's rain, rivers and wet soil have no counterpart."
     ]
+  },
+  {
+    "id": "mars-gusev-columbia-hills",
+    "name": "Columbia Hills, Gusev crater",
+    "body": "mars",
+    "lat": -14.57,
+    "lon": 175.47,
+    "summary": "Hills inside the 160 km Gusev crater. NASA's Spirit rover landed on the plains here on 4 January 2004 and drove east to the hills (Morris et al. 2006, JGR). The plains rocks are olivine basalt, almost unaltered; the hills rocks are basalt altered by water, with goethite (Morris et al. 2006), outcrops rich in magnesium-iron carbonate (Morris et al. 2010, Science) and deposits of opaline silica read as hydrothermal (Squyres et al. 2008, Science). The target point is Spirit's landing point; the hills lie inside the window that every value is measured over.",
+    "values": {
+      "tempMean": {
+        "value": -63.6,
+        "sigma": 15.0,
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario, air temperature 2 m above the surface (validation/build/mars_temperature.py)",
+        "badge": "Literature",
+        "note": "Climate model value, as for the other Mars targets. No rover temperature record was compared with it."
+      },
+      "tempRange": {
+        "value": 61.3,
+        "sigma": 5.0,
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario, air temperature 2 m above the surface (validation/build/mars_temperature.py)",
+        "badge": "Literature",
+        "note": "Climate model value, as for the other Mars targets. No rover temperature record was compared with it."
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 250.0,
+        "source": "NASA Science, Mars Facts: the atmosphere is too thin for liquid water to last on the surface",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0.05,
+        "sigma": 0.1,
+        "source": "NASA Earth Observatory, Measuring Vegetation (NDVI and EVI): NDVI of 0.1 and below is barren rock, sand or snow",
+        "badge": "Literature",
+        "note": "Reference value for bare ground on Earth's NDVI scale. Not measured on Mars."
+      },
+      "slope": {
+        "value": 0.53,
+        "sigma": 1.0,
+        "source": "MGS MOLA MEGDR 128 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 33.8,
+        "sigma": 50.0,
+        "source": "MGS MOLA MEGDR 128 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 2,
+        "sigma": null,
+        "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169 (plains rocks are olivine basalt; Columbia Hills rocks are basaltic, nearly unaltered to pervasively altered)",
+        "badge": "Literature",
+        "note": "GLiM class 2, Basic volcanic rocks. Chosen by SBATS for the basalt of the plains and the basaltic rocks of the hills. Many hills rocks are pervasively altered by water, which this class does not say. Read in the abstract."
+      }
+    },
+    "cannotCopy": [
+      "Gravity: 3.73 m/s2 at the surface of Mars against 9.82 m/s2 on Earth, a little over one third (NASA NSSDC Mars Fact Sheet).",
+      "Thin atmosphere: the mean surface pressure is 6.36 mb (NASA NSSDC Mars Fact Sheet) against 1014 mb on Earth (NASA NSSDC Earth Fact Sheet), and it is mostly carbon dioxide.",
+      "Radiation: Curiosity's RAD instrument measured about 0.67 millisieverts per day on the surface from August 2012 to June 2013 (Southwest Research Institute release, 9 December 2013, on Hassler et al. 2014, Science).",
+      "No liquid water: the atmosphere is too thin for liquid water to last on the surface (NASA Science, Mars Facts), so Earth's rain, rivers and wet soil have no counterpart."
+    ]
+  },
+  {
+    "id": "mars-holden",
+    "name": "Holden crater lake deposits",
+    "body": "mars",
+    "lat": -26.0,
+    "lon": -34.0,
+    "summary": "A crater in southern Margaritifer Terra with finely layered deposits on its floor, best exposed in the south-west where water breached the rim. The layers are nearly flat, can be traced for hundreds of metres to kilometres, and may have been laid down in a lake; orbital spectra suggest that some beds contain clays (NASA Photojournal PIA21561). It was studied as a landing site for NASA's Curiosity rover (4th MSL Landing Site Workshop). No lander has been here. The target point is the one the team gave, 26.0 S 326.0 E.",
+    "values": {
+      "tempMean": {
+        "value": -62.5,
+        "sigma": 15.0,
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario, air temperature 2 m above the surface (validation/build/mars_temperature.py)",
+        "badge": "Literature",
+        "note": "Climate model value. No lander has measured here."
+      },
+      "tempRange": {
+        "value": 49.4,
+        "sigma": 5.0,
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario, air temperature 2 m above the surface (validation/build/mars_temperature.py)",
+        "badge": "Literature",
+        "note": "Climate model value. No lander has measured here."
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 250.0,
+        "source": "NASA Science, Mars Facts: the atmosphere is too thin for liquid water to last on the surface",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0.05,
+        "sigma": 0.1,
+        "source": "NASA Earth Observatory, Measuring Vegetation (NDVI and EVI): NDVI of 0.1 and below is barren rock, sand or snow",
+        "badge": "Literature",
+        "note": "Reference value for bare ground on Earth's NDVI scale. Not measured on Mars."
+      },
+      "slope": {
+        "value": 1.98,
+        "sigma": 1.0,
+        "source": "MGS MOLA MEGDR 128 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 105.4,
+        "sigma": 52.7,
+        "source": "MGS MOLA MEGDR 128 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 3,
+        "sigma": null,
+        "source": "NASA Photojournal PIA21561, 'A Closer Look at Holden Crater' (NASA/JPL-Caltech/University of Arizona, 2017): finely layered, clay-bearing floor deposits that may have been laid down in a lake",
+        "badge": "Literature",
+        "note": "GLiM class 3, Siliciclastic sedimentary rocks. Chosen by SBATS for the layered deposits the target is named for. No rock has been analysed in place: the class rests on orbital images and spectra. The crater wall and its breccia are different rock."
+      }
+    },
+    "cannotCopy": [
+      "Gravity: 3.73 m/s2 at the surface of Mars against 9.82 m/s2 on Earth, a little over one third (NASA NSSDC Mars Fact Sheet).",
+      "Thin atmosphere: the mean surface pressure is 6.36 mb (NASA NSSDC Mars Fact Sheet) against 1014 mb on Earth (NASA NSSDC Earth Fact Sheet), and it is mostly carbon dioxide.",
+      "Radiation: Curiosity's RAD instrument measured about 0.67 millisieverts per day on the surface from August 2012 to June 2013 (Southwest Research Institute release, 9 December 2013, on Hassler et al. 2014, Science).",
+      "No liquid water: the atmosphere is too thin for liquid water to last on the surface (NASA Science, Mars Facts), so Earth's rain, rivers and wet soil have no counterpart."
+    ]
   }
 ]

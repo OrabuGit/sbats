@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T04:50:09Z",
+  "generatedAt": "2026-11-15T13:38:24Z",
   "note": "Slope and roughness of each target in a square of N x N posts of 463 m centred on the target's coordinates, for the window sizes used by data/sites.json. Same elevation models and the same function as data/targets.json. For site-level comparison only: a small window describes the ground at that point, not the whole landform. A window size that holds one target only (48: Shackleton, rim to rim) was measured for a scale comparison.",
   "postM": 463,
   "terrainFraction": 0.5,
@@ -46,6 +46,14 @@
    "moon-marius-hills": {
     "slope": 1.665,
     "roughness": 15.4
+   },
+   "mars-gusev-columbia-hills": {
+    "slope": 0.271,
+    "roughness": 2.6
+   },
+   "mars-holden": {
+    "slope": 5.783,
+    "roughness": 52.1
    }
   },
   "6": {
@@ -80,6 +88,14 @@
    "moon-marius-hills": {
     "slope": 1.495,
     "roughness": 17.7
+   },
+   "mars-gusev-columbia-hills": {
+    "slope": 0.275,
+    "roughness": 3.8
+   },
+   "mars-holden": {
+    "slope": 5.594,
+    "roughness": 77.7
    }
   },
   "9": {
@@ -114,6 +130,14 @@
    "moon-marius-hills": {
     "slope": 1.12,
     "roughness": 20.3
+   },
+   "mars-gusev-columbia-hills": {
+    "slope": 0.372,
+    "roughness": 7.4
+   },
+   "mars-holden": {
+    "slope": 5.03,
+    "roughness": 107.9
    }
   },
   "11": {
@@ -148,6 +172,14 @@
    "moon-marius-hills": {
     "slope": 1.026,
     "roughness": 22.2
+   },
+   "mars-gusev-columbia-hills": {
+    "slope": 0.429,
+    "roughness": 9.8
+   },
+   "mars-holden": {
+    "slope": 5.228,
+    "roughness": 132.7
    }
   },
   "16": {
@@ -182,6 +214,14 @@
    "moon-marius-hills": {
     "slope": 0.947,
     "roughness": 27.6
+   },
+   "mars-gusev-columbia-hills": {
+    "slope": 0.475,
+    "roughness": 14.2
+   },
+   "mars-holden": {
+    "slope": 5.605,
+    "roughness": 185.9
    }
   },
   "48": {

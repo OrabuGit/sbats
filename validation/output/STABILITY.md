@@ -1,6 +1,6 @@
 # Rank stability: does the top ten depend on the exact weights?
 
-Written 2026-11-15T06:50:09.419Z by `npx tsx validation/stability.ts`. Score frozen 2026-11-14; nothing here changes it.
+Written 2026-11-15T13:43:25.310Z by `npx tsx validation/stability.ts`. Score frozen 2026-11-14; nothing here changes it.
 
 Method: 200 redraws of the Base weights with seed 20261115. In each, every weight is multiplied by a random factor between 0.75 and 1.25, the six are renormalised to sum to 1, and all 91894 Earth cells are scored again with the frozen formula. No redraw is kept.
 
@@ -14,6 +14,8 @@ Method: 200 redraws of the Base weights with seed 20261115. In each, every weigh
 | mars-jezero | 85% | 50% | rank 10 moved between 7 and 62 |
 | mars-gale | 81% | 60% | rank 7 moved between 2 and 47 |
 | mars-arcadia-planitia | 84% | 60% | rank 6 moved between 4 and 32 |
+| mars-gusev-columbia-hills | 85% | 20% | rank 10 moved between 5 and 71 |
+| mars-holden | 100% | 100% | rank 5 moved between 3 and 7 |
 
 Reading: the list of the best ten cells is mostly the same whatever the weights within a quarter of the preset. Single ranks inside it are not fixed: say "among the ten best", not "the third best".
 
@@ -168,4 +170,20 @@ Rank among all scored Earth cells with the frozen weights, and the range that ni
 | mars-arcadia-planitia | id-maros-pangkep-karst | candidate | 63695 | 63564.9 to 63806.4 | 31% |
 | mars-arcadia-planitia | id-tambora-caldera | candidate | 62776 | 62369.3 to 63038 | 32% |
 | mars-arcadia-planitia | id-batur-lava-fields | candidate | 62142 | 61829.6 to 62460.2 | 32% |
+| mars-gusev-columbia-hills | id-kawah-ijen | candidate | 63545 | 63338 to 63664.4 | 31% |
+| mars-gusev-columbia-hills | id-merapi | candidate | 61069 | 60334.9 to 61712.9 | 34% |
+| mars-gusev-columbia-hills | id-gua-lawa | candidate | 63288 | 62973.9 to 63497.5 | 31% |
+| mars-gusev-columbia-hills | id-goa-pandan | candidate | 57178 | 55649.7 to 58434.1 | 38% |
+| mars-gusev-columbia-hills | id-kesaksak-lava-tube | candidate | 61672 | 61356.5 to 62007.3 | 33% |
+| mars-gusev-columbia-hills | id-maros-pangkep-karst | candidate | 63434 | 63299 to 63540.1 | 31% |
+| mars-gusev-columbia-hills | id-tambora-caldera | candidate | 62368 | 61868.7 to 62686.1 | 32% |
+| mars-gusev-columbia-hills | id-batur-lava-fields | candidate | 61672 | 61356.5 to 62007.3 | 33% |
+| mars-holden | id-kawah-ijen | candidate | 63139 | 62770.7 to 63446.2 | 31% |
+| mars-holden | id-merapi | candidate | 61621 | 60949.8 to 62120.2 | 33% |
+| mars-holden | id-gua-lawa | candidate | 63321 | 63153.7 to 63490.1 | 31% |
+| mars-holden | id-goa-pandan | candidate | 59647 | 58693.5 to 60387.1 | 35% |
+| mars-holden | id-kesaksak-lava-tube | candidate | 61465 | 61221.1 to 61807.4 | 33% |
+| mars-holden | id-maros-pangkep-karst | candidate | 63251 | 63084.5 to 63418.1 | 31% |
+| mars-holden | id-tambora-caldera | candidate | 61789 | 61359.3 to 62318.3 | 33% |
+| mars-holden | id-batur-lava-fields | candidate | 61465 | 61221.1 to 61807.4 | 33% |
 

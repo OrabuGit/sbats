@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T06:03:43Z",
+  "generatedAt": "2026-11-15T13:34:56Z",
   "targets": {
     "mars-jezero": {
       "wind": {
@@ -42,32 +42,60 @@
         "highestSeason": 0.729,
         "seasons": 24
       }
+    },
+    "mars-gusev-columbia-hills": {
+      "wind": {
+        "mean": 6.11,
+        "lowestSeason": 5.554,
+        "highestSeason": 6.774,
+        "seasons": 24
+      },
+      "dod": {
+        "mean": 0.418,
+        "lowestSeason": 0.198,
+        "highestSeason": 0.799,
+        "seasons": 24
+      }
+    },
+    "mars-holden": {
+      "wind": {
+        "mean": 8.611,
+        "lowestSeason": 3.919,
+        "highestSeason": 12.153,
+        "seasons": 24
+      },
+      "dod": {
+        "mean": 0.454,
+        "lowestSeason": 0.2,
+        "highestSeason": 0.798,
+        "seasons": 24
+      }
     }
   },
   "headers": {
     "wind": [
       "",
       "MCD_v6.2 with climatology average solar scenario.",
-      "Latitude 39.8N. Longitude 202.1E. Altitude 10.0 m ALS.",
+      "Latitude -26.0N. Longitude 326.0E. Altitude 10.0 m ALS.",
       "--------------------------------------------------------------------------------------",
       "Column 1 is Areocentric longitude (degrees)",
       "Columns 2+ are Horizontal wind speed (m/s)",
       "Line 1 is Local time (Martian hour)",
       "--------------------------------------------------------------------------------------",
-      "Retrieved on: 2026-11-15T07:04:57.323526",
+      "Retrieved on: 2026-11-15T14:35:56.397921",
       "Mars Climate Database (c) LMD/OU/IAA/ESA/CNES",
       ""
     ],
     "dod": [
       "",
       "MCD_v6.2 with climatology average solar scenario.",
-      "Latitude 39.8N. Longitude 202.1E. Altitude 10.0 m ALS.",
+      "Latitude -26.0N. Longitude 326.0E. Altitude 10.0 m ALS.",
       "--------------------------------------------------------------------------------------",
       "Column 1 is Areocentric longitude (degrees)",
       "Columns 2+ are Monthly mean dust column visible optical depth above surface",
       "Line 1 is Local time (Martian hour)",
       "--------------------------------------------------------------------------------------",
-      "Retrieved on: 2026-11-15T07:05:14.450352",
+      "Retrieved on: 2026-11-15T14:36:07.995473",
       "Mars Climate Database (c) LMD/OU/IAA/ESA/CNES",
       ""
     ]

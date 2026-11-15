@@ -1,6 +1,6 @@
 # Targets from anywhere, checked on the real Moon and Mars grids
 
-Written 2026-11-15T07:27:19.885Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json (1 degree, 64800 cells, built 2026-11-15T06:47:52Z).
+Written 2026-11-15T13:44:46.986Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json (1 degree, 64800 cells, built 2026-11-15T06:47:52Z).
 
 ## 1. Does the grid agree with the curated targets?
 
@@ -48,12 +48,22 @@ The curated value is measured over a 55.6 km window centred on the target; the g
 | mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | tempMean | -74.5 | -75.48 | 0.07 |
 | mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | tempRange | 53.2 | 50.35 | 0.57 |
 | mars-arcadia-planitia | 39.50 N, 157.50 W (25.4 km) | lithology | no value | 2 | n/a |
+| mars-gusev-columbia-hills | 14.50 S, 175.50 E (4.5 km) | slope | 0.53 | 0.47 | 0.06 |
+| mars-gusev-columbia-hills | 14.50 S, 175.50 E (4.5 km) | roughness | 33.8 | 33 | 0.02 |
+| mars-gusev-columbia-hills | 14.50 S, 175.50 E (4.5 km) | tempMean | -63.6 | -66.69 | 0.21 |
+| mars-gusev-columbia-hills | 14.50 S, 175.50 E (4.5 km) | tempRange | 61.3 | 64.31 | 0.60 |
+| mars-gusev-columbia-hills | 14.50 S, 175.50 E (4.5 km) | lithology | 2 | 2 | same class |
+| mars-holden | 26.50 S, 34.50 W (39.7 km) | slope | 1.98 | 1.86 | 0.12 |
+| mars-holden | 26.50 S, 34.50 W (39.7 km) | roughness | 105.4 | 202 | 1.83 |
+| mars-holden | 26.50 S, 34.50 W (39.7 km) | tempMean | -62.5 | -62.02 | 0.03 |
+| mars-holden | 26.50 S, 34.50 W (39.7 km) | tempRange | 49.4 | 46.73 | 0.53 |
+| mars-holden | 26.50 S, 34.50 W (39.7 km) | lithology | 3 | no value | n/a |
 
-More than one tolerance apart, or a different rock class: moon-malapert-massif tempMean: curated -159.5, grid -141.83; mars-gale tempRange: curated 62.1, grid 54.65.
+More than one tolerance apart, or a different rock class: moon-malapert-massif tempMean: curated -159.5, grid -141.83; mars-gale tempRange: curated 62.1, grid 54.65; mars-holden roughness: curated 105.4, grid 202.
 
 ## 2. What a user gets for each named place
 
-71 named places. By origin: 59 grid, 12 curated. By confidence: 31 low, 4 high, 36 medium. Missing factors: lithology at 25, tempRange at 17, tempMean at 10.
+71 named places. By origin: 58 grid, 13 curated. By confidence: 31 low, 5 high, 35 medium. Missing factors: lithology at 25, tempRange at 17, tempMean at 10.
 
 Places with no temperature value: 10. Their scores leave temperature out, run much higher, and are marked "not comparable" below.
 
@@ -78,7 +88,7 @@ Places with no temperature value: 10. Their scores leave temperature out, run mu
 | Viking 1 Lander (Chryse Planitia) | mars | grid cell 22.50 N, 47.50 W | low | lithology | 35.25 N, 85.25 E | 51.4 |
 | Viking 2 Lander (Utopia Planitia) | mars | grid cell 47.50 N, 134.50 E | low | lithology | 35.25 N, 85.25 E | 53.9 |
 | Mars Pathfinder (Ares Vallis) | mars | grid cell 19.50 N, 33.50 W | low | lithology | 35.25 N, 85.25 E | 52.3 |
-| Spirit landing site (Gusev crater) | mars | grid cell 14.50 S, 175.50 E | medium | none | 35.75 N, 86.25 E | 48.3 |
+| Spirit landing site (Gusev crater) | mars | curated target mars-gusev-columbia-hills | high | none | 35.75 N, 86.25 E | 48.9 |
 | Opportunity landing site (Meridiani) | mars | grid cell 1.50 S, 5.50 W | low | lithology | 35.25 N, 85.25 E | 49.0 |
 | Phoenix (north polar plains) | mars | grid cell 68.50 N, 125.50 W | low | lithology | 72.25 N, 115.25 W | 45.5 |
 | Curiosity (Bradbury Landing, Gale crater) | mars | curated target mars-gale | high | none | 35.25 N, 80.25 E | 51.8 |

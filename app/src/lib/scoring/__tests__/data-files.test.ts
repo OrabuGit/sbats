@@ -56,7 +56,7 @@ const BADGES = ['Measured', 'Mission', 'Literature'];
 const skip = (what: string): void => console.log(`    (skipped: ${what})`);
 
 describe('data/targets.json', () => {
-  it('lists the seven DESIGN.md sites and Marius Hills with unique kebab-case ids', () => {
+  it('lists the seven DESIGN.md sites, Marius Hills and the two Mars targets added after the freeze, with unique kebab-case ids', () => {
     if (!targets) return skip('targets.json does not exist yet');
     const ids = targets.map((t) => t.id);
     equal(new Set(ids).size, ids.length);
@@ -66,6 +66,8 @@ describe('data/targets.json', () => {
       [
         'mars-arcadia-planitia',
         'mars-gale',
+        'mars-gusev-columbia-hills',
+        'mars-holden',
         'mars-jezero',
         'moon-haworth',
         'moon-malapert-massif',

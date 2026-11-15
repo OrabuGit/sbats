@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T04:49:07Z",
+  "generatedAt": "2026-11-15T13:38:08Z",
   "method": "55.6 km square window centred on the target, block-averaged to 120 x 120 pixels (about 463 m), then pipeline/terrain_metrics.py: slope = mean Horn slope in degrees, roughness = standard deviation of elevation in metres.",
   "lolaOrientationCheck": {
     "shackletonFloorM": -2787.5,
@@ -126,6 +126,36 @@
       "windowCentre": {
         "lat": 14.091,
         "lon": -56.77
+      }
+    },
+    "mars-gusev-columbia-hills": {
+      "slope": 0.5263578049901558,
+      "roughness": 33.75979889257391,
+      "validPixels": 14400,
+      "pixels": 14400,
+      "dxM": 463.33,
+      "dyM": 463.06,
+      "elevationMinM": -2149.4716796875,
+      "elevationMaxM": -1532.4552001953125,
+      "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+      "windowCentre": {
+        "lat": -14.57031,
+        "lon": 175.47
+      }
+    },
+    "mars-holden": {
+      "slope": 1.976418543820874,
+      "roughness": 105.44572137135725,
+      "validPixels": 14400,
+      "pixels": 14400,
+      "dxM": 463.33,
+      "dyM": 463.06,
+      "elevationMinM": -2498.256103515625,
+      "elevationMaxM": -1304.405517578125,
+      "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+      "windowCentre": {
+        "lat": -26.0,
+        "lon": -34.0
       }
     }
   }

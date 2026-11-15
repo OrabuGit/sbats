@@ -123,6 +123,36 @@
             "lat": 14.091,
             "lon": -56.77
           }
+        },
+        "mars-gusev-columbia-hills": {
+          "slope": 0.2707904838441828,
+          "roughness": 2.623200695565176,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -1943.8131103515625,
+          "elevationMaxM": -1935.0,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -14.57031,
+            "lon": 175.47
+          }
+        },
+        "mars-holden": {
+          "slope": 5.7826776751463225,
+          "roughness": 52.05761774732488,
+          "validPixels": 16,
+          "pixels": 16,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2224.672119140625,
+          "elevationMaxM": -2039.6993408203125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+          "windowCentre": {
+            "lat": -26.0,
+            "lon": -34.0
+          }
         }
       }
     },
@@ -248,6 +278,36 @@
           "windowCentre": {
             "lat": 14.091,
             "lon": -56.77
+          }
+        },
+        "mars-gusev-columbia-hills": {
+          "slope": 0.27502913719919253,
+          "roughness": 3.7947897150866208,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -1943.8131103515625,
+          "elevationMaxM": -1930.3631591796875,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -14.57031,
+            "lon": 175.47
+          }
+        },
+        "mars-holden": {
+          "slope": 5.594340940093067,
+          "roughness": 77.74838056829596,
+          "validPixels": 36,
+          "pixels": 36,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2266.672119140625,
+          "elevationMaxM": -1966.5325927734375,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+          "windowCentre": {
+            "lat": -26.0,
+            "lon": -34.0
           }
         }
       }
@@ -375,6 +435,36 @@
             "lat": 14.091,
             "lon": -56.77
           }
+        },
+        "mars-gusev-columbia-hills": {
+          "slope": 0.37235551973668995,
+          "roughness": 7.391113528521584,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -1944.6549072265625,
+          "elevationMaxM": -1912.1602783203125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -14.56641,
+            "lon": 175.47
+          }
+        },
+        "mars-holden": {
+          "slope": 5.02969279878644,
+          "roughness": 107.8532180499243,
+          "validPixels": 81,
+          "pixels": 81,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2304.918212890625,
+          "elevationMaxM": -1866.8983154296875,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+          "windowCentre": {
+            "lat": -26.00391,
+            "lon": -34.0
+          }
         }
       }
     },
@@ -500,6 +590,36 @@
           "windowCentre": {
             "lat": 14.091,
             "lon": -56.77
+          }
+        },
+        "mars-gusev-columbia-hills": {
+          "slope": 0.4292049924755266,
+          "roughness": 9.803154927776879,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -1946.0,
+          "elevationMaxM": -1905.978759765625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -14.56641,
+            "lon": 175.47
+          }
+        },
+        "mars-holden": {
+          "slope": 5.22777551083827,
+          "roughness": 132.66730486106653,
+          "validPixels": 121,
+          "pixels": 121,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2318.958984375,
+          "elevationMaxM": -1787.68798828125,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+          "windowCentre": {
+            "lat": -25.99609,
+            "lon": -34.0
           }
         }
       }
@@ -627,6 +747,36 @@
             "lat": 14.091,
             "lon": -56.77
           }
+        },
+        "mars-gusev-columbia-hills": {
+          "slope": 0.47522387670288807,
+          "roughness": 14.192796689655236,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -1946.0,
+          "elevationMaxM": -1896.1014404296875,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n090hb.img",
+          "windowCentre": {
+            "lat": -14.57031,
+            "lon": 175.47
+          }
+        },
+        "mars-holden": {
+          "slope": 5.604803572578329,
+          "roughness": 185.85323994223432,
+          "validPixels": 256,
+          "pixels": 256,
+          "dxM": 463.0,
+          "dyM": 463.06,
+          "elevationMinM": -2325.03271484375,
+          "elevationMaxM": -1469.6871337890625,
+          "product": "MGS MOLA MEGDR 128 ppd, megt00n270hb.img",
+          "windowCentre": {
+            "lat": -26.0,
+            "lon": -34.0
+          }
         }
       }
     },
@@ -652,7 +802,7 @@
       }
     }
   },
-  "generatedAt": "2026-11-15T04:50:09Z",
+  "generatedAt": "2026-11-15T13:38:24Z",
   "method": "The same measurement as validation/output/target_terrain.json, in a square of N x N posts of 463 m centred on the target coordinates, for the window sizes used by data/sites.json. Used only for the site-level report. A window this small holds a few dozen posts and describes the ground at the stated coordinates, not the whole landform.",
   "lolaOrientationCheck": {
     "shackletonFloorM": -2787.5,

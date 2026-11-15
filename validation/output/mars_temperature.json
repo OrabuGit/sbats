@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T11:11:37Z",
+  "generatedAt": "2026-11-15T13:34:56Z",
   "altitudeM": 2.0,
   "seasonWeighting": {
     "eccentricity": 0.0935,
@@ -465,6 +465,314 @@
           "meanK": 189.08,
           "minK": 168.38,
           "maxK": 216.69
+        }
+      ]
+    },
+    "mars-gusev-columbia-hills": {
+      "tempMeanC": -63.6,
+      "tempRangeC": 61.3,
+      "midpointOfDailyMinMaxC": -59.6,
+      "unweightedTempMeanC": -62.3,
+      "version": "MCD_v6.2 with climatology average solar scenario.",
+      "point": "Latitude -14.57N. Longitude 175.47E. Altitude 2.0 m ALS.",
+      "seasons": [
+        {
+          "ls": 0.0,
+          "meanK": 210.88,
+          "minK": 183.97,
+          "maxK": 245.9
+        },
+        {
+          "ls": 15.0,
+          "meanK": 206.96,
+          "minK": 181.09,
+          "maxK": 240.9
+        },
+        {
+          "ls": 30.0,
+          "meanK": 203.09,
+          "minK": 178.19,
+          "maxK": 236.08
+        },
+        {
+          "ls": 45.0,
+          "meanK": 199.22,
+          "minK": 175.28,
+          "maxK": 231.43
+        },
+        {
+          "ls": 60.0,
+          "meanK": 196.94,
+          "minK": 174.46,
+          "maxK": 228.21
+        },
+        {
+          "ls": 75.0,
+          "meanK": 194.65,
+          "minK": 173.65,
+          "maxK": 224.89
+        },
+        {
+          "ls": 90.0,
+          "meanK": 194.94,
+          "minK": 173.86,
+          "maxK": 225.19
+        },
+        {
+          "ls": 105.0,
+          "meanK": 195.23,
+          "minK": 174.07,
+          "maxK": 225.45
+        },
+        {
+          "ls": 120.0,
+          "meanK": 198.49,
+          "minK": 175.41,
+          "maxK": 230.51
+        },
+        {
+          "ls": 135.0,
+          "meanK": 201.75,
+          "minK": 176.72,
+          "maxK": 235.59
+        },
+        {
+          "ls": 150.0,
+          "meanK": 206.67,
+          "minK": 180.12,
+          "maxK": 242.43
+        },
+        {
+          "ls": 165.0,
+          "meanK": 211.58,
+          "minK": 183.51,
+          "maxK": 249.49
+        },
+        {
+          "ls": 180.0,
+          "meanK": 215.83,
+          "minK": 186.0,
+          "maxK": 254.02
+        },
+        {
+          "ls": 195.0,
+          "meanK": 219.3,
+          "minK": 188.47,
+          "maxK": 258.55
+        },
+        {
+          "ls": 210.0,
+          "meanK": 222.12,
+          "minK": 191.14,
+          "maxK": 260.89
+        },
+        {
+          "ls": 225.0,
+          "meanK": 224.54,
+          "minK": 193.83,
+          "maxK": 263.22
+        },
+        {
+          "ls": 240.0,
+          "meanK": 223.8,
+          "minK": 193.54,
+          "maxK": 261.58
+        },
+        {
+          "ls": 255.0,
+          "meanK": 223.03,
+          "minK": 193.27,
+          "maxK": 259.87
+        },
+        {
+          "ls": 270.0,
+          "meanK": 221.55,
+          "minK": 191.63,
+          "maxK": 257.59
+        },
+        {
+          "ls": 285.0,
+          "meanK": 220.04,
+          "minK": 190.0,
+          "maxK": 255.26
+        },
+        {
+          "ls": 300.0,
+          "meanK": 218.9,
+          "minK": 189.5,
+          "maxK": 254.71
+        },
+        {
+          "ls": 315.0,
+          "meanK": 218.16,
+          "minK": 189.0,
+          "maxK": 254.16
+        },
+        {
+          "ls": 330.0,
+          "meanK": 216.9,
+          "minK": 187.92,
+          "maxK": 252.53
+        },
+        {
+          "ls": 345.0,
+          "meanK": 215.2,
+          "minK": 186.83,
+          "maxK": 250.91
+        }
+      ]
+    },
+    "mars-holden": {
+      "tempMeanC": -62.5,
+      "tempRangeC": 49.4,
+      "midpointOfDailyMinMaxC": -60.0,
+      "unweightedTempMeanC": -59.9,
+      "version": "MCD_v6.2 with climatology average solar scenario.",
+      "point": "Latitude -26.0N. Longitude 326.0E. Altitude 2.0 m ALS.",
+      "seasons": [
+        {
+          "ls": 0.0,
+          "meanK": 214.48,
+          "minK": 191.41,
+          "maxK": 243.11
+        },
+        {
+          "ls": 15.0,
+          "meanK": 207.35,
+          "minK": 186.37,
+          "maxK": 233.61
+        },
+        {
+          "ls": 30.0,
+          "meanK": 200.27,
+          "minK": 181.29,
+          "maxK": 224.09
+        },
+        {
+          "ls": 45.0,
+          "meanK": 193.19,
+          "minK": 176.2,
+          "maxK": 214.57
+        },
+        {
+          "ls": 60.0,
+          "meanK": 187.47,
+          "minK": 172.48,
+          "maxK": 205.99
+        },
+        {
+          "ls": 75.0,
+          "meanK": 181.71,
+          "minK": 168.75,
+          "maxK": 197.61
+        },
+        {
+          "ls": 90.0,
+          "meanK": 181.32,
+          "minK": 168.04,
+          "maxK": 197.46
+        },
+        {
+          "ls": 105.0,
+          "meanK": 180.92,
+          "minK": 167.32,
+          "maxK": 197.28
+        },
+        {
+          "ls": 120.0,
+          "meanK": 187.3,
+          "minK": 171.35,
+          "maxK": 206.73
+        },
+        {
+          "ls": 135.0,
+          "meanK": 193.69,
+          "minK": 175.38,
+          "maxK": 216.39
+        },
+        {
+          "ls": 150.0,
+          "meanK": 201.81,
+          "minK": 181.12,
+          "maxK": 227.96
+        },
+        {
+          "ls": 165.0,
+          "meanK": 209.96,
+          "minK": 186.87,
+          "maxK": 239.59
+        },
+        {
+          "ls": 180.0,
+          "meanK": 217.69,
+          "minK": 192.34,
+          "maxK": 249.65
+        },
+        {
+          "ls": 195.0,
+          "meanK": 225.44,
+          "minK": 197.27,
+          "maxK": 259.75
+        },
+        {
+          "ls": 210.0,
+          "meanK": 231.03,
+          "minK": 202.23,
+          "maxK": 266.36
+        },
+        {
+          "ls": 225.0,
+          "meanK": 236.32,
+          "minK": 207.21,
+          "maxK": 272.81
+        },
+        {
+          "ls": 240.0,
+          "meanK": 237.86,
+          "minK": 208.4,
+          "maxK": 273.53
+        },
+        {
+          "ls": 255.0,
+          "meanK": 239.13,
+          "minK": 209.6,
+          "maxK": 274.15
+        },
+        {
+          "ls": 270.0,
+          "meanK": 237.94,
+          "minK": 208.49,
+          "maxK": 272.32
+        },
+        {
+          "ls": 285.0,
+          "meanK": 236.73,
+          "minK": 207.36,
+          "maxK": 270.46
+        },
+        {
+          "ls": 300.0,
+          "meanK": 234.7,
+          "minK": 206.03,
+          "maxK": 268.6
+        },
+        {
+          "ls": 315.0,
+          "meanK": 232.68,
+          "minK": 204.67,
+          "maxK": 266.72
+        },
+        {
+          "ls": 330.0,
+          "meanK": 226.74,
+          "minK": 200.47,
+          "maxK": 259.81
+        },
+        {
+          "ls": 345.0,
+          "meanK": 221.63,
+          "minK": 196.34,
+          "maxK": 252.64
         }
       ]
     }

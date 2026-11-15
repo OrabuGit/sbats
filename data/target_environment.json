@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:49:35Z",
+  "generatedAt": "2026-11-15T13:42:25Z",
   "note": "Target-side values for the dimensions added after the freeze of 2026-11-14: wind, dust and ground ice. Never part of the all-round score. A dimension is compared only when the Earth side is published too and a tolerance has been written down.",
   "definitions": {
    "wind": "Mean wind speed 10 m above the surface, m/s.",
@@ -185,6 +185,52 @@
     "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
     "badge": "Literature",
     "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.236 to 0.729. Climate model."
+   },
+   "ice": {
+    "value": null,
+    "unit": "share of ground",
+    "source": null,
+    "badge": null,
+    "note": "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."
+   }
+  },
+  "mars-gusev-columbia-hills": {
+   "wind": {
+    "value": 6.11,
+    "unit": "m/s",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean wind speed 10 m above the surface over the Mars year, from a point query in the model's high-resolution mode. Seasonal means run from 5.55 to 6.77 m/s. A model, not a measurement. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."
+   },
+   "dust": {
+    "value": 0.418,
+    "unit": "optical depth",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.198 to 0.799. Climate model."
+   },
+   "ice": {
+    "value": null,
+    "unit": "share of ground",
+    "source": null,
+    "badge": null,
+    "note": "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."
+   }
+  },
+  "mars-holden": {
+   "wind": {
+    "value": 8.61,
+    "unit": "m/s",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean wind speed 10 m above the surface over the Mars year, from a point query in the model's high-resolution mode. Seasonal means run from 3.92 to 12.15 m/s. A model, not a measurement. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."
+   },
+   "dust": {
+    "value": 0.454,
+    "unit": "optical depth",
+    "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario (validation/build/mars_environment.py)",
+    "badge": "Literature",
+    "note": "Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from 0.2 to 0.798. Climate model."
    },
    "ice": {
     "value": null,

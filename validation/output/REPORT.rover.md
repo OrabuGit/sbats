@@ -2,7 +2,7 @@
 
 **Status: FINAL.** Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.
 
-Generated 2026-11-15T06:49:39.191Z by `npx tsx validation/validate.ts rover`. Preset: Rover.
+Generated 2026-11-15T13:42:36.772Z by `npx tsx validation/validate.ts rover`. Preset: Rover.
 Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-15T06:42:18Z.
 Split: 24 tuning sites and 10 hold-out sites, seed 20261114 (validation/tuning/split.json).
 
@@ -66,7 +66,7 @@ How to read the measures:
 
 ## What was left out of the scores
 
-- Left out of validation, because no known analog is listed for them: moon-marius-hills.
+- Left out of validation, because no known analog is listed for them: moon-marius-hills, mars-gusev-columbia-hills, mars-holden.
 - Target `moon-malapert-massif` has no usable value for: tempRange.
 - Target `moon-mons-mouton` has no usable value for: tempRange.
 - Target `moon-haworth` has no usable value for: tempRange.

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T07:27:44.487Z",
+ "generatedAt": "2026-11-15T13:43:04.473Z",
  "sitesGeneratedAt": "2026-11-15T07:23:39Z",
  "emitMinimumShare": 0.01,
  "sites": [
@@ -16,6 +16,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -67,6 +69,41 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Jarosite",
+      "Smectite clay",
+      "Gibbsite"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Hematite",
+      "Gibbsite"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.333,
      "shared": [
@@ -161,6 +198,8 @@
    "identified": [],
    "unassigned": [],
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -180,6 +219,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -199,6 +240,8 @@
    "identified": [],
    "unassigned": [],
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -218,6 +261,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -263,6 +308,41 @@
    ],
    "unassigned": [],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass",
+      "Smectite clay"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Hydrated volcanic glass"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.222,
      "shared": [
@@ -375,6 +455,34 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.125,
+     "shared": [
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Hematite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": []
+    },
+    "mars-holden": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Smectite clay"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite"
+     ]
+    },
     "mars-gale": {
      "similarity": 0,
      "shared": [],
@@ -497,6 +605,42 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.375,
+     "shared": [
+      "Hematite",
+      "Goethite",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hydrated volcanic glass",
+      "Smectite clay",
+      "Gibbsite"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Silica (tridymite, cristobalite, opal)",
+      "Hematite",
+      "Goethite",
+      "Hydrated volcanic glass",
+      "Gibbsite"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.333,
      "shared": [
@@ -632,6 +776,41 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Smectite clay",
+      "Jarosite",
+      "Hydrated volcanic glass"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Jarosite",
+      "Hematite",
+      "Hydrated volcanic glass"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.333,
      "shared": [
@@ -758,6 +937,41 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Mica and illite",
+      "Kaolinite",
+      "Smectite clay"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Kaolinite",
+      "Goethite"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.222,
      "shared": [
@@ -853,6 +1067,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -872,6 +1088,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -923,6 +1141,40 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.375,
+     "shared": [
+      "Hematite",
+      "Goethite",
+      "Iron sulfate"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Jarosite",
+      "Smectite clay"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Goethite",
+      "Hematite",
+      "Jarosite",
+      "Iron sulfate"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.333,
      "shared": [
@@ -1043,6 +1295,41 @@
    ],
    "unassigned": [],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Mica and illite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Smectite clay"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 1,
+     "shared": [
+      "Smectite clay"
+     ],
+     "targetOnly": [],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Mica and illite",
+      "Goethite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.222,
      "shared": [
@@ -1138,6 +1425,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -1178,6 +1467,40 @@
    ],
    "unassigned": [],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Smectite clay"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Goethite",
+      "Kaolinite",
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.111,
      "shared": [
@@ -1270,6 +1593,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -1289,6 +1614,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,
@@ -1340,6 +1667,38 @@
     }
    ],
    "targets": {
+    "mars-gusev-columbia-hills": {
+     "similarity": 0.25,
+     "shared": [
+      "Hematite",
+      "Goethite"
+     ],
+     "targetOnly": [
+      "Olivine",
+      "Pyroxene",
+      "Magnetite",
+      "Iron sulfate",
+      "Magnesium-iron carbonate (magnesite, siderite)",
+      "Silica (tridymite, cristobalite, opal)"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Calcium carbonate (calcite, aragonite, dolomite)"
+     ]
+    },
+    "mars-holden": {
+     "similarity": 0,
+     "shared": [],
+     "targetOnly": [
+      "Smectite clay"
+     ],
+     "notComparable": [],
+     "earthOnly": [
+      "Hematite",
+      "Calcium carbonate (calcite, aragonite, dolomite)",
+      "Goethite"
+     ]
+    },
     "mars-gale": {
      "similarity": 0.111,
      "shared": [
@@ -1428,6 +1787,8 @@
    "identified": null,
    "unassigned": null,
    "targets": {
+    "mars-gusev-columbia-hills": null,
+    "mars-holden": null,
     "mars-gale": null,
     "mars-jezero": null,
     "moon-shackleton-rim": null,

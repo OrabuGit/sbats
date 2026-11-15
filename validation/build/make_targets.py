@@ -236,6 +236,33 @@ TARGETS = [
         lith=None, lith_source=None,
         lith_note="No value. The geologic map unit at site AP-1 was not verified. Parts of Arcadia Planitia are mapped as Amazonian volcanic flows (Tanaka et al. 2014, USGS SIM 3292).",
     ),
+    # Added 2026-11-15, after the score was frozen on 2026-11-14. Same method and sources as the three
+    # targets above: MOLA terrain over the same window, MCD climate, rock class from an opened source.
+    # They are in no validation or tuning number.
+    mars(
+        "mars-gusev-columbia-hills", "Columbia Hills, Gusev crater", -14.57, 175.47,
+        "Hills inside the 160 km Gusev crater. NASA's Spirit rover landed on the plains here on 4 January 2004 and drove east to the hills (Morris et al. 2006, JGR). The plains rocks are olivine basalt, almost unaltered; the hills rocks are basalt altered by water, with goethite (Morris et al. 2006), outcrops rich in magnesium-iron carbonate (Morris et al. 2010, Science) and deposits of opaline silica read as hydrothermal (Squyres et al. 2008, Science). The target point is Spirit's landing point; the hills lie inside the window that every value is measured over.",
+        temp_mean=None,
+        temp_mean_note="Climate model value, as for the other Mars targets. No rover temperature record was compared with it.",
+        temp_range=None, temp_range_source=MCD, temp_range_badge="Literature",
+        temp_range_note="Climate model value, as for the other Mars targets. No rover temperature record was compared with it.",
+        slope=None, roughness=None,
+        lith=BASIC_VOLCANIC,
+        lith_source="Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169 (plains rocks are olivine basalt; Columbia Hills rocks are basaltic, nearly unaltered to pervasively altered)",
+        lith_note="GLiM class 2, Basic volcanic rocks. Chosen by SBATS for the basalt of the plains and the basaltic rocks of the hills. Many hills rocks are pervasively altered by water, which this class does not say. Read in the abstract.",
+    ),
+    mars(
+        "mars-holden", "Holden crater lake deposits", -26.0, -34.0,
+        "A crater in southern Margaritifer Terra with finely layered deposits on its floor, best exposed in the south-west where water breached the rim. The layers are nearly flat, can be traced for hundreds of metres to kilometres, and may have been laid down in a lake; orbital spectra suggest that some beds contain clays (NASA Photojournal PIA21561). It was studied as a landing site for NASA's Curiosity rover (4th MSL Landing Site Workshop). No lander has been here. The target point is the one the team gave, 26.0 S 326.0 E.",
+        temp_mean=None,
+        temp_mean_note="Climate model value. No lander has measured here.",
+        temp_range=None, temp_range_source=MCD, temp_range_badge="Literature",
+        temp_range_note="Climate model value. No lander has measured here.",
+        slope=None, roughness=None,
+        lith=SILICICLASTIC,
+        lith_source="NASA Photojournal PIA21561, 'A Closer Look at Holden Crater' (NASA/JPL-Caltech/University of Arizona, 2017): finely layered, clay-bearing floor deposits that may have been laid down in a lake",
+        lith_note="GLiM class 3, Siliciclastic sedimentary rocks. Chosen by SBATS for the layered deposits the target is named for. No rock has been analysed in place: the class rests on orbital images and spectra. The crater wall and its breccia are different rock.",
+    ),
 ]
 
 # --------------------------------------------------------------------------------------------
@@ -251,6 +278,8 @@ MEASURED = {
     "mars-jezero": (-56.6, 48.8, 2.63, 287.4),
     "mars-gale": (-57.7, 62.1, 6.11, 1262.8),
     "mars-arcadia-planitia": (-74.5, 53.2, 0.27, 16.8),
+    "mars-gusev-columbia-hills": (-63.6, 61.3, 0.53, 33.8),
+    "mars-holden": (-62.5, 49.4, 1.98, 105.4),
 }
 
 

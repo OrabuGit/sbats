@@ -6,6 +6,7 @@ Site-level result only. It never enters the all-round score (added after the fre
 Every target mineral is one row with the paper it was read in. `access` says how it was read:
   FT   full text of the paper was read
   ABS  abstract only
+  TALK slides of a workshop talk, not a peer-reviewed paper
 Rows were compiled by a research sub-agent and the key quotes re-read in the saved source texts in the
 main session (data/REVIEW_ME.md, Part 3). Nothing is from memory. A mineral that no opened source
 reports at a target is simply not listed.
@@ -110,7 +111,33 @@ JEZERO = [
     m("phosphate", "merrillite", "in-place", "Perseverance PIXL", None, TICE, TICE_URL, "FT"),
 ]
 
+# Added 2026-11-15, after the freeze. Read in the abstracts (ABS) or in the slides of a workshop talk (TALK).
+MORRIS06 = "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169"
+MORRIS06_URL = "https://ntrs.nasa.gov/citations/20080030169"
+MORRIS10 = "Morris et al. 2010, Science 329:421-424, doi:10.1126/science.1189667"
+MORRIS10_URL = "https://doi.org/10.1126/science.1189667"
+SQUYRES08 = "Squyres et al. 2008, Science 320:1063-1067, doi:10.1126/science.1155429"
+SQUYRES08_URL = "https://doi.org/10.1126/science.1155429"
+MB = "Spirit Moessbauer spectrometer"
+GUSEV = [
+    m("olivine", "olivine", "in-place", MB, "with pyroxene, 40 to 49% of the iron in moderately altered hills rocks, 9 to 24% in pervasively altered ones; sometimes absent", MORRIS06, MORRIS06_URL, "ABS"),
+    m("pyroxene", "pyroxene", "in-place", MB, "more iron in pyroxene than in olivine in the hills rocks", MORRIS06, MORRIS06_URL, "ABS"),
+    m("magnetite", "magnetite", "in-place", MB, "about 10 to 15% of the iron in some hills rocks", MORRIS06, MORRIS06_URL, "ABS"),
+    m("hematite", "hematite", "in-place", MB, None, MORRIS06, MORRIS06_URL, "ABS"),
+    m("goethite", "goethite", "in-place", MB, "up to 40% of the iron, in the rock Clovis", MORRIS06, MORRIS06_URL, "ABS"),
+    m("iron-sulfate", "ferric sulfate, in the Paso Robles soil", "in-place", MB, "about 65% of the iron in that soil", MORRIS06, MORRIS06_URL, "ABS"),
+    m("carbonate-mgfe", "magnesium-iron carbonate", "in-place", "Spirit rover instruments (not named in the abstract)", "16 to 34% by weight of the outcrop", MORRIS10, MORRIS10_URL, "ABS"),
+    m("silica", "opaline silica", "in-place", "Spirit rover instruments (not named in the abstract)", "as much as 91% SiO2 by weight", SQUYRES08, SQUYRES08_URL, "ABS"),
+]
+WRAY = "Wray, J., 'Mineralogic diversity at Holden crater', talk at the 4th MSL Landing Site Workshop (NASA), reporting Milliken et al. 2007 and Milliken and Bish 2010"
+WRAY_URL = "https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/3_Wray_Holden_opt.pdf"
+HOLDEN = [
+    m("smectite", "iron-magnesium clay minerals, which may be mixed-layer smectite and chlorite", "orbital", "MRO CRISM", None, WRAY, WRAY_URL, "TALK"),
+]
+
 TARGETS = {
+    "mars-gusev-columbia-hills": {"minerals": GUSEV, "note": "Added after the freeze. Rocks and soils analysed by Spirit on the plains and in the Columbia Hills. The Moessbauer figures are shares of the iron, not of the rock. Ilmenite and nanophase ferric oxide were also found and have no family here."},
+    "mars-holden": {"minerals": HOLDEN, "note": "Added after the freeze. Seen from orbit only, in the light-toned layered deposits and the flood deposits over them. The source is the slides of a workshop talk, not a paper, and it says the clays 'may be' smectite and chlorite mixed layers: counting them as smectite is SBATS's reading. The same talk reports olivine and pyroxene in the crater wall and the breccia, which are not the lake deposits and are left out."},
     "mars-gale": {"minerals": GALE, "note": "Drilled samples along Curiosity's route up Mount Sharp. Abundances vary a great deal from sample to sample; the ranges are across samples in which the mineral was detected."},
     "mars-jezero": {"minerals": JEZERO, "note": "Abraded rocks of the crater floor (Seitah and Maaz) and orbital spectra of the fans. Serpentine was looked for and not found (Farley et al. 2022)."},
     "moon-shackleton-rim": {
@@ -149,7 +176,7 @@ def main() -> None:
             "emitMinimumShare": 0.01,
             "emitMinimumShareNote": "An EMIT family counts when it is matched in at least 1% of the clear pixels of the footprint. A display rule.",
             "emitSource": "NASA EMIT L2B Estimated Mineral Identification and Band Depth (EMITL2BMIN), LP DAAC; method: Brodrick et al. 2023, EMIT L2b ATBD, JPL D-104479",
-            "access": {"FT": "full text of the paper was read", "ABS": "abstract only"},
+            "access": {"FT": "full text of the paper was read", "ABS": "abstract only", "TALK": "slides of a workshop talk, not a peer-reviewed paper"},
             "generatedBy": "validation/build/make_target_minerals.py",
         },
         "families": [{"id": i, "label": label, "emitPatterns": patterns, "note": note} for i, label, patterns, note in FAMILIES],

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T06:49:44.510Z",
+  "generatedAt": "2026-11-15T13:42:50.128Z",
   "frozenAt": "2026-11-14",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
   "presets": {
@@ -124,6 +124,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 619 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6915,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 602 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6871,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 531 m rougher than the target."
           }
         }
       },
@@ -247,6 +271,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,338 mm/year wetter than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6645,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,338 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6706,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,338 mm/year wetter than the target."
           }
         }
       },
@@ -368,6 +416,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,403 mm/year wetter than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6887,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,403 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6891,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,403 mm/year wetter than the target."
           }
         }
       },
@@ -489,6 +561,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,049 mm/year wetter than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6222,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on rock type and terrain. Held back by dryness: 2,049 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6491,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,049 mm/year wetter than the target."
           }
         }
       },
@@ -610,6 +706,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 415 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6711,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 398 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6689,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       },
@@ -731,6 +851,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 518 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6903,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 501 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6883,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 429 m rougher than the target."
           }
         }
       },
@@ -852,6 +996,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 532 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6787,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 515 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6724,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 443 m rougher than the target."
           }
         }
       },
@@ -973,6 +1141,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 415 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6711,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 398 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6689,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       }
@@ -1098,6 +1290,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 619 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6917,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 602 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6914,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 531 m rougher than the target."
           }
         }
       },
@@ -1221,6 +1437,30 @@
             ],
             "limitingFactor": "bareGround",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by bare ground: vegetation cover (NDVI 0.73) where the target is bare ground. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6443,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.73) where the target is bare ground."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6503,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.73) where the target is bare ground."
           }
         }
       },
@@ -1342,6 +1582,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 470 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6792,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 453 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6821,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 381 m rougher than the target."
           }
         }
       },
@@ -1463,6 +1727,30 @@
             ],
             "limitingFactor": "bareGround",
             "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.5772,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on rock type and terrain. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6189,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground."
           }
         }
       },
@@ -1584,6 +1872,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 415 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6692,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 398 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6697,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       },
@@ -1705,6 +2017,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 518 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6881,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 501 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6888,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 429 m rougher than the target."
           }
         }
       },
@@ -1826,6 +2162,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 532 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6817,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 515 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6811,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 443 m rougher than the target."
           }
         }
       },
@@ -1947,6 +2307,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 415 m rougher than the target. Medium confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6692,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 398 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6697,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       }
@@ -2072,6 +2456,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 619 m rougher than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6911,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 602 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6847,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Holden crater lake deposits. Held back by terrain: relief 531 m rougher than the target."
           }
         }
       },
@@ -2195,6 +2603,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,338 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6664,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,338 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6738,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,338 mm/year wetter than the target."
           }
         }
       },
@@ -2316,6 +2748,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,403 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6877,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,403 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6892,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,403 mm/year wetter than the target."
           }
         }
       },
@@ -2437,6 +2893,30 @@
             ],
             "limitingFactor": "bareGround",
             "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6306,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on rock type and terrain. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6588,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.74) where the target is bare ground."
           }
         }
       },
@@ -2558,6 +3038,30 @@
             ],
             "limitingFactor": "bareGround",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6729,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6737,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       },
@@ -2679,6 +3183,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 518 m rougher than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6899,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 501 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6888,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.76) where the target is bare ground."
           }
         }
       },
@@ -2800,6 +3328,30 @@
             ],
             "limitingFactor": "terrain",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by terrain: relief 532 m rougher than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6774,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "terrain",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by terrain: relief 515 m rougher than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6747,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.76) where the target is bare ground."
           }
         }
       },
@@ -2921,6 +3473,30 @@
             ],
             "limitingFactor": "bareGround",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6729,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6737,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "bareGround",
+            "reason": "Poor match for Holden crater lake deposits. Held back by bare ground: vegetation cover (NDVI 0.80) where the target is bare ground."
           }
         }
       }
@@ -3046,6 +3622,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 1,655 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6757,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 1,655 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6697,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 1,655 mm/year wetter than the target."
           }
         }
       },
@@ -3169,6 +3769,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,338 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6871,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,338 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6898,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,338 mm/year wetter than the target."
           }
         }
       },
@@ -3290,6 +3914,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 2,403 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6943,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 2,403 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6952,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,403 mm/year wetter than the target."
           }
         }
       },
@@ -3411,6 +4059,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1): close on terrain. Held back by dryness: 2,049 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6674,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on rock type and terrain. Held back by dryness: 2,049 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6769,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 2,049 mm/year wetter than the target."
           }
         }
       },
@@ -3532,6 +4204,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 1,615 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6614,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 1,615 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6629,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 1,615 mm/year wetter than the target."
           }
         }
       },
@@ -3653,6 +4349,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 1,939 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6826,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 1,939 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6827,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 1,939 mm/year wetter than the target."
           }
         }
       },
@@ -3774,6 +4494,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 1,282 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6454,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 1,282 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6443,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 1,282 mm/year wetter than the target."
           }
         }
       },
@@ -3895,6 +4639,30 @@
             ],
             "limitingFactor": "dryness",
             "reason": "Poor match for Arcadia Planitia (site AP-1). Held back by dryness: 1,615 mm/year wetter than the target. Low confidence: no data for rock class."
+          },
+          "mars-gusev-columbia-hills": {
+            "target": "mars-gusev-columbia-hills",
+            "score": 0,
+            "shareAbove": 0.6614,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Columbia Hills, Gusev crater: close on sunlight. Held back by dryness: 1,615 mm/year wetter than the target."
+          },
+          "mars-holden": {
+            "target": "mars-holden",
+            "score": 0,
+            "shareAbove": 0.6629,
+            "inTop10": false,
+            "coverage": 1,
+            "confidence": "high",
+            "unscoredReason": null,
+            "missing": [],
+            "limitingFactor": "dryness",
+            "reason": "Poor match for Holden crater lake deposits. Held back by dryness: 1,615 mm/year wetter than the target."
           }
         }
       }

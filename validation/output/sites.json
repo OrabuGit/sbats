@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T07:27:42.908Z",
+  "generatedAt": "2026-11-15T13:43:03.429Z",
   "frozenAt": "2026-11-14",
   "sitesGeneratedAt": "2026-11-15T07:23:39Z",
   "earthGeneratedAt": "2026-11-15T06:42:18Z",
@@ -1063,6 +1063,258 @@
               "base": {
                 "score": 0,
                 "midPercentile": 0.306,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 0.275,
+            "roughness": 3.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.049
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.055
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.421
+              },
+              "sunlight": {
+                "similarity": 0.98,
+                "midPercentile": 0.887
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.325,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.064,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.37,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.034
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.055
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.334
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.891
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.306,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.058,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.338,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.309,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 5.594,
+            "roughness": 77.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.239,
+                "midPercentile": 0.405
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.055
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.421
+              },
+              "sunlight": {
+                "similarity": 0.79,
+                "midPercentile": 0.741
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.477,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.056,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.363,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.403,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.714
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.035
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.055
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.334
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.744
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.714,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.306,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.061,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.339,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.313,
                 "unscoredReason": null,
                 "limitingFactor": "terrain"
               }
@@ -2136,6 +2388,258 @@
             }
           },
           "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 0.372,
+            "roughness": 7.4
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.001
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.02
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.573
+              },
+              "sunlight": {
+                "similarity": 0.979,
+                "midPercentile": 0.883
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.285,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.024,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.344,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.285,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.136
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.02
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.347
+              },
+              "sunlight": {
+                "similarity": 0.979,
+                "midPercentile": 0.886
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.366,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.024,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.311,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.335,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 5.03,
+            "roughness": 107.9
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.053
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.02
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.573
+              },
+              "sunlight": {
+                "similarity": 0.786,
+                "midPercentile": 0.737
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.356,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.022,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.34,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.326,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.016,
+                "midPercentile": 0.137
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.02
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.347
+              },
+              "sunlight": {
+                "similarity": 0.787,
+                "midPercentile": 0.74
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.379,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.022,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.309,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
         }
       ]
     },
@@ -3203,6 +3707,258 @@
             }
           },
           "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 4,
+          "targetTerrainAtWindow": {
+            "slope": 0.271,
+            "roughness": 2.6
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.116
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.018
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.349
+              },
+              "sunlight": {
+                "similarity": 0.978,
+                "midPercentile": 0.879
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.357,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.023,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.31,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.328,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.063
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.018
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.345
+              },
+              "sunlight": {
+                "similarity": 0.978,
+                "midPercentile": 0.882
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.325,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.022,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.309,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.311,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 4,
+          "targetTerrainAtWindow": {
+            "slope": 5.783,
+            "roughness": 52.1
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.923,
+                "midPercentile": 0.97
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.018
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.349
+              },
+              "sunlight": {
+                "similarity": 0.783,
+                "midPercentile": 0.733
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.419,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.02,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.308,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.335,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.065
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.018
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.345
+              },
+              "sunlight": {
+                "similarity": 0.783,
+                "midPercentile": 0.736
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.323,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.02,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.307,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.311,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.001
         }
       ]
     },
@@ -4270,6 +5026,258 @@
             }
           },
           "terrainAgainst55km": 0.621
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 0.275,
+            "roughness": 3.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.611,
+                "midPercentile": 0.362
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.03
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.378
+              },
+              "sunlight": {
+                "similarity": 0.973,
+                "midPercentile": 0.862
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.478,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.035,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.332,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.39,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.992,
+                "midPercentile": 0.958
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.03
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.345
+              },
+              "sunlight": {
+                "similarity": 0.973,
+                "midPercentile": 0.861
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.446,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.035,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.323,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.378,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.713
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 5.594,
+            "roughness": 77.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.426,
+                "midPercentile": 0.682
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.03
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.378
+              },
+              "sunlight": {
+                "similarity": 0.771,
+                "midPercentile": 0.716
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.442,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.032,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.328,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.362,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.407,
+                "midPercentile": 0.663
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.03
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.345
+              },
+              "sunlight": {
+                "similarity": 0.77,
+                "midPercentile": 0.715
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.406,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.032,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.32,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.351,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.489
         }
       ]
     },
@@ -5333,6 +6341,258 @@
                 "midPercentile": 0.324,
                 "unscoredReason": null,
                 "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.071
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.515
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.887
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.357,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.065,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.405,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.362,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.07
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.317
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.891
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.324,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.065,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.335,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.489,
+                "midPercentile": 0.734
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.515
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.741
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0.7,
+                "midPercentile": 0.595,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.057,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.395,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.1,
+                "midPercentile": 0.442,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.073
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.317
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.744
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.321,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.057,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.331,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.331,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
               }
             }
           },
@@ -6404,6 +7664,258 @@
             }
           },
           "terrainAgainst55km": 0.01
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0.012,
+                "midPercentile": 0.197
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.035
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.309
+              },
+              "sunlight": {
+                "similarity": 0.972,
+                "midPercentile": 0.858
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.368,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.038,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.317,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.354,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.035
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.335
+              },
+              "sunlight": {
+                "similarity": 0.973,
+                "midPercentile": 0.861
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.311,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.04,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.325,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.31,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.02
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.847,
+                "midPercentile": 0.936
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.035
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.309
+              },
+              "sunlight": {
+                "similarity": 0.769,
+                "midPercentile": 0.712
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.376,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.037,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.316,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.348,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.044
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.035
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.335
+              },
+              "sunlight": {
+                "similarity": 0.77,
+                "midPercentile": 0.715
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.31,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.037,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.322,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.312,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.229
         }
       ]
     },
@@ -7465,6 +8977,258 @@
               "base": {
                 "score": 0,
                 "midPercentile": 0.317,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 16,
+          "targetTerrainAtWindow": {
+            "slope": 0.475,
+            "roughness": 14.2
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.005
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.092
+              },
+              "bareGround": {
+                "similarity": 0.071,
+                "midPercentile": 0.727
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.887
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.289,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0.2,
+                "midPercentile": 0.113,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0.2,
+                "midPercentile": 0.528,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.29,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.044
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.092
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.333
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.891
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.312,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0.2,
+                "midPercentile": 0.109,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.358,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.321,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 16,
+          "targetTerrainAtWindow": {
+            "slope": 5.605,
+            "roughness": 185.9
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.097
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.092
+              },
+              "bareGround": {
+                "similarity": 0.071,
+                "midPercentile": 0.727
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.741
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0.3,
+                "midPercentile": 0.554,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0.1,
+                "midPercentile": 0.093,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0.2,
+                "midPercentile": 0.504,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.2,
+                "midPercentile": 0.472,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.046
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.092
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.333
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.744
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.311,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0.1,
+                "midPercentile": 0.093,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.353,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.328,
                 "unscoredReason": null,
                 "limitingFactor": "terrain"
               }
@@ -8538,6 +10302,258 @@
             }
           },
           "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 0.372,
+            "roughness": 7.4
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.147
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.548
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.892
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.495,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.065,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.416,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.431,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.07
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.317
+              },
+              "sunlight": {
+                "similarity": 0.981,
+                "midPercentile": 0.891
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.324,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.065,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.335,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.001
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 5.03,
+            "roughness": 107.9
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.979,
+                "midPercentile": 0.992
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.548
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.746
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 2,
+                "midPercentile": 0.653,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.057,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.406,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.1,
+                "midPercentile": 0.461,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.073
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.056
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.317
+              },
+              "sunlight": {
+                "similarity": 0.791,
+                "midPercentile": 0.744
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.321,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.057,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.331,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.331,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.034
         }
       ]
     },
@@ -9599,6 +11615,258 @@
               "base": {
                 "score": 0,
                 "midPercentile": 0.292,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 0.372,
+            "roughness": 7.4
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.098
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "bareGround": {
+                "similarity": 0.992,
+                "midPercentile": 0.994
+              },
+              "sunlight": {
+                "similarity": 0.992,
+                "midPercentile": 0.933
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.494,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.051,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.455,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.416,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.011
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.447
+              },
+              "sunlight": {
+                "similarity": 0.992,
+                "midPercentile": 0.934
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.294,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.049,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.363,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.293,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 9,
+          "targetTerrainAtWindow": {
+            "slope": 5.03,
+            "roughness": 107.9
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.717,
+                "midPercentile": 0.875
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "bareGround": {
+                "similarity": 0.992,
+                "midPercentile": 0.994
+              },
+              "sunlight": {
+                "similarity": 0.939,
+                "midPercentile": 0.884
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 82.8,
+                "midPercentile": 0.989,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.044,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.441,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.3,
+                "midPercentile": 0.499,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.011
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.447
+              },
+              "sunlight": {
+                "similarity": 0.938,
+                "midPercentile": 0.883
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.294,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.044,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.358,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.294,
                 "unscoredReason": null,
                 "limitingFactor": "terrain"
               }
@@ -10672,6 +12940,258 @@
             }
           },
           "terrainAgainst55km": 0.167
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.191,
+                "midPercentile": 0.273
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.066
+              },
+              "bareGround": {
+                "similarity": 0.184,
+                "midPercentile": 0.783
+              },
+              "sunlight": {
+                "similarity": 0.994,
+                "midPercentile": 0.941
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 18.8,
+                "midPercentile": 0.799,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.079,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0.1,
+                "midPercentile": 0.49,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.7,
+                "midPercentile": 0.569,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.042
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.066
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.534
+              },
+              "sunlight": {
+                "similarity": 0.994,
+                "midPercentile": 0.946
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.327,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.042,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.371,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.319,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.256
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.592,
+                "midPercentile": 0.806
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.066
+              },
+              "bareGround": {
+                "similarity": 0.184,
+                "midPercentile": 0.783
+              },
+              "sunlight": {
+                "similarity": 0.933,
+                "midPercentile": 0.88
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 35.2,
+                "midPercentile": 0.871,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.067,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0.1,
+                "midPercentile": 0.471,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0.7,
+                "midPercentile": 0.535,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.043
+              },
+              "climate": {
+                "similarity": 0,
+                "midPercentile": 0.066
+              },
+              "bareGround": {
+                "similarity": 0,
+                "midPercentile": 0.534
+              },
+              "sunlight": {
+                "similarity": 0.93,
+                "midPercentile": 0.879
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.332,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 0,
+                "midPercentile": 0.041,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 0,
+                "midPercentile": 0.369,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.692
         }
       ]
     },
@@ -11739,6 +14259,258 @@
             }
           },
           "terrainAgainst55km": 0.131
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0.149,
+                "midPercentile": 0.263
+              },
+              "climate": {
+                "similarity": 0.06,
+                "midPercentile": 0.609
+              },
+              "bareGround": {
+                "similarity": 0.927,
+                "midPercentile": 0.966
+              },
+              "sunlight": {
+                "similarity": 0.94,
+                "midPercentile": 0.799
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 33.6,
+                "midPercentile": 0.844,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 12.8,
+                "midPercentile": 0.972,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 17.3,
+                "midPercentile": 0.951,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 19.7,
+                "midPercentile": 0.922,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.054
+              },
+              "climate": {
+                "similarity": 0.046,
+                "midPercentile": 0.561
+              },
+              "bareGround": {
+                "similarity": 0.962,
+                "midPercentile": 0.982
+              },
+              "sunlight": {
+                "similarity": 0.934,
+                "midPercentile": 0.798
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.364,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 11,
+                "midPercentile": 0.931,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 15.4,
+                "midPercentile": 0.933,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.434,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.211
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.65,
+                "midPercentile": 0.841
+              },
+              "climate": {
+                "similarity": 0.06,
+                "midPercentile": 0.609
+              },
+              "bareGround": {
+                "similarity": 0.927,
+                "midPercentile": 0.966
+              },
+              "sunlight": {
+                "similarity": 0.991,
+                "midPercentile": 0.96
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 76.1,
+                "midPercentile": 0.98,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 12.9,
+                "midPercentile": 0.833,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 17.3,
+                "midPercentile": 0.906,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 28.6,
+                "midPercentile": 0.98,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.057
+              },
+              "climate": {
+                "similarity": 0.046,
+                "midPercentile": 0.561
+              },
+              "bareGround": {
+                "similarity": 0.962,
+                "midPercentile": 0.982
+              },
+              "sunlight": {
+                "similarity": 0.993,
+                "midPercentile": 0.966
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.431,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 11.1,
+                "midPercentile": 0.749,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 15.4,
+                "midPercentile": 0.879,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 0.4,
+                "midPercentile": 0.502,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.703
         }
       ]
     },
@@ -12806,6 +15578,258 @@
             }
           },
           "terrainAgainst55km": 0.809
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.862,
+                "midPercentile": 0.451
+              },
+              "climate": {
+                "similarity": 0.095,
+                "midPercentile": 0.698
+              },
+              "bareGround": {
+                "similarity": 0.958,
+                "midPercentile": 0.98
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.238
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 90.4,
+                "midPercentile": 0.966,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 3.2,
+                "midPercentile": 0.334,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 24,
+                "midPercentile": 0.992,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 18.7,
+                "midPercentile": 0.912,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0.677,
+                "midPercentile": 0.377
+              },
+              "climate": {
+                "similarity": 0.095,
+                "midPercentile": 0.698
+              },
+              "bareGround": {
+                "similarity": 0.976,
+                "midPercentile": 0.987
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.242
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 79.7,
+                "midPercentile": 0.937,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 4.9,
+                "midPercentile": 0.448,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 21.7,
+                "midPercentile": 0.982,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 17.2,
+                "midPercentile": 0.897,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.869
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.254,
+                "midPercentile": 0.435
+              },
+              "climate": {
+                "similarity": 0.095,
+                "midPercentile": 0.698
+              },
+              "bareGround": {
+                "similarity": 0.958,
+                "midPercentile": 0.98
+              },
+              "sunlight": {
+                "similarity": 0.006,
+                "midPercentile": 0.238
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 45.8,
+                "midPercentile": 0.914,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 4.8,
+                "midPercentile": 0.344,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 24,
+                "midPercentile": 0.97,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 15.9,
+                "midPercentile": 0.856,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.714
+              },
+              "terrain": {
+                "similarity": 0.85,
+                "midPercentile": 0.938
+              },
+              "climate": {
+                "similarity": 0.095,
+                "midPercentile": 0.698
+              },
+              "bareGround": {
+                "similarity": 0.976,
+                "midPercentile": 0.987
+              },
+              "sunlight": {
+                "similarity": 0.006,
+                "midPercentile": 0.242
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.714,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 90.4,
+                "midPercentile": 0.996,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 9.6,
+                "midPercentile": 0.654,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 29.8,
+                "midPercentile": 0.989,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 26.4,
+                "midPercentile": 0.969,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.417
         }
       ]
     },
@@ -13873,6 +16897,258 @@
             }
           },
           "terrainAgainst55km": 0.209
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.235,
+                "midPercentile": 0.283
+              },
+              "climate": {
+                "similarity": 0.011,
+                "midPercentile": 0.321
+              },
+              "bareGround": {
+                "similarity": 0.953,
+                "midPercentile": 0.978
+              },
+              "sunlight": {
+                "similarity": 0.79,
+                "midPercentile": 0.749
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 43.8,
+                "midPercentile": 0.869,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 8.2,
+                "midPercentile": 0.776,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 12.3,
+                "midPercentile": 0.872,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 17.4,
+                "midPercentile": 0.899,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.076,
+                "midPercentile": 0.24
+              },
+              "climate": {
+                "similarity": 0.011,
+                "midPercentile": 0.321
+              },
+              "bareGround": {
+                "similarity": 0.869,
+                "midPercentile": 0.938
+              },
+              "sunlight": {
+                "similarity": 0.799,
+                "midPercentile": 0.75
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 22.4,
+                "midPercentile": 0.811,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 3.2,
+                "midPercentile": 0.335,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 6.3,
+                "midPercentile": 0.741,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 9,
+                "midPercentile": 0.795,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.313
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.571,
+                "midPercentile": 0.792
+              },
+              "climate": {
+                "similarity": 0.011,
+                "midPercentile": 0.321
+              },
+              "bareGround": {
+                "similarity": 0.953,
+                "midPercentile": 0.978
+              },
+              "sunlight": {
+                "similarity": 0.98,
+                "midPercentile": 0.94
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 71.7,
+                "midPercentile": 0.974,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 5.1,
+                "midPercentile": 0.354,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 7.9,
+                "midPercentile": 0.747,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 16.7,
+                "midPercentile": 0.865,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.642,
+                "midPercentile": 0.836
+              },
+              "climate": {
+                "similarity": 0.011,
+                "midPercentile": 0.321
+              },
+              "bareGround": {
+                "similarity": 0.869,
+                "midPercentile": 0.938
+              },
+              "sunlight": {
+                "similarity": 0.983,
+                "midPercentile": 0.942
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 73.4,
+                "midPercentile": 0.976,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 3.4,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 6.3,
+                "midPercentile": 0.722,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 17.2,
+                "midPercentile": 0.872,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.737
         }
       ]
     },
@@ -14940,6 +18216,258 @@
             }
           },
           "terrainAgainst55km": 0.785
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 0.275,
+            "roughness": 3.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.783,
+                "midPercentile": 0.408
+              },
+              "climate": {
+                "similarity": 0.01,
+                "midPercentile": 0.31
+              },
+              "bareGround": {
+                "similarity": 0.912,
+                "midPercentile": 0.958
+              },
+              "sunlight": {
+                "similarity": 0.998,
+                "midPercentile": 0.961
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 83.8,
+                "midPercentile": 0.945,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 3.1,
+                "midPercentile": 0.329,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 6,
+                "midPercentile": 0.736,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 17.8,
+                "midPercentile": 0.903,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.132
+              },
+              "climate": {
+                "similarity": 0.01,
+                "midPercentile": 0.31
+              },
+              "bareGround": {
+                "similarity": 0.959,
+                "midPercentile": 0.98
+              },
+              "sunlight": {
+                "similarity": 0.998,
+                "midPercentile": 0.963
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0.4,
+                "midPercentile": 0.595,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 4.8,
+                "midPercentile": 0.441,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 7.5,
+                "midPercentile": 0.764,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 1.6,
+                "midPercentile": 0.629,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.839
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 5.594,
+            "roughness": 77.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.357,
+                "midPercentile": 0.608
+              },
+              "climate": {
+                "similarity": 0.01,
+                "midPercentile": 0.31
+              },
+              "bareGround": {
+                "similarity": 0.912,
+                "midPercentile": 0.958
+              },
+              "sunlight": {
+                "similarity": 0.858,
+                "midPercentile": 0.804
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 54.2,
+                "midPercentile": 0.94,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 3,
+                "midPercentile": 0.266,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 6,
+                "midPercentile": 0.718,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 13.9,
+                "midPercentile": 0.827,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.714
+              },
+              "terrain": {
+                "similarity": 0.009,
+                "midPercentile": 0.13
+              },
+              "climate": {
+                "similarity": 0.01,
+                "midPercentile": 0.31
+              },
+              "bareGround": {
+                "similarity": 0.959,
+                "midPercentile": 0.98
+              },
+              "sunlight": {
+                "similarity": 0.858,
+                "midPercentile": 0.807
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.714,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 7.3,
+                "midPercentile": 0.728,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 6.8,
+                "midPercentile": 0.433,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 10.4,
+                "midPercentile": 0.787,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 7,
+                "midPercentile": 0.731,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.402
         }
       ]
     },
@@ -16007,6 +19535,258 @@
             }
           },
           "terrainAgainst55km": 0.001
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.002,
+                "midPercentile": 0.169
+              },
+              "climate": {
+                "similarity": 0.027,
+                "midPercentile": 0.452
+              },
+              "bareGround": {
+                "similarity": 0.969,
+                "midPercentile": 0.985
+              },
+              "sunlight": {
+                "similarity": 0.743,
+                "midPercentile": 0.733
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 3,
+                "midPercentile": 0.696,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 6.3,
+                "midPercentile": 0.599,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 11.4,
+                "midPercentile": 0.853,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 4.3,
+                "midPercentile": 0.718,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0.027,
+                "midPercentile": 0.213
+              },
+              "climate": {
+                "similarity": 0.027,
+                "midPercentile": 0.452
+              },
+              "bareGround": {
+                "similarity": 0.891,
+                "midPercentile": 0.947
+              },
+              "sunlight": {
+                "similarity": 0.744,
+                "midPercentile": 0.735
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 12.7,
+                "midPercentile": 0.775,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 8,
+                "midPercentile": 0.763,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 11.9,
+                "midPercentile": 0.863,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 9.8,
+                "midPercentile": 0.807,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.003
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.775,
+                "midPercentile": 0.903
+              },
+              "climate": {
+                "similarity": 0.027,
+                "midPercentile": 0.452
+              },
+              "bareGround": {
+                "similarity": 0.969,
+                "midPercentile": 0.985
+              },
+              "sunlight": {
+                "similarity": 0.96,
+                "midPercentile": 0.909
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 85.6,
+                "midPercentile": 0.992,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 6.7,
+                "midPercentile": 0.427,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 11.4,
+                "midPercentile": 0.806,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 25.8,
+                "midPercentile": 0.965,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.714
+              },
+              "terrain": {
+                "similarity": 0.451,
+                "midPercentile": 0.704
+              },
+              "climate": {
+                "similarity": 0.027,
+                "midPercentile": 0.452
+              },
+              "bareGround": {
+                "similarity": 0.891,
+                "midPercentile": 0.947
+              },
+              "sunlight": {
+                "similarity": 0.961,
+                "midPercentile": 0.911
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.714,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 61,
+                "midPercentile": 0.956,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 12.2,
+                "midPercentile": 0.802,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 16.3,
+                "midPercentile": 0.893,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 25.1,
+                "midPercentile": 0.96,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.054
         }
       ]
     },
@@ -17068,6 +20848,258 @@
               "base": {
                 "score": 32.8,
                 "midPercentile": 0.988,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": null
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "climate": {
+                "similarity": 0.094,
+                "midPercentile": 0.695
+              },
+              "bareGround": {
+                "similarity": 0.949,
+                "midPercentile": 0.976
+              },
+              "sunlight": {
+                "similarity": 0.988,
+                "midPercentile": 0.917
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "ice": {
+                "score": 16.4,
+                "midPercentile": 0.99,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 21.3,
+                "midPercentile": 0.98,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 26.1,
+                "midPercentile": 0.983,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0.659,
+                "midPercentile": 0.373
+              },
+              "climate": {
+                "similarity": 0.094,
+                "midPercentile": 0.695
+              },
+              "bareGround": {
+                "similarity": 0.98,
+                "midPercentile": 0.989
+              },
+              "sunlight": {
+                "similarity": 0.989,
+                "midPercentile": 0.925
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 78.6,
+                "midPercentile": 0.936,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 16.4,
+                "midPercentile": 0.99,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 21.5,
+                "midPercentile": 0.981,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 33.2,
+                "midPercentile": 0.999,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": null
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "climate": {
+                "similarity": 0.094,
+                "midPercentile": 0.695
+              },
+              "bareGround": {
+                "similarity": 0.949,
+                "midPercentile": 0.976
+              },
+              "sunlight": {
+                "similarity": 0.946,
+                "midPercentile": 0.894
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "ice": {
+                "score": 16.2,
+                "midPercentile": 0.945,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 21.3,
+                "midPercentile": 0.952,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 26,
+                "midPercentile": 0.967,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.605,
+                "midPercentile": 0.815
+              },
+              "climate": {
+                "similarity": 0.094,
+                "midPercentile": 0.695
+              },
+              "bareGround": {
+                "similarity": 0.98,
+                "midPercentile": 0.989
+              },
+              "sunlight": {
+                "similarity": 0.945,
+                "midPercentile": 0.891
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 75,
+                "midPercentile": 0.979,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 16.2,
+                "midPercentile": 0.945,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 21.5,
+                "midPercentile": 0.954,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 32.3,
+                "midPercentile": 0.99,
                 "unscoredReason": null,
                 "limitingFactor": "temperature"
               }
@@ -18141,6 +22173,258 @@
             }
           },
           "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.027
+              },
+              "climate": {
+                "similarity": 0.079,
+                "midPercentile": 0.662
+              },
+              "bareGround": {
+                "similarity": 0.771,
+                "midPercentile": 0.907
+              },
+              "sunlight": {
+                "similarity": 0.992,
+                "midPercentile": 0.929
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.319,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 21.7,
+                "midPercentile": 0.997,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 25.4,
+                "midPercentile": 0.994,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.356,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.6,
+                "midPercentile": 0.958
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.142
+              },
+              "climate": {
+                "similarity": 0.079,
+                "midPercentile": 0.662
+              },
+              "bareGround": {
+                "similarity": 0.798,
+                "midPercentile": 0.914
+              },
+              "sunlight": {
+                "similarity": 0.992,
+                "midPercentile": 0.937
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 60,
+                "midPercentile": 0.958,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0.7,
+                "midPercentile": 0.62,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 21.7,
+                "midPercentile": 0.997,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 25.7,
+                "midPercentile": 0.995,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 4.7,
+                "midPercentile": 0.726,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.059,
+                "midPercentile": 0.158
+              },
+              "climate": {
+                "similarity": 0.079,
+                "midPercentile": 0.662
+              },
+              "bareGround": {
+                "similarity": 0.771,
+                "midPercentile": 0.907
+              },
+              "sunlight": {
+                "similarity": 0.939,
+                "midPercentile": 0.884
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 18.4,
+                "midPercentile": 0.796,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 14.7,
+                "midPercentile": 0.902,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 18.4,
+                "midPercentile": 0.924,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 16.3,
+                "midPercentile": 0.861,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.026,
+                "midPercentile": 0.144
+              },
+              "climate": {
+                "similarity": 0.079,
+                "midPercentile": 0.662
+              },
+              "bareGround": {
+                "similarity": 0.798,
+                "midPercentile": 0.914
+              },
+              "sunlight": {
+                "similarity": 0.938,
+                "midPercentile": 0.881
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 12,
+                "midPercentile": 0.761,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 14.7,
+                "midPercentile": 0.902,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 18.6,
+                "midPercentile": 0.926,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 13.4,
+                "midPercentile": 0.821,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
         }
       ]
     },
@@ -19202,6 +23486,258 @@
               "base": {
                 "score": 0,
                 "midPercentile": 0.466,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.024
+              },
+              "climate": {
+                "similarity": 0.299,
+                "midPercentile": 0.854
+              },
+              "bareGround": {
+                "similarity": 0.09,
+                "midPercentile": 0.739
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.196
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.314,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 6.8,
+                "midPercentile": 0.663,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 18.5,
+                "midPercentile": 0.961,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.323,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.072
+              },
+              "climate": {
+                "similarity": 0.299,
+                "midPercentile": 0.854
+              },
+              "bareGround": {
+                "similarity": 0.085,
+                "midPercentile": 0.736
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.2
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.393,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 8.4,
+                "midPercentile": 0.795,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 17.3,
+                "midPercentile": 0.951,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0.1,
+                "midPercentile": 0.465,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.029,
+                "midPercentile": 0.145
+              },
+              "climate": {
+                "similarity": 0.299,
+                "midPercentile": 0.854
+              },
+              "bareGround": {
+                "similarity": 0.09,
+                "midPercentile": 0.739
+              },
+              "sunlight": {
+                "similarity": 0.004,
+                "midPercentile": 0.196
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 4.8,
+                "midPercentile": 0.702,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 10.4,
+                "midPercentile": 0.708,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 18.5,
+                "midPercentile": 0.924,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 6.9,
+                "midPercentile": 0.728,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.933
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.072
+              },
+              "climate": {
+                "similarity": 0.299,
+                "midPercentile": 0.854
+              },
+              "bareGround": {
+                "similarity": 0.085,
+                "midPercentile": 0.736
+              },
+              "sunlight": {
+                "similarity": 0.004,
+                "midPercentile": 0.199
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.933,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.467,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 19.3,
+                "midPercentile": 0.978,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 26.8,
+                "midPercentile": 0.98,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0.9,
+                "midPercentile": 0.553,
                 "unscoredReason": null,
                 "limitingFactor": "terrain"
               }
@@ -20275,6 +24811,258 @@
             }
           },
           "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 0.275,
+            "roughness": 3.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.004
+              },
+              "climate": {
+                "similarity": 0.294,
+                "midPercentile": 0.842
+              },
+              "bareGround": {
+                "similarity": 0.135,
+                "midPercentile": 0.762
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.204
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.289,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 6.7,
+                "midPercentile": 0.661,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 21.5,
+                "midPercentile": 0.981,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.288,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.473
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.037
+              },
+              "climate": {
+                "similarity": 0.294,
+                "midPercentile": 0.842
+              },
+              "bareGround": {
+                "similarity": 0.133,
+                "midPercentile": 0.762
+              },
+              "sunlight": {
+                "similarity": 0.001,
+                "midPercentile": 0.2
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.473,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.333,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 8.3,
+                "midPercentile": 0.79,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 19.7,
+                "midPercentile": 0.969,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.375,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 6,
+          "targetTerrainAtWindow": {
+            "slope": 5.594,
+            "roughness": 77.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.086
+              },
+              "climate": {
+                "similarity": 0.294,
+                "midPercentile": 0.842
+              },
+              "bareGround": {
+                "similarity": 0.135,
+                "midPercentile": 0.762
+              },
+              "sunlight": {
+                "similarity": 0.005,
+                "midPercentile": 0.204
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0.1,
+                "midPercentile": 0.526,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 10.4,
+                "midPercentile": 0.706,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 21.5,
+                "midPercentile": 0.954,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 1,
+                "midPercentile": 0.56,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.933
+              },
+              "terrain": {
+                "similarity": 0,
+                "midPercentile": 0.038
+              },
+              "climate": {
+                "similarity": 0.294,
+                "midPercentile": 0.842
+              },
+              "bareGround": {
+                "similarity": 0.133,
+                "midPercentile": 0.762
+              },
+              "sunlight": {
+                "similarity": 0.004,
+                "midPercentile": 0.199
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.933,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 0,
+                "midPercentile": 0.341,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 19.1,
+                "midPercentile": 0.978,
+                "unscoredReason": null,
+                "limitingFactor": "sunlight"
+              },
+              "astrobiology": {
+                "score": 30.6,
+                "midPercentile": 0.991,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "base": {
+                "score": 0,
+                "midPercentile": 0.423,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0
         }
       ]
     },
@@ -21342,6 +26130,258 @@
             }
           },
           "terrainAgainst55km": 0.161
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.186,
+                "midPercentile": 0.272
+              },
+              "climate": {
+                "similarity": 0.053,
+                "midPercentile": 0.584
+              },
+              "bareGround": {
+                "similarity": 0.306,
+                "midPercentile": 0.821
+              },
+              "sunlight": {
+                "similarity": 0.256,
+                "midPercentile": 0.619
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 23.2,
+                "midPercentile": 0.813,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 7.8,
+                "midPercentile": 0.755,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 10.7,
+                "midPercentile": 0.833,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 13.9,
+                "midPercentile": 0.86,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.043,
+                "midPercentile": 0.225
+              },
+              "climate": {
+                "similarity": 0.053,
+                "midPercentile": 0.584
+              },
+              "bareGround": {
+                "similarity": 0.174,
+                "midPercentile": 0.779
+              },
+              "sunlight": {
+                "similarity": 0.262,
+                "midPercentile": 0.622
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 8,
+                "midPercentile": 0.749,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 15.8,
+                "midPercentile": 0.988,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 15,
+                "midPercentile": 0.929,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 11.6,
+                "midPercentile": 0.831,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.244
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": null,
+                "midPercentile": null
+              },
+              "terrain": {
+                "similarity": 0.573,
+                "midPercentile": 0.794
+              },
+              "climate": {
+                "similarity": 0.053,
+                "midPercentile": 0.584
+              },
+              "bareGround": {
+                "similarity": 0.306,
+                "midPercentile": 0.821
+              },
+              "sunlight": {
+                "similarity": 0.508,
+                "midPercentile": 0.619
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": null,
+                "midPercentile": null,
+                "unscoredReason": "coverage-too-low",
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 43.3,
+                "midPercentile": 0.905,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 9.3,
+                "midPercentile": 0.623,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 10.7,
+                "midPercentile": 0.792,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 21,
+                "midPercentile": 0.919,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.473,
+                "midPercentile": 0.721
+              },
+              "climate": {
+                "similarity": 0.053,
+                "midPercentile": 0.584
+              },
+              "bareGround": {
+                "similarity": 0.174,
+                "midPercentile": 0.779
+              },
+              "sunlight": {
+                "similarity": 0.516,
+                "midPercentile": 0.622
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 30.3,
+                "midPercentile": 0.851,
+                "unscoredReason": null,
+                "limitingFactor": "bareGround"
+              },
+              "ice": {
+                "score": 10.6,
+                "midPercentile": 0.722,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "astrobiology": {
+                "score": 9.7,
+                "midPercentile": 0.776,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              },
+              "base": {
+                "score": 17,
+                "midPercentile": 0.87,
+                "unscoredReason": null,
+                "limitingFactor": "temperature"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.646
         }
       ]
     },
@@ -22409,6 +27449,258 @@
             }
           },
           "terrainAgainst55km": 0.524
+        },
+        {
+          "target": "mars-gusev-columbia-hills",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 0.429,
+            "roughness": 9.8
+          },
+          "targetTerrainAt55km": {
+            "slope": 0.53,
+            "roughness": 33.8
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.54,
+                "midPercentile": 0.346
+              },
+              "climate": {
+                "similarity": 0.002,
+                "midPercentile": 0.209
+              },
+              "bareGround": {
+                "similarity": 0.995,
+                "midPercentile": 0.996
+              },
+              "sunlight": {
+                "similarity": 0.008,
+                "midPercentile": 0.403
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 70.8,
+                "midPercentile": 0.923,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 1.5,
+                "midPercentile": 0.223,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 6.1,
+                "midPercentile": 0.738,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 8.6,
+                "midPercentile": 0.791,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 1,
+                "midPercentile": 0.985
+              },
+              "terrain": {
+                "similarity": 0.007,
+                "midPercentile": 0.188
+              },
+              "climate": {
+                "similarity": 0.002,
+                "midPercentile": 0.209
+              },
+              "bareGround": {
+                "similarity": 0.897,
+                "midPercentile": 0.95
+              },
+              "sunlight": {
+                "similarity": 0.008,
+                "midPercentile": 0.4
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 100,
+                "midPercentile": 0.985,
+                "unscoredReason": null,
+                "limitingFactor": null
+              },
+              "mobility": {
+                "score": 5.9,
+                "midPercentile": 0.733,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 1.5,
+                "midPercentile": 0.222,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 5.9,
+                "midPercentile": 0.734,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 2.8,
+                "midPercentile": 0.678,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.695
+        },
+        {
+          "target": "mars-holden",
+          "listed": false,
+          "windowPosts": 11,
+          "targetTerrainAtWindow": {
+            "slope": 5.228,
+            "roughness": 132.7
+          },
+          "targetTerrainAt55km": {
+            "slope": 1.98,
+            "roughness": 105.4
+          },
+          "site": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.467,
+                "midPercentile": 0.716
+              },
+              "climate": {
+                "similarity": 0.002,
+                "midPercentile": 0.209
+              },
+              "bareGround": {
+                "similarity": 0.995,
+                "midPercentile": 0.996
+              },
+              "sunlight": {
+                "similarity": 0.034,
+                "midPercentile": 0.403
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 65.3,
+                "midPercentile": 0.963,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 1.2,
+                "midPercentile": 0.178,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 3.9,
+                "midPercentile": 0.68,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 7.2,
+                "midPercentile": 0.733,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "grid": {
+            "dimensions": {
+              "geology": {
+                "similarity": 0.15,
+                "midPercentile": 0.281
+              },
+              "terrain": {
+                "similarity": 0.24,
+                "midPercentile": 0.407
+              },
+              "climate": {
+                "similarity": 0.002,
+                "midPercentile": 0.209
+              },
+              "bareGround": {
+                "similarity": 0.897,
+                "midPercentile": 0.95
+              },
+              "sunlight": {
+                "similarity": 0.033,
+                "midPercentile": 0.4
+              }
+            },
+            "purposes": {
+              "geology": {
+                "score": 15,
+                "midPercentile": 0.281,
+                "unscoredReason": null,
+                "limitingFactor": "rockType"
+              },
+              "mobility": {
+                "score": 43.1,
+                "midPercentile": 0.904,
+                "unscoredReason": null,
+                "limitingFactor": "terrain"
+              },
+              "ice": {
+                "score": 1.2,
+                "midPercentile": 0.178,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "astrobiology": {
+                "score": 3.8,
+                "midPercentile": 0.677,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              },
+              "base": {
+                "score": 6,
+                "midPercentile": 0.712,
+                "unscoredReason": null,
+                "limitingFactor": "dryness"
+              }
+            }
+          },
+          "terrainAgainst55km": 0.817
         }
       ]
     }

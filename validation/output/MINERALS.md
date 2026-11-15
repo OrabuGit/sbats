@@ -1,6 +1,6 @@
 # Minerals on both sides: what each Earth site shares with each target
 
-Written 2026-11-15T07:27:44.482Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T07:23:39Z (Session B).
+Written 2026-11-15T13:43:04.471Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T07:23:39Z (Session B).
 
 **Site-level result only. Added after the score was frozen on 2026-11-14: it is not part of any score and has not been validated.**
 
@@ -17,6 +17,8 @@ How to read it:
 
 | Target | Mineral families reported | Comparable with EMIT | Not comparable |
 | --- | --- | --- | --- |
+| mars-gusev-columbia-hills | 8 | Olivine, Pyroxene, Magnetite, Hematite, Goethite, Iron sulfate, Magnesium-iron carbonate, Silica | none |
+| mars-holden | 1 | Smectite clay | none |
 | mars-gale | 11 | Pyroxene, Olivine, Magnetite, Hematite, Jarosite, Calcium sulfate, Smectite clay, Silica, Magnesium-iron carbonate | Plagioclase feldspar, Akaganeite |
 | mars-jezero | 9 | Olivine, Pyroxene, Magnesium-iron carbonate, Calcium sulfate, Magnesium sulfate, Perchlorate, Smectite clay | Plagioclase feldspar, Phosphate |
 | moon-shackleton-rim | 1 | none | Plagioclase feldspar |
@@ -73,20 +75,20 @@ A mineral match in a cloudy pixel is a match to cloud, not ground. This table re
 
 ## Shared minerals, site by target
 
-| Site | mars-gale | mars-jezero | moon-shackleton-rim | moon-marius-hills |
-| --- | --- | --- | --- | --- |
-| Mount Merapi and the Opak River, Central Java, Indonesia | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | not comparable | not comparable | not comparable | not comparable |
-| Kesaksak lava tube, Batur caldera, Bali, Indonesia | not comparable | not comparable | not comparable | not comparable |
-| Mount Tambora caldera, Sumbawa, Indonesia | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Mount Batur black lava fields, Bali, Indonesia | 0 of 9: none | 0 of 7: none | not comparable | 0 of 2: none |
-| Mauna Kea, Hawaii, USA | 3 of 9: Hematite, Smectite clay, Silica | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Kilauea, Hawaii, USA | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Atacama Desert hyperarid core (Yungay), Chile | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Dallol, Danakil Depression, Ethiopia | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Dasht-e Lut (Lut Desert), Iran | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
-| Tunupa volcano, north shore of Salar de Uyuni, Bolivia | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
-| Craters of the Moon, Idaho, USA | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
+| Site | mars-gusev-columbia-hills | mars-holden | mars-gale | mars-jezero | moon-shackleton-rim | moon-marius-hills |
+| --- | --- | --- | --- | --- | --- | --- |
+| Mount Merapi and the Opak River, Central Java, Indonesia | 2 of 8: Hematite, Goethite | 1 of 1: Smectite clay | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | not comparable | not comparable | not comparable | not comparable | not comparable | not comparable |
+| Kesaksak lava tube, Batur caldera, Bali, Indonesia | not comparable | not comparable | not comparable | not comparable | not comparable | not comparable |
+| Mount Tambora caldera, Sumbawa, Indonesia | 2 of 8: Hematite, Goethite | 1 of 1: Smectite clay | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Mount Batur black lava fields, Bali, Indonesia | 1 of 8: Goethite | 0 of 1: none | 0 of 9: none | 0 of 7: none | not comparable | 0 of 2: none |
+| Mauna Kea, Hawaii, USA | 3 of 8: Hematite, Goethite, Silica | 1 of 1: Smectite clay | 3 of 9: Hematite, Smectite clay, Silica | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Kilauea, Hawaii, USA | 2 of 8: Hematite, Goethite | 1 of 1: Smectite clay | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Atacama Desert hyperarid core (Yungay), Chile | 2 of 8: Hematite, Goethite | 1 of 1: Smectite clay | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Dallol, Danakil Depression, Ethiopia | 3 of 8: Hematite, Goethite, Iron sulfate | 1 of 1: Smectite clay | 3 of 9: Hematite, Jarosite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Dasht-e Lut (Lut Desert), Iran | 2 of 8: Hematite, Goethite | 1 of 1: Smectite clay | 2 of 9: Hematite, Smectite clay | 1 of 7: Smectite clay | not comparable | 0 of 2: none |
+| Tunupa volcano, north shore of Salar de Uyuni, Bolivia | 2 of 8: Hematite, Goethite | 0 of 1: none | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
+| Craters of the Moon, Idaho, USA | 2 of 8: Hematite, Goethite | 0 of 1: none | 1 of 9: Hematite | 0 of 7: none | not comparable | 0 of 2: none |
 
 Each cell: how many of the target's comparable mineral families EMIT also identified at the site, and which.
 

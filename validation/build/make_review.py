@@ -38,6 +38,8 @@ COORDS = {
     "moon-marius-hills": ("The Marius Hills pit, 14.091 N 303.230 E, Wagner and Robinson 2014, Icarus 237:52, Table 2 (read in the open manuscript). The LROC pit atlas gives 14.0917, 303.2299. JAXA's 2017 release gives 14.100 N, 303.262 E, about 1 km away. 'Marius Hills' is an informal name with no IAU Gazetteer entry.", "https://doi.org/10.1016/j.icarus.2014.04.002", "B", "High"),
     "mars-jezero": ("Perseverance landing point, 18.44 N 77.45 E, Rodriguez-Manfredi et al. 2023, Nature Geoscience.", "https://doi.org/10.1038/s41561-022-01084-0", "A", "High"),
     "mars-gale": ("Curiosity landing point, 4.6 S 137.4 E, NASA MSL fact sheet.", "https://solarsystem.nasa.gov/docs/MSL%20Fact%20Sheet%20REV-141119.pdf", "A", "High"),
+    "mars-gusev-columbia-hills": ("ADDED AFTER THE FREEZE. Spirit's landing point as the team gave it, 14.57 S 175.47 E. Morris et al. 2006 (manuscript on NASA NTRS) give 14.5692 S, 175.4729 E. Spirit drove east from here to the Columbia Hills, which lie inside the 55.6 km window.", "https://ntrs.nasa.gov/citations/20080030169", "A", "High"),
+    "mars-holden": ("ADDED AFTER THE FREEZE. The point the team gave, 26.0 S 326.0 E (written here as -34.0). It was not checked against a published crater centre. The layered deposits are best exposed in the south-west of the crater (NASA PIA21561); the window is centred on the team's point, not on those outcrops.", "https://science.nasa.gov/photojournal/a-closer-look-at-holden-crater/", "B", "Medium"),
     "mars-arcadia-planitia": ("Candidate landing site AP-1, 39.8 N 202.1 E (written here as -157.9), Golombek et al. 2021, LPSC abstract 2420, Table 1. The paper does not say whether latitude is planetocentric; at 0.5 degree resolution the difference does not matter.", "https://www.hou.usra.edu/meetings/lpsc2021/pdf/2420.pdf", "A", "High"),
 }
 
@@ -53,6 +55,8 @@ REVIEW = {
         "mars-gale": (MCD_URL, "A", "Medium to low",
                       "Climate model. DISAGREES WITH THE ROVER: the midpoint of REMS daily minimum and maximum is -43.7 C over 4,717 sols; the model's figure for that same statistic is -54.6 C. The model value is used so that all three Mars targets share one definition (a true 24-hour mean, like Earth's). A human should decide whether to keep it. With sigma 15 C the choice changes scores only slightly."),
         "mars-arcadia-planitia": (MCD_URL, "A", "Medium to low", "Climate model. No lander has measured here and no published site value was found."),
+        "mars-gusev-columbia-hills": (MCD_URL, "A", "Medium to low", "ADDED AFTER THE FREEZE. Climate model, same run and settings as the other Mars targets (validation/build/mars_temperature.py, 2026-11-15; the three earlier targets came out unchanged in that run). Not compared with any Spirit temperature record."),
+        "mars-holden": (MCD_URL, "A", "Medium to low", "ADDED AFTER THE FREEZE. Climate model, same run. No lander has measured here."),
     },
     "tempRange": {
         "*moon": ("", "", "n/a", "Left null on purpose. See the note in targets.json."),
@@ -62,6 +66,8 @@ REVIEW = {
         "mars-gale": (REMS_URL, "A", "Medium",
                       "Computed by validation/build/mars_temperature.py from NASA's public REMS weather feed. The feed says it is for outreach, not science; the calibrated data are in the PDS. It agrees with Martinez et al. 2016 (Fisica de la Tierra 28:163), who give air temperature amplitudes of about 45 to 75 K."),
         "mars-arcadia-planitia": (MCD_URL, "A", "Medium to low", "Climate model. No lander has measured here."),
+        "mars-gusev-columbia-hills": (MCD_URL, "A", "Medium to low", "ADDED AFTER THE FREEZE. Climate model, same run. At 61.3 C it is the largest daily range of the Mars targets after Gale's rover value."),
+        "mars-holden": (MCD_URL, "A", "Medium to low", "ADDED AFTER THE FREEZE. Climate model, same run. No lander has measured here."),
     },
     "precip": {
         "*moon": (MOONFACT, "A", "High", "Set to 0 by data/SCHEMA.md. The source shows why: there is no atmosphere."),
@@ -90,6 +96,8 @@ REVIEW = {
         "mars-jezero": ("https://doi.org/10.1126/science.abo2196", "B", "Medium", "Abstract only. The landing point is on the Maaz lava flows; the window also holds the sedimentary delta."),
         "mars-gale": ("https://doi.org/10.1126/science.1242777", "B", "Medium", "Abstract only. Sedimentary rock with basaltic grains: no GLiM class fits exactly."),
         "mars-arcadia-planitia": ("https://doi.org/10.3133/sim3292", "B", "n/a", "Left null. The map unit at AP-1 needs a GIS query of USGS SIM 3292."),
+        "mars-gusev-columbia-hills": ("https://ntrs.nasa.gov/citations/20080030169", "B", "Medium", "ADDED AFTER THE FREEZE. Abstract only. Basalt on the plains and basaltic rocks in the hills, many of them pervasively altered: 'Basic volcanic rocks' is SBATS's choice and does not say the alteration."),
+        "mars-holden": ("https://science.nasa.gov/photojournal/a-closer-look-at-holden-crater/", "B", "Low to medium", "ADDED AFTER THE FREEZE. From a NASA image release, not a paper, and from orbit only: layered, clay-bearing deposits that 'may' be lake beds. 'Siliciclastic sedimentary rocks' is SBATS's choice."),
     },
 }
 

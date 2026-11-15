@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T07:27:19.885Z",
+ "generatedAt": "2026-11-15T13:44:46.986Z",
  "agreement": [
   {
    "target": "moon-malapert-massif",
@@ -416,18 +416,122 @@
      "same": null
     }
    ]
+  },
+  {
+   "target": "mars-gusev-columbia-hills",
+   "body": "mars",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -14.5,
+    "lon": 175.5,
+    "distanceKm": 4.5
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 0.53,
+     "grid": 0.47,
+     "sigma": 1,
+     "sigmasApart": 0.06,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 33.8,
+     "grid": 33,
+     "sigma": 50,
+     "sigmasApart": 0.02,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -63.6,
+     "grid": -66.69,
+     "sigma": 15,
+     "sigmasApart": 0.21,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 61.3,
+     "grid": 64.31,
+     "sigma": 5,
+     "sigmasApart": 0.6,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 2,
+     "grid": 2,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": true
+    }
+   ]
+  },
+  {
+   "target": "mars-holden",
+   "body": "mars",
+   "gridLoaded": true,
+   "cell": {
+    "lat": -26.5,
+    "lon": -34.5,
+    "distanceKm": 39.7
+   },
+   "rows": [
+    {
+     "key": "slope",
+     "curated": 1.98,
+     "grid": 1.86,
+     "sigma": 1,
+     "sigmasApart": 0.12,
+     "same": null
+    },
+    {
+     "key": "roughness",
+     "curated": 105.4,
+     "grid": 202,
+     "sigma": 52.7,
+     "sigmasApart": 1.83,
+     "same": null
+    },
+    {
+     "key": "tempMean",
+     "curated": -62.5,
+     "grid": -62.02,
+     "sigma": 15,
+     "sigmasApart": 0.03,
+     "same": null
+    },
+    {
+     "key": "tempRange",
+     "curated": 49.4,
+     "grid": 46.73,
+     "sigma": 5,
+     "sigmasApart": 0.53,
+     "same": null
+    },
+    {
+     "key": "lithology",
+     "curated": 3,
+     "grid": null,
+     "sigma": null,
+     "sigmasApart": null,
+     "same": null
+    }
+   ]
   }
  ],
  "coverage": {
   "places": 71,
   "byOrigin": {
-   "grid": 59,
-   "curated": 12
+   "grid": 58,
+   "curated": 13
   },
   "byConfidence": {
    "low": 31,
-   "high": 4,
-   "medium": 36
+   "high": 5,
+   "medium": 35
   },
   "missing": {
    "lithology": 25,
@@ -440,8 +544,8 @@
     "curated": 8
    },
    "mars": {
-    "grid": 22,
-    "curated": 4
+    "grid": 21,
+    "curated": 5
    }
   }
  }

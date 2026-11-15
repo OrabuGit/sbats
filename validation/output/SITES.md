@@ -1,7 +1,7 @@
 # Site-level scores from fine-scale values
 
-Written 2026-11-15T07:27:42.905Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T07:23:39Z (Session B).
-Scoring values frozen 2026-11-14. Target windows: validation/output/target_terrain_windows.json (2026-11-15T04:50:09Z).
+Written 2026-11-15T13:43:03.427Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T07:23:39Z (Session B).
+Scoring values frozen 2026-11-14. Target windows: validation/output/target_terrain_windows.json (2026-11-15T13:38:24Z).
 
 Read this first:
 
@@ -41,6 +41,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.60 (p 0.96) [0.15] | 0.00 (p 0.01) [0.13] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.42) [0.00] | 0.95 (p 0.85) [0.95] | 1.08 deg, 14.4 m | 0.00 |
 | mars-gale (listed) | 0.15 (p 0.28) [0.60] | 0.00 (p 0.00) [0.74] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.42) [0.00] | 1.00 (p 0.98) [1.00] | 0.37 deg, 4.4 m | 0.24 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.05) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.42) [0.00] | 0.28 (p 0.48) [0.28] | 0.10 deg, 1.1 m | 0.00 |
+| mars-gusev-columbia-hills | 0.60 (p 0.96) [0.15] | 0.00 (p 0.05) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.42) [0.00] | 0.98 (p 0.89) [0.98] | 0.28 deg, 3.8 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.60] | 0.24 (p 0.41) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.42) [0.00] | 0.79 (p 0.74) [0.79] | 5.59 deg, 77.7 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -54,6 +56,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 60.0 (p 0.96) [15.0] | 0.0 (p 0.29) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.37) [0.0] | 0.0 (p 0.31) [0.0] |
 | mars-gale (listed) | 15.0 (p 0.28) [60.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.30) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.33) [0.0] |
+| mars-gusev-columbia-hills | 60.0 (p 0.96) [15.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.37) [0.0] | 0.0 (p 0.33) [0.0] |
+| mars-holden | 15.0 (p 0.28) [60.0] | 0.0 (p 0.48) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.40) [0.0] |
 
 ### Mount Merapi and the Opak River, Central Java, Indonesia
 
@@ -81,6 +85,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.60 (p 0.96) [0.60] | 0.00 (p 0.00) [0.97] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.57) [0.00] | 0.95 (p 0.84) [0.95] | 1.21 deg, 28.3 m | 0.00 |
 | mars-gale (listed) | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.44] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.57) [0.00] | 1.00 (p 0.97) [1.00] | 0.47 deg, 7.4 m | 0.00 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.00) [0.00] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.57) [0.00] | 0.27 (p 0.47) [0.27] | 0.07 deg, 1.0 m | 0.00 |
+| mars-gusev-columbia-hills | 0.60 (p 0.96) [0.60] | 0.00 (p 0.00) [0.00] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.57) [0.00] | 0.98 (p 0.88) [0.98] | 0.37 deg, 7.4 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.00 (p 0.05) [0.02] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.57) [0.00] | 0.79 (p 0.74) [0.79] | 5.03 deg, 107.9 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -94,6 +100,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 60.0 (p 0.96) [60.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.34) [0.0] | 0.0 (p 0.28) [0.0] |
 | mars-gale (listed) | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.34) [0.0] | 0.0 (p 0.28) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.34) [0.0] | 0.0 (p 0.28) [0.0] |
+| mars-gusev-columbia-hills | 60.0 (p 0.96) [60.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.34) [0.0] | 0.0 (p 0.28) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.34) [0.0] | 0.0 (p 0.33) [0.0] |
 
 ### Gua Lawa lava tube, Purbalingga, Central Java, Indonesia
 
@@ -121,6 +129,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 1.00 (p 0.98) [0.60] | 0.00 (p 0.04) [0.33] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.35) [0.00] | 0.95 (p 0.84) [0.95] | 1.15 deg, 10.1 m | 0.03 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.65] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.35) [0.00] | 1.00 (p 0.96) [1.00] | 0.28 deg, 2.9 m | 0.40 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.12) [0.00] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.35) [0.00] | 0.27 (p 0.47) [0.27] | 0.09 deg, 1.0 m | 0.00 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [0.60] | 0.00 (p 0.12) [0.00] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.35) [0.00] | 0.98 (p 0.88) [0.98] | 0.27 deg, 2.6 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.92 (p 0.97) [0.00] | 0.00 (p 0.02) [0.00] | 0.00 (p 0.35) [0.00] | 0.78 (p 0.73) [0.78] | 5.78 deg, 52.1 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -134,6 +144,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 100.0 (p 0.98) [60.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.30) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.29) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.30) [0.0] | 0.0 (p 0.33) [0.0] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [60.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.33) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.0 (p 0.42) [0.0] | 0.0 (p 0.02) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.34) [0.0] |
 
 ### Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia
 
@@ -161,6 +173,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 1.00 (p 0.98) [1.00] | 0.92 (p 0.99) [0.26] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.38) [0.00] | 0.94 (p 0.82) [0.94] | 1.08 deg, 14.4 m | 0.36 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.65 (p 0.99) [0.18] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.38) [0.00] | 1.00 (p 0.94) [1.00] | 0.37 deg, 4.4 m | 0.22 |
 | mars-arcadia-planitia | no data [no data] | 0.53 (p 0.38) [0.93] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.38) [0.00] | 0.26 (p 0.45) [0.26] | 0.10 deg, 1.1 m | 0.62 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [1.00] | 0.61 (p 0.36) [0.99] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.38) [0.00] | 0.97 (p 0.86) [0.97] | 0.28 deg, 3.8 m | 0.71 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.43 (p 0.68) [0.41] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.38) [0.00] | 0.77 (p 0.72) [0.77] | 5.59 deg, 77.7 m | 0.49 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -174,6 +188,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 100.0 (p 0.98) [100.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.35) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.39) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.33) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.48) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.38) [0.0] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [100.0] | 0.0 (p 0.48) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.39) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.0 (p 0.44) [0.0] | 0.0 (p 0.03) [0.0] | 0.0 (p 0.33) [0.0] | 0.0 (p 0.36) [0.0] |
 
 ### Kesaksak lava tube, Batur caldera, Bali, Indonesia
 
@@ -201,6 +217,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.60 (p 0.96) [0.60] | 0.00 (p 0.01) [0.21] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.52) [0.00] | 0.95 (p 0.85) [0.95] | 1.39 deg, 36.8 m | 0.00 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.65] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.52) [0.00] | 1.00 (p 0.98) [1.00] | 0.55 deg, 10.0 m | 0.32 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.07) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.52) [0.00] | 0.28 (p 0.48) [0.28] | 0.09 deg, 1.4 m | 0.00 |
+| mars-gusev-columbia-hills | 0.60 (p 0.96) [0.60] | 0.00 (p 0.07) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.52) [0.00] | 0.98 (p 0.89) [0.98] | 0.43 deg, 9.8 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.49 (p 0.73) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.52) [0.00] | 0.79 (p 0.74) [0.79] | 5.23 deg, 132.7 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -214,6 +232,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 60.0 (p 0.96) [60.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.34) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.40) [0.0] | 0.0 (p 0.31) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.39) [0.0] | 0.0 (p 0.35) [0.0] |
+| mars-gusev-columbia-hills | 60.0 (p 0.96) [60.0] | 0.0 (p 0.36) [0.0] | 0.0 (p 0.07) [0.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.36) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.7 (p 0.59) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.40) [0.0] | 0.1 (p 0.44) [0.0] |
 
 ### Maros-Pangkep karst caves, South Sulawesi, Indonesia
 
@@ -241,6 +261,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.15 (p 0.47) [0.60] | 0.09 (p 0.09) [0.04] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.94 (p 0.82) [0.94] | 1.39 deg, 36.8 m | 0.39 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.01 (p 0.00) [0.71] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 1.00 (p 0.94) [1.00] | 0.55 deg, 10.0 m | 0.39 |
 | mars-arcadia-planitia | no data [no data] | 0.01 (p 0.20) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.26 (p 0.45) [0.26] | 0.09 deg, 1.4 m | 0.01 |
+| mars-gusev-columbia-hills | 0.15 (p 0.47) [0.60] | 0.01 (p 0.20) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.97 (p 0.86) [0.97] | 0.43 deg, 9.8 m | 0.02 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.85 (p 0.94) [0.00] | 0.00 (p 0.04) [0.00] | 0.00 (p 0.31) [0.00] | 0.77 (p 0.71) [0.77] | 5.23 deg, 132.7 m | 0.23 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -254,6 +276,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 15.0 (p 0.47) [60.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.32) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.31) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.37) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.31) [0.0] | 0.0 (p 0.35) [0.0] |
+| mars-gusev-columbia-hills | 15.0 (p 0.47) [60.0] | 0.0 (p 0.37) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.35) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.0 (p 0.38) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.32) [0.0] | 0.0 (p 0.35) [0.0] |
 
 ### Mount Tambora caldera, Sumbawa, Indonesia
 
@@ -281,6 +305,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 1.00 (p 0.98) [0.60] | 0.00 (p 0.00) [0.09] | 0.00 (p 0.09) [0.00] | 0.07 (p 0.73) [0.00] | 0.95 (p 0.85) [0.95] | 1.39 deg, 49.4 m | 0.00 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.72] | 0.00 (p 0.09) [0.00] | 0.07 (p 0.73) [0.00] | 1.00 (p 0.98) [1.00] | 0.82 deg, 22.5 m | 0.00 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.01) [0.00] | 0.00 (p 0.09) [0.00] | 0.07 (p 0.73) [0.00] | 0.28 (p 0.48) [0.28] | 0.13 deg, 2.6 m | 0.00 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [0.60] | 0.00 (p 0.01) [0.00] | 0.00 (p 0.09) [0.00] | 0.07 (p 0.73) [0.00] | 0.98 (p 0.89) [0.98] | 0.47 deg, 14.2 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.00 (p 0.10) [0.00] | 0.00 (p 0.09) [0.00] | 0.07 (p 0.73) [0.00] | 0.79 (p 0.74) [0.79] | 5.61 deg, 185.9 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -294,6 +320,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 100.0 (p 0.98) [60.0] | 0.0 (p 0.28) [0.0] | 0.2 (p 0.11) [0.2] | 0.2 (p 0.53) [0.0] | 0.0 (p 0.28) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [0.0] | 0.1 (p 0.10) [0.1] | 0.2 (p 0.50) [0.0] | 0.0 (p 0.28) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.29) [0.0] | 0.0 (p 0.09) [0.0] | 0.0 (p 0.51) [0.0] | 0.0 (p 0.29) [0.0] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [60.0] | 0.0 (p 0.29) [0.0] | 0.2 (p 0.11) [0.2] | 0.2 (p 0.53) [0.0] | 0.0 (p 0.29) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 0.3 (p 0.55) [0.0] | 0.1 (p 0.09) [0.1] | 0.2 (p 0.50) [0.0] | 0.2 (p 0.47) [0.0] |
 
 ### Mount Batur black lava fields, Bali, Indonesia
 
@@ -321,6 +349,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.60 (p 0.96) [0.60] | 0.00 (p 0.05) [0.21] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.55) [0.00] | 0.95 (p 0.85) [0.95] | 1.21 deg, 28.3 m | 0.18 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.65] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.55) [0.00] | 1.00 (p 0.98) [1.00] | 0.47 deg, 7.4 m | 0.44 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.15) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.55) [0.00] | 0.28 (p 0.48) [0.28] | 0.07 deg, 1.0 m | 0.00 |
+| mars-gusev-columbia-hills | 0.60 (p 0.96) [0.60] | 0.00 (p 0.15) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.55) [0.00] | 0.98 (p 0.89) [0.98] | 0.37 deg, 7.4 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.98 (p 0.99) [0.00] | 0.00 (p 0.06) [0.00] | 0.00 (p 0.55) [0.00] | 0.79 (p 0.75) [0.79] | 5.03 deg, 107.9 m | 0.03 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -334,6 +364,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 60.0 (p 0.96) [60.0] | 0.1 (p 0.47) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.42) [0.0] | 0.0 (p 0.39) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.36) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.49) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.41) [0.0] | 0.0 (p 0.42) [0.0] |
+| mars-gusev-columbia-hills | 60.0 (p 0.96) [60.0] | 0.0 (p 0.49) [0.0] | 0.0 (p 0.07) [0.0] | 0.0 (p 0.42) [0.0] | 0.0 (p 0.43) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 2.0 (p 0.65) [0.0] | 0.0 (p 0.06) [0.0] | 0.0 (p 0.41) [0.0] | 0.1 (p 0.46) [0.0] |
 
 ## Known analogs, for comparison
 
@@ -363,6 +395,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 1.00 (p 0.98) [0.60] | 0.00 (p 0.03) [0.00] | 0.00 (p 0.04) [0.00] | 0.99 (p 0.99) [0.00] | 1.00 (p 0.99) [1.00] | 1.21 deg, 28.3 m | 0.01 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.90] | 0.00 (p 0.04) [0.00] | 0.99 (p 0.99) [0.00] | 0.96 (p 0.84) [0.96] | 0.47 deg, 7.4 m | 0.40 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.10) [0.00] | 0.00 (p 0.04) [0.00] | 0.99 (p 0.99) [0.00] | 0.44 (p 0.63) [0.44] | 0.07 deg, 1.0 m | 0.00 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [0.60] | 0.00 (p 0.10) [0.00] | 0.00 (p 0.04) [0.00] | 0.99 (p 0.99) [0.00] | 0.99 (p 0.93) [0.99] | 0.37 deg, 7.4 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.72 (p 0.88) [0.00] | 0.00 (p 0.04) [0.00] | 0.99 (p 0.99) [0.00] | 0.94 (p 0.88) [0.94] | 5.03 deg, 107.9 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -376,6 +410,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 100.0 (p 0.98) [60.0] | 0.1 (p 0.49) [0.0] | 0.0 (p 0.05) [0.0] | 0.0 (p 0.46) [0.0] | 0.0 (p 0.38) [0.0] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.41) [0.1] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.44) [0.0] | 0.0 (p 0.35) [0.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.48) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.44) [0.0] | 0.0 (p 0.41) [0.0] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [60.0] | 0.0 (p 0.49) [0.0] | 0.0 (p 0.05) [0.0] | 0.0 (p 0.46) [0.0] | 0.0 (p 0.42) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 82.8 (p 0.99) [0.0] | 0.0 (p 0.04) [0.0] | 0.0 (p 0.44) [0.0] | 0.3 (p 0.50) [0.0] |
 
 ### Kilauea, Hawaii, USA
 
@@ -403,6 +439,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | 1.00 (p 0.98) [no data] | 0.58 (p 0.87) [0.22] | 0.00 (p 0.07) [0.00] | 0.18 (p 0.78) [0.00] | 1.00 (p 0.99) [1.00] | 1.39 deg, 36.8 m | 0.53 |
 | mars-gale (listed) | 0.15 (p 0.28) [no data] | 0.22 (p 0.64) [0.69] | 0.00 (p 0.07) [0.00] | 0.18 (p 0.78) [0.00] | 0.96 (p 0.84) [0.96] | 0.55 deg, 10.0 m | 0.30 |
 | mars-arcadia-planitia | no data [no data] | 0.11 (p 0.27) [0.00] | 0.00 (p 0.07) [0.00] | 0.18 (p 0.78) [0.00] | 0.43 (p 0.63) [0.43] | 0.09 deg, 1.4 m | 0.17 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [no data] | 0.19 (p 0.27) [0.00] | 0.00 (p 0.07) [0.00] | 0.18 (p 0.78) [0.00] | 0.99 (p 0.94) [0.99] | 0.43 deg, 9.8 m | 0.26 |
+| mars-holden | 0.15 (p 0.28) [no data] | 0.59 (p 0.81) [0.00] | 0.00 (p 0.07) [0.00] | 0.18 (p 0.78) [0.00] | 0.93 (p 0.88) [0.93] | 5.23 deg, 132.7 m | 0.69 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -416,6 +454,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | 100.0 (p 0.98) [no score] | 34.7 (p 0.87) [0.6] | 0.0 (p 0.08) [0.0] | 0.1 (p 0.49) [0.0] | 0.9 (p 0.53) [0.0] |
 | mars-gale (listed) | 15.0 (p 0.28) [no score] | 20.3 (p 0.78) [1.2] | 0.0 (p 0.07) [0.0] | 0.1 (p 0.47) [0.0] | 0.5 (p 0.48) [0.1] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 14.0 (p 0.79) [0.0] | 0.0 (p 0.07) [0.0] | 0.0 (p 0.47) [0.0] | 0.2 (p 0.54) [0.0] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [no score] | 18.8 (p 0.80) [0.0] | 0.0 (p 0.08) [0.0] | 0.1 (p 0.49) [0.0] | 0.7 (p 0.57) [0.0] |
+| mars-holden | 15.0 (p 0.28) [no score] | 35.2 (p 0.87) [0.0] | 0.0 (p 0.07) [0.0] | 0.1 (p 0.47) [0.0] | 0.7 (p 0.54) [0.0] |
 
 ### Atacama Desert hyperarid core (Yungay), Chile
 
@@ -445,6 +485,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | 0.15 (p 0.47) [0.15] | 0.50 (p 0.82) [0.08] | 0.06 (p 0.61) [0.05] | 0.93 (p 0.97) [0.96] | 0.97 (p 0.90) [0.97] | 1.39 deg, 36.8 m | 0.55 |
 | mars-gale (listed) | 0.15 (p 0.28) [0.15] | 0.17 (p 0.46) [0.68] | 0.06 (p 0.61) [0.05] | 0.93 (p 0.97) [0.96] | 0.87 (p 0.80) [0.86] | 0.55 deg, 10.0 m | 0.31 |
 | mars-arcadia-planitia | no data [no data] | 0.09 (p 0.26) [0.00] | 0.06 (p 0.61) [0.05] | 0.93 (p 0.97) [0.96] | 0.57 (p 0.70) [0.58] | 0.09 deg, 1.4 m | 0.13 |
+| mars-gusev-columbia-hills | 0.15 (p 0.47) [0.15] | 0.15 (p 0.26) [0.00] | 0.06 (p 0.61) [0.05] | 0.93 (p 0.97) [0.96] | 0.94 (p 0.80) [0.93] | 0.43 deg, 9.8 m | 0.21 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.65 (p 0.84) [0.00] | 0.06 (p 0.61) [0.05] | 0.93 (p 0.97) [0.96] | 0.99 (p 0.96) [0.99] | 5.23 deg, 132.7 m | 0.70 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -458,6 +500,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | 15.0 (p 0.47) [15.0] | 65.9 (p 0.97) [23.8] | 12.8 (p 0.96) [11.1] | 17.3 (p 0.95) [15.4] | 26.8 (p 0.99) [15.6] |
 | mars-gale (listed) | 15.0 (p 0.28) [15.0] | 36.4 (p 0.91) [79.3] | 12.6 (p 0.92) [10.8] | 17.3 (p 0.91) [15.4] | 20.3 (p 0.95) [26.5] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 24.6 (p 0.83) [0.0] | 10.6 (p 0.67) [8.7] | 18.0 (p 0.96) [15.6] | 16.6 (p 0.86) [0.0] |
+| mars-gusev-columbia-hills | 15.0 (p 0.47) [15.0] | 33.6 (p 0.84) [0.0] | 12.8 (p 0.97) [11.0] | 17.3 (p 0.95) [15.4] | 19.7 (p 0.92) [0.0] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 76.1 (p 0.98) [0.0] | 12.9 (p 0.83) [11.1] | 17.3 (p 0.91) [15.4] | 28.6 (p 0.98) [0.4] |
 
 ### Haughton impact structure, Devon Island, Canada
 
@@ -485,6 +529,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | no data [0.15] | 0.95 (p 0.99) [0.47] | 0.10 (p 0.70) [0.10] | 0.96 (p 0.98) [0.98] | 0.00 (p 0.24) [0.00] | 1.39 deg, 36.8 m | 0.30 |
 | mars-gale (listed) | no data [0.60] | 0.90 (p 1.00) [0.23] | 0.10 (p 0.70) [0.10] | 0.96 (p 0.98) [0.98] | 0.00 (p 0.24) [0.00] | 0.55 deg, 10.0 m | 0.20 |
 | mars-arcadia-planitia (listed) | no data [no data] | 0.72 (p 0.44) [0.50] | 0.10 (p 0.70) [0.10] | 0.96 (p 0.98) [0.98] | 0.08 (p 0.24) [0.08] | 0.09 deg, 1.4 m | 0.81 |
+| mars-gusev-columbia-hills | no data [0.15] | 0.86 (p 0.45) [0.68] | 0.10 (p 0.70) [0.10] | 0.96 (p 0.98) [0.98] | 0.00 (p 0.24) [0.00] | 0.43 deg, 9.8 m | 0.87 |
+| mars-holden | no data [0.60] | 0.25 (p 0.43) [0.85] | 0.10 (p 0.70) [0.10] | 0.96 (p 0.98) [0.98] | 0.01 (p 0.24) [0.01] | 5.23 deg, 132.7 m | 0.42 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -498,6 +544,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | no score: coverage-too-low [15.0] | 95.3 (p 1.00) [65.4] | 3.6 (p 0.35) [5.3] | 24.0 (p 0.99) [21.7] | 20.3 (p 0.96) [16.4] |
 | mars-gale (listed) | no score: coverage-too-low [60.0] | 92.4 (p 1.00) [44.3] | 2.7 (p 0.29) [6.3] | 24.0 (p 0.97) [29.8] | 17.6 (p 0.91) [15.2] |
 | mars-arcadia-planitia (listed) | no score: coverage-too-low [no score] | 81.9 (p 0.95) [67.4] | 9.0 (p 0.61) [9.1] | 24.0 (p 0.98) [24.2] | 29.0 (p 0.98) [26.2] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [15.0] | 90.4 (p 0.97) [79.7] | 3.2 (p 0.33) [4.9] | 24.0 (p 0.99) [21.7] | 18.7 (p 0.91) [17.2] |
+| mars-holden | no score: coverage-too-low [60.0] | 45.8 (p 0.91) [90.4] | 4.8 (p 0.34) [9.6] | 24.0 (p 0.97) [29.8] | 15.9 (p 0.86) [26.4] |
 
 ### Timanfaya, Lanzarote, Spain
 
@@ -525,6 +573,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | 1.00 (p 0.98) [no data] | 0.65 (p 0.91) [0.65] | 0.01 (p 0.32) [0.01] | 0.95 (p 0.98) [0.87] | 0.85 (p 0.75) [0.86] | 1.39 deg, 36.8 m | 0.53 |
 | mars-gale (listed) | 0.15 (p 0.28) [no data] | 0.27 (p 0.73) [0.35] | 0.01 (p 0.32) [0.01] | 0.95 (p 0.98) [0.87] | 0.69 (p 0.75) [0.70] | 0.55 deg, 10.0 m | 0.29 |
 | mars-arcadia-planitia | no data [no data] | 0.14 (p 0.28) [0.04] | 0.01 (p 0.32) [0.01] | 0.95 (p 0.98) [0.87] | 0.77 (p 0.81) [0.76] | 0.09 deg, 1.4 m | 0.21 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [no data] | 0.23 (p 0.28) [0.08] | 0.01 (p 0.32) [0.01] | 0.95 (p 0.98) [0.87] | 0.79 (p 0.75) [0.80] | 0.43 deg, 9.8 m | 0.31 |
+| mars-holden | 0.15 (p 0.28) [no data] | 0.57 (p 0.79) [0.64] | 0.01 (p 0.32) [0.01] | 0.95 (p 0.98) [0.87] | 0.98 (p 0.94) [0.98] | 5.23 deg, 132.7 m | 0.74 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -538,6 +588,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | 100.0 (p 0.98) [no score] | 77.1 (p 0.99) [74.2] | 8.3 (p 0.76) [3.3] | 12.3 (p 0.87) [6.3] | 22.6 (p 0.97) [17.0] |
 | mars-gale (listed) | 15.0 (p 0.28) [no score] | 47.0 (p 0.96) [52.8] | 4.7 (p 0.41) [3.1] | 7.9 (p 0.75) [6.3] | 13.3 (p 0.84) [13.9] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 33.3 (p 0.85) [15.4] | 3.2 (p 0.34) [3.2] | 6.5 (p 0.77) [6.3] | 11.0 (p 0.81) [7.3] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [no score] | 43.8 (p 0.87) [22.4] | 8.2 (p 0.78) [3.2] | 12.3 (p 0.87) [6.3] | 17.4 (p 0.90) [9.0] |
+| mars-holden | 15.0 (p 0.28) [no score] | 71.7 (p 0.97) [73.4] | 5.1 (p 0.35) [3.4] | 7.9 (p 0.75) [6.3] | 16.7 (p 0.86) [17.2] |
 
 ### Dallol, Danakil Depression, Ethiopia
 
@@ -565,6 +617,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | no data [0.15] | 0.99 (p 1.00) [0.98] | 0.01 (p 0.31) [0.01] | 0.91 (p 0.96) [0.96] | 0.98 (p 0.91) [0.98] | 1.08 deg, 14.4 m | 0.30 |
 | mars-gale (listed) | no data [0.60] | 0.82 (p 1.00) [0.42] | 0.01 (p 0.31) [0.01] | 0.91 (p 0.96) [0.96] | 0.99 (p 0.89) [0.99] | 0.37 deg, 4.4 m | 0.20 |
 | mars-arcadia-planitia | no data [no data] | 0.71 (p 0.43) [0.00] | 0.01 (p 0.31) [0.01] | 0.91 (p 0.96) [0.96] | 0.34 (p 0.55) [0.34] | 0.10 deg, 1.1 m | 0.79 |
+| mars-gusev-columbia-hills | no data [0.15] | 0.78 (p 0.41) [0.00] | 0.01 (p 0.31) [0.01] | 0.91 (p 0.96) [0.96] | 1.00 (p 0.96) [1.00] | 0.28 deg, 3.8 m | 0.84 |
+| mars-holden | no data [0.60] | 0.36 (p 0.61) [0.01] | 0.01 (p 0.31) [0.01] | 0.91 (p 0.96) [0.96] | 0.86 (p 0.80) [0.86] | 5.59 deg, 77.7 m | 0.40 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -578,6 +632,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | no score: coverage-too-low [15.0] | 95.6 (p 1.00) [96.9] | 3.1 (p 0.32) [4.8] | 6.0 (p 0.74) [7.5] | 19.1 (p 0.95) [18.5] |
 | mars-gale (listed) | no score: coverage-too-low [60.0] | 85.9 (p 1.00) [60.4] | 3.1 (p 0.31) [7.0] | 6.0 (p 0.72) [10.4] | 18.0 (p 0.92) [18.4] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 79.2 (p 0.94) [0.2] | 2.4 (p 0.30) [2.4] | 6.0 (p 0.76) [6.1] | 15.2 (p 0.85) [0.6] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [15.0] | 83.8 (p 0.94) [0.4] | 3.1 (p 0.33) [4.8] | 6.0 (p 0.74) [7.5] | 17.8 (p 0.90) [1.6] |
+| mars-holden | no score: coverage-too-low [60.0] | 54.2 (p 0.94) [7.3] | 3.0 (p 0.27) [6.8] | 6.0 (p 0.72) [10.4] | 13.9 (p 0.83) [7.0] |
 
 ### Dasht-e Lut (Lut Desert), Iran
 
@@ -605,6 +661,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | no data [0.15] | 0.02 (p 0.07) [0.69] | 0.03 (p 0.45) [0.03] | 0.97 (p 0.98) [0.89] | 0.81 (p 0.73) [0.81] | 1.39 deg, 36.8 m | 0.19 |
 | mars-gale | no data [0.60] | 0.00 (p 0.00) [0.39] | 0.03 (p 0.45) [0.03] | 0.97 (p 0.98) [0.89] | 0.64 (p 0.73) [0.64] | 0.55 deg, 10.0 m | 0.40 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.17) [0.01] | 0.03 (p 0.45) [0.03] | 0.97 (p 0.98) [0.89] | 0.82 (p 0.83) [0.82] | 0.09 deg, 1.4 m | 0.00 |
+| mars-gusev-columbia-hills | no data [0.15] | 0.00 (p 0.17) [0.03] | 0.03 (p 0.45) [0.03] | 0.97 (p 0.98) [0.89] | 0.74 (p 0.73) [0.74] | 0.43 deg, 9.8 m | 0.00 |
+| mars-holden | no data [0.60] | 0.78 (p 0.90) [0.45] | 0.03 (p 0.45) [0.03] | 0.97 (p 0.98) [0.89] | 0.96 (p 0.91) [0.96] | 5.23 deg, 132.7 m | 0.05 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -618,6 +676,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | no score: coverage-too-low [15.0] | 11.2 (p 0.73) [77.6] | 6.4 (p 0.54) [8.1] | 11.4 (p 0.85) [11.9] | 8.6 (p 0.76) [22.4] |
 | mars-gale | no score: coverage-too-low [60.0] | 3.5 (p 0.63) [56.0] | 6.0 (p 0.58) [11.3] | 11.4 (p 0.81) [16.3] | 4.6 (p 0.65) [23.2] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 1.8 (p 0.68) [8.0] | 6.4 (p 0.49) [6.4] | 11.4 (p 0.88) [11.1] | 3.3 (p 0.70) [7.2] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [15.0] | 3.0 (p 0.70) [12.7] | 6.3 (p 0.60) [8.0] | 11.4 (p 0.85) [11.9] | 4.3 (p 0.72) [9.8] |
+| mars-holden | no score: coverage-too-low [60.0] | 85.6 (p 0.99) [61.0] | 6.7 (p 0.43) [12.2] | 11.4 (p 0.81) [16.3] | 25.8 (p 0.96) [25.1] |
 
 ### Salar de Uyuni salt flat, Bolivia
 
@@ -645,6 +705,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.15 (p 0.47) [0.15] | no data [0.41] | 0.09 (p 0.69) [0.09] | 0.95 (p 0.98) [0.98] | 1.00 (p 0.99) [1.00] | 1.39 deg, 36.8 m | no data |
 | mars-gale | 0.15 (p 0.28) [0.15] | no data [0.24] | 0.09 (p 0.69) [0.09] | 0.95 (p 0.98) [0.98] | 0.95 (p 0.83) [0.95] | 0.55 deg, 10.0 m | no data |
 | mars-arcadia-planitia | no data [no data] | no data [0.54] | 0.09 (p 0.69) [0.09] | 0.95 (p 0.98) [0.98] | 0.46 (p 0.64) [0.45] | 0.09 deg, 1.4 m | no data |
+| mars-gusev-columbia-hills | 0.15 (p 0.47) [0.15] | no data [0.66] | 0.09 (p 0.69) [0.09] | 0.95 (p 0.98) [0.98] | 0.99 (p 0.92) [0.99] | 0.43 deg, 9.8 m | no data |
+| mars-holden | 0.15 (p 0.28) [0.15] | no data [0.60] | 0.09 (p 0.69) [0.09] | 0.95 (p 0.98) [0.98] | 0.95 (p 0.89) [0.94] | 5.23 deg, 132.7 m | no data |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -658,6 +720,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 15.0 (p 0.47) [15.0] | no score: coverage-too-low [60.4] | 16.4 (p 0.99) [16.4] | 21.3 (p 0.98) [21.5] | 26.2 (p 0.99) [29.5] |
 | mars-gale | 15.0 (p 0.28) [15.0] | no score: coverage-too-low [44.5] | 16.2 (p 0.98) [16.2] | 21.3 (p 0.95) [21.5] | 26.0 (p 0.98) [25.6] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | no score: coverage-too-low [70.2] | 13.9 (p 0.73) [13.9] | 23.7 (p 0.98) [24.0] | 26.4 (p 0.95) [32.8] |
+| mars-gusev-columbia-hills | 15.0 (p 0.47) [15.0] | no score: coverage-too-low [78.6] | 16.4 (p 0.99) [16.4] | 21.3 (p 0.98) [21.5] | 26.1 (p 0.98) [33.2] |
+| mars-holden | 15.0 (p 0.28) [15.0] | no score: coverage-too-low [75.0] | 16.2 (p 0.94) [16.2] | 21.3 (p 0.95) [21.5] | 26.0 (p 0.97) [32.3] |
 
 ### Tunupa volcano, north shore of Salar de Uyuni, Bolivia
 
@@ -685,6 +749,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | 0.60 (p 0.96) [0.60] | 0.00 (p 0.00) [0.39] | 0.08 (p 0.66) [0.08] | 0.77 (p 0.91) [0.80] | 1.00 (p 0.99) [1.00] | 1.39 deg, 36.8 m | 0.00 |
 | mars-gale | 0.15 (p 0.28) [0.15] | 0.00 (p 0.00) [0.49] | 0.08 (p 0.66) [0.08] | 0.77 (p 0.91) [0.80] | 0.95 (p 0.84) [0.96] | 0.55 deg, 10.0 m | 0.10 |
 | mars-arcadia-planitia | no data [no data] | 0.00 (p 0.03) [0.00] | 0.08 (p 0.66) [0.08] | 0.77 (p 0.91) [0.80] | 0.44 (p 0.63) [0.44] | 0.09 deg, 1.4 m | 0.00 |
+| mars-gusev-columbia-hills | 0.60 (p 0.96) [0.60] | 0.00 (p 0.03) [0.00] | 0.08 (p 0.66) [0.08] | 0.77 (p 0.91) [0.80] | 0.99 (p 0.93) [0.99] | 0.43 deg, 9.8 m | 0.00 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.06 (p 0.16) [0.03] | 0.08 (p 0.66) [0.08] | 0.77 (p 0.91) [0.80] | 0.94 (p 0.88) [0.94] | 5.23 deg, 132.7 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -698,6 +764,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | 60.0 (p 0.96) [60.0] | 0.0 (p 0.29) [53.6] | 21.8 (p 1.00) [21.8] | 25.4 (p 0.99) [25.7] | 0.0 (p 0.34) [32.6] |
 | mars-gale | 15.0 (p 0.28) [15.0] | 0.0 (p 0.28) [61.0] | 14.8 (p 0.96) [14.8] | 18.4 (p 0.92) [18.6] | 0.0 (p 0.31) [28.0] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 0.0 (p 0.32) [0.4] | 12.1 (p 0.70) [12.1] | 19.6 (p 0.97) [19.9] | 0.0 (p 0.35) [1.9] |
+| mars-gusev-columbia-hills | 60.0 (p 0.96) [60.0] | 0.0 (p 0.32) [0.7] | 21.7 (p 1.00) [21.7] | 25.4 (p 0.99) [25.7] | 0.0 (p 0.36) [4.7] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 18.4 (p 0.80) [12.0] | 14.7 (p 0.90) [14.7] | 18.4 (p 0.92) [18.6] | 16.3 (p 0.86) [13.4] |
 
 ### Beacon Valley, McMurdo Dry Valleys, Antarctica
 
@@ -725,6 +793,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | no data [0.15] | 0.00 (p 0.00) [0.01] | 0.30 (p 0.85) [0.30] | 0.09 (p 0.74) [0.09] | 0.00 (p 0.20) [0.00] | 1.39 deg, 36.8 m | 0.00 |
 | mars-gale | no data [1.00] | 0.00 (p 0.00) [0.51] | 0.30 (p 0.85) [0.30] | 0.09 (p 0.74) [0.09] | 0.00 (p 0.20) [0.00] | 0.55 deg, 10.0 m | 0.11 |
 | mars-arcadia-planitia (listed) | no data [no data] | 0.00 (p 0.03) [0.00] | 0.30 (p 0.85) [0.30] | 0.09 (p 0.74) [0.09] | 0.06 (p 0.20) [0.06] | 0.09 deg, 1.4 m | 0.00 |
+| mars-gusev-columbia-hills | no data [0.15] | 0.00 (p 0.02) [0.00] | 0.30 (p 0.85) [0.30] | 0.09 (p 0.74) [0.09] | 0.00 (p 0.20) [0.00] | 0.43 deg, 9.8 m | 0.00 |
+| mars-holden | no data [1.00] | 0.03 (p 0.14) [0.00] | 0.30 (p 0.85) [0.30] | 0.09 (p 0.74) [0.09] | 0.00 (p 0.20) [0.00] | 5.23 deg, 132.7 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -738,6 +808,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | no score: coverage-too-low [15.0] | 0.0 (p 0.29) [2.9] | 7.6 (p 0.70) [9.1] | 18.5 (p 0.96) [17.3] | 0.0 (p 0.31) [5.5] |
 | mars-gale | no score: coverage-too-low [100.0] | 0.0 (p 0.28) [22.9] | 5.7 (p 0.54) [12.5] | 18.5 (p 0.92) [26.8] | 0.0 (p 0.29) [16.4] |
 | mars-arcadia-planitia (listed) | no score: coverage-too-low [no score] | 0.0 (p 0.31) [0.0] | 20.0 (p 0.90) [20.0] | 18.5 (p 0.96) [18.1] | 0.0 (p 0.34) [0.0] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [15.0] | 0.0 (p 0.31) [0.0] | 6.8 (p 0.66) [8.4] | 18.5 (p 0.96) [17.3] | 0.0 (p 0.32) [0.1] |
+| mars-holden | no score: coverage-too-low [100.0] | 4.8 (p 0.70) [0.0] | 10.4 (p 0.71) [19.3] | 18.5 (p 0.92) [26.8] | 6.9 (p 0.73) [0.9] |
 
 ### Don Juan Pond, Wright Valley, Antarctica
 
@@ -765,6 +837,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero | no data [0.15] | 0.00 (p 0.00) [0.00] | 0.29 (p 0.84) [0.29] | 0.14 (p 0.76) [0.13] | 0.00 (p 0.20) [0.00] | 1.08 deg, 14.4 m | 0.00 |
 | mars-gale | no data [1.00] | 0.00 (p 0.00) [0.42] | 0.29 (p 0.84) [0.29] | 0.14 (p 0.76) [0.13] | 0.00 (p 0.20) [0.00] | 0.37 deg, 4.4 m | 0.00 |
 | mars-arcadia-planitia (listed) | no data [no data] | 0.00 (p 0.00) [0.00] | 0.29 (p 0.84) [0.29] | 0.14 (p 0.76) [0.13] | 0.06 (p 0.20) [0.06] | 0.10 deg, 1.1 m | 0.00 |
+| mars-gusev-columbia-hills | no data [0.15] | 0.00 (p 0.00) [0.00] | 0.29 (p 0.84) [0.29] | 0.14 (p 0.76) [0.13] | 0.00 (p 0.20) [0.00] | 0.28 deg, 3.8 m | 0.00 |
+| mars-holden | no data [1.00] | 0.00 (p 0.09) [0.00] | 0.29 (p 0.84) [0.29] | 0.14 (p 0.76) [0.13] | 0.01 (p 0.20) [0.00] | 5.59 deg, 77.7 m | 0.00 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -778,6 +852,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero | no score: coverage-too-low [15.0] | 0.0 (p 0.28) [0.4] | 7.5 (p 0.70) [9.0] | 21.5 (p 0.98) [19.7] | 0.0 (p 0.28) [2.2] |
 | mars-gale | no score: coverage-too-low [100.0] | 0.0 (p 0.28) [25.1] | 5.7 (p 0.54) [12.4] | 21.5 (p 0.95) [30.6] | 0.0 (p 0.28) [17.0] |
 | mars-arcadia-planitia (listed) | no score: coverage-too-low [no score] | 0.0 (p 0.29) [0.0] | 19.8 (p 0.90) [19.7] | 21.5 (p 0.97) [21.4] | 0.0 (p 0.29) [0.0] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [15.0] | 0.0 (p 0.29) [0.0] | 6.7 (p 0.66) [8.3] | 21.5 (p 0.98) [19.7] | 0.0 (p 0.29) [0.0] |
+| mars-holden | no score: coverage-too-low [100.0] | 0.1 (p 0.53) [0.0] | 10.4 (p 0.71) [19.1] | 21.5 (p 0.95) [30.6] | 1.0 (p 0.56) [0.0] |
 
 ### Craters of the Moon, Idaho, USA
 
@@ -805,6 +881,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | no data [1.00] | 0.56 (p 0.86) [0.84] | 0.05 (p 0.58) [0.05] | 0.31 (p 0.82) [0.17] | 0.31 (p 0.62) [0.32] | 1.39 deg, 36.8 m | 0.51 |
 | mars-gale (listed) | no data [0.15] | 0.21 (p 0.63) [0.31] | 0.05 (p 0.58) [0.05] | 0.31 (p 0.82) [0.17] | 0.19 (p 0.62) [0.20] | 0.55 deg, 10.0 m | 0.30 |
 | mars-arcadia-planitia | no data [no data] | 0.11 (p 0.27) [0.02] | 0.05 (p 0.58) [0.05] | 0.31 (p 0.82) [0.17] | 0.97 (p 0.94) [0.97] | 0.09 deg, 1.4 m | 0.16 |
+| mars-gusev-columbia-hills | no data [1.00] | 0.19 (p 0.27) [0.04] | 0.05 (p 0.58) [0.05] | 0.31 (p 0.82) [0.17] | 0.26 (p 0.62) [0.26] | 0.43 deg, 9.8 m | 0.24 |
+| mars-holden | no data [0.15] | 0.57 (p 0.79) [0.47] | 0.05 (p 0.58) [0.05] | 0.31 (p 0.82) [0.17] | 0.51 (p 0.62) [0.52] | 5.23 deg, 132.7 m | 0.65 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -818,6 +896,8 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | no score: coverage-too-low [100.0] | 42.9 (p 0.92) [41.8] | 8.2 (p 0.75) [16.3] | 10.7 (p 0.83) [15.0] | 19.7 (p 0.96) [24.9] |
 | mars-gale (listed) | no score: coverage-too-low [15.0] | 25.0 (p 0.81) [23.9] | 7.3 (p 0.68) [8.9] | 10.7 (p 0.79) [9.7] | 14.0 (p 0.86) [13.9] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 17.3 (p 0.80) [5.2] | 10.9 (p 0.67) [10.9] | 10.7 (p 0.86) [8.5] | 13.9 (p 0.84) [7.4] |
+| mars-gusev-columbia-hills | no score: coverage-too-low [100.0] | 23.2 (p 0.81) [8.0] | 7.8 (p 0.76) [15.8] | 10.7 (p 0.83) [15.0] | 13.9 (p 0.86) [11.6] |
+| mars-holden | no score: coverage-too-low [15.0] | 43.3 (p 0.91) [30.3] | 9.3 (p 0.62) [10.6] | 10.7 (p 0.79) [9.7] | 21.0 (p 0.92) [17.0] |
 
 ### Askja caldera, Iceland highlands
 
@@ -845,6 +925,8 @@ Similarity per dimension at site scale, 0 to 1. In brackets: the same dimension 
 | mars-jezero (listed) | 1.00 (p 0.98) [1.00] | 0.93 (p 0.99) [0.91] | 0.00 (p 0.21) [0.00] | 0.99 (p 1.00) [0.90] | 0.01 (p 0.40) [0.01] | 1.39 deg, 36.8 m | 0.46 |
 | mars-gale (listed) | 0.15 (p 0.28) [0.15] | 0.58 (p 0.98) [0.40] | 0.00 (p 0.21) [0.00] | 0.99 (p 1.00) [0.90] | 0.01 (p 0.40) [0.01] | 0.55 deg, 10.0 m | 0.23 |
 | mars-arcadia-planitia | no data [no data] | 0.39 (p 0.35) [0.00] | 0.00 (p 0.21) [0.00] | 0.99 (p 1.00) [0.90] | 0.24 (p 0.40) [0.24] | 0.09 deg, 1.4 m | 0.52 |
+| mars-gusev-columbia-hills | 1.00 (p 0.98) [1.00] | 0.54 (p 0.35) [0.01] | 0.00 (p 0.21) [0.00] | 0.99 (p 1.00) [0.90] | 0.01 (p 0.40) [0.01] | 0.43 deg, 9.8 m | 0.69 |
+| mars-holden | 0.15 (p 0.28) [0.15] | 0.47 (p 0.72) [0.24] | 0.00 (p 0.21) [0.00] | 0.99 (p 1.00) [0.90] | 0.03 (p 0.40) [0.03] | 5.23 deg, 132.7 m | 0.82 |
 
 Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
@@ -858,4 +940,6 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 | mars-jezero (listed) | 100.0 (p 0.98) [100.0] | 95.6 (p 1.00) [90.3] | 1.7 (p 0.23) [1.6] | 6.1 (p 0.74) [5.9] | 10.3 (p 0.80) [10.0] |
 | mars-gale (listed) | 15.0 (p 0.28) [15.0] | 73.5 (p 1.00) [57.0] | 0.8 (p 0.17) [0.8] | 3.9 (p 0.68) [3.8] | 6.3 (p 0.69) [5.6] |
 | mars-arcadia-planitia | no score: coverage-too-low [no score] | 59.2 (p 0.91) [3.4] | 0.7 (p 0.20) [0.7] | 2.6 (p 0.70) [2.5] | 7.6 (p 0.78) [1.7] |
+| mars-gusev-columbia-hills | 100.0 (p 0.98) [100.0] | 70.8 (p 0.92) [5.9] | 1.5 (p 0.22) [1.5] | 6.1 (p 0.74) [5.9] | 8.6 (p 0.79) [2.8] |
+| mars-holden | 15.0 (p 0.28) [15.0] | 65.3 (p 0.96) [43.1] | 1.2 (p 0.18) [1.2] | 3.9 (p 0.68) [3.8] | 7.2 (p 0.73) [6.0] |
 

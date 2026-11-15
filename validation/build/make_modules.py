@@ -273,6 +273,11 @@ def build():
                                  "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Jezero is at 18 N.", "B"),
         "mars-gale": mars_site("mars-gale", 318.7, 0.492, 13.4, 0.219, 0, PIQUEUX,
                                "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Gale is at 5 S.", "B"),
+        # Added 2026-11-15, after the freeze: same Mars Climate Database run as the three sites below.
+        "mars-gusev-columbia-hills": mars_site("mars-gusev-columbia-hills", 314.4, 0.492, 13.4, 0.244, 0, PIQUEUX,
+                                               "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Gusev is at 15 S.", "B"),
+        "mars-holden": mars_site("mars-holden", 287.3, 0.492, 13.4, 0.253, 0, PIQUEUX,
+                                 "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Holden is at 26 S.", "B"),
         "mars-arcadia-planitia": mars_site("mars-arcadia-planitia", 240.7, 0.509, 15.4, 0.102, 1, BRAMSON,
                                            "A widespread layer of excess water ice tens of metres thick, and the site was chosen for its ice. 1 means the miner works at its rated output; the rating itself is a lunar figure.", "A"),
     }

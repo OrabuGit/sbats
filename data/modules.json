@@ -521,6 +521,80 @@
         "note": "Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model."
       }
     },
+    "mars-gusev-columbia-hills": {
+      "irradianceWm2": {
+        "value": 314.4,
+        "unit": "W/m2",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up."
+      },
+      "litFraction": {
+        "value": 0.492,
+        "unit": "fraction",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight."
+      },
+      "longestDarkHours": {
+        "value": 13.4,
+        "unit": "hours",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Longest night of the Mars year, from hourly model output: good to about an hour."
+      },
+      "iceAvailability": {
+        "value": 0,
+        "unit": "fraction of nominal miner output",
+        "source": "Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947",
+        "badge": "Literature",
+        "note": "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Gusev is at 15 S."
+      },
+      "dustStormSolarFactor": {
+        "value": 0.244,
+        "unit": "fraction of normal sunlight",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model."
+      }
+    },
+    "mars-holden": {
+      "irradianceWm2": {
+        "value": 287.3,
+        "unit": "W/m2",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up."
+      },
+      "litFraction": {
+        "value": 0.492,
+        "unit": "fraction",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight."
+      },
+      "longestDarkHours": {
+        "value": 13.4,
+        "unit": "hours",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Longest night of the Mars year, from hourly model output: good to about an hour."
+      },
+      "iceAvailability": {
+        "value": 0,
+        "unit": "fraction of nominal miner output",
+        "source": "Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947",
+        "badge": "Literature",
+        "note": "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Holden is at 26 S."
+      },
+      "dustStormSolarFactor": {
+        "value": 0.253,
+        "unit": "fraction of normal sunlight",
+        "source": "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py)",
+        "badge": "Literature",
+        "note": "Dust-storm scenario divided by the normal year, at five seasons in the dust-storm season (Ls 210 to 330). Climate model."
+      }
+    },
     "mars-arcadia-planitia": {
       "irradianceWm2": {
         "value": 240.7,

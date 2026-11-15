@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T06:50:09.420Z",
+ "generatedAt": "2026-11-15T13:43:25.312Z",
  "draws": 200,
  "seed": 20261115,
  "spread": 0.25,
@@ -1889,6 +1889,316 @@
      "rankP05": 61829.6,
      "rankP95": 62460.2,
      "basePercentile": 0.324
+    }
+   ]
+  },
+  {
+   "target": "mars-gusev-columbia-hills",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 0.853,
+   "minTop10Overlap": 0.2,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 85% of the top 10 stayed in the top 10 on average (20% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 35.75,
+     "lon": 86.25,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 1,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 89.25,
+     "baseRank": 2,
+     "bestRank": 2,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 85.25,
+     "baseRank": 3,
+     "bestRank": 2,
+     "worstRank": 21,
+     "shareInTop10": 0.99
+    },
+    {
+     "lat": 34.75,
+     "lon": 84.75,
+     "baseRank": 4,
+     "bestRank": 2,
+     "worstRank": 29,
+     "shareInTop10": 0.915
+    },
+    {
+     "lat": 36.25,
+     "lon": 88.75,
+     "baseRank": 5,
+     "bestRank": 2,
+     "worstRank": 31,
+     "shareInTop10": 0.88
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.75,
+     "baseRank": 6,
+     "bestRank": 3,
+     "worstRank": 35,
+     "shareInTop10": 0.94
+    },
+    {
+     "lat": 35.25,
+     "lon": 85.75,
+     "baseRank": 7,
+     "bestRank": 5,
+     "worstRank": 40,
+     "shareInTop10": 0.9
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.25,
+     "baseRank": 8,
+     "bestRank": 6,
+     "worstRank": 45,
+     "shareInTop10": 0.84
+    },
+    {
+     "lat": 35.75,
+     "lon": 84.75,
+     "baseRank": 9,
+     "bestRank": 7,
+     "worstRank": 56,
+     "shareInTop10": 0.62
+    },
+    {
+     "lat": 35.75,
+     "lon": 89.25,
+     "baseRank": 10,
+     "bestRank": 5,
+     "worstRank": 71,
+     "shareInTop10": 0.44
+    }
+   ],
+   "sites": [
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 63545,
+     "rankP05": 63338,
+     "rankP95": 63664.4,
+     "basePercentile": 0.309
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 61069,
+     "rankP05": 60334.9,
+     "rankP95": 61712.9,
+     "basePercentile": 0.335
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63288,
+     "rankP05": 62973.9,
+     "rankP95": 63497.5,
+     "basePercentile": 0.311
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 57178,
+     "rankP05": 55649.7,
+     "rankP95": 58434.1,
+     "basePercentile": 0.378
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61672,
+     "rankP05": 61356.5,
+     "rankP95": 62007.3,
+     "basePercentile": 0.329
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 63434,
+     "rankP05": 63299,
+     "rankP95": 63540.1,
+     "basePercentile": 0.31
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 62368,
+     "rankP05": 61868.7,
+     "rankP95": 62686.1,
+     "basePercentile": 0.321
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61672,
+     "rankP05": 61356.5,
+     "rankP95": 62007.3,
+     "basePercentile": 0.329
+    }
+   ]
+  },
+  {
+   "target": "mars-holden",
+   "scoredCells": 91894,
+   "meanTop10Overlap": 1,
+   "minTop10Overlap": 1,
+   "summary": "With every weight moved by up to 25% in 200 redraws, 100% of the top 10 stayed in the top 10 on average (100% in the worst redraw).",
+   "top10": [
+    {
+     "lat": 35.75,
+     "lon": 85.25,
+     "baseRank": 1,
+     "bestRank": 1,
+     "worstRank": 1,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 86.75,
+     "baseRank": 2,
+     "bestRank": 2,
+     "worstRank": 3,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 84.75,
+     "baseRank": 3,
+     "bestRank": 2,
+     "worstRank": 4,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 87.25,
+     "baseRank": 4,
+     "bestRank": 4,
+     "worstRank": 5,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 87.75,
+     "baseRank": 5,
+     "bestRank": 3,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 83.75,
+     "baseRank": 6,
+     "bestRank": 4,
+     "worstRank": 7,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 86.25,
+     "baseRank": 7,
+     "bestRank": 6,
+     "worstRank": 9,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.75,
+     "lon": 83.25,
+     "baseRank": 8,
+     "bestRank": 6,
+     "worstRank": 9,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.25,
+     "baseRank": 9,
+     "bestRank": 8,
+     "worstRank": 9,
+     "shareInTop10": 1
+    },
+    {
+     "lat": 35.25,
+     "lon": 84.75,
+     "baseRank": 10,
+     "bestRank": 10,
+     "worstRank": 10,
+     "shareInTop10": 1
+    }
+   ],
+   "sites": [
+    {
+     "id": "id-kawah-ijen",
+     "kind": "candidate",
+     "baseRank": 63139,
+     "rankP05": 62770.7,
+     "rankP95": 63446.2,
+     "basePercentile": 0.313
+    },
+    {
+     "id": "id-merapi",
+     "kind": "candidate",
+     "baseRank": 61621,
+     "rankP05": 60949.8,
+     "rankP95": 62120.2,
+     "basePercentile": 0.329
+    },
+    {
+     "id": "id-gua-lawa",
+     "kind": "candidate",
+     "baseRank": 63321,
+     "rankP05": 63153.7,
+     "rankP95": 63490.1,
+     "basePercentile": 0.311
+    },
+    {
+     "id": "id-goa-pandan",
+     "kind": "candidate",
+     "baseRank": 59647,
+     "rankP05": 58693.5,
+     "rankP95": 60387.1,
+     "basePercentile": 0.351
+    },
+    {
+     "id": "id-kesaksak-lava-tube",
+     "kind": "candidate",
+     "baseRank": 61465,
+     "rankP05": 61221.1,
+     "rankP95": 61807.4,
+     "basePercentile": 0.331
+    },
+    {
+     "id": "id-maros-pangkep-karst",
+     "kind": "candidate",
+     "baseRank": 63251,
+     "rankP05": 63084.5,
+     "rankP95": 63418.1,
+     "basePercentile": 0.312
+    },
+    {
+     "id": "id-tambora-caldera",
+     "kind": "candidate",
+     "baseRank": 61789,
+     "rankP05": 61359.3,
+     "rankP95": 62318.3,
+     "basePercentile": 0.328
+    },
+    {
+     "id": "id-batur-lava-fields",
+     "kind": "candidate",
+     "baseRank": 61465,
+     "rankP05": 61221.1,
+     "rankP95": 61807.4,
+     "basePercentile": 0.331
     }
    ]
   }

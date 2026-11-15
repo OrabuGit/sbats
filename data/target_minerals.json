@@ -1,13 +1,14 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:49:35Z",
+  "generatedAt": "2026-11-15T13:42:25Z",
   "note": "Minerals reported at the targets in cited papers, and the mineral families used to compare them with NASA EMIT identifications at Earth sites (data/sites.json, mineralogy). Site-level result only, added after the freeze of 2026-11-14: never part of the all-round score. An EMIT identification is a spectral match in a 60 m pixel, not an abundance; a rover result is a laboratory measurement of one sample. A shared family is a pointer, not proof.",
   "emitMinimumShare": 0.01,
   "emitMinimumShareNote": "An EMIT family counts when it is matched in at least 1% of the clear pixels of the footprint. A display rule.",
   "emitSource": "NASA EMIT L2B Estimated Mineral Identification and Band Depth (EMITL2BMIN), LP DAAC; method: Brodrick et al. 2023, EMIT L2b ATBD, JPL D-104479",
   "access": {
    "FT": "full text of the paper was read",
-   "ABS": "abstract only"
+   "ABS": "abstract only",
+   "TALK": "slides of a workshop talk, not a peer-reviewed paper"
   },
   "generatedBy": "validation/build/make_target_minerals.py"
  },
@@ -226,6 +227,115 @@
   }
  ],
  "targets": {
+  "mars-gusev-columbia-hills": {
+   "minerals": [
+    {
+     "family": "olivine",
+     "name": "olivine",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": "with pyroxene, 40 to 49% of the iron in moderately altered hills rocks, 9 to 24% in pervasively altered ones; sometimes absent",
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "pyroxene",
+     "name": "pyroxene",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": "more iron in pyroxene than in olivine in the hills rocks",
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "magnetite",
+     "name": "magnetite",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": "about 10 to 15% of the iron in some hills rocks",
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "hematite",
+     "name": "hematite",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": null,
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "goethite",
+     "name": "goethite",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": "up to 40% of the iron, in the rock Clovis",
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "iron-sulfate",
+     "name": "ferric sulfate, in the Paso Robles soil",
+     "method": "in-place",
+     "instrument": "Spirit Moessbauer spectrometer",
+     "abundance": "about 65% of the iron in that soil",
+     "source": "Morris et al. 2006, JGR Planets 111(E2), doi:10.1029/2005JE002584, authors' manuscript on NASA NTRS 20080030169",
+     "url": "https://ntrs.nasa.gov/citations/20080030169",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "carbonate-mgfe",
+     "name": "magnesium-iron carbonate",
+     "method": "in-place",
+     "instrument": "Spirit rover instruments (not named in the abstract)",
+     "abundance": "16 to 34% by weight of the outcrop",
+     "source": "Morris et al. 2010, Science 329:421-424, doi:10.1126/science.1189667",
+     "url": "https://doi.org/10.1126/science.1189667",
+     "badge": "Literature",
+     "access": "ABS"
+    },
+    {
+     "family": "silica",
+     "name": "opaline silica",
+     "method": "in-place",
+     "instrument": "Spirit rover instruments (not named in the abstract)",
+     "abundance": "as much as 91% SiO2 by weight",
+     "source": "Squyres et al. 2008, Science 320:1063-1067, doi:10.1126/science.1155429",
+     "url": "https://doi.org/10.1126/science.1155429",
+     "badge": "Literature",
+     "access": "ABS"
+    }
+   ],
+   "note": "Added after the freeze. Rocks and soils analysed by Spirit on the plains and in the Columbia Hills. The Moessbauer figures are shares of the iron, not of the rock. Ilmenite and nanophase ferric oxide were also found and have no family here."
+  },
+  "mars-holden": {
+   "minerals": [
+    {
+     "family": "smectite",
+     "name": "iron-magnesium clay minerals, which may be mixed-layer smectite and chlorite",
+     "method": "orbital",
+     "instrument": "MRO CRISM",
+     "abundance": null,
+     "source": "Wray, J., 'Mineralogic diversity at Holden crater', talk at the 4th MSL Landing Site Workshop (NASA), reporting Milliken et al. 2007 and Milliken and Bish 2010",
+     "url": "https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/3_Wray_Holden_opt.pdf",
+     "badge": "Literature",
+     "access": "TALK"
+    }
+   ],
+   "note": "Added after the freeze. Seen from orbit only, in the light-toned layered deposits and the flood deposits over them. The source is the slides of a workshop talk, not a paper, and it says the clays 'may be' smectite and chlorite mixed layers: counting them as smectite is SBATS's reading. The same talk reports olivine and pyroxene in the crater wall and the breccia, which are not the lake deposits and are left out."
+  },
   "mars-gale": {
    "minerals": [
     {
