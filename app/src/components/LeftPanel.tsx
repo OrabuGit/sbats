@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { Search } from 'lucide-react';
+import { flags } from '../flags';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Preset, type Target, type Weights } from '../types';
 import { DIMENSIONS, FACTOR_LABELS, PURPOSES, type PurposeId } from '../lib/scoringAdapter';
 import { formatLat, formatLon } from '../lib/geo';
@@ -19,6 +22,9 @@ interface Props {
   onMode: (m: MatchMode) => void;
   purposeId: PurposeId;
   onPurpose: (id: PurposeId) => void;
+  /** 2: pick a place (list, search, optional purpose). 3: the chosen place, ranking and weights. */
+  step: 2 | 3;
+  onChangePlace: () => void;
 }
 
 export type MatchMode = 'all' | 'purpose';
@@ -26,11 +32,15 @@ const MODES: { id: MatchMode; label: string }[] = [
   { id: 'all', label: 'All-round match' },
   { id: 'purpose', label: 'Match by purpose' },
 ];
+
 const dimensionLabel = (id: string) => DIMENSIONS.find((d) => d.id === id)?.label ?? id;
 
 const BODY_LABEL = { moon: 'Moon', mars: 'Mars' } as const;
 
-export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose }: Props) {
+export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace }: Props) {
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const listed = targets.filter((t) => t.body === targets.find((x) => x.id === targetId)?.body && (q === '' || t.name.toLowerCase().includes(q)));
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const total = FACTOR_IDS.reduce((a, id) => a + weights[id], 0) || 1;
   const unpublished = FACTOR_KEYS.filter((k) => target.values[k]?.value === null || target.values[k]?.value === undefined);
@@ -39,32 +49,60 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
 
   return (
     <div className="flex flex-col">
-      <section className="border-b border-line" aria-labelledby="h-target">
-        <h2 id="h-target" className="label px-4 pb-2 pt-4">
-          01 Target
-        </h2>
-        {(['moon', 'mars'] as const).map((body) => {
-          const group = targets.filter((t) => t.body === body);
-          if (group.length === 0) return null;
-          return (
-            <fieldset key={body}>
-              <legend className="num w-full border-y border-line bg-bg px-4 py-1 text-[10px] uppercase tracking-[0.1em] text-muted">{BODY_LABEL[body]}</legend>
-              {group.map((t) => {
-                const on = t.id === target.id;
-                return (
-                  <label key={t.id} className={`row last:border-b-0 ${on ? 'row-on' : ''}`}>
-                    <input type="radio" name="target" value={t.id} checked={on} onChange={() => onTarget(t.id)} className="sr-only" />
-                    <span className={`flex-1 text-[14px] ${on ? 'font-medium' : ''}`}>{t.name}</span>
-                    <span className="num text-[11px] text-muted">
-                      {formatLat(t.lat, 1)} {formatLon(t.lon, 1)}
-                    </span>
-                  </label>
-                );
-              })}
-            </fieldset>
-          );
-        })}
-      </section>
+      {step === 2 ? (
+        <section className="border-b border-line" aria-labelledby="h-target">
+          <h2 id="h-target" className="label px-4 pb-2 pt-4">
+            02 Place on {BODY_LABEL[target.body] === 'Moon' ? 'the Moon' : 'Mars'}
+          </h2>
+          <label className="flex items-center gap-2 border-y border-line bg-bg px-4">
+            <Search size={14} className="shrink-0 text-muted" aria-hidden="true" />
+            <span className="sr-only">Search places</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search places"
+              className="h-11 min-w-0 flex-1 bg-transparent text-[14px] text-text placeholder:text-muted focus:outline-none"
+            />
+            <span className="num text-[11px] text-muted">
+              {listed.length} of {targets.filter((t) => t.body === target.body).length}
+            </span>
+          </label>
+          <fieldset>
+            <legend className="sr-only">Known base sites</legend>
+            {listed.map((t) => {
+              const on = t.id === target.id;
+              return (
+                <label key={t.id} className={`row last:border-b-0 ${on ? 'row-on' : ''}`}>
+                  <input type="radio" name="target" value={t.id} checked={on} onChange={() => onTarget(t.id)} className="sr-only" />
+                  <span className={`flex-1 text-[14px] ${on ? 'font-medium' : ''}`}>{t.name}</span>
+                  <span className="num text-[11px] text-muted">
+                    {formatLat(t.lat, 1)} {formatLon(t.lon, 1)}
+                  </span>
+                </label>
+              );
+            })}
+            {listed.length === 0 && <p className="px-4 py-3 text-[13px] text-muted">No place matches "{query}".</p>}
+          </fieldset>
+          <p className="border-t border-line px-4 py-3 text-[12px] text-muted">
+            {flags.anyPoint
+              ? 'Or click any point on the globe.'
+              : 'Only listed places can be picked. Measured values for an arbitrary point are not in the data yet.'}
+          </p>
+        </section>
+      ) : (
+        <section className="flex items-center justify-between gap-3 border-b border-line py-2 pl-4 pr-2" aria-labelledby="h-target">
+          <div className="min-w-0">
+            <h2 id="h-target" className="label">
+              Place
+            </h2>
+            <p className="text-[14px] font-medium text-text">{target.name}</p>
+          </div>
+          <button type="button" onClick={onChangePlace} className="tool">
+            Change
+          </button>
+        </section>
+      )}
 
       <section className="border-b border-line p-4" aria-label={`${target.name}: values`}>
         <p className="text-[13px] leading-5 text-text">{target.summary}</p>
@@ -93,7 +131,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
 
       <section className="border-b border-line" aria-labelledby="h-mode">
         <h2 id="h-mode" className="label px-4 pb-1 pt-4">
-          Ranking
+          {step === 2 ? 'Purpose, optional' : 'Ranking'}
         </h2>
         <div className="tabs tabs-fill px-4" role="group" aria-label="Ranking">
           {MODES.map((m) => (
@@ -148,7 +186,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
         </section>
       )}
 
-      {mode === 'all' && (
+      {mode === 'all' && step === 3 && (
         <section className="p-4" aria-labelledby="h-weights">
           <div className="flex items-baseline justify-between">
             <h2 id="h-weights" className="label">

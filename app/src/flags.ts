@@ -17,4 +17,15 @@ export const flags = {
   bestMonth: true,
   /** Featured site pages from data/sites.json. */
   sitePages: true,
+  /** Print-ready report of a match, with CSV and GeoJSON export. */
+  report: false,
+  /** Terrain page: route, rover, slope colours. */
+  terrain: false,
+  /**
+   * Step 2 "click any point" on the Moon or Mars. Off: the data has measured values for the listed
+   * base sites only. Turn on when Session B publishes values for arbitrary points.
+   */
+  anyPoint: false,
+  /** Stability of a rank in the results list. Off until the scoring library publishes it. */
+  stability: false,
 } as const;

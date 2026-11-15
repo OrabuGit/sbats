@@ -18,6 +18,10 @@ import { loadExtracts, loadSites } from './data/sites';
 import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
+import { Home } from './components/Home';
+import { MatchDetail } from './components/MatchDetail';
+import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
+import { savedId, useSaved } from './lib/saved';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
 import { decodeLayout, type SavedLayout } from './lib/simAdapter';
@@ -28,6 +32,9 @@ const globeModule = import('./components/GlobeView');
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 const worldModule = import('./components/WorldGlobe');
 const WorldGlobe = lazy(() => worldModule.then((m) => ({ default: m.WorldGlobe })));
+
+type View = 'home' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain';
+const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 
 const LIST_LIMIT = 15;
 const MAP_MARKERS = 10;
@@ -111,15 +118,18 @@ function Orbit({ data }: { data: DataBundle }) {
   const [tab, setTab] = useState<'setup' | 'results'>('setup');
   const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number; arrive?: boolean } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
+  // Steps: 1 world, 2 place, 3 matches, 4 match. Home and the reference pages are views outside the steps.
   const [step, setStep] = useState<Step>(1);
-  const [view, setView] = useState<'orbit' | 'method' | 'validation' | 'site' | 'recon'>('orbit');
+  const [view, setView] = useState<View>('home');
   const [siteId, setSiteId] = useState<string | null>(null);
+  const [worldPage, setWorldPage] = useState<WorldId>('moon');
   const [sharedLayout, setSharedLayout] = useState<SavedLayout | null>(null);
   const sandboxRef = useRef<SandboxHandle>(null);
   const modules = useAsync(loadModules, 'modules');
   const climate = useAsync(loadSiteClimate, 'climate');
   const sitesFile = useAsync(loadSites, 'sites');
   const extracts = useAsync(loadExtracts, 'extracts');
+  const saved = useSaved();
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
   const reconReady = flags.recon && modules.status === 'ready' && (!modules.value.fixture || fixtureAllowed);
 
@@ -179,37 +189,36 @@ function Orbit({ data }: { data: DataBundle }) {
   const leftRef = useRef<HTMLElement>(null);
   const seq = useRef(0);
 
+  // Opening a cell is step 4: the match page.
   const select = useCallback(
     (i: number, fly = true) => {
       if (i < 0) return;
-      setView('orbit');
       setSelected(i);
-      setStep(2);
-      setTab('results');
+      setStep(4);
+      setView('match');
       if (fly) setFocus({ lat: earth.cells[i].lat, lon: earth.cells[i].lon, seq: ++seq.current });
-      rightRef.current?.scrollTo({ top: 0 });
     },
     [earth],
   );
 
-  // Step 1 to step 2: leave the Moon or Mars globe and arrive over the best-matching part of Earth.
+  // Step 2 to step 3: leave the Moon or Mars globe and arrive over the best-matching part of Earth.
   const arriving = useRef(false);
   const goToEarth = useCallback((id?: string) => {
     if (id) setTargetId(id);
     arriving.current = true;
     setSelected(null);
     setView('orbit');
-    setStep(2);
+    setStep(3);
     setTab('results');
   }, []);
   useEffect(() => {
-    if (!arriving.current || step !== 2) return;
+    if (!arriving.current || step !== 3) return;
     arriving.current = false;
     const top = candidates[0] ? earth.cells[candidates[0].index] : null;
     setFocus({ lat: top?.lat ?? 5, lon: top?.lon ?? 105, seq: ++seq.current, arrive: true });
   }, [step, candidates, earth]);
 
-  // From the Validation page: open the grid cell nearest to a site, against the given target.
+  // Open the grid cell nearest to a point, against the given target.
   const openSite = useCallback(
     (lat: number, lon: number, id: string) => {
       const i = index.nearest(lat, lon, 2);
@@ -220,7 +229,21 @@ function Orbit({ data }: { data: DataBundle }) {
     [index, select],
   );
 
-  // Demo: plays the ORBIT part of the flow. Later steps join when their flags are on.
+  const pickWorld = useCallback(
+    (w: WorldId) => {
+      if (w === 'earth') return;
+      if (target.body !== w) {
+        const first = targets.find((t) => t.body === w);
+        if (first) setTargetId(first.id);
+      }
+      setSelected(null);
+      setView('orbit');
+      setStep(2);
+      setTab('setup');
+    },
+    [target, targets],
+  );
+
   const timers = useRef<number[]>([]);
   const stopDemo = useCallback(() => {
     timers.current.forEach((t) => window.clearTimeout(t));
@@ -229,8 +252,9 @@ function Orbit({ data }: { data: DataBundle }) {
   }, []);
   useEffect(() => stopDemo, [stopDemo]);
 
-  // The site the demo and step 3 fall back to: an SBATS candidate, with a terrain extract if one exists.
-  const extractIds = useMemo(() => new Set(extracts.status === 'ready' && extracts.value ? extracts.value.items.map((x) => x.id) : []), [extracts]);
+  // The site the demo falls back to: a proposed site, with a terrain extract if one exists.
+  const extractIndex = extracts.status === 'ready' ? extracts.value : null;
+  const extractIds = useMemo(() => new Set(extractIndex ? extractIndex.items.map((x) => x.id) : []), [extractIndex]);
   const featuredSite = useMemo(() => {
     const cands = sites.filter((s) => s.analog.kind === 'candidate' && s.index >= 0);
     return cands.find((s) => extractIds.has(s.analog.id)) ?? cands[0] ?? null;
@@ -239,85 +263,83 @@ function Orbit({ data }: { data: DataBundle }) {
   const candidatesRef = useRef(candidates);
   candidatesRef.current = candidates;
 
+  const openRecon = useCallback(
+    (i?: number) => {
+      if (!reconReady) return;
+      const cellIndex = i ?? selected ?? featured;
+      if (cellIndex === null) return;
+      setSelected(cellIndex);
+      setStep(4);
+      setTab('results');
+      setView('recon');
+    },
+    [reconReady, selected, featured],
+  );
+
   const runDemo = () => {
     if (demo) return stopDemo();
     const at = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
     // The demo runs against the target its site is proposed for, so the comparison means something.
     const demoTarget = targets.find((t) => t.id === featuredSite?.analog.analogFor[0]) ?? target;
     setTargetId(demoTarget.id);
-    setView('orbit');
     setSelected(null);
     setMode('ranked');
     setPresetId(PRESETS[0].id);
     setWeights(PRESETS[0].weights);
     setMatchMode('all');
     setTab('setup');
-    setStep(1);
-    setDemo(`Demo: target ${demoTarget.name}`);
-    at(3000, () => {
-      setDemo('Demo: ranking Earth cells');
+    setView('home');
+    setDemo('Demo: three worlds');
+    at(2500, () => {
+      setDemo(`Demo: a place on ${demoTarget.body === 'moon' ? 'the Moon' : 'Mars'}, ${demoTarget.name}`);
+      setView('orbit');
+      setStep(2);
+    });
+    at(5500, () => {
+      setDemo('Demo: every Earth cell ranked');
       goToEarth();
     });
-    at(6500, () => {
-      setDemo('Demo: the top candidate');
+    at(9000, () => {
+      setDemo('Demo: the top match, factor by factor');
       const top = candidatesRef.current[0]?.index;
       if (top !== undefined) select(top);
     });
     if (featured !== null) {
-      at(11000, () => {
-        setDemo(featuredSite ? `Demo: ${featuredSite.analog.name.split(',')[0]}, a proposed site` : 'Demo: a second site');
+      at(13000, () => {
+        setDemo(featuredSite ? `Demo: ${featuredSite.analog.name.split(',')[0]}, a proposed site` : 'Demo: a second match');
         select(featured);
       });
     }
     if (reconReady && featured !== null) {
       const has3d = flags.boots && !!featuredSite && extractIds.has(featuredSite.analog.id) && extractIds.has(demoTarget.id);
-      at(15500, () => {
+      at(17500, () => {
         setDemo('Demo: a base at the site');
-        setSelected(featured);
-        setStep(3);
-        setTab('results');
-        setView('recon');
+        openRecon(featured);
       });
-      at(16300, () => sandboxRef.current?.loadExample());
-      at(18500, () => {
+      at(18300, () => sandboxRef.current?.loadExample());
+      at(20000, () => {
         setDemo(`Demo: the same base at ${demoTarget.name}`);
         sandboxRef.current?.deploy();
       });
       if (has3d) {
-        at(20500, () => {
+        at(21500, () => {
           setDemo('Demo: both sites as terrain, one scale');
           sandboxRef.current?.setMode('3d');
         });
       }
-      at(25000, () => {
+      at(25500, () => {
         setDemo('Demo: 30 days, day by day');
         sandboxRef.current?.setMode('plan');
         sandboxRef.current?.setDay(1);
         document.getElementById('h-time')?.scrollIntoView({ block: 'start' });
       });
-      for (let i = 1; i <= 10; i++) at(25000 + i * 420, () => sandboxRef.current?.setDay(i * 3));
-      at(30000, () => {
-        timers.current = [];
-        setDemo(null);
-      });
-    } else {
-      at(16000, () => {
-        timers.current = [];
-        setDemo(null);
-      });
+      for (let i = 1; i <= 10; i++) at(25500 + i * 400, () => sandboxRef.current?.setDay(i * 3));
     }
+    at(30000, () => {
+      timers.current = [];
+      setDemo(null);
+    });
   };
-
-  const openRecon = useCallback(() => {
-    if (!reconReady) return;
-    // Step 3 needs an Earth site. With none open, take the featured candidate site or the top cell.
-    const i = selected ?? featured;
-    if (i === null) return;
-    if (selected === null) setSelected(i);
-    setStep(3);
-    setTab('results');
-    setView('recon');
-  }, [reconReady, selected, featured]);
 
   // A share link carries a layout, a target and an Earth cell. Apply it once, when the sandbox can open.
   const linkDone = useRef(false);
@@ -335,7 +357,7 @@ function Orbit({ data }: { data: DataBundle }) {
       if (t) setTargetId(t.id);
       setSharedLayout(layout);
       setSelected(i >= 0 ? i : featured);
-      setStep(3);
+      setStep(4);
       setView('recon');
     } catch {
       // A link that cannot be read opens the app as usual.
@@ -343,19 +365,27 @@ function Orbit({ data }: { data: DataBundle }) {
   }, [reconReady, targets, index, featured]);
 
   const onStep = (s: Step) => {
-    if (s === 3) return openRecon();
+    if (s === 4) {
+      if (selected !== null) setView('match');
+      return;
+    }
+    if (s === 3) {
+      if (view === 'orbit' && step === 3) return;
+      if (step < 3 || view === 'home') return goToEarth();
+      setView('orbit');
+      setStep(3);
+      setTab('results');
+      return;
+    }
     setView('orbit');
     setStep(s);
-    if (s === 1) {
-      setSelected(null);
-      setTab('setup');
-      leftRef.current?.querySelector<HTMLElement>('input[name="target"]:checked')?.focus();
-    } else if (s === 2) {
-      if (step === 1) return goToEarth();
-      setTab('results');
-      rightRef.current?.querySelector<HTMLElement>('button')?.focus();
-    }
+    setTab('setup');
+    if (s === 2) leftRef.current?.querySelector<HTMLElement>('input[name="target"]:checked')?.focus();
   };
+
+  // The two big globes are created the first time step 2 or 3 opens, not on the home screen.
+  const globesNeeded = useRef(false);
+  if (view === 'orbit' && step >= 2) globesNeeded.current = true;
 
   const selectedCell = selected !== null ? earth.cells[selected] : null;
   const explained = useMemo(() => (selected !== null ? explain(selected) : null), [selected, explain]);
@@ -370,7 +400,6 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const climateFile = climate.status === 'ready' ? climate.value : null;
   const featuredSites = flags.sitePages && sitesFile.status === 'ready' ? sitesFile.value : null;
-  const extractIndex = extracts.status === 'ready' ? extracts.value : null;
   const month = useMemo(() => {
     const months = named ? climateFile?.sites.find((x) => x.id === named.id)?.months : undefined;
     if (!months || !explained || !climateFile) return null;
@@ -378,7 +407,11 @@ function Orbit({ data }: { data: DataBundle }) {
   }, [named, climateFile, explained]);
   const namedHasPage = !!named && !!featuredSites?.sites.some((x) => x.id === named.id);
   const infoOpen = view === 'method' || view === 'validation' || view === 'site';
-  const showWorld = view === 'orbit' && step === 1;
+  const showWorld = view === 'orbit' && step === 2;
+  const showEarth = view === 'orbit' && step === 3;
+  const windowKm = extractIndex?.meta.windowKm ?? 20;
+  const earthExtract = extractIndex?.items.find((x) => x.id === named?.id) ?? null;
+  const targetExtract = extractIndex?.items.find((x) => x.id === target.id) ?? null;
 
   // A site page opens against the target the site is proposed for, when it has one.
   const openSitePage = useCallback(
@@ -391,37 +424,199 @@ function Orbit({ data }: { data: DataBundle }) {
     [analogs, targetId, targets],
   );
 
-  const status = demo ?? (weights !== liveWeights ? 'Scoring' : selected !== null ? 'Dossier open' : 'Ready');
+  const selectedSavedId = selectedCell ? savedId(target.id, selectedCell.lat, selectedCell.lon) : null;
+  const isSaved = !!selectedSavedId && saved.list.some((x) => x.id === selectedSavedId);
+  const toggleSaved = () => {
+    if (!selectedCell || !selectedSavedId || !explained) return;
+    if (isSaved) return saved.remove(selectedSavedId);
+    saved.add({
+      id: selectedSavedId,
+      targetId: target.id,
+      targetName: target.name,
+      lat: selectedCell.lat,
+      lon: selectedCell.lon,
+      name: named?.name ?? siteCode(selectedCell),
+      score: explained.score,
+      savedAt: new Date().toISOString(),
+    });
+  };
+
+  const status =
+    demo ??
+    (view === 'home'
+      ? 'Home'
+      : view === 'match'
+        ? 'Match open'
+        : view === 'recon'
+          ? 'Sandbox'
+          : view === 'orbit'
+            ? weights !== liveWeights
+              ? 'Scoring'
+              : step === 1
+                ? 'Pick a world'
+                : step === 2
+                  ? 'Pick a place'
+                  : 'Ready'
+            : 'Reading');
+
+  useEffect(() => {
+    const where = view === 'home' ? '' : view === 'match' && selectedCell ? `${named?.name.split(',')[0] ?? siteCode(selectedCell)} and ${target.name} · ` : view === 'orbit' && step >= 2 ? `${target.name} · ` : '';
+    document.title = `${where}SBATS-26`;
+  }, [view, step, target, named, selectedCell]);
 
   return (
     <div className="flex min-h-full flex-col lg:h-full">
       <TopBar
-        step={step}
+        step={view === 'orbit' || view === 'match' ? step : null}
         onStep={onStep}
+        canMatch={selected !== null}
+        onHome={() => setView('home')}
+        featuredOpen={view === 'featured'}
+        onFeatured={() => setView('featured')}
         demoRunning={demo !== null}
         onDemo={runDemo}
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
-        reconLocked={!reconReady}
       />
 
-      {data.warnings.length > 0 && (
+      {(data.warnings.length > 0 || saved.error) && (
         <div className="border-b border-line bg-panel px-4 py-2 text-[12px] text-accent" role="alert">
-          {data.warnings.join(' ')}
+          {[...data.warnings, saved.error].filter(Boolean).join(' ')}
         </div>
+      )}
+
+      {view === 'home' && (
+        <Home
+          targets={targets}
+          cells={earth.cells.length}
+          siteCount={analogs.length}
+          sites={featuredSites}
+          extracts={extractIndex}
+          saved={saved.list}
+          onFind={() => {
+            setView('orbit');
+            setStep(1);
+          }}
+          onWorld={pickWorld}
+          onWorldPage={(w) => {
+            setWorldPage(w);
+            setView('world');
+          }}
+          onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
+          onOpenSaved={(s) => openSite(s.lat, s.lon, s.targetId)}
+          onRemoveSaved={saved.remove}
+        />
+      )}
+
+      {view === 'orbit' && step === 1 && (
+        <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-world">
+          <header className="border-b border-line px-4 py-6 sm:px-6">
+            <p className="label">01 World</p>
+            <h2 id="h-world" className="mt-1 text-[22px] font-semibold leading-7 text-text">
+              Which world is the base on?
+            </h2>
+          </header>
+          <div className="border-b border-line bg-bg">
+            <Worlds
+              worlds={['moon', 'mars']}
+              caption={(w) => `${targets.filter((t) => t.body === w).length} base sites`}
+              action={(w) => `Pick ${w === 'moon' ? 'the Moon' : 'Mars'}`}
+              onPick={pickWorld}
+              selected={target.body}
+            />
+          </div>
+          <p className="readout px-4 py-3 sm:px-6">True relative size. {WORLD_CREDIT}</p>
+        </main>
+      )}
+
+      {(view === 'featured' || view === 'world' || view === 'report' || view === 'terrain') && (
+        <main className="scroll min-h-0 flex-1 bg-panel p-6">
+          <p className="label">Not built yet</p>
+          <p className="mt-2 text-[14px] text-text">{view === 'world' ? `World page: ${worldPage}` : view}</p>
+        </main>
+      )}
+
+      {view === 'match' && selectedCell && explained && (
+        <MatchDetail
+          cell={selectedCell}
+          placeName={named?.name ?? null}
+          kindLabel={named ? KIND_LABEL[named.kind] : null}
+          target={target}
+          explained={explained}
+          meta={meta}
+          landCover={earth.meta.landCover ?? null}
+          purpose={purpose}
+          gaps={ts.prepared.gaps}
+          notes={ts.notes}
+          rank={rank}
+          ground={{ earth: earthExtract, target: targetExtract, windowKm, state: extracts.status }}
+          saved={isSaved}
+          onSave={toggleSaved}
+          onBack={() => {
+            setView('orbit');
+            setStep(3);
+            setTab('results');
+          }}
+          actions={[
+            { label: 'View report', primary: true, onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },
+            {
+              label: 'Download report',
+              onClick: flags.report
+                ? () => {
+                    setView('report');
+                    window.setTimeout(() => window.print(), 400);
+                  }
+                : null,
+              why: 'not built yet',
+            },
+            {
+              label: 'Open 3D terrain',
+              onClick: flags.terrain && earthExtract?.elevation && targetExtract?.elevation ? () => setView('terrain') : null,
+              why: !flags.terrain ? 'not built yet' : 'no terrain extract was built for one of the two places',
+            },
+            { label: 'Place a base', onClick: reconReady ? () => openRecon() : null, why: 'data/modules.json is not published with this build' },
+            ...(namedHasPage && named ? [{ label: 'Site page', onClick: () => openSitePage(named.id) }] : []),
+          ]}
+        >
+          <Dossier
+            embedded
+            cell={selectedCell}
+            target={target}
+            explained={explained}
+            meta={meta}
+            landCover={earth.meta.landCover ?? null}
+            purpose={purpose}
+            profile={profile}
+            purposeScores={purposeScores}
+            onPurpose={(id) => {
+              setPurposeId(id);
+              setMatchMode('purpose');
+            }}
+            named={named}
+            isNew={isNewSite(selectedCell, analogs)}
+            rank={rank}
+            percentile={pct}
+            gaps={ts.prepared.gaps}
+            notes={ts.notes}
+            onBack={() => setView('orbit')}
+            onBuild={null}
+            month={month}
+            onSitePage={null}
+          />
+        </MatchDetail>
       )}
 
       {flags.methodPage && infoOpen && (
         <InfoShell
           view={view}
           onView={(v) => (v === 'site' ? openSitePage(siteId ?? featuredSites?.sites[0]?.id ?? '') : setView(v))}
-          onBack={() => setView('orbit')}
+          onBack={() => setView('home')}
           title={
             view === 'method'
               ? 'How a match score is made, with what data, and where it stops being reliable'
               : view === 'validation'
                 ? 'Do known analog sites score high and wrong places score low? The numbers, including the weak ones'
-                : (featuredSites?.sites.find((x) => x.id === siteId) ?? featuredSites?.sites[0])?.name ?? 'Featured sites'
+                : (featuredSites?.sites.find((x) => x.id === siteId) ?? featuredSites?.sites[0])?.name ?? 'Site pages'
           }
         >
           {view === 'method' ? (
@@ -429,7 +624,7 @@ function Orbit({ data }: { data: DataBundle }) {
           ) : view === 'validation' ? (
             <ValidationPage earth={earth} targets={targets} onOpenSite={openSite} />
           ) : sitesFile.status === 'loading' ? (
-            <Loading what="featured sites" />
+            <Loading what="site pages" />
           ) : featuredSites && featuredSites.sites.length > 0 ? (
             <SitePage
               sites={featuredSites}
@@ -446,16 +641,7 @@ function Orbit({ data }: { data: DataBundle }) {
               climate={climateFile}
               extracts={extractIndex}
               onDossier={(i) => select(i)}
-              onBuild={
-                reconReady
-                  ? (i) => {
-                      setSelected(i);
-                      setStep(3);
-                      setTab('results');
-                      setView('recon');
-                    }
-                  : null
-              }
+              onBuild={reconReady ? (i) => openRecon(i) : null}
             />
           ) : (
             <Absent what={sitesFile.status === 'error' ? `data/sites.json could not be read: ${sitesFile.message}` : 'data/sites.json is not published with this build.'} />
@@ -472,29 +658,25 @@ function Orbit({ data }: { data: DataBundle }) {
           target={target}
           modules={modules.value}
           solar={annualSolar(climateFile, named?.id ?? null)}
-          ground={{
-            earth: extractIndex?.items.find((x) => x.id === named?.id) ?? null,
-            target: extractIndex?.items.find((x) => x.id === target.id) ?? null,
-            windowKm: extractIndex?.meta.windowKm ?? 20,
-          }}
+          ground={{ earth: earthExtract, target: targetExtract, windowKm }}
           initial={sharedLayout}
           tab={tab}
           onTab={setTab}
-          onBack={() => {
-            setView('orbit');
-            setStep(2);
-          }}
+          onBack={() => setView('match')}
         />
       )}
 
-      {/* The globe stays mounted behind the Method page, so coming back is instant. */}
-      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${view !== 'orbit' ? 'hidden' : 'flex lg:grid'}`}>
+      {/* The globes stay mounted once step 2 or 3 has been opened, so coming back is instant. */}
+      {globesNeeded.current && (
+      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${showWorld || showEarth ? 'flex lg:grid' : 'hidden'}`}>
         <aside
           ref={leftRef}
-          aria-label="Target and mission controls"
+          aria-label={step === 2 ? 'Places' : 'Target and weights'}
           className={`scroll order-3 bg-panel lg:order-1 lg:block lg:min-h-0 lg:border-r lg:border-line ${tab === 'setup' ? 'block' : 'hidden'}`}
         >
           <LeftPanel
+            step={step === 2 ? 2 : 3}
+            onChangePlace={() => onStep(2)}
             targets={targets}
             targetId={target.id}
             onTarget={setTargetId}
@@ -507,11 +689,7 @@ function Orbit({ data }: { data: DataBundle }) {
               setWeights(p.weights);
             }}
             mode={matchMode}
-            onMode={(m) => {
-              setMatchMode(m);
-              // The purpose list sits below the target card: bring it into view when it appears.
-              if (m === 'purpose') window.setTimeout(() => document.getElementById('purpose-section')?.scrollIntoView({ block: 'nearest' }), 0);
-            }}
+            onMode={setMatchMode}
             purposeId={purposeId}
             onPurpose={setPurposeId}
             weights={weights}
@@ -526,89 +704,50 @@ function Orbit({ data }: { data: DataBundle }) {
           />
         </aside>
 
-        <div className="h-[46vh] min-h-[280px] shrink-0 order-1 border-b border-line lg:order-2 lg:h-auto lg:min-h-0 lg:border-b-0">
+        <div className="order-1 h-[46vh] min-h-[280px] shrink-0 border-b border-line lg:order-2 lg:h-auto lg:min-h-0 lg:border-b-0">
           <Suspense
             fallback={
-              <div className="flex h-full items-center bg-bg px-4">
+              <div className="flex h-full items-start bg-bg p-4">
                 <p className="label" role="status">
                   Loading globe
                 </p>
               </div>
             }
           >
-            <div className={showWorld ? 'h-full' : 'hidden'}>
+            <div className={showEarth ? 'hidden' : 'h-full'}>
               <WorldGlobe targets={targets} targetId={target.id} onTarget={setTargetId} onPick={goToEarth} active={showWorld} />
             </div>
-            <div className={showWorld ? 'hidden' : 'h-full'}>
-            <GlobeView
-              earth={earth}
-              results={results}
-              index={index}
-              selected={selected}
-              candidates={mapCandidates}
-              sites={mapSites}
-              onSelect={select}
-              focus={focus}
-              active={view === 'orbit' && !showWorld}
-            />
+            <div className={showEarth ? 'h-full' : 'hidden'}>
+              <GlobeView
+                earth={earth}
+                results={results}
+                index={index}
+                selected={selected}
+                candidates={mapCandidates}
+                sites={mapSites}
+                onSelect={select}
+                focus={focus}
+                active={showEarth}
+              />
             </div>
           </Suspense>
         </div>
 
         <div className="tabs tabs-fill order-2 shrink-0 bg-panel lg:hidden" role="group" aria-label="Panel">
           {(['setup', 'results'] as const).map((t) => (
-            <button
-              key={t}
-              type="button"
-              aria-pressed={tab === t}
-              onClick={() => setTab(t)}
-              className="tab"
-            >
-              {t === 'setup' ? (step === 1 ? 'Targets' : 'Target and weights') : step === 1 ? 'This target' : selected !== null ? 'Dossier' : 'Candidates'}
+            <button key={t} type="button" aria-pressed={tab === t} onClick={() => setTab(t)} className="tab">
+              {t === 'setup' ? (step === 2 ? 'Places' : 'Target and weights') : step === 2 ? 'This place' : 'Matches'}
             </button>
           ))}
         </div>
 
         <aside
           ref={rightRef}
-          aria-label={step === 1 ? 'Target' : selected !== null ? 'Site dossier' : 'Analog candidates'}
+          aria-label={step === 2 ? 'This place' : 'Matches'}
           className={`scroll order-3 bg-panel lg:order-3 lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
         >
-          {showWorld ? (
-            <TargetBrief
-              target={target}
-              extract={extractIndex?.items.find((x) => x.id === target.id) ?? null}
-              extractsState={extracts.status}
-              windowKm={extractIndex?.meta.windowKm ?? 20}
-              onFind={() => goToEarth()}
-            />
-          ) : selectedCell && explained ? (
-            <Dossier
-              cell={selectedCell}
-              target={target}
-              explained={explained}
-              meta={meta}
-              landCover={earth.meta.landCover ?? null}
-              purpose={purpose}
-              profile={profile}
-              purposeScores={purposeScores}
-              onPurpose={(id) => {
-                setPurposeId(id);
-                setMatchMode('purpose');
-              }}
-              named={named}
-              isNew={isNewSite(selectedCell, analogs)}
-              rank={rank}
-              percentile={pct}
-              gaps={ts.prepared.gaps}
-              notes={ts.notes}
-              onBack={() => setSelected(null)}
-              onBuild={reconReady ? openRecon : null}
-              month={month}
-              onSitePage={
-namedHasPage && named ? () => openSitePage(named.id) : null
-              }
-            />
+          {step === 2 ? (
+            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} />
           ) : (
             <CandidateList
               earth={earth}
@@ -629,15 +768,16 @@ namedHasPage && named ? () => openSitePage(named.id) : null
           )}
         </aside>
       </div>
+      )}
 
       <StatusStrip
-        coords={selectedCell ? formatCoords(selectedCell.lat, selectedCell.lon) : null}
-        code={selectedCell ? siteCode(selectedCell) : null}
+        coords={selectedCell && view !== 'home' ? formatCoords(selectedCell.lat, selectedCell.lon) : null}
+        code={selectedCell && view !== 'home' ? siteCode(selectedCell) : null}
         cells={earth.cells.length}
         resolutionDeg={earth.meta.resolutionDeg}
         fixtureFiles={[...data.fixtureFiles.map((f) => `${f}.json`), ...(view === 'recon' && modules.status === 'ready' && modules.value.fixture ? ['modules.json'] : [])]}
         view={view}
-        status={view === 'orbit' ? status : view === 'recon' ? (demo ?? 'Sandbox') : view === 'site' ? 'Site page' : 'Reading'}
+        status={status}
       />
     </div>
   );

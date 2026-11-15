@@ -38,6 +38,8 @@ interface Props {
   month: { result: BestMonth; source: string } | null;
   /** Opens the featured site page. null when the cell has none. */
   onSitePage: (() => void) | null;
+  /** Inside the match page: the header, score and buttons are left to that page. */
+  embedded?: boolean;
 }
 
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
@@ -156,7 +158,7 @@ function FactorBlock({ f, target, meta, landCover }: { f: FactorBreakdown; targe
   );
 }
 
-export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack, onBuild, month, onSitePage }: Props) {
+export function Dossier({ cell, target, explained: e, meta, landCover, purpose, profile, purposeScores, onPurpose, named, isNew, rank, percentile, gaps, notes, onBack, onBuild, month, onSitePage, embedded = false }: Props) {
   const scored = e.score !== null;
   const sources = new Map<string, string>();
   for (const f of e.breakdown)
@@ -177,7 +179,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
 
   return (
     <article aria-labelledby="h-dossier">
-      <header className="border-b border-line">
+      <header className={embedded ? 'hidden' : 'border-b border-line'}>
         <button type="button" onClick={onBack} className="tool w-full !justify-start border-b border-line">
           <ArrowLeft size={14} aria-hidden="true" /> Back to candidates
         </button>
@@ -389,6 +391,8 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </div>
       </section>
 
+      {!embedded && (
+        <>
       <section className="border-b border-line" aria-labelledby="h-breakdown">
         <h3 id="h-breakdown" className="label border-b border-line p-4">
           Factor breakdown
@@ -427,6 +431,9 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
           })}
         </ul>
       </section>
+
+        </>
+      )}
 
       <section className="p-4" aria-labelledby="h-sources">
         <h3 id="h-sources" className="label">
