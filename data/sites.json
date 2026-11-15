@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T04:43:34Z",
+  "generatedAt": "2026-11-15T05:01:46Z",
   "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json, two more candidate sites proposed by a team member, and nine already-known analogs for comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint.",
   "year": 2025,
   "bareNdviThreshold": 0.2,
@@ -1983,9 +1983,9 @@
    "footprintNote": "The whole summit caldera of Tambora, rim to rim, with a little of the outer slope in the corners of the square.",
    "footprintStatus": "provisional",
    "footprintBasis": "Square enclosing the caldera rim as traced on Copernicus DEM GLO-30: rim crest 3.1 to 4.2 km from its centre, 7.1 km north-south by 7.4 km east-west. Smithsonian GVP describes a 6-km-wide, 1250-m-deep caldera.",
-   "inAnalogsJson": false,
+   "inAnalogsJson": true,
    "coordinateSource": "Centre of the caldera rim traced on Copernicus DEM GLO-30 (highest point along 180 rays from the caldera floor). Smithsonian GVP volcano 264040 lists the volcano at 8.25 S, 118.0 E.",
-   "analogSource": null,
+   "analogSource": "Smithsonian GVP volcano 264040 (the 1815 eruption 'formed a 6-km-wide, 1250-m-deep caldera'); position: centre of the caldera rim traced by Session B on Copernicus DEM GLO-30 (decisions/B.md)",
    "proposedBy": "team member",
    "caveat": null,
    "values": {
@@ -2312,9 +2312,9 @@
    "footprintNote": "Young bare lava flows on the caldera floor south-west of the Batur cone.",
    "footprintStatus": "provisional",
    "footprintBasis": "Square enclosing the bare-rock polygon mapped in OpenStreetMap (relation 19753621): 4.0 km north-south by 3.2 km east-west. The square also holds ground outside the polygon. Smithsonian GVP confirms historical basaltic lava flows on the caldera floor but gives no outline.",
-   "inAnalogsJson": false,
+   "inAnalogsJson": true,
    "coordinateSource": "Centre of the bounding box of OpenStreetMap relation 19753621 (natural=bare_rock, 7.5 km2, version 3 of 2025-10-25), the mapped bare lava south-west of the Batur cone. (c) OpenStreetMap contributors, ODbL.",
-   "analogSource": null,
+   "analogSource": "Smithsonian GVP volcano 264010 ('Basaltic lava flows from both summit and flank vents have reached the caldera floor'); outline: OpenStreetMap relation 19753621 (natural=bare_rock), (c) OpenStreetMap contributors, ODbL, read by Session B (decisions/B.md)",
    "proposedBy": "team member",
    "caveat": "The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the footprint is ground outside the lava field.",
    "values": {

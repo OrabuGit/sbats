@@ -73,8 +73,8 @@ def fetch(points: list[tuple[float, float]]) -> dict:
 
 def build() -> dict:
     analogs = json.loads((DATA / "analogs.json").read_text())
-    from sites import EXTRA_SITES   # sites proposed by a team member that are not in analogs.json
-    analogs += [{"id": k, **v} for k, v in EXTRA_SITES.items()]
+    from sites import merged_sites   # adds the sites proposed by a team member that analogs.json does not have
+    analogs = list(merged_sites({a["id"]: a for a in analogs}).values())
     d = fetch([(a["lat"], a["lon"]) for a in analogs])
     u = {p: d["params"][p]["units"] for p in d["params"]}
     assert u["T2M"] == "C" and u["T2M_RANGE"] == "C" and u["PRECTOTCORR"] == "mm/day" and u["ALLSKY_SFC_SW_DWN"] == "W m-2", u

@@ -61,8 +61,8 @@ SITE_CACHE.mkdir(exist_ok=True)
 COMPARISON_IDS = ["mauna-kea", "kilauea", "atacama-yungay", "haughton-crater", "lanzarote-timanfaya",
                   "dallol", "dasht-e-lut", "salar-de-uyuni", "tunupa-volcano"]
 
-# Sites proposed by a team member that are not in data/analogs.json (that file belongs to another
-# part of the project). Coordinates come from the source named in "coordinateSource"; nothing is typed
+# Sites proposed by a team member. Where data/analogs.json has the same id, its name, coordinates and
+# kind are used and this entry only adds the coordinate source; otherwise the site is taken from here. Coordinates come from the source named in "coordinateSource"; nothing is typed
 # from memory. "candidate" = proposed new analog. "known" = already-known analog added for comparison,
 # not a new finding. How each position was fixed is logged in decisions/B.md.
 EXTRA_SITES = {
@@ -169,6 +169,18 @@ GDAL_ENV = dict(
     GDAL_HTTP_USERAGENT=USER_AGENT, VSI_CACHE="FALSE", AWS_NO_SIGN_REQUEST="YES",
 )
 HEADERS = {"User-Agent": USER_AGENT}
+
+
+def merged_sites(analogs: dict) -> dict:
+    """analogs.json entries by id, plus the EXTRA_SITES it does not have. analogs.json wins on shared fields."""
+    out = dict(analogs)
+    for k, v in EXTRA_SITES.items():
+        if k in out:
+            assert abs(out[k]["lat"] - v["lat"]) < 0.01 and abs(out[k]["lon"] - v["lon"]) < 0.01, f"{k}: coordinates differ from analogs.json"
+            out[k] = {"coordinateSource": v["coordinateSource"], **out[k]}
+        else:
+            out[k] = {"id": k, "analogFor": [], **v}
+    return out
 
 
 def cached(name: str, fn):
@@ -477,8 +489,8 @@ def r(x, nd):
 
 def build() -> dict:
     analogs = {a["id"]: a for a in json.loads((DATA / "analogs.json").read_text())}
-    assert not set(analogs) & set(EXTRA_SITES), "an extra site is now in analogs.json: remove it from EXTRA_SITES"
-    analogs.update({k: {"id": k, **v} for k, v in EXTRA_SITES.items()})
+    in_file = set(analogs)
+    analogs = merged_sites(analogs)
     earth = json.loads((DATA / "earth.json").read_text())
     cells = {(c["lat"], c["lon"]): c for c in earth["cells"]}
     fsrc = {f["key"]: f["source"] for f in earth["meta"]["factors"]}
@@ -558,9 +570,9 @@ def build() -> dict:
             "footprintKm": side, "footprintNote": fnote,
             "footprintStatus": "provisional" if sid in PROVISIONAL else "set",
             "footprintBasis": PROVISIONAL.get(sid),
-            "inAnalogsJson": sid not in EXTRA_SITES,
+            "inAnalogsJson": sid in in_file,
             "coordinateSource": a.get("coordinateSource"),
-            "analogSource": a.get("analogSource") if sid in EXTRA_SITES else a.get("source"),
+            "analogSource": a.get("source") or a.get("analogSource"),
             "proposedBy": "team member" if sid in PROVISIONAL else None,
             "caveat": CAVEATS.get(sid),
             "values": vals,

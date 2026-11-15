@@ -1,7 +1,18 @@
 {
  "meta": {
-  "generatedAt": "2026-11-14T12:48:17Z",
+  "generatedAt": "2026-11-15T05:01:34Z",
   "windowKm": 20.0,
+  "pairs": [
+   {
+    "earth": "id-tambora-caldera",
+    "other": "moon-shackleton-rim"
+   },
+   {
+    "earth": "id-batur-lava-fields",
+    "other": "moon-marius-hills"
+   }
+  ],
+  "pairsNote": "Side-by-side pairs asked for by the team. They are for showing two places at one scale and are not analog scores.",
   "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
   "description": "Every extract covers the same ground area, so they can be shown side by side at one scale. Pixel size differs per dataset and is given per file; nothing is upsampled.",
   "imageNote": "No Mars image was requested or built: image is null for Mars targets. A lunar image that is at least 95% near-black (permanent shadow) is null too."
@@ -16,6 +27,7 @@
    "matchedTargets": [
     "mars-gale"
    ],
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/id-kawah-ijen/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -59,6 +71,7 @@
    "matchedTargets": [
     "mars-gale"
    ],
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/id-merapi/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -99,6 +112,7 @@
    "lat": -7.2314,
    "lon": 109.3175,
    "matchedTargets": [],
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/id-gua-lawa/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -133,11 +147,95 @@
    }
   },
   {
+   "id": "id-tambora-caldera",
+   "name": "Mount Tambora caldera, Sumbawa, Indonesia",
+   "body": "earth",
+   "lat": -8.2438,
+   "lon": 117.9918,
+   "matchedTargets": [],
+   "pairedWith": "moon-shackleton-rim",
+   "elevation": {
+    "file": "extracts/id-tambora-caldera/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 473.4,
+    "max": 2711.0,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S09_00_E117_00_DEM",
+     "Copernicus_DSM_COG_10_S09_00_E118_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-tambora-caldera/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_50LNR_20250905_0_L2A, S2C_50LPR_20250905_1_L2A",
+    "date": "2025-09-05",
+    "sceneCloudPct": 6.7,
+    "clearShareInWindow": 0.965,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "id-batur-lava-fields",
+   "name": "Mount Batur black lava fields, Bali, Indonesia",
+   "body": "earth",
+   "lat": -8.2556,
+   "lon": 115.3628,
+   "matchedTargets": [],
+   "pairedWith": "moon-marius-hills",
+   "elevation": {
+    "file": "extracts/id-batur-lava-fields/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 15.5,
+    "max": 2145.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S09_00_E115_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-batur-lava-fields/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_50LLR_20251008_0_L2A",
+    "date": "2025-10-08",
+    "sceneCloudPct": 8.7,
+    "clearShareInWindow": 0.985,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
    "id": "moon-malapert-massif",
    "name": "Malapert Massif",
    "body": "moon",
    "lat": -85.98,
    "lon": -1.67,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/moon-malapert-massif/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -162,8 +260,8 @@
     "nativePixelM": 100,
     "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
     "badge": "Mission",
-    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
-    "darkShare": 0.462
+    "darkShare": 0.462,
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole."
    }
   },
   {
@@ -172,6 +270,7 @@
    "body": "moon",
    "lat": -84.6,
    "lon": 31.0,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/moon-mons-mouton/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -196,8 +295,8 @@
     "nativePixelM": 100,
     "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
     "badge": "Mission",
-    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
-    "darkShare": 0.147
+    "darkShare": 0.147,
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole."
    }
   },
   {
@@ -206,6 +305,7 @@
    "body": "moon",
    "lat": -87.45,
    "lon": -5.17,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/moon-haworth/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -229,6 +329,9 @@
    "body": "moon",
    "lat": -89.67,
    "lon": 129.78,
+   "pairedWith": [
+    "id-tambora-caldera"
+   ],
    "elevation": {
     "file": "extracts/moon-shackleton-rim/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -253,8 +356,45 @@
     "nativePixelM": 100,
     "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
     "badge": "Mission",
-    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole.",
-    "darkShare": 0.864
+    "darkShare": 0.864,
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole."
+   }
+  },
+  {
+   "id": "moon-marius-hills",
+   "name": "Marius Hills pit",
+   "body": "moon",
+   "lat": 14.091,
+   "lon": -56.77,
+   "pairedWith": [
+    "id-batur-lava-fields"
+   ],
+   "elevation": {
+    "file": "extracts/moon-marius-hills/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 333,
+    "pixelM": 60.0,
+    "min": -1746.5,
+    "max": -1275.5,
+    "noDataShare": 0.0,
+    "product": "LRO LOLA gridded DEM LDEM_512, ldem_512_00n_45n_270_360.img",
+    "nativePixelM": 59.2,
+    "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
+    "badge": "Mission",
+    "note": "Heights above a sphere of radius 1737.4 km."
+   },
+   "image": {
+    "file": "extracts/moon-marius-hills/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "LROC WAC Global Morphology Mosaic 100 m (June 2013)",
+    "nativePixelM": 100,
+    "attribution": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "darkShare": 0.0,
+    "note": "darkShare is the share of pixels that are black or nearly black (value under 8 of 255): permanent shadow or no usable image in the mosaic near the pole."
    }
   },
   {
@@ -263,6 +403,7 @@
    "body": "mars",
    "lat": 18.44,
    "lon": 77.45,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/mars-jezero/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -286,6 +427,7 @@
    "body": "mars",
    "lat": -4.6,
    "lon": 137.4,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/mars-gale/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
@@ -309,6 +451,7 @@
    "body": "mars",
    "lat": 39.8,
    "lon": -157.9,
+   "pairedWith": null,
    "elevation": {
     "file": "extracts/mars-arcadia-planitia/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",

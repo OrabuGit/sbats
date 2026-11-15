@@ -14,6 +14,7 @@ upsampled to look finer than it is, and the pixel size is written to the index.
   Earth  elevation  Copernicus DEM GLO-30 (ESA)                          30 m
          image      Sentinel-2 L2A true colour, one scene (ESA)          10 m
   Moon   elevation  LRO LOLA polar gridded DEM LDEM_80S_80M (NASA PDS)   80 m
+                    away from the pole: LOLA LDEM_512 global grid          60 m
          image      LROC WAC global mosaic 100 m (NASA/GSFC/ASU, USGS)  100 m
   Mars   elevation  MGS MOLA MEGDR 128 pixels per degree (NASA PDS)     463 m
          image      none requested: null
@@ -53,12 +54,18 @@ XCACHE = CACHE / "extracts"
 XCACHE.mkdir(exist_ok=True)
 
 # Featured Indonesian sites. Gua Lawa is the lava tube whose own coordinates are published.
-EARTH_SITES = ["id-kawah-ijen", "id-merapi", "id-gua-lawa"]
+EARTH_SITES = ["id-kawah-ijen", "id-merapi", "id-gua-lawa", "id-tambora-caldera", "id-batur-lava-fields"]
+
+# Side-by-side pairs asked for by the team, beyond the analogFor lists of analogs.json.
+PAIRS = {"id-tambora-caldera": "moon-shackleton-rim", "id-batur-lava-fields": "moon-marius-hills"}
 
 MOON_R, MARS_R = 1_737_400.0, 3_396_000.0
 LOLA_URL = ("https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/"
             "ldem_80s_80m.img")
 LOLA_N, LOLA_SCALE_M, LOLA_CENTRE, LOLA_DN_TO_M = 7600, 80.0, 3799.5, 0.5   # from the PDS label
+LOLA_CYL = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img"
+LOLA512_PPD, LOLA512_LINES, LOLA512_SAMPLES = 512, 23040, 46080   # from the PDS labels: tiles of 45 x 90 degrees
+LOLA_POLAR_LIMIT = -82.0   # south of this the polar grid is used (it reaches 80 S; the window needs a margin)
 MOLA_BASE = "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128"
 MOLA_PPD, MOLA_LINES, MOLA_SAMPLES = 128, 5632, 11520
 WAC_URL = "https://planetarymaps.usgs.gov/mosaic/Lunar_LRO_LROC-WAC_Mosaic_global_100m_June2013.tif"
@@ -136,22 +143,38 @@ def earth_image(site_id: str, lat: float, lon: float):
     n, dtr = grid(px)
     dst = ortho(lat, lon, "earth")
     items = S.cached(f"stac_all_{site_id}", lambda: _stac_visual(lat, lon))
+    # A window that crosses a Sentinel-2 tile edge needs the neighbouring tiles of the same day (one
+    # satellite pass), so scenes are grouped by date and each group is tried as one mosaic.
+    days: dict[str, list[dict]] = {}
+    for it in items:
+        days.setdefault(it["date"], []).append(it)
     best = None
-    for it in sorted(items, key=lambda i: i["cloud"])[:10]:
-        share = _clear_share(it, dst, dtr, n)
-        if share is not None and (best is None or share > best[0]):
-            best = (share, it)
-        if best and best[0] > 0.97:
+    for day in sorted(days.values(), key=lambda g: min(i["cloud"] for i in g))[:10]:
+        scl = np.zeros((n // 10, n // 10), np.uint8)
+        for it in day:
+            part = _scl(it, dst, dtr, n)
+            scl = np.where(scl == 0, part, scl)
+        if (scl == 0).mean() > 0.001:
+            continue  # the pass does not cover the whole window
+        share = float(np.isin(scl, (4, 5, 6, 7, 11)).mean())
+        if best is None or share > best[0]:
+            best = (share, day)
+        if best[0] > 0.97:
             break
     if best is None:
         return None, px, None
-    share, it = best
+    share, day = best
     rgb = np.zeros((3, n, n), np.uint8)
-    with rasterio.Env(**S.GDAL_ENV), rasterio.open("/vsicurl/" + it["visual"]) as ds:
-        with WarpedVRT(ds, crs=dst, transform=dtr, width=n, height=n, resampling=Resampling.bilinear) as vrt:
-            rgb[:] = vrt.read([1, 2, 3])
-    return rgb, px, {"product": "Sentinel-2 L2A true colour image (TCI)", "scene": it["id"], "date": it["date"],
-                     "sceneCloudPct": round(it["cloud"], 1), "clearShareInWindow": round(share, 3), "nativePixelM": 10,
+    for it in day:
+        def go(it=it):
+            with rasterio.Env(**S.GDAL_ENV), rasterio.open("/vsicurl/" + it["visual"]) as ds:
+                with WarpedVRT(ds, crs=dst, transform=dtr, width=n, height=n, resampling=Resampling.bilinear) as vrt:
+                    return vrt.read([1, 2, 3])
+        part = S._retry(go)
+        rgb = np.where((rgb == 0).all(axis=0), part, rgb)
+    it = day[0]
+    return rgb, px, {"product": "Sentinel-2 L2A true colour image (TCI)", "scene": ", ".join(i["id"] for i in day), "date": it["date"],
+                     "sceneCloudPct": round(max(i["cloud"] for i in day), 1), "clearShareInWindow": round(share, 3), "nativePixelM": 10,
                      "attribution": ATTR["s2"].format(year=it["date"][:4]), "badge": "Measured"}
 
 
@@ -165,18 +188,15 @@ def _stac_visual(lat: float, lon: float) -> list[dict]:
              "visual": f["assets"]["visual"]["href"], "scl": f["assets"]["scl"]["href"]} for f in d["features"]]
 
 
-def _clear_share(it: dict, dst: CRS, dtr, n: int):
-    """Share of the window that is clear in this scene, from its classification at 100 m. None if the scene does not cover the window."""
+def _scl(it: dict, dst: CRS, dtr, n: int):
+    """The scene's classification over the window at 100 m. 0 where the scene has no data."""
     m = n // 10
     def go():
         with rasterio.Env(**S.GDAL_ENV), rasterio.open("/vsicurl/" + it["scl"]) as ds:
             with WarpedVRT(ds, crs=dst, transform=dtr * dtr.scale(10, 10), width=m, height=m,
                            resampling=Resampling.nearest) as vrt:
                 return vrt.read(1)
-    scl = S._retry(go)
-    if (scl == 0).mean() > 0.001:
-        return None
-    return float(np.isin(scl, (4, 5, 6, 7, 11)).mean())
+    return S._retry(go)
 
 
 # ---------------------------------------------------------------- Moon
@@ -188,7 +208,37 @@ def lola_rc(lat, lon):
     return LOLA_CENTRE - y / LOLA_SCALE_M, LOLA_CENTRE + x / LOLA_SCALE_M
 
 
+def moon_elevation_global(lat: float, lon: float):
+    """LOLA LDEM_512 (simple cylindrical, 512 pixels per degree, about 59 m), for places away from the poles."""
+    px = 60.0
+    n, dtr = grid(px)
+    dst = ortho(lat, lon, "moon")
+    geo = CRS.from_proj4(f"+proj=longlat +R={MOON_R} +no_defs")
+    X, Y = corners_in(dst, geo, 300)
+    X = X % 360.0
+    top = 90.0 if lat >= 45 else 45.0 if lat >= 0 else 0.0 if lat >= -45 else -45.0
+    tag = {90.0: "45n_90n", 45.0: "00n_45n", 0.0: "45s_00s", -45.0: "90s_45s"}[top]
+    west = 90.0 * math.floor((lon % 360.0) / 90.0)
+    name = f"ldem_512_{tag}_{int(west):03d}_{int(west) + 90:03d}.img"
+    r0, r1 = math.floor((top - Y.max()) * LOLA512_PPD), math.ceil((top - Y.min()) * LOLA512_PPD) + 1
+    c0, c1 = math.floor((X.min() - west) * LOLA512_PPD), math.ceil((X.max() - west) * LOLA512_PPD) + 1
+    if r0 < 0 or c0 < 0 or r1 > LOLA512_LINES or c1 > LOLA512_SAMPLES:
+        raise RuntimeError("window crosses a LOLA tile edge")
+    raw = fetch_range(f"{LOLA_CYL}/{name}", r0 * LOLA512_SAMPLES * 2, (r1 - r0) * LOLA512_SAMPLES * 2)
+    src = np.frombuffer(raw, dtype="<i2").reshape(r1 - r0, LOLA512_SAMPLES)[:, c0:c1].astype(np.float32) * LOLA_DN_TO_M
+    str_ = from_origin(west + c0 / LOLA512_PPD, top - r0 / LOLA512_PPD, 1 / LOLA512_PPD, 1 / LOLA512_PPD)
+    geo360 = CRS.from_proj4(f"+proj=longlat +R={MOON_R} +lon_wrap=180 +no_defs")
+    z = np.full((n, n), np.nan, np.float32)
+    reproject(src, z, src_transform=str_, src_crs=geo360, dst_transform=dtr, dst_crs=dst,
+              resampling=Resampling.nearest, dst_nodata=np.nan)
+    return z, px, {"product": f"LRO LOLA gridded DEM LDEM_512, {name}", "nativePixelM": 59.2,
+                   "attribution": ATTR["lola"], "badge": "Mission",
+                   "note": "Heights above a sphere of radius 1737.4 km."}
+
+
 def moon_elevation(lat: float, lon: float):
+    if lat > LOLA_POLAR_LIMIT:
+        return moon_elevation_global(lat, lon)
     px = 80.0
     n, dtr = grid(px)
     dst = ortho(lat, lon, "moon")
@@ -281,7 +331,9 @@ def save(item_id: str, z, zpx, zmeta, img, ipx, imeta) -> dict:
 
 def build() -> dict:
     analogs = {a["id"]: a for a in json.loads((DATA / "analogs.json").read_text())}
+    analogs = S.merged_sites(analogs)
     targets = json.loads((DATA / "targets.json").read_text())
+    assert set(PAIRS.values()) <= {t["id"] for t in targets}, "a paired target is missing from targets.json"
     items = []
     for sid in EARTH_SITES:
         a = analogs[sid]
@@ -289,7 +341,8 @@ def build() -> dict:
         z, zpx, zm = earth_elevation(a["lat"], a["lon"])
         img, ipx, im = earth_image(sid, a["lat"], a["lon"])
         items.append({"id": sid, "name": a["name"], "body": "earth", "lat": a["lat"], "lon": a["lon"],
-                      "matchedTargets": a["analogFor"], **save(sid, z, zpx, zm, img, ipx, im)})
+                      "matchedTargets": a["analogFor"], "pairedWith": PAIRS.get(sid),
+                      **save(sid, z, zpx, zm, img, ipx, im)})
     for t in targets:
         print(f"[{t['id']}]")
         if t["body"] == "moon":
@@ -299,11 +352,15 @@ def build() -> dict:
             z, zpx, zm = mars_elevation(t["lat"], t["lon"])
             img, ipx, im = None, None, None
         items.append({"id": t["id"], "name": t["name"], "body": t["body"], "lat": t["lat"], "lon": t["lon"],
+                      "pairedWith": [k for k, v in PAIRS.items() if v == t["id"]] or None,
                       **save(t["id"], z, zpx, zm, img, ipx, im)})
     return {
         "meta": {
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "windowKm": WINDOW_KM,
+            "pairs": [{"earth": k, "other": v} for k, v in PAIRS.items()],
+            "pairsNote": ("Side-by-side pairs asked for by the team. They are for showing two places at one scale and are not "
+                          "analog scores."),
             "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
             "description": ("Every extract covers the same ground area, so they can be shown side by side at one scale. "
                             "Pixel size differs per dataset and is given per file; nothing is upsampled."),
