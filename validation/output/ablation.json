@@ -1,0 +1,989 @@
+{
+ "generatedAt": "2026-11-15T11:52:05.967Z",
+ "frozenAt": "2026-11-14",
+ "method": "Base preset. For each dimension: weight set to zero, remaining weights renormalised to sum to 1, every Earth cell scored again for every validation target with the frozen formula. The frozen score itself is not changed.",
+ "sites": {
+  "known": 28,
+  "negative": 6,
+  "note": "Tuning and hold-out sites together, as in the validation report: the hold-out sites alone are too few to show this."
+ },
+ "reference": {
+  "weights": {
+   "terrain": 0.25,
+   "bareGround": 0.2,
+   "dryness": 0.15,
+   "temperature": 0.15,
+   "sunlight": 0.1,
+   "rockType": 0.15
+  },
+  "metrics": {
+   "top10Share": 0.292,
+   "meanPercentile": 0.727,
+   "rocAuc": 0.883
+  },
+  "bestPlaceByTarget": {
+   "moon-malapert-massif": {
+    "lat": 79.75,
+    "lon": -81.75,
+    "score": 53.3,
+    "top10": [
+     "79.75,-81.75",
+     "82.25,-82.75",
+     "80.75,-67.75",
+     "81.25,-78.25",
+     "81.25,-63.75",
+     "78.75,-87.25",
+     "81.25,-64.75",
+     "80.75,-79.75",
+     "83.75,-32.75",
+     "81.25,-85.25"
+    ]
+   },
+   "moon-mons-mouton": {
+    "lat": 79.75,
+    "lon": -81.75,
+    "score": 55,
+    "top10": [
+     "79.75,-81.75",
+     "81.25,-78.25",
+     "80.75,-79.75",
+     "78.75,-87.25",
+     "81.25,-64.75",
+     "81.25,-85.25",
+     "82.25,-48.25",
+     "82.75,-77.25",
+     "80.75,-66.25",
+     "82.25,-49.25"
+    ]
+   },
+   "moon-haworth": {
+    "lat": 79.75,
+    "lon": -81.75,
+    "score": 53.7,
+    "top10": [
+     "79.75,-81.75",
+     "82.25,-82.75",
+     "81.25,-78.25",
+     "78.75,-87.25",
+     "81.25,-64.75",
+     "80.75,-67.75",
+     "80.75,-79.75",
+     "81.25,-63.75",
+     "81.25,-85.25",
+     "81.25,-64.25"
+    ]
+   },
+   "moon-shackleton-rim": {
+    "lat": 81.25,
+    "lon": -78.25,
+    "score": 55.1,
+    "top10": [
+     "81.25,-78.25",
+     "79.75,-81.75",
+     "82.25,-82.75",
+     "80.75,-67.75",
+     "80.75,-79.75",
+     "78.75,-87.25",
+     "81.25,-85.25",
+     "81.25,-64.75",
+     "81.25,-63.75",
+     "82.75,-77.25"
+    ]
+   },
+   "mars-jezero": {
+    "lat": 34.75,
+    "lon": 84.75,
+    "score": 55.5,
+    "top10": [
+     "34.75,84.75",
+     "36.25,88.75",
+     "35.75,86.25",
+     "35.75,89.25",
+     "35.25,88.75",
+     "36.75,93.25",
+     "35.25,89.75",
+     "35.75,90.25",
+     "-22.75,-67.25",
+     "-23.25,-67.25"
+    ]
+   },
+   "mars-gale": {
+    "lat": 35.25,
+    "lon": 80.25,
+    "score": 51.8,
+    "top10": [
+     "35.25,80.25",
+     "31.75,79.75",
+     "34.75,80.75",
+     "35.25,82.25",
+     "36.75,87.25",
+     "35.75,78.25",
+     "-24.75,-68.75",
+     "32.25,79.25",
+     "36.25,83.25",
+     "34.25,80.75"
+    ]
+   },
+   "mars-arcadia-planitia": {
+    "lat": 35.25,
+    "lon": 85.25,
+    "score": 51.5,
+    "top10": [
+     "35.25,85.25",
+     "35.25,84.75",
+     "35.25,85.75",
+     "38.25,92.25",
+     "37.75,93.25",
+     "35.25,84.25",
+     "38.25,92.75",
+     "37.75,92.75",
+     "37.25,93.75",
+     "38.25,93.25"
+    ]
+   }
+  }
+ },
+ "note": "Each row removes one scoring dimension, renormalises the other weights and scores again with the frozen formula. With all six, known analogs beat on average 73% of scored land squares and 29% reach the top 10%. Removing Bare ground hurts the most: the mean percentile falls to 52%. Removing Temperature (to 74%) or Terrain (to 78%) slightly raises it: in this validation set that dimension does not help to separate known analogs from other land. The best Earth place for a target stays the same for 1 to 3 of 7 targets, depending on what is removed, so the single top square is fragile; the top ten is steadier (see STABILITY.md). This is a finding about the validation set, not a reason to change the frozen weights.",
+ "removals": [
+  {
+   "removed": "terrain",
+   "label": "Terrain",
+   "weightRemoved": 0.25,
+   "metrics": {
+    "top10Share": 0.298,
+    "meanPercentile": 0.775,
+    "rocAuc": 0.923,
+    "meanScoreKnown": 10.7,
+    "meanScoreNegative": 0.1
+   },
+   "change": {
+    "top10Share": 0.006,
+    "meanPercentile": 0.048,
+    "rocAuc": 0.04
+   },
+   "knownAnalogRankCorrelation": 0.803,
+   "meanAbsolutePercentileMove": 0.048,
+   "biggestRise": {
+    "site": "dallol",
+    "target": "mars-jezero",
+    "before": 0.943,
+    "after": 0.855
+   },
+   "biggestFall": {
+    "site": "ladakh-tso-kar",
+    "target": "mars-arcadia-planitia",
+    "before": 0.352,
+    "after": 0.996
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 56.4
+     },
+     "top10Overlap": 1
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 56.4
+     },
+     "top10Overlap": 2
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 56.4
+     },
+     "top10Overlap": 1
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 56.4
+     },
+     "top10Overlap": 1
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 86.25,
+      "score": 52.3
+     },
+     "top10Overlap": 4
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 78.75,
+      "score": 52.7
+     },
+     "top10Overlap": 3
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 78.75,
+      "score": 51.1
+     },
+     "top10Overlap": 0
+    }
+   ],
+   "bestPlaceStaysFor": 3,
+   "targetsCompared": 7
+  },
+  {
+   "removed": "bareGround",
+   "label": "Bare ground",
+   "weightRemoved": 0.2,
+   "metrics": {
+    "top10Share": 0.208,
+    "meanPercentile": 0.522,
+    "rocAuc": 0.873,
+    "meanScoreKnown": 8.8,
+    "meanScoreNegative": 1.1
+   },
+   "change": {
+    "top10Share": -0.084,
+    "meanPercentile": -0.205,
+    "rocAuc": -0.01
+   },
+   "knownAnalogRankCorrelation": 0.897,
+   "meanAbsolutePercentileMove": 0.242,
+   "biggestRise": {
+    "site": "askja",
+    "target": "mars-gale",
+    "before": 0.67,
+    "after": 0.179
+   },
+   "biggestFall": {
+    "site": "rio-tinto",
+    "target": "mars-gale",
+    "before": 0.608,
+    "after": 0.717
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": -73.75,
+      "lon": 162.75,
+      "score": 71.4
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": -73.75,
+      "lon": 162.75,
+      "score": 76.8
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": -73.75,
+      "lon": 162.75,
+      "score": 72.2
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": -73.75,
+      "lon": 162.75,
+      "score": 77.3
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 48.8
+     },
+     "top10Overlap": 9
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 44.7
+     },
+     "top10Overlap": 6
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": -71.25,
+      "lon": 108.75,
+      "score": 54.5
+     },
+     "top10Overlap": 0
+    }
+   ],
+   "bestPlaceStaysFor": 2,
+   "targetsCompared": 7
+  },
+  {
+   "removed": "dryness",
+   "label": "Dryness",
+   "weightRemoved": 0.15,
+   "metrics": {
+    "top10Share": 0.298,
+    "meanPercentile": 0.727,
+    "rocAuc": 0.889,
+    "meanScoreKnown": 9.6,
+    "meanScoreNegative": 0.2
+   },
+   "change": {
+    "top10Share": 0.006,
+    "meanPercentile": 0,
+    "rocAuc": 0.006
+   },
+   "knownAnalogRankCorrelation": 0.924,
+   "meanAbsolutePercentileMove": 0.046,
+   "biggestRise": {
+    "site": "lanzarote-timanfaya",
+    "target": "mars-gale",
+    "before": 0.854,
+    "after": 0.775
+   },
+   "biggestFall": {
+    "site": "askja",
+    "target": "mars-jezero",
+    "before": 0.79,
+    "after": 0.988
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": 82.25,
+      "lon": -82.75,
+      "score": 50.8
+     },
+     "top10Overlap": 6
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": 80.75,
+      "lon": -79.75,
+      "score": 52.2
+     },
+     "top10Overlap": 6
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 50.1
+     },
+     "top10Overlap": 6
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": 80.75,
+      "lon": -79.75,
+      "score": 52.2
+     },
+     "top10Overlap": 6
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 50.7
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": 31.75,
+      "lon": 79.75,
+      "score": 47.7
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 45.2
+     },
+     "top10Overlap": 9
+    }
+   ],
+   "bestPlaceStaysFor": 3,
+   "targetsCompared": 7
+  },
+  {
+   "removed": "temperature",
+   "label": "Temperature",
+   "weightRemoved": 0.15,
+   "metrics": {
+    "top10Share": 0.315,
+    "meanPercentile": 0.735,
+    "rocAuc": 0.886,
+    "meanScoreKnown": 22.4,
+    "meanScoreNegative": 0.2
+   },
+   "change": {
+    "top10Share": 0.023,
+    "meanPercentile": 0.008,
+    "rocAuc": 0.003
+   },
+   "knownAnalogRankCorrelation": 0.953,
+   "meanAbsolutePercentileMove": 0.031,
+   "biggestRise": {
+    "site": "ladakh-tso-kar",
+    "target": "mars-gale",
+    "before": 0.994,
+    "after": 0.929
+   },
+   "biggestFall": {
+    "site": "lanzarote-timanfaya",
+    "target": "mars-gale",
+    "before": 0.854,
+    "after": 0.993
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 70.4
+     },
+     "top10Overlap": 8
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 72.9
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 71
+     },
+     "top10Overlap": 8
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 73
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": -25.25,
+      "lon": -69.75,
+      "score": 98.2
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": -21.75,
+      "lon": -69.25,
+      "score": 89.7
+     },
+     "top10Overlap": 1
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": 39.25,
+      "lon": 87.75,
+      "score": 99.6
+     },
+     "top10Overlap": 1
+    }
+   ],
+   "bestPlaceStaysFor": 3,
+   "targetsCompared": 7
+  },
+  {
+   "removed": "sunlight",
+   "label": "Sunlight",
+   "weightRemoved": 0.1,
+   "metrics": {
+    "top10Share": 0.244,
+    "meanPercentile": 0.713,
+    "rocAuc": 0.884,
+    "meanScoreKnown": 10.3,
+    "meanScoreNegative": 0.1
+   },
+   "change": {
+    "top10Share": -0.048,
+    "meanPercentile": -0.014,
+    "rocAuc": 0.001
+   },
+   "knownAnalogRankCorrelation": 0.947,
+   "meanAbsolutePercentileMove": 0.033,
+   "biggestRise": {
+    "site": "lanzarote-timanfaya",
+    "target": "mars-gale",
+    "before": 0.854,
+    "after": 0.755
+   },
+   "biggestFall": {
+    "site": "haughton-crater",
+    "target": "mars-gale",
+    "before": 0.874,
+    "after": 0.983
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 78.75,
+      "score": 50.4
+     },
+     "top10Overlap": 8
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 50.9
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 78.75,
+      "score": 49.7
+     },
+     "top10Overlap": 8
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 78.75,
+      "score": 52.2
+     },
+     "top10Overlap": 8
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": 36.25,
+      "lon": 88.75,
+      "score": 54.8
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 52.7
+     },
+     "top10Overlap": 7
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 47.4
+     },
+     "top10Overlap": 8
+    }
+   ],
+   "bestPlaceStaysFor": 3,
+   "targetsCompared": 7
+  },
+  {
+   "removed": "rockType",
+   "label": "Rock type",
+   "weightRemoved": 0.15,
+   "metrics": {
+    "top10Share": 0.292,
+    "meanPercentile": 0.726,
+    "rocAuc": 0.88,
+    "meanScoreKnown": 9.8,
+    "meanScoreNegative": 0.1
+   },
+   "change": {
+    "top10Share": 0,
+    "meanPercentile": -0.001,
+    "rocAuc": -0.003
+   },
+   "knownAnalogRankCorrelation": 0.991,
+   "meanAbsolutePercentileMove": 0.012,
+   "biggestRise": {
+    "site": "askja",
+    "target": "mars-jezero",
+    "before": 0.79,
+    "after": 0.743
+   },
+   "biggestFall": {
+    "site": "arkaroola",
+    "target": "mars-gale",
+    "before": 0.909,
+    "after": 0.956
+   },
+   "bestPlaceByTarget": [
+    {
+     "target": "moon-malapert-massif",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.3
+     },
+     "after": {
+      "lat": 82.25,
+      "lon": -68.25,
+      "score": 54
+     },
+     "top10Overlap": 2
+    },
+    {
+     "target": "moon-mons-mouton",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 55
+     },
+     "after": {
+      "lat": 82.25,
+      "lon": -68.25,
+      "score": 55.6
+     },
+     "top10Overlap": 2
+    },
+    {
+     "target": "moon-haworth",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 79.75,
+      "lon": -81.75,
+      "score": 53.7
+     },
+     "after": {
+      "lat": 82.25,
+      "lon": -68.25,
+      "score": 54.2
+     },
+     "top10Overlap": 2
+    },
+    {
+     "target": "moon-shackleton-rim",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 81.25,
+      "lon": -78.25,
+      "score": 55.1
+     },
+     "after": {
+      "lat": 82.25,
+      "lon": -68.25,
+      "score": 56.3
+     },
+     "top10Overlap": 2
+    },
+    {
+     "target": "mars-jezero",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 34.75,
+      "lon": 84.75,
+      "score": 55.5
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 85.75,
+      "score": 55.3
+     },
+     "top10Overlap": 0
+    },
+    {
+     "target": "mars-gale",
+     "sameBestPlace": false,
+     "before": {
+      "lat": 35.25,
+      "lon": 80.25,
+      "score": 51.8
+     },
+     "after": {
+      "lat": 35.75,
+      "lon": 78.25,
+      "score": 47
+     },
+     "top10Overlap": 4
+    },
+    {
+     "target": "mars-arcadia-planitia",
+     "sameBestPlace": true,
+     "before": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "after": {
+      "lat": 35.25,
+      "lon": 85.25,
+      "score": 51.5
+     },
+     "top10Overlap": 10
+    }
+   ],
+   "bestPlaceStaysFor": 1,
+   "targetsCompared": 7
+  }
+ ]
+}

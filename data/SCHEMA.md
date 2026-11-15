@@ -265,6 +265,75 @@ Global grids so that any point on the Moon or Mars can be a target. Same shape a
 - The SWIM subsurface ice maps for Mars could not be downloaded (the site returned HTTP 523 on 2026-11-15);
   `waterH2O` is a different, coarser measurement and is labelled as such.
 
+## data/logistics.json
+
+Owner: Session B. Built by `pipeline/logistics.py`. Added 2026-11-15.
+
+Computed field logistics for every Earth grid cell and every site in `sites.json`. No value is typed in.
+Distances are great-circle ("as the crow flies"), not travel distance or time.
+
+```
+{
+  "meta": { "aiUse", "generatedAt", "description", "sources": { country, airport, populatedPlace, volcano, elevation, climate },
+            "activeSince": 1900, "cellCount", "climateWindowRule", "badge", "notes" },
+  "tables": { "countries": [ name ], "airports": [ { name, iata, icao, country, municipality, lat, lon } ],
+              "places": [ { name, country, population, lat, lon } ],
+              "volcanoes": [ { number, name, lat, lon, lastEruptionYear, type } ] },
+  "sites": [ { id, name, lat, lon, country, airport: { name, iata, country, km }, populatedPlace: { name, population, km },
+               volcano: { name, number, lastEruptionYear, km }, elevationFootprintM: { min, max, source }, elevationCellMeanM,
+               climateWindows: { driestThreeMonths: [m, m, m], driestThreeMonthsPrecipMm, warmestMonth, coldestMonth, sunniestMonth, wettestMonth } } ],
+  "cells": { "country": [i], "airport": [i], "airportKm": [km], "place": [i], "placeKm": [km], "volcano": [i], "volcanoKm": [km],
+             "elevationM": [m], "driestThreeMonthsStart": [month], "warmestMonth": [m], "coldestMonth": [m], "sunniestMonth": [m] }
+}
+```
+
+- `cells` are columns in the order of `earth.json` cells: entry `k` of every array belongs to cell `k`. `country`,
+  `airport`, `place` and `volcano` are indices into the matching table; `airportKm`, `placeKm` and `volcanoKm`
+  are whole kilometres. A `null` means no value.
+- Airport: the nearest in OurAirports with scheduled passenger service and type large, medium or small. It may not
+  be the most practical one. Populated place: the nearest in Natural Earth (important places only). Volcano:
+  the nearest Smithsonian Holocene volcano with an eruption recorded in or after `meta.activeSince`.
+- `elevationM` (cells) is the mean of the land pixels of ETOPO 2022 in the cell; sites also carry the Copernicus
+  DEM range inside their footprint. A cell mean is not the height at a place.
+- `climateWindows`: `driestThreeMonths` is the three consecutive months (calendar-circular) with the least total
+  NASA POWER precipitation, as month numbers 1 to 12; the other entries are single months. They are grid-scale
+  and are not a score. The app's "best month" keeps its own rule for a chosen target.
+- Badge "Measured" for climate and elevation; airports, places, countries and volcano records are reference data.
+
+## data/site_stories.json
+
+Owner: Session B. Built by `pipeline/site_stories.py`. Added 2026-11-15.
+
+Five Earth-to-target stories written by the team, beside values computed from our data. The prose is the team's;
+every number comes from `sites.json`, `logistics.json` or `targets.json`. **No story carries a score or a similarity
+percentage**: scores are only what the app computes.
+
+```
+{ "meta": { "aiUse", "generatedAt", "description", "credit", "rules": [ ... ] },
+  "stories": [ {
+      "id", "title", "trek": "Mars Trek" | "Moon Trek", "earthSiteIds": [ site id ],
+      "earth": { "name", "teamLocation": { lat, lon } },
+      "target": { "name", "teamLocation": { lat, lon }, "targetId": id in targets.json | null, "note", "inTool": { id, name, lat, lon } | null },
+      "whyItStandsOut", "siteDescription", "testingTags": [ string ], "missionUse": string,
+      "limitation": [ string ], "workaround": [ string ],
+      "dominantRock": { "earth", "target", "status" } | null,
+      "ourData": [ { "siteId", "name", "lat", "lon", "footprintKm", "footprintStatus", "elevationFootprintM": [min, max],
+                     "values": { "<key>": { value, unit, scale, source, badge } }, "caveat" } ],
+      "dataChecks": [ { "claim", "data", "source", "agrees": boolean } ],
+      "logistics": { "computed": [ <the site entry of logistics.json> ], "teamEstimate": { accessDifficulty, nearestSupportHub, costEfficiency }, "note" },
+      "corrections": [ { field, was, now, basis } ], "verification": [ { claim, status, evidence } ],
+      "needsTeamReview": [ string ]?, "teamSource": { title, url }, "sources": [ ... ], "credit" } ] }
+```
+
+- Show `credit` with every story. Show `logistics.teamEstimate` only under the label "team estimate", next to
+  `logistics.computed`, never mixed into it.
+- `targetId` is `null` for Columbia Hills and Holden Crater: the tool has no target and no score for them.
+  `teamLocation` of a target can differ from the tool's point (`target.inTool`): say which is which.
+- `dataChecks` are statements in the team text that the data can speak to; `agrees: false` means the data disagrees
+  and the team should look (Tambora's "barren ash fields" against 28% bare ground).
+- `corrections` and `verification` record what was changed from the team's first draft and why. They may be shown
+  on request; they are the audit trail.
+
 ## data/site_climate.json
 
 Owner: Session B. Built by `pipeline/site_climate.py`.

@@ -3,7 +3,7 @@
     uv run --project pipeline pipeline/all.py
 
 Runs, in order: build.py (earth.json, earth.bin), site_climate.py, sites.py, extracts.py,
-planets.py (moon.json, mars.json and their .bin copies), jaxa_check.py. Each step caches its
+planets.py (moon.json, mars.json and their .bin copies), jaxa_check.py, logistics.py, site_stories.py. Each step caches its
 downloads in pipeline/cache/, so a second run only reassembles. Stops at the first step that fails.
 data/analogs.json and data/targets.json must exist (they are built by the validation scripts).
 """
@@ -15,7 +15,7 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-STEPS = ["build.py", "site_climate.py", "sites.py", "extracts.py", "planets.py", "jaxa_check.py"]
+STEPS = ["build.py", "site_climate.py", "sites.py", "extracts.py", "planets.py", "jaxa_check.py", "logistics.py", "site_stories.py"]
 
 if __name__ == "__main__":
     for step in STEPS:

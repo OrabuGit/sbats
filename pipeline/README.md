@@ -99,8 +99,10 @@ uv run --project pipeline pipeline/jaxa_check.py     # data/jaxa_check.json
 | `planet_geology.py` | lithology | USGS global geologic maps and an explicit unit-to-class table |
 | `moon_shadow.py` | Moon psrFrac | LOLA permanently shadowed regions |
 | `jaxa_check.py` | `data/jaxa_check.json` | JAXA GSMaP precipitation and GCOM-C SGLI NDVI against our NASA values at the named sites |
+| `logistics.py` | `data/logistics.json` | Field logistics for every Earth cell and site: country (Natural Earth), nearest airport with scheduled service (OurAirports), nearest populated place (Natural Earth), nearest volcano erupted since 1900 (Smithsonian), mean land elevation (ETOPO 2022), driest three months and warmest, coldest and sunniest month (NASA POWER). Straight-line distances |
+| `site_stories.py` | `data/site_stories.json` | The team's five site stories with corrections, our computed values and checks beside them, and her logistics labelled as a team estimate. No story carries a score |
 
-A cold run downloads about 6 GB (LOLA 0.5 GB, MOLA 2.1 GB, Diviner 2.8 GB, the two geologic map packages
+A cold run downloads about 6.5 GB (LOLA 0.5 GB, MOLA 2.1 GB, Diviner 2.8 GB, the two geologic map packages
 1 GB) and takes about an hour, most of it download. Everything downloads itself and is cached.
 
 ## What each stage does
