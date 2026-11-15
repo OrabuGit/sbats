@@ -3,7 +3,7 @@ import { loadData, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
 import { buildIndex, formatCoords, siteCode } from './lib/geo';
-import { keyLabel, metaByKey } from './lib/format';
+import { keyLabel, metaByKey, reasonLine } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { StatusStrip, TopBar, type Step } from './components/Chrome';
 import { LeftPanel, type MatchMode } from './components/LeftPanel';
@@ -19,6 +19,7 @@ import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
+import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
@@ -529,7 +530,25 @@ function Orbit({ data }: { data: DataBundle }) {
         </main>
       )}
 
-      {(view === 'featured' || view === 'world' || view === 'report' || view === 'terrain') && (
+      {view === 'featured' && (
+        <FeaturedPage
+          sites={featuredSites}
+          sitesState={sitesFile.status}
+          extracts={extractIndex}
+          analogs={analogs}
+          targets={targets}
+          target={target}
+          earth={earth}
+          results={results}
+          top={candidates}
+          reason={(i) => reasonLine(explain(i))}
+          onSitePage={openSitePage}
+          onMatch={openSite}
+          onCell={(i) => select(i)}
+        />
+      )}
+
+      {(view === 'world' || view === 'report' || view === 'terrain') && (
         <main className="scroll min-h-0 flex-1 bg-panel p-6">
           <p className="label">Not built yet</p>
           <p className="mt-2 text-[14px] text-text">{view === 'world' ? `World page: ${worldPage}` : view}</p>

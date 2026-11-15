@@ -134,3 +134,34 @@ export function loadImage(file: string): Promise<HTMLImageElement> {
   }
   return hit;
 }
+
+/** Written findings per site, parsed from validation/sites/FINDINGS.md at build time. Printed as they are. */
+export interface Findings {
+  written: string | null;
+  claim: string | null;
+  sections: { title: string; slug: string; strong: string[]; short: string[]; notScored: string[]; bullets: string[] }[];
+}
+export const loadFindings = () => loadExtra<Findings>('findings.json');
+
+/** Site-scale scores from validation/score_sites.ts (Session C). */
+export interface SiteScores {
+  generatedAt: string;
+  sites: {
+    id: string;
+    name: string;
+    kind: string;
+    provisional?: boolean;
+    caveat?: string | null;
+    bareFrac?: number | null;
+    rockType?: string | null;
+    results: {
+      target: string;
+      listed: boolean;
+      site: {
+        dimensions: Record<string, { similarity: number | null; midPercentile: number | null }>;
+        purposes: Record<string, { score: number | null; limitingFactor: string | null }>;
+      };
+    }[];
+  }[];
+}
+export const loadSiteScores = () => loadExtra<SiteScores>('validation-sites.json');

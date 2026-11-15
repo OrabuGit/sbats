@@ -46,7 +46,39 @@ const fromFile = (rel: string) => () => {
   const f = path.join(ROOT, rel);
   return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null;
 };
+/**
+ * The written findings per site (validation/sites/FINDINGS.md), split into fields. The featured
+ * sites page prints these sentences as they are, so no claim in the app is stronger than the findings.
+ */
+function parseFindings(md: string) {
+  const clean = (t: string) => t.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ').trim();
+  const field = (body: string, name: string): string[] => {
+    const m = body.match(new RegExp(`\\*\\*${name}:\\*\\*([\\s\\S]*?)(?=\\n\\*\\*[A-Z]|\\n\\n[^-\\s]|\\n#|$)`));
+    if (!m) return [];
+    const text = m[1];
+    const bullets = text.split(/\n- /);
+    return bullets.map(clean).filter(Boolean);
+  };
+  const sections = md.split(/\n## /).slice(1).map((sec) => {
+    const nl = sec.indexOf('\n');
+    const title = sec.slice(0, nl).trim();
+    const body = sec.slice(nl + 1);
+    const bullets = body
+      .split(/\n(?=- )/)
+      .filter((b) => b.startsWith('- '))
+      .map((b) => clean(b.slice(2).split(/\n\n/)[0]));
+    return { title, slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), strong: field(body, 'Strong'), short: field(body, 'Short'), notScored: field(body, 'Not scored at all'), bullets };
+  });
+  const claim = md.match(/So the honest claim[^\n]*\n[^\n]*\n[^\n]*/);
+  return { written: (md.match(/Written (\d{4}-\d{2}-\d{2})/) ?? [])[1] ?? null, claim: claim ? clean(claim[0]) : null, sections };
+}
+
 const EXTRA: Record<string, () => string | null> = {
+  'validation-sites.json': fromFile('validation/output/sites.json'),
+  'findings.json': () => {
+    const md = fromFile('validation/sites/FINDINGS.md')();
+    return md === null ? null : JSON.stringify(parseFindings(md));
+  },
   'validation-report-base.json': fromFile('validation/output/report.json'),
   'validation-report-rover.json': fromFile('validation/output/report.rover.json'),
   'validation-report-ice.json': fromFile('validation/output/report.ice.json'),
