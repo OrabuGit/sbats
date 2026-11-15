@@ -395,10 +395,11 @@ quoted line the coordinates were read from (`quote`). Built by `validation/build
 
 Checked in the main session (check level A): all 27 lunar landing rows were found again, digit for digit, in
 NASA's two NSSDCA pages fetched on 2026-11-15 (the Apollo coordinates page and the table of spacecraft on the
-Moon). The Mars landing sites agree with the values the team already held for Viking 1 and 2, Pathfinder, Spirit,
-Opportunity, Curiosity, InSight, Perseverance and Zhurong. Curiosity, Perseverance, Marius Hills, Shackleton and
-Arcadia AP-1 fall within 3 km of the curated targets. The candidate regions are check level B (sub-agent only):
-please spot-check those before the demo.
+Moon). The six Mars landers that cite NASA catalogue pages (Viking 1 and 2, Pathfinder, Spirit, Opportunity,
+Phoenix) were found again on those pages the same day. Curiosity, Perseverance, InSight and Zhurong (rover
+waypoint files and papers) agree with the values the team already held, and Curiosity, Perseverance, Marius
+Hills, Shackleton and Arcadia AP-1 fall within 3 km of the curated targets. The candidate regions are check
+level B (sub-agent only): please spot-check those before the demo.
 
 Decisions a human should make:
 
