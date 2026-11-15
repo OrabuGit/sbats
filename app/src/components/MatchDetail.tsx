@@ -11,6 +11,7 @@ import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
 import { Ground } from './Ground';
 import { Locator } from './Locator';
 import { ActivityArt, type Activity } from './ActivityArt';
+import { AiMark } from './AiMark';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
 import { ScoreDial } from './ScoreDial';
 import { SunlightCompare } from './SunlightCompare';
@@ -509,6 +510,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">
               In the 3D view you can switch the surface, add contour lines, set the sun and plan a rover route over the real elevation grid.
             </p>
+            <AiMark className="mt-2" />
             <div className="mt-5 grid gap-x-10 gap-y-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
               {[tools.primary, tools.secondary].map((t, i) => (
                 <div key={t.title} className={`border-t-2 pt-4 ${i === 0 ? 'border-accent' : 'border-line'}`}>

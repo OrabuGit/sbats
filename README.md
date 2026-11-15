@@ -204,6 +204,7 @@ design were taken from any of them: each was written for this project from its o
 | `decisions/` | One log per work stream of the choices made and why |
 | `SOURCES.md` | Every dataset: provider, URL, access date, licence, use |
 | `AI_USE.md` | Every use of AI in the project |
+| `FEATURES.md` | Where every feature is in the app and how many clicks it takes from the home page |
 | `SUBMISSION_NOTES.md` | Resource lists ready to paste into the project page |
 
 ## Licence

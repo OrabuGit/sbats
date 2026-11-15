@@ -1,3 +1,4 @@
+import { AiMark } from './AiMark';
 import { Check, Minus, X } from 'lucide-react';
 import type { MatchRecord } from '../lib/matchAdapter';
 import { STATUS_WORD, plainResults, type Capability, type CapabilityId, type PurposeStatus } from '../lib/plainResults';
@@ -93,6 +94,7 @@ export function PlainResults({ record, score, placeName }: { record: MatchRecord
         <Reveal className="mt-12">
           <h3 className="display text-[24px] leading-8 text-text">What could be tested here</h3>
           <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">One card for each of seven kinds of work, rated by fixed rules from how well this place matches the target. Where our data cannot judge, the card says Not assessed and why.</p>
+          <AiMark className="mt-2" />
           <ul className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
             {r.capabilities.map((c) => (
               <CapabilityCard key={c.id} c={c} />
