@@ -478,8 +478,10 @@ Decisions a human should make:
    between the 5th and 95th percentile of Earth's land cells; the third is a quarter of the 0 to 1 scale.
    Written down before any site was compared, and not tuned. Are these the right widths?
 2. Mars wind and dust are climate model values (Mars Climate Database, 10 m wind, column dust optical
-   depth). Gale's 12.6 m/s is far above the other two sites and matches no place on Earth: probably the
-   model's coarse grid at the crater wall. Curiosity's own wind record would be the better source.
+   depth). Gale's 12.6 m/s is far above the other two sites and matches no place on Earth. It is a point query
+   in the model's high-resolution mode, which adds slope winds inside the crater; the model's coarse map gives
+   7.6 m/s for the same cell (Session B's mars.json). Which one stands for 'Gale' is a judgement; Curiosity's
+   own wind record would be the better source.
 3. Earth 'dust' is aerosol optical depth of all particles (NASA POWER AOD_55). Smoke and pollution over Java
    read like Mars dust by number. The dimension is labelled 'Dust and aerosol' and the note says so. If the
    team prefers, drop the similarity for this dimension and show the two values only.

@@ -53,8 +53,10 @@ def main() -> None:
         tid = t["id"]
         if t["body"] == "mars":
             w, wl, wh, d, dl, dh = MARS[tid]
+            local = (" This is a point query in the model's high-resolution mode, which adds the slope winds inside the crater; "
+                     "the model's coarse map gives 7.6 m/s for the surrounding cell (data/mars.json).") if tid == "mars-gale" else ""
             out[tid] = {
-                "wind": v(w, "m/s", MCD, "Literature", f"Mean wind speed 10 m above the surface over the Mars year. Seasonal means run from {wl} to {wh} m/s. Climate model on a coarse grid: local slope winds are not resolved. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."),
+                "wind": v(w, "m/s", MCD, "Literature", f"Mean wind speed 10 m above the surface over the Mars year, from a point query in the model's high-resolution mode. Seasonal means run from {wl} to {wh} m/s.{local} A model, not a measurement. The air is about a hundredth as dense as Earth's, so the same speed pushes far less."),
                 "dust": v(d, "optical depth", MCD, "Literature", f"Mean dust optical depth of the whole air column in visible light over the Mars year. Seasonal means run from {dl} to {dh}. Climate model."),
                 "ice": v(None, "share of ground", None, None, "No mapped value yet. Shallow ground ice on Mars is mapped by other projects; none is in this data set."),
             }

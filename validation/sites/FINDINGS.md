@@ -224,8 +224,9 @@ Read with care:
   Central Java is close to Mars's 0.48. Over Java that haze is smoke, pollution and humid air; on Mars it
   is mineral dust. The Earth product counts all particles and cannot tell them apart. Dallol, in a
   desert, is the honest match on this dimension. Do not present Merapi as a dust analog.
-- **Gale's model wind (12.6 m/s) matches nowhere.** No site, known or candidate, comes close. That is a
-  coarse climate model at the foot of a crater wall; treat it as uncertain.
+- **Gale's model wind (12.6 m/s) matches nowhere.** No site, known or candidate, comes close. The figure is
+  a point query in the model's high-resolution mode, which adds slope winds inside the crater; the same
+  model's coarse map gives 7.6 m/s for the cell. Treat it as uncertain.
 - **Ice cannot be compared for any Indonesian site.** The permafrost map covers land north of 25 N
   only, and the tropics have none. The lunar polar targets carry a share of ice-stable ground (0.5% to
   35% of the window); Haughton, with permafrost under all of it, is the only site here that compares.
