@@ -3,6 +3,9 @@ import Globe, { type GlobeInstance } from 'globe.gl';
 import { Color, MeshBasicMaterial } from 'three';
 import { Minus, Plus } from 'lucide-react';
 import type { Target } from '../types';
+import { webglOk } from '../lib/gl';
+import { FlatWorldMap } from './FlatWorldMap';
+import { GlGuard } from './GlGuard';
 
 type Body = 'moon' | 'mars';
 
@@ -42,7 +45,7 @@ interface Props {
 }
 
 /** Step 1: the Moon or Mars as a globe, with the target sites as markers. */
-export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, onPoint, active, showTabs = true }: Props) {
+function WorldGlobe3D({ targets, targetId, places, placeId, onTarget, onPick, onPoint, active, showTabs = true }: Props) {
   const pointRef = useRef(onPoint);
   pointRef.current = onPoint;
   const holder = useRef<HTMLDivElement>(null);
@@ -114,8 +117,21 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
   }, [reduced]);
 
   useEffect(() => {
-    const size = window.innerWidth < 768 ? 2048 : 4096;
-    globeRef.current?.globeImageUrl(`${import.meta.env.BASE_URL}textures/${TEXTURE[body].file}-${size}.jpg`);
+    // The small picture first, so the globe is there at once; the large one replaces it when it has arrived.
+    const base = `${import.meta.env.BASE_URL}textures/${TEXTURE[body].file}`;
+    globeRef.current?.globeImageUrl(`${base}-2048.jpg`);
+    if (window.innerWidth < 768) return;
+    let alive = true;
+    const big = new Image();
+    big.onload = () => alive && globeRef.current?.globeImageUrl(`${base}-4096.jpg`);
+    const t = window.setTimeout(() => {
+      big.src = `${base}-4096.jpg`;
+    }, 1200);
+    return () => {
+      alive = false;
+      big.onload = null;
+      window.clearTimeout(t);
+    };
   }, [body]);
 
   useEffect(() => {
@@ -173,5 +189,16 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
         </button>
       </div>
     </section>
+  );
+}
+
+/** The Moon or Mars. A globe where the device can draw WebGL, a flat map where it cannot. */
+export function WorldGlobe(props: Props) {
+  const flat = <FlatWorldMap targets={props.targets} targetId={props.targetId} places={props.places} placeId={props.placeId} onPick={props.onPick} onPoint={props.onPoint} />;
+  if (!webglOk()) return flat;
+  return (
+    <GlGuard fallback={flat}>
+      <WorldGlobe3D {...props} />
+    </GlGuard>
   );
 }

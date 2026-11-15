@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0B0D0F" />
-    <meta name="description" content="SBATS ranks every 0.5° cell of Earth by how closely it matches a Moon or Mars base site, and tests a base layout at both." />
+    <meta name="description" content="SBATS ranks every 55 km square of Earth&rsquo;s land by how closely it matches a Moon or Mars base site, and tests a base layout at both." />
     <meta name="generator" content="Code written with AI assistance (Claude Code). See AI_USE.md in the repository." />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=2" />
     <style>
@@ -59,6 +59,11 @@
         font-size: 13px;
         opacity: 0.8;
       }
+      .splash i[data-det]::after {
+        width: var(--p);
+        animation: none;
+        transition: width 0.15s linear;
+      }
       @keyframes splash-run {
         from {
           transform: translateX(-100%);
@@ -71,7 +76,19 @@
     <title>SBATS · Earth analogs for Moon and Mars base sites</title>
   </head>
   <body>
-    <div id="root"><div class="splash" role="status" aria-label="Loading"><img src="./logo.svg" alt="SBATS" /><i></i></div></div>
+    <div id="root"><div class="splash" role="status" aria-label="Loading"><img src="./logo.svg" alt="SBATS" /><i></i><p>Loading Earth data</p></div></div>
+    <script>
+      // Start the Earth data now, in parallel with the app code. The app picks these requests up instead of starting its own.
+      (function () {
+        var b = '%BASE_URL%'.replace(/\/?$/, '/') + 'data/';
+        var go = function (f) {
+          return fetch(b + f, { cache: 'no-cache' }).catch(function () {
+            return null;
+          });
+        };
+        window.__sbatsEarly = { 'manifest.json': go('manifest.json'), 'earth.bin': go('earth.bin'), 'targets.json': go('targets.json'), 'analogs.json': go('analogs.json'), 'lithology_similarity.json': go('lithology_similarity.json') };
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

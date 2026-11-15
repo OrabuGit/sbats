@@ -18,7 +18,7 @@ export function InfoShell({
 }) {
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-info">
-      <header className="mx-auto w-full max-w-[1200px] px-5 pb-6 pt-8 sm:px-10 sm:pt-12">
+      <header className="w-full px-5 pb-6 pt-8 sm:px-10 sm:pt-12 lg:px-16">
         <p className="text-[14px] text-muted">{view === 'method' ? 'Method' : view === 'validation' ? 'Validation' : 'Featured site'}</p>
         <h2 id="h-info" className="display mt-1 max-w-[30ch] text-[28px] leading-9 text-text sm:text-[36px] sm:leading-[44px]">
           {title}
@@ -32,7 +32,7 @@ export function InfoShell({
 
 export function Section({ id, title, wide, children }: { id: string; title: string; wide?: boolean; children: React.ReactNode }) {
   return (
-    <section aria-labelledby={id} className="border-b border-line px-4 py-6 sm:px-6">
+    <section aria-labelledby={id} className="border-b border-line px-5 py-6 sm:px-10 lg:px-16">
       <h3 id={id} className="mb-3 text-[14px] font-semibold text-text">
         {title}
       </h3>

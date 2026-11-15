@@ -69,11 +69,59 @@ function checkLithology(x: unknown): string | null {
 /** Compact binary copy of earth.json (format SBE1, data/SCHEMA.md). Preferred when it is published. */
 export const COMPACT_EARTH_FILE = 'earth.bin';
 
+type Early = Record<string, Promise<Response | null>>;
+/** Requests index.html started before the app code arrived. Each is used once. */
+function early(file: string): Promise<Response | null> | null {
+  const e = (window as unknown as { __sbatsEarly?: Early }).__sbatsEarly;
+  const hit = e?.[file] ?? null;
+  if (e) delete e[file];
+  return hit;
+}
+
+/** Share of the Earth file received, 0 to 1, or null before the size is known. Shown on the loading screen. */
+let progress: number | null = null;
+const listeners = new Set<(p: number | null) => void>();
+export function onEarthProgress(fn: (p: number | null) => void): () => void {
+  listeners.add(fn);
+  fn(progress);
+  return () => void listeners.delete(fn);
+}
+function report(p: number | null) {
+  progress = p;
+  listeners.forEach((fn) => fn(p));
+}
+
+/** Reads a response body in pieces so the loading screen can show how much has arrived. */
+async function readWithProgress(res: Response): Promise<ArrayBuffer> {
+  // The size on the wire is the compressed size. What is read is larger, so the bar uses an estimate and never passes 99% before the end.
+  const encoded = Number(res.headers.get('content-length') ?? 0);
+  const expected = encoded * (res.headers.get('content-encoding') ? 2.5 : 1);
+  if (!res.body || expected === 0) return res.arrayBuffer();
+  const reader = res.body.getReader();
+  const parts: Uint8Array[] = [];
+  let got = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    parts.push(value);
+    got += value.length;
+    report(Math.min(0.99, got / expected));
+  }
+  const out = new Uint8Array(got);
+  let at = 0;
+  for (const p of parts) {
+    out.set(p, at);
+    at += p.length;
+  }
+  report(1);
+  return out.buffer;
+}
+
 async function fetchEarthBin(): Promise<unknown | undefined> {
   try {
-    const res = await fetch(`${import.meta.env.BASE_URL}data/${COMPACT_EARTH_FILE}`, { cache: 'no-cache' });
+    const res = (await early(COMPACT_EARTH_FILE)) ?? (await fetch(`${import.meta.env.BASE_URL}data/${COMPACT_EARTH_FILE}`, { cache: 'no-cache' }));
     if (!res.ok || (res.headers.get('content-type') ?? '').includes('text/html')) return undefined;
-    return decodeEarthBin(await res.arrayBuffer());
+    return decodeEarthBin(await readWithProgress(res));
   } catch {
     return undefined;
   }
@@ -84,7 +132,7 @@ const forceFixtures = new URLSearchParams(window.location.search).get('data') ==
 
 async function fetchJson(file: string): Promise<unknown | undefined> {
   try {
-    const res = await fetch(`${import.meta.env.BASE_URL}data/${file}`, { cache: 'no-cache' });
+    const res = (await early(file)) ?? (await fetch(`${import.meta.env.BASE_URL}data/${file}`, { cache: 'no-cache' }));
     if (!res.ok) return undefined;
     if ((res.headers.get('content-type') ?? '').includes('text/html')) return undefined; // host fallback page
     return await res.json();

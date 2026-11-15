@@ -1,6 +1,6 @@
 import { flushSync } from 'react-dom';
 import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import { loadData, loadExtra, type DataBundle } from './data/access';
+import { loadData, loadExtra, onEarthProgress, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Target, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
 import { buildIndex, distanceKm, formatCoords, siteCode } from './lib/geo';
@@ -11,6 +11,8 @@ import type { MatchMode } from './components/LeftPanel';
 import { activityOf } from './components/ActivityArt';
 import type { Tool } from './components/MatchDetail';
 import { MatchesStep } from './components/MatchesStep';
+import { DEFAULT_TARGET_ID } from './lib/defaults';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { PickWorld } from './components/PickWorld';
 import { CustomStep } from './components/CustomStep';
 import { AiUsePage } from './components/AiUsePage';
@@ -40,7 +42,7 @@ import { TerrainPage, type RoversFile } from './components/TerrainPage';
 import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
-import type { WorldId } from './components/Worlds';
+import type { WorldId } from './components/worldInfo';
 import { savedId, useSaved, type SavedLocation } from './lib/saved';
 import { targetFromKnownSite, targetFromPoint, type BodyGrid, type KnownSitesFile, type TargetProfile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
@@ -49,13 +51,15 @@ import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
 import { decodeLayout, layoutFromJson, type SavedLayout } from './lib/simAdapter';
 
-// The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
-// own chunk, starting now and in parallel with the data, so the panels never wait for it.
-const globeModule = import('./components/GlobeView');
+// The globe (three.js and globe.gl) is by far the largest part of the app. It is its own chunk. It starts
+// downloading when the browser is idle after the home page has drawn, so it never competes with the first screen.
+let globeModuleP: Promise<typeof import('./components/GlobeView')> | null = null;
+const globeModule = { then: <T,>(f: (m: typeof import('./components/GlobeView')) => T) => (globeModuleP ??= import('./components/GlobeView')).then(f) };
+const prefetchGlobe = () => void (globeModuleP ??= import('./components/GlobeView'));
 const learnModule = () => import('./components/LearnPage').then((m) => ({ default: m.LearnPage }));
 const LearnPage = lazy(learnModule);
-// Fetch the Learn page while the browser is idle, so opening it is not a wait.
-if (typeof window !== 'undefined') (window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 2500)))(() => void learnModule());
+// Once the first screen is drawn, fetch the globe and the Learn page while the browser is idle, so opening them is not a wait.
+const prefetchLater = () => (window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 2500)))(() => { prefetchGlobe(); void learnModule(); }, { timeout: 8000 });
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
 
 type View = 'home' | 'custom' | 'aiuse' | 'explore' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain' | 'learn';
@@ -65,6 +69,20 @@ const LIST_LIMIT = 15;
 const MAP_MARKERS = 10;
 
 type LoadState = { status: 'loading' } | { status: 'error'; message: string } | { status: 'ready'; data: DataBundle };
+
+/** The loading screen: the logo, a bar that fills as the Earth data arrives, and the share received. */
+function Splash() {
+  const [p, setP] = useState<number | null>(null);
+  useEffect(() => onEarthProgress(setP), []);
+  const pct = p === null ? null : Math.round(p * 100);
+  return (
+    <div className="splash" role="status" aria-label="Loading">
+      <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="SBATS" />
+      <i style={pct === null ? undefined : ({ '--p': `${pct}%` } as React.CSSProperties)} data-det={pct === null ? undefined : ''} />
+      <p>{pct === null ? 'Loading Earth data' : `Loading Earth data ${pct}%`}</p>
+    </div>
+  );
+}
 
 export default function App() {
   const [load, setLoad] = useState<LoadState>({ status: 'loading' });
@@ -78,6 +96,10 @@ export default function App() {
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (load.status === 'ready') prefetchLater();
+  }, [load.status]);
 
   // While the data loads: the same splash as the page ships with (see index.html), so nothing is drawn in pieces.
   if (load.status !== 'ready') {
@@ -95,12 +117,7 @@ export default function App() {
           </div>
         </div>
       );
-    return (
-      <div className="splash" role="status" aria-label="Loading">
-        <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="SBATS" />
-        <i />
-      </div>
-    );
+    return <Splash />;
   }
   return <Orbit data={load.data} />;
 }
@@ -123,7 +140,7 @@ function transition(fn: () => void) {
 function Orbit({ data }: { data: DataBundle }) {
   const { earth, targets, analogs, lithology } = data;
 
-  const [targetId, setTargetIdRaw] = useState(targets[0].id);
+  const [targetId, setTargetIdRaw] = useState((targets.find((t) => t.id === DEFAULT_TARGET_ID) ?? targets[0]).id);
   // A target built from a clicked point or a named place with no curated target (lib/targets).
   const [pointProfile, setPointProfile] = useState<TargetProfile | null>(null);
   // Conditions the person set by hand (the Custom option beside the Moon and Mars). Any other target replaces it.
@@ -211,7 +228,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const knownSites = useAsync(() => loadExtra<KnownSitesFile>('known_sites.json'), 'known-sites');
   const [placeId, setPlaceId] = useState<string | null>(null);
   // Global grids of the Moon and Mars, fetched when step 2 first opens. null for a body whose grid is not published.
-  const gridsWanted = flags.anyPoint && (view === 'orbit' || view === 'match' || homePick !== null) ? 'yes' : 'no';
+  const gridsWanted = flags.anyPoint && ((view === 'orbit' && step >= 2) || view === 'match') ? 'yes' : 'no';
   const gridsLoaded = useRef(false);
   if (gridsWanted === 'yes') gridsLoaded.current = true;
   const grids = useAsync(
@@ -231,7 +248,7 @@ function Orbit({ data }: { data: DataBundle }) {
   useEffect(() => {
     if (pointProfile) setCustomTarget(null);
   }, [pointProfile]);
-  const target = pointProfile?.target ?? customTarget ?? targets.find((t) => t.id === targetId) ?? targets[0];
+  const target = pointProfile?.target ?? customTarget ?? targets.find((t) => t.id === targetId) ?? targets.find((t) => t.id === DEFAULT_TARGET_ID) ?? targets[0];
   const meta = useMemo(() => metaByKey(earth), [earth]);
   const index = useMemo(() => buildIndex(earth), [earth]);
   const scorer = useMemo(() => createScorer(earth, lithology), [earth, lithology]);
@@ -439,7 +456,7 @@ function Orbit({ data }: { data: DataBundle }) {
     (w: WorldId) => {
       if (w === 'earth') return;
       if (target.body !== w || (place && place.body !== w)) {
-        const first = places.find((p) => p.body === w && p.hasValues);
+        const first = places.find((p) => p.body === w && p.hasValues && (p.targetId === DEFAULT_TARGET_ID || p.id === DEFAULT_TARGET_ID)) ?? places.find((p) => p.body === w && p.hasValues);
         if (first) pickPlace(first.id);
       }
       transition(() => {
@@ -985,10 +1002,21 @@ function Orbit({ data }: { data: DataBundle }) {
     if (view !== 'home' || !homeAuto || demo !== null) return;
     const withValues = places.filter((p) => p.targetId && targets.some((t) => t.id === p.targetId));
     if (withValues.length === 0) return;
+    // The first one shown is the default target; after that it varies.
+    let firstPick = withValues.find((p) => p.targetId === DEFAULT_TARGET_ID || p.id === DEFAULT_TARGET_ID) ?? null;
     let tick = Math.floor(Math.random() * 1000);
     const timers: number[] = [];
     const step = () => {
       tick += 1;
+      if (firstPick) {
+        const p = firstPick;
+        firstPick = null;
+        pickPlace(p.id);
+        setHomePick({ kind: 'place', id: p.id });
+        setHomeActive(0);
+        timers.push(window.setTimeout(() => setHomeActive(1), 4200));
+        return;
+      }
       // Mostly a Moon or Mars place linked out to Earth; now and then an Earth site linked back to its target.
       if (tick % 3 === 0 && earthPins.length > 0) {
         const x = earthPins[Math.floor(Math.random() * earthPins.length)];
@@ -1128,6 +1156,7 @@ function Orbit({ data }: { data: DataBundle }) {
         </div>
       )}
 
+      <ErrorBoundary what="This page" resetKey={`${view}:${step}`} onHome={() => setView('home')}>
       {view === 'home' && (
         <Home
           earth={earth}
@@ -1516,12 +1545,18 @@ function Orbit({ data }: { data: DataBundle }) {
               const out: string[] = [];
               if (flags.terrain && hasEarth && hasTarget) out.push('3D terrain', 'Route planner');
               if (named && storiesFor(storiesFile, named.id).length > 0) out.push('Site story');
+              // Minerals: a mineral list read from orbit (NASA EMIT) at this site, and minerals reported at the target to compare it with.
+              if (named && targetMinerals.status === 'ready' && (targetMinerals.value?.targets[target.id]?.minerals.length ?? 0) > 0) {
+                const m = (featuredSites?.sites.find((x) => x.id === named.id) as { mineralogy?: { value: { group1?: { top: unknown[] } | null; group2?: { top: unknown[] } | null } | null } | null } | undefined)?.mineralogy?.value;
+                if (m && ((m.group1?.top.length ?? 0) > 0 || (m.group2?.top.length ?? 0) > 0)) out.push('Minerals');
+              }
               return out;
             }}
             strip={previewPair ? <HomePair pair={previewPair} chips={previewChips} active={Math.max(-1, topIdx.indexOf(preview ?? -1))} onActive={(i) => previewFromGlobe(topIdx[i])} presets={PRESETS} presetId={presetId} onPreset={choosePreset} onOpen={() => preview !== null && select(preview)} onAll={null} onClose={() => setPreview(null)} /> : undefined}
           />
         </>
       )}
+      </ErrorBoundary>
 
       {tour !== null && <GuidedTour step={tour} onStep={tourGo} onClose={closeTour} />}
     </div>

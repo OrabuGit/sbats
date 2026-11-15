@@ -9,7 +9,7 @@ import { MATCH, MISS, VERDICT_WORD, fromRecord, type Verdict } from '../lib/verd
 import { matchWord, type PurposeDef } from '../lib/scoringAdapter';
 import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
 import { Ground } from './Ground';
-import { Locator } from './Locator';
+const Locator = lazy(() => import('./Locator').then((m) => ({ default: m.Locator })));
 import { ActivityArt, type Activity } from './ActivityArt';
 import { AiMark } from './AiMark';
 import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
@@ -415,12 +415,14 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                   </figcaption>
                 </figure>
               ) : custom ? null : (
+                <Suspense fallback={<div className="h-[300px] w-full sm:h-[340px]" role="status" aria-label="Loading globes" />}>
                 <Locator
                   points={[
                     { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
                     { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
                   ]}
                 />
+                </Suspense>
               )}
             </div>
           </header>

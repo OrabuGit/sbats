@@ -197,6 +197,16 @@ export function CandidateList(p: Props) {
                                     ? `Analog for ${target.name}.`
                                     : 'Analog for other targets.'}
                             </span>
+                            {index >= 0 && p.available && p.available(index).length > 0 && (
+                              <span className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[12px] text-muted">
+                                {p.available(index).map((t) => (
+                                  <span key={t} className="inline-flex items-center gap-1.5">
+                                    <span className="block h-1 w-1 rounded-full bg-muted" aria-hidden="true" />
+                                    {t}
+                                  </span>
+                                ))}
+                              </span>
+                            )}
                           </span>
                           <Score r={r} />
                         </button>

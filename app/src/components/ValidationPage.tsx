@@ -183,7 +183,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
   const iceCells = earth.cells.filter((c) => c.ndvi === null && c.barrenFrac === 0).length;
 
   const presetPicker = (
-    <div className="tabs flex-wrap px-2 sm:px-3" role="group" aria-label="Mission preset for these numbers">
+    <div className="tabs flex-wrap px-1.5 sm:px-5 lg:px-11" role="group" aria-label="Mission preset for these numbers">
       {PRESETS.map((p) => (
         <button key={p.id} type="button" aria-pressed={preset === p.id} onClick={() => setPreset(p.id)} className="tab sm:!px-5">
           {p.label}

@@ -1,8 +1,8 @@
 import { SiteFooter } from './SiteFooter';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Crosshair, Layers, Mountain } from 'lucide-react';
-import type { WorldId } from './Worlds';
-import { WORLD_CREDIT, WORLD_RADIUS_KM } from './Worlds';
+import type { WorldId } from './worldInfo';
+import { WORLD_CREDIT, WORLD_RADIUS_KM } from './worldInfo';
 import { ChapterHead, Counter, LEARN_CSS, LearnReveal, SourceLine, WorldDisc, reducedMotion, scrollFrame } from './LearnParts';
 import { EVENTS, STATIONS, WORLD_TEX } from './LearnData';
 import { LearnBases } from './LearnBases';

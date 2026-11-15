@@ -19,7 +19,7 @@ export function MSection({
   children: React.ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className="border-t border-line px-4 py-12 sm:px-6 sm:py-16">
+    <section aria-labelledby={id} className="border-t border-line px-5 py-12 sm:px-10 sm:py-16 lg:px-16">
       <div className={WIDTH}>
         <Reveal>
           <p className="label">{kicker}</p>

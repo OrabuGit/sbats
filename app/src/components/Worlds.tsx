@@ -1,15 +1,11 @@
-import { loadTexture } from '../lib/gl';
+import { loadTexture, webglOk } from '../lib/gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Color, Mesh, MeshBasicMaterial, OrthographicCamera, SRGBColorSpace, Scene, SphereGeometry, TextureLoader, WebGLRenderer } from 'three';
 
-export type WorldId = 'earth' | 'moon' | 'mars';
+import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './worldInfo';
+export { WORLD_CREDIT, WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './worldInfo';
 
-/** Volumetric mean radius, km (NASA NSSDCA planetary fact sheets). Used to draw the worlds at true relative size. */
-export const WORLD_RADIUS_KM: Record<WorldId, number> = { earth: 6371.0, moon: 1737.4, mars: 3389.5 };
-export const WORLD_NAME: Record<WorldId, string> = { earth: 'Earth', moon: 'Moon', mars: 'Mars' };
 const TEXTURE: Record<WorldId, string> = { earth: 'blue-marble-2048', moon: 'moon-wac-2048', mars: 'mars-viking-2048' };
-export const WORLD_CREDIT =
-  'Earth: Blue Marble, NASA Earth Observatory. Moon: LROC WAC mosaic, NASA/GSFC/Arizona State University. Mars: Viking MDIM 2.1, NASA/JPL/USGS.';
 
 interface Props {
   worlds: WorldId[];
@@ -22,6 +18,8 @@ interface Props {
   /** Fill the height of the parent instead of a fixed band. */
   tall?: boolean;
 }
+
+const STILL: Record<string, string> = { earth: 'blue-marble-2048', moon: 'moon-wac-2048', mars: 'mars-viking-2048' };
 
 /**
  * The worlds as slowly turning globes in one row, drawn at true relative size in one WebGL canvas.
@@ -39,6 +37,10 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
     let alive = true;
     let frame = 0;
     let renderer: WebGLRenderer;
+    if (!webglOk()) {
+      setState('error');
+      return;
+    }
     try {
       renderer = new WebGLRenderer({ antialias: true });
     } catch {
@@ -133,8 +135,24 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
     <div ref={holder} className={`relative w-full bg-bg ${tall ? 'h-full min-h-[320px]' : 'h-[46vw] max-h-[420px] min-h-[220px]'}`}>
       {state !== 'ready' && (
         <p className="label absolute left-4 top-4" role="status">
-          {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn'}
+          {state === 'loading' ? 'Loading globes' : 'Still images: this device cannot draw 3D globes'}
         </p>
+      )}
+      {state === 'error' && (
+        <div className="pointer-events-none absolute inset-0 grid items-center" style={{ gridTemplateColumns: `repeat(${worlds.length}, minmax(0, 1fr))` }} aria-hidden="true">
+          {worlds.map((w) => (
+            <div key={w} className="flex justify-center">
+              <span
+                className="block aspect-square w-[min(60%,200px)] rounded-full bg-panel"
+                style={{
+                  backgroundImage: `url(${import.meta.env.BASE_URL}textures/${STILL[w] ?? 'moon-wac-2048'}.jpg)`,
+                  backgroundSize: '300% 150%',
+                  backgroundPosition: '50% 50%',
+                }}
+              />
+            </div>
+          ))}
+        </div>
       )}
       <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${worlds.length}, minmax(0, 1fr))` }}>
         {worlds.map((w) => (

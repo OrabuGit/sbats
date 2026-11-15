@@ -3,7 +3,8 @@ import { formatCoords } from '../lib/geo';
 import { dataUrl, loadElevation, type ExtractItem } from '../data/sites';
 import { reliefCanvas } from '../lib/relief';
 import { shownLayer } from './Ground';
-import { WORLD_CREDIT } from './Worlds';
+import { WORLD_CREDIT } from './worldInfo';
+import { useNear } from '../lib/useNear';
 
 // A picture of a place that is never an empty box. SiteTile shows the same-scale extract (Sentinel-2,
 // LROC or THEMIS image, else shaded relief of its elevation grid). MapTile is the fallback and the
@@ -38,12 +39,13 @@ export function MapPicture({ body, lat, lon }: { body: Body; lat: number; lon: n
   const offX = 0.5 - x * W;
   const offY = Math.min(0, Math.max(ASPECT - H, ASPECT / 2 - y * H));
   const markY = (offY + y * H) / ASPECT;
+  const [nearRef, near] = useNear<HTMLSpanElement>();
   return (
-    <span className="absolute inset-0 block overflow-hidden bg-panel [container-type:inline-size]" aria-hidden="true">
+    <span ref={nearRef} className="absolute inset-0 block overflow-hidden bg-panel [container-type:inline-size]" aria-hidden="true">
       <span
         className="absolute inset-0 block"
         style={{
-          backgroundImage: `url(${tex(body)})`,
+          backgroundImage: near ? `url(${tex(body)})` : undefined,
           backgroundSize: `${W * 100}cqw ${H * 100}cqw`,
           backgroundPosition: `${offX * 100}cqw ${offY * 100}cqw`,
           backgroundRepeat: 'repeat-x',
@@ -105,10 +107,12 @@ export function SiteTile({
   const shown = item ? shownLayer(item, 'image') : null;
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const canvas = useRef<HTMLCanvasElement>(null);
+  // The relief is a large file: read it only when the tile is on or near the screen.
+  const [nearRef, near] = useNear<HTMLSpanElement>('300px');
 
   useEffect(() => {
     setState('loading');
-    if (!item || shown !== 'relief' || !item.elevation) return;
+    if (!near || !item || shown !== 'relief' || !item.elevation) return;
     let alive = true;
     const ev = item.elevation;
     loadElevation(ev).then(
@@ -126,7 +130,7 @@ export function SiteTile({
     return () => {
       alive = false;
     };
-  }, [item, shown]);
+  }, [item, shown, near]);
 
   const at = item ?? { body, lat, lon, name };
   const where = { lat: at.lat, lon: at.lon };
@@ -141,7 +145,7 @@ export function SiteTile({
   const Root = caption ? 'figure' : 'span';
   return (
     <Root className={`m-0 block min-w-0 ${caption ? '' : 'h-full'}`}>
-      <span className={`relative block w-full overflow-hidden bg-panel ${caption ? 'aspect-[4/3]' : 'h-full'}`}>
+      <span ref={nearRef} className={`relative block w-full overflow-hidden bg-panel ${caption ? 'aspect-[4/3]' : 'h-full'}`}>
         {state !== 'ready' && <MapPicture body={item?.body ?? body} lat={where.lat} lon={where.lon} />}
         {item && shown === 'image' && item.image && (
           <img

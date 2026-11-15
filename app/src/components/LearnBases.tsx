@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MapPin } from 'lucide-react';
 import { ChapterHead, LearnReveal, SourceLine, TEX, WorldDisc, useSeen } from './LearnParts';
 import { PLANNED, STATIONS, WORLD_TEX } from './LearnData';
-import { WORLD_CREDIT } from './Worlds';
+import { WORLD_CREDIT } from './worldInfo';
 import { ActivityArt } from './ActivityArt';
 
 /** Equirectangular position on a 2:1 map, in percent. */

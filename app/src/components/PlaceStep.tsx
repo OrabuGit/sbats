@@ -5,6 +5,7 @@ import type { ExtractItem } from '../data/sites';
 import type { TargetProfile } from '../lib/matchAdapter';
 import { formatCoords } from '../lib/geo';
 import { Ground } from './Ground';
+import { AFTER_FREEZE_TARGET_IDS } from '../lib/storyPairs';
 import type { GlobePlace } from './WorldGlobe';
 import { formatValue, type MetaByKey } from '../lib/format';
 import { SourceBadge } from './Badges';
@@ -106,6 +107,9 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
                 {picked.sub ? `${picked.sub}. ` : ''}
                 <span className="num">{formatCoords(picked.lat, picked.lon)}</span>
               </p>
+              {picked.targetId && AFTER_FREEZE_TARGET_IDS.includes(picked.targetId) && (
+                <p className="mt-1 text-[12px] leading-[18px] text-muted">Added after the freeze of 2026-11-14. It is in no validation number.</p>
+              )}
               {/* One verdict line and the key figures; the rest opens on request. */}
               <p className="mt-3 text-[15px] leading-6 text-text">
                 {ready ? `Ready. Measured values exist for ${picked.name.split(',')[0]}, so Earth can be searched for it.` : 'Not ready. No measured values exist for this place yet.'}
@@ -146,7 +150,7 @@ export function PlaceStep({ body, onBody, places, placeId, onPlace, onPoint, tar
                       {n}
                     </p>
                   ))}
-                  {extract && (
+                  {extract && !hidden && (
                     <div className="mt-4 max-w-[260px]">
                       <Ground item={extract} layer="relief" windowKm={windowKm} />
                     </div>

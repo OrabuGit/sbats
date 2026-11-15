@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
 import { BufferAttribute, BufferGeometry, DoubleSide, PerspectiveCamera, AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
+import { webglOk } from '../lib/gl';
+import { FlatEarthMap } from './FlatEarthMap';
+import { GlGuard } from './GlGuard';
 import SlippyMap from 'three-slippy-map-globe';
 import { feature } from 'topojson-client';
 import type { MultiPolygon, Polygon } from 'geojson';
@@ -13,17 +16,8 @@ import type { Candidate } from '../lib/rank';
 // Match strength is shown by brightness. This is data, not decoration: a cell's light is a function of its
 // score, and the legend below prints the same function. The best cells also glow. Nothing else on the
 // map glows. Cells are added to the imagery (additive blending), so a higher score is simply more light.
-const AMBER = '255,176,0';
-/** Share of full brightness for a score from 0 to 100. */
-export const brightness = (score: number) => Math.pow(Math.max(0, Math.min(100, score)) / 100, 1.1);
-/** Cells from this score up carry a halo. The halo grows with the score. */
-export const GLOW_FROM = 35;
-export const SCORE_CLASSES = [0, 20, 35, 50, 65, 80, 100].map((min) => ({ min, label: String(min), b: brightness(min) }));
-const NO_DATA = '#2B333B';
-// Over the imagery the cells are slightly see-through, so relief and coastlines stay readable.
-// Cells below the first score step get only a thin dark veil.
-const NO_DATA_ALPHA = 0.8;
-const cellAlpha = (score: number) => 0.035 + 0.93 * brightness(score);
+import { AMBER, GLOW_FROM, NO_DATA, NO_DATA_ALPHA, SCORE_CLASSES, brightness, cellAlpha } from '../lib/heat';
+export { brightness, GLOW_FROM, SCORE_CLASSES };
 /** Closest the camera comes, in globe radii above the surface: about 500 km, where the level 7 tiles are in use. */
 const MIN_ALTITUDE = 0.08;
 const OCEAN = '#0F1418';
@@ -195,7 +189,7 @@ type Marker =
   | { kind: 'rank'; lat: number; lng: number; index: number; rank: number }
   | { kind: 'site'; lat: number; lng: number; index: number; name: string };
 
-export function GlobeView({ earth, results, index, selected, candidates, sites, onSelect, focus, active, links = [], anchor, activeLink = 0 }: Props) {
+function GlobeView3D({ earth, results, index, selected, candidates, sites, onSelect, focus, active, links = [], anchor, activeLink = 0 }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef(links);
@@ -241,14 +235,24 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
 
     // The coastline base shows first. The imagery replaces it when it has loaded.
     let alive = true;
-    const img = new Image();
-    img.onload = () => {
-      if (!alive) return;
-      drawImagery(base, img);
-      baseTexture.needsUpdate = true;
-      setImagery((n) => n + 1);
+    let timer = 0;
+    const pending: HTMLImageElement[] = [];
+    // The 2048 picture first, so the map is there at once; the 4096 one is drawn over it when it has arrived.
+    const loadImagery = (size: number, then?: () => void) => {
+      const img = new Image();
+      pending.push(img);
+      img.onload = () => {
+        if (!alive) return;
+        drawImagery(base, img);
+        baseTexture.needsUpdate = true;
+        setImagery((n) => n + 1);
+        then?.();
+      };
+      img.src = `${import.meta.env.BASE_URL}textures/blue-marble-${size}.jpg`;
     };
-    img.src = `${import.meta.env.BASE_URL}textures/blue-marble-${w}.jpg`;
+    loadImagery(2048, () => {
+      if (w > 2048) timer = window.setTimeout(() => loadImagery(4096), 1200);
+    });
 
     const globe = new Globe(el, { animateIn: false, waitForGlobeReady: false })
       .backgroundColor('#0B0D0F')
@@ -413,7 +417,8 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     ro.observe(el);
     return () => {
       alive = false;
-      img.onload = null;
+      window.clearTimeout(timer);
+      pending.forEach((im) => (im.onload = null));
       ro.disconnect();
       controls.removeEventListener('change', updateTiles);
       window.clearTimeout(patchTimer);
@@ -642,5 +647,29 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
         </button>
       </div>
     </section>
+  );
+}
+
+/** The Earth map. A globe where the device can draw WebGL, a flat map where it cannot. */
+export function GlobeView(props: Props) {
+  const flat = (
+    <FlatEarthMap
+      earth={props.earth}
+      results={props.results}
+      index={props.index}
+      selected={props.selected}
+      candidates={props.candidates}
+      sites={props.sites}
+      onSelect={props.onSelect}
+      focus={props.focus}
+      links={props.links}
+      anchor={props.anchor}
+    />
+  );
+  if (!webglOk()) return flat;
+  return (
+    <GlGuard fallback={flat}>
+      <GlobeView3D {...props} />
+    </GlGuard>
   );
 }

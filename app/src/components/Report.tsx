@@ -1,9 +1,10 @@
+import { Suspense, lazy } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import type { CellSummary, EarthCell, EarthFile, Target } from '../types';
 import { downloadText, toCsv } from '../lib/download';
 import { formatCoords, siteCode } from '../lib/geo';
 import { countryKey, useCountries } from '../lib/where';
-import { Locator } from './Locator';
+const Locator = lazy(() => import('./Locator').then((m) => ({ default: m.Locator })));
 import { buildReport, type CellStability, type KnownSite, type MatchRecord, type SharedMinerals, type ReportText, type RouteResult, type StabilityResult } from '../lib/matchAdapter';
 import { useAsync } from '../lib/useAsync';
 import { loadFrozen, loadReport } from '../data/validation';
@@ -141,12 +142,14 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
           </div>
         </dl>
         <div className="no-print mt-4 max-w-[520px]">
-          <Locator
-            points={[
-              { world: 'earth', lat: cell.lat, lon: cell.lon, name: country ?? 'This cell', where: null },
-              { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
-            ]}
-          />
+          <Suspense fallback={<div className="h-[300px] w-full" role="status" aria-label="Loading globes" />}>
+            <Locator
+              points={[
+                { world: 'earth', lat: cell.lat, lon: cell.lon, name: country ?? 'This cell', where: null },
+                { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+              ]}
+            />
+          </Suspense>
         </div>
         <div className="mt-5 space-y-2 border-y border-line py-4">
           {report.summary.map((t, i) => (

@@ -42,8 +42,17 @@ export interface EarthOwnValue {
   badge: string | null;
 }
 
+/**
+ * Two Mars targets added after the freeze of 2026-11-14. The stories file does not name them yet, so the pairing is made
+ * here. They are in no validation number and no weight or tolerance changed for them.
+ */
+const AFTER_FREEZE_TARGET: Record<string, string> = { 'dallol-columbia-hills': 'mars-gusev-columbia-hills', 'uyuni-tunupa-holden': 'mars-holden' };
+export const AFTER_FREEZE_TARGET_IDS: string[] = Object.values(AFTER_FREEZE_TARGET);
+
 export interface StoryPair {
   storyId: string;
+  /** True when the target was added after the freeze: it is shown, but it is in no validation number. */
+  afterFreeze: boolean;
   earthSiteId: string;
   /** All-round score of the whole 0.5 degree grid cell (about 55 km) around the site. null when the place has no tool target. */
   verdict: PairVerdict | null;
@@ -83,7 +92,7 @@ export function pairVerdict(
   ];
   return stories.stories.map((story) => {
     const earthSiteId = story.earthSiteIds[0] ?? '';
-    const targetId = story.target.inTool?.id ?? story.target.targetId;
+    const targetId = story.target.inTool?.id ?? story.target.targetId ?? AFTER_FREEZE_TARGET[story.id];
     const site = sites?.sites.find((x) => x.id === earthSiteId);
     const earthOwn: EarthOwnValue[] = OWN.flatMap(([k, label]) => {
       const v = site?.values[k];
@@ -92,7 +101,8 @@ export function pairVerdict(
       if (k === 'bareFrac' && typeof v.value === 'number') return [{ label, text: `${Math.round(v.value * 100)}% of land pixels`, badge: v.badge ?? null }];
       return [{ label, text: `${num}${v.unit ? ` ${v.unit}` : ''}`, badge: v.badge ?? null }];
     });
-    const none = { storyId: story.id, earthSiteId, verdict: null, siteScale: null, earthOwn };
+    const afterFreeze = AFTER_FREEZE_TARGET_IDS.includes(targetId ?? '');
+    const none = { storyId: story.id, afterFreeze, earthSiteId, verdict: null, siteScale: null, earthOwn };
     if (!targetId) return none;
     const target = targets.find((t) => t.id === targetId);
     const point = site?.gridCell ?? site ?? story.earth.teamLocation;
@@ -122,6 +132,6 @@ export function pairVerdict(
         siteScale = null;
       }
     }
-    return { storyId: story.id, earthSiteId, verdict, siteScale, earthOwn };
+    return { storyId: story.id, afterFreeze, earthSiteId, verdict, siteScale, earthOwn };
   });
 }

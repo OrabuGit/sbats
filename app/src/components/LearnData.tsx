@@ -2,7 +2,7 @@
 // organisation that publishes it. Where a figure was not certain it is left out rather than guessed.
 // Planet figures are not repeated here: the Worlds chapter reads them from data/worlds.ts.
 import type { Badge } from '../types';
-import type { WorldId } from './Worlds';
+import type { WorldId } from './worldInfo';
 
 export interface Src {
   name: string;

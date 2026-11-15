@@ -2,7 +2,7 @@ import type { Target } from '../types';
 import { formatCoords } from '../lib/geo';
 import { WORLD_PAGES, WORLD_SOURCES, WORLD_SOURCES_ACCESSED } from '../data/worlds';
 import { SourceBadge } from './Badges';
-import { WORLD_NAME, type WorldId } from './Worlds';
+import { WORLD_NAME, type WorldId } from './worldInfo';
 
 interface Props {
   world: WorldId;

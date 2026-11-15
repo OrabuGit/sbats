@@ -1,4 +1,4 @@
-import { loadTexture } from '../lib/gl';
+import { loadTexture, webglOk } from '../lib/gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Color,
@@ -15,7 +15,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import { formatCoords } from '../lib/geo';
-import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './Worlds';
+import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './worldInfo';
 
 export interface LocatorPoint {
   world: WorldId;
@@ -34,6 +34,8 @@ const TEXTURE: Record<WorldId, string> = {
 };
 const AMBER = '#FFB000';
 
+const STILL: Record<string, string> = { earth: 'blue-marble-2048', moon: 'moon-wac-2048', mars: 'mars-viking-2048' };
+
 /**
  * Two worlds side by side at their true relative size, each turned so the place is in the middle and
  * marked with a pin. A picture of where the two places are, not a map to read values from.
@@ -50,6 +52,10 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
     let alive = true;
     let frame = 0;
     let renderer: WebGLRenderer;
+    if (!webglOk()) {
+      setState('error');
+      return;
+    }
     try {
       renderer = new WebGLRenderer({ antialias: true });
     } catch {
@@ -179,10 +185,23 @@ export function Locator({ points }: { points: [LocatorPoint, LocatorPoint] }) {
         role="img"
         aria-label={`${points[0].name} on ${WORLD_NAME[points[0].world]} and ${points[1].name} on ${WORLD_NAME[points[1].world]}, each marked with a pin`}
       >
-        {state !== 'ready' && (
+        {state === 'loading' && (
           <p className="absolute left-0 top-0 text-[12px] text-muted" role="status">
-            {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn'}
+            Loading globes
           </p>
+        )}
+        {state === 'error' && (
+          <div className="absolute inset-x-0 top-0 grid grid-cols-2 items-start gap-3 px-1" role="status">
+            {points.map((p) => (
+              <div key={p.world + p.name} className="relative aspect-[2/1] w-full bg-panel bg-cover" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}textures/${STILL[p.world] ?? 'moon-wac-2048'}.jpg)` }}>
+                <span
+                  className="absolute block h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent bg-bg"
+                  style={{ left: `${((p.lon + 180) / 360) * 100}%`, top: `${((90 - p.lat) / 180) * 100}%` }}
+                />
+              </div>
+            ))}
+            <p className="col-span-2 text-[12px] text-muted">Flat maps: this device cannot draw 3D globes.</p>
+          </div>
         )}
         <div className="absolute inset-x-0 bottom-0 grid grid-cols-2">
           {points.map((p) => (

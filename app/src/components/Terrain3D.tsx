@@ -26,6 +26,8 @@ import {
   WebGLRenderer,
 } from 'three';
 import { Pause, Play } from 'lucide-react';
+import { webglOk } from '../lib/gl';
+import { GlGuard } from './GlGuard';
 import { dataUrl, loadElevation, type ExtractItem } from '../data/sites';
 import type { ModuleType, PlacedModule } from '../lib/simAdapter';
 import { shownLayer, type GroundLayer } from './Ground';
@@ -77,25 +79,8 @@ interface Props {
   onReady?: (ready: boolean) => void;
 }
 
-/** A path drawn on one terrain, in km from the centre (x east, z south). */
-export interface RouteDraw {
-  points: { x: number; z: number }[];
-  /** Per segment (points.length - 1): 0 normal, 1 over 75% of the slope limit (amber), 2 over the limit (red, dashed). */
-  steep?: (0 | 1 | 2)[];
-  /** A straight line shown to explain a block, not a route: drawn muted, and no rover drives it. */
-  straight?: boolean;
-  /** Where to put the waypoint markers. Defaults to every point. */
-  waypoints?: { x: number; z: number }[];
-}
-
-/** Slope classes for the surface colours and their legend: upper bound in degrees and a flat colour. */
-export const SLOPE_CLASSES: { upTo: number; label: string; color: string }[] = [
-  { upTo: 5, label: '0 to 5°', color: '#3a434c' },
-  { upTo: 10, label: '5 to 10°', color: '#6b5a2e' },
-  { upTo: 15, label: '10 to 15°', color: '#9c7421' },
-  { upTo: 25, label: '15 to 25°', color: '#cd8f11' },
-  { upTo: Infinity, label: 'over 25°', color: '#ffb000' },
-];
+export { SLOPE_CLASSES, type RouteDraw } from './terrainTypes';
+import { SLOPE_CLASSES, type RouteDraw } from './terrainTypes';
 
 interface Built {
   scene: Scene;
@@ -310,7 +295,7 @@ function build(
   return built;
 }
 
-export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, routes, rover = null, onPoint, onReady }: Props) {
+function Terrain3DView({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, routes, rover = null, onPoint, onReady }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [orbit, setOrbit] = useState(!reduced);
@@ -609,6 +594,33 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
         Same horizontal and vertical scale on both, {exaggeration === 1 ? 'no vertical exaggeration (1x)' : `vertical exaggeration ${exaggeration}x, so slopes look steeper than they are`}, same
         camera and light (sun {sunElevation}° above the horizon, from the north-west). Heights are measured from each place's own lowest point. Modules are drawn
         about 50 times larger than life so they can be seen.
+      </p>
+    </div>
+  );
+}
+
+/** The terrain in 3D. Without WebGL it says so, and the 2D images and the route profile stay on the page. */
+export function Terrain3D(props: Parameters<typeof Terrain3DView>[0]) {
+  const none = <NoTerrain onReady={props.onReady} />;
+  if (!webglOk()) return none;
+  return (
+    <GlGuard fallback={none}>
+      <Terrain3DView {...props} />
+    </GlGuard>
+  );
+}
+
+function NoTerrain({ onReady }: { onReady?: (ready: boolean) => void }) {
+  useEffect(() => {
+    // The route planner waits for the terrain; without 3D it plans from the elevation grid alone.
+    onReady?.(true);
+  }, [onReady]);
+  return (
+    <div className="flex h-[320px] w-full flex-col items-start justify-center gap-2 bg-panel px-5 sm:px-8" role="status">
+      <p className="label">3D terrain</p>
+      <p className="text-[18px] font-medium text-text">3D needs graphics acceleration on this device.</p>
+      <p className="max-w-[56ch] text-[14px] leading-6 text-muted">
+        Turn hardware acceleration on in the browser settings, or open SBATS on another device, to see the terrain in 3D. The route profile and the example route do not need it, and the match page has the 2D side-by-side views.
       </p>
     </div>
   );

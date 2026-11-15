@@ -435,7 +435,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         </ul>
       </MSection>
 
-      <section aria-labelledby="m-reference" className="border-t border-line px-4 py-12 sm:px-6 sm:py-16">
+      <section aria-labelledby="m-reference" className="border-t border-line px-5 py-12 sm:px-10 sm:py-16 lg:px-16">
         <div className={WIDTH}>
           <p className="label">Reference</p>
           <h3 id="m-reference" className="display-l mt-2 text-[28px] text-text sm:text-[38px]">

@@ -7,7 +7,7 @@ import { planRoute, steepClass, type PlanResult } from '../lib/routePlan';
 import { useAsync } from '../lib/useAsync';
 import { RouteFigures, hoursText, metresPerHour, type Sourced } from './RouteFigures';
 import { RouteProfile, RouteSteepKey, type ProfilePoint } from './RouteProfile';
-import { SLOPE_CLASSES, type RouteDraw } from './Terrain3D';
+import { SLOPE_CLASSES, type RouteDraw } from './terrainTypes';
 import { TerrainLegend, TerrainPanel, type Surface } from './TerrainControls';
 import { heightRange, niceInterval, SUN_DEFAULT } from './TerrainScale';
 

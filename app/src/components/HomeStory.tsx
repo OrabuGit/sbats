@@ -3,6 +3,7 @@ import type { CellSummary, EarthFile } from '../types';
 import { FACTOR_LABELS, PRESETS } from '../lib/scoringAdapter';
 import { FACTOR_IDS } from '../types';
 import { useAsync } from '../lib/useAsync';
+import { useNear } from '../lib/useNear';
 import { loadExtra } from '../data/access';
 import { loadFrozen, loadReport, loadSources } from '../data/validation';
 import type { ExtractIndex } from '../data/sites';
@@ -133,9 +134,10 @@ function useCount(to: number, on: boolean, ms = 1200) {
 /** A world's real imagery as a flat map with its named places pinned at their true positions. */
 function PinMap({ body, places, chosen, on }: { body: 'moon' | 'mars'; places: HeroPlace[]; chosen: string | null; on: boolean }) {
   const here = places.filter((p) => p.body === body);
+  const [nearRef, near] = useNear<HTMLDivElement>();
   return (
     <figure className="m-0">
-      <div className="relative aspect-[2.6/1] overflow-hidden bg-panel" style={{ backgroundImage: `url(${TEX(body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048')})`, backgroundSize: '100% 100%' }}>
+      <div ref={nearRef} className="relative aspect-[2.6/1] overflow-hidden bg-panel" style={{ backgroundImage: near ? `url(${TEX(body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048')})` : undefined, backgroundSize: '100% 100%' }}>
         <span className="absolute inset-0 bg-bg/35" aria-hidden="true" />
         {here.map((p, i) => {
           const strong = p.hasValues;
@@ -163,10 +165,12 @@ function Disc({ tex, lat, lon, size = 132 }: { tex: string; lat: number; lon: nu
   const w = size * 4;
   const x = ((lon + 180) / 360) * w - size / 2;
   const y = ((90 - lat) / 180) * (w / 2) - size / 2;
+  const [nearRef, near] = useNear<HTMLSpanElement>();
   return (
     <span
+      ref={nearRef}
       className="relative block shrink-0 overflow-hidden rounded-full bg-panel"
-      style={{ width: size, height: size, backgroundImage: `url(${TEX(tex)})`, backgroundSize: `${w}px ${w / 2}px`, backgroundPosition: `${-x}px ${-y}px` }}
+      style={{ width: size, height: size, backgroundImage: near ? `url(${TEX(tex)})` : undefined, backgroundSize: `${w}px ${w / 2}px`, backgroundPosition: `${-x}px ${-y}px` }}
       aria-hidden="true"
     >
       <span className="absolute left-1/2 top-1/2 block h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent" />
@@ -271,6 +275,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
   const base = PRESETS[0];
 
   const counted = useCount(earth.cells.length, active === 1);
+  const [earthNear, nearEarth] = useNear<HTMLDivElement>();
   const moonChosen = places.find((p) => p.body === 'moon' && targetName && p.name.includes(targetName))?.id ?? places.find((p) => p.body === 'moon' && p.hasValues)?.id ?? null;
   const marsChosen = places.find((p) => p.body === 'mars' && p.hasValues)?.id ?? null;
   const targetPos = places.find((p) => targetName && p.name.includes(targetName)) ?? null;
@@ -291,7 +296,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
     </div>,
     // 2. Scored: a scan sweeps across the Earth and lights each cell
     <div key="s2" className="flex h-full flex-col justify-center">
-      <div className="relative aspect-[2/1] overflow-hidden bg-panel" style={{ backgroundImage: `url(${TEX('blue-marble-2048')})`, backgroundSize: '100% 100%' }}>
+      <div ref={earthNear} className="relative aspect-[2/1] overflow-hidden bg-panel" style={{ backgroundImage: nearEarth ? `url(${TEX('blue-marble-2048')})` : undefined, backgroundSize: '100% 100%' }}>
         <span className="absolute inset-0 bg-bg/70" aria-hidden="true" />
         <div className="absolute inset-0">
           <MiniHeat earth={earth} results={results} shown={active === 1} />

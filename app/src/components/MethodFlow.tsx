@@ -132,7 +132,7 @@ export function MethodFlow({ earth, targets, lithology }: Props) {
 
   if (!d) {
     return (
-      <section aria-labelledby="m-flow" className="px-4 pb-12 pt-12 sm:px-6 sm:pt-16">
+      <section aria-labelledby="m-flow" className="px-5 pb-12 pt-12 sm:px-10 sm:pt-16 lg:px-16">
         <div className="max-w-[1320px]">
           {header}
           <p className="mt-6 text-[14px] text-muted">No data. No target or scored Earth cell was published with this build.</p>
@@ -147,7 +147,7 @@ export function MethodFlow({ earth, targets, lithology }: Props) {
   const isOn = (n: number) => (wide ? active === n : active >= n);
 
   return (
-    <section aria-labelledby="m-flow" className="px-4 pb-8 pt-12 sm:px-6 sm:pt-16">
+    <section aria-labelledby="m-flow" className="px-5 pb-8 pt-12 sm:px-10 sm:pt-16 lg:px-16">
       <div className="max-w-[1320px]">
         {header}
         <div className="mt-8 lg:mt-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">

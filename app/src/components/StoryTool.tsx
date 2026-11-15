@@ -102,6 +102,7 @@ export function StoryTool({
       <p className="mt-1 text-[12px] text-muted">
         Measured inside the {fk !== null ? <span className="num">{fk} km</span> : 'site'} footprint, against {targetName}
       </p>
+      {pair.afterFreeze && <p className="mt-1 text-[12px] text-muted">This target was added after the freeze of 2026-11-14. It is in no validation number.</p>}
       <ul className={`mt-3 grid gap-y-2.5 ${wide ? 'md:grid-cols-2 md:gap-x-12' : ''}`}>
         {shown.map((r) => (
           <li key={r.label} className="min-w-0">

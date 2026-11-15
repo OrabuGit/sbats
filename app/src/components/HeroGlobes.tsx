@@ -28,7 +28,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './Worlds';
+import { WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './worldInfo';
 
 export interface HeroPlace {
   id: string;
@@ -712,7 +712,8 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   const caption = (w: WorldId) => (w === 'earth' ? `${cells.toLocaleString('en-US')} cells scored` : `${count(w)} named places`);
 
   return (
-    <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg transition-opacity duration-700" style={{ opacity: state === 'loading' && !late ? 0 : 1 }}>
+    <div className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg">
+      <div ref={holder} className="absolute inset-0 transition-opacity duration-700" style={{ opacity: state === 'loading' && !late ? 0 : 1 }}>
       {state === 'error' && (
         <div className="absolute inset-0 z-[6] flex flex-col items-center justify-center gap-6 px-4 pt-28 text-center" role="status">
           <div className="flex items-center justify-center gap-5 sm:gap-10" aria-hidden="true">
@@ -798,6 +799,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
           Landing site or candidate region, no values yet
         </span>
         <span>Click a pin to see its best matches. Drag a globe. Not to scale.</span>
+      </div>
       </div>
       {children}
     </div>

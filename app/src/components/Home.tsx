@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState, type ComponentProps } from 'react';
 import { ArrowRight, ChartScatter, Layers, Mountain, Route, Search } from 'lucide-react';
 import type { CellSummary, EarthFile } from '../types';
 import { loadExtra } from '../data/access';
@@ -9,13 +9,14 @@ import type { StoryPair } from '../lib/storyPairs';
 import { StoryPairs } from './StoryPairs';
 import { useAsync } from '../lib/useAsync';
 import { countryKey, useCountries } from '../lib/where';
-import { HeroGlobes, type HeroLink, type HeroPick, type HeroPlace, type HeroSite } from './HeroGlobes';
+import { HeroStill } from './HeroStill';
+import type { HeroGlobes as HeroGlobesType, HeroLink, HeroPick, HeroPlace, HeroSite } from './HeroGlobes';
 import { HomePair, type PairInfo } from './HomePair';
 import { HomeStory, Reveal } from './HomeStory';
 import { SiteFooter } from './SiteFooter';
 import { Logo } from './Logo';
 import { NavRight } from './Chrome';
-import type { WorldId } from './Worlds';
+import type { WorldId } from './worldInfo';
 
 interface Props {
   earth: EarthFile;
@@ -177,7 +178,22 @@ function TopScan({ note, onOpen }: { note: Props['scanNote']; onOpen: (lat: numb
 }
 
 /** The home page: three globes, the two ways in, the featured sites, then how it works. */
+// three.js is the largest part of the app. The home page text and buttons draw first, over still pictures of the worlds,
+// and the 3D globes take their place when the code has arrived.
+const HeroGlobes = lazy(() => import('./HeroGlobes').then((m) => ({ default: m.HeroGlobes })));
+function HeroGlobesLazy(props: ComponentProps<typeof HeroGlobesType>) {
+  return (
+    <Suspense fallback={<HeroStill>{props.children}</HeroStill>}>
+      <HeroGlobes {...props} />
+    </Suspense>
+  );
+}
+
 export function Home(p: Props) {
+  // Marks when the home page first drew, for load-time measurements.
+  useEffect(() => {
+    performance.mark('sbats-home-ready');
+  }, []);
   const scroller = useRef<HTMLElement>(null);
   const [solid, setSolid] = useState(false);
   // Width of one scoring grid square in km (0.5 degree of latitude is about 55 km).
@@ -223,7 +239,7 @@ export function Home(p: Props) {
         {/* 1. Hero: three globes on the left three quarters, the two actions on the right. */}
         <section className="relative flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
           <div className="h-[60svh] min-h-[380px] lg:order-2 lg:h-auto lg:min-h-[640px]">
-            <HeroGlobes places={p.places} sites={p.earthPins} cells={p.earth.cells.length} onPick={p.onPick} onWorld={p.onWorld} pick={p.pick} links={p.links} reverse={p.reverse} active={p.active}>
+            <HeroGlobesLazy places={p.places} sites={p.earthPins} cells={p.earth.cells.length} onPick={p.onPick} onWorld={p.onWorld} pick={p.pick} links={p.links} reverse={p.reverse} active={p.active}>
               {p.pair && p.auto && (
                 <p className="pointer-events-none absolute inset-x-0 bottom-1 z-10 flex items-center justify-center gap-2 px-4 sm:bottom-5 text-center text-[14px] text-muted" aria-live="polite">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
@@ -235,7 +251,7 @@ export function Home(p: Props) {
                   <HomePair pair={p.pair} chips={p.chips} active={p.active} onActive={p.onActive} presets={p.presets} presetId={p.presetId} onPreset={p.onPreset} onOpen={p.onOpenPair} onAll={p.onAllMatches} onClose={p.onClearPick} />
                 </div>
               )}
-            </HeroGlobes>
+            </HeroGlobesLazy>
           </div>
           {p.pair && !p.auto && (
             <div className="lg:hidden">

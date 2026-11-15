@@ -3,7 +3,7 @@ import { WORLD_PAGES, WORLD_SOURCES } from '../data/worlds';
 import { ComputedBadge } from './Badges';
 import { ChapterHead, Counter, LearnReveal, SourceLine, WorldDisc, useSeen } from './LearnParts';
 import { WORLD_TEX } from './LearnData';
-import { WORLD_CREDIT, WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './Worlds';
+import { WORLD_CREDIT, WORLD_NAME, WORLD_RADIUS_KM, type WorldId } from './worldInfo';
 
 const ORDER: WorldId[] = ['earth', 'mars', 'moon'];
 const DROP_M = 2;

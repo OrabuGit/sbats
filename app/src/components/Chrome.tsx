@@ -1,3 +1,4 @@
+import { Bookmark } from 'lucide-react';
 import { flags } from '../flags';
 import { Logo } from './Logo';
 
@@ -46,7 +47,7 @@ export interface NavProps {
  */
 export function NavRight(p: NavProps) {
   const tone = (on: boolean) => (on ? 'text-text' : 'text-text/70 hover:text-text');
-  const items: { label: string; on: boolean; go?: () => void; extra?: React.ReactNode }[] = [
+  const items: { label: string; on: boolean; go?: () => void; icon?: boolean; extra?: React.ReactNode }[] = [
     { label: 'Home', on: !!p.homeOpen, go: p.onHome },
     { label: 'Find analog', on: !!p.findOpen, go: p.onFind },
     { label: 'Featured sites', on: p.featuredOpen, go: p.onFeatured },
@@ -56,7 +57,7 @@ export function NavRight(p: NavProps) {
     ...(flags.methodPage ? [{ label: 'Method', on: p.methodOpen, go: p.onMethod }] : []),
     { label: 'Learn', on: p.learnOpen, go: p.onLearn },
     { label: 'Tour', on: false, go: p.onTour },
-    { label: 'Saved', on: p.savedOpen, go: p.onSaved, extra: p.savedCount > 0 ? <span className="num text-[12px] text-accent">{p.savedCount}</span> : null },
+    { label: 'Saved', on: p.savedOpen, go: p.onSaved, icon: true, extra: p.savedCount > 0 ? <span className="num text-[12px] text-accent">{p.savedCount}</span> : null },
   ];
   return (
     <nav aria-label="Main" className="-mx-1 flex min-w-0 items-center overflow-x-auto xl:mx-0 xl:overflow-visible">
@@ -64,8 +65,16 @@ export function NavRight(p: NavProps) {
       {items
         .filter((i) => i.go)
         .map((i) => (
-          <button key={i.label} type="button" onClick={i.go} aria-pressed={i.on} className={`${NAV} ${tone(i.on)}`}>
-            {i.label}
+          <button
+            key={i.label}
+            type="button"
+            onClick={i.go}
+            aria-pressed={i.on}
+            aria-label={i.icon ? (p.savedCount > 0 ? `${i.label}, ${p.savedCount} items` : i.label) : undefined}
+            title={i.icon ? i.label : undefined}
+            className={`${NAV} ${tone(i.on)}`}
+          >
+            {i.icon ? <Bookmark size={18} strokeWidth={1.75} aria-hidden="true" fill={i.on ? 'currentColor' : 'none'} /> : i.label}
             {i.extra}
           </button>
         ))}
