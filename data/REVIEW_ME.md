@@ -390,7 +390,7 @@ enters the all-round score.
 
 ## `data/known_sites.json`: places on the Moon and Mars a user can pick
 
-66 places: 27 lunar and 10 Mars landing sites, 17 lunar and 12 Mars candidate regions. Each row has its citation, URL and the
+71 places: 27 lunar and 10 Mars landing sites, 18 lunar and 16 Mars candidate regions. Each row has its citation, URL and the
 quoted line the coordinates were read from (`quote`). Built by `validation/build/make_known_sites.py`.
 
 Checked in the main session (check level A): all 27 lunar landing rows were found again, digit for digit, in

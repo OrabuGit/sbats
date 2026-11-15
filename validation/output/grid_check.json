@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T06:50:24.403Z",
+ "generatedAt": "2026-11-15T07:27:19.885Z",
  "agreement": [
   {
    "target": "moon-malapert-massif",
@@ -419,28 +419,28 @@
   }
  ],
  "coverage": {
-  "places": 66,
+  "places": 71,
   "byOrigin": {
-   "grid": 54,
+   "grid": 59,
    "curated": 12
   },
   "byConfidence": {
-   "low": 28,
+   "low": 31,
    "high": 4,
-   "medium": 34
+   "medium": 36
   },
   "missing": {
-   "lithology": 22,
+   "lithology": 25,
    "tempRange": 17,
    "tempMean": 10
   },
   "byBody": {
    "moon": {
-    "grid": 36,
+    "grid": 37,
     "curated": 8
    },
    "mars": {
-    "grid": 18,
+    "grid": 22,
     "curated": 4
    }
   }

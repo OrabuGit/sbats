@@ -1,6 +1,6 @@
 # Targets from anywhere, checked on the real Moon and Mars grids
 
-Written 2026-11-15T06:50:24.403Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json (1 degree, 64800 cells, built 2026-11-15T06:47:52Z).
+Written 2026-11-15T07:27:19.885Z by `npx tsx validation/grid_check.ts`. Grids: moon.json (2 degree, 16200 cells, built 2026-11-15T06:43:23Z); mars.json (1 degree, 64800 cells, built 2026-11-15T06:47:52Z).
 
 ## 1. Does the grid agree with the curated targets?
 
@@ -53,17 +53,20 @@ More than one tolerance apart, or a different rock class: moon-malapert-massif t
 
 ## 2. What a user gets for each named place
 
-66 named places. By origin: 54 grid, 12 curated. By confidence: 28 low, 4 high, 34 medium. Missing factors: lithology at 22, tempRange at 17, tempMean at 10.
+71 named places. By origin: 59 grid, 12 curated. By confidence: 31 low, 4 high, 36 medium. Missing factors: lithology at 25, tempRange at 17, tempMean at 10.
 
 Places with no temperature value: 10. Their scores leave temperature out, run much higher, and are marked "not comparable" below.
 
 | Place | Body | Profile from | Confidence | Missing | Best-ranked Earth cell | Score |
 | --- | --- | --- | --- | --- | --- | --- |
+| Arabia Terra: area south of Firsoff crater | mars | grid cell 0.50 N, 8.50 W | low | lithology | 35.25 N, 82.75 E | 55.4 |
 | Deuteronilus Mensae exploration zone (DBDM EZ) | mars | grid cell 39.50 N, 23.50 E | low | lithology | 35.75 N, 83.75 E | 60.1 |
+| Hellas: eastern rim exploration zone | mars | grid cell 40.50 S, 103.50 E | low | lithology | 35.25 N, 80.25 E | 53.3 |
 | Mawrth Vallis (ExoMars candidate landing site) | mars | grid cell 22.50 N, 17.50 W | low | lithology | 37.25 N, 88.25 E | 55.0 |
 | Midway (Mars 2020 finalist) | mars | curated target mars-jezero | high | none | 34.75 N, 84.75 E | 55.5 |
 | Northeast Syrtis Major (Mars 2020 finalist) | mars | grid cell 17.50 N, 77.50 E | low | lithology | 35.25 N, 80.25 E | 55.5 |
 | Oxia Planum (ExoMars Rosalind Franklin landing site) | mars | grid cell 18.50 N, 24.50 W | low | lithology | 35.25 N, 85.25 E | 53.5 |
+| Pavonis Mons | mars | grid cell 1.50 N, 112.50 W | medium | none | 34.75 N, 84.75 E | 51.4 |
 | Starship candidate: Arcadia Planitia AP-1 | mars | curated target mars-arcadia-planitia | medium | lithology | 35.25 N, 85.25 E | 51.5 |
 | Starship candidate: Arcadia Planitia AP-8 | mars | grid cell 40.50 N, 158.50 W | medium | none | 35.75 N, 86.25 E | 45.3 |
 | Starship candidate: Arcadia Planitia AP-9 | mars | grid cell 40.50 N, 156.50 W | medium | none | 35.75 N, 86.25 E | 47.5 |
@@ -71,6 +74,7 @@ Places with no temperature value: 10. Their scores leave temperature out, run mu
 | Starship candidate: Erebus Montes EM-16 | mars | grid cell 39.50 N, 167.50 W | medium | none | 35.75 N, 86.25 E | 51.1 |
 | Starship candidate: Phlegra Montes PM-1 | mars | grid cell 35.50 N, 163.50 E | low | lithology | 34.75 N, 79.25 E | 59.0 |
 | Starship candidate: Phlegra Montes PM-7 | mars | grid cell 36.50 N, 162.50 E | low | lithology | 35.25 N, 80.25 E | 57.8 |
+| Valles Marineris: Eastern Melas Chasma exploration zone | mars | grid cell 11.50 S, 70.50 W | low | lithology | 35.25 N, 82.25 E | 55.8 |
 | Viking 1 Lander (Chryse Planitia) | mars | grid cell 22.50 N, 47.50 W | low | lithology | 35.25 N, 85.25 E | 51.4 |
 | Viking 2 Lander (Utopia Planitia) | mars | grid cell 47.50 N, 134.50 E | low | lithology | 35.25 N, 85.25 E | 53.9 |
 | Mars Pathfinder (Ares Vallis) | mars | grid cell 19.50 N, 33.50 W | low | lithology | 35.25 N, 85.25 E | 52.3 |
@@ -86,6 +90,7 @@ Places with no temperature value: 10. Their scores leave temperature out, run mu
 | Artemis III candidate: Mons Mouton Plateau | moon | curated target moon-mons-mouton | medium | tempRange | 82.75 N, 77.25 W | 51.1 |
 | Artemis III candidate: Nobile Rim 2 | moon | grid cell 83.00 S, 59.00 E | low | lithology | 79.75 N, 82.75 W | 39.3 |
 | Artemis III candidate: Peak near Cabeus B | moon | grid cell 83.00 S, 69.00 W | low | lithology | 82.25 N, 68.25 W | 40.6 |
+| Artemis III candidate: Slater Plain (point is the centre of Slater crater) | moon | grid cell 89.00 S, 111.00 E | medium | none | 79.75 N, 81.75 W | 40.3 |
 | Artemis III candidate: de Gerlache Rim 2 (LROC 'de Gerlache Rim' mosaic) | moon | grid cell 89.00 S, 67.00 W | low | lithology | 82.25 N, 68.25 W | 41.0 |
 | Artemis III candidates: Nobile Rim 1 and Mons Mouton (shared mosaic) | moon | curated target moon-mons-mouton | medium | tempRange | 82.75 N, 77.25 W | 51.1 |
 | Compton-Belkovich Volcanic Complex | moon | grid cell 61.00 N, 99.00 E | low | tempMean, tempRange, lithology | no score |  |

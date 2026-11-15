@@ -1,21 +1,40 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:49:35Z",
-  "note": "Real places on the Moon and Mars a user can pick as a target: mission landing sites and candidate landing or base regions. Every coordinate was read in the cited source; none is from memory. A candidate region's point is a published centre or site point, not a boundary. targetId links a place to the curated target of data/targets.json whose 55.6 km window holds it.",
+  "generatedAt": "2026-11-15T07:26:55Z",
+  "note": "Real places on the Moon and Mars a user can pick as a target: mission landing sites and candidate landing or base regions. Every coordinate was read in the cited source; none is from memory. A candidate region's point is a published centre or site point, not a boundary; where a region has no published centre, the IAU centre of the feature that names it is used and the note says so. A status of 'proposed in the literature, not an official shortlist' marks a place proposed by its authors and not chosen by any agency. targetId links a place to the curated target of data/targets.json whose 55.6 km window holds it.",
   "coordinateConvention": "Latitude north positive; longitude east positive, -180 to 180. The source's own longitude is quoted in each note. Mars sources do not always say whether latitude is planetocentric or planetographic; at this scale the difference is under 0.4 degrees.",
   "counts": {
    "moon": {
     "landing-site": 27,
-    "candidate-region": 17
+    "candidate-region": 18
    },
    "mars": {
     "landing-site": 10,
-    "candidate-region": 12
+    "candidate-region": 16
    }
   },
   "generatedBy": "validation/build/make_known_sites.py from validation/build/known_sites_raw.json"
  },
  "sites": [
+  {
+   "id": "mars-arabia-terra-area-south-of-firsoff-crater",
+   "name": "Arabia Terra: area south of Firsoff crater",
+   "body": "mars",
+   "lat": 0.3911,
+   "lon": -8.3625,
+   "kind": "candidate-region",
+   "mission": null,
+   "agency": null,
+   "date": null,
+   "status": "proposed in the literature, not an official shortlist",
+   "source": "Ori, G. G. and Pondrelli, M. (2015), 'Exploration Zone for Human Mission to Mars: the Area South of Firsoff Crater in Arabia Terra', First Landing Site/Exploration Zone Workshop for Human Missions to the Surface of Mars (Houston, 27-30 October 2015, LPI), abstract 1026. Accessed 2026-11-15.",
+   "url": "https://www.hou.usra.edu/meetings/explorationzone2015/pdf/1026.pdf",
+   "access": "primary",
+   "quote": "We are proposing an area South of Firsoff Crater centered at 0 23 28 N, 8 21 45 W (Fig. 1). The area is relatively flat (elevation range: min. -1900, max -1600)",
+   "note": "A proposal by its authors, presented at a workshop that collected proposals; no agency has selected or shortlisted it. The abstract's text gives the centre as '0 23 28 N, 8 21 45 W'; the degree, minute and second marks did not survive in the PDF text, and reading the numbers as degrees, minutes and seconds (0.3911 N, 8.3625 W) is SBATS's interpretation. One proposed zone in Arabia Terra, not the centre of the region. Latitude type not stated. Longitude as the source gives it: source gives 8 21 45 W (degrees, minutes, seconds); converted to east-positive -8.3625.",
+   "targetId": null,
+   "targetDistanceKm": null
+  },
   {
    "id": "mars-deuteronilus-mensae-exploration-zone",
    "name": "Deuteronilus Mensae exploration zone (DBDM EZ)",
@@ -32,6 +51,25 @@
    "access": "primary",
    "quote": "The Dichotomy Boundary Deuteronilus Mensae (DBDM) Exploration Zone (EZ) (39.11˚ N, 23.199˚ E)",
    "note": "Centre of a 100 km radius exploration zone with radar-confirmed glacier ice. East-positive; latitude type not stated. A second proposal at the same workshop (Plaut, abstract 1044) gives only a box: 39-43 N, 20-24 E. The IAU centre of Deuteronilus Mensae as a whole is 45.11 N, 23.92 E (USGS Gazetteer Feature 1509). Golombek et al. 2021 judged Deuteronilus Mensae too rocky for Starship in available images. Longitude as the source gives it: source gives 23.199 E; no conversion needed.",
+   "targetId": null,
+   "targetDistanceKm": null
+  },
+  {
+   "id": "mars-hellas-eastern-rim-exploration-zone",
+   "name": "Hellas: eastern rim exploration zone",
+   "body": "mars",
+   "lat": -40.0,
+   "lon": 104.0,
+   "kind": "candidate-region",
+   "mission": null,
+   "agency": null,
+   "date": null,
+   "status": "proposed in the literature, not an official shortlist",
+   "source": "Rice, J. W. Jr. et al. (2015), 'Manned Mars Mission Exploration Zone: Eastern Rim of Hellas Impact Basin', First Landing Site/Exploration Zone Workshop for Human Missions to the Surface of Mars (Houston, 27-30 October 2015, LPI), abstract 1038. Accessed 2026-11-15.",
+   "url": "https://www.hou.usra.edu/meetings/explorationzone2015/pdf/1038.pdf",
+   "access": "primary",
+   "quote": "Our proposed 200 km diameter Exploration Zone centered near 40 S; 104 E is located along the eastern rim of the Hellas basin",
+   "note": "A proposal by its authors, presented at a workshop that collected proposals; no agency has selected or shortlisted it. Centre of a proposed 200 km zone on the eastern rim, not the basin floor; given to the nearest degree. Latitude type not stated. Two other eastern-rim proposals at the same workshop give different centres: Levy and Holt (abstract 1037), 39.05 S, 101.91 E; Gallegos and Newsom (abstract 1035, 'Mesopotamia'), 35.352 S, 94.02 E. Longitude as the source gives it: source gives 104 E; no conversion needed.",
    "targetId": null,
    "targetDistanceKm": null
   },
@@ -108,6 +146,25 @@
    "access": "primary",
    "quote": "Oxia Planum (18.20°N, 335.45°E) has been chosen as the landing site of the European Space Agency (ESA) ExoMars Rosalind Franklin rover",
    "note": "East-positive 0-360; latitude type not stated. No coordinate was found on an ESA web page. DISAGREEMENTS: Vago et al. 2017 (ESA ExoMars team, Astrobiology, doi:10.1089/ast.2016.1533) give the candidate ellipse as 18.159 N, 335.666 E; Coates et al. 2017 give 18.14 N, 335.76 E; Quantin-Nataf et al. 2021 give a range of 16-19 N, -23 to -28 E; the IAU feature centre is 17.28 N, 334.29 E (USGS Gazetteer Feature 15821, planetocentric). Publisher link: https://doi.org/10.1029/2024JE008527 (blocks scripted access, opens in a browser). Longitude as the source gives it: source gives 335.45 E on a 0-360 east-positive scale; converted to -24.55.",
+   "targetId": null,
+   "targetDistanceKm": null
+  },
+  {
+   "id": "mars-pavonis-mons",
+   "name": "Pavonis Mons",
+   "body": "mars",
+   "lat": 1.48,
+   "lon": -112.96,
+   "kind": "candidate-region",
+   "mission": null,
+   "agency": null,
+   "date": null,
+   "status": "proposed in the literature, not an official shortlist",
+   "source": "Coordinates: USGS Astrogeology / IAU Working Group for Planetary System Nomenclature, Gazetteer of Planetary Nomenclature, 'Pavonis Mons', Feature ID 4620. Proposal: Kokh, P. with Walden, B. (1994), 'Urbs Pavonis: The Peacock Metroplex. The Site for Mars' Main Settlement', Moon Miners' Manifesto 73 (March 1994), reprinted in the National Space Society compilation 'Moon Miners' Manifesto: Lava Tubes' (https://nss.org/wp-content/uploads/2017/07/Moon-Miners-Manifesto-Lava-Tubes.pdf). Accessed 2026-11-15.",
+   "url": "https://planetarynames.wr.usgs.gov/Feature/4620",
+   "access": "primary",
+   "quote": "Pavonis Mons ... Mars ... Center Latitude 1.48 ... Center Longitude 247.04 ... Diameter 366.53 km ... Planetocentric, +East, 0 - 360. Kokh and Walden: 'the expectation should be that Pavonis is honeycombed with many thousands of miles of lavatubes'",
+   "note": "The proposal is an article in a space-advocacy newsletter, not a peer-reviewed paper and not from a space agency. It argues from the volcano's height, its position on the equator and the lava tubes expected in a shield volcano; it names no site on the mountain. No proposal for Pavonis Mons was found among the 2015 human landing site workshop abstracts. The point is the IAU centre of the volcano (diameter 366.53 km). The same Gazetteer page also lists an older centre of 0.79 N, 246.60 E with a diameter of 375 km. Longitude as the source gives it: source gives 247.04 E (planetocentric, +East, 0-360); converted to east-positive -112.96; the same page also prints 112.96, the west-positive form.",
    "targetId": null,
    "targetDistanceKm": null
   },
@@ -241,6 +298,25 @@
    "access": "primary",
    "quote": "PM-7 36.43 162.16 -2.3  (Table 1 columns: Landing Site, Latitude °N, Longitude °E, Elevation km)",
    "note": "Table header is 'Latitude °N, Longitude °E', east-positive on a 0-360 scale; elevations are relative to the MOLA geoid; planetocentric or planetographic is not stated. Downselected secondary (third priority) site. Elevation -2.3 km. Next to lineated valley fill. Longitude as the source gives it: source gives 162.16 E on a 0-360 east-positive scale; already within -180..180, no conversion needed.",
+   "targetId": null,
+   "targetDistanceKm": null
+  },
+  {
+   "id": "mars-valles-marineris-eastern-melas-chasma-exploration-zone",
+   "name": "Valles Marineris: Eastern Melas Chasma exploration zone",
+   "body": "mars",
+   "lat": -11.7,
+   "lon": -70.0,
+   "kind": "candidate-region",
+   "mission": null,
+   "agency": null,
+   "date": null,
+   "status": "proposed in the literature, not an official shortlist",
+   "source": "McEwen, A. et al. (2015), 'Landing Site and Exploration Zone in Eastern Melas Chasma', First Landing Site/Exploration Zone Workshop for Human Missions to the Surface of Mars (Houston, 27-30 October 2015, LPI), abstract 1007. Accessed 2026-11-15.",
+   "url": "https://www.hou.usra.edu/meetings/explorationzone2015/pdf/1007.pdf",
+   "access": "primary",
+   "quote": "Discussion of East Melas EZ: This region (see figure; center ~11.7 S, 290.0 E) is one of the largest low-elevation equatorial regions on Mars",
+   "note": "A proposal by its authors, presented at a workshop that collected proposals; no agency has selected or shortlisted it. Centre of the proposed exploration zone in one trough of Valles Marineris, not the centre of the canyon system. East-positive 0-360; latitude type not stated. Three other Valles Marineris proposals were presented at the same workshop (Mojarro et al., abstract 1036; Kochemasov, abstract 1006; Clifford et al., abstract 1054, the eastern outlet). Longitude as the source gives it: source gives 290.0 E; converted to east-positive -70.0.",
    "targetId": null,
    "targetDistanceKm": null
   },
@@ -526,6 +602,25 @@
    "access": "primary",
    "quote": "Site Name Peak Near Cabeus B Center Lat -83.6 Center Lon 291.2",
    "note": "One of the nine Artemis III candidate landing regions NASA announced on 28 October 2024 (https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/). NASA published no coordinates for the regions. The value here is the CENTRE OF THE LROC NAC MOSAIC made for the region, rounded by LROC to 0.1 deg (about 3 km in latitude), not an official region centre. Mosaic bounds: lat -84.06 to -83.21, lon -72.47 to -64.80. Longitude as the source gives it: source gives 291.2 E on a 0-360 east-positive scale; converted to -68.8.",
+   "targetId": null,
+   "targetDistanceKm": null
+  },
+  {
+   "id": "moon-artemis-slater-plain",
+   "name": "Artemis III candidate: Slater Plain (point is the centre of Slater crater)",
+   "body": "moon",
+   "lat": -88.08,
+   "lon": 111.29,
+   "kind": "candidate-region",
+   "mission": "Artemis III (candidate)",
+   "agency": "NASA",
+   "date": null,
+   "status": "candidate landing region",
+   "source": "Coordinates: USGS Astrogeology / IAU Working Group for Planetary System Nomenclature, Gazetteer of Planetary Nomenclature, 'Slater', Feature ID 15325 (centre of Slater crater). Region: NASA news release 'NASA Provides Update on Artemis III Moon Landing Regions', 28 October 2024, and George, T. et al. (2026), 'Artemis III Site Selection Update: Downselection from Thirteen to Nine Candidate Regions', Lunar and Planetary Science Conference abstract, NASA NTRS 20250011660. Accessed 2026-11-15.",
+   "url": "https://planetarynames.wr.usgs.gov/Feature/15325",
+   "access": "primary",
+   "quote": "Slater ... Moon ... Center Latitude -88.08 ... Center Longitude 111.29 ... Planetographic, +East, -180 - 180 ... Diameter 25.12 km. NASA abstract: 'the updated set of Artemis III candidate landing regions - Peak near Cabeus B, Haworth, Malapert Massif, Mons Mouton Plateau, Mons Mouton, Nobile Rim 1, Nobile Rim 2, de Gerlache Rim 2, and Slater Plain'",
+   "note": "THE POINT IS THE CENTRE OF SLATER CRATER, NOT OF THE REGION. Slater Plain is one of the nine Artemis III candidate landing regions NASA announced on 28 October 2024 (https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/) and the only one added that year. NASA published no coordinates for the regions, no LROC region mosaic was found for this one, and the USGS navigation-grid data release that holds its outline (McClernan 2024, doi:10.5066/P1MEQ6UK) could not be opened. The region is the plain beside the crater that names it, so its true centre is some tens of kilometres from this point. Replace the point when a published region centre is read. Longitude as the source gives it: source gives 111.29 (planetographic, +East, -180 to 180); no conversion needed.",
    "targetId": null,
    "targetDistanceKm": null
   },

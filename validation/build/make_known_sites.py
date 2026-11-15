@@ -74,7 +74,9 @@ def main() -> None:
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "note": ("Real places on the Moon and Mars a user can pick as a target: mission landing sites and candidate landing or base "
                      "regions. Every coordinate was read in the cited source; none is from memory. A candidate region's point is a "
-                     "published centre or site point, not a boundary. targetId links a place to the curated target of data/targets.json "
+                     "published centre or site point, not a boundary; where a region has no published centre, the IAU centre of the "
+                     "feature that names it is used and the note says so. A status of 'proposed in the literature, not an official "
+                     "shortlist' marks a place proposed by its authors and not chosen by any agency. targetId links a place to the curated target of data/targets.json "
                      "whose 55.6 km window holds it."),
             "coordinateConvention": "Latitude north positive; longitude east positive, -180 to 180. The source's own longitude is quoted in each note. Mars sources do not always say whether latitude is planetocentric or planetographic; at this scale the difference is under 0.4 degrees.",
             "counts": {b: {k: sum(1 for s in sites if s["body"] == b and s["kind"] == k) for k in ("landing-site", "candidate-region")} for b in ("moon", "mars")},
