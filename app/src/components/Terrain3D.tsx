@@ -4,13 +4,13 @@ import {
   BoxGeometry,
   BufferAttribute,
   BufferGeometry,
-  Line,
   LineBasicMaterial,
   LineSegments,
   Raycaster,
   Vector2,
   Vector3,
   Color,
+  DoubleSide,
   ConeGeometry,
   CylinderGeometry,
   DirectionalLight,
@@ -67,10 +67,23 @@ interface Props {
   sunElevation?: number;
   /** Route waypoints in km from the centre of the square (x east, z south). Drawn on both terrains. */
   route?: { x: number; z: number }[];
+  /** Optional per-side routes (Earth, target) that replace `route`: each its own path, with steepness per segment. */
+  routes?: [RouteDraw | null, RouteDraw | null];
   /** Position of the rover along the route, 0 to 1, or null for no rover. */
   rover?: number | null;
   /** Called with the ground point under a click on the Earth terrain. */
   onPoint?: (xKm: number, zKm: number) => void;
+}
+
+/** A path drawn on one terrain, in km from the centre (x east, z south). */
+export interface RouteDraw {
+  points: { x: number; z: number }[];
+  /** Per segment (points.length - 1): 0 normal, 1 over 75% of the slope limit (amber), 2 over the limit (red, dashed). */
+  steep?: (0 | 1 | 2)[];
+  /** A straight line shown to explain a block, not a route: drawn muted, and no rover drives it. */
+  straight?: boolean;
+  /** Where to put the waypoint markers. Defaults to every point. */
+  waypoints?: { x: number; z: number }[];
 }
 
 /** Slope classes for the surface colours and their legend: upper bound in degrees and a flat colour. */
@@ -113,6 +126,44 @@ function moduleGeometry(type: ModuleType): BufferGeometry {
     case 'landingPad':
       return new CylinderGeometry(s * 0.7, s * 0.7, s * 0.06, 12).translate(0, s * 0.03, 0);
   }
+}
+
+/** Triangles of a flat ribbon along a path, `w` km wide, optionally dashed as [on, off] km along the ground plan. */
+function ribbon(pts: Vector3[], w: number, dash: [number, number] | null): BufferGeometry {
+  const pos: number[] = [];
+  const quad = (a: Vector3, b: Vector3) => {
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const l = Math.hypot(dx, dz);
+    if (l === 0) return;
+    const nx = (-dz / l) * (w / 2);
+    const nz = (dx / l) * (w / 2);
+    pos.push(a.x + nx, a.y, a.z + nz, a.x - nx, a.y, a.z - nz, b.x + nx, b.y, b.z + nz, a.x - nx, a.y, a.z - nz, b.x - nx, b.y, b.z - nz, b.x + nx, b.y, b.z + nz);
+  };
+  let s = 0;
+  for (let k = 0; k < pts.length - 1; k++) {
+    const a = pts[k];
+    const b = pts[k + 1];
+    const l = Math.hypot(b.x - a.x, b.z - a.z);
+    if (!dash || l === 0) {
+      quad(a, b);
+      s += l;
+      continue;
+    }
+    const period = dash[0] + dash[1];
+    let t0 = 0;
+    while (t0 < 1) {
+      const phase = s % period;
+      const on = phase < dash[0];
+      const t1 = Math.min(1, t0 + ((on ? dash[0] - phase : period - phase) || 1e-6) / l);
+      if (on) quad(a.clone().lerp(b, t0), a.clone().lerp(b, t1));
+      s += (t1 - t0) * l;
+      t0 = t1;
+    }
+  }
+  const geo = new BufferGeometry();
+  geo.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3));
+  return geo;
 }
 
 /** Lights and vertical scale for a sun elevation and an exaggeration. The sun stays in the north-west. */
@@ -256,7 +307,7 @@ function build(
   return built;
 }
 
-export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, rover = null, onPoint }: Props) {
+export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, routes, rover = null, onPoint }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [orbit, setOrbit] = useState(!reduced);
@@ -436,31 +487,50 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
     const b = built.current;
     if (!b || state !== 'ready') return;
     const disposables: { dispose: () => void }[] = [];
-    const pts = route ?? [];
-    // Sample the path every 100 m so the line follows the ground.
-    const dense: { x: number; z: number }[] = [];
-    for (let i = 0; i < pts.length - 1; i++) {
-      const len = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].z - pts[i].z);
-      const steps = Math.max(1, Math.ceil(len / 0.1));
-      for (let k = 0; k < steps; k++) dense.push({ x: pts[i].x + ((pts[i + 1].x - pts[i].x) * k) / steps, z: pts[i].z + ((pts[i + 1].z - pts[i].z) * k) / steps });
-    }
-    if (pts.length > 0) dense.push(pts[pts.length - 1]);
     b.forEach((side, i) => {
       side.routeGroup.clear();
-      if (pts.length === 0) return;
+      const draw: RouteDraw | null = routes ? routes[i] : route && route.length > 0 ? { points: route } : null;
+      const pts = draw?.points ?? [];
+      if (pts.length === 0 && !draw?.waypoints?.length) return;
+      // Sample the path every 100 m so the line follows the ground; each sample keeps its segment's steepness class.
+      const dense: { x: number; z: number; cls: number }[] = [];
+      for (let k = 0; k < pts.length - 1; k++) {
+        const len = Math.hypot(pts[k + 1].x - pts[k].x, pts[k + 1].z - pts[k].z);
+        const steps = Math.max(1, Math.ceil(len / 0.1));
+        const cls = draw?.steep?.[k] ?? 0;
+        for (let s = 0; s < steps; s++) dense.push({ x: pts[k].x + ((pts[k + 1].x - pts[k].x) * s) / steps, z: pts[k].z + ((pts[k + 1].z - pts[k].z) * s) / steps, cls });
+      }
+      if (pts.length > 0) dense.push({ ...pts[pts.length - 1], cls: dense[dense.length - 1]?.cls ?? 0 });
       const lift = 0.06;
-      const lineGeo = new BufferGeometry().setFromPoints(dense.map((p) => new Vector3(p.x, side.heightAt(p.x, p.z) + lift, p.z)));
-      const lineMat = new LineBasicMaterial({ color: i === 0 ? 0xd7dde3 : 0xffb000 });
+      const base = routes ? (draw?.straight ? 0x7c8894 : 0xd7dde3) : i === 0 ? 0xd7dde3 : 0xffb000;
+      // One line per run of samples with the same class: amber over 75% of the limit, red and dashed over it.
+      let startK = 0;
+      for (let k = 1; k <= dense.length; k++) {
+        if (k < dense.length && dense[k].cls === dense[startK].cls && k < dense.length - 1) continue;
+        const run = dense.slice(startK, Math.min(dense.length, k + 1));
+        const cls = dense[startK].cls;
+        if (run.length > 1) {
+          // A flat ribbon a little wider than a pixel, so the colour reads on the satellite image; WebGL lines are always 1 px.
+          const geo = ribbon(
+            run.map((p) => new Vector3(p.x, side.heightAt(p.x, p.z) + lift, p.z)),
+            cls === 0 ? 0.07 : 0.1,
+            cls === 2 ? [0.16, 0.1] : null,
+          );
+          const mat = new MeshBasicMaterial({ color: cls === 2 ? 0xff4d4d : cls === 1 ? 0xffb000 : base, side: DoubleSide });
+          disposables.push(geo, mat);
+          side.routeGroup.add(new Mesh(geo, mat));
+        }
+        startK = k;
+      }
       const dotGeo = new BoxGeometry(0.22, 0.22, 0.22);
-      const dotMat = new MeshBasicMaterial({ color: i === 0 ? 0xd7dde3 : 0xffb000 });
-      disposables.push(lineGeo, lineMat, dotGeo, dotMat);
-      side.routeGroup.add(new Line(lineGeo, lineMat));
-      for (const p of pts) {
+      const dotMat = new MeshBasicMaterial({ color: base });
+      disposables.push(dotGeo, dotMat);
+      for (const p of draw?.waypoints ?? pts) {
         const m = new Mesh(dotGeo, dotMat);
         m.position.set(p.x, side.heightAt(p.x, p.z) + lift, p.z);
         side.routeGroup.add(m);
       }
-      if (rover !== null && dense.length > 1) {
+      if (rover !== null && dense.length > 1 && !draw?.straight) {
         const at = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)))];
         const next = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)) + 1)];
         // A box on a wider box: a rover drawn far larger than life, like the modules.
@@ -477,7 +547,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
     });
     redraw.current();
     return () => disposables.forEach((d) => d.dispose());
-  }, [route, rover, state, exaggeration]);
+  }, [route, routes, rover, state, exaggeration]);
 
   if (!ready) return <p className="p-3 text-[13px] text-muted">No data. A terrain extract is missing for one of the two places.</p>;
 

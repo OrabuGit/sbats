@@ -1241,6 +1241,9 @@ function Orbit({ data }: { data: DataBundle }) {
           onSave={toggleSaved}
           onBack={backToEarth}
           tools={matchTools}
+          earth={earth}
+          climate={climateFile}
+          minerals={match.minerals}
           terrain={terrainReady && earthExtract && targetExtract ? { earth: earthExtract, target: targetExtract, windowKm, onOpen: () => transition(() => setView('terrain')) } : null}
           actions={[
             { label: 'View report', onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },

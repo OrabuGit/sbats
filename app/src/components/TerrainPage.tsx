@@ -3,9 +3,11 @@ import { ArrowLeft, Pause, Play, RotateCcw, Undo2 } from 'lucide-react';
 import { loadElevation, type ExtractItem } from '../data/sites';
 import { getLastLayout, routeKey, setRoutes } from '../lib/layoutStore';
 import { measureRoute, type ElevationTile, type RouteResult } from '../lib/matchAdapter';
+import { planRoute, steepClass, type PlanResult } from '../lib/routePlan';
 import { useAsync } from '../lib/useAsync';
-import { ComputedBadge } from './Badges';
-import { SLOPE_CLASSES } from './Terrain3D';
+import { RouteFigures, RoverFigure, hoursText, metresPerHour, type Sourced } from './RouteFigures';
+import { RouteProfile, RouteSteepKey, type ProfilePoint } from './RouteProfile';
+import { SLOPE_CLASSES, type RouteDraw } from './Terrain3D';
 import { TerrainControls, TerrainLegend } from './TerrainControls';
 import { heightRange, niceInterval, SUN_DEFAULT } from './TerrainScale';
 
@@ -26,13 +28,6 @@ interface Props {
 }
 
 type Surface = 'image' | 'relief' | 'slope' | 'height';
-interface Sourced {
-  value: number | null;
-  unit: string;
-  kind: string;
-  source: string;
-  badge?: 'Measured' | 'Mission' | 'Literature';
-}
 export interface RoversFile {
   meta: { note: string; energyNote?: string };
   rovers: { id: string; name: string; body: 'moon' | 'mars'; crewed: boolean; slopeLimit: Sourced | null; speed: Sourced | null }[];
@@ -41,15 +36,6 @@ interface RoutePoint {
   x: number;
   z: number;
 }
-/** Distance and height along a route, for the chart. Height is above the lowest point of the route's own square. */
-interface RouteProfile {
-  distKm: number[];
-  heightM: number[];
-}
-const profileOf = (r: RouteResult, floor: number): RouteProfile => {
-  const s = r.samples.filter((x) => x.elevationM !== null);
-  return { distKm: s.map((x) => x.distanceM / 1000), heightM: s.map((x) => (x.elevationM as number) - floor) };
-};
 const DRIVE_SECONDS = 12;
 /** A route across the middle of the square, in km from its centre. Lets a route be made without a pointer. */
 const EXAMPLE_ROUTE: RoutePoint[] = [
@@ -57,50 +43,15 @@ const EXAMPLE_ROUTE: RoutePoint[] = [
   { x: -1, z: -1 },
   { x: 5, z: -3 },
 ];
-const fx = (v: number | null | undefined, d: number) => (v === null || v === undefined ? 'no data' : v.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d }));
-
-/** Elevation along the route on both terrains, on one pair of axes. */
-function ProfileChart({ a, b, at }: { a: RouteProfile; b: RouteProfile; at: number | null }) {
-  const w = 640;
-  const h = 200;
-  const pad = { l: 52, r: 12, t: 10, b: 28 };
-  const maxD = Math.max(a.distKm[a.distKm.length - 1] ?? 0, 0.1);
-  const all = [...a.heightM, ...b.heightM];
-  const lo = Math.min(...all);
-  const hi = Math.max(...all, lo + 1);
-  const x = (d: number) => pad.l + (d / maxD) * (w - pad.l - pad.r);
-  const y = (v: number) => h - pad.b - ((v - lo) / (hi - lo)) * (h - pad.t - pad.b);
-  const line = (p: RouteProfile) => p.distKm.map((d, i) => `${x(d).toFixed(1)},${y(p.heightM[i]).toFixed(1)}`).join(' ');
-  const yTicks = [lo, (lo + hi) / 2, hi];
-  const xTicks = [0, maxD / 2, maxD];
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="block w-full max-w-[640px]" role="img" aria-label={`Elevation along the route. Earth from ${fx(Math.min(...a.heightM), 0)} to ${fx(Math.max(...a.heightM), 0)} m, target from ${fx(Math.min(...b.heightM), 0)} to ${fx(Math.max(...b.heightM), 0)} m, over ${fx(maxD, 1)} km.`}>
-      {yTicks.map((v) => (
-        <g key={v}>
-          <line x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} stroke="#2A3138" strokeWidth="1" />
-          <text x={pad.l - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill="#7C8894" fontFamily="IBM Plex Mono, monospace">
-            {fx(v, 0)}
-          </text>
-        </g>
-      ))}
-      {xTicks.map((d) => (
-        <text key={d} x={x(d)} y={h - 8} textAnchor={d === 0 ? 'start' : d === maxD ? 'end' : 'middle'} fontSize="11" fill="#7C8894" fontFamily="IBM Plex Mono, monospace">
-          {fx(d, 1)} km
-        </text>
-      ))}
-      <polyline points={line(b)} fill="none" stroke="#FFB000" strokeWidth="1.5" />
-      <polyline points={line(a)} fill="none" stroke="#D7DDE3" strokeWidth="1.5" />
-      {at !== null && <line x1={x(at * maxD)} x2={x(at * maxD)} y1={pad.t} y2={h - pad.b} stroke="#D7DDE3" strokeWidth="1" strokeDasharray="2 3" />}
-    </svg>
-  );
-}
+const fx = (v: number, d: number) => v.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
 
 /** Step 5, "Open 3D terrain": the Earth place and the target as terrain at one scale, with a route driven on both. */
 export function TerrainPage({ earth, target, windowKm, earthName, targetName, rovers, targetBody, onBack, onBase }: Props) {
-  const usable = (rovers?.rovers ?? []).filter((r) => r.slopeLimit?.value != null);
+  const all = rovers?.rovers ?? [];
   const [roverId, setRoverId] = useState<string | null>(null);
-  const roverSpec = usable.find((r) => r.id === roverId) ?? usable.find((r) => r.body === targetBody) ?? usable[0] ?? null;
+  const roverSpec = all.find((r) => r.id === roverId) ?? all.find((r) => r.body === targetBody && r.slopeLimit?.value != null) ?? all[0] ?? null;
   const slopeLimitDeg = roverSpec?.slopeLimit?.value ?? null;
+  const speedMph = metresPerHour(roverSpec?.speed);
   const [surface, setSurface] = useState<Surface>('image');
   const [contours, setContours] = useState(false);
   const [exaggeration, setExaggeration] = useState(1);
@@ -120,34 +71,73 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
     });
   }, [heights, earthName, targetName]);
 
-  // Session C's route library measures the same waypoints on each elevation tile.
-  const measured = useMemo(() => {
-    if (heights.status !== 'ready' || route.length < 2) return null;
-    const items = [earth, target];
+  // Plan the route on each terrain: the same start, waypoints and end, at the same offsets from the centre, under the same limit.
+  const items = useMemo(() => [earth, target] as const, [earth, target]);
+  const plans = useMemo(() => {
+    if (heights.status !== 'ready' || route.length < 2 || slopeLimitDeg === null) return null;
     return heights.value.map((data, i) => {
       const el = items[i].elevation!;
-      const tile: ElevationTile = { size: el.size, pixelM: el.pixelM, data };
       const toTile = (p: RoutePoint) => ({ col: ((p.x + windowKm / 2) / windowKm) * (el.size - 1), row: ((p.z + windowKm / 2) / windowKm) * (el.size - 1) });
       try {
-        return measureRoute(tile, route.map(toTile), {
-          limit: roverSpec?.slopeLimit && slopeLimitDeg !== null ? { rover: roverSpec.name, limitDeg: slopeLimitDeg, kind: roverSpec.slopeLimit.kind, source: roverSpec.slopeLimit.source } : null,
-          speed: roverSpec?.speed?.value != null ? { rover: roverSpec.name, metresPerHour: roverSpec.speed.value, kind: roverSpec.speed.kind, source: roverSpec.speed.source } : null,
-        });
+        return planRoute({ size: el.size, pixelM: el.pixelM, data }, route.map(toTile), { limitDeg: slopeLimitDeg });
+      } catch {
+        return null;
+      }
+    }) as [PlanResult | null, PlanResult | null];
+  }, [heights, route, items, windowKm, slopeLimitDeg]);
+
+  // Tile pixels back to km from the centre, for the 3D view.
+  const toKm = (i: number, col: number, row: number) => {
+    const n = items[i].elevation!.size - 1;
+    return { x: (col / n) * windowKm - windowKm / 2, z: (row / n) * windowKm - windowKm / 2 };
+  };
+  // What each side draws: the planned path, or, when it is blocked, the straight line of the blocked leg.
+  const sides = useMemo(() => {
+    if (!plans || slopeLimitDeg === null) return null;
+    return plans.map((p, i) => {
+      if (!p) return null;
+      const floor = items[i].elevation!.min;
+      if (p.ok) {
+        const points: ProfilePoint[] = p.samples.map((s, k) => ({ distanceM: s.distanceM, heightM: s.elevationM - floor, slopeDeg: k === 0 ? null : s.slopeDeg }));
+        const draw: RouteDraw = { points: p.samples.map((s) => toKm(i, s.col, s.row)), steep: p.samples.slice(1).map((s) => steepClass(s.slopeDeg, slopeLimitDeg)), waypoints: route };
+        return { plan: p, points, draw, straight: false };
+      }
+      const st = p.blocked!.straight;
+      const points: ProfilePoint[] = st.map((s) => ({ distanceM: s.distanceM, heightM: s.elevationM === null ? null : s.elevationM - floor, slopeDeg: s.slopeDeg }));
+      const draw: RouteDraw = { points: st.map((s) => toKm(i, s.col, s.row)), steep: st.slice(1).map((s) => steepClass(s.slopeDeg, slopeLimitDeg)), straight: true, waypoints: route };
+      return { plan: p, points, draw, straight: true };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plans, items, route, windowKm, slopeLimitDeg]);
+  const drivable = !!sides?.some((s) => s && !s.straight);
+  // Without a plan (no slope limit, one point, or still loading) only the waypoints are marked: no line is drawn through ground that was not checked.
+  const draws = useMemo(() => [0, 1].map((i) => sides?.[i]?.draw ?? { points: [], waypoints: route }) as [RouteDraw, RouteDraw], [sides, route]);
+
+  // Session C's route library measures each planned path, for the report of this pair. A blocked side is not reported as a route.
+  const measured = useMemo(() => {
+    if (heights.status !== 'ready' || !plans) return null;
+    return plans.map((p, i) => {
+      if (!p || !p.ok || p.samples.length < 2) return null;
+      const el = items[i].elevation!;
+      const tile: ElevationTile = { size: el.size, pixelM: el.pixelM, data: heights.value[i] };
+      try {
+        return measureRoute(
+          tile,
+          p.samples.map((s) => ({ col: s.col, row: s.row })),
+          {
+            limit: roverSpec?.slopeLimit && slopeLimitDeg !== null ? { rover: roverSpec.name, limitDeg: slopeLimitDeg, kind: roverSpec.slopeLimit.kind, source: roverSpec.slopeLimit.source } : null,
+            speed: roverSpec?.speed && speedMph !== null ? { rover: roverSpec.name, metresPerHour: speedMph, kind: roverSpec.speed.kind, source: roverSpec.speed.source } : null,
+          },
+        );
       } catch {
         return null;
       }
     }) as [RouteResult | null, RouteResult | null];
-  }, [heights, route, earth, target, windowKm, slopeLimitDeg, roverSpec]);
-  const profiles = useMemo(
-    () => (measured && measured[0] && measured[1] ? ([profileOf(measured[0], earth.elevation!.min), profileOf(measured[1], target.elevation!.min)] as const) : null),
-    [measured, earth, target],
-  );
-  const figures = measured;
-  // Keep the measured routes for the report of this pair.
+  }, [heights, plans, items, roverSpec, slopeLimitDeg, speedMph]);
   useEffect(() => {
     const list: { label: string; result: RouteResult }[] = [];
-    if (measured?.[0]) list.push({ label: `Route on ${earthName} (Earth)`, result: measured[0] });
-    if (measured?.[1]) list.push({ label: `The same route laid on ${targetName}`, result: measured[1] });
+    if (measured?.[0]) list.push({ label: `Planned route on ${earthName} (Earth)`, result: measured[0] });
+    if (measured?.[1]) list.push({ label: `The same start and end planned on ${targetName}`, result: measured[1] });
     setRoutes(routeKey(earth.id, target.id), list);
   }, [measured, earth, target, earthName, targetName]);
 
@@ -178,18 +168,21 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
     setRover(null);
     setDriving(false);
   };
-  const row = (label: string, get: (f: RouteResult) => string) => (
-    <tr className="border-b border-line">
-      <th scope="row" className="py-2 pr-4 text-left text-[12px] font-normal text-muted">
-        {label}
-      </th>
-      {[0, 1].map((i) => (
-        <td key={i} className={`num py-2 pl-4 text-right text-[13px] ${figures?.[i] ? 'text-text' : 'text-muted'}`}>
-          {figures?.[i] ? get(figures[i] as RouteResult) : 'no data'}
-        </td>
-      ))}
-    </tr>
-  );
+  const pointName = (k: number, n: number) => (k === 0 ? 'the start' : k === n - 1 ? 'the end' : `waypoint ${k}`);
+  /** A plain sentence for a side with no route under the limit. */
+  const blockedText = (name: string, p: PlanResult) => {
+    const bl = p.blocked!;
+    const from = pointName(bl.leg, route.length);
+    const to = pointName(bl.leg + 1, route.length);
+    if (bl.reason === 'no data') return `No route on ${name}: ${from} or ${to} lies on a post with no elevation data.`;
+    const lead = `No route on ${name} keeps every step at or under ${p.limitDeg}°: nothing connects ${from} to ${to}.`;
+    const cross =
+      bl.sections.length > 0
+        ? ` The straight line between them crosses ${bl.sections.length} section${bl.sections.length === 1 ? '' : 's'} steeper than the limit, ${fx(bl.overLimitM, 0)} m in all, up to ${fx(bl.maxSlopeDeg ?? 0, 1)}° (red, dashed).`
+        : ' The straight line between them has no single step over the limit at this spacing, but every path on the grid does.';
+    return `${lead}${cross} The search reached no closer than ${fx(bl.closestToEndM / 1000, 2)} km to ${to}.`;
+  };
+  const names = [earthName, targetName];
 
   return (
     <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-terrain">
@@ -220,7 +213,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
             if (!driving && (rover === null || rover >= 1)) setRover(0);
             setDriving((d) => !d);
           }}
-          disabled={route.length < 2}
+          disabled={!drivable}
           aria-pressed={driving}
           className="btn btn-primary !rounded-none"
         >
@@ -234,8 +227,9 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
           {earthName} and {targetName} at one scale
         </h2>
         <p className="mt-1 max-w-[72ch] text-[13px] text-muted">
-          Click the Earth terrain, on the left, to add waypoints, or press Example route. The same route is laid on the target at the same positions, so the two can be
-          compared. Drag to turn both.
+          Click the Earth terrain (left, or top on a phone): the first point is the start, the last point is the end, and any points between are waypoints, in order. Or press Example route.
+          A route is planned over the real elevation grid that never steps steeper than the chosen rover's slope limit, then planned again on the target from the same
+          positions under the same limit. Drag to turn both.
         </p>
       </header>
 
@@ -259,6 +253,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
           cols={24}
           rows={12}
           route={route}
+          routes={draws}
           rover={rover}
           onPoint={(x, z) => change([...route, { x, z }])}
         />
@@ -281,90 +276,83 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, ro
 
       <section className="grid gap-x-10 gap-y-6 border-b border-line px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]" aria-labelledby="h-route">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <h3 id="h-route" className="text-[14px] font-semibold text-text">
-              Elevation along the route
-            </h3>
-            <span className="num flex items-center gap-1.5 text-[11px] text-muted">
-              <span className="block h-0.5 w-4 bg-text" aria-hidden="true" /> Earth
-            </span>
-            <span className="num flex items-center gap-1.5 text-[11px] text-muted">
-              <span className="block h-0.5 w-4 bg-accent" aria-hidden="true" /> Target
-            </span>
-          </div>
-          <div className="mt-3 min-h-[200px]">
+          <h3 id="h-route" className="text-[14px] font-semibold text-text">
+            Elevation along the route
+          </h3>
+          {slopeLimitDeg !== null && sides && (
+            <div className="mt-2">
+              <RouteSteepKey limitDeg={slopeLimitDeg} />
+            </div>
+          )}
+          <div className="mt-3 min-h-[200px] space-y-5">
             {heights.status === 'loading' ? (
               <p className="label" role="status">
                 Loading elevation
               </p>
             ) : heights.status === 'error' ? (
               <p className="text-[13px] text-muted">The elevation grids could not be loaded: {heights.message}</p>
-            ) : profiles ? (
-              <ProfileChart a={profiles[0]} b={profiles[1]} at={rover} />
+            ) : route.length < 2 ? (
+              <p className="text-[13px] text-muted">No route yet. {route.length === 1 ? 'The start is placed. Click again to place the end.' : 'Click the Earth terrain to place the start.'}</p>
+            ) : slopeLimitDeg === null ? (
+              <p className="text-[13px] text-muted">No data: {roverSpec ? `${roverSpec.name} has no published slope limit in data/rovers.json` : 'data/rovers.json is not loaded'}, so no route is planned.</p>
             ) : (
-              <p className="text-[13px] text-muted">
-                No route yet. {route.length === 1 ? 'One waypoint is placed. Add a second.' : 'Click the Earth terrain to place the first waypoint.'}
-              </p>
+              sides?.map((side, i) =>
+                side ? (
+                  <figure key={names[i]}>
+                    <figcaption className="mb-1 text-[12px] text-text">
+                      {names[i]}
+                      <span className="text-muted">{side.straight ? ': no route; the straight line of the blocked leg' : ': the planned route'}</span>
+                    </figcaption>
+                    <RouteProfile id={`p${i}`} points={side.points} limitDeg={slopeLimitDeg} at={side.straight ? null : rover} straight={side.straight} title={`${names[i]}, ${side.straight ? 'straight line' : 'planned route'}`} />
+                    {side.straight && (
+                      <p className="mt-1 max-w-[72ch] text-[13px] text-text" role="status">
+                        {blockedText(names[i], side.plan)}
+                      </p>
+                    )}
+                  </figure>
+                ) : (
+                  <p key={names[i]} className="text-[13px] text-muted">
+                    {names[i]}: no data
+                  </p>
+                ),
+              )
             )}
           </div>
           <p className="mt-2 text-[11px] text-muted">Height in metres above each square's own lowest point. Distance along the ground plan.</p>
         </div>
 
         <div className="min-w-0">
-          <label className="mb-3 flex max-w-[460px] items-center justify-between gap-3 border-b border-line pb-2 text-[13px] text-text">
+          <label className="flex max-w-[460px] items-center justify-between gap-3 border-b border-line pb-2 text-[13px] text-text">
             <span className="label">Rover</span>
-            <select value={roverSpec?.id ?? ''} onChange={(e) => setRoverId(e.target.value)} disabled={usable.length === 0} className="h-11 min-w-0 bg-panel text-[13px] text-text">
-              {usable.length === 0 && <option value="">no data</option>}
-              {usable.map((r) => (
+            <select value={roverSpec?.id ?? ''} onChange={(e) => setRoverId(e.target.value)} disabled={all.length === 0} className="h-11 min-w-0 bg-panel text-[13px] text-text">
+              {all.length === 0 && <option value="">no data</option>}
+              {all.map((r) => (
                 <option key={r.id} value={r.id}>
-                  {r.name}, {r.body === 'moon' ? 'Moon' : 'Mars'}, limit {r.slopeLimit?.value}°
+                  {r.name}, {r.body === 'moon' ? 'Moon' : 'Mars'}, limit {r.slopeLimit?.value != null ? `${r.slopeLimit.value}°` : 'no data'}
                 </option>
               ))}
             </select>
           </label>
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[14px] font-semibold text-text">Route figures</h3>
-            <ComputedBadge title="Computed in the browser by the route library from the elevation grids, sampled at each grid's own pixel size." />
-
+          <div className="mb-5 max-w-[460px]">
+            <RoverFigure label="Slope limit" fig={roverSpec?.slopeLimit} unit="°" />
+            <RoverFigure label="Speed" fig={roverSpec?.speed} unit={roverSpec?.speed ? ` ${roverSpec.speed.unit}` : ''} />
           </div>
-          <table className="mt-2 w-full max-w-[460px] border-collapse">
-            <thead>
-              <tr className="border-b border-line">
-                <th scope="col" className="label py-1.5 text-left font-normal">
-                  {route.length} waypoints
-                </th>
-                <th scope="col" className="label py-1.5 pl-4 text-right font-normal">
-                  Earth
-                </th>
-                <th scope="col" className="label py-1.5 pl-4 text-right font-normal">
-                  Target
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {row('Length on the map', (f) => `${fx(f.distanceM / 1000, 2)} km`)}
-              {row('Length on the surface', (f) => (f.surfaceDistanceM === null ? 'no data' : `${fx(f.surfaceDistanceM / 1000, 2)} km`))}
-              {row('Total climb', (f) => `${fx(f.ascentM, 0)} m`)}
-              {row('Total descent', (f) => `${fx(f.descentM, 0)} m`)}
-              {row('Steepest climb on the route', (f) => (f.maxUphillDeg === null ? 'no data' : `${fx(f.maxUphillDeg, 1)}°`))}
-              {row('Steepest ground crossed', (f) => (f.maxTerrainSlopeDeg === null ? 'no data' : `${fx(f.maxTerrainSlopeDeg, 1)}°`))}
-              {row(slopeLimitDeg === null ? 'Share above a slope limit' : `Share on ground steeper than ${slopeLimitDeg}°`, (f) => (f.shareAboveLimit === null ? 'no data' : `${fx(f.shareAboveLimit * 100, 0)}%`))}
-              {row('Driving time, lower bound', (f) => (f.drivingTimeH === null ? 'no data' : f.drivingTimeH < 1 ? `${fx(f.drivingTimeH * 60, 0)} min` : `${fx(f.drivingTimeH, 1)} h`))}
-              {row('Slope measured over', (f) => `${fx(f.baselineM, 0)} m`)}
-            </tbody>
-          </table>
-          <ul className="mt-2 max-w-[60ch] space-y-1">
-            {[...new Set([...(figures?.[0]?.notes ?? []), ...(figures?.[1]?.notes ?? [])])].map((n) => (
-              <li key={n} className="text-[11px] text-muted">
-                {n}
-              </li>
-            ))}
+          <RouteFigures
+            sides={[
+              { name: earthName, plan: plans?.[0] ?? null, pixelM: earth.elevation!.pixelM },
+              { name: targetName, plan: plans?.[1] ?? null, pixelM: target.elevation!.pixelM },
+            ]}
+            limitDeg={slopeLimitDeg}
+            speedMph={speedMph}
+            waypoints={route.length}
+          />
+          <ul className="mt-2 max-w-[62ch] space-y-1">
             <li className="text-[11px] text-muted">
-              {roverSpec
-                ? `Slope limit: ${roverSpec.slopeLimit?.value}° (${roverSpec.slopeLimit?.kind}; ${roverSpec.slopeLimit?.source}).${roverSpec.speed?.value != null ? ` Speed: ${roverSpec.speed.value.toLocaleString('en-US')} m per hour (${roverSpec.speed.kind}; ${roverSpec.speed.source}).` : ' No published speed.'}`
-                : 'No data. data/rovers.json is not published with this build, so no slope limit or driving time is shown.'}{' '}
-              No energy figure is shown: no citable model of rover energy against slope was found.
+              {speedMph !== null && roverSpec?.speed
+                ? `Drive time is the distance divided by ${fx(roverSpec.speed.value ?? 0, 0)} ${roverSpec.speed.unit} (${roverSpec.speed.kind}; ${roverSpec.speed.source}). It excludes stops and terrain effects${plans?.[0]?.ok ? `: at that speed the Earth route takes ${hoursText(plans[0].distanceM / speedMph)}` : ''}.`
+                : 'Drive time: no data, because this rover has no published speed in data/rovers.json.'}
             </li>
+            <li className="text-[11px] text-muted">No energy figure is shown: no citable model of rover energy against slope was found.</li>
           </ul>
         </div>
       </section>

@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState } from 'react';
 import { ArrowLeft, Bookmark, BookmarkCheck, Check, Minus, X } from 'lucide-react';
-import type { CellScore, EarthCell, Target } from '../types';
-import type { MatchDimension, MatchRecord, MatchSide } from '../lib/matchAdapter';
+import type { CellScore, EarthCell, EarthFile, Target } from '../types';
+import type { MatchDimension, MatchRecord, MatchSide, SharedMinerals } from '../lib/matchAdapter';
 import type { ExtractItem } from '../data/sites';
 import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatSim, unscoredText, type MetaByKey } from '../lib/format';
@@ -16,6 +16,8 @@ import { ScoreDial } from './ScoreDial';
 import { PlainResults } from './PlainResults';
 import { FieldLogistics, logisticsFromRecord } from './FieldLogistics';
 import { CompareSlider } from './CompareSlider';
+import { FullData } from './FullData';
+import type { SiteClimate } from '../data/sandbox';
 import { countryKey, useCountries } from '../lib/where';
 
 const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Terrain3D })));
@@ -58,6 +60,12 @@ interface Props {
   /** The two tools, ordered by what the match is for. */
   tools: { primary: Tool; secondary: Tool };
   actions: { label: string; onClick: (() => void) | null; primary?: boolean; why?: string }[];
+  /** data/earth.json, for the "Full data" table (percentile among Earth cells, clamping). Left out: read from the app's cached data load. null: none. */
+  earth?: EarthFile | null;
+  /** data/site_climate.json, for the monthly chart of a named site. Left out: read from the app's cached loader. null: none. */
+  climate?: SiteClimate | null;
+  /** Minerals shared with the target (the match library's result). Optional. */
+  minerals?: SharedMinerals | null;
   /** Everything else known about the cell: profile, purposes, best month, sources. */
   children: React.ReactNode;
 }
@@ -201,7 +209,7 @@ function Place({ title, sub, item, layer, windowKm, state }: { title: string; su
 
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, terrain, children }: Props) {
+export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, terrain, earth, climate, minerals = null, children }: Props) {
   const site = scale === 'site';
   const score = site ? record.score.value : e.score;
   const scored = score !== null;
@@ -536,6 +544,19 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </ul>
           </section>
 
+          <FullData
+            record={record}
+            explained={e}
+            cell={cell}
+            target={target}
+            meta={meta}
+            placeName={name}
+            scale={scale}
+            ground={ground}
+            earth={earth}
+            climate={climate}
+            minerals={minerals}
+          />
         </div>
 
         <section className={`${pad} border-t border-line py-10`} aria-labelledby="h-more">
