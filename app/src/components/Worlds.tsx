@@ -18,13 +18,15 @@ interface Props {
   action: (w: WorldId) => string;
   onPick: (w: WorldId) => void;
   selected?: WorldId | null;
+  /** Fill the height of the parent instead of a fixed band. */
+  tall?: boolean;
 }
 
 /**
  * The worlds as slowly turning globes in one row, drawn at true relative size in one WebGL canvas.
  * Each column is a real button.
  */
-export function Worlds({ worlds, caption, action, onPick, selected = null }: Props) {
+export function Worlds({ worlds, caption, action, onPick, selected = null, tall = false }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -126,7 +128,7 @@ export function Worlds({ worlds, caption, action, onPick, selected = null }: Pro
   }, [key, reduced]);
 
   return (
-    <div ref={holder} className="relative h-[46vw] max-h-[420px] min-h-[220px] w-full bg-bg">
+    <div ref={holder} className={`relative w-full bg-bg ${tall ? 'h-full min-h-[320px]' : 'h-[46vw] max-h-[420px] min-h-[220px]'}`}>
       {state !== 'ready' && (
         <p className="label absolute left-4 top-4" role="status">
           {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn'}

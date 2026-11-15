@@ -37,10 +37,12 @@ interface Props {
   onPoint: ((lat: number, lon: number) => void) | null;
   /** False while another view covers the globe, so it stops drawing. */
   active: boolean;
+  /** Show the Moon and Mars switch over the globe. The place step has its own. */
+  showTabs?: boolean;
 }
 
 /** Step 1: the Moon or Mars as a globe, with the target sites as markers. */
-export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, onPoint, active }: Props) {
+export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, onPoint, active, showTabs = true }: Props) {
   const pointRef = useRef(onPoint);
   pointRef.current = onPoint;
   const holder = useRef<HTMLDivElement>(null);
@@ -121,7 +123,7 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
     if (!globe) return;
     globe.htmlElementsData(places.filter((t) => t.body === body).map((t) => ({ ...t, on: t.id === target.id })));
     // Close enough to tell neighbouring sites apart: the lunar targets are within a few degrees of each other.
-    globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 0.7 : 1.6 }, reduced ? 0 : 900);
+    globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 1.6 : 1.9 }, reduced ? 0 : 900);
   }, [places, body, target, reduced]);
 
   useEffect(() => {
@@ -130,7 +132,7 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
     if (active) {
       globe.resumeAnimation();
       // A flight started while the globe was hidden never ran: put the camera where it belongs.
-      globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 0.7 : 1.6 }, 0);
+      globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 1.6 : 1.9 }, 0);
     } else globe.pauseAnimation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
@@ -145,7 +147,7 @@ export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPic
   return (
     <section className="relative h-full min-h-0 w-full overflow-hidden bg-bg" aria-label={`${BODY_LABEL[body]} globe with target sites`}>
       <div ref={holder} className="absolute inset-0" />
-      <div className="absolute left-3 top-3 flex border border-line bg-panel px-1" role="group" aria-label="World">
+      <div className={`absolute left-3 top-3 flex border border-line bg-panel px-1 ${showTabs ? '' : 'hidden'}`} role="group" aria-label="World">
         {bodies.map((b) => (
           <button
             key={b}

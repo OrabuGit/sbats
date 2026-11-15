@@ -6,8 +6,10 @@ import { formatCoords, siteCode } from '../lib/geo';
 import { formatScore, formatSim, unscoredText, type MetaByKey } from '../lib/format';
 import { MATCH, MISS, VERDICT_WORD, fromRecord, type Verdict } from '../lib/verdict';
 import { matchWord, type PurposeDef } from '../lib/scoringAdapter';
-import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
+import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
 import { Ground } from './Ground';
+import { Locator } from './Locator';
+import { countryKey, useCountries } from '../lib/where';
 
 interface Props {
   cell: EarthCell;
@@ -78,19 +80,49 @@ function Side({ label, side }: { label: string; side: MatchSide }) {
   );
 }
 
+/** Similarity on a track in three zones: below 0.30 no match, 0.30 to 0.75 partly, 0.75 and up a match. */
+function Track({ value, label }: { value: number | null; label: string }) {
+  const v = value === null ? 0 : Math.max(0, Math.min(1, value));
+  const zones = [
+    { from: 0, to: MISS, word: 'No' },
+    { from: MISS, to: MATCH, word: 'Partly' },
+    { from: MATCH, to: 1, word: 'Match' },
+  ];
+  return (
+    <div role="meter" aria-label={`${label} similarity`} aria-valuemin={0} aria-valuemax={1} aria-valuenow={value ?? 0} aria-valuetext={value === null ? 'no data' : value.toFixed(2)}>
+      <div className="relative flex h-2 gap-[3px]">
+        {zones.map((z) => {
+          const fill = Math.max(0, Math.min(1, (v - z.from) / (z.to - z.from)));
+          return (
+            <span key={z.word} className="relative block bg-line" style={{ width: `${(z.to - z.from) * 100}%` }}>
+              {value !== null && <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: `${fill * 100}%` }} />}
+            </span>
+          );
+        })}
+      </div>
+      <div className="mt-1 flex gap-[3px] text-[10px] leading-3 text-muted" aria-hidden="true">
+        {zones.map((z) => (
+          <span key={z.word} style={{ width: `${(z.to - z.from) * 100}%` }}>
+            {z.word}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** One dimension: its measurements on both sides, the reason in a sentence, and the verdict at the right. */
 function DimensionRow({ d, targetName }: { d: MatchDimension; targetName: string }) {
   const v = fromRecord(d.verdict);
-  const pct = d.similarity === null ? 0 : Math.max(0, Math.min(1, d.similarity)) * 100;
   return (
-    <li className="grid gap-x-6 gap-y-3 border-b border-line py-4 last:border-b-0 md:grid-cols-[150px_minmax(0,1fr)_170px]">
+    <li className="grid gap-x-8 gap-y-3 border-t border-line py-6 md:grid-cols-[150px_minmax(0,1fr)_220px]">
       <div>
-        <h4 className="text-[14px] font-semibold text-text">{d.label}</h4>
+        <h4 className="text-[16px] font-semibold text-text">{d.label}</h4>
         <p className="mt-0.5 text-[12px] text-muted">{d.measures}</p>
       </div>
 
       <div className="min-w-0 space-y-3">
-        <p className="text-[13px] leading-5 text-text">{d.reason}</p>
+        <p className="text-[14px] leading-[22px] text-text">{d.reason}</p>
         {d.rows.map((r) => (
           <div key={r.key}>
             <p className="text-[12px] text-muted">{r.label}</p>
@@ -103,23 +135,13 @@ function DimensionRow({ d, targetName }: { d: MatchDimension; targetName: string
         ))}
       </div>
 
-      <div className="flex items-center justify-between gap-3 md:flex-col md:items-end md:justify-start">
-        <VerdictChip v={v} />
-        <div className="flex w-[150px] items-center gap-2 md:w-full">
-          <div
-            className="h-1.5 flex-1 bg-line"
-            role="meter"
-            aria-label={`${d.label} similarity`}
-            aria-valuemin={0}
-            aria-valuemax={1}
-            aria-valuenow={d.similarity ?? 0}
-            aria-valuetext={d.similarity === null ? 'no data' : d.similarity.toFixed(2)}
-          >
-            <div className={`h-full ${v === 'miss' ? 'bg-muted' : 'bg-accent'}`} style={{ width: `${pct}%` }} />
-          </div>
-          <span className={`num w-12 text-right ${d.similarity === null ? 'text-[10px] uppercase text-muted' : 'text-[13px] text-text'}`}>{formatSim(d.similarity)}</span>
+      <div className="flex flex-col gap-2">
+        <div className="flex items-baseline justify-between gap-3">
+          <VerdictChip v={v} />
+          <span className={d.similarity === null ? 'text-[12px] text-muted' : 'display num text-[28px] leading-8 text-text'}>{formatSim(d.similarity)}</span>
         </div>
-        {d.percentile !== null && <p className="num text-[11px] text-muted md:text-right">percentile {(d.percentile * 100).toFixed(0)} of Earth cells</p>}
+        <Track value={d.similarity} label={d.label} />
+        {d.percentile !== null && <p className="num text-[11px] text-muted">Closer than {(d.percentile * 100).toFixed(0)}% of Earth cells</p>}
       </div>
     </li>
   );
@@ -161,96 +183,100 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
   const partial = by('partial');
   const misses = by('miss');
   const none = by('none');
-  const name = placeName ?? siteCode(cell);
+  const countries = useCountries([cell]);
+  const country = countries.get(countryKey(cell.lat, cell.lon)) ?? null;
+  // A cell with no site in it is named by where it is.
+  const name = placeName ?? (country ? `Open land in ${country}` : 'Open land');
+  const worldWord = target.body === 'moon' ? 'the Moon' : 'Mars';
+  const pad = 'mx-auto w-full max-w-[1200px] px-5 sm:px-10';
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-match">
-      <div className="flex items-stretch border-b border-line">
-        <button type="button" onClick={onBack} className="tool border-r border-line">
-          <ArrowLeft size={14} aria-hidden="true" /> Matches
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-match">
+      <div className={`${pad} flex items-center justify-between pt-3`}>
+        <button type="button" onClick={onBack} className="btn btn-ghost !pl-0">
+          <ArrowLeft size={15} aria-hidden="true" /> Back to the globe
         </button>
-        <span className="flex-1" />
-        <button type="button" onClick={onSave} aria-pressed={saved} className="tool border-l border-line">
-          {saved ? <BookmarkCheck size={14} aria-hidden="true" /> : <Bookmark size={14} aria-hidden="true" />} {saved ? 'Saved' : 'Save'}
+        <button type="button" onClick={onSave} aria-pressed={saved} className="btn btn-ghost">
+          {saved ? <BookmarkCheck size={15} aria-hidden="true" /> : <Bookmark size={15} aria-hidden="true" />} {saved ? 'Saved' : 'Save'}
         </button>
       </div>
 
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="min-w-0 lg:border-r lg:border-line">
-          <header className="border-b border-line px-4 py-6 sm:px-6">
-            <p className="label">Match{rank !== null ? `, rank ${rank}` : ''}</p>
-            <h2 id="h-match" className="mt-1 max-w-[28ch] text-[22px] font-semibold leading-7 text-text">
-              {name} as a stand-in for {target.name}
-            </h2>
-            <p className="num mt-1 text-[12px] text-muted">
-              {placeName ? `${siteCode(cell)} · ` : ''}
-              {formatCoords(cell.lat, cell.lon)}
-            </p>
-            {kindLabel && (
-              <p className="mt-2">
-                <Tag>{kindLabel}</Tag>
+      <div>
+        <div>
+          <header className={`${pad} grid gap-x-12 gap-y-8 pb-12 pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)]`}>
+            <div className="min-w-0">
+              <p className="text-[14px] text-muted">
+                {rank !== null ? `Match number ${rank}` : 'Match'}
+                {kindLabel ? ` · ${kindLabel}` : ''}
               </p>
-            )}
+              <h2 id="h-match" className="display-l mt-2 text-[36px] sm:text-[52px]">
+                {name}
+              </h2>
+              <p className="mt-2 text-[18px] leading-7 text-muted">
+                as a stand-in for <span className="text-text">{target.name}</span> on {worldWord}
+              </p>
+              <p className="num mt-2 text-[12px] text-muted">
+                {country && placeName ? `${country} · ` : ''}
+                {formatCoords(cell.lat, cell.lon)} · cell {siteCode(cell)}
+              </p>
 
-            <div className="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-[auto_minmax(0,1fr)]">
-              <div>
-                <p className="label">{site ? `Footprint, ${record.earth.footprintKm ?? ''} km, Base weights` : purpose ? purpose.label : 'All-round match'}</p>
-                <p className={`num mt-1 font-semibold leading-none ${scored ? 'text-[44px] text-text' : 'text-[22px] text-muted'}`}>
-                  {scored ? formatScore(score) : 'NO DATA'}
-                  {scored && <span className="ml-1.5 text-[13px] font-normal text-muted">/ 100</span>}
+              <div className="mt-8 flex items-end gap-5">
+                <p className={`display leading-none ${scored ? 'text-[76px] text-text' : 'text-[28px] text-muted'}`}>
+                  {scored ? formatScore(score) : 'No data'}
                 </p>
-                <span className="mt-3 block h-0.5 w-[180px] bg-line" aria-hidden="true">
-                  {scored && <span className="block h-full bg-accent" style={{ width: `${Math.max(0, Math.min(100, score as number))}%` }} />}
-                </span>
-                <p className="mt-2 flex items-center gap-3 text-[12px] text-muted">
-                  {scored && <span className="font-semibold text-text">{matchWord(score as number)} match</span>}
-                  <ConfidenceBadge confidence={site ? record.score.confidence : e.confidence} coverage={site ? record.score.coverage : e.coverage} />
+                <div className="pb-2">
+                  <p className="text-[14px] text-muted">{site ? `out of 100, footprint ${record.earth.footprintKm ?? ''} km` : `out of 100, ${purpose ? purpose.label.toLowerCase() : 'all-round'}`}</p>
+                  <p className="mt-1 flex items-center gap-3 text-[14px]">
+                    {scored && <span className="font-semibold text-text">{matchWord(score as number)} match</span>}
+                    <ConfidenceBadge confidence={site ? record.score.confidence : e.confidence} coverage={site ? record.score.coverage : e.coverage} />
+                  </p>
+                </div>
+              </div>
+              <p className="mt-5 max-w-[56ch] text-[16px] leading-[26px] text-text">{site ? record.score.reason : scored ? e.reason : unscoredText(e, meta)}</p>
+              <dl className="mt-4 space-y-1.5 text-[14px]">
+                {[
+                  { v: 'match' as const, items: matches },
+                  { v: 'partial' as const, items: partial },
+                  { v: 'miss' as const, items: misses },
+                  { v: 'none' as const, items: none },
+                ]
+                  .filter((g) => g.items.length > 0)
+                  .map((g) => (
+                    <div key={g.v} className="flex items-baseline gap-3">
+                      <dt className="w-[120px] shrink-0">
+                        <VerdictChip v={g.v} />
+                      </dt>
+                      <dd className="text-text">{list(g.items)}</dd>
+                    </div>
+                  ))}
+              </dl>
+              {stability && <p className="mt-5 max-w-[64ch] text-[13px] leading-5 text-muted">{stability.text}</p>}
+              {notes.map((n) => (
+                <p key={n} className="mt-3 max-w-[64ch] border-l-2 border-accent pl-3 text-[13px] leading-5 text-text" role="note">
+                  {n}
                 </p>
-              </div>
-              <div className="max-w-[62ch]">
-                <p className="text-[14px] leading-[22px] text-text">{site ? record.score.reason : scored ? e.reason : unscoredText(e, meta)}</p>
-                <dl className="mt-3 space-y-1.5 text-[13px]">
-                  {[
-                    { v: 'match' as const, items: matches },
-                    { v: 'partial' as const, items: partial },
-                    { v: 'miss' as const, items: misses },
-                    { v: 'none' as const, items: none },
-                  ]
-                    .filter((g) => g.items.length > 0)
-                    .map((g) => (
-                      <div key={g.v} className="flex items-baseline gap-3">
-                        <dt className="w-[120px] shrink-0">
-                          <VerdictChip v={g.v} />
-                        </dt>
-                        <dd className="text-text">{list(g.items)}</dd>
-                      </div>
-                    ))}
-                </dl>
-              </div>
+              ))}
+              {onScale && (
+                <div className="tabs mt-6 max-w-[420px]" role="group" aria-label="Scale of the Earth values">
+                  {(['grid', 'site'] as const).map((sc) => (
+                    <button key={sc} type="button" aria-pressed={scale === sc} onClick={() => onScale(sc)} className="tab">
+                      {sc === 'grid' ? 'Grid cell, 55 km' : `Footprint, ${record.earth.footprintKm ?? 'site'} km`}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-            {stability && (
-              <p className="mt-4 max-w-[72ch] text-[12px] text-muted">
-                <span className="label mr-2">Stability</span>
-                {stability.text}
-              </p>
-            )}
-            {notes.map((n) => (
-              <p key={n} className="mt-3 text-[12px] text-accent" role="note">
-                {n}
-              </p>
-            ))}
-            {onScale && (
-              <div className="tabs mt-5 max-w-[420px]" role="group" aria-label="Scale of the Earth values">
-                {(['grid', 'site'] as const).map((sc) => (
-                  <button key={sc} type="button" aria-pressed={scale === sc} onClick={() => onScale(sc)} className="tab">
-                    {sc === 'grid' ? 'Grid cell, 55 km' : `Footprint, ${record.earth.footprintKm ?? 'site'} km`}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="lg:pt-10">
+              <Locator
+                points={[
+                  { world: 'earth', lat: cell.lat, lon: cell.lon, name: placeName?.split(',')[0] ?? country ?? 'This cell', where: placeName ? country : null },
+                  { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+                ]}
+              />
+            </div>
           </header>
 
-          <section className="border-b border-line px-4 py-6 sm:px-6" aria-labelledby="h-side">
-            <h3 id="h-side" className="mb-3 text-[14px] font-semibold text-text">
+          <section className={`${pad} py-10`} aria-labelledby="h-side">
+            <h3 id="h-side" className="display mb-4 text-[24px] leading-8 text-text">
               Side by side, {ground.windowKm} km across
             </h3>
             <div className="grid max-w-[680px] grid-cols-2 gap-4">
@@ -263,8 +289,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </p>
           </section>
 
-          <section className="border-b border-line px-4 py-6 sm:px-6" aria-labelledby="h-rows">
-            <h3 id="h-rows" className="text-[14px] font-semibold text-text">
+          <section className={`${pad} py-10`} aria-labelledby="h-rows">
+            <h3 id="h-rows" className="display text-[24px] leading-8 text-text">
               Dimension by dimension
             </h3>
             <p className="mt-1 max-w-[72ch] text-[12px] text-muted">
@@ -287,8 +313,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             )}
           </section>
 
-          <section className="border-b border-line px-4 py-6 sm:px-6" aria-labelledby="h-extra">
-            <h3 id="h-extra" className="text-[14px] font-semibold text-text">
+          <section className={`${pad} py-10`} aria-labelledby="h-extra">
+            <h3 id="h-extra" className="display text-[24px] leading-8 text-text">
               Added after the score was frozen
             </h3>
             <p className="mt-1 max-w-[72ch] text-[12px] text-muted">Shown beside the score, never part of it, and not validated.</p>
@@ -328,8 +354,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             )}
           </section>
 
-          <section className="border-b border-line px-4 py-6 sm:px-6" aria-labelledby="h-cannot">
-            <h3 id="h-cannot" className="text-[14px] font-semibold text-text">
+          <section className={`${pad} py-10`} aria-labelledby="h-cannot">
+            <h3 id="h-cannot" className="display text-[24px] leading-8 text-text">
               What Earth cannot copy
             </h3>
             <p className="mt-1 text-[12px] text-muted">Never part of the score. No rehearsal at this place tests these.</p>
@@ -347,8 +373,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </ul>
           </section>
 
-          <section className="px-4 py-6 sm:px-6" aria-labelledby="h-actions">
-            <h3 id="h-actions" className="label">
+          <section className={`${pad} py-10`} aria-labelledby="h-actions">
+            <h3 id="h-actions" className="display text-[24px] leading-8 text-text">
               What to do with this match
             </h3>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -368,9 +394,12 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
           </section>
         </div>
 
-        <aside aria-label="More about this cell" className="border-t border-line lg:border-t-0">
-          {children}
-        </aside>
+        <section className={`${pad} border-t border-line py-10`} aria-labelledby="h-more">
+          <h3 id="h-more" className="display text-[24px] leading-8 text-text">
+            More about this place
+          </h3>
+          <div className="mt-6">{children}</div>
+        </section>
       </div>
     </main>
   );

@@ -1,7 +1,9 @@
 import { ArrowLeft } from 'lucide-react';
 import type { CellSummary, EarthCell, EarthFile, Target } from '../types';
 import { downloadText, toCsv } from '../lib/download';
-import { siteCode } from '../lib/geo';
+import { formatCoords, siteCode } from '../lib/geo';
+import { countryKey, useCountries } from '../lib/where';
+import { Locator } from './Locator';
 import { buildReport, type CellStability, type KnownSite, type MatchRecord, type SharedMinerals, type ReportText, type RouteResult, type StabilityResult } from '../lib/matchAdapter';
 import { useAsync } from '../lib/useAsync';
 import { loadFrozen, loadReport } from '../data/validation';
@@ -42,6 +44,7 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
     if (!h || !f || h.rocAuc === null || h.top10Share === null || h.meanPercentile === null) return null;
     return { holdoutAuc: h.rocAuc, holdoutTop10: h.top10Share, holdoutMeanPercentile: h.meanPercentile, frozenAt: f.frozenAt };
   }, 'report-validation');
+  const country = useCountries([cell]).get(countryKey(cell.lat, cell.lon)) ?? null;
   const report = buildReport({ record, minerals, knownSite, stability, routes, validation: validation.status === 'ready' ? validation.value : null });
   const base = `sbats-${slug(record.earth.name)}-${target.id}`;
 
@@ -122,6 +125,29 @@ export function Report({ cell, target, earth, record, stability, routes, mineral
           {report.title}
         </h2>
         <p className="mt-1 text-[13px] text-muted">{report.subtitle}</p>
+        <dl className="mt-4 grid gap-x-8 gap-y-2 text-[13px] sm:grid-cols-2">
+          <div>
+            <dt className="text-muted">Earth place</dt>
+            <dd className="text-text">
+              {country ? `${country}. ` : ''}
+              <span className="num">{formatCoords(cell.lat, cell.lon)}</span>, grid cell {siteCode(cell)}, {record.earth.scale === 'site' ? 'measured at footprint scale' : 'a 0.5° cell about 55 km across'}.
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted">{target.body === 'moon' ? 'Moon' : 'Mars'} target</dt>
+            <dd className="text-text">
+              {target.name}. <span className="num">{formatCoords(target.lat, target.lon)}</span>.
+            </dd>
+          </div>
+        </dl>
+        <div className="no-print mt-4 max-w-[520px]">
+          <Locator
+            points={[
+              { world: 'earth', lat: cell.lat, lon: cell.lon, name: country ?? 'This cell', where: null },
+              { world: target.body, lat: target.lat, lon: target.lon, name: target.name.split(',')[0], where: null },
+            ]}
+          />
+        </div>
         <div className="mt-5 space-y-2 border-y border-line py-4">
           {report.summary.map((t, i) => (
             <p key={i} className="text-[14px] leading-[22px] text-text">

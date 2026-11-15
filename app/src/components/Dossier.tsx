@@ -178,7 +178,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
   const hasSun = e.breakdown.some((f) => f.keys.some((k) => isSunKey(k.key)));
 
   return (
-    <article aria-labelledby="h-dossier">
+    <article aria-labelledby="h-dossier" className={embedded ? 'grid gap-x-16 gap-y-12 lg:grid-cols-2 [&_h3]:!text-[17px] [&_h3]:!font-semibold [&_h3]:!text-text' : undefined}>
       <header className={embedded ? 'hidden' : 'border-b border-line'}>
         <button type="button" onClick={onBack} className="tool w-full !justify-start border-b border-line">
           <ArrowLeft size={14} aria-hidden="true" /> Back to candidates
@@ -254,7 +254,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
       </header>
 
       {flags.bestMonth && scored && (
-        <section className="border-b border-line p-4" aria-labelledby="h-month">
+        <section className={embedded ? '' : 'border-b border-line p-4'} aria-labelledby="h-month">
           <h3 id="h-month" className="label">
             Best month to test
           </h3>
@@ -266,8 +266,8 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </section>
       )}
 
-      <section className="border-b border-line" aria-labelledby="h-missing">
-        <div className="p-4">
+      <section className={embedded ? '' : 'border-b border-line'} aria-labelledby="h-missing">
+        <div className={embedded ? '' : 'p-4'}>
           <h3 id="h-missing" className="label">
             Left out of the score
           </h3>
@@ -298,7 +298,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </div>
       </section>
 
-      {profile && (
+      {profile && !embedded && (
         <section className="border-b border-line p-4" aria-labelledby="h-profile">
           <h3 id="h-profile" className="label">
             Analog profile
@@ -343,8 +343,8 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
       )}
 
       {purposeScores && (
-        <section className="border-b border-line" aria-labelledby="h-purposes">
-          <div className="px-4 pt-4">
+        <section className={embedded ? '' : 'border-b border-line'} aria-labelledby="h-purposes">
+          <div className={embedded ? '' : 'px-4 pt-4'}>
             <h3 id="h-purposes" className="label">
               Match by purpose
             </h3>
@@ -352,7 +352,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
               The match score, 0 to 100, using only the factors each purpose depends on. Select one to rank every cell by it.
             </p>
           </div>
-          <ul className="mt-2 border-t border-line">
+          <ul className={embedded ? 'mt-3' : 'mt-2 border-t border-line'}>
             {purposeScores.map(({ id, result }) => {
               const def = PURPOSES.find((x) => x.id === id);
               if (!def) return null;
@@ -375,18 +375,18 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
               );
             })}
           </ul>
-          <p className="border-t border-line px-4 py-2 text-[11px] text-muted">
+          <p className={embedded ? 'mt-2 text-[12px] text-muted' : 'border-t border-line px-4 py-2 text-[11px] text-muted'}>
             Full base rehearsal is the all-round match with the Base weights. The purposes were defined after the validation results were
             known, so they are a second view and not evidence.
           </p>
         </section>
       )}
 
-      <section className="border-b border-line" aria-labelledby="h-radar">
-        <h3 id="h-radar" className="label px-4 pt-4">
+      <section className={embedded ? '' : 'border-b border-line'} aria-labelledby="h-radar">
+        <h3 id="h-radar" className={embedded ? 'label' : 'label px-4 pt-4'}>
           Similarity by factor, 0 to 1
         </h3>
-        <div className="px-4 pb-2">
+        <div className={embedded ? 'mt-2 max-w-[420px]' : 'px-4 pb-2'}>
           <Radar factors={e.breakdown} />
         </div>
       </section>
@@ -435,7 +435,7 @@ export function Dossier({ cell, target, explained: e, meta, landCover, purpose, 
         </>
       )}
 
-      <section className="p-4" aria-labelledby="h-sources">
+      <section className={embedded ? 'lg:col-span-2' : 'p-4'} aria-labelledby="h-sources">
         <h3 id="h-sources" className="label">
           Sources
         </h3>

@@ -6,14 +6,16 @@ import { buildIndex, siteCode } from './lib/geo';
 import { keyLabel, metaByKey, reasonLine } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { TopBar, type Step } from './components/Chrome';
-import { LeftPanel, type MatchMode } from './components/LeftPanel';
-import { CandidateList, type ListMode } from './components/CandidateList';
+import type { MatchMode } from './components/LeftPanel';
+import { MatchesStep } from './components/MatchesStep';
+import { PickWorld } from './components/PickWorld';
+import { PlaceStep } from './components/PlaceStep';
+import type { ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
 import { MethodPage } from './components/MethodPage';
 import { ValidationPage } from './components/ValidationPage';
 import { Absent, InfoShell, Loading } from './components/InfoParts';
 import { SitePage } from './components/SitePage';
-import { TargetBrief } from './components/TargetBrief';
 import { loadExtracts, loadSites } from './data/sites';
 import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
@@ -26,7 +28,7 @@ import { TerrainPage, type RoversFile } from './components/TerrainPage';
 import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
-import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
+import type { WorldId } from './components/Worlds';
 import { savedId, useSaved, type SavedLocation } from './lib/saved';
 import { targetFromKnownSite, targetFromPoint, type BodyGrid, type KnownSitesFile, type TargetProfile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
@@ -39,8 +41,6 @@ import { decodeLayout, layoutFromJson, type SavedLayout } from './lib/simAdapter
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
 const globeModule = import('./components/GlobeView');
 const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView })));
-const worldModule = import('./components/WorldGlobe');
-const WorldGlobe = lazy(() => worldModule.then((m) => ({ default: m.WorldGlobe })));
 
 type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain';
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
@@ -220,7 +220,6 @@ function Orbit({ data }: { data: DataBundle }) {
   const mapSites = useMemo(() => sites.filter((s) => s.index >= 0), [sites]);
   const explain = useCallback((i: number) => ts.explain(earth.cells[i], liveWeights), [ts, earth, liveWeights]);
 
-  const rightRef = useRef<HTMLElement>(null);
   const leftRef = useRef<HTMLElement>(null);
   const seq = useRef(0);
 
@@ -483,6 +482,15 @@ function Orbit({ data }: { data: DataBundle }) {
     }
   }, [reconReady, targets, index, featured]);
 
+  // Back to the Earth globe: fly to the cell that was open, or to the best match.
+  const backToEarth = useCallback(() => {
+    setView('orbit');
+    setStep(3);
+    setTab('results');
+    const cell = selected !== null ? earth.cells[selected] : candidates[0] ? earth.cells[candidates[0].index] : null;
+    if (cell) setFocus({ lat: cell.lat, lon: cell.lon, seq: ++seq.current });
+  }, [selected, candidates, earth]);
+
   const onStep = (s: Step) => {
     if (s === 4) {
       if (selected !== null) setView('match');
@@ -491,10 +499,7 @@ function Orbit({ data }: { data: DataBundle }) {
     if (s === 3) {
       if (view === 'orbit' && step === 3) return;
       if (step < 3 || view === 'home') return goToEarth();
-      setView('orbit');
-      setStep(3);
-      setTab('results');
-      return;
+      return backToEarth();
     }
     setView('orbit');
     setStep(s);
@@ -751,24 +756,7 @@ function Orbit({ data }: { data: DataBundle }) {
       {view === 'saved' && <SavedPage saved={saved.list} onOpen={openSavedItem} onRemove={saved.remove} onFind={() => { setView('orbit'); setStep(1); }} />}
 
       {view === 'orbit' && step === 1 && (
-        <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-world">
-          <header className="border-b border-line px-4 py-6 sm:px-6">
-            <p className="label">01 World</p>
-            <h2 id="h-world" className="mt-1 text-[22px] font-semibold leading-7 text-text">
-              Which world is the base on?
-            </h2>
-          </header>
-          <div className="border-b border-line bg-bg">
-            <Worlds
-              worlds={['moon', 'mars']}
-              caption={(w) => `${targets.filter((t) => t.body === w).length} base sites`}
-              action={(w) => `Pick ${w === 'moon' ? 'the Moon' : 'Mars'}`}
-              onPick={pickWorld}
-              selected={target.body}
-            />
-          </div>
-          <p className="readout px-4 py-3 sm:px-6">True relative size. {WORLD_CREDIT}</p>
-        </main>
+        <PickWorld moonPlaces={places.filter((p) => p.body === 'moon').length} marsPlaces={places.filter((p) => p.body === 'mars').length} onPick={pickWorld} />
       )}
 
       {view === 'featured' && (
@@ -859,11 +847,7 @@ function Orbit({ data }: { data: DataBundle }) {
           ground={{ earth: earthExtract, target: targetExtract, windowKm, state: extracts.status }}
           saved={isSaved}
           onSave={toggleSaved}
-          onBack={() => {
-            setView('orbit');
-            setStep(3);
-            setTab('results');
-          }}
+          onBack={backToEarth}
           actions={[
             { label: 'View report', primary: true, onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },
             {
@@ -976,125 +960,74 @@ function Orbit({ data }: { data: DataBundle }) {
         />
       )}
 
-      {/* The globes stay mounted once step 2 or 3 has been opened, so coming back is instant. */}
+      {/* Both steps stay mounted once opened, so coming back is instant. */}
       {globesNeeded.current && (
-      <div className={`min-h-0 flex-1 flex-col lg:grid-cols-[320px_minmax(0,1fr)_380px] ${showWorld || showEarth ? 'flex lg:grid' : 'hidden'}`}>
-        <aside
-          ref={leftRef}
-          aria-label={step === 2 ? 'Places' : 'Target and weights'}
-          className={`scroll order-3 bg-panel lg:order-1 lg:block lg:min-h-0 lg:border-r lg:border-line ${tab === 'setup' ? 'block' : 'hidden'}`}
-        >
-          <LeftPanel
-            step={step === 2 ? 2 : 3}
-            onChangePlace={() => onStep(2)}
-            target={target}
+        <>
+          <PlaceStep
+            hidden={!showWorld}
+            body={target.body === 'mars' ? 'mars' : 'moon'}
+            onBody={pickWorld}
             places={places}
             placeId={place?.id ?? null}
             onPlace={pickPlace}
-            anyPoint={flags.anyPoint && gridOf(target.body) !== null}
-            presets={PRESETS}
-            presetId={presetId}
-            onPreset={(id) => {
-              const p = PRESETS.find((x) => x.id === id);
-              if (!p) return;
-              setPresetId(id);
-              setWeights(p.weights);
-            }}
-            mode={matchMode}
-            onMode={setMatchMode}
-            purposeId={purposeId}
-            onPurpose={setPurposeId}
-            weights={weights}
-            onWeight={(id: FactorId, v: number) => {
-              // The library needs at least one weight above zero, so the last one cannot reach 0.
-              const next = { ...sliderWeights, [id]: v };
-              if (FACTOR_IDS.reduce((a, k) => a + next[k], 0) <= 0) return;
-              setPresetId(null);
-              setWeights(next);
-            }}
-            meta={meta}
+            onPoint={flags.anyPoint && gridOf(target.body) !== null ? (lat, lon) => void pickPoint(target.body, lat, lon) : null}
+            targets={targets}
+            target={target}
+            profile={pointProfile}
+            extract={targetExtract}
+            windowKm={windowKm}
+            onFind={() => goToEarth()}
           />
-        </aside>
-
-        <div className="order-1 h-[46vh] min-h-[280px] shrink-0 border-b border-line lg:order-2 lg:h-auto lg:min-h-0 lg:border-b-0">
-          <Suspense
-            fallback={
-              <div className="flex h-full items-start bg-bg p-4">
-                <p className="label" role="status">
-                  Loading globe
-                </p>
-              </div>
+          <MatchesStep
+            hidden={!showEarth}
+            body={target.body}
+            globe={
+              <Suspense fallback={<p className="absolute left-5 top-5 text-[13px] text-muted" role="status">Loading globe</p>}>
+                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={select} focus={focus} active={showEarth} />
+              </Suspense>
             }
-          >
-            <div className={showEarth ? 'hidden' : 'h-full'}>
-              <WorldGlobe
-                targets={targets}
-                targetId={target.id}
-                places={places}
-                placeId={place?.id ?? null}
-                onTarget={pickPlace}
-                onPick={(id) => {
-                  const p = places.find((x) => x.id === id);
-                  pickPlace(id);
-                  if (p?.targetId && targets.some((t) => t.id === p.targetId)) goToEarth(p.targetId);
-                }}
-                onPoint={flags.anyPoint && gridOf(target.body) !== null ? (lat, lon) => pickPoint(target.body, lat, lon) : null}
-                active={showWorld}
-              />
-            </div>
-            <div className={showEarth ? 'h-full' : 'hidden'}>
-              <GlobeView
-                earth={earth}
-                results={results}
-                index={index}
-                selected={selected}
-                candidates={mapCandidates}
-                sites={mapSites}
-                onSelect={select}
-                focus={focus}
-                active={showEarth}
-              />
-            </div>
-          </Suspense>
-        </div>
-
-        <div className="tabs tabs-fill order-2 shrink-0 bg-panel lg:hidden" role="group" aria-label="Panel">
-          {(['setup', 'results'] as const).map((t) => (
-            <button key={t} type="button" aria-pressed={tab === t} onClick={() => setTab(t)} className="tab">
-              {t === 'setup' ? (step === 2 ? 'Places' : 'Target and weights') : step === 2 ? 'This place' : 'Matches'}
-            </button>
-          ))}
-        </div>
-
-        <aside
-          ref={rightRef}
-          aria-label={step === 2 ? 'This place' : 'Matches'}
-          className={`scroll order-3 bg-panel lg:order-3 lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
-        >
-          {step === 2 ? (
-            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} place={place && place.id !== target.id ? place : null} profile={pointProfile} />
-          ) : (
-            <CandidateList
-              earth={earth}
-              target={target}
-              purpose={purpose}
-              results={results}
-              candidates={candidates}
-              explain={explain}
-              sites={sites}
-              tally={counts}
-              emptyReason={emptyReason}
-              includeLow={includeLow}
-              onIncludeLow={setIncludeLow}
-              stability={stabNow}
-              warnings={pointProfile?.notes ?? []}
-              mode={mode}
-              onMode={setMode}
-              onSelect={select}
-            />
-          )}
-        </aside>
-      </div>
+            controls={{
+              presets: PRESETS,
+              presetId,
+              onPreset: (id) => {
+                const p = PRESETS.find((x) => x.id === id);
+                if (!p) return;
+                setPresetId(id);
+                setWeights(p.weights);
+                setMatchMode('all');
+              },
+              mode: matchMode,
+              onMode: setMatchMode,
+              purposeId,
+              onPurpose: setPurposeId,
+              weights,
+              onWeight: (id: FactorId, v: number) => {
+                // The library needs at least one weight above zero, so the last one cannot reach 0.
+                const next = { ...sliderWeights, [id]: v };
+                if (FACTOR_IDS.reduce((a, k) => a + next[k], 0) <= 0) return;
+                setPresetId(null);
+                setWeights(next);
+              },
+            }}
+            presets={PRESETS}
+            listMode={mode}
+            onListMode={setMode}
+            earth={earth}
+            target={target}
+            purpose={purpose}
+            results={results}
+            candidates={candidates}
+            explain={explain}
+            sites={sites}
+            tally={counts}
+            emptyReason={emptyReason}
+            includeLow={includeLow}
+            onIncludeLow={setIncludeLow}
+            stability={stabNow}
+            warnings={pointProfile?.notes ?? []}
+            onSelect={select}
+          />
+        </>
       )}
 
     </div>

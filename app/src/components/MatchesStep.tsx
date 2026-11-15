@@ -1,0 +1,48 @@
+import type { ReactNode } from 'react';
+import type { Candidate } from '../lib/rank';
+import type { Preset, Target } from '../types';
+import { useCountries } from '../lib/where';
+import { CandidateList, type ListMode } from './CandidateList';
+import { MatchControls } from './MatchControls';
+
+type ListProps = Parameters<typeof CandidateList>[0];
+type ControlProps = Parameters<typeof MatchControls>[0];
+
+interface Props extends Omit<ListProps, 'countries' | 'mode' | 'onMode'> {
+  /** The Earth globe, already wired to the same results. */
+  globe: ReactNode;
+  controls: ControlProps;
+  presets: Preset[];
+  listMode: ListMode;
+  onListMode: (m: ListMode) => void;
+  hidden: boolean;
+  body: Target['body'];
+}
+
+/** Step 3: Earth fills the page, the best places are pinned on it, and one panel lists them. */
+export function MatchesStep({ globe, controls, listMode, onListMode, hidden, body, ...list }: Props) {
+  const shown: Candidate[] = list.candidates;
+  const countries = useCountries(shown.map((c) => list.earth.cells[c.index]));
+  const world = body === 'moon' ? 'the Moon' : 'Mars';
+  return (
+    <main className={`min-h-0 flex-1 flex-col bg-bg lg:flex-row ${hidden ? 'hidden' : 'flex'}`} aria-labelledby="h-matches">
+      <div className="relative h-[46svh] min-h-[300px] shrink-0 lg:h-auto lg:min-h-0 lg:flex-1">
+        {globe}
+        <div className="pointer-events-none absolute left-0 top-0 max-w-[calc(100%-1rem)] bg-bg px-5 pb-4 pt-4 sm:px-10 sm:pt-6 lg:px-16">
+          <h1 id="h-matches" className="display-l text-[30px] sm:text-[48px]">
+            Where on Earth
+          </h1>
+          <p className="mt-1 max-w-[36ch] text-[14px] leading-5 text-muted">
+            The best places to rehearse a base like <span className="text-text">{list.target.name}</span> on {world}. Click a pin or a row.
+          </p>
+        </div>
+      </div>
+      <aside aria-label="Matches" className="scroll min-h-0 flex-1 bg-panel pb-8 pt-5 lg:w-[460px] lg:flex-none">
+        <MatchControls {...controls} />
+        <div className="mt-5">
+          <CandidateList {...list} countries={countries} mode={listMode} onMode={onListMode} />
+        </div>
+      </aside>
+    </main>
+  );
+}

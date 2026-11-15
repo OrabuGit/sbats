@@ -316,6 +316,19 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
   background: var(--color-bg);
 }
 
+.btn-ghost {
+  border-color: transparent;
+  color: var(--color-muted);
+  padding: 0 10px;
+}
+.btn-ghost:hover {
+  border-color: transparent;
+  color: var(--color-text);
+}
+.btn-ghost[aria-pressed='true'] {
+  color: var(--color-accent);
+}
+
 /* Quiet button for toolbars and "back" links: text only. */
 .tool {
   display: inline-flex;
