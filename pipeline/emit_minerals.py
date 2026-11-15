@@ -8,8 +8,8 @@ Source: EMIT L2B Estimated Mineral Identification and Band Depth, 60 m (EMITL2BM
 with the cloud, cirrus and water flags of the matching EMIT L2A mask product. EMIT is an imaging
 spectrometer on the International Space Station; it sees latitudes up to about 52 degrees.
 
-Per site: the granules whose outline contains the site, least cloudy first, at most MAX_TRIES of
-them. The first one in which at least MIN_VALID of the footprint pixels are free of cloud, cirrus
+Per site: the granules whose outline contains the site (product version 2, plus version 1 for
+scenes version 2 does not hold), least cloudy first, at most MAX_TRIES of them. The first one in which at least MIN_VALID of the footprint pixels are free of cloud, cirrus
 and water is used; if none qualifies the mineralogy is null with the reason. Nothing is merged
 across dates. For each of the product's two mineral groups the file lists the share of valid
 footprint pixels with an identification and the most frequent spectral-library matches with their
@@ -35,7 +35,7 @@ from common import CACHE, DATA, USER_AGENT, read_env_token  # noqa: E402
 CMR = "https://cmr.earthdata.nasa.gov/search/granules.umm_json"
 MIN_COLLECTIONS = [("EMITL2BMIN", "002"), ("EMITL2BMIN", "001")]
 MASK_COLLECTIONS = [("EMITL2AMASK", "003"), ("EMITL2AMASK", "002"), ("EMITL2ARFL", "001")]
-MAX_TRIES = 6
+MAX_TRIES = 8
 MIN_VALID = 0.5
 TOP = 5
 RAW = CACHE / "emit"
@@ -113,15 +113,18 @@ def _mask_for(g: dict) -> tuple[np.ndarray, str] | None:
 
 
 def site_minerals(lat: float, lon: float, side_km: float) -> dict:
-    granules = []
-    for sn, ver in MIN_COLLECTIONS:
-        granules = _cmr(sn, ver, point=f"{lon},{lat}")
-        if granules:
-            collection = f"{sn} v{ver}"
-            break
+    # Both product versions are searched: version 2 first, then version 1 scenes that version 2 does not have.
+    granules, seen = [], set()
+    for rank, (sn, ver) in enumerate(MIN_COLLECTIONS):
+        for g in _cmr(sn, ver, point=f"{lon},{lat}"):
+            if _scene_key(g["GranuleUR"]) not in seen:
+                seen.add(_scene_key(g["GranuleUR"]))
+                g["_collection"], g["_rank"] = f"{sn} v{ver}", rank
+                granules.append(g)
     if not granules:
         return {"covered": False, "reason": "No EMIT L2B mineral granule contains the site."}
-    granules.sort(key=lambda g: (g.get("CloudCover") is None, g.get("CloudCover") or 0))
+    granules.sort(key=lambda g: (g.get("CloudCover") is None, g.get("CloudCover") or 0, g["_rank"]))
+    collection = "EMITL2BMIN v002 and v001"
     dlat = side_km * 500 / M_PER_DEG
     dlon = dlat / np.cos(np.radians(lat))
     tried = []
@@ -181,7 +184,7 @@ def site_minerals(lat: float, lon: float, side_km: float) -> dict:
             version = f.attrs.get("title", b"")
             version = version.decode() if isinstance(version, bytes) else str(version)
         p.unlink()
-        return {"covered": True, "collection": collection, "product": version, "granule": rec["granule"], "date": rec["date"],
+        return {"covered": True, "collection": g["_collection"], "product": version, "granule": rec["granule"], "date": rec["date"],
                 "sceneCloudPct": rec["sceneCloudPct"], "mask": mask_name, "pixels": int(valid.sum()), "pixelsInFootprint": n_in,
                 "validShare": rec["validShare"], **groups, "granulesAvailable": len(granules), "tried": tried}
     return {"covered": True, "collection": collection, "granulesAvailable": len(granules), "tried": tried,

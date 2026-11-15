@@ -160,6 +160,10 @@ GVP_NUMBER = {
 LITERATURE_ROCK = {
     "id-goa-pandan": ("basalt", "Sirait et al. 2023, Journal of Geoscience, Engineering, Environment, and Technology 8(2):112-122, "
                                 "doi:10.25299/jgeet.2023.8.2.12118 (abstract: basalt lava sequence forming Goa Pandan)"),
+    # Abstract read through Crossref on 2026-11-15: "An extensive limestone ecosystem found in the four regencies of
+    # South Sulawesi (Indonesia) including Maros-Pangkep karst area".
+    "id-maros-pangkep-karst": ("limestone", "Maulany et al. 2019, IOP Conference Series: Earth and Environmental Science 270:012030, "
+                                            "doi:10.1088/1755-1315/270/1/012030 (abstract: limestone ecosystem including the Maros-Pangkep karst area)"),
 }
 
 # GLiM first-level class for a rock name, by GLiM's own definitions (Hartmann & Moosdorf 2012):
@@ -171,6 +175,7 @@ ROCK_TO_GLIM = {
     "Granite": 9,
     "Trachybasalt / Tephrite Basanite": 2,
     "Evaporite": 14,                       # GLiM class "Evaporites"
+    "limestone": 6,                        # limestone is the type carbonate sedimentary rock
     "Andesite and related volcanic": 10,   # andesite is the type intermediate volcanic rock
 }
 

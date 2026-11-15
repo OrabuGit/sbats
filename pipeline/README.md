@@ -48,7 +48,7 @@ the stage stops with an error; run it again and it fetches only the missing tile
 ## Other outputs
 
 `build.py` also writes `data/earth.bin`, a compact binary copy of `earth.json` for the browser
-(1.9 MB against 15.6 MB). The JSON is the source of truth: the build decodes the binary again and
+(2.5 MB against 20 MB). The JSON is the source of truth: the build decodes the binary again and
 fails if any value differs. Layout in `compact.py`, browser decoder in `earth_bin_decoder.ts`.
 
 Three more scripts build the site-level files. They read `data/analogs.json` and
@@ -57,14 +57,14 @@ Three more scripts build the site-level files. They read `data/analogs.json` and
 ```bash
 uv run --project pipeline pipeline/site_climate.py   # data/site_climate.json, under a minute
 uv run --project pipeline pipeline/sites.py          # data/sites.json, about 40 minutes cold
-uv run --project pipeline pipeline/extracts.py       # data/extracts/, about 15 minutes cold
+uv run --project pipeline pipeline/extracts.py       # data/extracts/, about 25 minutes cold
 ```
 
 | Script | Output | What it holds |
 | --- | --- | --- |
 | `site_climate.py` | `data/site_climate.json` | 12 monthly normals (NASA POWER, 2001-2020) of temperature, day-night range, precipitation and surface solar irradiance for every site in `analogs.json` and the extra comparison sites defined in `sites.py`. Grid-cell values, not site measurements |
-| `sites.py` | `data/sites.json` | Fine-scale values in a 2 to 7.4 km footprint for the candidate sites (now with the Tambora caldera and the Batur lava fields) and nine known analogs: terrain from Copernicus DEM GLO-30, NDVI and bare-ground share from Sentinel-2 at 10 m, rock type from regional geologic maps (Macrostrat), the Smithsonian volcano list or a cited paper, and mineral matches from NASA EMIT (`emit_minerals.py`, needs `EARTHDATA_TOKEN`). Climate is copied from the grid and labelled so. Footprints proposed by a team member are marked `provisional` |
-| `extracts.py` | `data/extracts/` | 20 km elevation and image extracts, all at one ground scale, for the featured Indonesian sites and every target: Copernicus DEM and Sentinel-2 for Earth, LOLA and LROC WAC for the Moon, MOLA for Mars. `meta.pairs` lists the pairs the team asked for (Tambora with Shackleton, Batur lava with Marius Hills) |
+| `sites.py` | `data/sites.json` | Fine-scale values in a 2 to 7.4 km footprint for the candidate sites (now with the Tambora caldera and the Batur lava fields) and thirteen known analogs: terrain from Copernicus DEM GLO-30, NDVI and bare-ground share from Sentinel-2 at 10 m, rock type from regional geologic maps (Macrostrat), the Smithsonian volcano list or a cited paper, and mineral matches from NASA EMIT (`emit_minerals.py`, needs `EARTHDATA_TOKEN`). Climate is copied from the grid and labelled so. Footprints proposed by a team member are marked `provisional` |
+| `extracts.py` | `data/extracts/` | 20 km elevation and image extracts, all at one ground scale, for every candidate site and every target: Copernicus DEM 30 m and Sentinel-2 for Earth, LOLA (20 m at the south pole) and LROC WAC for the Moon, the HRSC-MOLA 200 m model and a THEMIS infrared image for Mars. `meta.pairs` lists the pairs the team asked for (Tambora with Shackleton, Batur lava with Marius Hills) |
 
 Limits of the site files:
 

@@ -1,7 +1,7 @@
 {
  "meta": {
   "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
-  "generatedAt": "2026-11-15T06:42:20Z",
+  "generatedAt": "2026-11-15T06:59:24Z",
   "description": "Factors measured inside a small square footprint centred on each site, for the candidate sites of analogs.json, two more candidate sites proposed by a team member, and thirteen already-known analogs for comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint.",
   "year": 2025,
   "bareNdviThreshold": 0.2,
@@ -9,7 +9,7 @@
    "terrain": "Copernicus DEM GLO-30, water pixels left out with the product's water body mask. Same function as earth.json (pipeline/terrain_metrics.py): mean Horn 3x3 slope, standard deviation of elevation. slope/roughness on 463 m posts, slopeFine/roughnessFine on 1 arc-second (about 31 m) posts.",
    "vegetation": "Sentinel-2 L2A, 2025, up to 3 least-cloudy scenes per month (scene cloud cover under 80%). Per 10 m pixel: NDVI from bands 4 and 8 for observations classed vegetation, not vegetated, water or unclassified (open water is removed with the Copernicus DEM water body mask instead, because the classification labels dark lava as water); mean per month, then mean of months. ndvi is the footprint mean. Only scenes flagged as offset-corrected in the archive are used. bareFrac is the share of non-water pixels below 0.2.",
    "rock": "Finest regional geologic map unit at the site coordinates from Macrostrat (large, medium or small scale maps only). If there is none, the volcano's major rock type from the Smithsonian Global Volcanism Program. If there is neither, a rock type stated in the abstract of a paper about the feature. Otherwise null.",
-   "minerals": "NASA EMIT L2B mineral identification, 60 m. Per site, the least cloudy granule (of at most 6 tried) in which the footprint is wholly inside the scene and at least 50% of its pixels are free of cloud, cirrus and water in the EMIT L2A mask. One date, nothing merged. Null where no granule qualifies.",
+   "minerals": "NASA EMIT L2B mineral identification, 60 m. Per site, the least cloudy granule (of at most 8 tried) in which the footprint is wholly inside the scene and at least 50% of its pixels are free of cloud, cirrus and water in the EMIT L2A mask. One date, nothing merged. Null where no granule qualifies.",
    "climate": "Copied from the site's 0.5 degree cell in earth.json (scale: grid)."
   }
  },
@@ -373,15 +373,50 @@
     "errors": []
    },
    "mineralogy": {
-    "value": null,
+    "value": {
+     "group1": {
+      "identifiedShare": 0.025,
+      "top": [
+       {
+        "libraryName": "Hypersthene NMNHC2368 W1R1Bb",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.025,
+        "meanBandDepth": 0.4796
+       }
+      ]
+     },
+     "group2": {
+      "identifiedShare": 0.712,
+      "top": [
+       {
+        "libraryName": "Cronstedtite M3542 =bb_",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.448,
+        "meanBandDepth": 0.2741
+       },
+       {
+        "libraryName": "Prehnite GDS613.a <60um =aa_",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.209,
+        "meanBandDepth": 0.2179
+       },
+       {
+        "libraryName": "Perchlorate_Mg GDS851.2 220K",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.055,
+        "meanBandDepth": 0.2444
+       }
+      ]
+     }
+    },
     "scale": "site",
-    "source": null,
-    "badge": null,
-    "date": null,
-    "validShare": null,
-    "pixels": null,
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20260427T031739_2611702_050; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20260427T031739_2611702_050 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "badge": "Measured",
+    "date": "2026-04-27",
+    "validShare": 1.0,
+    "pixels": 2084,
     "emitCovers": true,
-    "granulesAvailable": 1,
+    "granulesAvailable": 18,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20240518T070648",
@@ -389,9 +424,36 @@
       "sceneCloudPct": 35,
       "validShare": 0.0,
       "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250823T050256_2523503_049",
+      "date": "2025-08-23",
+      "sceneCloudPct": 50,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250924T033218_2526703_003",
+      "date": "2025-09-24",
+      "sceneCloudPct": 66,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251125T025751_2532902_004",
+      "date": "2025-11-25",
+      "sceneCloudPct": 68,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20260427T031739_2611702_050",
+      "date": "2026-04-27",
+      "sceneCloudPct": 72,
+      "validShare": 1.0
      }
     ],
-    "note": "EMIT has 1 granules over the site, but none of the 1 least cloudy ones gave a usable footprint."
+    "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
    }
   },
   {
@@ -1167,32 +1229,53 @@
     "errors": []
    },
    "mineralogy": {
-    "value": null,
+    "value": {
+     "group1": {
+      "identifiedShare": 0.001,
+      "top": [
+       {
+        "libraryName": "Goethite_Thin_Film WS222 W1R1Ba",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.001,
+        "meanBandDepth": 0.0059
+       }
+      ]
+     },
+     "group2": {
+      "identifiedShare": 0.006,
+      "top": [
+       {
+        "libraryName": "Calcite WS272 W1R1Ha",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.005,
+        "meanBandDepth": 0.0255
+       },
+       {
+        "libraryName": "Plastic_Vinyl GDS372 White W1R1Fa",
+        "libraryTitle": null,
+        "shareOfValidPixels": 0.001,
+        "meanBandDepth": 0.0333
+       }
+      ]
+     }
+    },
     "scale": "site",
-    "source": null,
-    "badge": null,
-    "date": null,
-    "validShare": null,
-    "pixels": null,
+    "source": "NASA EMIT L2B Estimated Mineral Identification and Band Depth 60 m (EMITL2BMIN v001), granule EMIT_L2B_MIN_001_20250721T053513_2520204_003; cloud, cirrus and water removed with EMIT_L2A_MASK_002_20250721T053513_2520204_003 (flags: cloud flag, cirrus flag, water flag, dilated cloud flag). NASA LP DAAC.",
+    "badge": "Measured",
+    "date": "2025-07-21",
+    "validShare": 1.0,
+    "pixels": 956,
     "emitCovers": true,
-    "granulesAvailable": 2,
+    "granulesAvailable": 12,
     "granulesTried": [
      {
-      "granule": "EMIT_L2B_MIN_002_20240601T020101",
-      "date": "2024-06-01",
-      "sceneCloudPct": 76,
-      "validShare": 0.0,
-      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
-     },
-     {
-      "granule": "EMIT_L2B_MIN_002_20241218T072804",
-      "date": "2024-12-18",
-      "sceneCloudPct": 87,
-      "validShare": 0.0,
-      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+      "granule": "EMIT_L2B_MIN_001_20250721T053513_2520204_003",
+      "date": "2025-07-21",
+      "sceneCloudPct": 55,
+      "validShare": 1.0
      }
     ],
-    "note": "EMIT has 2 granules over the site, but none of the 2 least cloudy ones gave a usable footprint."
+    "note": "Best spectral-library match per 60 m pixel on one date. group1 and group2 are the product's two mineral groups (group 1 holds the iron oxide matches, group 2 the clay, mica, carbonate and sulfate matches). shareOfValidPixels is how often a match occurs, not how much of the mineral is there. The spectral library also holds entries that are not minerals (dry vegetation, plastics); they are listed as the product gives them. Matches are weak where plants cover the ground: read them with bareFrac."
    }
   },
   {
@@ -1556,8 +1639,22 @@
     "validShare": null,
     "pixels": null,
     "emitCovers": true,
-    "granulesAvailable": 4,
+    "granulesAvailable": 14,
     "granulesTried": [
+     {
+      "granule": "EMIT_L2B_MIN_001_20250822T054926_2523404_042",
+      "date": "2025-08-22",
+      "sceneCloudPct": 37,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251223T050952_2535704_023",
+      "date": "2025-12-23",
+      "sceneCloudPct": 54,
+      "validShare": 0.0,
+      "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
+     },
      {
       "granule": "EMIT_L2B_MIN_002_20240218T080006",
       "date": "2024-02-18",
@@ -1573,21 +1670,33 @@
       "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      },
      {
-      "granule": "EMIT_L2B_MIN_002_20240427T044549",
-      "date": "2024-04-27",
-      "sceneCloudPct": 97,
+      "granule": "EMIT_L2B_MIN_001_20231107T005337_2331101_002",
+      "date": "2023-11-07",
+      "sceneCloudPct": 84,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20251223T050940_2535704_022",
+      "date": "2025-12-23",
+      "sceneCloudPct": 94,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_001_20250430T030239_2512002_020",
+      "date": "2025-04-30",
+      "sceneCloudPct": 95,
       "validShare": 0.0,
       "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      },
      {
-      "granule": "EMIT_L2B_MIN_002_20241229T032052",
-      "date": "2024-12-29",
-      "sceneCloudPct": 100,
+      "granule": "EMIT_L2B_MIN_001_20251018T071218_2529105_047",
+      "date": "2025-10-18",
+      "sceneCloudPct": 96,
       "validShare": 0.0,
       "skipped": "under 50% of the footprint has a retrieval free of cloud, cirrus and water"
      }
     ],
-    "note": "EMIT has 4 granules over the site, but none of the 4 least cloudy ones gave a usable footprint."
+    "note": "EMIT has 14 granules over the site, but none of the 8 least cloudy ones gave a usable footprint."
    }
   },
   {
@@ -2137,20 +2246,21 @@
      "note": "Share of clear observations classed as snow. Snow observations are left out of ndvi and bareFrac."
     },
     "rockType": {
-     "value": null,
+     "value": "limestone",
      "unit": "",
      "scale": "site",
-     "source": null,
-     "badge": null,
-     "note": "No regional geologic map, volcano record or retrievable paper abstract gives the rock type here."
+     "source": "Maulany et al. 2019, IOP Conference Series: Earth and Environmental Science 270:012030, doi:10.1088/1755-1315/270/1/012030 (abstract: limestone ecosystem including the Maros-Pangkep karst area)",
+     "badge": "Literature",
+     "note": "Stated in a paper about this feature, not read from a map."
     },
     "lithology": {
-     "value": null,
+     "value": 6,
      "unit": "class code",
      "scale": "site",
-     "source": null,
-     "badge": null,
-     "note": "The rock type has no exact GLiM class in the mapping table, or is unknown."
+     "source": "Maulany et al. 2019, IOP Conference Series: Earth and Environmental Science 270:012030, doi:10.1088/1755-1315/270/1/012030 (abstract: limestone ecosystem including the Maros-Pangkep karst area)",
+     "badge": "Literature",
+     "label": "Carbonate sedimentary rocks",
+     "note": "GLiM class assigned from the named rock type by GLiM's class definitions."
     },
     "tempMean": {
      "value": 26.26,
@@ -6982,7 +7092,7 @@
     "validShare": null,
     "pixels": null,
     "emitCovers": true,
-    "granulesAvailable": 15,
+    "granulesAvailable": 18,
     "granulesTried": [
      {
       "granule": "EMIT_L2B_MIN_002_20261105T120416",
@@ -7022,9 +7132,21 @@
       "date": "2026-10-20",
       "sceneCloudPct": 31,
       "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_002_20230122T170949",
+      "date": "2023-01-22",
+      "sceneCloudPct": 35,
+      "skipped": "footprint not wholly inside the scene"
+     },
+     {
+      "granule": "EMIT_L2B_MIN_002_20261101T133803",
+      "date": "2026-11-01",
+      "sceneCloudPct": 43,
+      "skipped": "footprint not wholly inside the scene"
      }
     ],
-    "note": "EMIT has 15 granules over the site, but none of the 6 least cloudy ones gave a usable footprint."
+    "note": "EMIT has 18 granules over the site, but none of the 8 least cloudy ones gave a usable footprint."
    }
   },
   {
