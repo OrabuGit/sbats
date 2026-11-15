@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ArrowLeft, Bookmark, BookmarkCheck, Check, Minus, X } from 'lucide-react';
 import type { CellScore, EarthCell, Target } from '../types';
 import type { MatchDimension, MatchRecord, MatchSide } from '../lib/matchAdapter';
@@ -10,6 +11,8 @@ import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
 import { Ground } from './Ground';
 import { Locator } from './Locator';
 import { ActivityArt, type Activity } from './ActivityArt';
+import { ELEMENT_NAME, ElementIcon, isElement } from './ElementIcon';
+import { ScoreDial } from './ScoreDial';
 import { countryKey, useCountries } from '../lib/where';
 
 export interface Tool {
@@ -127,10 +130,17 @@ function Track({ value, label }: { value: number | null; label: string }) {
 function DimensionRow({ d, targetName }: { d: MatchDimension; targetName: string }) {
   const v = fromRecord(d.verdict);
   return (
-    <li className="grid gap-x-8 gap-y-3 border-t border-line py-6 md:grid-cols-[150px_minmax(0,1fr)_220px]">
-      <div>
-        <h4 className="text-[16px] font-semibold text-text">{d.label}</h4>
-        <p className="mt-0.5 text-[12px] text-muted">{d.measures}</p>
+    <li id={`dim-${d.id}`} className="grid scroll-mt-20 gap-x-8 gap-y-3 border-t border-line py-6 md:grid-cols-[170px_minmax(0,1fr)_220px]">
+      <div className="flex items-start gap-3">
+        {isElement(d.id) && (
+          <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 ${v === 'match' ? 'border-accent bg-accent text-bg' : v === 'partial' ? 'border-accent text-accent' : 'border-line text-muted'}`}>
+            <ElementIcon id={d.id} size={26} />
+          </span>
+        )}
+        <div className="min-w-0">
+          <h4 className="text-[16px] font-semibold text-text">{d.label}</h4>
+          <p className="mt-0.5 text-[12px] leading-4 text-muted">{d.measures}</p>
+        </div>
       </div>
 
       <div className="min-w-0 space-y-3">
@@ -195,6 +205,11 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
   const partial = by('partial');
   const misses = by('miss');
   const none = by('none');
+  // The dimension shown in the detail beside the dial: the weakest one until another is chosen.
+  const weakest = core.reduce((w, d, i) => (d.similarity !== null && (w < 0 || d.similarity < (core[w].similarity as number)) ? i : w), -1);
+  const [picked, setPicked] = useState<number | null>(null);
+  const sel = Math.min(picked ?? Math.max(0, weakest), Math.max(0, core.length - 1));
+  const chosen = core[sel] ?? null;
   const countries = useCountries([cell]);
   const country = countries.get(countryKey(cell.lat, cell.lon)) ?? null;
   // A cell with no site in it is named by where it is.
@@ -286,6 +301,69 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               />
             </div>
           </header>
+
+          {core.length > 0 && (
+            <section className={`${pad} pb-16`} aria-labelledby="h-why">
+              <h3 id="h-why" className="display text-[24px] leading-8 text-text">
+                {scored ? `Why it scores ${formatScore(score)}` : 'What can be compared'}
+              </h3>
+              <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">
+                Each icon is one thing the two places are compared on. The amber shape reaches further out the closer they are alike: past the outer dashed ring is a match, inside the inner one is not.
+              </p>
+              <div className="mt-8 grid items-center gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <ScoreDial dims={core} score={scored ? (score as number) : null} selected={sel} onSelect={setPicked} />
+                {chosen && (
+                  <div aria-live="polite">
+                    <div className="flex items-center gap-4">
+                      {isElement(chosen.id) && (
+                        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 ${fromRecord(chosen.verdict) === 'match' ? 'border-accent bg-accent text-bg' : fromRecord(chosen.verdict) === 'partial' ? 'border-accent text-accent' : 'border-line text-muted'}`}>
+                          <ElementIcon id={chosen.id} size={32} />
+                        </span>
+                      )}
+                      <div>
+                        <p className="display text-[28px] leading-8 text-text">{isElement(chosen.id) ? ELEMENT_NAME[chosen.id] : chosen.label}</p>
+                        <p className="text-[13px] text-muted">{chosen.measures}</p>
+                      </div>
+                      <div className="ml-auto text-right">
+                        <p className="display text-[44px] leading-none text-text">{formatSim(chosen.similarity)}</p>
+                        <VerdictChip v={fromRecord(chosen.verdict)} />
+                      </div>
+                    </div>
+                    <div className="mt-5">
+                      <Track value={chosen.similarity} label={chosen.label} />
+                    </div>
+                    <p className="mt-5 text-[16px] leading-[26px] text-text">{chosen.reason}</p>
+                    {chosen.rows.slice(0, 2).map((r) => (
+                      <dl key={r.key} className="mt-4 grid grid-cols-2 gap-x-6">
+                        <Side label="Earth" side={r.earth} />
+                        <Side label={target.name} side={r.target} />
+                      </dl>
+                    ))}
+                    {weakest >= 0 && (
+                      <p className="mt-6 border-l-2 border-accent pl-4 text-[14px] leading-[22px] text-muted">
+                        {sel === weakest ? (
+                          <>
+                            <span className="font-semibold text-text">The weakest link.</span> The score multiplies the factors together (a weighted geometric mean), so a weak one cannot be averaged away.
+                          </>
+                        ) : (
+                          <>
+                            Weakest here is{' '}
+                            <button type="button" onClick={() => setPicked(weakest)} className="link-rule font-semibold text-text">
+                              {core[weakest].label.toLowerCase()}
+                            </button>
+                            . The score multiplies the factors together, so a weak one cannot be averaged away.
+                          </>
+                        )}
+                      </p>
+                    )}
+                    <a href={`#dim-${chosen.id}`} className="link-rule mt-5 inline-block text-[14px] font-medium text-text">
+                      All the numbers for {chosen.label.toLowerCase()}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
 
           <section className={`${pad} pb-14`} aria-labelledby="h-do">
             <h3 id="h-do" className="display text-[24px] leading-8 text-text">

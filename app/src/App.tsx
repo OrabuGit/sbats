@@ -160,6 +160,15 @@ function Orbit({ data }: { data: DataBundle }) {
   // The pair picked on the home globes, and which of its links is shown in the strip.
   const [homePick, setHomePick] = useState<HeroPick>(null);
   const [homeActive, setHomeActive] = useState(0);
+  // While nobody is using the globes, the hero walks through the pairs by itself. A touch pauses it for half a minute.
+  const [homeAuto, setHomeAuto] = useState(true);
+  const resumeTimer = useRef<number>(0);
+  const userTouch = useCallback(() => {
+    setHomeAuto(false);
+    window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => setHomeAuto(true), 30000);
+  }, []);
+  useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
   // On the Matches step: the Earth cell previewed in the strip, before it is opened.
   const [preview, setPreview] = useState<number | null>(null);
   const [tab, setTab] = useState<'setup' | 'results'>('setup');
@@ -815,6 +824,35 @@ function Orbit({ data }: { data: DataBundle }) {
     const cell = earth.cells[c.index];
     return { label: homeCountries.get(countryKey(cell.lat, cell.lon)) ?? 'Open land', score: results[c.index].score };
   });
+  useEffect(() => {
+    if (view !== 'home' || !homeAuto || demo !== null) return;
+    const withValues = places.filter((p) => p.targetId && targets.some((t) => t.id === p.targetId));
+    if (withValues.length === 0) return;
+    let tick = Math.floor(Math.random() * 1000);
+    const timers: number[] = [];
+    const step = () => {
+      tick += 1;
+      // Mostly a Moon or Mars place linked out to Earth; now and then an Earth site linked back to its target.
+      if (tick % 3 === 0 && earthPins.length > 0) {
+        const x = earthPins[Math.floor(Math.random() * earthPins.length)];
+        setHomePick({ kind: 'site', id: x.id });
+        setHomeActive(0);
+      } else {
+        const p = withValues[Math.floor(Math.random() * withValues.length)];
+        pickPlace(p.id);
+        setHomePick({ kind: 'place', id: p.id });
+        setHomeActive(0);
+        timers.push(window.setTimeout(() => setHomeActive(1), 4200));
+      }
+    };
+    timers.push(window.setTimeout(step, 2200));
+    const iv = window.setInterval(step, 8600);
+    return () => {
+      window.clearInterval(iv);
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [view, homeAuto, demo, places, targets, earthPins, pickPlace]);
+
   // Development only: lets a test script pick a pin without chasing a turning globe.
   useEffect(() => {
     if (!import.meta.env.DEV) return;
@@ -941,6 +979,7 @@ function Orbit({ data }: { data: DataBundle }) {
             setView('world');
           }}
           onPick={(kind, id) => {
+            userTouch();
             if (kind === 'place') pickPlace(id);
             setHomePick({ kind, id });
             setHomeActive(0);
@@ -950,15 +989,24 @@ function Orbit({ data }: { data: DataBundle }) {
           links={homeLinkList}
           reverse={homeReverse && homeReverse.place ? homeReverse : null}
           active={homeActiveIdx}
-          onActive={setHomeActive}
+          onActive={(i) => {
+            userTouch();
+            setHomeActive(i);
+          }}
           pair={homePair}
           chips={homeChips}
           presets={PRESETS}
           presetId={presetId}
-          onPreset={choosePreset}
+          onPreset={(id) => {
+            userTouch();
+            choosePreset(id);
+          }}
           onOpenPair={openHomePair}
           onAllMatches={homePlace && homeReady ? () => goToEarth() : null}
-          onClearPick={() => setHomePick(null)}
+          onClearPick={() => {
+            userTouch();
+            setHomePick(null);
+          }}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
           onMethod={() => setView('method')}
           onValidation={() => setView('validation')}

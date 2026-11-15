@@ -1,6 +1,7 @@
 import { ArrowRight, X } from 'lucide-react';
 import { ConfidenceBadge } from './Badges';
 import { ActivityArt, activityOf } from './ActivityArt';
+import { ElementIcon, isElement } from './ElementIcon';
 import { PRESET_WORDS } from './MatchControls';
 import { MATCH, MISS } from '../lib/verdict';
 
@@ -32,11 +33,14 @@ interface Props {
 }
 
 /** One dimension of the pair: a short track with the 0.30 and 0.75 cut-offs marked. */
-function Mini({ label, v }: { label: string; v: number | null }) {
+function Mini({ id, label, v }: { id: string; label: string; v: number | null }) {
   return (
     <div className="min-w-0" role="meter" aria-label={`${label} similarity`} aria-valuemin={0} aria-valuemax={1} aria-valuenow={v ?? 0} aria-valuetext={v === null ? 'no data' : v.toFixed(2)}>
       <div className="flex items-baseline justify-between gap-2">
-        <span className="truncate text-[12px] text-muted">{label}</span>
+        <span className="flex min-w-0 items-center gap-1.5 text-[12px] text-muted">
+          {isElement(id) && <ElementIcon id={id} size={16} className={v !== null && v >= MATCH ? 'text-accent' : ''} />}
+          <span className="truncate">{label}</span>
+        </span>
         <span className={`num text-[13px] font-semibold ${v === null ? 'text-muted' : 'text-text'}`}>{v === null ? 'no data' : v.toFixed(2)}</span>
       </div>
       <div className="relative mt-1 h-1.5 bg-line">
@@ -78,7 +82,7 @@ export function HomePair({ pair, chips, active, onActive, presets, presetId, onP
       ) : (
         <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">
           {pair.dims.map((d) => (
-            <Mini key={d.id} label={d.label} v={d.similarity} />
+            <Mini key={d.id} id={d.id} label={d.label} v={d.similarity} />
           ))}
         </div>
       )}

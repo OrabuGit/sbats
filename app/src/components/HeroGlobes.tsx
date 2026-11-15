@@ -407,7 +407,12 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     const placeLinks = () => {
       const pk = pickRef.current;
       const els = linkEls.current;
-      const hideAll = () => els.forEach((e) => e && (e.style.opacity = '0'));
+      const hideAll = () =>
+        els.forEach((e) => {
+          if (!e) return;
+          e.style.opacity = '0';
+          e.querySelector('path')?.style.setProperty('stroke-dashoffset', '100');
+        });
       if (!pk) {
         hideAll();
         if (markEl.current) markEl.current.style.opacity = '0';
@@ -437,17 +442,20 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         const e = ends[i];
         if (!e) {
           el.style.opacity = '0';
+          el.querySelector('path')?.style.setProperty('stroke-dashoffset', '100');
           return;
         }
         const b = project(e.world, e.lat, e.lon);
         if (!a.front || !b.front) {
           el.style.opacity = '0';
+          el.querySelector('path')?.style.setProperty('stroke-dashoffset', '100');
           return;
         }
         // An arc that bows upward, higher the longer the link.
         const mx = (a.x + b.x) / 2;
         const my = (a.y + b.y) / 2 - Math.hypot(b.x - a.x, b.y - a.y) * 0.28;
         const path = el.querySelector('path');
+        path?.style.setProperty('stroke-dashoffset', '0');
         path?.setAttribute('d', `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
         const tag = el.querySelector<SVGGElement>('[data-tag]');
         // The label sits on the curve, a little short of the far end.
@@ -591,16 +599,17 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         </p>
       )}
       <svg className="pointer-events-none absolute inset-0 z-[5] h-full w-full" aria-hidden="true">
-        <circle ref={markEl} r="15" fill="none" stroke="#FFB000" strokeWidth="2" style={{ opacity: 0 }} />
+        <circle ref={markEl} className="hero-link" r="15" fill="none" stroke="#FFB000" strokeWidth="2" style={{ opacity: 0 }} />
         {drawn.map((l, i) => (
           <g
             key={i}
+            className="hero-link"
             ref={(el) => {
               linkEls.current[i] = el;
             }}
             style={{ opacity: 0 }}
           >
-            <path fill="none" stroke="#FFB000" strokeWidth={i === active ? 2.4 : 1.4} strokeLinecap="round" />
+            <path className="hero-arc" pathLength={100} fill="none" stroke="#FFB000" strokeWidth={i === active ? 2.4 : 1.4} strokeLinecap="round" style={{ transitionDelay: `${i * 140}ms` }} />
             <circle r="4" fill="#FFB000" />
             <g data-tag="">
               <rect x="-24" y="-11" width="48" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />

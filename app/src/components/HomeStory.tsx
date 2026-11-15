@@ -8,6 +8,7 @@ import { loadFrozen, loadReport, loadSources } from '../data/validation';
 import type { ExtractIndex } from '../data/sites';
 import { verdictOf, VERDICT_WORD } from '../lib/verdict';
 import { ActivityArt } from './ActivityArt';
+import { ElementIcon, isElement } from './ElementIcon';
 import type { HeroPlace } from './HeroGlobes';
 import { countryAt } from '../lib/where';
 
@@ -305,7 +306,10 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
           const sim = d?.similarity ?? null;
           return (
             <li key={id} className="flex items-center gap-4 py-2.5">
-              <span className="w-[100px] text-[15px] text-text">{label}</span>
+              <span className="flex w-[116px] items-center gap-2 text-[15px] text-text">
+                {isElement(id) && <ElementIcon id={id} size={20} className={active === 2 && sim !== null && sim >= 0.75 ? 'text-accent' : 'text-muted'} />}
+                {label}
+              </span>
               <span className="relative block h-2 flex-1 bg-line" aria-hidden="true">
                 <span className="absolute inset-y-0 left-0 bg-accent" style={{ width: active === 2 ? `${(sim ?? 0) * 100}%` : '0%', transition: `width 900ms cubic-bezier(0.4, 0, 0.2, 1) ${300 + k * 120}ms` }} />
                 <span className="absolute inset-y-0 left-[30%] w-px bg-bg" />
