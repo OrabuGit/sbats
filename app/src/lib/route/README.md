@@ -37,8 +37,9 @@ local orthographic projection centred on the item, north up).
 
 ## Limits, stated in every result
 
-- Slope is measured between posts one pixel apart: 30 m on Earth, 60 or 80 m on the Moon, 463 m on
-  Mars. A route within the limit here is not proven drivable.
+- Slope is measured between posts one pixel apart: the tile's `pixelM` (in the current extracts 30 m on
+  Earth, 20 or 60 m on the Moon, 200 m on Mars; each result states its own `baselineM`). A route within the
+  limit here is not proven drivable.
 - Slopes from a coarse grid are gentler than slopes of the same ground from a fine grid. Do not compare
   a Mars route with an Earth route by slope.
 - **Energy is almost never given.** No published, citable model of rover energy against slope was found.

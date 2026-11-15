@@ -4,11 +4,11 @@
 // row 0 at the north edge, in a local projection where one pixel is `pixelM` metres on the ground.
 //
 // Two honest limits, repeated in every result:
-//   1. Slope is measured between elevation posts `pixelM` apart (30 m on Earth, 60 or 80 m on the
-//      Moon, 463 m on Mars). A rover meets rocks and steps far smaller than that. A route that looks
-//      drivable here is not proven drivable.
-//   2. Tiles of different bodies have different pixel sizes. Slopes from a 463 m grid are gentler
-//      than slopes of the same ground from a 30 m grid, so compare routes at one pixel size only.
+//   1. Slope is measured between elevation posts `pixelM` apart (tens to hundreds of metres, stated
+//      per tile). A rover meets rocks and steps far smaller than that. A route that looks drivable
+//      here is not proven drivable.
+//   2. Tiles of different bodies have different pixel sizes. Slopes from a coarse grid are gentler
+//      than slopes of the same ground from a fine grid, so compare routes at one pixel size only.
 
 /** An elevation tile. `data` has size x size values, row-major, north row first; NaN is no data. */
 export interface ElevationTile {

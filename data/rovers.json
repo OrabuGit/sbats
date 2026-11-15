@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:07:20Z",
+  "generatedAt": "2026-11-15T06:49:35Z",
   "note": "Published slope limits and speeds of rovers, each with its source, for app/src/lib/route. slopeLimit is the limit used in operations or stated as the design requirement; otherSlopeFigures are shown for context. speed gives a lower bound on driving time. A rover with no published figure has null.",
   "energyNote": "No published, simple, citable model of rover energy against slope was found. The only energy figure is the Apollo rover's measured rate on the Moon. Do not apply it to another vehicle, another body, or a slope.",
   "notFound": [

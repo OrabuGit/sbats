@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T06:49:21Z",
+  "generatedAt": "2026-11-15T06:49:35Z",
   "note": "Target-side values for the dimensions added after the freeze of 2026-11-14: wind, dust and ground ice. Never part of the all-round score. A dimension is compared only when the Earth side is published too and a tolerance has been written down.",
   "definitions": {
    "wind": "Mean wind speed 10 m above the surface, m/s.",

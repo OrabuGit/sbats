@@ -1,6 +1,6 @@
 # Geology dimension: where the number comes from
 
-Generated 2026-11-15T06:42:16.644Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:06:00Z. Score frozen 2026-11-14; nothing here changes it.
+Generated 2026-11-15T06:49:50.165Z by `npx tsx validation/geology.ts`. Earth grid built 2026-11-15T06:42:18Z. Score frozen 2026-11-14; nothing here changes it.
 The cause, in words, is in `validation/purposes/GEOLOGY.md`. Percentiles are tie-fair (0.5 is chance).
 
 ## 1. The dimension has three possible values per target

@@ -1,6 +1,6 @@
 # What the search finds: the best-ranked places on Earth for each target
 
-Written 2026-11-15T06:07:59.824Z by `npx tsx validation/discoveries.ts`. Score frozen 2026-11-14. Data file for the app: `data/discoveries.json`.
+Written 2026-11-15T06:50:17.799Z by `npx tsx validation/discoveries.ts`. Score frozen 2026-11-14. Data file for the app: `data/discoveries.json`.
 
 Rules, the same as the app's candidate list: best all-round score first (Base weights), high and medium confidence only, each pick at least 250 km from the picks above it. **New** means more than 500 km from every one of our 28 known analogs.
 

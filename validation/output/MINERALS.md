@@ -1,6 +1,6 @@
 # Minerals on both sides: what each Earth site shares with each target
 
-Written 2026-11-15T06:42:14.478Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T06:40:44Z (Session B).
+Written 2026-11-15T06:49:54.809Z by `npx tsx validation/minerals.ts`. Site values: data/sites.json built 2026-11-15T06:42:20Z (Session B).
 
 **Site-level result only. Added after the score was frozen on 2026-11-14: it is not part of any score and has not been validated.**
 

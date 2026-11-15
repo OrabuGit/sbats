@@ -1,6 +1,6 @@
 # Site-level scores from fine-scale values
 
-Written 2026-11-15T06:42:10.906Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T06:40:44Z (Session B).
+Written 2026-11-15T06:49:53.940Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T06:42:20Z (Session B).
 Scoring values frozen 2026-11-14. Target windows: validation/output/target_terrain_windows.json (2026-11-15T04:50:09Z).
 
 Read this first:

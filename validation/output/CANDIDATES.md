@@ -1,6 +1,6 @@
 # Indonesian candidate sites
 
-Scored 2026-11-15T06:07:28.114Z with the values frozen on 2026-11-14. Earth grid built 2026-11-15T06:06:00Z.
+Scored 2026-11-15T06:49:44.509Z with the values frozen on 2026-11-14. Earth grid built 2026-11-15T06:42:18Z.
 
 These sites were never used to tune or validate the score. Each is scored at its 0.5 degree cell, about
 55 km wide, so a crater or a cave is represented by the rainfall, vegetation and rock of the whole cell.
