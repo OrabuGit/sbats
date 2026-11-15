@@ -60,7 +60,9 @@ const agreement = data.targets.map((t) => {
 });
 
 // 2. Coverage over the named places
-const profiles = known.sites.map((s) => ({ site: s, profile: targetFromKnownSite(s, { grid: grids[s.body] ?? null, curated: data.targets }) }));
+// Rock classes the scoring library knows. A grid class outside the list is left out, with a note, instead of failing.
+const rockClasses = (data.earth.meta.factors.find((f) => f.key === 'lithology')?.classes ?? []).map((c) => c.code);
+const profiles = known.sites.map((s) => ({ site: s, profile: targetFromKnownSite(s, { grid: grids[s.body] ?? null, curated: data.targets, rockClasses }) }));
 const count = <T extends string>(values: T[]): Record<string, number> => values.reduce<Record<string, number>>((acc, v) => ({ ...acc, [v]: (acc[v] ?? 0) + 1 }), {});
 const coverage = {
   places: profiles.length,
