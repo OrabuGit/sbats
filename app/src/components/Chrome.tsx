@@ -14,6 +14,8 @@ interface TopBarProps {
   featuredOpen: boolean;
   onFeatured: () => void;
   demoRunning: boolean;
+  /** What the demo is showing now, or null. */
+  demoLabel: string | null;
   onDemo: () => void;
   /** True while a reference page (Method, Validation, Sites) is open. */
   methodOpen: boolean;
@@ -27,7 +29,7 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 4, label: 'Match' },
 ];
 
-export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeatured, demoRunning, onDemo, methodOpen, onMethod }: TopBarProps) {
+export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeatured, demoRunning, demoLabel, onDemo, methodOpen, onMethod }: TopBarProps) {
   return (
     <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
       <h1 className="flex items-stretch border-r border-line">
@@ -70,40 +72,11 @@ export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeature
           <span className="hidden lg:inline">Method</span>
         </button>
       )}
+      {demoLabel && <span className="mr-3 hidden max-w-[240px] items-center truncate text-[12px] text-muted lg:flex">{demoLabel}</span>}
       <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className="btn btn-primary h-full min-w-11 !rounded-none !px-3 sm:!px-4">
         {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
         <span className="hidden whitespace-nowrap sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
     </header>
-  );
-}
-
-interface StatusProps {
-  coords: string | null;
-  code: string | null;
-  cells: number;
-  resolutionDeg: number;
-  fixtureFiles: string[];
-  view: string;
-  status: string;
-}
-
-export function StatusStrip({ coords, code, cells, resolutionDeg, fixtureFiles, view, status }: StatusProps) {
-  const cellText = `${cells.toLocaleString('en-US')} cells at ${resolutionDeg}°`;
-  return (
-    <footer className="num flex min-h-8 shrink-0 flex-wrap items-center gap-x-5 gap-y-0.5 border-t border-line bg-panel px-3 py-1 text-[11px] uppercase tracking-wider text-muted sm:px-4">
-      <span>View {view}</span>
-      <span className="text-text">{coords ?? 'No site selected'}</span>
-      {code && <span className="text-text">{code}</span>}
-      <span>{cellText}</span>
-      {fixtureFiles.length > 0 && (
-        <span className="text-accent" title="These files are synthetic fixtures from app/src/mocks, not real data.">
-          Fixture data, not real: {fixtureFiles.join(', ')}
-        </span>
-      )}
-      <span className="ml-auto text-text" role="status" aria-live="polite">
-        {status}
-      </span>
-    </footer>
   );
 }

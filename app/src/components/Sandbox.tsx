@@ -412,7 +412,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
     >
       <section className="border-b border-line p-4" aria-labelledby="h-palette">
         <h2 id="h-palette" className="label mb-1">
-          03 Modules
+          Modules
         </h2>
         <p className="mb-3 text-[12px] text-muted">
           Select a module and click the Earth grid, or use plus and minus. One square is{' '}

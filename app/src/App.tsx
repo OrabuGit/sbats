@@ -2,10 +2,10 @@ import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useR
 import { loadData, loadExtra, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
-import { buildIndex, formatCoords, siteCode } from './lib/geo';
+import { buildIndex, siteCode } from './lib/geo';
 import { keyLabel, metaByKey, reasonLine } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
-import { StatusStrip, TopBar, type Step } from './components/Chrome';
+import { TopBar, type Step } from './components/Chrome';
 import { LeftPanel, type MatchMode } from './components/LeftPanel';
 import { CandidateList, type ListMode } from './components/CandidateList';
 import { Dossier } from './components/Dossier';
@@ -615,24 +615,6 @@ function Orbit({ data }: { data: DataBundle }) {
     if (p && !(p.targetId && targets.some((t) => t.id === p.targetId)) && gridOf(p.body) !== null) pickPlace(placeId);
   }, [placeId, pointProfile, places, targets, gridOf, pickPlace]);
 
-  const status =
-    demo ??
-    (view === 'home'
-      ? 'Home'
-      : view === 'match'
-        ? 'Match open'
-        : view === 'recon'
-          ? 'Sandbox'
-          : view === 'orbit'
-            ? weights !== liveWeights
-              ? 'Scoring'
-              : step === 1
-                ? 'Pick a world'
-                : step === 2
-                  ? 'Pick a place'
-                  : 'Ready'
-            : 'Reading');
-
   useEffect(() => {
     const where = view === 'home' ? '' : view === 'match' && selectedCell ? `${named?.name.split(',')[0] ?? siteCode(selectedCell)} and ${target.name} · ` : view === 'orbit' && step >= 2 ? `${(step === 2 && place ? place.name : target.name)} · ` : '';
     document.title = `${where}SBATS-26`;
@@ -649,15 +631,23 @@ function Orbit({ data }: { data: DataBundle }) {
         featuredOpen={view === 'featured'}
         onFeatured={() => setView('featured')}
         demoRunning={demo !== null}
+        demoLabel={demo}
         onDemo={runDemo}
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
       />
       )}
 
-      {(data.warnings.length > 0 || saved.error) && (
-        <div className="border-b border-line bg-panel px-4 py-2 text-[12px] text-accent" role="alert">
-          {[...data.warnings, saved.error].filter(Boolean).join(' ')}
+      {(data.warnings.length > 0 || saved.error || data.fixtureFiles.length > 0 || (view === 'recon' && modules.status === 'ready' && modules.value.fixture)) && (
+        <div className="bg-bg px-4 py-2 text-[12px] text-accent" role="alert">
+          {[
+            ...data.warnings,
+            saved.error,
+            data.fixtureFiles.length > 0 ? `Fixture data, not real: ${data.fixtureFiles.map((f) => `${f}.json`).join(', ')}.` : null,
+            view === 'recon' && modules.status === 'ready' && modules.value.fixture ? 'Fixture module numbers, not real.' : null,
+          ]
+            .filter(Boolean)
+            .join(' ')}
         </div>
       )}
 
@@ -1052,17 +1042,6 @@ function Orbit({ data }: { data: DataBundle }) {
       </div>
       )}
 
-      {view !== 'home' && (
-      <StatusStrip
-        coords={selectedCell ? formatCoords(selectedCell.lat, selectedCell.lon) : null}
-        code={selectedCell ? siteCode(selectedCell) : null}
-        cells={earth.cells.length}
-        resolutionDeg={earth.meta.resolutionDeg}
-        fixtureFiles={[...data.fixtureFiles.map((f) => `${f}.json`), ...(view === 'recon' && modules.status === 'ready' && modules.value.fixture ? ['modules.json'] : [])]}
-        view={view}
-        status={status}
-      />
-      )}
     </div>
   );
 }

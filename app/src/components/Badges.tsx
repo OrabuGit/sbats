@@ -5,7 +5,7 @@ export function SourceBadge({ badge, source }: { badge: Badge | null; source?: s
   if (!badge) return null;
   return (
     <span
-      className="num inline-block border border-line px-1 text-[10px] uppercase leading-4 tracking-wider text-muted"
+      className="inline-block border border-line px-1.5 text-[11px] font-medium leading-[18px] text-muted"
       title={source ? `${badge}: ${source}` : badge}
     >
       {badge}
@@ -17,7 +17,7 @@ export function SourceBadge({ badge, source }: { badge: Badge | null; source?: s
 export function ComputedBadge({ title = 'Computed in the browser from latitude. Not read from a dataset.' }: { title?: string }) {
   return (
     <span
-      className="num inline-block border border-dashed border-line px-1 text-[10px] uppercase leading-4 tracking-wider text-muted"
+      className="inline-block border border-dashed border-line px-1.5 text-[11px] font-medium leading-[18px] text-muted"
       title={title}
     >
       Computed
@@ -30,7 +30,7 @@ const LEVEL: Record<Confidence, number> = { high: 3, medium: 2, low: 1 };
 /** Confidence badge: three pips plus the word. Neutral colour, since green and red mean readiness. */
 export function ConfidenceBadge({ confidence, coverage }: { confidence: Confidence | null; coverage?: number }) {
   if (!confidence) {
-    return <span className="num border border-line px-1 text-[10px] uppercase leading-4 tracking-wider text-muted">No data</span>;
+    return <span className="border border-line px-1.5 text-[11px] font-medium leading-[18px] text-muted">No data</span>;
   }
   const n = LEVEL[confidence];
   const title =
@@ -38,7 +38,7 @@ export function ConfidenceBadge({ confidence, coverage }: { confidence: Confiden
       ? `Confidence ${confidence}`
       : `Confidence ${confidence}: factors with data cover ${(coverage * 100).toFixed(0)}% of the mission weight`;
   return (
-    <span className="num inline-flex items-center gap-1.5 text-[10px] uppercase leading-4 tracking-wider text-muted" title={title}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium leading-4 text-muted" title={title}>
       <span className="flex gap-0.5" aria-hidden="true">
         {[1, 2, 3].map((i) => (
           <span key={i} className={`block h-2 w-1 ${i <= n ? 'bg-text' : 'bg-line'}`} />
@@ -53,7 +53,7 @@ export function Tag({ children, title, tone = 'muted' }: { children: React.React
   return (
     <span
       title={title}
-      className={`num inline-block border px-1 text-[10px] font-semibold uppercase leading-4 tracking-wider ${
+      className={`inline-block border px-1.5 text-[11px] font-semibold leading-[18px] ${
         tone === 'accent' ? 'border-accent text-accent' : 'border-line text-muted'
       }`}
     >

@@ -177,7 +177,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 lg:border-r lg:border-line">
           <header className="border-b border-line px-4 py-6 sm:px-6">
-            <p className="label">04 Match{rank !== null ? ` · rank ${rank}` : ''}</p>
+            <p className="label">Match{rank !== null ? `, rank ${rank}` : ''}</p>
             <h2 id="h-match" className="mt-1 max-w-[28ch] text-[22px] font-semibold leading-7 text-text">
               {name} as a stand-in for {target.name}
             </h2>
@@ -349,7 +349,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
 
           <section className="px-4 py-6 sm:px-6" aria-labelledby="h-actions">
             <h3 id="h-actions" className="label">
-              05 Actions
+              What to do with this match
             </h3>
             <div className="mt-3 flex flex-wrap gap-2">
               {actions.map((a) => (

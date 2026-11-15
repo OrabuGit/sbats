@@ -344,7 +344,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
 
       <section className="border-b border-line px-4 sm:px-6" aria-labelledby="h-proposed">
         <h2 id="h-proposed" className="label pt-6">
-          01 Proposed by the team · {proposed.length}
+          Proposed by the team
         </h2>
         {sitesState === 'loading' && (
           <p className="label py-6" role="status">
@@ -394,7 +394,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
 
       <section className="border-b border-line px-4 py-8 sm:px-6" aria-labelledby="h-known">
         <h2 id="h-known" className="label">
-          02 Established analog sites, as benchmarks · {known.length}
+          Established analog sites, as benchmarks
         </h2>
         <p className="mt-2 max-w-[72ch] text-[13px] text-muted">
           Sites used by space agencies and field teams, scored by the same footprint procedure. Scores are match scores, 0 to 100, for the purpose
@@ -511,7 +511,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
 
       <section className="px-4 py-8 sm:px-6" aria-labelledby="h-scan">
         <h2 id="h-scan" className="label">
-          03 Top of the global scan for {target.name}
+          Top of the global scan for {target.name}
         </h2>
         <p className="mt-2 max-w-[72ch] text-[13px] text-muted">
           The three best 0.5° cells by all-round match, at least 250 km apart. Cell scale, about 55 km on a side. Pick another place in step 2 to

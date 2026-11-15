@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
-import { AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
+import { PerspectiveCamera, AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
 import SlippyMap from 'three-slippy-map-globe';
 import { feature } from 'topojson-client';
 import type { MultiPolygon, Polygon } from 'geojson';
@@ -245,7 +245,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       .height(el.clientHeight || 300)
       .htmlLat('lat')
       .htmlLng('lng')
-      .htmlAltitude(0.005)
+      .htmlAltitude(0.012)
       .htmlTransitionDuration(0)
       .htmlElement((d: object) => {
         const m = d as Marker;
@@ -288,7 +288,10 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     controls.minDistance = GLOBE_RADIUS * (1 + MIN_ALTITUDE);
     controls.maxDistance = 600;
 
-    const tiles = new SlippyMap(GLOBE_RADIUS * 1.0004, { tileUrl: GIBS_TILE, maxLevel: GIBS_MAX_LEVEL });
+    const tiles = new SlippyMap(GLOBE_RADIUS * 1.003, { tileUrl: GIBS_TILE, maxLevel: GIBS_MAX_LEVEL });
+    // Tiles and the heat layer are flat-faced spheres: the finer the faces, the smaller the dip between
+    // vertices. A dip deeper than the gap to the layer below lets that layer show through and flicker.
+    tiles.curvatureResolution = 1.5;
     // One level deeper than the library's default at each distance on a large screen, for sharpness.
     if (!small) tiles.thresholds = tiles.thresholds.map((t) => t * 2);
     const addTile = tiles.add.bind(tiles);
@@ -305,7 +308,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       return addTile(...objs);
     };
     const overlay = new Mesh(
-      new SphereGeometry(GLOBE_RADIUS * 1.0012, 96, 48),
+      new SphereGeometry(GLOBE_RADIUS * 1.006, 240, 120),
       new MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false, blending: AdditiveBlending }),
     );
     overlay.rotation.y = -Math.PI / 2; // same orientation as the library's globe
@@ -313,6 +316,11 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     overlay.renderOrder = 1;
     globe.scene().add(tiles, overlay);
     const camera = globe.camera();
+    // A nearer near-plane gives the depth buffer ten times the precision for the thin layers on the globe.
+    if ('near' in camera && 'updateProjectionMatrix' in camera) {
+      (camera as PerspectiveCamera).near = 1;
+      (camera as PerspectiveCamera).updateProjectionMatrix();
+    }
     const updateTiles = () => {
       tiles.updatePov(camera);
       if (altRef.current) altRef.current.textContent = `${Math.round(globe.pointOfView().altitude * 6371).toLocaleString('en-US')} km`;

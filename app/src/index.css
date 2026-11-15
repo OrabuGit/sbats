@@ -85,13 +85,12 @@ button[aria-disabled='true'] {
   outline-offset: -2px;
 }
 
-/* Small uppercase letter-spaced label. */
+/* Small label: Inter, sentence case. Numbers and codes keep the mono. */
 .label {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   line-height: 16px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-weight: 500;
   color: var(--color-muted);
 }
 
