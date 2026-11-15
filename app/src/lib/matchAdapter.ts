@@ -26,6 +26,7 @@ import { PRESETS, buildProfileIndex, computeEarthRanges, prepareTarget, rankStab
 import type { EarthRanges, ProfileIndex, StabilityBasis, StabilityResult } from './scoring';
 import { measureRoute, type ElevationTile, type RouteResult } from './route';
 import { loadExtra } from '../data/access';
+import { flags } from '../flags';
 import type { EarthCell, EarthFile, LithologySimilarity, Target, Weights } from '../types';
 
 export { MATCH_AT, PARTLY_AT, VERDICT_LABEL, buildReport, measureRoute };
@@ -55,6 +56,10 @@ function ranges(earth: EarthFile): EarthRanges {
   return r;
 }
 
+/** True for a site whose EMIT minerals must not be shown yet. Indonesian site ids start with "id-". */
+export const mineralsWithheld = (siteId: string) => !flags.indonesiaMinerals && siteId.startsWith('id-');
+export const WITHHELD_NOTE = 'Minerals are not shown for this site: the EMIT identifications for the Indonesian sites are being rebuilt after a cloud screening problem was found.';
+
 export interface RecordInput {
   earth: EarthFile;
   lithology: LithologySimilarity;
@@ -78,7 +83,10 @@ export interface RecordInput {
  * and the target's terrain is measured in a window of the same size when that was published.
  */
 export function matchRecord(input: RecordInput): { record: MatchRecord; note: string | null; minerals: SharedMinerals | null } {
-  const { earth, lithology, target, cell, site } = input;
+  const { earth, lithology, target, cell } = input;
+  // EMIT minerals for the Indonesian sites are withheld until the rebuilt file is confirmed (flags.indonesiaMinerals).
+  const withheld = !!input.site && mineralsWithheld(input.site.id);
+  const site = input.site && withheld ? { ...input.site, mineralogy: null } : input.site;
   const classes = earth.meta.factors.find((f) => f.key === 'lithology')?.classes;
   const like = site && input.targetWindows ? targetAtSiteWindow(target, sitePosts(site), input.targetWindows) : null;
   const used = like ?? target;
@@ -130,7 +138,7 @@ export function matchRecord(input: RecordInput): { record: MatchRecord; note: st
       extraRanges: xr,
     });
   try {
-    return { record: build(lithology), note: null, minerals: shared };
+    return { record: build(lithology), note: withheld ? WITHHELD_NOTE : null, minerals: shared };
   } catch (e) {
     // A rock class outside the similarity table: compare without rock type and say so.
     return { record: build(null), note: `Rock type is left out: ${e instanceof Error ? e.message : String(e)}`, minerals: shared };

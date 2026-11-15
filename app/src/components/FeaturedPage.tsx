@@ -5,6 +5,7 @@ import { formatShare } from '../lib/format';
 import { DIMENSIONS, PURPOSES } from '../lib/scoringAdapter';
 import { useAsync } from '../lib/useAsync';
 import { loadExtra } from '../data/access';
+import { mineralsWithheld } from '../lib/matchAdapter';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 
@@ -365,7 +366,9 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
               targets={targets}
               tested={(() => {
                 const b = bm?.sites?.find((x) => x.id === s.id);
-                return b ? { could: b.couldTest ?? [], cannot: b.cannotTest ?? [] } : null;
+                // The sentence about minerals seen from orbit is withheld for the Indonesian sites until their EMIT data is rebuilt.
+                const keep = (t: Tested) => !(mineralsWithheld(s.id) && /mineral/i.test(t.text));
+                return b ? { could: (b.couldTest ?? []).filter(keep), cannot: b.cannotTest ?? [] } : null;
               })()}
               onSitePage={onSitePage}
               onMatch={onMatch}
