@@ -1,22 +1,21 @@
 import { ArrowRight } from 'lucide-react';
-import type { ExtractIndex, SitesFile } from '../data/sites';
+import type { ExtractIndex, ExtractItem, SitesFile } from '../data/sites';
 import { loadStories, type SiteStory } from '../data/stories';
 import { useAsync } from '../lib/useAsync';
 import type { StoryPair } from '../lib/storyPairs';
-import { ConfidenceBadge } from './Badges';
 import { Reveal } from './HomeStory';
-import { SiteTile, type Body } from './MapTile';
+import { SiteTile, mosaicCredit, type Body } from './MapTile';
+import { StoryTool } from './StoryTool';
 
-// The team's five site stories as Earth-and-target pairs on the home page. Pictures come from the
-// same-scale extracts (or the global mosaic when there is none); the words are the team's; the verdict
-// is the tool's own, computed in the browser (lib/storyPairs.ts). No story value is shown as a score.
+// The featured section of the home page: the team's five site stories as Earth-and-target pairs, in
+// the layout of the old featured sites (a full-bleed lead, then a row of cards). Pictures come from the
+// same-scale extracts, else the app's own global mosaic (SiteTile never leaves an empty box). The words
+// are the team's; everything under "Computed by the tool" is the tool's own (lib/storyPairs.ts).
 
 const ORDER = ['tambora-shackleton', 'batur-marius', 'dallol-columbia-hills', 'uyuni-tunupa-holden', 'lut-gale'];
-/** A second, smaller Earth tile shown with a pair. */
-const SECOND: Record<string, string> = { 'uyuni-tunupa-holden': 'tunupa-volcano' };
-const NO_TARGET = 'No tool target for this place, so the tool gives no score.';
 
 const short = (n: string) => n.split(',')[0];
+const region = (n: string) => n.split(',').slice(1).join(',').trim();
 const bodyOf = (id: string | null, name: string): Body => (id?.startsWith('mars') || /mars/i.test(name) ? 'mars' : id?.startsWith('moon') || /moon|lunar/i.test(name) ? 'moon' : 'earth');
 
 /** The first sentence when the text is long; whole when short. */
@@ -27,120 +26,206 @@ function firstSentence(t: string | null): string | null {
   return m ? m[1] : t;
 }
 
-function Pair({ story, n, pair, sites, extracts, onSite }: { story: SiteStory; n: number; pair: StoryPair | null; sites: SitesFile | null; extracts: ExtractIndex | null; onSite: (id: string) => void }) {
-  const earthId = story.earthSiteIds[0];
-  const site = sites?.sites.find((s) => s.id === earthId) ?? null;
+function credit(item: ExtractItem | null, body: Body): string {
+  if (item?.image) return item.image.attribution.startsWith(item.image.product.split(' (')[0]) ? item.image.attribution : `${item.image.product}. ${item.image.attribution}`;
+  if (item?.elevation) return `Shaded relief from ${item.elevation.product}. ${item.elevation.attribution}`;
+  return `Global mosaic, about 24° across. ${mosaicCredit(body)}`;
+}
+
+interface Resolved {
+  story: SiteStory;
+  pair: StoryPair | null;
+  earthId: string;
+  earthName: string;
+  earthFull: string;
+  earthPoint: { lat: number; lon: number } | null;
+  earthItem: ExtractItem | null;
+  tName: string;
+  tFull: string;
+  tPoint: { lat: number; lon: number } | null;
+  tBody: Body;
+  tItem: ExtractItem | null;
+  why: string | null;
+}
+
+function resolve(story: SiteStory, pair: StoryPair | null, sites: SitesFile | null, extracts: ExtractIndex | null): Resolved {
   const ex = (id: string | null | undefined) => (id ? (extracts?.items.find((i) => i.id === id) ?? null) : null);
-  const earthPoint = site ?? story.earth.teamLocation ?? story.ourData[0] ?? null;
-  const secondId = SECOND[story.id];
-  const second = secondId ? (sites?.sites.find((s) => s.id === secondId) ?? null) : null;
+  const earthId = story.earthSiteIds[0] ?? '';
+  const site = sites?.sites.find((s) => s.id === earthId) ?? null;
+  const earthFull = site?.name ?? story.earth.name;
   const tId = story.target.inTool?.id ?? story.target.targetId;
-  const tPoint = story.target.inTool ?? story.target.teamLocation;
-  const tBody = bodyOf(tId, story.target.name);
-  const tName = story.target.inTool?.name ?? short(story.target.name);
-  const v = pair?.verdict ?? null;
-  const why = firstSentence(story.whyItStandsOut);
+  return {
+    story,
+    pair,
+    earthId,
+    earthName: short(earthFull),
+    earthFull,
+    earthPoint: site ?? story.earth.teamLocation ?? story.ourData[0] ?? null,
+    earthItem: ex(earthId),
+    tName: story.target.inTool?.name ?? short(story.target.name),
+    tFull: story.target.name,
+    tPoint: story.target.inTool ?? story.target.teamLocation,
+    tBody: bodyOf(tId, story.target.name),
+    tItem: ex(tId),
+    why: firstSentence(story.whyItStandsOut),
+  };
+}
 
+/** The target's picture, small, for the lower right corner of the Earth picture. */
+function Inset({ r, className }: { r: Resolved; className: string }) {
+  if (!r.tPoint) return null;
   return (
-    <article className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]" aria-labelledby={`pair-${story.id}`}>
-      <Reveal>
-        <div className="grid grid-cols-2 gap-3 sm:gap-5">
-          <div className="min-w-0">
-            {earthPoint ? (
-              <SiteTile item={ex(earthId)} body="earth" lat={earthPoint.lat} lon={earthPoint.lon} name={short(site?.name ?? story.earth.name)} />
-            ) : (
-              <p className="text-[13px] text-muted">No data. No position for this Earth site.</p>
-            )}
-            {second && (
-              <div className="mt-4 w-2/3">
-                <SiteTile item={ex(second.id)} body="earth" lat={second.lat} lon={second.lon} name={short(second.name)} small />
-              </div>
-            )}
-          </div>
-          <div className="min-w-0">
-            {tPoint ? (
-              <SiteTile item={ex(tId)} body={tBody} lat={tPoint.lat} lon={tPoint.lon} name={tName} />
-            ) : (
-              <p className="text-[13px] text-muted">No data. No position for this target.</p>
-            )}
-          </div>
-        </div>
-      </Reveal>
-      <Reveal i={1} className="min-w-0">
-        <p className="num text-[12px] text-muted">{String(n).padStart(2, '0')}</p>
-        <h3 id={`pair-${story.id}`} className="display mt-2 text-[26px] leading-8 text-text sm:text-[32px] sm:leading-[38px]">
-          {story.title}
-        </h3>
-        {why && <p className="mt-3 max-w-[56ch] text-[15px] leading-6 text-text">{why}</p>}
-        <p className="mt-1 text-[12px] text-muted">Written by the SBATS team</p>
+    <span className={`block ${className}`}>
+      <span className="relative block aspect-[4/3] w-full border-2 border-bg">
+        <SiteTile item={r.tItem} body={r.tBody} lat={r.tPoint.lat} lon={r.tPoint.lon} name={r.tName} caption={false} />
+      </span>
+      <span className="block bg-bg px-1.5 py-0.5 text-[12px] leading-[18px] text-text">{r.tName}</span>
+    </span>
+  );
+}
 
-        <div className="mt-6 border-l-2 border-accent pl-4">
-          <p className="text-[12px] text-muted">Computed by the tool: grid cell 0.5° against {tId ? tName : 'the target'}, Base weights</p>
-          {!tId ? (
-            <>
-              <p className="mt-1 text-[15px] leading-6 text-text">{NO_TARGET}</p>
-              {story.target.note && <p className="mt-1 text-[12px] leading-[18px] text-muted">{story.target.note}</p>}
-            </>
-          ) : v && v.score !== null ? (
-            <p className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="display text-[34px] leading-none text-text">{v.score.toFixed(0)}</span>
-              <span className="text-[13px] text-muted">/ 100</span>
-              <span className="text-[15px] font-medium text-text">{v.word} match</span>
-              <ConfidenceBadge confidence={(v.confidence as 'high' | 'medium' | 'low' | null) ?? null} />
+function Lead({ r, cellKm, onSite, onAll }: { r: Resolved; cellKm: number; onSite: () => void; onAll: () => void }) {
+  const where = region(r.earthFull);
+  return (
+    <>
+      <div className="relative min-h-[520px] overflow-hidden bg-panel sm:min-h-[72svh]">
+        {r.earthPoint && (
+          <span className="absolute inset-0 block">
+            <SiteTile item={r.earthItem} body="earth" lat={r.earthPoint.lat} lon={r.earthPoint.lon} name={r.earthName} caption={false} />
+          </span>
+        )}
+        <div className="absolute inset-0 bg-bg/55" aria-hidden="true" />
+        <div className="relative flex min-h-[520px] flex-col justify-end px-5 pb-10 pt-24 sm:min-h-[72svh] sm:px-10 sm:pr-[250px] lg:px-16 lg:pb-16 lg:pr-[320px]">
+          <Inset r={r} className="mb-6 w-[150px] sm:hidden" />
+          <Reveal>
+            <p className="num text-[12px] text-text/80">Featured sites · proposed by the team</p>
+          </Reveal>
+          <Reveal i={1}>
+            <h2 id="h-home-featured" className="display-xl mt-3 max-w-[18ch] text-[40px] text-text sm:text-[64px] lg:text-[80px]">
+              {r.story.title}
+            </h2>
+          </Reveal>
+          <Reveal i={2}>
+            <p className="mt-3 text-[14px] text-text/80">
+              {where ? `${where}. ` : ''}Stands in for {r.tFull}.
             </p>
-          ) : (
-            <p className="mt-1 text-[15px] leading-6 text-muted">{pair ? 'No data. The grid cell has too little data for a score.' : 'No data. The verdict is not computed on this page.'}</p>
-          )}
+            {r.why && <p className="mt-2 max-w-[58ch] text-[15px] leading-[24px] text-text sm:text-[17px] sm:leading-7">{r.why}</p>}
+            <p className="mt-1 text-[12px] text-text/80">Written by the SBATS team</p>
+          </Reveal>
+          <Reveal i={3}>
+            <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <button type="button" onClick={onSite} className="btn btn-primary !px-6">
+                Open the site page
+              </button>
+              <button type="button" onClick={onAll} className="link-rule inline-flex min-h-11 items-center text-[16px] font-medium text-text">
+                All featured sites
+              </button>
+            </div>
+          </Reveal>
         </div>
+        <Inset r={r} className="absolute bottom-10 right-5 hidden w-[200px] sm:block lg:bottom-16 lg:right-16 lg:w-[240px]" />
+      </div>
+      <p className="mt-2 px-5 text-[11px] leading-4 text-muted sm:px-10 lg:px-16">
+        Pictures: {r.earthName}, {credit(r.earthItem, 'earth')} {r.tName}, {credit(r.tItem, r.tBody)}
+      </p>
+      <div className="mt-8 px-5 sm:px-10 lg:px-16">
+        <Reveal>
+          <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} maxRows={8} onSite={onSite} wide />
+        </Reveal>
+      </div>
+    </>
+  );
+}
 
-        <button type="button" onClick={() => onSite(earthId)} className="link-rule mt-6 inline-flex min-h-11 items-center gap-2 text-[15px] font-medium text-text">
-          Open the {short(site?.name ?? story.earth.name)} site page <ArrowRight size={16} aria-hidden="true" />
+function Card({ r, cellKm, onSite }: { r: Resolved; cellKm: number; onSite: () => void }) {
+  const where = region(r.earthFull);
+  return (
+    <article aria-labelledby={`pair-${r.story.id}`} className="min-w-0">
+      <button type="button" onClick={onSite} className="group block w-full text-left" aria-label={`Open the ${r.earthName} site page`}>
+        <span className="relative block aspect-[4/3] overflow-hidden bg-panel">
+          {r.earthPoint && <SiteTile item={r.earthItem} body="earth" lat={r.earthPoint.lat} lon={r.earthPoint.lon} name={r.earthName} caption={false} />}
+          <Inset r={r} className="absolute bottom-2 right-2 w-[40%]" />
+        </span>
+      </button>
+      <h3 id={`pair-${r.story.id}`} className="display mt-3 text-[20px] leading-[26px] text-text">
+        <button type="button" onClick={onSite} className="text-left hover:text-accent">
+          {r.story.title}
         </button>
-      </Reveal>
+      </h3>
+      <p className="mt-0.5 text-[13px] text-muted">
+        {where ? `${where} · ` : ''}against {r.tName}
+      </p>
+      {r.why && <p className="mt-2 line-clamp-2 text-[14px] leading-[22px] text-text">{r.why}</p>}
+      <p className="mt-1 text-[11px] leading-4 text-muted">
+        Pictures: {credit(r.earthItem, 'earth')} {credit(r.tItem, r.tBody)}
+      </p>
+      <div className="mt-4">
+        <StoryTool pair={r.pair} earthName={r.earthName} targetName={r.tName} cellKm={cellKm} maxRows={4} onSite={onSite} />
+      </div>
     </article>
   );
 }
 
 /** The featured section of the home page: the team's pairs, in the team's order. */
-export function StoryPairs({ pairs, sites, extracts, onSite, onAll }: { pairs: StoryPair[] | undefined; sites: SitesFile | null; extracts: ExtractIndex | null; onSite: (id: string) => void; onAll: () => void }) {
+export function StoryPairs({
+  pairs,
+  sites,
+  extracts,
+  cellKm,
+  onSite,
+  onAll,
+}: {
+  pairs: StoryPair[] | undefined;
+  sites: SitesFile | null;
+  extracts: ExtractIndex | null;
+  cellKm: number;
+  onSite: (id: string) => void;
+  onAll: () => void;
+}) {
   const file = useAsync(loadStories, 'site-stories');
   const stories = file.status === 'ready' && file.value && Array.isArray(file.value.stories) ? file.value.stories : [];
   const rank = (s: SiteStory) => {
     const i = ORDER.indexOf(s.id);
     return i < 0 ? ORDER.length : i;
   };
-  const sorted = [...stories].sort((a, b) => rank(a) - rank(b));
+  const sorted = [...stories].sort((a, b) => rank(a) - rank(b)).map((s) => resolve(s, pairs?.find((p) => p.storyId === s.id) ?? null, sites, extracts));
+  const lead = sorted[0] ?? null;
+  const rest = sorted.slice(1);
+
   return (
-    <section aria-labelledby="h-home-featured" className="px-5 pb-8 pt-20 sm:px-10 lg:px-16">
-      <Reveal>
-        <h2 id="h-home-featured" className="display-l text-[30px] sm:text-[44px]">
-          Featured sites · proposed by the team
-        </h2>
-        <p className="mt-2 max-w-[64ch] text-[15px] leading-6 text-muted">
-          Five places on Earth the team proposes, each beside the Moon or Mars place it stands in for. The words are the team&rsquo;s. The verdict under each pair is the tool&rsquo;s own.
-        </p>
-      </Reveal>
-      {file.status === 'loading' && (
-        <p className="mt-10 text-[13px] text-muted" role="status">
-          Loading the team&rsquo;s sites
-        </p>
+    <section aria-labelledby="h-home-featured" className="pb-8 pt-12">
+      {lead && <Lead r={lead} cellKm={cellKm} onSite={() => onSite(lead.earthId)} onAll={onAll} />}
+      {!lead && (
+        <div className="px-5 py-24 sm:px-10 lg:px-16">
+          <h2 id="h-home-featured" className="display-l text-[34px]">
+            Featured sites · proposed by the team
+          </h2>
+          <p className="mt-3 text-[14px] text-muted" role="status">
+            {file.status === 'loading' ? 'Loading the team’s sites' : 'No data. The team’s site stories are not published with this build.'}
+          </p>
+        </div>
       )}
-      {file.status !== 'loading' && sorted.length === 0 && <p className="mt-10 text-[13px] text-muted">No data. data/site_stories.json is not published with this build.</p>}
-      {sorted.length > 0 && (
-        <ol className="mt-14 space-y-20 sm:space-y-24">
-          {sorted.map((s, i) => (
-            <li key={s.id}>
-              <Pair story={s} n={i + 1} pair={pairs?.find((p) => p.storyId === s.id) ?? null} sites={sites} extracts={extracts} onSite={onSite} />
-            </li>
-          ))}
-        </ol>
+      {rest.length > 0 && (
+        <div className="mt-16 px-5 sm:px-10 lg:px-16">
+          <ul className="-mx-5 flex scroll-pl-5 snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-14 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+            {rest.map((r, i) => (
+              <li key={r.story.id} className="w-[80vw] shrink-0 snap-start sm:w-auto">
+                <Reveal i={i % 4}>
+                  <Card r={r} cellKm={cellKm} onSite={() => onSite(r.earthId)} />
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+          <Reveal className="mt-12">
+            <p className="max-w-[60ch] text-[14px] leading-[22px] text-muted">
+              The Indonesian candidates, the established analog sites shown as benchmarks, and the team stories in full are on the featured sites page.
+            </p>
+            <button type="button" onClick={onAll} className="link-rule mt-3 inline-flex min-h-11 items-center gap-2 text-[16px] font-medium text-text">
+              All featured sites <ArrowRight size={16} aria-hidden="true" />
+            </button>
+          </Reveal>
+        </div>
       )}
-      <Reveal className="mt-16">
-        <p className="max-w-[60ch] text-[14px] leading-[22px] text-muted">The Indonesian candidates, the established analog sites shown as benchmarks, and the team stories in full are on the featured sites page.</p>
-        <button type="button" onClick={onAll} className="link-rule mt-3 inline-flex min-h-11 items-center text-[16px] font-medium text-text">
-          All featured sites
-        </button>
-      </Reveal>
     </section>
   );
 }

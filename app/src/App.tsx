@@ -3,9 +3,9 @@ import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useR
 import { loadData, loadExtra, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Target, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
-import { buildIndex, formatCoords, siteCode } from './lib/geo';
+import { buildIndex, distanceKm, formatCoords, siteCode } from './lib/geo';
 import { keyLabel, metaByKey, reasonLine } from './lib/format';
-import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
+import { NEW_DISTANCE_KM, isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { TopBar, type Step } from './components/Chrome';
 import type { MatchMode } from './components/LeftPanel';
 import { activityOf } from './components/ActivityArt';
@@ -706,7 +706,50 @@ function Orbit({ data }: { data: DataBundle }) {
 
   const climateFile = climate.status === 'ready' ? climate.value : null;
   const featuredSites = flags.sitePages && sitesFile.status === 'ready' ? sitesFile.value : null;
-  const storyPairs = useMemo(() => pairVerdict(earth, scorer, targets, featuredSites, storiesFile), [earth, scorer, targets, featuredSites, storiesFile]);
+  // For the home page's "Best new places": the best Earth cell for Shackleton rim overall, and the known analog it sits beside.
+  // The list skips ranks because places near a known analog are left out of it.
+  const scanNote = useMemo(() => {
+    const t = targets.find((x) => x.id === 'moon-shackleton-rim');
+    if (!t) return null;
+    const res = scorer.forTarget(t).scoreAll(PRESETS[0].weights);
+    let best = -1;
+    let bestScore = -1;
+    res.forEach((r, i) => {
+      if (r.score !== null && r.confidence !== 'low' && r.score > bestScore) {
+        bestScore = r.score;
+        best = i;
+      }
+    });
+    if (best < 0) return null;
+    const c = earth.cells[best];
+    let near: { name: string; km: number } | null = null;
+    for (const a of analogs) {
+      if (a.kind !== 'known') continue;
+      const km = distanceKm(c.lat, c.lon, a.lat, a.lon);
+      if (!near || km < near.km) near = { name: a.name.split(',')[0], km };
+    }
+    return { lat: c.lat, lon: c.lon, score: bestScore, near, excluded: !!near && near.km <= NEW_DISTANCE_KM };
+  }, [earth, scorer, targets, analogs]);
+  const storyPairs = useMemo(
+    () =>
+      pairVerdict(earth, scorer, targets, featuredSites, storiesFile, (site, t) => {
+        const i = index.nearest(site.lat, site.lon, 2);
+        if (i < 0) return null;
+        return matchRecord({
+          earth,
+          lithology,
+          target: t,
+          cell: earth.cells[i],
+          name: site.name,
+          site: site as unknown as Parameters<typeof matchRecord>[0]['site'],
+          targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
+          minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
+          environment: targetEnv.status === 'ready' ? targetEnv.value : null,
+          profile: null,
+        }).record;
+      }),
+    [earth, scorer, targets, featuredSites, storiesFile, index, lithology, targetWindows, targetMinerals, targetEnv],
+  );
   const month = useMemo(() => {
     const months = named ? climateFile?.sites.find((x) => x.id === named.id)?.months : undefined;
     if (!months || !explained || !climateFile) return null;
@@ -1133,6 +1176,7 @@ function Orbit({ data }: { data: DataBundle }) {
           onOpenPair={openHomePair}
           onAllMatches={homePlace && homeReady ? () => goToEarth() : null}
           pairs={storyPairs}
+          scanNote={scanNote}
           onSitePair={openSitePage}
           onTour={() => {
             userTouch();

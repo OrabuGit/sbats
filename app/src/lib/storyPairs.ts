@@ -7,6 +7,9 @@ import type { SitesFile } from '../data/sites';
 import type { StoriesFile } from '../data/stories';
 import { buildIndex, type CellIndex } from './geo';
 import { PRESETS, matchWord, type Scorer } from './scoringAdapter';
+import type { MatchRecord } from './matchAdapter';
+import { fromRecord, type Verdict } from './verdict';
+import type { FeaturedSite } from '../data/sites';
 
 export interface PairVerdict {
   /** 0 to 100, or null when the cell has too little data for a score. */
@@ -16,18 +19,53 @@ export interface PairVerdict {
   confidence: string | null;
 }
 
+/** One measurement of the site-scale comparison: Earth value against target value, with the tool's verdict. */
+export interface SiteScaleRow {
+  label: string;
+  earth: string;
+  target: string;
+  verdict: Verdict;
+}
+
+/** The comparison measured inside the site's own footprint, with the footprint score. */
+export interface SiteScale {
+  footprintKm: number | null;
+  rows: SiteScaleRow[];
+  score: number | null;
+  word: string;
+  confidence: string | null;
+}
+
+export interface EarthOwnValue {
+  label: string;
+  text: string;
+  badge: string | null;
+}
+
 export interface StoryPair {
   storyId: string;
   earthSiteId: string;
-  /** null when the story's place has no target in targets.json, so the tool gives no score. */
+  /** All-round score of the whole 0.5 degree grid cell (about 55 km) around the site. null when the place has no tool target. */
   verdict: PairVerdict | null;
+  /** The measurements inside the site's footprint against the target, or null when there is no tool target. */
+  siteScale: SiteScale | null;
+  /** The Earth site's own measured values, always, for the pair whose target has no values. */
+  earthOwn: EarthOwnValue[];
 }
 
 const NO_DATA: PairVerdict = { score: null, word: 'no data', confidence: null };
 const indexes = new WeakMap<EarthFile, CellIndex>();
 
 /** One entry per story: the verdict of the Earth site's grid cell against the story's tool target. */
-export function pairVerdict(earth: EarthFile, scorer: Scorer, targets: Target[], sites: SitesFile | null, stories: StoriesFile | null): StoryPair[] {
+export function pairVerdict(
+  earth: EarthFile,
+  scorer: Scorer,
+  targets: Target[],
+  sites: SitesFile | null,
+  stories: StoriesFile | null,
+  /** The match record of a featured site against a target at footprint scale (App builds it with matchRecord). */
+  recordFor?: (site: FeaturedSite, target: Target) => MatchRecord | null,
+): StoryPair[] {
   if (!stories) return [];
   let index = indexes.get(earth);
   if (!index) {
@@ -35,25 +73,55 @@ export function pairVerdict(earth: EarthFile, scorer: Scorer, targets: Target[],
     indexes.set(earth, index);
   }
   const weights = PRESETS[0].weights;
+  const OWN: [string, string][] = [
+    ['slope', 'Slope'],
+    ['roughness', 'Roughness'],
+    ['bareFrac', 'Bare ground'],
+    ['rockType', 'Rock class'],
+    ['tempMean', 'Mean temperature'],
+    ['precip', 'Precipitation'],
+  ];
   return stories.stories.map((story) => {
     const earthSiteId = story.earthSiteIds[0] ?? '';
     const targetId = story.target.inTool?.id ?? story.target.targetId;
-    if (!targetId) return { storyId: story.id, earthSiteId, verdict: null };
+    const site = sites?.sites.find((x) => x.id === earthSiteId);
+    const earthOwn: EarthOwnValue[] = OWN.flatMap(([k, label]) => {
+      const v = site?.values[k];
+      if (!v || v.value === null || v.value === undefined) return [];
+      const num = typeof v.value === 'number' ? (Math.abs(v.value) >= 100 ? Math.round(v.value) : Math.round(v.value * 100) / 100) : v.value;
+      if (k === 'bareFrac' && typeof v.value === 'number') return [{ label, text: `${Math.round(v.value * 100)}% of land pixels`, badge: v.badge ?? null }];
+      return [{ label, text: `${num}${v.unit ? ` ${v.unit}` : ''}`, badge: v.badge ?? null }];
+    });
+    const none = { storyId: story.id, earthSiteId, verdict: null, siteScale: null, earthOwn };
+    if (!targetId) return none;
     const target = targets.find((t) => t.id === targetId);
-    const site = sites?.sites.find((s) => s.id === earthSiteId);
     const point = site?.gridCell ?? site ?? story.earth.teamLocation;
-    if (!target || !point) return { storyId: story.id, earthSiteId, verdict: NO_DATA };
+    if (!target || !point) return { ...none, verdict: NO_DATA };
     const i = index.nearest(point.lat, point.lon, 2);
-    if (i < 0) return { storyId: story.id, earthSiteId, verdict: NO_DATA };
+    if (i < 0) return { ...none, verdict: NO_DATA };
+    let verdict: PairVerdict = NO_DATA;
     try {
       const e = scorer.forTarget(target).explain(earth.cells[i], weights);
-      return {
-        storyId: story.id,
-        earthSiteId,
-        verdict: e.score === null ? { ...NO_DATA, confidence: e.confidence ?? null } : { score: e.score, word: matchWord(e.score), confidence: e.confidence ?? null },
-      };
+      verdict = e.score === null ? { ...NO_DATA, confidence: e.confidence ?? null } : { score: e.score, word: matchWord(e.score), confidence: e.confidence ?? null };
     } catch {
-      return { storyId: story.id, earthSiteId, verdict: NO_DATA };
+      verdict = NO_DATA;
     }
+    let siteScale: SiteScale | null = null;
+    if (site && recordFor) {
+      try {
+        const rec = recordFor(site, target);
+        if (rec) {
+          const rows = rec.dimensions
+            .filter((d) => d.inScore)
+            .flatMap((d) => d.rows.map((r) => ({ label: r.label, earth: r.earth.text, target: r.target.text, verdict: fromRecord(r.verdict) })))
+            .filter((r) => r.earth !== 'no data' || r.target !== 'no data');
+          const sc = rec.score.value;
+          siteScale = { footprintKm: rec.earth.footprintKm ?? null, rows, score: sc, word: sc === null ? 'no data' : matchWord(sc), confidence: rec.score.confidence ?? null };
+        }
+      } catch {
+        siteScale = null;
+      }
+    }
+    return { storyId: story.id, earthSiteId, verdict, siteScale, earthOwn };
   });
 }

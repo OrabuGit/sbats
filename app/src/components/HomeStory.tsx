@@ -204,7 +204,6 @@ const LIMITS = [
   'A score describes a whole 0.5° cell, about 55 km on a side. A small site inside a different landscape is scored as its surroundings. Featured sites are also measured inside their own footprint, 2 to 7.4 km.',
   'Gravity, vacuum, thin atmosphere and radiation cannot be matched anywhere on Earth. They are never scored; every match lists them.',
   'The Moon and Mars are colder than anywhere on Earth. A target temperature is compared with Earth’s coldest cell, and the real value is shown beside it.',
-  'Absolute scores are low, and known Moon analogs rank mid-table. The validation numbers, weak ones included, are on the Validation page.',
   'There is no factor for caves, lava tubes, lakes or water chemistry. Whether a site is a good lava tube analog rests on the feature, not on a score.',
   'A missing value reads “no data”. Nothing is filled in.',
 ];
@@ -420,6 +419,14 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
             Why the numbers can be trusted, and where they stop.
           </h2>
         </Reveal>
+        {hold && hold.overall.meanPercentile !== null && (
+          <Reveal i={1}>
+            <p className="display mt-8 max-w-[30ch] text-[26px] leading-9 text-text sm:text-[34px] sm:leading-[44px]">
+              Known analog sites score higher than <span className="text-accent">{Math.round(hold.overall.meanPercentile * 100)}%</span> of all land squares.
+            </p>
+            <p className="mt-2 max-w-[60ch] text-[14px] leading-[22px] text-muted">Chance would be 50%. Measured on test sites that never set a weight.</p>
+          </Reveal>
+        )}
         <div className="mt-16 grid gap-x-16 gap-y-16 lg:grid-cols-3">
           <Reveal>
             <h3 className="display text-[22px] text-text">The data</h3>
@@ -458,8 +465,7 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
             </p>
             {hold ? (
               <p className="mt-6 text-[14px] leading-[22px] text-text">
-                On sites never used to set a weight, <span className="num">{pct(hold.overall.top10Share)}</span> of known analogs reach the top 10% of Earth cells:{' '}
-                <span className="num">{pct(hold.mars.top10Share)}</span> for Mars targets and <span className="num">{pct(hold.moon.top10Share)}</span> for Moon targets. The Moon is the weak result.
+                On those same sites, <span className="num">{pct(hold.overall.top10Share)}</span> of known analogs reach the top 10% of Earth cells.
               </p>
             ) : (
               <p className="mt-6 text-[13px] text-muted">{report.status === 'loading' ? 'Loading validation' : 'No data. The validation report was not published with this build.'}</p>
@@ -482,6 +488,14 @@ export function HomeStory({ earth, results, targetName, targetId, places, placeC
                   {t}
                 </li>
               ))}
+              {hold && (
+                <li className="text-[14px] leading-[22px] text-muted">
+                  The Moon is the weak result: its known analogs land at {pct(hold.moon.meanPercentile)} of Earth on average and {pct(hold.moon.top10Share)} reach the top 10%, while Mars targets reach {pct(hold.mars.top10Share)}. Absolute scores are low.{' '}
+                  <button type="button" onClick={onValidation} className="link-rule font-medium text-text">
+                    See Validation
+                  </button>
+                </li>
+              )}
             </ul>
           </Reveal>
         </div>

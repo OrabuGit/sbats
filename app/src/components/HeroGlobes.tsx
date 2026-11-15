@@ -184,6 +184,11 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     let alive = true;
     let frame = 0;
     let visible = true;
+    // `?nogl` shows the still-image fallback, to check it without a device that cannot draw WebGL.
+    if (new URLSearchParams(window.location.search).has('nogl')) {
+      setState('error');
+      return;
+    }
     let renderer: WebGLRenderer;
     try {
       renderer = new WebGLRenderer({ antialias: true });
@@ -709,9 +714,18 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
   return (
     <div ref={holder} className="relative h-full min-h-[340px] w-full touch-pan-y overflow-hidden bg-bg transition-opacity duration-700" style={{ opacity: state === 'loading' && !late ? 0 : 1 }}>
       {state === 'error' && (
-        <p className="readout absolute left-4 top-20" role="status">
-          Globes could not be drawn on this device
-        </p>
+        <div className="absolute inset-0 z-[6] flex flex-col items-center justify-center gap-6 px-4 pt-28 text-center" role="status">
+          <div className="flex items-center justify-center gap-5 sm:gap-10" aria-hidden="true">
+            {[
+              ['mars', 'mars-viking-2048', 'h-24 w-24 sm:h-36 sm:w-36'],
+              ['earth', 'blue-marble-2048', 'h-32 w-32 sm:h-52 sm:w-52'],
+              ['moon', 'moon-wac-2048', 'h-20 w-20 sm:h-28 sm:w-28'],
+            ].map(([w, tex, size]) => (
+              <span key={w} className={`block rounded-full bg-panel bg-cover bg-center ${size}`} style={{ backgroundImage: `url(${import.meta.env.BASE_URL}textures/${tex}.jpg)`, backgroundSize: '300% 150%', backgroundPosition: '40% 50%' }} />
+            ))}
+          </div>
+          <p className="max-w-[44ch] text-[14px] leading-5 text-muted">The 3D globes could not be drawn on this device. Mars, Earth and the Moon are shown as still images; everything else works.</p>
+        </div>
       )}
       <svg className="pointer-events-none absolute inset-0 z-[5] h-full w-full" aria-hidden="true">
         <circle ref={markEl} className="hero-link" r="15" fill="none" stroke="#FFB000" strokeWidth="2" style={{ opacity: 0 }} />

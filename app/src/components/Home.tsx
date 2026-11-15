@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChartScatter, Layers, Mountain, Route, Search } from 'lucide-react';
 import type { CellSummary, EarthFile } from '../types';
 import { loadExtra } from '../data/access';
 import { formatCoords } from '../lib/geo';
@@ -65,7 +65,12 @@ interface Props {
   pairs?: StoryPair[];
   /** Opens the site page of a featured site. Falls back to onFeatured(id). */
   onSitePair?: (siteId: string) => void;
+  /** The best Earth cell overall for Shackleton rim, and the known analog it sits beside (App.tsx). */
+  scanNote?: { lat: number; lon: number; score: number; near: { name: string; km: number } | null; excluded: boolean } | null;
 }
+
+/** The scan section always shows Shackleton rim, the target of the lead pair, whatever target is selected. */
+const SCAN_TARGET = 'moon-shackleton-rim';
 
 /** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
 function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRight>[0] }) {
@@ -96,20 +101,32 @@ interface Discoveries {
   targets: { target: string; name: string; top: DiscPick[] }[];
 }
 
-/** The three best-scoring Earth places for the current target, from data/discoveries.json. */
-function TopScan({ target, onOpen }: { target: { id: string; name: string }; onOpen: (lat: number, lon: number, id: string) => void }) {
+/** The three best new Earth places for Shackleton rim, from data/discoveries.json. */
+function TopScan({ note, onOpen }: { note: Props['scanNote']; onOpen: (lat: number, lon: number, id: string) => void }) {
   const disc = useAsync(() => loadExtra<Discoveries>('discoveries.json'), 'home-top-scan');
-  const picks = disc.status === 'ready' ? (disc.value?.targets.find((t) => t.target === target.id)?.top.slice(0, 3) ?? []) : [];
+  const entry = disc.status === 'ready' ? (disc.value?.targets.find((t) => t.target === SCAN_TARGET) ?? null) : null;
+  const picks = entry?.top.filter((x) => x.isNew).slice(0, 3) ?? [];
+  const targetName = entry?.name ?? 'Shackleton rim';
   const names = useCountries(picks);
   if (disc.status === 'ready' && picks.length === 0) return null;
   return (
     <section aria-labelledby="h-top-scan" className="mt-16 px-5 sm:px-10 lg:px-16">
       <Reveal>
-        <h2 id="h-top-scan" className="display text-[22px] leading-7 sm:text-[26px] sm:leading-8">
-          Top of the global scan for {target.name}
+        <h2 id="h-top-scan" className="display text-[19px] leading-6 sm:text-[21px] sm:leading-7">
+          Best new places: far from any known analog
         </h2>
+        <p className="mt-1 max-w-[72ch] text-[13px] leading-5 text-muted">
+          Against {targetName}, Base weights. Ranks skip numbers because only high and medium confidence places count, only one place is kept in any 250 km, and only places more than 500 km from every known analog are listed here.
+          {note?.excluded && note.near && (
+            <>
+              {' '}
+              The top-scoring place, <span className="num">{formatCoords(note.lat, note.lon)}</span> (score <span className="num">{Math.round(note.score)}</span>), is left out: it lies about{' '}
+              <span className="num">{Math.round(note.near.km).toLocaleString('en-US')}</span> km from {note.near.name}, a known analog.
+            </>
+          )}
+        </p>
       </Reveal>
-      <ol className="mt-6 grid gap-x-10 gap-y-8 md:grid-cols-3">
+      <ol className="mt-5 grid gap-x-10 gap-y-7 md:grid-cols-3">
         {disc.status === 'loading' &&
           [0, 1, 2].map((k) => (
             <li key={k} className="min-h-[200px] animate-pulse motion-reduce:animate-none" aria-hidden="true">
@@ -123,17 +140,17 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
         {picks.map((p, i) => (
           <li key={`${p.lat},${p.lon}`}>
             <Reveal i={i}>
-              <p className="text-[13px] text-muted">Rank {p.rank.toLocaleString('en-US')}</p>
-              <p className="display mt-1 text-[40px] leading-none text-text">
+              <p className="text-[12px] text-muted">Rank {p.rank.toLocaleString('en-US')}</p>
+              <p className="display mt-1 text-[28px] leading-none text-text">
                 {p.score.toFixed(0)}
-                <span className="ml-2 text-[13px] font-normal text-muted">/ 100</span>
+                <span className="ml-1.5 text-[12px] font-normal text-muted">/ 100</span>
               </p>
-              <p className="mt-2 text-[15px] font-medium text-text">{names.get(countryKey(p.lat, p.lon)) ?? 'Open land'}</p>
+              <p className="mt-2 text-[14px] font-medium text-text">{names.get(countryKey(p.lat, p.lon)) ?? 'Open land'}</p>
               <p className="text-[13px] text-muted">{formatCoords(p.lat, p.lon)}</p>
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <ConfidenceBadge confidence={p.confidence} />
                 {p.isNew && (
-                  <span className="border border-accent px-1.5 text-[11px] font-semibold leading-[18px] text-accent" title={p.nearestKnown ? `${Math.round(p.nearestKnown.km).toLocaleString('en-US')} km from ${p.nearestKnown.name}` : undefined}>
+                  <span className="text-[13px] font-semibold leading-[18px] text-accent" title={p.nearestKnown ? `${Math.round(p.nearestKnown.km).toLocaleString('en-US')} km from ${p.nearestKnown.name}` : undefined}>
                     New{p.nearestKnown ? `, ${Math.round(p.nearestKnown.km).toLocaleString('en-US')} km from any known analog` : ''}
                   </span>
                 )}
@@ -143,7 +160,7 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
                   ? `Stable: rank ${p.stability.rankP05} to ${p.stability.rankP95} in nine of ten redraws of the weights, in the top 10 in ${Math.round(p.stability.shareInTop10 * 100)}% of them.`
                   : 'No stability figure for this place.'}
               </p>
-              <button type="button" onClick={() => onOpen(p.lat, p.lon, target.id)} className="link-rule mt-4 text-[15px] font-medium text-text">
+              <button type="button" onClick={() => onOpen(p.lat, p.lon, SCAN_TARGET)} className="link-rule mt-3 inline-flex min-h-11 items-center text-[14px] font-medium text-text">
                 Open the match
               </button>
             </Reveal>
@@ -163,6 +180,8 @@ function TopScan({ target, onOpen }: { target: { id: string; name: string }; onO
 export function Home(p: Props) {
   const scroller = useRef<HTMLElement>(null);
   const [solid, setSolid] = useState(false);
+  // Width of one scoring grid square in km (0.5 degree of latitude is about 55 km).
+  const cellKm = Math.floor(p.earth.meta.resolutionDeg * 111);
   // The Tambora image is the backdrop of the story section further down.
   const leadImage = p.extracts?.items.find((i) => i.id === 'id-tambora-caldera')?.image ?? p.extracts?.items.find((i) => i.image && p.sites?.sites.some((x) => x.id === i.id && x.kind === 'candidate'))?.image ?? null;
 
@@ -226,7 +245,7 @@ export function Home(p: Props) {
           <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:order-1 lg:pb-0 lg:pl-16 lg:pr-6 lg:pt-14">
             <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[46px] lg:leading-[1.05]">Find where on Earth to rehearse a Moon or Mars base.</h2>
             <p className="mt-3 max-w-[42ch] text-[15px] leading-[24px] text-muted lg:mt-5">
-              Pick a landing site or a planned base on the Moon or Mars. SBATS ranks every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.
+              Pick a landing site or a planned base on the Moon or Mars. SBATS ranks {`every ${cellKm} km square`} of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.
             </p>
             <div className="mt-6 flex flex-col items-start gap-5 lg:mt-9">
               <button type="button" onClick={p.onFind} className="btn btn-primary !h-14 !min-h-14 w-full max-w-[320px] !justify-between !px-6 !text-[17px] !font-semibold">
@@ -263,17 +282,18 @@ export function Home(p: Props) {
           <ul className="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
             {(
               [
-                ['matches', 'Find matches', 'Every land square of Earth scored against a Moon or Mars place, as a map and a ranked list.'],
-                ['compare', 'Compare factor by factor', 'Rock, terrain, climate, bare ground and sunlight, each with both values and a verdict.'],
-                ['terrain', 'Fly the terrain', 'Both places as 3D terrain at one scale, with surfaces, contours and a low sun.'],
-                ['route', 'Plan a rover route', 'A route over the real elevation grid that avoids slopes the rover cannot climb.'],
-                ['explore', 'Explore the data', 'Every Earth square on any two factors, with the target and the best matches marked.'],
+                ['matches', Search, 'Find matches', 'Every land square of Earth scored against a Moon or Mars place, as a map and a ranked list.'],
+                ['compare', Layers, 'Compare factor by factor', 'Rock, terrain, climate, bare ground and sunlight, each with both values and a verdict.'],
+                ['terrain', Mountain, 'Fly the terrain', 'Both places as 3D terrain at one scale, with surfaces, contours and a low sun.'],
+                ['route', Route, 'Plan a rover route', 'A route over the real elevation grid that avoids slopes the rover cannot climb.'],
+                ['explore', ChartScatter, 'Explore the data', 'Every Earth square on any two factors, with the target and the best matches marked.'],
               ] as const
-            ).map(([kind, title, line], i) => (
+            ).map(([kind, Icon, title, line], i) => (
               <li key={kind}>
                 <Reveal i={i}>
                   <button type="button" onClick={() => p.onFeature(kind)} className="group block text-left">
                     <span className="block border-t-2 border-line pt-4 transition-colors group-hover:border-accent">
+                      <Icon size={28} strokeWidth={1.5} aria-hidden="true" className="mb-3 text-muted transition-colors group-hover:text-accent motion-reduce:transition-none" />
                       <span className="display block text-[22px] leading-7 text-text">{title}</span>
                       <span className="mt-2 block text-[14px] leading-[22px] text-muted">{line}</span>
                       <span className="link-rule mt-4 inline-block text-[14px] font-medium text-text">Try it</span>
@@ -286,9 +306,9 @@ export function Home(p: Props) {
         </section>
 
         {/* 2. Featured sites: the team's five pairs, each with the tool's own verdict. */}
-        <StoryPairs pairs={p.pairs} sites={p.sites} extracts={p.extracts} onSite={(id) => (p.onSitePair ? p.onSitePair(id) : p.onFeatured(id))} onAll={() => p.onFeatured()} />
+        <StoryPairs pairs={p.pairs} sites={p.sites} extracts={p.extracts} cellKm={cellKm} onSite={(id) => (p.onSitePair ? p.onSitePair(id) : p.onFeatured(id))} onAll={() => p.onFeatured()} />
 
-        <TopScan target={p.target} onOpen={p.onOpenMatch} />
+        <TopScan note={p.scanNote ?? null} onOpen={p.onOpenMatch} />
 
         {/* 3. How it works, the data, the method and its limits. */}
         <HomeStory
