@@ -8,7 +8,8 @@ import { countryKey, useCountries } from '../lib/where';
 import { loadExtra } from '../data/access';
 import { mineralsWithheld } from '../lib/matchAdapter';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
-import { storyFor, useStories, type SiteStory } from '../data/stories';
+import { storiesFor, useStories, type SiteStory } from '../data/stories';
+import { TeamStories } from './StoryTeam';
 import { ConfidenceBadge, SourceBadge, Tag } from './Badges';
 import { ELEMENT_NAME, ElementIcon, type ElementId } from './ElementIcon';
 import { Reveal } from './HomeStory';
@@ -125,29 +126,28 @@ function ProfileDots({ result, size = 'md' }: { result: NonNullable<ReturnType<t
   );
 }
 
-/** The written story of a site with its source badge. Nothing at all when there is no story. */
-export function StoryNote({ story }: { story: SiteStory | null }) {
-  if (!story) return null;
+/** A pointer from a site to its team stories, which are shown in full under "Team stories". */
+function StoryPointer({ stories }: { stories: SiteStory[] }) {
+  if (stories.length === 0) return null;
   return (
     <div className="mt-6 border-l-2 border-line pl-4" role="note">
-      <p className="label">{story.title ?? 'Story'}</p>
-      <div className="mt-1 max-w-[62ch] space-y-2">
-        {story.paragraphs.map((t) => (
-          <p key={t} className="text-[14px] leading-[22px] text-text">
-            {t}
-          </p>
-        ))}
-      </div>
-      <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted">
-        <SourceBadge badge={story.badge} source={story.source} />
-        {story.url?.startsWith('https://') ? (
-          <a href={story.url} target="_blank" rel="noreferrer" className="link-rule">
-            {story.source}
-          </a>
-        ) : (
-          <span>{story.source}</span>
-        )}
-      </p>
+      <p className="label">Team story</p>
+      {stories.map((st) => (
+        <p key={st.id} className="mt-1 text-[14px] leading-[22px] text-text">
+          {st.title}.{' '}
+          <button
+            type="button"
+            className="link-rule inline-flex min-h-11 items-center text-muted hover:text-text"
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('sbats-story', { detail: st.id }));
+              document.getElementById('h-stories')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+            }}
+          >
+            Read it under Team stories
+          </button>
+        </p>
+      ))}
+      <p className="text-[12px] text-muted">Written by the SBATS team. The scores on this page are computed by the tool, not taken from the story.</p>
     </div>
   );
 }
@@ -162,8 +162,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
   targets: Target[];
   /** Sentences built by fixed rules from measured values (data/benchmarks.json). */
   tested: { could: Tested[]; cannot: Tested[] } | null;
-  /** The written story of the site, when data/site_stories.json has one. */
-  story: SiteStory | null;
+  /** The team stories that use this site (data/site_stories.json). */
+  story: SiteStory[];
   onSitePage: Props['onSitePage'];
   onMatch: Props['onMatch'];
 }) {
@@ -211,7 +211,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
 
         {result && target && (
           <div className="mt-6">
-            <p className="mb-2 text-[13px] text-muted">Match to {target.name}, from the footprint</p>
+            <p className="mb-2 text-[13px] text-muted">Computed by the tool: match to {target.name}, from the footprint</p>
             <ProfileDots result={result} />
           </div>
         )}
@@ -221,7 +221,7 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, test
           <Lines title="Falls short on" items={[...(finding?.short ?? []), ...(finding?.notScored ?? []).map((t) => `Not scored at all: ${t}`)]} empty="No written finding for this site." />
         </div>
 
-        <StoryNote story={story} />
+        <StoryPointer stories={story} />
 
         <details className="group mt-6 border-t border-line pt-3">
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[15px] font-medium text-text [&::-webkit-details-marker]:hidden">
@@ -466,7 +466,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                   const keep = (t: Tested) => !(mineralsWithheld(s.id) && /mineral/i.test(t.text));
                   return b ? { could: (b.couldTest ?? []).filter(keep), cannot: b.cannotTest ?? [] } : null;
                 })()}
-                story={storyFor(stories, s.id)}
+                story={storiesFor(stories, s.id)}
                 onSitePage={onSitePage}
                 onMatch={onMatch}
               />
@@ -474,6 +474,21 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           );
         })()}
       </section>
+
+      {stories && stories.stories.length > 0 && (
+        <section className="py-10" aria-labelledby="h-stories">
+          <h2 id="h-stories" className="display scroll-mt-4 text-[32px] leading-9 text-text">
+            Team stories
+          </h2>
+          <p className="mt-2 max-w-[72ch] text-[13px] leading-5 text-muted">
+            {stories.stories.length} Earth-to-target stories written by the SBATS team, checked against our data. The story carries no score: the numbers beside it, under
+            Computed by the tool, come from the tool and our data files.
+          </p>
+          <div className="mt-8">
+            <TeamStories stories={stories.stories} />
+          </div>
+        </section>
+      )}
 
       {limits.length > 0 && (
         <section className="py-10" aria-labelledby="h-read">

@@ -1,59 +1,89 @@
-// Site stories: short written accounts of featured sites, published later as data/site_stories.json
-// by another session. The file may be absent: loadStories then gives null and the app shows nothing,
-// no placeholder. The file can carry text and its source only. A score that is not computed by the
-// tool is never read from it (the type has no field for one, and storyFor copies only the fields below).
-//
-// Expected shape:
-//   { "meta": { "generatedAt": "...", "description": "..." },
-//     "stories": [ { "siteId": "id-tambora", "title": "optional", "text": "paragraph" | ["paragraph", ...],
-//                    "source": "where it comes from", "badge": "Literature", "url": "optional" } ] }
-//
-// Test fixture, for a local check only (never put it in data/):
-//   { "stories": [ { "siteId": "id-batur", "text": ["Example."], "source": "Example source", "badge": "Literature" } ] }
+// Site stories: data/site_stories.json (Session B, pipeline/site_stories.py; shape in data/SCHEMA.md,
+// section "data/site_stories.json"). Five Earth-to-target stories written by the team, beside values
+// computed from the project's own data. No story carries a score or a similarity percentage: the type
+// has no field for one, and every score on screen comes from the tool. The file may be absent: the
+// loader then gives null and the pages show nothing for it.
 import type { Badge } from '../types';
 import { loadExtra } from './access';
 import { useAsync } from '../lib/useAsync';
+import type { SiteLogistics } from '../components/FieldLogisticsData';
 
-export interface SiteStory {
-  siteId: string;
-  title: string | null;
-  paragraphs: string[];
+export interface LatLon {
+  lat: number;
+  lon: number;
+}
+
+export interface StoryValue {
+  value: number | string | null;
+  unit: string;
+  scale: string;
   source: string;
   badge: Badge;
-  url: string | null;
 }
 
-interface RawStory {
-  siteId?: unknown;
-  id?: unknown;
-  title?: unknown;
-  text?: unknown;
-  source?: unknown;
-  badge?: unknown;
-  url?: unknown;
+export interface StoryOurData {
+  siteId: string;
+  name: string;
+  lat: number;
+  lon: number;
+  footprintKm: number | null;
+  footprintStatus: string | null;
+  elevationFootprintM: [number | null, number | null] | null;
+  values: Record<string, StoryValue>;
+  caveat: string | null;
 }
+
+export interface SiteStory {
+  id: string;
+  title: string;
+  trek: string | null;
+  earthSiteIds: string[];
+  earth: { name: string; teamLocation: LatLon | null };
+  target: {
+    name: string;
+    teamLocation: LatLon | null;
+    /** Id in targets.json, or null when the tool has no target (and no score) for the place. */
+    targetId: string | null;
+    note: string | null;
+    /** The tool's own point for the target, when it differs from the team's rounded position. */
+    inTool: { id: string; name: string; lat: number; lon: number } | null;
+  };
+  whyItStandsOut: string | null;
+  siteDescription: string | null;
+  testingTags: string[];
+  missionUse: string | null;
+  limitation: string[];
+  workaround: string[];
+  dominantRock: { earth: string; target: string; status: string } | null;
+  ourData: StoryOurData[];
+  dataChecks: { claim: string; data: string; source: string; agrees: boolean }[];
+  logistics: {
+    computed: (SiteLogistics & { siteId: string })[];
+    teamEstimate: { accessDifficulty?: string | null; nearestSupportHub?: string | null; costEfficiency?: string | null } | null;
+    note: string | null;
+  } | null;
+  corrections: { field: string; was: string | null; now: string | null; basis: string }[];
+  verification: { claim: string; status: string; evidence: string }[];
+  needsTeamReview?: string[];
+  teamSource: { title: string; url: string | null } | null;
+  sources: { title: string; url: string | null }[];
+  credit: string | null;
+}
+
 export interface StoriesFile {
-  meta?: { generatedAt?: string; description?: string };
-  stories?: RawStory[];
+  meta: { generatedAt: string; description: string; credit: string; rules: string[] };
+  stories: SiteStory[];
 }
 
 export const loadStories = () => loadExtra<StoriesFile>('site_stories.json');
 
-const BADGES: readonly string[] = ['Measured', 'Mission', 'Literature'];
-const str = (x: unknown): string | null => (typeof x === 'string' && x.trim() !== '' ? x.trim() : null);
-
-/** The story of one site, or null when the file, the site, its text, its source or its badge is missing. */
-export function storyFor(file: StoriesFile | null, siteId: string): SiteStory | null {
-  const raw = file?.stories?.find((s) => (s.siteId ?? s.id) === siteId);
-  if (!raw) return null;
-  const paragraphs = (Array.isArray(raw.text) ? raw.text : [raw.text]).map(str).filter((t): t is string => t !== null);
-  const source = str(raw.source);
-  if (paragraphs.length === 0 || !source || typeof raw.badge !== 'string' || !BADGES.includes(raw.badge)) return null;
-  return { siteId, title: str(raw.title), paragraphs, source, badge: raw.badge as Badge, url: str(raw.url) };
+/** The stories that use this Earth site. Empty when the file or the site has none. */
+export function storiesFor(file: StoriesFile | null, siteId: string): SiteStory[] {
+  return file?.stories?.filter((s) => Array.isArray(s.earthSiteIds) && s.earthSiteIds.includes(siteId)) ?? [];
 }
 
-/** The story of a site once the file has loaded. null while loading, when the file is missing, or when the site has none. */
+/** The stories file once loaded. null while loading or when it was not published. */
 export function useStories(): StoriesFile | null {
   const s = useAsync(loadStories, 'site-stories');
-  return s.status === 'ready' ? s.value : null;
+  return s.status === 'ready' && s.value && Array.isArray(s.value.stories) ? s.value : null;
 }

@@ -298,7 +298,7 @@ export function buildReport(input: ReportInput): MatchReport {
     version: 1,
     generatedAt: record.generatedAt,
     title: `${record.earth.name} as an analog for ${record.target.name}`,
-    subtitle: `SBATS-26 match report. ${body === 'Mars' ? 'Mars' : 'Moon'} target at ${coords(record.target.lat, record.target.lon)}; Earth place at ${coords(record.earth.lat, record.earth.lon)}.`,
+    subtitle: `SBATS match report. ${body === 'Mars' ? 'Mars' : 'Moon'} target at ${coords(record.target.lat, record.target.lon)}; Earth place at ${coords(record.earth.lat, record.earth.lon)}.`,
     summary,
     sections,
     citations: c.all(),

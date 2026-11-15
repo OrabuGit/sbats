@@ -73,6 +73,8 @@ interface Props {
   rover?: number | null;
   /** Called with the ground point under a click on the Earth terrain. */
   onPoint?: (xKm: number, zKm: number) => void;
+  /** Called with true once both terrains are built and drawn, and with false while one is being rebuilt. */
+  onReady?: (ready: boolean) => void;
 }
 
 /** A path drawn on one terrain, in km from the centre (x east, z south). */
@@ -308,7 +310,7 @@ function build(
   return built;
 }
 
-export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, routes, rover = null, onPoint }: Props) {
+export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, height = false, contours = false, exaggeration = 1, sunElevation = SUN_DEFAULT, route, routes, rover = null, onPoint, onReady }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [orbit, setOrbit] = useState(!reduced);
@@ -323,6 +325,11 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
   viewRef.current = { exag: exaggeration, sunDeg: sunElevation, contours };
   const onPointRef = useRef(onPoint);
   onPointRef.current = onPoint;
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
+  useEffect(() => {
+    onReadyRef.current?.(state === 'ready');
+  }, [state]);
   const sides = [earth, target] as const;
   const ready = earth.item.elevation !== null && target.item.elevation !== null;
 

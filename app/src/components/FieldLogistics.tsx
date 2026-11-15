@@ -7,6 +7,7 @@ import { dayLengths, dayMeaning, hoursText, limitFromRovers, precipMeaning, reli
 import { ComputedBadge, SourceBadge } from './Badges';
 import { Reveal } from './HomeStory';
 import { Block } from './ValidationParts';
+import { logisticsLines, usePlaceLogistics } from './FieldLogisticsData';
 
 /** One measured value with where it came from. value null is "no data". */
 export interface LogisticsValue {
@@ -27,6 +28,8 @@ interface Props {
   relief: { item: ExtractItem; windowKm: number } | null;
   /** 'match' is a band on the match page; 'site' is a block of the site page. */
   variant?: 'match' | 'site';
+  /** Which row of data/logistics.json to show: a site by id, or the Earth cell at this lat and lon. Left out: none. */
+  where?: { siteId: string } | { lat: number; lon: number } | null;
 }
 
 /** The earth-side measurements of a match record, as logistics values. */
@@ -61,9 +64,11 @@ const NO_DATA = 'No data for this place.';
 /**
  * Quantities a field team would plan around, all worked out from numbers this page already has.
  * Day lengths are computed from latitude (lib/plainResults.ts, rule 6); the rest are measured values
- * with their own badge and a sentence from a fixed rule. Nothing here is a travel time or a distance.
+ * with their own badge and a sentence from a fixed rule. Below them, when `where` is given, the place's row of
+ * data/logistics.json: airport, town, volcano, elevation and climate months, each with its source.
  */
-export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief, variant = 'match' }: Props) {
+export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief, variant = 'match', where = null }: Props) {
+  const lg = usePlaceLogistics(where);
   const rovers = useAsync(() => loadExtra<RoversLike>('rovers.json'), 'rovers-logistics');
   const limit = rovers.status === 'ready' ? limitFromRovers(rovers.value) : null;
   const { longest, shortest } = dayLengths(lat);
@@ -76,7 +81,8 @@ export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief
       {slope?.value != null && limit && <SourceBadge badge="Literature" source={`${limit.rover} slope limit: ${limit.source}`} />}
     </>
   );
-  const intro = 'What a field team would plan around, worked out from the numbers for this place. No travel times and no distances: the data has none.';
+  const intro =
+    'What a field team would plan around, from the numbers for this place. Distances are straight-line (great-circle) from the place, not travel distance or time.';
   const rows = (
     <dl className="mt-5">
             <Row
@@ -126,10 +132,31 @@ export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief
             <div className="border-t border-line" aria-hidden="true" />
     </dl>
   );
+  const access =
+    where === null ? null : (
+      <div className="mt-10">
+        <h4 className="label">Getting there and when to go</h4>
+        {lg.status === 'loading' ? (
+          <p className="mt-3 text-[14px] text-muted">Loading field logistics…</p>
+        ) : !lg.place ? (
+          <p className="mt-3 text-[14px] text-muted">No data. data/logistics.json has no row for this place.</p>
+        ) : (
+          <dl className="mt-2">
+            {logisticsLines(lg.place, lg.file).map((l) => (
+              <Row key={l.label} label={l.label} value={l.value} badge={l.badge} meaning={l.source} />
+            ))}
+            <div className="border-t border-line" aria-hidden="true" />
+          </dl>
+        )}
+      </div>
+    );
   if (variant === 'site') {
     return (
       <Block id="s-logistics" label="Field logistics" title="What a team would plan around." lead={intro}>
-        <Reveal className="max-w-[1200px]">{rows}</Reveal>
+        <Reveal className="max-w-[1200px]">
+          {rows}
+          {access}
+        </Reveal>
       </Block>
     );
   }
@@ -142,6 +169,7 @@ export function FieldLogistics({ lat, tempMean, precip, slope, roughness, relief
           </h3>
           <p className="mt-1 max-w-[64ch] text-[14px] leading-[22px] text-muted">{intro}</p>
           {rows}
+          {access}
         </Reveal>
       </div>
     </section>

@@ -1,51 +1,172 @@
+import { ChevronDown, ChevronUp, Pause, Play, RotateCcw, Undo2 } from 'lucide-react';
 import { ComputedBadge } from './Badges';
+import { RoverFigure, type Sourced } from './RouteFigures';
 import { EXAGGERATION_MAX, EXAGGERATION_MIN, HEIGHT_RAMP, SUN_DEFAULT, SUN_LOW } from './TerrainScale';
 
-interface ControlProps {
+export type Surface = 'image' | 'relief' | 'slope' | 'height';
+export interface RoverOption {
+  id: string;
+  name: string;
+  body: 'moon' | 'mars';
+  slopeLimit: Sourced | null;
+  speed: Sourced | null;
+}
+
+interface PanelProps {
+  surface: Surface;
+  onSurface: (s: Surface) => void;
   contours: boolean;
   onContours: (on: boolean) => void;
   exaggeration: number;
   onExaggeration: (x: number) => void;
   sun: number;
   onSun: (deg: number) => void;
+  planner: {
+    open: boolean;
+    onOpen: (open: boolean) => void;
+    rovers: RoverOption[];
+    rover: RoverOption | null;
+    onRover: (id: string) => void;
+    /** Plain sentence on what the clicks have placed so far. */
+    status: string;
+    canPlan: boolean;
+    onPlan: () => void;
+    canUndo: boolean;
+    onUndo: () => void;
+    canReset: boolean;
+    onReset: () => void;
+    canDrive: boolean;
+    driving: boolean;
+    onDrive: () => void;
+  };
 }
 
-/** Display controls for the 3D terrain: contours, vertical exaggeration and the sun. Every target is at least 44 px. */
-export function TerrainControls({ contours, onContours, exaggeration, onExaggeration, sun, onSun }: ControlProps) {
+const SURFACES: [Surface, string][] = [
+  ['image', 'Satellite'],
+  ['relief', 'Relief'],
+  ['slope', 'Slope'],
+  ['height', 'Height'],
+];
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section aria-label={title} className="min-w-0">
+    <h4 className="label">{title}</h4>
+    <div className="mt-1">{children}</div>
+  </section>
+);
+
+/**
+ * The one control panel of the 3D terrain, titled View: surface, contour lines, height exaggeration, sun and the route planner.
+ * Sections are set apart by whitespace and a small heading. Every target is at least 44 px.
+ */
+export function TerrainPanel({ surface, onSurface, contours, onContours, exaggeration, onExaggeration, sun, onSun, planner }: PanelProps) {
+  const r = planner.rover;
   return (
-    <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-line px-4 py-1 sm:px-6" role="group" aria-label="Terrain display">
-      <button type="button" aria-pressed={contours} onClick={() => onContours(!contours)} className="btn btn-ghost !px-0">
-        <span className="block h-0.5 w-4 bg-current" aria-hidden="true" /> {contours ? 'Contours on' : 'Contours off'}
-      </button>
+    <aside aria-labelledby="h-view" className="px-4 py-4 sm:px-6 lg:border-r lg:border-line lg:py-5">
+      <h3 id="h-view" className="display text-[17px] text-text">
+        View
+      </h3>
+      <div className="mt-3 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-1">
+        <Section title="Surface">
+          <div className="-ml-2.5 flex flex-wrap" role="group" aria-label="Surface">
+            {SURFACES.map(([id, label]) => (
+              <button key={id} type="button" aria-pressed={surface === id} onClick={() => onSurface(id)} className="tab !px-2.5">
+                {label}
+              </button>
+            ))}
+          </div>
+        </Section>
 
-      <label className="flex min-h-11 items-center gap-3 text-[13px] text-text">
-        <span className="label">Vertical exaggeration</span>
-        <input
-          type="range"
-          className="slider !w-[140px]"
-          min={EXAGGERATION_MIN}
-          max={EXAGGERATION_MAX}
-          step={1}
-          value={exaggeration}
-          onChange={(e) => onExaggeration(Number(e.target.value))}
-          aria-valuetext={`${exaggeration}x exaggeration`}
-        />
-        <output className="num min-w-[116px] text-[12px] text-text">{exaggeration}x exaggeration</output>
-      </label>
+        <Section title="Lines">
+          <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[13px] text-text">
+            <input type="checkbox" className="check" checked={contours} onChange={(e) => onContours(e.target.checked)} />
+            Contours
+          </label>
+        </Section>
 
-      <div className="flex flex-wrap items-center gap-x-3" role="group" aria-label="Sun elevation">
-        <span className="label">Sun</span>
-        <button type="button" aria-pressed={sun === SUN_DEFAULT} onClick={() => onSun(SUN_DEFAULT)} className="tab">
-          Default sun {SUN_DEFAULT}°
-        </button>
-        <button type="button" aria-pressed={sun === SUN_LOW} onClick={() => onSun(SUN_LOW)} className="tab">
-          Low sun {SUN_LOW}°
-        </button>
-        <span className="num text-[12px] text-muted" role="status">
-          Sun {sun}° above the horizon, from the north-west
-        </span>
+        <Section title="Height">
+          <label className="block text-[13px] text-text">
+            <span className="flex items-baseline justify-between gap-3">
+              <span>Exaggeration</span>
+              <output className="num text-[13px] text-text">{exaggeration}x</output>
+            </span>
+            <input
+              type="range"
+              className="slider"
+              min={EXAGGERATION_MIN}
+              max={EXAGGERATION_MAX}
+              step={1}
+              value={exaggeration}
+              onChange={(e) => onExaggeration(Number(e.target.value))}
+              aria-valuetext={exaggeration === 1 ? 'no exaggeration, 1x' : `${exaggeration}x exaggeration`}
+            />
+          </label>
+        </Section>
+
+        <Section title="Sun">
+          <div className="-ml-2.5 flex flex-wrap" role="group" aria-label="Sun position">
+            <button type="button" aria-pressed={sun === SUN_DEFAULT} onClick={() => onSun(SUN_DEFAULT)} className="tab !px-2.5">
+              Default {SUN_DEFAULT}°
+            </button>
+            <button type="button" aria-pressed={sun === SUN_LOW} onClick={() => onSun(SUN_LOW)} className="tab !px-2.5">
+              Low sun {SUN_LOW}°
+            </button>
+          </div>
+          <p className="num text-[12px] text-muted" role="status">
+            {sun}° above the horizon, from the north-west
+          </p>
+        </Section>
+
+        <div className="min-w-0 sm:col-span-2 lg:col-span-1">
+          <Section title="Route">
+            <button type="button" className="btn btn-accent" aria-expanded={planner.open} aria-controls="route-planner" onClick={() => planner.onOpen(!planner.open)}>
+              Plan route {planner.open ? <ChevronUp size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
+            </button>
+          </Section>
+          {planner.open && (
+            <div id="route-planner" className="mt-4 max-w-[460px] space-y-4">
+              <label className="block text-[13px] text-text">
+                <span className="label block">Rover</span>
+                <select
+                  value={r?.id ?? ''}
+                  onChange={(e) => planner.onRover(e.target.value)}
+                  disabled={planner.rovers.length === 0}
+                  className="mt-1 h-11 w-full min-w-0 border border-line bg-panel px-2 text-[13px] text-text"
+                >
+                  {planner.rovers.length === 0 && <option value="">no data</option>}
+                  {planner.rovers.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.name}, {o.body === 'moon' ? 'Moon' : 'Mars'}, limit {o.slopeLimit?.value != null ? `${o.slopeLimit.value}°` : 'no data'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div>
+                <RoverFigure label="Slope limit" fig={r?.slopeLimit} unit="°" />
+                <RoverFigure label="Speed" fig={r?.speed} unit={r?.speed ? ` ${r.speed.unit}` : ''} />
+              </div>
+              <p className="text-[13px] text-muted" role="status">
+                {planner.status}
+              </p>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <button type="button" onClick={planner.onPlan} disabled={!planner.canPlan} className="btn">
+                  Plan
+                </button>
+                <button type="button" onClick={planner.onDrive} disabled={!planner.canDrive} aria-pressed={planner.driving} className="btn btn-primary">
+                  {planner.driving ? <Pause size={13} aria-hidden="true" /> : <Play size={13} aria-hidden="true" />} {planner.driving ? 'Pause' : 'Drive'}
+                </button>
+                <button type="button" onClick={planner.onUndo} disabled={!planner.canUndo} className="tool">
+                  <Undo2 size={14} aria-hidden="true" /> Undo
+                </button>
+                <button type="button" onClick={planner.onReset} disabled={!planner.canReset} className="tool">
+                  <RotateCcw size={14} aria-hidden="true" /> Reset
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }
 

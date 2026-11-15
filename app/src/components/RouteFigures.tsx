@@ -27,7 +27,7 @@ export const hoursText = (h: number) => (h < 1 ? `${fx(h * 60, 0)} min` : `${fx(
 /** One published rover figure with its unit, kind and source badge, or "no data". */
 export function RoverFigure({ label, fig, unit }: { label: string; fig: Sourced | null | undefined; unit: string }) {
   return (
-    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 border-b border-line py-2">
+    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-1.5">
       <span className="label w-[92px] shrink-0">{label}</span>
       {fig && fig.value !== null ? (
         <>
@@ -109,6 +109,13 @@ export function RouteFigures({ sides, limitDeg, speedMph, waypoints }: { sides: 
           ))}
         </tbody>
       </table>
+      {limitDeg !== null && sides.some((s) => s.plan) && (
+        <p className="mt-3 max-w-[62ch] text-[13px] text-text">
+          {`Under the ${limitDeg}° limit: ${sides
+            .map((s) => (s.plan === null ? `no data for ${s.name}` : s.plan.ok ? `${fx(s.plan.distanceM / 1000, 1)} km on ${s.name}, steepest step ${fx(s.plan.maxSlopeDeg, 1)}°` : `no route on ${s.name}`))
+            .join('; ')}.`}
+        </p>
+      )}
       <ul className="mt-2 max-w-[62ch] space-y-1">
         {sides.map((s) =>
           s.plan ? (

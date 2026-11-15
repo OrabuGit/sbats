@@ -412,6 +412,11 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
       </MSection>
 
       <MSection id="m-limits" kicker="Honest limits" title="Where it stops being reliable">
+        <p className="mb-6 max-w-[70ch] border-t border-line pt-4 text-[14px] leading-6 text-text">
+          <span className="label mr-2">Known gap</span>
+          We hold no global dataset of caves, lava tubes or other underground environments. The tool cannot find them; where a site&apos;s own story or a
+          cited source records a cave, it is noted on that site&apos;s page.
+        </p>
         <ul className="grid gap-x-12 md:grid-cols-2">
           {[
             `Gravity, vacuum and radiation cannot be matched anywhere on Earth. They are never scored. Each dossier lists them under "What Earth cannot copy".`,
@@ -420,6 +425,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             "The Moon and Mars are colder than anywhere on Earth. Target temperatures are moved to Earth's coldest cell before scoring, so the temperature match is always better than the real gap. The dossier shows the real value next to the one used.",
             `Scores use annual means. Monthly normals exist for the ${siteCount} sites in analogs.json only. They feed "Best month to test" and never a score.`,
             'Absolute scores are low and known Moon analogs rank mid-table. The numbers are on the Validation page.',
+            'Atacama, Antarctica, Iceland, Hawaii, Death Valley and Haughton are the well-known analog sites. The tool treats them as known and its job is to find places beyond them.',
             'The base simulation is a daily balance of power, water, oxygen and food. It has no thermal model, no dust on panels outside a storm and no transit. A module with an unsourced number is tagged Illustrative and its effect is left out.',
           ].map((t) => (
             <li key={t} className="border-t border-line py-4 text-[14px] leading-6 text-text">

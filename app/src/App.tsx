@@ -1033,8 +1033,16 @@ function Orbit({ data }: { data: DataBundle }) {
         demoRunning={demo !== null}
         demoLabel={demo}
         onDemo={runDemo}
-        methodOpen={infoOpen}
-        onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
+        methodOpen={view === 'method'}
+        onMethod={() => setView('method')}
+        onFind={() => onStep(1)}
+        findOpen={view === 'orbit' && step <= 2}
+        onExplore={() => transition(() => setView('explore'))}
+        exploreOpen={view === 'explore'}
+        onCustom={() => transition(() => { setView('custom'); setStep(2); })}
+        customOpen={view === 'custom'}
+        onValidation={() => setView('validation')}
+        validationOpen={view === 'validation'}
         onTour={() => {
           userTouch();
           tourGo(0);
@@ -1109,6 +1117,8 @@ function Orbit({ data }: { data: DataBundle }) {
             tourGo(0);
           }}
           onAiUse={() => setView('aiuse')}
+          onExplore={() => transition(() => setView('explore'))}
+          onCustom={() => transition(() => { setView('custom'); setStep(2); })}
           onClearPick={() => {
             userTouch();
             setHomePick(null);

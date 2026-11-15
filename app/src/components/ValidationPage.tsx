@@ -618,7 +618,7 @@ export function ValidationPage({ earth, targets, onOpenSite }: Props) {
       </Block>
 
       {/* Extra checks: render only when their files are published */}
-      <ValidationChecks />
+      <ValidationChecks holdout={hold.overall} />
 
       {/* Limits */}
       <Block id="v-limits" label="Limits" title="Where this validation stops." lead="Six reasons to read the numbers above with care.">

@@ -431,10 +431,10 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     };
   }, []);
 
-  // Repaint the heatmap texture when scores change.
+  // Repaint the heatmap texture when scores change, and only while the globe is on screen.
   useEffect(() => {
     const t = texRef.current;
-    if (!t) return;
+    if (!t || !active) return;
     const { canvas, texture, rings } = t;
     const g = canvas.getContext('2d')!;
     const w = canvas.width;
@@ -463,6 +463,8 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     });
     // Halos, brightest last. A blurred copy of the cell, so a strong cell spills a little light on its neighbours.
     glow.sort((a, b) => a.score - b.score);
+    // The halo is the costly part (a blur per cell): only the strongest cells get one.
+    if (glow.length > 700) glow.splice(0, glow.length - 700);
     g.save();
     g.globalAlpha = 1;
     for (const c of glow) {
@@ -478,7 +480,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     if (imagery === 0) drawOutlines(g, w, h, rings);
     texture.needsUpdate = true;
     patchApi.current?.();
-  }, [earth, results, imagery]);
+  }, [earth, results, imagery, active]);
 
   // Markers: ranked candidates, named sites, and the selected cell.
   useEffect(() => {

@@ -13,8 +13,8 @@ import { BestMonthTable } from './BestMonth';
 import { ELEMENT_NAME, isElement } from './ElementIcon';
 import { Ground } from './Ground';
 import { FieldLogistics, type LogisticsValue } from './FieldLogistics';
-import { StoryNote } from './FeaturedPage';
-import { storyFor, useStories } from '../data/stories';
+import { TeamStories } from './StoryTeam';
+import { storiesFor, useStories } from '../data/stories';
 import { Absent, DataTable, Td } from './InfoParts';
 import { DimensionStrip, LedgerRow, ScaleSquares, Spark, type DimTile } from './SiteParts';
 import { Block, CountUp, Meter, More, Rv, useSeen } from './ValidationParts';
@@ -262,7 +262,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
               </div>
             </Rv>
             <Rv i={1} className="mt-10">
-              <p className="label">All-round match to {target.name}, Base weights</p>
+              <p className="label">Computed by the tool: all-round match to {target.name}, Base weights</p>
               <div className="mt-3 grid gap-x-8 gap-y-6 sm:grid-cols-2">
                 <ScoreTile label="Grid cell, 0.5°" e={atCell} note="The score in the heatmap and the candidates list." />
                 <ScoreTile label={`Footprint, ${site.footprintKm} km`} e={atSite} note="The same formula on the footprint values. Not used in the ranking." />
@@ -292,14 +292,22 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
                 )}
               </div>
             </Rv>
-            {storyFor(stories, site.id) && (
-              <Rv i={3}>
-                <StoryNote story={storyFor(stories, site.id)} />
-              </Rv>
-            )}
           </div>
         </div>
       </section>
+
+      {storiesFor(stories, site.id).length > 0 && (
+        <Block
+          id="s-story"
+          label="Team story"
+          title="What the team wrote about this place."
+          lead="Written by the SBATS team and checked against our data. The story carries no score: the scores above are computed by the tool."
+        >
+          <div className="max-w-[1200px]">
+            <TeamStories key={site.id} stories={storiesFor(stories, site.id)} />
+          </div>
+        </Block>
+      )}
 
       {/* Five dimensions and the ledger */}
       <Block
@@ -478,6 +486,7 @@ export function SitePage({ sites, siteId, onSite, earth, index, meta, targets, t
 
       <FieldLogistics
         variant="site"
+        where={{ siteId: site.id }}
         lat={site.lat}
         tempMean={logistic('tempMean')}
         precip={logistic('precip')}

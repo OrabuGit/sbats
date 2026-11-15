@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { ArrowLeft, Bookmark, BookmarkCheck, Check, Minus, X } from 'lucide-react';
 import type { CellScore, EarthCell, EarthFile, Target } from '../types';
 import type { MatchDimension, MatchRecord, MatchSide, SharedMinerals } from '../lib/matchAdapter';
@@ -209,6 +209,87 @@ function Place({ title, sub, item, layer, windowKm, state }: { title: string; su
 
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
+const TAB_LIST = [
+  { id: 'sec-overview', label: 'Overview' },
+  { id: 'sec-data', label: 'Full data' },
+  { id: 'sec-tests', label: 'What to test here' },
+  { id: 'sec-3d', label: '3D terrain' },
+  { id: 'sec-report', label: 'Report' },
+] as const;
+
+/** Plain text tabs, pinned while the page scrolls, with a thin underline on the section being read. */
+function MatchTabs() {
+  const [active, setActive] = useState<string>(TAB_LIST[0].id);
+  const [top, setTop] = useState(0);
+  useEffect(() => {
+    // Below 1024 px the page itself scrolls under the sticky top bar: pin under it. Above, the page body scrolls on its own.
+    const place = () => setTop(window.innerWidth < 1024 ? (document.querySelector('header')?.getBoundingClientRect().height ?? 0) : 0);
+    place();
+    window.addEventListener('resize', place);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    );
+    for (const t of TAB_LIST) {
+      const el = document.getElementById(t.id);
+      if (el) io.observe(el);
+    }
+    return () => {
+      window.removeEventListener('resize', place);
+      io.disconnect();
+    };
+  }, []);
+  return (
+    <nav aria-label="Sections of this match" className="sticky z-20 bg-bg" style={{ top }}>
+      <div className="mx-auto flex w-full max-w-[1200px] overflow-x-auto px-3 sm:px-8">
+        {TAB_LIST.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            aria-current={active === t.id ? 'true' : undefined}
+            onClick={() => document.getElementById(t.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className={`min-h-11 shrink-0 whitespace-nowrap border-b px-3 text-[14px] font-medium transition-colors sm:px-4 ${active === t.id ? 'border-accent text-text' : 'border-line text-muted hover:text-text'}`}
+          >
+            {t.label}
+          </button>
+        ))}
+        <span className="min-w-4 flex-1 border-b border-line" aria-hidden="true" />
+      </div>
+    </nav>
+  );
+}
+
+/** The first three measurements, with a link to all of them. A taste of the Full data section. */
+function TopFactors({ dims, targetName }: { dims: MatchDimension[]; targetName: string }) {
+  const rows = dims.flatMap((d) => d.rows.slice(0, 1).map((r) => ({ d, r }))).slice(0, 3);
+  if (rows.length === 0) return null;
+  return (
+    <section className="mx-auto w-full max-w-[1200px] px-5 pb-12 sm:px-10" aria-label="The first three measurements">
+      <ul>
+        {rows.map(({ d, r }) => (
+          <li key={d.id + r.key} className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 gap-y-1 border-t border-line py-3 md:grid-cols-[180px_minmax(0,1fr)_minmax(0,1fr)_auto]">
+            <span className="text-[15px] font-medium text-text">{r.label}</span>
+            <span className="num order-3 text-[14px] text-text md:order-none">
+              <span className="text-muted">Earth </span>
+              {r.earth.text}
+            </span>
+            <span className="num order-4 text-[14px] text-text md:order-none">
+              <span className="text-muted">{targetName.split(',')[0]} </span>
+              {r.target.text}
+            </span>
+            <span className="display text-[20px] text-text">{formatSim(r.similarity)}</span>
+          </li>
+        ))}
+      </ul>
+      <button type="button" onClick={() => document.getElementById('sec-data')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="link-rule mt-3 text-[14px] font-medium text-text">
+        See all measurements
+      </button>
+    </section>
+  );
+}
+
 export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, terrain, earth, climate, minerals = null, children }: Props) {
   const site = scale === 'site';
   const score = site ? record.score.value : e.score;
@@ -245,6 +326,8 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
 
       <div>
         <div>
+          <MatchTabs />
+          <div id="sec-overview" className="scroll-mt-28">
           <header className={`${pad} grid gap-x-12 gap-y-8 pb-12 pt-6 ${terrain ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,640px)]' : 'lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)]'}`}>
             <div className="min-w-0">
               <p className="text-[14px] text-muted">
@@ -323,9 +406,9 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                     <Terrain3D earth={{ item: terrain.earth, modules: [] }} target={{ item: terrain.target, modules: [] }} windowKm={terrain.windowKm} layer="image" cols={24} rows={12} />
                   </Suspense>
                   <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[13px] text-muted">
-                    <span>The two places as 3D terrain, at one scale. Drag to turn it.</span>
+                    <span>A live preview of both places as 3D terrain, at one scale. Drag to turn it.</span>
                     <button type="button" onClick={terrain.onOpen} className="btn btn-primary !px-5">
-                      Open full 3D view
+                      Open 3D terrain
                     </button>
                   </figcaption>
                 </figure>
@@ -339,9 +422,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               )}
             </div>
           </header>
-
-          <PlainResults record={record} score={score} placeName={name} />
-
+          <TopFactors dims={core} targetName={target.name} />
           {core.length > 0 && (
             <section className={`${pad} pb-16`} aria-labelledby="h-why">
               <h3 id="h-why" className="display text-[24px] leading-8 text-text">
@@ -390,9 +471,13 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                                 <span className="font-semibold text-text">The weakest link.</span> The score multiplies the factors together, a weighted geometric mean, so a weak one cannot be averaged away.
                               </p>
                             )}
-                            <a href={`#dim-${d.id}`} className="link-rule mt-3 inline-block text-[13px] font-medium text-text">
+                            <button
+                              type="button"
+                              onClick={() => document.getElementById(`dim-${d.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                              className="link-rule mt-3 inline-block text-[13px] font-medium text-text"
+                            >
                               All the numbers
-                            </a>
+                            </button>
                           </div>
                         )}
                       </li>
@@ -402,33 +487,40 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               </div>
             </section>
           )}
+          </div>
 
+          <div id="sec-tests" className="scroll-mt-28">
+          <PlainResults record={record} score={score} placeName={name} />
+          <FieldLogistics
+            lat={cell.lat}
+            {...logisticsFromRecord(record)}
+            where={{ lat: cell.lat, lon: cell.lon }}
+            relief={ground.earth?.elevation ? { item: ground.earth, windowKm: ground.windowKm } : null}
+          />
+          </div>
+
+          <div id="sec-3d" className="scroll-mt-28">
           <section className={`${pad} pb-14`} aria-labelledby="h-do">
             <h3 id="h-do" className="display text-[24px] leading-8 text-text">
               Work with this place
             </h3>
+            <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">
+              In the 3D view you can switch the surface, add contour lines, set the sun and plan a rover route over the real elevation grid.
+            </p>
             <div className="mt-5 grid gap-x-10 gap-y-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
               {[tools.primary, tools.secondary].map((t, i) => (
                 <div key={t.title} className={`border-t-2 pt-4 ${i === 0 ? 'border-accent' : 'border-line'}`}>
                   <ActivityArt kind={t.art} className={`w-auto ${i === 0 ? 'h-16 text-accent' : 'h-12 text-muted'}`} />
                   <h4 className={`display mt-3 text-text ${i === 0 ? 'text-[28px] leading-8' : 'text-[20px] leading-7'}`}>{t.title}</h4>
                   <p className="mt-1 max-w-[46ch] text-[14px] leading-[22px] text-muted">{t.line}</p>
-                  <button type="button" onClick={t.onClick ?? undefined} disabled={!t.onClick} className={`btn mt-4 ${i === 0 ? 'btn-primary !h-12 !px-6 !text-[15px]' : ''}`}>
+                  <button type="button" onClick={t.onClick ?? undefined} disabled={!t.onClick} className={`btn mt-4 ${i === 0 ? '!px-6 !text-[15px]' : ''}`}>
                     {t.cta}
                   </button>
                   {!t.onClick && t.why && <p className="mt-2 max-w-[46ch] text-[12px] leading-[18px] text-muted">{t.why}</p>}
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex flex-wrap gap-x-2 gap-y-1">
-              {actions.map((a) => (
-                <button key={a.label} type="button" onClick={a.onClick ?? undefined} disabled={!a.onClick} title={a.onClick ? undefined : a.why} className="btn btn-ghost !pl-0 !pr-4">
-                  {a.label}
-                </button>
-              ))}
-            </div>
           </section>
-
           {!custom && (
           <section className={`${pad} py-10`} aria-labelledby="h-side">
             <h3 id="h-side" className="display mb-4 text-[24px] leading-8 text-text">
@@ -444,7 +536,6 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </p>
           </section>
           )}
-
           {ground.earth && ground.target && (
             <section className={`${pad} py-10`} aria-labelledby="h-slide">
               <h3 id="h-slide" className="display mb-4 text-[24px] leading-8 text-text">
@@ -453,13 +544,9 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               <CompareSlider earth={ground.earth} target={ground.target} windowKm={ground.windowKm} earthName={name} targetName={target.name} targetWorld={target.body === 'moon' ? 'Moon' : 'Mars'} />
             </section>
           )}
+          </div>
 
-          <FieldLogistics
-            lat={cell.lat}
-            {...logisticsFromRecord(record)}
-            relief={ground.earth?.elevation ? { item: ground.earth, windowKm: ground.windowKm } : null}
-          />
-
+          <div id="sec-data" className="scroll-mt-28">
           <section className={`${pad} py-10`} aria-labelledby="h-rows">
             <h3 id="h-rows" className="display text-[24px] leading-8 text-text">
               Dimension by dimension
@@ -483,8 +570,26 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               </ul>
             )}
           </section>
-
-          <section className={`${pad} py-10`} aria-labelledby="h-extra">
+          <FullData
+            record={record}
+            explained={e}
+            cell={cell}
+            target={target}
+            meta={meta}
+            placeName={name}
+            scale={scale}
+            ground={ground}
+            earth={earth}
+            climate={climate}
+            minerals={minerals}
+          />
+          <details id="sec-extra" className={`group ${pad} py-6`}>
+            <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-baseline gap-x-4 gap-y-1 [&::-webkit-details-marker]:hidden">
+              <span className="display text-[24px] leading-8 text-text">Added after the score was frozen</span>
+              <span className="text-[14px] text-muted">Minerals, ice, dust and wind: shown beside the score, never part of it.</span>
+              <span className="ml-auto text-muted transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+            </summary>
+          <div aria-labelledby="h-extra">
             <h3 id="h-extra" className="display text-[24px] leading-8 text-text">
               Added after the score was frozen
             </h3>
@@ -523,8 +628,9 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 </p>
               </div>
             )}
-          </section>
+          </div>
 
+          </details>
           <section className={`${pad} py-10`} aria-labelledby="h-cannot">
             <h3 id="h-cannot" className="display text-[24px] leading-8 text-text">
               What Earth cannot copy
@@ -543,28 +649,30 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               ))}
             </ul>
           </section>
+          </div>
 
-          <FullData
-            record={record}
-            explained={e}
-            cell={cell}
-            target={target}
-            meta={meta}
-            placeName={name}
-            scale={scale}
-            ground={ground}
-            earth={earth}
-            climate={climate}
-            minerals={minerals}
-          />
-        </div>
-
-        <section className={`${pad} border-t border-line py-10`} aria-labelledby="h-more">
-          <h3 id="h-more" className="display text-[24px] leading-8 text-text">
-            More about this place
-          </h3>
+          <div id="sec-report" className="scroll-mt-28">
+            <section className={`${pad} pb-6 pt-10`} aria-labelledby="h-report-tab">
+              <h3 id="h-report-tab" className="display text-[24px] leading-8 text-text">Report</h3>
+              <p className="mt-1 max-w-[60ch] text-[14px] leading-[22px] text-muted">A print-ready report of this match with numbered citations, and CSV and GeoJSON exports.</p>
+            <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
+              {actions.map((a) => (
+                <button key={a.label} type="button" onClick={a.onClick ?? undefined} disabled={!a.onClick} title={a.onClick ? undefined : a.why} className="btn !px-4">
+                  {a.label}
+                </button>
+              ))}
+            </div>
+            </section>
+          <details id="sec-more" className={`group ${pad} py-6`}>
+            <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-baseline gap-x-4 gap-y-1 [&::-webkit-details-marker]:hidden">
+              <span className="display text-[24px] leading-8 text-text">More about this place</span>
+              <span className="text-[14px] text-muted">Best month to test, what was left out, match by purpose and every source.</span>
+              <span className="ml-auto text-muted transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+            </summary>
           <div className="mt-6">{children}</div>
-        </section>
+          </details>
+          </div>
+        </div>
       </div>
     </main>
   );

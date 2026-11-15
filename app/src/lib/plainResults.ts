@@ -14,6 +14,31 @@
 //     Partial = "partly", Not suited = "does-not-match", No data = "no-data". Each carries the
 //     purpose's own reason (PurposeDef.why) and, from the purpose's own dimension list, which of its
 //     dimensions hold it back (verdict other than "matches").
+//  4b. Capabilities ("What could be tested here"): one card for each of the seven kinds of work the challenge
+//     names, in this order: Landing, Navigation, Mobility, Robotics, Construction, Resource utilization,
+//     Human operations. Each is Ready, Partial, Not suited or Not assessed, by the rule below from the
+//     record's dimension verdicts (same cut-offs as everywhere: 0.75 / 0.30) and its purpose scores.
+//     There are two kinds of rule.
+//       By dimensions: "core" dimensions must all match for Ready; one core dimension that does not match
+//       is Not suited; otherwise Partial. "Support" dimensions can only lower Ready to Partial (a condition,
+//       not a blocker). Landing:      core terrain (slope and roughness), support sunlight.
+//                       Navigation:   core terrain and bare ground (open surface), support sunlight (light and
+//                                     shadow for cameras). Construction: core terrain (slope, roughness),
+//                                     support rock type; its reason always says that ground strength and
+//                                     regolith depth are not assessed.
+//       By purpose: the verdict of the record's own purpose score. Mobility = the Rover mobility purpose
+//       (terrain, bare ground). Resource utilization = the Ice and resources purpose (climate, sunlight,
+//       rock type); where the ice or minerals dimension has data and does not match, Ready is lowered to
+//       Partial, and where it matches or does not exist the purpose alone decides. Human operations = the
+//       Full base rehearsal purpose (rock, terrain, climate, bare ground, sunlight).
+//     Not assessed, by rule: any dimension the rule needs has no data (the reason names it); the purpose
+//     has no score (reason names the dimensions with no data); and always for Robotics, because robot
+//     performance depends on regolith properties and electronics temperature cycles that the grid does not
+//     hold at site scale. The only dust and temperature figures here are the air haze (aerosol optical
+//     depth) and the day-night swing of a 0.5 degree cell: neither is regolith dust or a component
+//     temperature, so no part of Robotics is rated from them.
+//     The reason names the dimensions by verdict ("Slope and roughness match; sunlight matches partly.").
+//     The score shown, when there is one, is the purpose's own score, printed as given.
 //  5. Dimension to activity: geology = rock and mineral sampling, terrain = driving and landing
 //     practice, climate = thermal and life-support tests, bare ground = surface operations on bare
 //     ground, sunlight = solar power tests.
@@ -47,8 +72,8 @@ const isDim = (id: string): id is DimId => id in ACTIVITY;
 
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-export type PurposeStatus = 'ready' | 'partial' | 'not-suited' | 'no-data';
-export const STATUS_WORD: Record<PurposeStatus, string> = { ready: 'Ready', partial: 'Partial', 'not-suited': 'Not suited', 'no-data': 'No data' };
+export type PurposeStatus = 'ready' | 'partial' | 'not-suited' | 'no-data' | 'not-assessed';
+export const STATUS_WORD: Record<PurposeStatus, string> = { ready: 'Ready', partial: 'Partial', 'not-suited': 'Not suited', 'no-data': 'No data', 'not-assessed': 'Not assessed' };
 
 export interface PlainPurpose {
   id: string;
@@ -62,12 +87,29 @@ export interface PlainPurpose {
   heldBack: string[];
 }
 
+export type CapabilityId = 'landing' | 'navigation' | 'mobility' | 'robotics' | 'construction' | 'resources' | 'human';
+
+export interface Capability {
+  id: CapabilityId;
+  /** The name as the challenge uses it. */
+  label: string;
+  status: PurposeStatus;
+  /** One line, written by rule from the verdicts. */
+  reason: string;
+  /** What the rating was read from, in words. Empty when nothing was assessed. */
+  basis: string;
+  /** The purpose's own score (0 to 100) when the rating comes from a purpose, else null. */
+  score: number | null;
+}
+
 export interface PlainResults {
   headline: string;
   goodFor: string[];
   notFor: string[];
   tags: { label: string; verdict: Verdict }[];
   purposes: PlainPurpose[];
+  /** The seven kinds of work, one card each, in fixed order. */
+  capabilities: Capability[];
 }
 
 const STATUS: Record<Verdict, PurposeStatus> = { match: 'ready', partial: 'partial', miss: 'not-suited', none: 'no-data' };
@@ -112,7 +154,114 @@ export function plainResults(record: MatchRecord, score: number | null, placeNam
     notFor: miss.map((d) => ACTIVITY[d.id as DimId].activity),
     tags: [...match, ...partial].map((d) => ({ label: ACTIVITY[d.id as DimId].tag, verdict: fromRecord(d.verdict) })),
     purposes,
+    capabilities: capabilities(record),
   };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Capabilities (rule 4b)
+
+type NeedId = 'geology' | 'terrain' | 'climate' | 'bareGround' | 'sunlight' | 'minerals' | 'ice';
+/** Noun phrase for each dimension in a reason, and whether it reads as plural ("slope and roughness match"). */
+const NAME: Record<NeedId, { text: string; pl: boolean }> = {
+  geology: { text: 'rock type', pl: false },
+  terrain: { text: 'slope and roughness', pl: true },
+  climate: { text: 'climate', pl: false },
+  bareGround: { text: 'open bare ground', pl: false },
+  sunlight: { text: 'sunlight', pl: false },
+  minerals: { text: 'minerals', pl: true },
+  ice: { text: 'ground ice', pl: false },
+};
+
+interface Rule {
+  id: CapabilityId;
+  label: string;
+  by: 'dims' | 'purpose' | 'none';
+  core?: NeedId[];
+  support?: NeedId[];
+  purpose?: string;
+  purposeName?: string;
+  /** Dimensions that lower Ready to Partial when present with data and not matching. */
+  optional?: NeedId[];
+  note?: string;
+  unassessed?: string;
+}
+
+export const CAPABILITY_RULES: Rule[] = [
+  { id: 'landing', label: 'Landing', by: 'dims', core: ['terrain'], support: ['sunlight'], note: 'Rock abundance at landing-site scale is not assessed.' },
+  { id: 'navigation', label: 'Navigation', by: 'dims', core: ['terrain', 'bareGround'], support: ['sunlight'], note: 'Visible landmarks are not assessed.' },
+  { id: 'mobility', label: 'Mobility', by: 'purpose', purpose: 'mobility', purposeName: 'Rover mobility' },
+  {
+    id: 'robotics',
+    label: 'Robotics',
+    by: 'none',
+    unassessed: 'Robot performance depends on dust and regolith properties and electronics temperature cycles that our grid does not hold at site scale.',
+  },
+  { id: 'construction', label: 'Construction', by: 'dims', core: ['terrain'], support: ['geology'], note: 'Ground strength and regolith depth are not assessed.' },
+  { id: 'resources', label: 'Resource utilization', by: 'purpose', purpose: 'ice', purposeName: 'Ice and resources', optional: ['ice', 'minerals'] },
+  { id: 'human', label: 'Human operations', by: 'purpose', purpose: 'base', purposeName: 'Full base rehearsal', note: 'Radiation, vacuum and gravity cannot be copied on Earth.' },
+];
+
+const WORD: Record<Verdict, string> = { match: 'match', partial: 'match partly', miss: 'do not match', none: 'have no data' };
+const WORD1: Record<Verdict, string> = { match: 'matches', partial: 'matches partly', miss: 'does not match', none: 'has no data' };
+
+/** "Slope and roughness match; sunlight matches partly." Grouped by verdict, the same style as the headline. */
+function sentence(items: { id: NeedId; v: Verdict }[]): string {
+  const parts: string[] = [];
+  for (const v of ['match', 'partial', 'miss'] as Verdict[]) {
+    const g = items.filter((i) => i.v === v);
+    if (g.length === 0) continue;
+    const plural = g.length > 1 || NAME[g[0].id].pl;
+    parts.push(`${list(g.map((i) => NAME[i.id].text))} ${plural ? WORD[v] : WORD1[v]}`);
+  }
+  const t = parts.join('; ');
+  return t ? `${t.charAt(0).toUpperCase()}${t.slice(1)}.` : '';
+}
+
+function capabilities(record: MatchRecord): Capability[] {
+  const dimV = (id: NeedId): Verdict => {
+    const d = record.dimensions.find((x) => x.id === id);
+    return d ? fromRecord(d.verdict) : 'none';
+  };
+  return CAPABILITY_RULES.map((r): Capability => {
+    const base = { id: r.id, label: r.label };
+    const tail = r.note ? ` ${r.note}` : '';
+    if (r.by === 'none') return { ...base, status: 'not-assessed', reason: r.unassessed ?? '', basis: '', score: null };
+
+    if (r.by === 'dims') {
+      const need = [...(r.core ?? []), ...(r.support ?? [])];
+      const items = need.map((id) => ({ id, v: dimV(id) }));
+      const missing = items.filter((i) => i.v === 'none');
+      if (missing.length > 0) {
+        return { ...base, status: 'not-assessed', reason: `No data for ${list(missing.map((i) => NAME[i.id].text))}, so this is not assessed.${tail}`, basis: '', score: null };
+      }
+      const core = items.filter((i) => r.core?.includes(i.id));
+      const support = items.filter((i) => r.support?.includes(i.id));
+      const status: PurposeStatus = core.some((i) => i.v === 'miss')
+        ? 'not-suited'
+        : core.every((i) => i.v === 'match') && support.every((i) => i.v === 'match')
+          ? 'ready'
+          : 'partial';
+      return { ...base, status, reason: `${sentence(items)}${tail}`, basis: list(need.map((id) => NAME[id].text)), score: null };
+    }
+
+    // By purpose
+    const p = record.purposes.find((x) => x.id === r.purpose);
+    const def = PURPOSES.find((x) => x.id === r.purpose);
+    const dims = (def?.dimensions ?? []) as NeedId[];
+    const items = dims.map((id) => ({ id, v: dimV(id) }));
+    if (!p || p.verdict === 'no-data') {
+      const missing = items.filter((i) => i.v === 'none');
+      const what = missing.length > 0 ? `No data for ${list(missing.map((i) => NAME[i.id].text))}` : `The ${r.purposeName?.toLowerCase()} score could not be computed`;
+      return { ...base, status: 'not-assessed', reason: `${what}, so this is not assessed.${tail}`, basis: '', score: null };
+    }
+    const opt = (r.optional ?? []).map((id) => ({ id, v: dimV(id) })).filter((i) => i.v !== 'none');
+    let status = STATUS[fromRecord(p.verdict)];
+    if (status === 'ready' && opt.some((i) => i.v !== 'match')) status = 'partial';
+    const reason = `${sentence([...items, ...opt])}${tail}`;
+    const optNames = opt.length > 0 ? ` and ${list(opt.map((i) => NAME[i.id].text))}` : '';
+    return { ...base, status, reason, basis: `the ${r.purposeName} score (${list(dims.map((id) => NAME[id].text))})${optNames}`, score: p.score };
+  });
 }
 
 // ---------------------------------------------------------------------------------------------

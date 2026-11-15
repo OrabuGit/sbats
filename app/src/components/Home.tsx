@@ -53,6 +53,8 @@ interface Props {
   onMethod: () => void;
   onLearn: () => void;
   onTour: () => void;
+  onExplore: () => void;
+  onCustom: () => void;
   onAiUse: () => void;
   onValidation: () => void;
 }
@@ -69,12 +71,14 @@ const claimOf = (f: Findings | null) => {
 /** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
 function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRight>[0] }) {
   return (
-    <header className={`absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between px-3 transition-colors duration-300 sm:h-[72px] sm:px-8 ${solid ? 'bg-bg' : 'bg-transparent'}`}>
-      <h1 className="m-0 flex items-center">
+    <header className={`absolute inset-x-0 top-0 z-30 flex flex-wrap items-center justify-between gap-x-3 px-3 transition-colors duration-300 sm:px-8 ${solid ? 'bg-bg' : 'bg-transparent'}`}>
+      <h1 className="m-0 flex h-14 items-center sm:h-[72px]">
         <span className="sr-only">SBATS</span>
         <Logo height={28} />
       </h1>
-      <NavRight {...nav} />
+      <div className="w-full min-w-0 xl:w-auto">
+        <NavRight {...nav} />
+      </div>
     </header>
   );
 }
@@ -212,6 +216,10 @@ export function Home(p: Props) {
           learnOpen: false,
           onLearn: p.onLearn,
           onTour: p.onTour,
+          onFind: p.onFind,
+          onExplore: p.onExplore,
+          onCustom: p.onCustom,
+          onValidation: p.onValidation,
           savedCount: p.savedCount,
           savedOpen: false,
           onSaved: p.onSaved,
@@ -244,6 +252,9 @@ export function Home(p: Props) {
             </div>
           )}
           <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:order-1 lg:pb-0 lg:pl-16 lg:pr-6 lg:pt-14">
+            <p className="mb-3 text-[13px] leading-5 text-muted lg:mb-4">
+              <span className="font-semibold text-text">SBATS</span> stands for <span className="text-text">S</span>pace <span className="text-text">B</span>ase <span className="text-text">A</span>nalog <span className="text-text">T</span>errain <span className="text-text">S</span>ystem
+            </p>
             <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[46px] lg:leading-[1.05]">Find where on Earth to rehearse a Moon or Mars base.</h2>
             <p className="mt-3 max-w-[42ch] text-[15px] leading-[24px] text-muted lg:mt-5">
               Pick a landing site or a planned base on the Moon or Mars. SBATS ranks every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.

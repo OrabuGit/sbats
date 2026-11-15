@@ -1,4 +1,3 @@
-import { Bookmark, BookOpen, CircleHelp, GraduationCap, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
 import { Logo } from './Logo';
 
@@ -11,31 +10,22 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 4, label: 'Match' },
 ];
 
-const NAV = 'inline-flex min-h-11 whitespace-nowrap items-center gap-2 px-2.5 text-[14px] font-medium transition-colors sm:px-3.5 sm:text-[15px]';
+const NAV = 'inline-flex min-h-11 whitespace-nowrap items-center gap-2 px-2.5 text-[14px] font-medium transition-colors lg:px-3 xl:text-[15px]';
 
-/** The right-hand navigation, the same on every page. Text only: no bar, no border. */
-export function NavRight({
-  onHome,
-  homeOpen = false,
-  featuredOpen,
-  onFeatured,
-  methodOpen,
-  onMethod,
-  learnOpen,
-  onLearn,
-  onTour,
-  savedCount,
-  savedOpen,
-  onSaved,
-  demoRunning,
-  demoLabel,
-  onDemo,
-}: {
-  /** Goes to the landing page. Omitted on the landing page itself. */
+export interface NavProps {
+  /** Goes to the landing page. */
   onHome?: () => void;
   homeOpen?: boolean;
+  onFind?: () => void;
+  findOpen?: boolean;
   featuredOpen: boolean;
   onFeatured: () => void;
+  onExplore?: () => void;
+  exploreOpen?: boolean;
+  onCustom?: () => void;
+  customOpen?: boolean;
+  validationOpen?: boolean;
+  onValidation?: () => void;
   methodOpen: boolean;
   onMethod: () => void;
   learnOpen: boolean;
@@ -48,46 +38,41 @@ export function NavRight({
   demoRunning: boolean;
   demoLabel: string | null;
   onDemo: () => void;
-}) {
+}
+
+/**
+ * The navigation, the same on every page. Every place a person may want is a word in this row: nothing waits
+ * behind an icon or a menu. Below 1280 px it is its own row under the logo and scrolls sideways if it must.
+ */
+export function NavRight(p: NavProps) {
   const tone = (on: boolean) => (on ? 'text-text' : 'text-text/70 hover:text-text');
+  const items: { label: string; on: boolean; go?: () => void; extra?: React.ReactNode }[] = [
+    { label: 'Home', on: !!p.homeOpen, go: p.onHome },
+    { label: 'Find analog', on: !!p.findOpen, go: p.onFind },
+    { label: 'Featured sites', on: p.featuredOpen, go: p.onFeatured },
+    { label: 'Explore data', on: !!p.exploreOpen, go: p.onExplore },
+    { label: 'Custom conditions', on: !!p.customOpen, go: p.onCustom },
+    { label: 'Validation', on: !!p.validationOpen, go: p.onValidation },
+    ...(flags.methodPage ? [{ label: 'Method', on: p.methodOpen, go: p.onMethod }] : []),
+    { label: 'Learn', on: p.learnOpen, go: p.onLearn },
+    { label: 'Tour', on: false, go: p.onTour },
+    { label: 'Saved', on: p.savedOpen, go: p.onSaved, extra: p.savedCount > 0 ? <span className="num text-[12px] text-accent">{p.savedCount}</span> : null },
+  ];
   return (
-    <nav aria-label="Main" className="flex items-center">
-      {demoLabel && <span className="mr-3 hidden max-w-[240px] truncate text-[12px] text-muted xl:inline">{demoLabel}</span>}
-      {onHome && (
-        <button type="button" onClick={onHome} aria-pressed={homeOpen} aria-label="Home" className={`${NAV} ${tone(homeOpen)}`}>
-          Home
-        </button>
-      )}
-      <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`${NAV} ${tone(featuredOpen)}`}>
-        <MapPin size={15} aria-hidden="true" className="sm:hidden" />
-        <span className="hidden sm:inline">Featured sites</span>
-      </button>
-      {flags.methodPage && (
-        <button type="button" onClick={onMethod} aria-pressed={methodOpen} aria-label="Method" className={`${NAV} ${tone(methodOpen)}`}>
-          <BookOpen size={15} aria-hidden="true" className="sm:hidden" />
-          <span className="hidden sm:inline">Method</span>
-        </button>
-      )}
-      <button type="button" onClick={onLearn} aria-pressed={learnOpen} aria-label="Learn" className={`${NAV} ${tone(learnOpen)}`}>
-        <GraduationCap size={15} aria-hidden="true" className="sm:hidden" />
-        <span className="hidden sm:inline">Learn</span>
-      </button>
-      {onTour && (
-        <button type="button" onClick={onTour} aria-label="Take the guided tour" className={`${NAV} ${tone(false)}`}>
-          <CircleHelp size={15} aria-hidden="true" className="sm:hidden" />
-          <span className="hidden sm:inline">Tour</span>
-        </button>
-      )}
-      <button type="button" onClick={onSaved} aria-pressed={savedOpen} aria-label={`Saved, ${savedCount}`} className={`${NAV} ${tone(savedOpen)}`}>
-        <Bookmark size={15} aria-hidden="true" />
-        <span className="hidden sm:inline">Saved</span>
-        {savedCount > 0 && <span className="num text-[12px] text-accent">{savedCount}</span>}
-      </button>
+    <nav aria-label="Main" className="-mx-1 flex min-w-0 items-center overflow-x-auto xl:mx-0 xl:overflow-visible">
+      {p.demoLabel && <span className="mr-3 hidden max-w-[240px] truncate text-[12px] text-muted xl:inline">{p.demoLabel}</span>}
+      {items
+        .filter((i) => i.go)
+        .map((i) => (
+          <button key={i.label} type="button" onClick={i.go} aria-pressed={i.on} className={`${NAV} ${tone(i.on)}`}>
+            {i.label}
+            {i.extra}
+          </button>
+        ))}
       {flags.demoButton && (
-        <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
-        {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-        <span className="hidden sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
-      </button>
+        <button type="button" onClick={p.onDemo} aria-pressed={p.demoRunning} className={`${NAV} ${tone(p.demoRunning)}`}>
+          {p.demoRunning ? 'Stop demo' : 'Run demo'}
+        </button>
       )}
     </nav>
   );
@@ -106,14 +91,17 @@ export function TopBar({
   /** True once a match is open, so step 4 can be returned to. */
   canMatch: boolean;
   onHome: () => void;
-} & Parameters<typeof NavRight>[0]) {
+} & NavProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-3 bg-bg px-3 sm:px-8">
-      <button type="button" onClick={onHome} aria-label="SBATS, home" className="flex min-h-11 items-center">
+    <header className="sticky top-0 z-30 flex shrink-0 flex-wrap items-center justify-between gap-x-3 bg-bg px-3 sm:px-8">
+      <button type="button" onClick={onHome} aria-label="SBATS, home" className="flex h-14 items-center">
         <Logo height={26} />
       </button>
+      <div className="order-3 w-full min-w-0 xl:order-2 xl:w-auto">
+        <NavRight {...right} onHome={onHome} />
+      </div>
       {step !== null && (
-        <nav aria-label="Steps" className="mr-auto hidden items-center md:ml-2 md:flex xl:absolute xl:left-1/2 xl:m-0 xl:-translate-x-1/2">
+        <nav aria-label="Steps" className="order-4 hidden w-full items-center md:flex">
           <ol className="flex items-center gap-1">
             {STEPS.map(({ n, label }) => {
               const locked = n === 4 && !canMatch;
@@ -126,11 +114,11 @@ export function TopBar({
                     aria-disabled={locked || undefined}
                     title={locked ? 'Open a match from the list first' : undefined}
                     onClick={() => !locked && onStep(n)}
-                    className={`inline-flex min-h-11 items-center border-b-2 px-2 text-[14px] font-medium lg:px-3 ${
+                    className={`inline-flex min-h-10 items-center border-b-2 px-3 text-[14px] font-medium ${
                       active ? 'border-accent text-text' : locked ? 'border-transparent text-text/25' : 'border-transparent text-text/60 hover:text-text'
                     }`}
                   >
-                    {label}
+                    {n}. {label}
                   </button>
                 </li>
               );
@@ -138,7 +126,6 @@ export function TopBar({
           </ol>
         </nav>
       )}
-      <NavRight {...right} onHome={onHome} />
     </header>
   );
 }

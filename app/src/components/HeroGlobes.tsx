@@ -98,7 +98,9 @@ interface Slot {
 /** Where each globe sits, in canvas pixels from the top left. One function for the canvas and the labels. */
 export function layoutGlobes(w: number, h: number, reserve = 0): Slot[] {
   // The transparent navigation bar lies over the top of the canvas: keep the globes below it.
-  const nav = w < 640 ? 56 : 72;
+  // The navigation lies over the top of the canvas; below 1280 px it is a second row.
+  const wide = typeof window !== 'undefined' && window.innerWidth >= 1280;
+  const nav = (w < 640 ? 56 : 72) + (wide ? 0 : 44);
   const uh = h - nav - reserve;
   if (w < 640) {
     const rE = Math.min(w * 0.27, uh * 0.225);
@@ -259,7 +261,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     // An experiment (flags.stars): a faint starfield in three layers that twinkle slowly out of step.
     const starLayers = flags.stars
       ? [0, 1, 2].map((k) => {
-          const n = [140, 90, 40][k];
+          const n = [100, 60, 24][k];
           const pts = new Float32Array(n * 3);
           // A fixed seed, so the sky is the same on every visit.
           let seed = 7919 * (k + 1);
@@ -271,12 +273,12 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
           }
           const geoS = new BufferGeometry();
           geoS.setAttribute('position', new BufferAttribute(pts, 3));
-          const mat = new PointsMaterial({ color: 0xffffff, size: [1.2, 1.7, 2.3][k], sizeAttenuation: false, transparent: true, opacity: [0.35, 0.5, 0.7][k], depthWrite: false });
+          const mat = new PointsMaterial({ color: 0xffffff, size: [1.1, 1.5, 2][k], sizeAttenuation: false, transparent: true, opacity: [0.26, 0.38, 0.52][k], depthWrite: false });
           const obj = new Points(geoS, mat);
           obj.renderOrder = -2;
           obj.frustumCulled = false;
           scene.add(obj);
-          return { obj, geoS, mat, unit, pts, base: [0.35, 0.5, 0.7][k], phase: k * 2.1 };
+          return { obj, geoS, mat, unit, pts, base: [0.26, 0.38, 0.52][k], phase: k * 2.1 };
         })
       : [];
 
@@ -766,7 +768,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
           </span>
         </button>
       ))}
-      <div className={`absolute bottom-4 left-4 hidden max-w-[80%] flex-wrap items-center gap-x-6 gap-y-1 text-[12px] text-muted sm:left-8 ${pick ? '' : 'sm:flex'}`}>
+      <div className={`absolute bottom-4 right-4 hidden max-w-[70%] flex-wrap items-center justify-end gap-x-6 gap-y-1 text-right text-[12px] text-muted sm:right-8 ${pick ? '' : 'sm:flex'}`}>
         <span className="inline-flex items-center gap-2">
           <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true">
             <ellipse cx="11" cy="9" rx="10" ry="4" fill="none" stroke="#FFB000" strokeWidth="1.6" />
