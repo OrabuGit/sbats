@@ -1,5 +1,6 @@
 import { Suspense, forwardRef, lazy, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { flags } from '../flags';
+import { getLastLayout, setLastLayout } from '../lib/layoutStore';
 import { Eraser, FolderOpen, Link2, Minus, Plus, Save, Trash2 } from 'lucide-react';
 import type { EarthCell, Target } from '../types';
 import {
@@ -53,9 +54,6 @@ export const EXAMPLE_LAYOUT: SavedLayout = {
     ...[6, 7, 8, 9].flatMap((x) => [4, 5, 6].map((y) => ({ type: 'battery' as const, x, y }))),
   ],
 };
-
-/** The layout being worked on, kept while the sandbox is closed so going back to the dossier does not lose it. */
-let lastLayout: SavedLayout | null = null;
 
 export interface SandboxHandle {
   loadExample: () => void;
@@ -236,10 +234,9 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   ref,
 ) {
   const file = modules.file;
-  const [layout, setLayout] = useState<SavedLayout>(initial ?? lastLayout ?? { modules: [], resupplyEveryDays: null });
-  useEffect(() => {
-    lastLayout = layout;
-  }, [layout]);
+  const [layout, setLayout] = useState<SavedLayout>(initial ?? getLastLayout() ?? { modules: [], resupplyEveryDays: null });
+  // Kept while the sandbox is closed, and shared with the terrain page.
+  useEffect(() => setLastLayout(layout), [layout]);
   const [tool, setTool] = useState<ModuleType | 'erase'>('habitat');
   const [deployed, setDeployed] = useState(false);
   const [day, setDay] = useState(DAYS);
@@ -739,7 +736,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
       <div className="scroll order-1 shrink-0 border-b border-line bg-bg lg:order-2 lg:min-h-0 lg:border-b-0">
         <div className="flex flex-wrap items-stretch border-b border-line bg-panel [&_.tab]:-mb-px">
           <button type="button" onClick={onBack} className="tool border-r border-line">
-            Back to dossier
+            Back to the match
           </button>
           <p className="hidden min-w-0 flex-1 items-center px-4 text-[13px] text-muted md:flex">One layout, two sites</p>
           <span className="flex-1 md:hidden" />

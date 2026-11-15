@@ -2,7 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AmbientLight,
   BoxGeometry,
+  BufferAttribute,
   BufferGeometry,
+  Line,
+  LineBasicMaterial,
+  Raycaster,
+  Vector2,
+  Vector3,
   Color,
   ConeGeometry,
   CylinderGeometry,
@@ -47,11 +53,30 @@ interface Props {
   /** Layout grid size, to place modules over the middle band of the terrain as in the plan view. */
   cols: number;
   rows: number;
+  /** Colour the surface by slope class instead of the image or plain grey. */
+  slope?: boolean;
+  /** Route waypoints in km from the centre of the square (x east, z south). Drawn on both terrains. */
+  route?: { x: number; z: number }[];
+  /** Position of the rover along the route, 0 to 1, or null for no rover. */
+  rover?: number | null;
+  /** Called with the ground point under a click on the Earth terrain. */
+  onPoint?: (xKm: number, zKm: number) => void;
 }
+
+/** Slope classes for the surface colours and their legend: upper bound in degrees and a flat colour. */
+export const SLOPE_CLASSES: { upTo: number; label: string; color: string }[] = [
+  { upTo: 5, label: '0 to 5°', color: '#3a434c' },
+  { upTo: 10, label: '5 to 10°', color: '#6b5a2e' },
+  { upTo: 15, label: '10 to 15°', color: '#9c7421' },
+  { upTo: 25, label: '15 to 25°', color: '#cd8f11' },
+  { upTo: Infinity, label: 'over 25°', color: '#ffb000' },
+];
 
 interface Built {
   scene: Scene;
   modules: Group;
+  routeGroup: Group;
+  terrain: Mesh;
   heightAt: (xKm: number, zKm: number) => number;
   reliefKm: number;
   dispose: () => void;
@@ -75,7 +100,7 @@ function moduleGeometry(type: ModuleType): BufferGeometry {
   }
 }
 
-function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer: GroundLayer, onTexture: () => void): Built {
+function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer: GroundLayer, slope: boolean, onTexture: () => void): Built {
   const el = item.elevation!;
   const step = Math.max(1, Math.ceil(el.size / MAX_SAMPLES));
   const n = Math.floor((el.size - 1) / step) + 1;
@@ -106,9 +131,24 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
   sun.position.set(-1, 1.4, -1);
   scene.add(sun, new AmbientLight(0xffffff, 0.9));
 
-  const material = new MeshLambertMaterial({ color: 0x6b737b, flatShading: n < 100 });
+  const material = new MeshLambertMaterial({ color: slope ? 0xffffff : 0x6b737b, flatShading: n < 100, vertexColors: slope });
+  if (slope) {
+    // Slope at each sample from its four neighbours, in the same horizontal and vertical unit (km).
+    const spacing = windowKm / (n - 1);
+    const colors = new Float32Array(n * n * 3);
+    const palette = SLOPE_CLASSES.map((c) => new Color(c.color));
+    for (let r = 0; r < n; r++)
+      for (let c = 0; c < n; c++) {
+        const dx = (sample(Math.min(n - 1, c + 1), r) - sample(Math.max(0, c - 1), r)) / (2 * spacing);
+        const dz = (sample(c, Math.min(n - 1, r + 1)) - sample(c, Math.max(0, r - 1))) / (2 * spacing);
+        const deg = (Math.atan(Math.hypot(dx, dz)) * 180) / Math.PI;
+        const col = palette[SLOPE_CLASSES.findIndex((k) => deg < k.upTo)];
+        colors.set([col.r, col.g, col.b], (r * n + c) * 3);
+      }
+    geo.setAttribute('color', new BufferAttribute(colors, 3));
+  }
   const shown = shownLayer(item, layer);
-  if (shown === 'image' && item.image) {
+  if (!slope && shown === 'image' && item.image) {
     new TextureLoader().load(dataUrl(item.image.file), (tex) => {
       tex.colorSpace = SRGBColorSpace;
       tex.anisotropy = 4;
@@ -118,9 +158,11 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
       onTexture();
     });
   }
-  scene.add(new Mesh(geo, material));
+  const terrain = new Mesh(geo, material);
+  scene.add(terrain);
   const modules = new Group();
-  scene.add(modules);
+  const routeGroup = new Group();
+  scene.add(modules, routeGroup);
 
   const half = windowKm / 2;
   const heightAt = (xKm: number, zKm: number) => {
@@ -131,6 +173,8 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
   return {
     scene,
     modules,
+    routeGroup,
+    terrain,
     heightAt,
     reliefKm: (max - min) / 1000,
     dispose: () => {
@@ -141,7 +185,7 @@ function build(item: ExtractItem, heights: Float32Array, windowKm: number, layer
   };
 }
 
-export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props) {
+export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = false, route, rover = null, onPoint }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const [orbit, setOrbit] = useState(!reduced);
@@ -150,6 +194,8 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const built = useRef<[Built, Built] | null>(null);
   const redraw = useRef<() => void>(() => {});
+  const onPointRef = useRef(onPoint);
+  onPointRef.current = onPoint;
   const sides = [earth, target] as const;
   const ready = earth.item.elevation !== null && target.item.elevation !== null;
 
@@ -170,6 +216,43 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
     const camera = new PerspectiveCamera(32, 1, 0.5, 1000);
     let angle = 0.6;
     let last = performance.now();
+    // Drag turns both terrains. A press that does not move is a click on the ground.
+    const canvas = renderer.domElement;
+    canvas.style.touchAction = 'pan-y';
+    let down: { x: number; angle: number; moved: boolean } | null = null;
+    const onDown = (ev: PointerEvent) => {
+      down = { x: ev.clientX, angle, moved: false };
+      canvas.setPointerCapture(ev.pointerId);
+    };
+    const onMove = (ev: PointerEvent) => {
+      if (!down) return;
+      const dx = ev.clientX - down.x;
+      if (Math.abs(dx) > 4) down.moved = true;
+      if (down.moved) {
+        angle = down.angle - dx * 0.008;
+        draw();
+      }
+    };
+    const onUp = (ev: PointerEvent) => {
+      const press = down;
+      down = null;
+      if (!press || press.moved || !onPointRef.current || !built.current) return;
+      const box = canvas.getBoundingClientRect();
+      const stacked = box.width < 640;
+      const vw = stacked ? box.width : box.width / 2;
+      const vh = stacked ? box.height / 2 : box.height;
+      const x = ev.clientX - box.left;
+      const y = ev.clientY - box.top;
+      if (x > vw || y > vh) return; // only the Earth terrain takes waypoints
+      draw(); // leaves the camera as both viewports use it
+      const ray = new Raycaster();
+      ray.setFromCamera(new Vector2((x / vw) * 2 - 1, -(y / vh) * 2 + 1), camera);
+      const hit = ray.intersectObject(built.current[0].terrain)[0];
+      if (hit) onPointRef.current(hit.point.x, hit.point.z);
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
 
     const draw = () => {
       const b = built.current;
@@ -216,7 +299,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
     Promise.all([loadElevation(earth.item.elevation!), loadElevation(target.item.elevation!)]).then(
       ([he, ht]) => {
         if (!alive) return;
-        built.current = [build(earth.item, he, windowKm, layer, () => draw()), build(target.item, ht, windowKm, layer, () => draw())];
+        built.current = [build(earth.item, he, windowKm, layer, slope, () => draw()), build(target.item, ht, windowKm, layer, slope, () => draw())];
         setState('ready');
         ro.observe(el);
         frame = requestAnimationFrame(loop);
@@ -227,12 +310,15 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
       alive = false;
       cancelAnimationFrame(frame);
       ro.disconnect();
+      canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointermove', onMove);
+      canvas.removeEventListener('pointerup', onUp);
       built.current?.forEach((b) => b.dispose());
       built.current = null;
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [earth.item, target.item, windowKm, layer, ready]);
+  }, [earth.item, target.item, windowKm, layer, slope, ready]);
 
   // Modules: replaced when the layout changes, without rebuilding the terrain.
   useEffect(() => {
@@ -260,6 +346,54 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows }: Props)
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [earth.modules, target.modules, state, cols, rows, windowKm]);
+
+  // Route and rover: the same path, in km from the centre, draped on both terrains.
+  useEffect(() => {
+    const b = built.current;
+    if (!b || state !== 'ready') return;
+    const disposables: { dispose: () => void }[] = [];
+    const pts = route ?? [];
+    // Sample the path every 100 m so the line follows the ground.
+    const dense: { x: number; z: number }[] = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const len = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].z - pts[i].z);
+      const steps = Math.max(1, Math.ceil(len / 0.1));
+      for (let k = 0; k < steps; k++) dense.push({ x: pts[i].x + ((pts[i + 1].x - pts[i].x) * k) / steps, z: pts[i].z + ((pts[i + 1].z - pts[i].z) * k) / steps });
+    }
+    if (pts.length > 0) dense.push(pts[pts.length - 1]);
+    b.forEach((side, i) => {
+      side.routeGroup.clear();
+      if (pts.length === 0) return;
+      const lift = 0.06;
+      const lineGeo = new BufferGeometry().setFromPoints(dense.map((p) => new Vector3(p.x, side.heightAt(p.x, p.z) + lift, p.z)));
+      const lineMat = new LineBasicMaterial({ color: i === 0 ? 0xd7dde3 : 0xffb000 });
+      const dotGeo = new BoxGeometry(0.22, 0.22, 0.22);
+      const dotMat = new MeshBasicMaterial({ color: i === 0 ? 0xd7dde3 : 0xffb000 });
+      disposables.push(lineGeo, lineMat, dotGeo, dotMat);
+      side.routeGroup.add(new Line(lineGeo, lineMat));
+      for (const p of pts) {
+        const m = new Mesh(dotGeo, dotMat);
+        m.position.set(p.x, side.heightAt(p.x, p.z) + lift, p.z);
+        side.routeGroup.add(m);
+      }
+      if (rover !== null && dense.length > 1) {
+        const at = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)))];
+        const next = dense[Math.min(dense.length - 1, Math.round(rover * (dense.length - 1)) + 1)];
+        // A box on a wider box: a rover drawn far larger than life, like the modules.
+        const body = new BoxGeometry(0.5, 0.16, 0.34).translate(0, 0.16, 0);
+        const mast = new BoxGeometry(0.12, 0.26, 0.12).translate(0.1, 0.36, 0);
+        const mat = new MeshBasicMaterial({ color: 0xffffff });
+        disposables.push(body, mast, mat);
+        const g = new Group();
+        g.add(new Mesh(body, mat), new Mesh(mast, mat));
+        g.position.set(at.x, side.heightAt(at.x, at.z), at.z);
+        g.rotation.y = Math.atan2(-(next.z - at.z), next.x - at.x);
+        side.routeGroup.add(g);
+      }
+    });
+    redraw.current();
+    return () => disposables.forEach((d) => d.dispose());
+  }, [route, rover, state]);
 
   if (!ready) return <p className="p-3 text-[13px] text-muted">No data. A terrain extract is missing for one of the two places.</p>;
 
