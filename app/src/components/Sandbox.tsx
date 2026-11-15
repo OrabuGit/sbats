@@ -4,12 +4,10 @@ import { getLastLayout, setLastLayout } from '../lib/layoutStore';
 import { Eraser, FolderOpen, Link2, Minus, Plus, Save, Trash2 } from 'lucide-react';
 import type { EarthCell, Target } from '../types';
 import {
-  LayoutError,
   MODULE_PARAMS,
   MODULE_TYPES,
   deployTwice,
   encodeLayout,
-  layoutFromJson,
   layoutToJson,
   missingParams,
   simulate,
@@ -39,7 +37,6 @@ const Terrain3D = lazy(() => import('./Terrain3D').then((m) => ({ default: m.Ter
 const COLS = 24;
 const ROWS = 12;
 const DAYS = 30;
-const STORAGE_KEY = 'sbats.layout.v1';
 
 const LETTER: Record<ModuleType, string> = { habitat: 'H', solar: 'S', battery: 'B', greenhouse: 'G', iceMiner: 'I', landingPad: 'P' };
 
@@ -79,6 +76,11 @@ interface Props {
   tab: 'setup' | 'results';
   onTab: (t: 'setup' | 'results') => void;
   onBack: () => void;
+  /** Saves the base into the Saved list. Returns false when the browser refused. */
+  onSaveBase: (layout: unknown, moduleCount: number) => boolean;
+  /** Opens the Saved page. */
+  onOpenSaved: () => void;
+  savedBases: number;
 }
 
 const n0 = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : v.toLocaleString('en-US', { maximumFractionDigits: 0 }));
@@ -230,7 +232,7 @@ function sustainText(s: Simulation['sustainability']): string {
 }
 
 export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
-  { cell, siteName, target, modules, solar, ground, initial, tab, onTab, onBack },
+  { cell, siteName, target, modules, solar, ground, initial, tab, onTab, onBack, onSaveBase, onOpenSaved, savedBases },
   ref,
 ) {
   const file = modules.file;
@@ -322,23 +324,9 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
   };
 
   const save = () => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layoutToJson(layout)));
-      setMessage('Saved in this browser.');
-    } catch (e) {
-      setMessage(`Could not save: ${e instanceof Error ? e.message : String(e)}`);
-    }
-  };
-  const load = () => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) return setMessage('No saved layout in this browser.');
-      setLayout(layoutFromJson(JSON.parse(raw)));
-      setLink(null);
-      setMessage('Loaded the saved layout.');
-    } catch (e) {
-      setMessage(`Could not load: ${e instanceof LayoutError ? e.message : 'the saved layout is not readable'}`);
-    }
+    if (layout.modules.length === 0) return setMessage('Place a module first.');
+    const ok = onSaveBase(layoutToJson(layout), layout.modules.length);
+    setMessage(ok ? 'Saved. It is under Saved, in the top bar.' : 'Could not save in this browser.');
   };
   const share = () => {
     try {
@@ -558,10 +546,10 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         </h2>
         <div className="grid grid-cols-3 gap-2">
           <button type="button" onClick={save} className="btn !px-2">
-            <Save size={13} aria-hidden="true" /> Save
+            <Save size={13} aria-hidden="true" /> Save base
           </button>
-          <button type="button" onClick={load} className="btn !px-2">
-            <FolderOpen size={13} aria-hidden="true" /> Load
+          <button type="button" onClick={onOpenSaved} className="btn !px-2">
+            <FolderOpen size={13} aria-hidden="true" /> Saved{savedBases > 0 ? ` (${savedBases})` : ''}
           </button>
           <button type="button" onClick={share} className="btn !px-2">
             <Link2 size={13} aria-hidden="true" /> Link
@@ -576,7 +564,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
             <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className="num mt-1 h-11 w-full border border-line bg-bg px-2 text-[11px] text-text" />
           </label>
         )}
-        <p className="mt-2 text-[12px] text-muted">The link holds the layout, the Earth cell and the target. Saving stays in this browser.</p>
+        <p className="mt-2 text-[12px] text-muted">The link holds the layout, the Earth cell and the target. A saved base stays in this browser.</p>
       </section>
     </aside>
   );

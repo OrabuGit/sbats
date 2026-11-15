@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Play, Square, X } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { EarthFile } from '../types';
 import { dataUrl, loadFindings, type ExtractIndex, type FeaturedSite, type Findings, type SitesFile } from '../data/sites';
 import { useAsync } from '../lib/useAsync';
-import type { SavedLocation } from '../lib/saved';
-import { formatCoords } from '../lib/geo';
 import { HeroGlobes, type HeroPlace } from './HeroGlobes';
 import { HomeStory, Reveal } from './HomeStory';
-import { Wordmark } from './Wordmark';
+import { Logo } from './Logo';
+import { NavRight } from './Chrome';
 import type { WorldId } from './Worlds';
 
 interface Props {
@@ -15,7 +14,8 @@ interface Props {
   places: HeroPlace[];
   sites: SitesFile | null;
   extracts: ExtractIndex | null;
-  saved: SavedLocation[];
+  savedCount: number;
+  onSaved: () => void;
   demo: string | null;
   onDemo: () => void;
   onFind: () => void;
@@ -24,8 +24,6 @@ interface Props {
   onFeatured: (id?: string) => void;
   onMethod: () => void;
   onValidation: () => void;
-  onOpenSaved: (s: SavedLocation) => void;
-  onRemoveSaved: (id: string) => void;
 }
 
 const LEAD = ['tambora', 'batur'];
@@ -37,27 +35,15 @@ const claimOf = (f: Findings | null) => {
 };
 
 /** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
-function HomeNav({ solid, demo, onDemo, onFeatured, onMethod }: { solid: boolean; demo: string | null; onDemo: () => void; onFeatured: () => void; onMethod: () => void }) {
-  const item = 'min-h-11 px-2 text-[14px] font-medium text-text/80 hover:text-text sm:px-4 sm:text-[15px]';
+/** Transparent navigation: no bar, no border. It takes a solid background only once the page has moved under it. */
+function HomeNav({ solid, nav }: { solid: boolean; nav: Parameters<typeof NavRight>[0] }) {
   return (
-    <header className={`absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between px-4 transition-colors duration-300 sm:h-[72px] sm:px-8 ${solid ? 'bg-bg' : 'bg-transparent'}`}>
-      <h1 className="m-0 text-[22px]">
+    <header className={`absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between px-3 transition-colors duration-300 sm:h-[72px] sm:px-8 ${solid ? 'bg-bg' : 'bg-transparent'}`}>
+      <h1 className="m-0 flex items-center">
         <span className="sr-only">SBATS-26</span>
-        <Wordmark size={24} />
+        <Logo height={28} />
       </h1>
-      <nav aria-label="Main" className="flex items-center">
-        {demo && <span className="num mr-3 hidden max-w-[220px] truncate text-[11px] text-muted md:inline">{demo}</span>}
-        <button type="button" onClick={onFeatured} className={item}>
-          Featured<span className="hidden sm:inline"> sites</span>
-        </button>
-        <button type="button" onClick={onMethod} className={item}>
-          Method
-        </button>
-        <button type="button" onClick={onDemo} aria-pressed={demo !== null} aria-label={demo ? 'Stop demo' : 'Run demo'} className={`${item} inline-flex items-center gap-2`}>
-          {demo ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-          <span className="hidden sm:inline">{demo ? 'Stop demo' : 'Run demo'}</span>
-        </button>
-      </nav>
+      <NavRight {...nav} />
     </header>
   );
 }
@@ -106,7 +92,21 @@ export function Home(p: Props) {
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col bg-bg">
-      <HomeNav solid={solid} demo={p.demo} onDemo={p.onDemo} onFeatured={() => p.onFeatured()} onMethod={p.onMethod} />
+      <HomeNav
+        solid={solid}
+        nav={{
+          featuredOpen: false,
+          onFeatured: () => p.onFeatured(),
+          methodOpen: false,
+          onMethod: p.onMethod,
+          savedCount: p.savedCount,
+          savedOpen: false,
+          onSaved: p.onSaved,
+          demoRunning: p.demo !== null,
+          demoLabel: p.demo,
+          onDemo: p.onDemo,
+        }}
+      />
       <main ref={scroller} className="scroll min-h-0 flex-1 bg-bg" aria-label="SBATS-26 home">
         {/* 1. Hero: three globes on the left three quarters, the two actions on the right. */}
         <section className="flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[3fr_1fr]" aria-label="Earth, the Moon and Mars">
@@ -195,40 +195,6 @@ export function Home(p: Props) {
         {/* 3. How it works, the data, the method and its limits. */}
         <HomeStory earth={p.earth} placeCount={p.places.length} onMethod={p.onMethod} onValidation={p.onValidation} onFind={p.onFind} />
 
-        {/* 4. Saved locations. */}
-        <section className="px-5 pb-24 sm:px-10 lg:px-16" aria-labelledby="h-home-saved">
-          <h2 id="h-home-saved" className="display text-[24px] text-text">
-            Saved locations
-          </h2>
-          {p.saved.length === 0 ? (
-            <p className="mt-2 text-[14px] text-muted">None yet. Open a match and press Save. They stay in this browser.</p>
-          ) : (
-            <ul className="mt-4 max-w-[720px]">
-              {p.saved.map((s) => (
-                <li key={s.id} className="flex items-stretch border-b border-line first:border-t">
-                  <button type="button" onClick={() => p.onOpenSaved(s)} className="flex min-h-14 flex-1 items-center gap-4 py-2 text-left hover:text-accent">
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[15px] text-text">{s.name}</span>
-                      <span className="num block text-[11px] text-muted">
-                        {formatCoords(s.lat, s.lon)} · for {s.targetName}
-                      </span>
-                    </span>
-                    {s.comparable === false ? (
-                      <span className="num max-w-[150px] text-right text-[11px] text-muted" title="This target has no temperature value, so its scores run high and cannot be set beside the others.">
-                        {s.score === null ? 'no data' : s.score.toFixed(0)}, not comparable
-                      </span>
-                    ) : (
-                      <span className={`num ${s.score === null ? 'text-[11px] text-muted' : 'text-[20px] font-semibold text-text'}`}>{s.score === null ? 'no data' : s.score.toFixed(0)}</span>
-                    )}
-                  </button>
-                  <button type="button" onClick={() => p.onRemoveSaved(s.id)} aria-label={`Remove ${s.name} from saved locations`} className="tool !px-0">
-                    <X size={14} aria-hidden="true" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
       </main>
     </div>
   );

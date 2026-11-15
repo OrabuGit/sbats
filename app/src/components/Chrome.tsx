@@ -1,26 +1,8 @@
-import { BookOpen, MapPin, Play, Square } from 'lucide-react';
+import { Bookmark, BookOpen, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
-import { Wordmark } from './Wordmark';
+import { Logo } from './Logo';
 
 export type Step = 1 | 2 | 3 | 4;
-
-interface TopBarProps {
-  /** The current step, or null on a page outside the steps (home, reference pages). */
-  step: Step | null;
-  onStep: (s: Step) => void;
-  /** True once a match is open, so step 4 can be returned to. */
-  canMatch: boolean;
-  onHome: () => void;
-  featuredOpen: boolean;
-  onFeatured: () => void;
-  demoRunning: boolean;
-  /** What the demo is showing now, or null. */
-  demoLabel: string | null;
-  onDemo: () => void;
-  /** True while a reference page (Method, Validation, Sites) is open. */
-  methodOpen: boolean;
-  onMethod: () => void;
-}
 
 const STEPS: { n: Step; label: string }[] = [
   { n: 1, label: 'World' },
@@ -29,54 +11,105 @@ const STEPS: { n: Step; label: string }[] = [
   { n: 4, label: 'Match' },
 ];
 
-export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeatured, demoRunning, demoLabel, onDemo, methodOpen, onMethod }: TopBarProps) {
+const NAV = 'inline-flex min-h-11 items-center gap-2 px-2.5 text-[14px] font-medium transition-colors sm:px-3.5 sm:text-[15px]';
+
+/** The right-hand navigation, the same on every page. Text only: no bar, no border. */
+export function NavRight({
+  featuredOpen,
+  onFeatured,
+  methodOpen,
+  onMethod,
+  savedCount,
+  savedOpen,
+  onSaved,
+  demoRunning,
+  demoLabel,
+  onDemo,
+}: {
+  featuredOpen: boolean;
+  onFeatured: () => void;
+  methodOpen: boolean;
+  onMethod: () => void;
+  savedCount: number;
+  savedOpen: boolean;
+  onSaved: () => void;
+  demoRunning: boolean;
+  demoLabel: string | null;
+  onDemo: () => void;
+}) {
+  const tone = (on: boolean) => (on ? 'text-text' : 'text-text/70 hover:text-text');
   return (
-    <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
-      <h1 className="flex items-stretch border-r border-line">
-        <button type="button" onClick={onHome} aria-label="SBATS-26, home" className="flex items-center px-3 hover:bg-bg sm:px-4">
-          <Wordmark size={18} suffix={false} />
-        </button>
-      </h1>
-      <nav aria-label="Steps" className="flex min-w-0 flex-1 items-stretch">
-        <ol className="flex items-stretch">
-          {STEPS.map(({ n, label }) => {
-            const locked = n === 4 && !canMatch;
-            const active = step === n;
-            return (
-              <li key={n} className="flex items-stretch">
-                <button
-                  type="button"
-                  aria-current={active ? 'step' : undefined}
-                  aria-disabled={locked || undefined}
-                  title={locked ? 'Open a match from the list first' : undefined}
-                  onClick={() => !locked && onStep(n)}
-                  className={`flex min-w-10 items-center justify-center gap-2 border-b-2 px-2 pt-0.5 sm:min-w-11 sm:px-4 ${
-                    active ? 'border-accent text-text' : locked ? 'border-transparent text-line' : 'border-transparent text-muted hover:text-text'
-                  }`}
-                >
-                  <span className={`num text-[11px] ${active ? 'text-accent' : ''}`}>0{n}</span>
-                  <span className="hidden text-[13px] font-medium md:inline">{label}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-      <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`tool hidden border-b-2 pt-0.5 !px-3 sm:inline-flex ${featuredOpen ? 'border-accent !text-text' : 'border-transparent'}`}>
-        <MapPin size={14} aria-hidden="true" />
-        <span className="hidden lg:inline">Featured sites</span>
+    <nav aria-label="Main" className="flex items-center">
+      {demoLabel && <span className="mr-3 hidden max-w-[240px] truncate text-[12px] text-muted xl:inline">{demoLabel}</span>}
+      <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`${NAV} ${tone(featuredOpen)}`}>
+        <MapPin size={15} aria-hidden="true" className="sm:hidden" />
+        <span className="hidden sm:inline">Featured sites</span>
       </button>
       {flags.methodPage && (
-        <button type="button" onClick={onMethod} aria-pressed={methodOpen} aria-label="Method and validation" className={`tool border-b-2 pt-0.5 !px-3 ${methodOpen ? 'border-accent !text-text' : 'border-transparent'}`}>
-          <BookOpen size={14} aria-hidden="true" />
-          <span className="hidden lg:inline">Method</span>
+        <button type="button" onClick={onMethod} aria-pressed={methodOpen} aria-label="Method" className={`${NAV} ${tone(methodOpen)}`}>
+          <BookOpen size={15} aria-hidden="true" className="sm:hidden" />
+          <span className="hidden sm:inline">Method</span>
         </button>
       )}
-      {demoLabel && <span className="mr-3 hidden max-w-[240px] items-center truncate text-[12px] text-muted lg:flex">{demoLabel}</span>}
-      <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className="btn btn-primary h-full min-w-11 !rounded-none !px-3 sm:!px-4">
-        {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-        <span className="hidden whitespace-nowrap sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
+      <button type="button" onClick={onSaved} aria-pressed={savedOpen} aria-label={`Saved, ${savedCount}`} className={`${NAV} ${tone(savedOpen)}`}>
+        <Bookmark size={15} aria-hidden="true" />
+        <span className="hidden sm:inline">Saved</span>
+        {savedCount > 0 && <span className="num text-[12px] text-accent">{savedCount}</span>}
       </button>
+      <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
+        {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
+        <span className="hidden md:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
+      </button>
+    </nav>
+  );
+}
+
+export function TopBar({
+  step,
+  onStep,
+  canMatch,
+  onHome,
+  ...right
+}: {
+  /** The current step, or null on a page outside the steps. */
+  step: Step | null;
+  onStep: (s: Step) => void;
+  /** True once a match is open, so step 4 can be returned to. */
+  canMatch: boolean;
+  onHome: () => void;
+} & Parameters<typeof NavRight>[0]) {
+  return (
+    <header className="relative z-30 flex h-16 shrink-0 items-center justify-between gap-3 bg-bg px-3 sm:px-8">
+      <button type="button" onClick={onHome} aria-label="SBATS, home" className="flex min-h-11 items-center">
+        <Logo height={26} />
+      </button>
+      {step !== null && (
+        <nav aria-label="Steps" className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex">
+          <ol className="flex items-center gap-1">
+            {STEPS.map(({ n, label }) => {
+              const locked = n === 4 && !canMatch;
+              const active = step === n;
+              return (
+                <li key={n}>
+                  <button
+                    type="button"
+                    aria-current={active ? 'step' : undefined}
+                    aria-disabled={locked || undefined}
+                    title={locked ? 'Open a match from the list first' : undefined}
+                    onClick={() => !locked && onStep(n)}
+                    className={`inline-flex min-h-11 items-center border-b-2 px-3 text-[14px] font-medium ${
+                      active ? 'border-accent text-text' : locked ? 'border-transparent text-text/25' : 'border-transparent text-text/60 hover:text-text'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+      <NavRight {...right} />
     </header>
   );
 }

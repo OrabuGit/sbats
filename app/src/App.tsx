@@ -19,20 +19,21 @@ import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
-import { Wordmark } from './components/Wordmark';
+import { SavedPage } from './components/SavedPage';
+import { Logo } from './components/Logo';
 import { WorldPage } from './components/WorldPage';
 import { TerrainPage, type RoversFile } from './components/TerrainPage';
 import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
-import { savedId, useSaved } from './lib/saved';
+import { savedId, useSaved, type SavedLocation } from './lib/saved';
 import { targetFromKnownSite, targetFromPoint, type BodyGrid, type KnownSitesFile, type TargetProfile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
 import { loadTargetEnvironment, loadTargetMinerals, loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
-import { decodeLayout, type SavedLayout } from './lib/simAdapter';
+import { decodeLayout, layoutFromJson, type SavedLayout } from './lib/simAdapter';
 
 // The globe (three.js and globe.gl) is by far the largest part of the app. It is fetched as its
 // own chunk, starting now and in parallel with the data, so the panels never wait for it.
@@ -41,7 +42,7 @@ const GlobeView = lazy(() => globeModule.then((m) => ({ default: m.GlobeView }))
 const worldModule = import('./components/WorldGlobe');
 const WorldGlobe = lazy(() => worldModule.then((m) => ({ default: m.WorldGlobe })));
 
-type View = 'home' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain';
+type View = 'home' | 'saved' | 'orbit' | 'match' | 'recon' | 'method' | 'validation' | 'site' | 'featured' | 'world' | 'report' | 'terrain';
 const KIND_LABEL = { candidate: 'Proposed site', known: 'Known analog', negative: 'Negative control' } as const;
 
 const LIST_LIMIT = 15;
@@ -77,7 +78,7 @@ export default function App() {
         <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
           <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
             <h1 className="m-0">
-              <Wordmark size={20} />
+              <Logo height={24} />
             </h1>
           </div>
         </header>
@@ -584,6 +585,65 @@ function Orbit({ data }: { data: DataBundle }) {
   const stabOf = (i: number) => stabNow?.followed.find((f) => f.index === i) ?? null;
   const stabSelected = selected !== null ? stabOf(selected) : null;
 
+  // Open something from the Saved page: a match, or a base layout in the sandbox.
+  const openSavedItem = useCallback(
+    (s: SavedLocation) => {
+      const i = index.nearest(s.lat, s.lon, 2);
+      if (i < 0) return;
+      const go = () => {
+        if (s.kind === 'base' && s.layout) {
+          try {
+            setSharedLayout(layoutFromJson(s.layout));
+          } catch {
+            return;
+          }
+          setSelected(i);
+          setStep(4);
+          setTab('results');
+          setView('recon');
+        } else select(i);
+      };
+      if (s.targetPoint) {
+        loadExtra<BodyGrid>(`${s.targetPoint.body}.json`).then((grid) => {
+          if (!grid || !s.targetPoint) return;
+          try {
+            setPlaceId(null);
+            setPointProfile(targetFromPoint(s.targetPoint.body, s.targetPoint.lat, s.targetPoint.lon, { ...profileOptions(s.targetPoint.body), grid }));
+            go();
+          } catch {
+            // The point can no longer be built: leave the saved entry as it is.
+          }
+        });
+      } else {
+        setTargetId(s.targetId);
+        go();
+      }
+    },
+    [index, select, profileOptions, setTargetId],
+  );
+  const saveBase = useCallback(
+    (layout: unknown, moduleCount: number) => {
+      if (!selectedCell) return false;
+      saved.add({
+        id: `base:${Date.now()}`,
+        kind: 'base',
+        targetId: target.id,
+        targetName: target.name,
+        ...(pointProfile ? { targetPoint: { body: target.body, lat: target.lat, lon: target.lon } } : {}),
+        lat: selectedCell.lat,
+        lon: selectedCell.lon,
+        name: `Base at ${(named?.name ?? siteCode(selectedCell)).split(',')[0]}`,
+        score: null,
+        savedAt: new Date().toISOString(),
+        layout,
+        moduleCount,
+      });
+      return true;
+    },
+    [saved, selectedCell, target, pointProfile, named],
+  );
+  const savedBases = saved.list.filter((x) => x.kind === 'base').length;
+
   const selectedSavedId = selectedCell ? savedId(target.id, selectedCell.lat, selectedCell.lon) : null;
   const isSaved = !!selectedSavedId && saved.list.some((x) => x.id === selectedSavedId);
   const toggleSaved = () => {
@@ -630,6 +690,9 @@ function Orbit({ data }: { data: DataBundle }) {
         onHome={() => setView('home')}
         featuredOpen={view === 'featured'}
         onFeatured={() => setView('featured')}
+        savedCount={saved.list.length}
+        savedOpen={view === 'saved'}
+        onSaved={() => setView('saved')}
         demoRunning={demo !== null}
         demoLabel={demo}
         onDemo={runDemo}
@@ -657,7 +720,8 @@ function Orbit({ data }: { data: DataBundle }) {
           places={heroPlaces}
           sites={featuredSites}
           extracts={extractIndex}
-          saved={saved.list}
+          savedCount={saved.list.length}
+          onSaved={() => setView('saved')}
           demo={demo}
           onDemo={runDemo}
           onFind={() => {
@@ -678,25 +742,10 @@ function Orbit({ data }: { data: DataBundle }) {
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
           onMethod={() => setView('method')}
           onValidation={() => setView('validation')}
-          onOpenSaved={(s) => {
-            const i = index.nearest(s.lat, s.lon, 2);
-            if (i < 0) return;
-            if (s.targetPoint) {
-              loadExtra<BodyGrid>(`${s.targetPoint.body}.json`).then((grid) => {
-                if (!grid || !s.targetPoint) return;
-                try {
-                  setPlaceId(null);
-                  setPointProfile(targetFromPoint(s.targetPoint.body, s.targetPoint.lat, s.targetPoint.lon, { ...profileOptions(s.targetPoint.body), grid }));
-                  select(i);
-                } catch {
-                  // The point can no longer be built: leave the saved entry as it is.
-                }
-              });
-            } else openSite(s.lat, s.lon, s.targetId);
-          }}
-          onRemoveSaved={saved.remove}
         />
       )}
+
+      {view === 'saved' && <SavedPage saved={saved.list} onOpen={openSavedItem} onRemove={saved.remove} onFind={() => { setView('orbit'); setStep(1); }} />}
 
       {view === 'orbit' && step === 1 && (
         <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-world">
@@ -918,6 +967,9 @@ function Orbit({ data }: { data: DataBundle }) {
           tab={tab}
           onTab={setTab}
           onBack={() => setView('match')}
+          onSaveBase={saveBase}
+          onOpenSaved={() => setView('saved')}
+          savedBases={savedBases}
         />
       )}
 

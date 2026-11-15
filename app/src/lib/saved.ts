@@ -14,6 +14,12 @@ export interface SavedLocation {
   /** False when the target has no temperature: the score runs high and must not be read beside others. */
   comparable?: boolean;
   savedAt: string;
+  /** 'match' (default) is a match against a target. 'base' is a base layout placed at this place. */
+  kind?: 'match' | 'base';
+  /** For a base: the layout in the form the simulation library saves (module types, positions, crew, cargo). */
+  layout?: unknown;
+  /** For a base: how many modules it holds. */
+  moduleCount?: number;
 }
 
 const KEY = 'sbats.saved.v1';
