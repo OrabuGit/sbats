@@ -120,123 +120,59 @@ export interface PurposesFile {
 export const loadPurposes = () => loadExtra<PurposesFile>('validation-purposes.json');
 
 // ---------------------------------------------------------------------------------------------
-// Two optional files, published later by another session. Until they exist the page shows nothing
-// for them. Both are read defensively: anything that does not look right is dropped, never thrown.
-//
-// data/validation_ablation.json, "remove one factor at a time". Percentiles are fractions 0 to 1
-// (the share of Earth cells a known analog outscores, hold-out set, chance 0.5):
-//   {
-//     "generatedAt": "2026-11-16",
-//     "metric": "Mean percentile of the hold-out analogs",
-//     "full": 0.716,                       // the full model, nothing removed
-//     "factors": [
-//       { "factor": "ndvi", "label": "Bare ground", "without": 0.70, "change": -0.016 }
-//     ]                                    // "change" = without minus full; computed here if absent
-//   }
-//   A bare array of the same factor rows is also accepted ("full" is then unknown).
-//
-// data/validation_agreement.json, "do independent datasets agree":
-//   {
-//     "generatedAt": "2026-11-16",
-//     "pairs": [
-//       { "label": "Elevation", "a": "Copernicus DEM", "b": "SRTM", "agreement": 0.93, "n": 120,
-//         "unit": "cells", "metric": "share of cells within one tolerance" }
-//     ]                                    // "agreement" 0 to 1; "n" = sample size
-//   }
-//   A bare array of the same pair rows is also accepted.
+// Two files written by /validation (Session C) and published by the build as validation-ablation.json
+// (validation/output/ablation.json) and validation-agreement.json (validation/output/agreement.json).
+// Only the fields the page uses are listed. Until a file is published the page shows nothing for it.
 // ---------------------------------------------------------------------------------------------
 
-export interface AblationFactor {
-  /** Factor key, as written in the file. */
-  factor: string;
-  /** Plain name from the file, if any. */
-  label: string | null;
-  /** Overall percentile (0 to 1) with this factor removed. */
-  without: number;
-  /** Change against the full model, in fraction points. Null when it cannot be worked out. */
-  change: number | null;
+interface AblationMetrics {
+  top10Share: number | null;
+  meanPercentile: number | null;
+  rocAuc: number | null;
 }
-export interface AblationData {
-  metric: string | null;
-  /** The full model's overall percentile (0 to 1), or null. */
-  full: number | null;
-  factors: AblationFactor[];
+export interface AblationRemoval {
+  removed: string;
+  label: string;
+  weightRemoved: number;
+  metrics: AblationMetrics;
+  change: Partial<AblationMetrics>;
+  knownAnalogRankCorrelation?: number | null;
+  bestPlaceStaysFor?: number;
+  targetsCompared?: number;
+  bestPlaceByTarget?: { target: string; sameBestPlace: boolean }[];
 }
+export interface AblationFile {
+  generatedAt: string;
+  frozenAt: string;
+  method: string;
+  sites: { known: number; negative: number; note: string };
+  reference: { weights: Record<string, number>; metrics: AblationMetrics };
+  note: string;
+  removals: AblationRemoval[];
+}
+
 export interface AgreementPair {
-  label: string | null;
-  a: string;
-  b: string;
-  /** 0 to 1. */
-  agreement: number;
-  /** Sample size, a whole number above 0. */
+  id: string;
+  title: string;
+  first: string;
+  second: string;
+  differsOnPurpose: string | null;
   n: number;
-  unit: string | null;
-  metric: string | null;
+  pearsonR?: number | null;
+  sameClass?: number;
+  verdict: string;
+  caveat: string | null;
 }
-export interface AgreementData {
+export interface AgreementFile {
+  generatedAt: string;
+  rule: string;
+  note: string;
   pairs: AgreementPair[];
 }
 
-const rec = (v: unknown): Record<string, unknown> | null => (typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Record<string, unknown>) : null);
-const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
-const txt = (v: unknown): string | null => (typeof v === 'string' && v.trim() !== '' ? v.trim() : null);
-/** A share written as 0 to 1, or by mistake as 0 to 100. */
-const share = (v: unknown): number | null => {
-  const n = num(v);
-  if (n === null || n < 0 || n > 100) return null;
-  return n > 1 ? n / 100 : n;
-};
-const rowsOf = (raw: unknown, key: string): unknown[] | null => {
-  if (Array.isArray(raw)) return raw;
-  const o = rec(raw);
-  return o && Array.isArray(o[key]) ? (o[key] as unknown[]) : null;
-};
+const okAblation = (x: AblationFile | null): AblationFile | null =>
+  x && Array.isArray(x.removals) && x.removals.length > 0 && x.reference?.metrics ? x : null;
+const okAgreement = (x: AgreementFile | null): AgreementFile | null => (x && Array.isArray(x.pairs) && x.pairs.length > 0 ? x : null);
 
-export function parseAblation(raw: unknown): AblationData | null {
-  try {
-    const rows = rowsOf(raw, 'factors');
-    if (!rows) return null;
-    const o = rec(raw);
-    const full = o ? share(o.full) : null;
-    const factors: AblationFactor[] = [];
-    for (const row of rows) {
-      const r = rec(row);
-      const factor = r ? txt(r.factor) : null;
-      const without = r ? share(r.without) : null;
-      if (!r || !factor || without === null) continue;
-      let change = num(r.change);
-      if (change !== null && Math.abs(change) > 1) change /= 100;
-      if (change === null && full !== null) change = without - full;
-      factors.push({ factor, label: txt(r.label), without, change });
-    }
-    return factors.length ? { metric: o ? txt(o.metric) : null, full, factors } : null;
-  } catch {
-    return null;
-  }
-}
-
-export function parseAgreement(raw: unknown): AgreementData | null {
-  try {
-    const rows = rowsOf(raw, 'pairs');
-    if (!rows) return null;
-    const pairs: AgreementPair[] = [];
-    for (const row of rows) {
-      const r = rec(row);
-      if (!r) continue;
-      const a = txt(r.a);
-      const b = txt(r.b);
-      const agreement = share(r.agreement);
-      const n = num(r.n);
-      if (!a || !b || agreement === null || n === null || n < 1 || !Number.isInteger(n)) continue;
-      pairs.push({ label: txt(r.label), a, b, agreement, n, unit: txt(r.unit), metric: txt(r.metric) });
-    }
-    return pairs.length ? { pairs } : null;
-  } catch {
-    return null;
-  }
-}
-
-export const loadAblation = (): Promise<AblationData | null> =>
-  loadExtra<unknown>('validation_ablation.json').then(parseAblation, () => null);
-export const loadAgreement = (): Promise<AgreementData | null> =>
-  loadExtra<unknown>('validation_agreement.json').then(parseAgreement, () => null);
+export const loadAblation = (): Promise<AblationFile | null> => loadExtra<AblationFile>('validation-ablation.json').then(okAblation, () => null);
+export const loadAgreement = (): Promise<AgreementFile | null> => loadExtra<AgreementFile>('validation-agreement.json').then(okAgreement, () => null);

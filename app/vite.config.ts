@@ -86,6 +86,8 @@ const EXTRA: Record<string, () => string | null> = {
   'validation-candidates.json': fromFile('validation/output/candidates.json'),
   'validation-purposes.json': fromFile('validation/output/purposes.json'),
   'validation-frozen.json': fromFile('validation/tuning/frozen.json'),
+  'validation-ablation.json': fromFile('validation/output/ablation.json'),
+  'validation-agreement.json': fromFile('validation/output/agreement.json'),
   'sources.json': () => {
     const md = fromFile('SOURCES.md')();
     return md === null ? null : JSON.stringify(parseSources(md));

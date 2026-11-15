@@ -151,15 +151,16 @@ function ribbon(pts: Vector3[], w: number, dash: [number, number] | null): Buffe
       continue;
     }
     const period = dash[0] + dash[1];
-    let t0 = 0;
-    while (t0 < 1) {
-      const phase = s % period;
+    // Walk the segment in km; every step advances at least 0.1 m, so rounding can never stall the loop.
+    let d = 0;
+    while (d < l) {
+      const phase = (s + d) % period;
       const on = phase < dash[0];
-      const t1 = Math.min(1, t0 + ((on ? dash[0] - phase : period - phase) || 1e-6) / l);
-      if (on) quad(a.clone().lerp(b, t0), a.clone().lerp(b, t1));
-      s += (t1 - t0) * l;
-      t0 = t1;
+      const d1 = Math.min(l, d + Math.max(1e-4, on ? dash[0] - phase : period - phase));
+      if (on) quad(a.clone().lerp(b, d / l), a.clone().lerp(b, d1 / l));
+      d = d1;
     }
+    s += l;
   }
   const geo = new BufferGeometry();
   geo.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3));
@@ -314,6 +315,8 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
   const orbitRef = useRef(orbit);
   orbitRef.current = orbit;
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
+  // Counts terrain builds, so the route, modules and view are put back on a rebuilt terrain even when `state` stays 'ready' across a batched rebuild.
+  const [buildNo, setBuildNo] = useState(0);
   const built = useRef<[Built, Built] | null>(null);
   const redraw = useRef<() => void>(() => {});
   const viewRef = useRef({ exag: exaggeration, sunDeg: sunElevation, contours });
@@ -425,6 +428,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
         if (!alive) return;
         built.current = [build(earth.item, he, windowKm, layer, slope, height, viewRef.current, () => draw()), build(target.item, ht, windowKm, layer, slope, height, viewRef.current, () => draw())];
         setState('ready');
+        setBuildNo((k) => k + 1);
         ro.observe(el);
         frame = requestAnimationFrame(loop);
       },
@@ -453,7 +457,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       if (side.contourLines) side.contourLines.visible = contours;
     });
     redraw.current();
-  }, [exaggeration, sunElevation, contours, state]);
+  }, [exaggeration, sunElevation, contours, state, buildNo]);
 
   // Modules: replaced when the layout changes, without rebuilding the terrain.
   useEffect(() => {
@@ -480,7 +484,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
       material.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [earth.modules, target.modules, state, cols, rows, windowKm, exaggeration]);
+  }, [earth.modules, target.modules, state, cols, rows, windowKm, exaggeration, buildNo]);
 
   // Route and rover: the same path, in km from the centre, draped on both terrains.
   useEffect(() => {
@@ -513,7 +517,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
           // A flat ribbon a little wider than a pixel, so the colour reads on the satellite image; WebGL lines are always 1 px.
           const geo = ribbon(
             run.map((p) => new Vector3(p.x, side.heightAt(p.x, p.z) + lift, p.z)),
-            cls === 0 ? 0.07 : 0.1,
+            cls === 0 && !draw?.straight ? 0.07 : 0.1,
             cls === 2 ? [0.16, 0.1] : null,
           );
           const mat = new MeshBasicMaterial({ color: cls === 2 ? 0xff4d4d : cls === 1 ? 0xffb000 : base, side: DoubleSide });
@@ -547,7 +551,7 @@ export function Terrain3D({ earth, target, windowKm, layer, cols, rows, slope = 
     });
     redraw.current();
     return () => disposables.forEach((d) => d.dispose());
-  }, [route, routes, rover, state, exaggeration]);
+  }, [route, routes, rover, state, exaggeration, buildNo]);
 
   if (!ready) return <p className="p-3 text-[13px] text-muted">No data. A terrain extract is missing for one of the two places.</p>;
 
