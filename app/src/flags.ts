@@ -29,9 +29,9 @@ export const flags = {
   /** Stability of a rank in the results list and on the match page (Session C's rankStability). */
   stability: true,
   /**
-   * NASA EMIT mineral identifications for the Indonesian sites. Off: Session B found that the
+   * NASA EMIT mineral identifications for the Indonesian sites. On again since Session C confirmed the corrected data. It was off while Session B found that the
    * mineralogy built on 2026-11-15 was not screened with every cloud flag, so some identifications
    * may be cloud. Turn on only when Session C confirms the rebuilt file.
    */
-  indonesiaMinerals: false,
+  indonesiaMinerals: true,
 } as const;
