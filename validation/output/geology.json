@@ -1,0 +1,1948 @@
+{
+  "generatedAt": "2026-11-15T04:44:55.827Z",
+  "frozenAt": "2026-11-14",
+  "earthGeneratedAt": "2026-11-14T13:02:33Z",
+  "sitesGeneratedAt": "2026-11-15T04:43:34Z",
+  "levels": {
+    "same": 1,
+    "related": 0.6,
+    "unrelated": 0.15
+  },
+  "targets": [
+    {
+      "id": "moon-malapert-massif",
+      "body": "moon",
+      "rockClass": 4,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.007,
+        "related": 0.033,
+        "unrelated": 0.961
+      },
+      "percentile": {
+        "same": 0.997,
+        "related": 0.977,
+        "unrelated": 0.48
+      }
+    },
+    {
+      "id": "moon-mons-mouton",
+      "body": "moon",
+      "rockClass": 4,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.007,
+        "related": 0.033,
+        "unrelated": 0.961
+      },
+      "percentile": {
+        "same": 0.997,
+        "related": 0.977,
+        "unrelated": 0.48
+      }
+    },
+    {
+      "id": "moon-haworth",
+      "body": "moon",
+      "rockClass": 4,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.007,
+        "related": 0.033,
+        "unrelated": 0.961
+      },
+      "percentile": {
+        "same": 0.997,
+        "related": 0.977,
+        "unrelated": 0.48
+      }
+    },
+    {
+      "id": "moon-shackleton-rim",
+      "body": "moon",
+      "rockClass": 4,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.007,
+        "related": 0.033,
+        "unrelated": 0.961
+      },
+      "percentile": {
+        "same": 0.997,
+        "related": 0.977,
+        "unrelated": 0.48
+      }
+    },
+    {
+      "id": "mars-jezero",
+      "body": "mars",
+      "rockClass": 2,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.029,
+        "related": 0.026,
+        "unrelated": 0.945
+      },
+      "percentile": {
+        "same": 0.985,
+        "related": 0.958,
+        "unrelated": 0.473
+      }
+    },
+    {
+      "id": "mars-gale",
+      "body": "mars",
+      "rockClass": 3,
+      "cellsWithRockClass": 86276,
+      "share": {
+        "same": 0.134,
+        "related": 0.304,
+        "unrelated": 0.562
+      },
+      "percentile": {
+        "same": 0.933,
+        "related": 0.714,
+        "unrelated": 0.281
+      }
+    },
+    {
+      "id": "mars-arcadia-planitia",
+      "body": "mars",
+      "rockClass": null,
+      "cellsWithRockClass": 0,
+      "share": {
+        "same": 0,
+        "related": 0,
+        "unrelated": 0
+      },
+      "percentile": {
+        "same": 0,
+        "related": 0,
+        "unrelated": 0
+      }
+    }
+  ],
+  "landCells": 91894,
+  "cellsWithNoRockClass": 5618,
+  "citedForGeology": {
+    "sites": 23,
+    "scoredSites": 19,
+    "meanPercentile": 0.593,
+    "sd": 0.15,
+    "standardError": 0.034,
+    "pairs": {
+      "same": 6,
+      "related": 13,
+      "unrelated": 35,
+      "no data": 15
+    },
+    "moon": {
+      "pairs": {
+        "same": 0,
+        "related": 8,
+        "unrelated": 20,
+        "no data": 8
+      },
+      "meanPercentile": 0.622
+    },
+    "mars": {
+      "pairs": {
+        "same": 6,
+        "related": 5,
+        "unrelated": 15,
+        "no data": 7
+      },
+      "meanPercentile": 0.589
+    },
+    "ifEveryPairWere": {
+      "same": 0.973,
+      "related": 0.89,
+      "unrelated": 0.416
+    }
+  },
+  "otherKnownSites": {
+    "sites": 5,
+    "scoredSites": 4,
+    "meanPercentile": 0.565,
+    "sd": 0.056,
+    "standardError": 0.028,
+    "pairs": {
+      "same": 0,
+      "related": 3,
+      "unrelated": 7,
+      "no data": 2
+    }
+  },
+  "sites": [
+    {
+      "id": "atacama-yungay",
+      "name": "Atacama Desert hyperarid core (Yungay), Chile",
+      "citedForGeology": true,
+      "cellClass": 13,
+      "pairs": [
+        {
+          "site": "atacama-yungay",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 13,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "atacama-yungay",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 13,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.377
+    },
+    {
+      "id": "haughton-crater",
+      "name": "Haughton impact structure, Devon Island, Canada",
+      "citedForGeology": true,
+      "cellClass": 5,
+      "pairs": [
+        {
+          "site": "haughton-crater",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "haughton-crater",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        },
+        {
+          "site": "haughton-crater",
+          "target": "mars-arcadia-planitia",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": null,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "beacon-valley",
+      "name": "Beacon Valley, McMurdo Dry Valleys, Antarctica",
+      "citedForGeology": false,
+      "cellClass": 3,
+      "pairs": [
+        {
+          "site": "beacon-valley",
+          "target": "mars-arcadia-planitia",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": null,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": null
+    },
+    {
+      "id": "don-juan-pond",
+      "name": "Don Juan Pond, Wright Valley, Antarctica",
+      "citedForGeology": true,
+      "cellClass": 3,
+      "pairs": [
+        {
+          "site": "don-juan-pond",
+          "target": "mars-arcadia-planitia",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": null,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": null
+    },
+    {
+      "id": "mauna-kea",
+      "name": "Mauna Kea, Hawaii, USA",
+      "citedForGeology": true,
+      "cellClass": 10,
+      "pairs": [
+        {
+          "site": "mauna-kea",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 10,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mauna-kea",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 10,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mauna-kea",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 10,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mauna-kea",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 10,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    },
+    {
+      "id": "kilauea",
+      "name": "Kilauea, Hawaii, USA",
+      "citedForGeology": true,
+      "cellClass": null,
+      "pairs": [
+        {
+          "site": "kilauea",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "kilauea",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "kilauea",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "kilauea",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "kilauea",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": null,
+          "targetClass": 2,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "kilauea",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": null,
+          "targetClass": 3,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": null
+    },
+    {
+      "id": "craters-of-the-moon",
+      "name": "Craters of the Moon, Idaho, USA",
+      "citedForGeology": true,
+      "cellClass": 2,
+      "pairs": [
+        {
+          "site": "craters-of-the-moon",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 2,
+          "level": "same",
+          "percentile": 0.985
+        },
+        {
+          "site": "craters-of-the-moon",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.633
+    },
+    {
+      "id": "lanzarote-timanfaya",
+      "name": "Timanfaya, Lanzarote, Spain",
+      "citedForGeology": true,
+      "cellClass": null,
+      "pairs": [
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": null,
+          "targetClass": 4,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": null,
+          "targetClass": 2,
+          "level": "no data",
+          "percentile": null
+        },
+        {
+          "site": "lanzarote-timanfaya",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": null,
+          "targetClass": 3,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": null
+    },
+    {
+      "id": "ries-crater",
+      "name": "Noerdlinger Ries impact crater, Germany",
+      "citedForGeology": true,
+      "cellClass": 3,
+      "pairs": [
+        {
+          "site": "ries-crater",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 3,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "ries-crater",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 3,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "ries-crater",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 3,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "ries-crater",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 3,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    },
+    {
+      "id": "askja",
+      "name": "Askja caldera, Iceland highlands",
+      "citedForGeology": true,
+      "cellClass": 2,
+      "pairs": [
+        {
+          "site": "askja",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "askja",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "askja",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "askja",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "askja",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 2,
+          "level": "same",
+          "percentile": 0.985
+        },
+        {
+          "site": "askja",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.862
+    },
+    {
+      "id": "mdrs-utah",
+      "name": "Mars Desert Research Station, Hanksville, Utah, USA",
+      "citedForGeology": false,
+      "cellClass": 1,
+      "pairs": [
+        {
+          "site": "mdrs-utah",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "mdrs-utah",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "rio-tinto",
+      "name": "Rio Tinto, Huelva, Spain",
+      "citedForGeology": true,
+      "cellClass": 3,
+      "pairs": [
+        {
+          "site": "rio-tinto",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "rio-tinto",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": 3,
+          "level": "same",
+          "percentile": 0.933
+        }
+      ],
+      "meanPercentile": 0.703
+    },
+    {
+      "id": "dallol",
+      "name": "Dallol, Danakil Depression, Ethiopia",
+      "citedForGeology": true,
+      "cellClass": 1,
+      "pairs": [
+        {
+          "site": "dallol",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "dallol",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "sp-crater",
+      "name": "SP Crater, San Francisco Volcanic Field, Arizona, USA",
+      "citedForGeology": false,
+      "cellClass": 6,
+      "pairs": [
+        {
+          "site": "sp-crater",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 6,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sp-crater",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 6,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sp-crater",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 6,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sp-crater",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 6,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    },
+    {
+      "id": "meteor-crater",
+      "name": "Meteor Crater, Arizona, USA",
+      "citedForGeology": true,
+      "cellClass": 2,
+      "pairs": [
+        {
+          "site": "meteor-crater",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "meteor-crater",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "meteor-crater",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        },
+        {
+          "site": "meteor-crater",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 2,
+          "targetClass": 4,
+          "level": "related",
+          "percentile": 0.977
+        }
+      ],
+      "meanPercentile": 0.977
+    },
+    {
+      "id": "death-valley-ubehebe",
+      "name": "Ubehebe Crater, Death Valley, California, USA",
+      "citedForGeology": true,
+      "cellClass": 1,
+      "pairs": [
+        {
+          "site": "death-valley-ubehebe",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "death-valley-ubehebe",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "pilbara-north-pole-dome",
+      "name": "North Pole Dome, Pilbara, Australia",
+      "citedForGeology": true,
+      "cellClass": 3,
+      "pairs": [
+        {
+          "site": "pilbara-north-pole-dome",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "pilbara-north-pole-dome",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 3,
+          "targetClass": 3,
+          "level": "same",
+          "percentile": 0.933
+        }
+      ],
+      "meanPercentile": 0.703
+    },
+    {
+      "id": "arkaroola",
+      "name": "Arkaroola, Flinders Ranges, Australia",
+      "citedForGeology": true,
+      "cellClass": 9,
+      "pairs": [
+        {
+          "site": "arkaroola",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 9,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "arkaroola",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 9,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.377
+    },
+    {
+      "id": "qaidam-basin",
+      "name": "Qaidam Basin, China",
+      "citedForGeology": true,
+      "cellClass": 1,
+      "pairs": [
+        {
+          "site": "qaidam-basin",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "qaidam-basin",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "makhtesh-ramon",
+      "name": "Makhtesh Ramon, Negev, Israel",
+      "citedForGeology": false,
+      "cellClass": 5,
+      "pairs": [
+        {
+          "site": "makhtesh-ramon",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "makhtesh-ramon",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "lonar-crater",
+      "name": "Lonar crater, Maharashtra, India",
+      "citedForGeology": true,
+      "cellClass": 2,
+      "pairs": [
+        {
+          "site": "lonar-crater",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 2,
+          "level": "same",
+          "percentile": 0.985
+        },
+        {
+          "site": "lonar-crater",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.633
+    },
+    {
+      "id": "ladakh-tso-kar",
+      "name": "Tso Kar, Ladakh, India",
+      "citedForGeology": false,
+      "cellClass": 5,
+      "pairs": [
+        {
+          "site": "ladakh-tso-kar",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "ladakh-tso-kar",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        },
+        {
+          "site": "ladakh-tso-kar",
+          "target": "mars-arcadia-planitia",
+          "body": "mars",
+          "cellClass": 5,
+          "targetClass": null,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "makgadikgadi-pans",
+      "name": "Makgadikgadi Pans, Botswana",
+      "citedForGeology": true,
+      "cellClass": 1,
+      "pairs": [
+        {
+          "site": "makgadikgadi-pans",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 2,
+          "level": "unrelated",
+          "percentile": 0.473
+        },
+        {
+          "site": "makgadikgadi-pans",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 1,
+          "targetClass": 3,
+          "level": "related",
+          "percentile": 0.714
+        }
+      ],
+      "meanPercentile": 0.593
+    },
+    {
+      "id": "teide",
+      "name": "Teide and Las Canadas, Tenerife, Spain",
+      "citedForGeology": true,
+      "cellClass": 2,
+      "pairs": [
+        {
+          "site": "teide",
+          "target": "mars-jezero",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 2,
+          "level": "same",
+          "percentile": 0.985
+        },
+        {
+          "site": "teide",
+          "target": "mars-gale",
+          "body": "mars",
+          "cellClass": 2,
+          "targetClass": 3,
+          "level": "unrelated",
+          "percentile": 0.281
+        }
+      ],
+      "meanPercentile": 0.633
+    },
+    {
+      "id": "etna",
+      "name": "Mount Etna, Sicily, Italy",
+      "citedForGeology": true,
+      "cellClass": 5,
+      "pairs": [
+        {
+          "site": "etna",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 5,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "etna",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 5,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "etna",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 5,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "etna",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 5,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    },
+    {
+      "id": "sudbury",
+      "name": "Sudbury Basin, Ontario, Canada",
+      "citedForGeology": true,
+      "cellClass": 9,
+      "pairs": [
+        {
+          "site": "sudbury",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sudbury",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sudbury",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "sudbury",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    },
+    {
+      "id": "kangerlussuaq",
+      "name": "Kangerlussuaq, Greenland",
+      "citedForGeology": true,
+      "cellClass": 8,
+      "pairs": [
+        {
+          "site": "kangerlussuaq",
+          "target": "mars-arcadia-planitia",
+          "body": "mars",
+          "cellClass": 8,
+          "targetClass": null,
+          "level": "no data",
+          "percentile": null
+        }
+      ],
+      "meanPercentile": null
+    },
+    {
+      "id": "mistastin-crater",
+      "name": "Mistastin crater, Labrador, Canada",
+      "citedForGeology": true,
+      "cellClass": 9,
+      "pairs": [
+        {
+          "site": "mistastin-crater",
+          "target": "moon-malapert-massif",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mistastin-crater",
+          "target": "moon-mons-mouton",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mistastin-crater",
+          "target": "moon-haworth",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        },
+        {
+          "site": "mistastin-crater",
+          "target": "moon-shackleton-rim",
+          "body": "moon",
+          "cellClass": 9,
+          "targetClass": 4,
+          "level": "unrelated",
+          "percentile": 0.48
+        }
+      ],
+      "meanPercentile": 0.48
+    }
+  ],
+  "siteLevel": {
+    "note": "Separate site-level result. Rock class mapped at the site or for the whole volcano (data/sites.json), against the class of the 0.5 degree cell. Five known analogs only: an illustration, not a validation.",
+    "knownSites": 9,
+    "knownSitesWhereCellAndSiteClassAgree": 0,
+    "knownSitesWhereTheyDiffer": 2,
+    "knownSitesNotComparable": 7,
+    "knownMeanPercentileWithCellClass": 0.511,
+    "knownMeanPercentileWithSiteClass": 0.77,
+    "rows": [
+      {
+        "id": "id-kawah-ijen",
+        "name": "Kawah Ijen, East Java, Indonesia",
+        "kind": "candidate",
+        "rockType": "Andesite / Basaltic Andesite",
+        "siteClass": 10,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263350 (Ijen)",
+        "cellClass": 1,
+        "agrees": false,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.473,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.714,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-merapi",
+        "name": "Mount Merapi and the Opak River, Central Java, Indonesia",
+        "kind": "candidate",
+        "rockType": "Andesite / Basaltic Andesite",
+        "siteClass": 10,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263250 (Merapi)",
+        "cellClass": 10,
+        "agrees": true,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-gua-lawa",
+        "name": "Gua Lawa lava tube, Purbalingga, Central Java, Indonesia",
+        "kind": "candidate",
+        "rockType": "Basalt / Picro-Basalt",
+        "siteClass": 2,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 263180 (Slamet)",
+        "cellClass": 10,
+        "agrees": false,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-goa-pandan",
+        "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+        "kind": "candidate",
+        "rockType": "basalt",
+        "siteClass": 2,
+        "siteScale": "site",
+        "source": "Sirait et al. 2023, Journal of Geoscience, Engineering, Environment, and Technology 8(2):112-122, doi:10.25299/jgeet.2023.8.2.12118 (abstract: basalt lava sequence forming Goa Pandan)",
+        "cellClass": 2,
+        "agrees": true,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.977,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "same",
+            "cellPercentile": 0.985,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-kesaksak-lava-tube",
+        "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+        "kind": "candidate",
+        "rockType": "Andesite / Basaltic Andesite",
+        "siteClass": 10,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 264010 (Batur)",
+        "cellClass": 10,
+        "agrees": true,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-maros-pangkep-karst",
+        "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+        "kind": "candidate",
+        "rockType": null,
+        "siteClass": null,
+        "siteScale": "site",
+        "source": null,
+        "cellClass": 10,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          }
+        ]
+      },
+      {
+        "id": "id-tambora-caldera",
+        "name": "Mount Tambora caldera, Sumbawa, Indonesia",
+        "kind": "candidate",
+        "rockType": "Trachybasalt / Tephrite Basanite",
+        "siteClass": 2,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 264040 (Tambora)",
+        "cellClass": 10,
+        "agrees": false,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "id-batur-lava-fields",
+        "name": "Mount Batur black lava fields, Bali, Indonesia",
+        "kind": "candidate",
+        "rockType": "Andesite / Basaltic Andesite",
+        "siteClass": 10,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 264010 (Batur)",
+        "cellClass": 10,
+        "agrees": true,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-haworth",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.48
+          },
+          {
+            "target": "mars-jezero",
+            "listed": false,
+            "cellLevel": "related",
+            "cellPercentile": 0.958,
+            "siteLevel": "related",
+            "sitePercentile": 0.958
+          },
+          {
+            "target": "mars-gale",
+            "listed": false,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "mauna-kea",
+        "name": "Mauna Kea, Hawaii, USA",
+        "kind": "known",
+        "rockType": "Scoria cones",
+        "siteClass": 2,
+        "siteScale": "volcano",
+        "source": "Smithsonian Global Volcanism Program, Volcanoes of the World, volcano 332030 (Mauna Kea)",
+        "cellClass": 10,
+        "agrees": false,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.48,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          }
+        ]
+      },
+      {
+        "id": "kilauea",
+        "name": "Kilauea, Hawaii, USA",
+        "kind": "known",
+        "rockType": "basalt",
+        "siteClass": 2,
+        "siteScale": "site",
+        "source": "Geologic map of the State of Hawaiʻi (large-scale map) via Macrostrat: 2021 Sherrod, D.R., Sinton, J.M., Watkins, S.E., and Brunt, K.M., 2021, Geologic map of the State of Hawaiʻi: U.S. Geological Survey Scientific Investigations Map 3143, pamphlet 72 p., 5 sheets, scales 1:100,000 and 1:250,000, https://doi.org/10.3133/sim3143. https://doi.org/10.3133/sim3143",
+        "cellClass": null,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "atacama-yungay",
+        "name": "Atacama Desert hyperarid core (Yungay), Chile",
+        "kind": "known",
+        "rockType": "Granite",
+        "siteClass": 9,
+        "siteScale": "site",
+        "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+        "cellClass": 13,
+        "agrees": false,
+        "pairs": [
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.473,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.473
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.281,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "haughton-crater",
+        "name": "Haughton impact structure, Devon Island, Canada",
+        "kind": "known",
+        "rockType": "sedimentary",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "GMNA (small-scale map) via Macrostrat: Garrity, C.P., and Soller, D.R., 2009 Database of the Geologic Map of North America: adapted from the map by J.C. Reed, Jr. and others (2005) U.S. Geological Survey Data Series 424 ",
+        "cellClass": 5,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.473,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.714,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          }
+        ]
+      },
+      {
+        "id": "lanzarote-timanfaya",
+        "name": "Timanfaya, Lanzarote, Spain",
+        "kind": "known",
+        "rockType": "mafic volcanic rocks",
+        "siteClass": 2,
+        "siteScale": "site",
+        "source": "Spain (medium-scale map) via Macrostrat: 1995 Mapa Geológico de la Península Ibérica, Baleares y Canarias a escala 1:1.000.000 Instituto Geológico y Minero de España",
+        "cellClass": null,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "moon-malapert-massif",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-mons-mouton",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-haworth",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "moon-shackleton-rim",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "related",
+            "sitePercentile": 0.977
+          },
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "same",
+            "sitePercentile": 0.985
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "no data",
+            "cellPercentile": null,
+            "siteLevel": "unrelated",
+            "sitePercentile": 0.281
+          }
+        ]
+      },
+      {
+        "id": "dallol",
+        "name": "Dallol, Danakil Depression, Ethiopia",
+        "kind": "known",
+        "rockType": "volcanic",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Africa (small-scale map) via Macrostrat: Thiéblemont, D. (ed.) 2016 New edition of the 1:10,000,000 geological map of Africa CGMW-BRGM",
+        "cellClass": 1,
+        "agrees": null,
+        "pairs": [
+          {
+            "target": "mars-jezero",
+            "listed": true,
+            "cellLevel": "unrelated",
+            "cellPercentile": 0.473,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          },
+          {
+            "target": "mars-gale",
+            "listed": true,
+            "cellLevel": "related",
+            "cellPercentile": 0.714,
+            "siteLevel": "no data",
+            "sitePercentile": null
+          }
+        ]
+      },
+      {
+        "id": "dasht-e-lut",
+        "name": "Dasht-e Lut (Lut Desert), Iran",
+        "kind": "known",
+        "rockType": null,
+        "siteClass": null,
+        "siteScale": "site",
+        "source": null,
+        "cellClass": 1,
+        "agrees": null,
+        "pairs": []
+      },
+      {
+        "id": "salar-de-uyuni",
+        "name": "Salar de Uyuni salt flat, Bolivia",
+        "kind": "known",
+        "rockType": "Evaporite",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+        "cellClass": 14,
+        "agrees": null,
+        "pairs": []
+      },
+      {
+        "id": "tunupa-volcano",
+        "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
+        "kind": "known",
+        "rockType": "Andesite and related volcanic",
+        "siteClass": null,
+        "siteScale": "site",
+        "source": "Geological Map of South America 2018 (small-scale map) via Macrostrat: Gómez, J., Schobbenhaus, C. & Montes, N.E., compilers 2019 Geological Map of South America 2018. Scale 1:5 000 000 Commission for the Geological Map of the World (CGMW), Colombian Geological Survey and Geological Survey of Brazil",
+        "cellClass": 10,
+        "agrees": null,
+        "pairs": []
+      }
+    ]
+  }
+}
