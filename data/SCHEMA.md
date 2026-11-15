@@ -239,6 +239,34 @@ and for sunlight in the sandbox.
   at the site. A summit and the plain below it share one number. Label it as grid scale in the UI.
 - Unknown values are `null`.
 
+## data/jaxa_check.json
+
+Owner: Session B. Built by `pipeline/jaxa_check.py`. Added 2026-11-15.
+
+Cross-check of our NASA values against JAXA data (partner agency) for every site in
+`site_climate.json`. It is a check: no JAXA value replaces a NASA value anywhere.
+
+```
+{
+  "meta": { "generatedAt", "description", "sources": { "jaxaPrecip", "jaxaNdvi", "nasaPrecip", "nasaNdvi", "attribution" },
+            "method": { "precip", "ndvi" },
+            "agreement": { "precipMmPerYear": S, "ndvi": S }, "badge" },
+  "sites": [
+    { "id", "name", "lat", "lon",
+      "precip": { "nasaPowerMmPerMonth": [12], "jaxaGsmapMmPerMonth": [12], "nasaPowerMmPerYear", "jaxaGsmapMmPerYear", "note" },
+      "ndvi": { "cell": { "lat", "lon" }, "nasaModis", "jaxaSgli", "jaxaSgliMonthly": [12], "jaxaMonthsWithData" } }
+  ]
+}
+```
+
+- `S` is `{ "n", "pearsonR", "spearmanR", "meanDifferenceJaxaMinusNasa", "meanAbsoluteDifference" }` over the
+  sites where both values exist.
+- JAXA precipitation is GSMaP (2012-2021 normals, 0.1 degree, 60 S to 60 N; `null` outside). NASA
+  precipitation is POWER (2001-2020, about 0.5 degree). Different years and grid size: expect the same
+  pattern, not the same millimetres.
+- JAXA NDVI is GCOM-C SGLI, 2025, averaged over the site's 0.5 degree cell, against the MODIS cell value.
+- Show `meta.sources.attribution` wherever these numbers are shown.
+
 ## data/sites.json
 
 Owner: Session B. Built by `pipeline/sites.py`.
