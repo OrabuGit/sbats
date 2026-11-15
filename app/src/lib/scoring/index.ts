@@ -20,6 +20,9 @@ export {
 } from './profile';
 export type { DimensionDef, DimensionId, DimensionProfile, ProfileIndex, PurposeDef, PurposeId, Rank } from './profile';
 
+export { STABILITY_DRAWS, STABILITY_SEED, STABILITY_SPREAD, perturbWeights, rankStability, scoresFromBasis, seededRandom, stabilityBasis } from './stability';
+export type { CellStability, StabilityBasis, StabilityOptions, StabilityResult } from './stability';
+
 export { buildReason, describeGap, formatValue, matchWord } from './explain';
 
 export { gaussianSimilarity, gaussianLogSimilarity, clampToRange, weightedGeometricMean } from './similarity';
