@@ -17,7 +17,15 @@ import { DATA, OUT, readJson } from './lib';
 
 interface SitesFile {
   meta: { generatedAt: string };
-  sites: { id: string; name: string; kind: string; mineralogy?: (EmitMineralogy & { emitCovers?: boolean }) | null }[];
+  sites: { id: string; name: string; kind: string; mineralogy?: (EmitMineralogy & { emitCovers?: boolean; source?: string | null; validShare?: number | null; pixels?: number | null; cloudFlags?: string[] | null }) | null }[];
+}
+
+/** The cloud-screening flags a scene was filtered with, as the pipeline states them, or null when it does not say. */
+function screening(m: { source?: string | null; cloudFlags?: string[] | null } | null | undefined): string | null {
+  if (!m) return null;
+  if (Array.isArray(m.cloudFlags) && m.cloudFlags.length > 0) return m.cloudFlags.join(', ');
+  const hit = /\(flags?:\s*([^)]*)\)/i.exec(m.source ?? '');
+  return hit ? (hit[1] as string).trim() : null;
 }
 
 const sites = readJson<SitesFile>(join(DATA, 'sites.json'));
@@ -33,6 +41,9 @@ const rows = sites.sites.map((s) => {
     name: s.name,
     kind: s.kind,
     date: s.mineralogy?.date ?? null,
+    clearShare: s.mineralogy?.validShare ?? null,
+    pixels: s.mineralogy?.pixels ?? null,
+    cloudScreening: screening(s.mineralogy),
     reason: earth ? null : (s.mineralogy?.note ?? 'No EMIT data.'),
     vegetationShare: earth?.nonMineralShare ?? null,
     identified: earth?.families.map((f) => ({ family: f.family, label: f.label, shareOfValidPixels: f.shareOfValidPixels })) ?? null,
@@ -70,11 +81,17 @@ for (const [id, t] of Object.entries(file.targets)) if (t.minerals.length === 0)
 md.push('');
 
 md.push('## What EMIT identifies at each Earth site', '');
-md.push('| Site | Kind | Date | Dry vegetation matched | Mineral families identified (share of clear pixels) | Seen but not assigned to a family |', '| --- | --- | --- | --- | --- | --- |');
+md.push('| Site | Kind | Date | Clear pixels | Dry vegetation matched | Mineral families identified (share of clear pixels) | Seen but not assigned to a family |', '| --- | --- | --- | --- | --- | --- | --- |');
 for (const r of rows) {
-  if (!r.identified) md.push(`| ${r.name} | ${r.kind} | | | no data: ${r.reason} | |`);
-  else md.push(`| ${r.name} | ${r.kind} | ${r.date ?? ''} | ${pct(r.vegetationShare ?? 0)} | ${r.identified.map((f) => `${short(f.label)} ${pct(f.shareOfValidPixels)}`).join(', ') || 'none'} | ${(r.unassigned ?? []).map((u) => `${u.libraryTitle ?? u.libraryName} ${pct(u.shareOfValidPixels)}`).join(', ') || 'none'} |`);
+  if (!r.identified) md.push(`| ${r.name} | ${r.kind} | | | | no data: ${r.reason} | |`);
+  else md.push(`| ${r.name} | ${r.kind} | ${r.date ?? ''} | ${r.clearShare === null ? 'not stated' : pct(r.clearShare)}${r.pixels === null ? '' : ` of ${r.pixels}`} | ${pct(r.vegetationShare ?? 0)} | ${r.identified.map((f) => `${short(f.label)} ${pct(f.shareOfValidPixels)}`).join(', ') || 'none'} | ${(r.unassigned ?? []).map((u) => `${u.libraryTitle ?? u.libraryName} ${pct(u.shareOfValidPixels)}`).join(', ') || 'none'} |`);
 }
+md.push('');
+
+md.push('## How each scene was screened for cloud', '');
+md.push('A mineral match in a cloudy pixel is a match to cloud, not ground. This table repeats, per site, the mask flags the pipeline says it removed before counting. A scene screened with fewer flags than the others should be read with more doubt.', '');
+md.push('| Site | Date | Flags removed before counting |', '| --- | --- | --- |');
+for (const r of rows) if (r.identified) md.push(`| ${r.name} | ${r.date ?? ''} | ${r.cloudScreening ?? 'not stated by the pipeline'} |`);
 md.push('');
 
 md.push('## Shared minerals, site by target', '');
