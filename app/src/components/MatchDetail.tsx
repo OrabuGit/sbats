@@ -9,7 +9,17 @@ import { matchWord, type PurposeDef } from '../lib/scoringAdapter';
 import { ComputedBadge, ConfidenceBadge, SourceBadge } from './Badges';
 import { Ground } from './Ground';
 import { Locator } from './Locator';
+import { ActivityArt, type Activity } from './ActivityArt';
 import { countryKey, useCountries } from '../lib/where';
+
+export interface Tool {
+  title: string;
+  line: string;
+  cta: string;
+  art: Activity;
+  onClick: (() => void) | null;
+  why?: string;
+}
 
 interface Props {
   cell: EarthCell;
@@ -35,6 +45,8 @@ interface Props {
   saved: boolean;
   onSave: () => void;
   onBack: () => void;
+  /** The two tools, ordered by what the match is for. */
+  tools: { primary: Tool; secondary: Tool };
   actions: { label: string; onClick: (() => void) | null; primary?: boolean; why?: string }[];
   /** Everything else known about the cell: profile, purposes, best month, sources. */
   children: React.ReactNode;
@@ -73,7 +85,7 @@ function Side({ label, side }: { label: string; side: MatchSide }) {
       <dd className="flex flex-wrap items-center gap-x-2">
         <span className={`num text-[14px] ${none ? 'text-muted' : 'text-text'}`}>{side.text}</span>
         {!none && (side.scale === 'computed' ? <ComputedBadge /> : <SourceBadge badge={side.badge} source={side.source} />)}
-        {side.scale && SCALE_TAG[side.scale] && <span className="num text-[10px] uppercase tracking-wider text-muted">{SCALE_TAG[side.scale]}</span>}
+        {side.scale && SCALE_TAG[side.scale] && <span className="num text-[10px] text-muted">{SCALE_TAG[side.scale]}</span>}
       </dd>
       {side.note && <dd className="mt-0.5 text-[11px] leading-4 text-muted">{side.note}</dd>}
     </div>
@@ -172,7 +184,7 @@ function Place({ title, sub, item, layer, windowKm, state }: { title: string; su
 
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, children }: Props) {
+export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, meta, purpose, record, scale, onScale, stability, notes, rank, ground, saved, onSave, onBack, actions, tools, children }: Props) {
   const site = scale === 'site';
   const score = site ? record.score.value : e.score;
   const scored = score !== null;
@@ -216,7 +228,7 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               </p>
               <p className="num mt-2 text-[12px] text-muted">
                 {country && placeName ? `${country} · ` : ''}
-                {formatCoords(cell.lat, cell.lon)} · cell {siteCode(cell)}
+                {formatCoords(cell.lat, cell.lon)} · cell <span className="code">{siteCode(cell)}</span>
               </p>
 
               <div className="mt-8 flex items-end gap-5">
@@ -274,6 +286,32 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
               />
             </div>
           </header>
+
+          <section className={`${pad} pb-14`} aria-labelledby="h-do">
+            <h3 id="h-do" className="display text-[24px] leading-8 text-text">
+              Work with this place
+            </h3>
+            <div className="mt-5 grid gap-x-10 gap-y-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+              {[tools.primary, tools.secondary].map((t, i) => (
+                <div key={t.title} className={`border-t-2 pt-4 ${i === 0 ? 'border-accent' : 'border-line'}`}>
+                  <ActivityArt kind={t.art} className={`w-auto ${i === 0 ? 'h-16 text-accent' : 'h-12 text-muted'}`} />
+                  <h4 className={`display mt-3 text-text ${i === 0 ? 'text-[28px] leading-8' : 'text-[20px] leading-7'}`}>{t.title}</h4>
+                  <p className="mt-1 max-w-[46ch] text-[14px] leading-[22px] text-muted">{t.line}</p>
+                  <button type="button" onClick={t.onClick ?? undefined} disabled={!t.onClick} className={`btn mt-4 ${i === 0 ? 'btn-primary !h-12 !px-6 !text-[15px]' : ''}`}>
+                    {t.cta}
+                  </button>
+                  {!t.onClick && t.why && <p className="mt-2 max-w-[46ch] text-[12px] leading-[18px] text-muted">{t.why}</p>}
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-wrap gap-x-2 gap-y-1">
+              {actions.map((a) => (
+                <button key={a.label} type="button" onClick={a.onClick ?? undefined} disabled={!a.onClick} title={a.onClick ? undefined : a.why} className="btn btn-ghost !pl-0 !pr-4">
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          </section>
 
           <section className={`${pad} py-10`} aria-labelledby="h-side">
             <h3 id="h-side" className="display mb-4 text-[24px] leading-8 text-text">
@@ -373,25 +411,6 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
             </ul>
           </section>
 
-          <section className={`${pad} py-10`} aria-labelledby="h-actions">
-            <h3 id="h-actions" className="display text-[24px] leading-8 text-text">
-              What to do with this match
-            </h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {actions.map((a) => (
-                <button key={a.label} type="button" onClick={a.onClick ?? undefined} disabled={!a.onClick} title={a.onClick ? undefined : a.why} className={`btn ${a.primary ? 'btn-primary' : ''}`}>
-                  {a.label}
-                </button>
-              ))}
-            </div>
-            {actions
-              .filter((a) => !a.onClick && a.why)
-              .map((a) => (
-                <p key={a.label} className="mt-2 text-[12px] text-muted">
-                  {a.label}: {a.why}
-                </p>
-              ))}
-          </section>
         </div>
 
         <section className={`${pad} border-t border-line py-10`} aria-labelledby="h-more">

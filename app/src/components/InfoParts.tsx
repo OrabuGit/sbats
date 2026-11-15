@@ -24,7 +24,7 @@ export function InfoShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="scroll min-h-0 flex-1 bg-panel" aria-labelledby="h-info">
+    <main className="scroll min-h-0 flex-1 bg-bg" aria-labelledby="h-info">
       <header className="border-b border-line">
         <div className="flex items-stretch border-b border-line [&_.tab]:-mb-px">
           <button type="button" onClick={onBack} className="tool border-r border-line sm:!px-6">

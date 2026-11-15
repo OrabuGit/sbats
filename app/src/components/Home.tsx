@@ -6,7 +6,8 @@ import { siteCode, formatCoords } from '../lib/geo';
 import { ConfidenceBadge } from './Badges';
 import { dataUrl, loadFindings, type ExtractIndex, type FeaturedSite, type Findings, type SitesFile } from '../data/sites';
 import { useAsync } from '../lib/useAsync';
-import { HeroGlobes, type HeroPlace } from './HeroGlobes';
+import { HeroGlobes, type HeroLink, type HeroPick, type HeroPlace, type HeroSite } from './HeroGlobes';
+import { HomePair, type PairInfo } from './HomePair';
 import { HomeStory, Reveal } from './HomeStory';
 import { Logo } from './Logo';
 import { NavRight } from './Chrome';
@@ -28,7 +29,22 @@ interface Props {
   onDemo: () => void;
   onFind: () => void;
   onWorld: (w: WorldId) => void;
-  onPlace: (id: string) => void;
+  /** A pin on a globe was pressed. */
+  onPick: (kind: 'place' | 'site', id: string) => void;
+  pick: HeroPick;
+  earthPins: HeroSite[];
+  links: HeroLink[];
+  reverse: { place: string; score: number | null } | null;
+  active: number;
+  onActive: (i: number) => void;
+  pair: PairInfo | null;
+  chips: { label: string; score: number | null }[];
+  presets: { id: string }[];
+  presetId: string | null;
+  onPreset: (id: string) => void;
+  onOpenPair: () => void;
+  onAllMatches: (() => void) | null;
+  onClearPick: () => void;
   onFeatured: (id?: string) => void;
   onMethod: () => void;
   onValidation: () => void;
@@ -184,13 +200,24 @@ export function Home(p: Props) {
       />
       <main ref={scroller} className="scroll min-h-0 flex-1 bg-bg" aria-label="SBATS-26 home">
         {/* 1. Hero: three globes on the left three quarters, the two actions on the right. */}
-        <section className="flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[3fr_1fr]" aria-label="Earth, the Moon and Mars">
-          <div className="h-[60svh] min-h-[380px] lg:h-auto lg:min-h-[640px]">
-            <HeroGlobes places={p.places} cells={p.earth.cells.length} onPlace={p.onPlace} onWorld={p.onWorld} />
+        <section className="flex min-h-[100svh] flex-col lg:grid lg:min-h-[100svh] lg:grid-cols-[minmax(420px,1fr)_3fr]" aria-label="Earth, the Moon and Mars">
+          <div className="h-[60svh] min-h-[380px] lg:order-2 lg:h-auto lg:min-h-[640px]">
+            <HeroGlobes places={p.places} sites={p.earthPins} cells={p.earth.cells.length} onPick={p.onPick} onWorld={p.onWorld} pick={p.pick} links={p.links} reverse={p.reverse} active={p.active}>
+              {p.pair && (
+                <div className="hidden lg:block">
+                  <HomePair pair={p.pair} chips={p.chips} active={p.active} onActive={p.onActive} presets={p.presets} presetId={p.presetId} onPreset={p.onPreset} onOpen={p.onOpenPair} onAll={p.onAllMatches} onClose={p.onClearPick} />
+                </div>
+              )}
+            </HeroGlobes>
           </div>
-          <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:pb-0 lg:pl-4 lg:pr-12 lg:pt-14">
-            <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[38px]">Find where on Earth to rehearse a Moon or Mars base.</h2>
-            <p className="mt-3 max-w-[40ch] text-[14px] leading-[22px] text-muted lg:mt-4">
+          {p.pair && (
+            <div className="lg:hidden">
+              <HomePair pair={p.pair} chips={p.chips} active={p.active} onActive={p.onActive} presets={p.presets} presetId={p.presetId} onPreset={p.onPreset} onOpen={p.onOpenPair} onAll={p.onAllMatches} onClose={p.onClearPick} />
+            </div>
+          )}
+          <div className="flex flex-col justify-center px-5 pb-10 pt-2 sm:px-10 lg:order-1 lg:pb-0 lg:pl-16 lg:pr-6 lg:pt-14">
+            <h2 className="display-l text-[28px] sm:text-[34px] lg:text-[46px] lg:leading-[1.05]">Find where on Earth to rehearse a Moon or Mars base.</h2>
+            <p className="mt-3 max-w-[42ch] text-[15px] leading-[24px] text-muted lg:mt-5">
               Pick a landing site or a planned base on the Moon or Mars. SBATS ranks every {p.earth.meta.resolutionDeg}° cell of Earth&rsquo;s land by how well it stands in for it, and shows where the match fails.
             </p>
             <div className="mt-6 flex flex-col items-start gap-5 lg:mt-9">

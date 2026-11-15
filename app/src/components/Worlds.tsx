@@ -1,3 +1,4 @@
+import { loadTexture } from '../lib/gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Color, Mesh, MeshBasicMaterial, OrthographicCamera, SRGBColorSpace, Scene, SphereGeometry, TextureLoader, WebGLRenderer } from 'three';
 
@@ -57,7 +58,8 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
     const meshes = worlds.map((w) => {
       // Unlit and slightly darkened, like the other globes in the app.
       const material = new MeshBasicMaterial({ color: new Color(0.82, 0.82, 0.82) });
-      loader.load(
+      loadTexture(
+        loader,
         `${import.meta.env.BASE_URL}textures/${TEXTURE[w]}.jpg`,
         (tex) => {
           if (!alive) return;
@@ -68,7 +70,6 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
           if (--pending === 0) setState('ready');
           draw();
         },
-        undefined,
         () => alive && setState('error'),
       );
       const mesh = new Mesh(geometry, material);
@@ -121,6 +122,7 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
         mat.map?.dispose();
         mat.dispose();
       });
+      renderer.forceContextLoss();
       renderer.dispose();
       renderer.domElement.remove();
     };
@@ -146,7 +148,7 @@ export function Worlds({ worlds, caption, action, onPick, selected = null, tall 
           >
             <span className={`border-l-2 pl-2.5 ${selected === w ? 'border-accent' : 'border-line group-hover:border-accent'}`}>
               <span className="block text-[14px] font-semibold text-text sm:text-[17px]">{WORLD_NAME[w]}</span>
-              <span className="num block text-[10px] uppercase tracking-wider text-muted sm:text-[11px]">{caption(w)}</span>
+              <span className="num block text-[10px] text-muted sm:text-[11px]">{caption(w)}</span>
             </span>
           </button>
         ))}

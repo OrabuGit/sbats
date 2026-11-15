@@ -1,12 +1,15 @@
+import { flushSync } from 'react-dom';
 import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { loadData, loadExtra, type DataBundle } from './data/access';
-import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
+import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Target, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
-import { buildIndex, siteCode } from './lib/geo';
+import { buildIndex, formatCoords, siteCode } from './lib/geo';
 import { keyLabel, metaByKey, reasonLine } from './lib/format';
 import { isNewSite, percentile, tally, topCandidates } from './lib/rank';
 import { TopBar, type Step } from './components/Chrome';
 import type { MatchMode } from './components/LeftPanel';
+import { activityOf } from './components/ActivityArt';
+import type { Tool } from './components/MatchDetail';
 import { MatchesStep } from './components/MatchesStep';
 import { PickWorld } from './components/PickWorld';
 import { PlaceStep } from './components/PlaceStep';
@@ -20,6 +23,9 @@ import { loadExtracts, loadSites } from './data/sites';
 import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
+import type { HeroLink, HeroPick, HeroSite } from './components/HeroGlobes';
+import { HomePair, type PairInfo } from './components/HomePair';
+import { countryKey, useCountries } from './lib/where';
 import { Home } from './components/Home';
 import { SavedPage } from './components/SavedPage';
 import { Logo } from './components/Logo';
@@ -111,6 +117,13 @@ export default function App() {
   return <Orbit data={load.data} />;
 }
 
+/** Runs a state change inside a view transition, so the screens cross-fade instead of jumping. */
+function transition(fn: () => void) {
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  if (!doc.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
+  doc.startViewTransition(() => flushSync(fn));
+}
+
 function Orbit({ data }: { data: DataBundle }) {
   const { earth, targets, analogs, lithology } = data;
 
@@ -129,11 +142,23 @@ function Orbit({ data }: { data: DataBundle }) {
   // In purpose mode the weights are fixed by the purpose. The sliders keep their own values for the way back.
   const weights = matchMode === 'purpose' ? purposeWeights(purposeId) : sliderWeights;
   const purpose = matchMode === 'purpose' ? (PURPOSES.find((p) => p.id === purposeId) ?? null) : null;
+  const choosePreset = useCallback((id: string) => {
+    const p = PRESETS.find((x) => x.id === id);
+    if (!p) return;
+    setPresetId(id);
+    setWeights(p.weights);
+    setMatchMode('all');
+  }, []);
   const [selected, setSelected] = useState<number | null>(null);
   const [includeLow, setIncludeLow] = useState(false);
   const [mode, setMode] = useState<ListMode>('ranked');
+  // The pair picked on the home globes, and which of its links is shown in the strip.
+  const [homePick, setHomePick] = useState<HeroPick>(null);
+  const [homeActive, setHomeActive] = useState(0);
+  // On the Matches step: the Earth cell previewed in the strip, before it is opened.
+  const [preview, setPreview] = useState<number | null>(null);
   const [tab, setTab] = useState<'setup' | 'results'>('setup');
-  const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number; arrive?: boolean } | null>(null);
+  const [focus, setFocus] = useState<{ lat: number; lon: number; seq: number; arrive?: boolean; close?: boolean } | null>(null);
   const [demo, setDemo] = useState<string | null>(null);
   // Steps: 1 world, 2 place, 3 matches, 4 match. Home and the reference pages are views outside the steps.
   const [step, setStep] = useState<Step>(1);
@@ -151,7 +176,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const knownSites = useAsync(() => loadExtra<KnownSitesFile>('known_sites.json'), 'known-sites');
   const [placeId, setPlaceId] = useState<string | null>(null);
   // Global grids of the Moon and Mars, fetched when step 2 first opens. null for a body whose grid is not published.
-  const gridsWanted = flags.anyPoint && (view === 'orbit' || view === 'match') ? 'yes' : 'no';
+  const gridsWanted = flags.anyPoint && (view === 'orbit' || view === 'match' || homePick !== null) ? 'yes' : 'no';
   const gridsLoaded = useRef(false);
   if (gridsWanted === 'yes') gridsLoaded.current = true;
   const grids = useAsync(
@@ -227,12 +252,34 @@ function Orbit({ data }: { data: DataBundle }) {
   const select = useCallback(
     (i: number, fly = true) => {
       if (i < 0) return;
-      setSelected(i);
-      setStep(4);
-      setView('match');
+      transition(() => {
+        setSelected(i);
+        setStep(4);
+        setView('match');
+      });
       if (fly) setFocus({ lat: earth.cells[i].lat, lon: earth.cells[i].lon, seq: ++seq.current });
     },
     [earth],
+  );
+  // A pin on the Earth globe: compare it in the strip first, and open it from there.
+  const previewFromGlobe = useCallback(
+    (i: number) => {
+      if (i < 0) return;
+      setPreview(i);
+      setFocus({ lat: earth.cells[i].lat, lon: earth.cells[i].lon, seq: ++seq.current });
+    },
+    [earth],
+  );
+  // Choosing a match on the Earth globe: fly down to it first, then cross-fade to its page.
+  const openFromGlobe = useCallback(
+    (i: number) => {
+      if (i < 0) return;
+      const cell = earth.cells[i];
+      setSelected(i);
+      setFocus({ lat: cell.lat, lon: cell.lon, seq: ++seq.current, close: true });
+      window.setTimeout(() => select(i, false), window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1000);
+    },
+    [earth, select],
   );
 
   // Step 2 to step 3: leave the Moon or Mars globe and arrive over the best-matching part of Earth.
@@ -240,10 +287,13 @@ function Orbit({ data }: { data: DataBundle }) {
   const goToEarth = useCallback((id?: string) => {
     if (id) setTargetId(id);
     arriving.current = true;
-    setSelected(null);
-    setView('orbit');
-    setStep(3);
-    setTab('results');
+    setPreview(null);
+    transition(() => {
+      setSelected(null);
+      setView('orbit');
+      setStep(3);
+      setTab('results');
+    });
   }, []);
   useEffect(() => {
     if (!arriving.current || step !== 3) return;
@@ -354,10 +404,12 @@ function Orbit({ data }: { data: DataBundle }) {
         const first = places.find((p) => p.body === w && p.hasValues);
         if (first) pickPlace(first.id);
       }
-      setSelected(null);
-      setView('orbit');
-      setStep(2);
-      setTab('setup');
+      transition(() => {
+        setSelected(null);
+        setView('orbit');
+        setStep(2);
+        setTab('setup');
+      });
     },
     [target, place, places, pickPlace],
   );
@@ -401,6 +453,7 @@ function Orbit({ data }: { data: DataBundle }) {
     const demoTarget = targets.find((t) => t.id === featuredSite?.analog.analogFor[0]) ?? target;
     setTargetId(demoTarget.id);
     setSelected(null);
+    setHomePick(null);
     setMode('ranked');
     setPresetId(PRESETS[0].id);
     setWeights(PRESETS[0].weights);
@@ -484,14 +537,17 @@ function Orbit({ data }: { data: DataBundle }) {
 
   // Back to the Earth globe: fly to the cell that was open, or to the best match.
   const backToEarth = useCallback(() => {
-    setView('orbit');
-    setStep(3);
-    setTab('results');
+    transition(() => {
+      setView('orbit');
+      setStep(3);
+      setTab('results');
+    });
     const cell = selected !== null ? earth.cells[selected] : candidates[0] ? earth.cells[candidates[0].index] : null;
-    if (cell) setFocus({ lat: cell.lat, lon: cell.lon, seq: ++seq.current });
+    if (cell) setFocus({ lat: cell.lat, lon: cell.lon, seq: ++seq.current, close: selected !== null });
   }, [selected, candidates, earth]);
 
-  const onStep = (s: Step) => {
+  const onStep = (s: Step) => transition(() => onStepNow(s));
+  const onStepNow = (s: Step) => {
     if (s === 4) {
       if (selected !== null) setView('match');
       return;
@@ -647,6 +703,7 @@ function Orbit({ data }: { data: DataBundle }) {
     },
     [saved, selectedCell, target, pointProfile, named],
   );
+  const activity = activityOf(presetId, matchMode === 'purpose' ? purposeId : null);
   const savedBases = saved.list.filter((x) => x.kind === 'base').length;
 
   const selectedSavedId = selectedCell ? savedId(target.id, selectedCell.lat, selectedCell.lon) : null;
@@ -667,6 +724,144 @@ function Orbit({ data }: { data: DataBundle }) {
       savedAt: new Date().toISOString(),
     });
   };
+
+  // Matches step: arcs from the target to the five best Earth places, and a strip for the one previewed.
+  const topCells = candidates.slice(0, 5).map((c) => earth.cells[c.index]);
+  const topIdx = candidates.slice(0, 5).map((c) => c.index);
+  const stepCountries = useCountries(preview !== null ? [...topCells, earth.cells[preview]] : topCells);
+  const placeName = (i: number) => sites.find((x) => x.index === i)?.analog.name.split(',')[0] ?? stepCountries.get(countryKey(earth.cells[i].lat, earth.cells[i].lon)) ?? 'Open land';
+  const topLinks = topIdx.map((i) => ({ lat: earth.cells[i].lat, lon: earth.cells[i].lon, label: results[i].score === null ? '-' : results[i].score!.toFixed(0) }));
+  const previewChips = topIdx.map((i) => ({ label: placeName(i), score: results[i].score }));
+  const previewPair: PairInfo | null =
+    preview !== null && step === 3 && view === 'orbit'
+      ? {
+          mode: 'place',
+          from: target.name.split(',')[0],
+          to: placeName(preview),
+          toSub: `${formatCoords(earth.cells[preview].lat, earth.cells[preview].lon)} on Earth`,
+          score: results[preview].score,
+          confidence: results[preview].confidence,
+          dims: ts.profile(earth.cells[preview]).map((d) => ({ id: d.id, label: d.label, similarity: d.similarity })),
+          note: null,
+        }
+      : null;
+
+  // Linked pairs on the home globes. A Moon or Mars pick links to its best Earth cells for the current purpose;
+  // an Earth site links to the target it most resembles.
+  const earthPins = useMemo<HeroSite[]>(
+    () => (featuredSites?.sites ?? []).filter((x) => x.kind !== 'negative').map((x) => ({ id: x.id, name: x.name, lat: x.lat, lon: x.lon, proposed: x.kind === 'candidate' })),
+    [featuredSites],
+  );
+  const homePlace = homePick?.kind === 'place' ? (places.find((p) => p.id === homePick.id) ?? null) : null;
+  // The target is set by picking the place; until it is, the list belongs to another place.
+  const homeReady = !!homePlace && place?.id === homePlace.id && !(pointProfile && pointProfile.origin === 'none');
+  const homeLinks = useMemo(() => (homeReady ? candidates.slice(0, 5) : []), [homeReady, candidates]);
+  const homeCells = homeLinks.map((c) => earth.cells[c.index]);
+  const homeCountries = useCountries(homeCells);
+  const homeSite = homePick?.kind === 'site' ? (earthPins.find((x) => x.id === homePick.id) ?? null) : null;
+  const siteBest = useMemo(() => {
+    if (!homeSite) return null;
+    const i = index.nearest(homeSite.lat, homeSite.lon, 2);
+    if (i < 0) return null;
+    const cell = earth.cells[i];
+    let best: { target: Target; score: number | null; confidence: 'high' | 'medium' | 'low' | null; dims: { id: string; label: string; similarity: number | null }[] } | null = null;
+    for (const t of targets) {
+      const sc = scorer.forTarget(t);
+      const e = sc.explain(cell, liveWeights);
+      if (e.score !== null && (!best || e.score > (best.score ?? -1)))
+        best = { target: t, score: e.score, confidence: e.confidence, dims: sc.profile(cell).map((d) => ({ id: d.id, label: d.label, similarity: d.similarity })) };
+    }
+    return best ? { ...best, index: i } : null;
+  }, [homeSite, index, earth, targets, scorer, liveWeights]);
+  const homeLinkList: HeroLink[] = homeLinks.map((c) => ({ lat: earth.cells[c.index].lat, lon: earth.cells[c.index].lon, score: results[c.index].score }));
+  const homeReverse = siteBest ? { place: places.find((p) => p.targetId === siteBest.target.id)?.id ?? '', score: siteBest.score } : null;
+  const homeActiveIdx = Math.min(homeActive, Math.max(0, homeLinks.length - 1));
+  const homePair: PairInfo | null = (() => {
+    if (homePlace) {
+      const c = homeLinks[homeActiveIdx];
+      const cell = c ? earth.cells[c.index] : null;
+      const r = c ? results[c.index] : null;
+      return {
+        mode: 'place',
+        from: homePlace.name.split(',')[0],
+        to: cell ? (homeCountries.get(countryKey(cell.lat, cell.lon)) ?? 'Open land') : 'no Earth place yet',
+        toSub: cell ? `${formatCoords(cell.lat, cell.lon)} on Earth` : '',
+        score: r?.score ?? null,
+        confidence: r?.confidence ?? null,
+        dims: cell ? ts.profile(cell).map((d) => ({ id: d.id, label: d.label, similarity: d.similarity })) : [],
+        note: homeReady ? (cell ? null : 'No Earth cell has a score for this place with these weights.') : place?.id === homePlace.id ? 'No measured values exist for this place yet, so nothing can be matched. Places with an amber marker have values.' : 'Working out the matches',
+      };
+    }
+    if (homeSite && siteBest)
+      return {
+        mode: 'site',
+        from: homeSite.name.split(',')[0],
+        to: siteBest.target.name,
+        toSub: `${siteBest.target.body === 'moon' ? 'Moon' : 'Mars'}, the closest of the ${targets.length} base sites with measured values`,
+        score: siteBest.score,
+        confidence: siteBest.confidence,
+        dims: siteBest.dims,
+        note: null,
+      };
+    if (homeSite) return { mode: 'site', from: homeSite.name.split(',')[0], to: 'no target', toSub: '', score: null, confidence: null, dims: [], note: 'No Moon or Mars site can be scored against this Earth place.' };
+    return null;
+  })();
+  const homeChips = homeLinks.map((c) => {
+    const cell = earth.cells[c.index];
+    return { label: homeCountries.get(countryKey(cell.lat, cell.lon)) ?? 'Open land', score: results[c.index].score };
+  });
+  // Development only: lets a test script pick a pin without chasing a turning globe.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    (window as unknown as { __pick?: (kind: 'place' | 'site', id: string) => void }).__pick = (kind, id) => {
+      if (kind === 'place') pickPlace(id);
+      setHomePick({ kind, id });
+      setHomeActive(0);
+    };
+  }, [pickPlace]);
+  useEffect(() => {
+    if (import.meta.env.DEV) (window as unknown as { __preview?: (i: number | null) => void }).__preview = (i) => setPreview(i === null ? null : (topIdx[i] ?? null));
+  });
+  const openHomePair = () => {
+    if (homePlace && homeLinks[homeActiveIdx]) select(homeLinks[homeActiveIdx].index);
+    else if (homeSite && siteBest) openSite(homeSite.lat, homeSite.lon, siteBest.target.id);
+  };
+
+  // The two tools, ordered by what the match is for.
+  const terrainReady = flags.terrain && !!earthExtract?.elevation && !!targetExtract?.elevation;
+    const baseTool: Tool = {
+    title: 'Plan a base here',
+    line: `Place modules on this ground, then run the same layout at ${target.name} and read the gap report.`,
+    cta: 'Open the base planner',
+    art: 'base',
+    onClick: reconReady ? () => openRecon() : null,
+    why: 'The base planner needs data/modules.json, which is not published with this build.',
+  };
+  const roverTool: Tool = {
+    title: 'Drive a rover in 3D',
+    line: `Draw a route over this terrain and over ${target.name}, and compare the slopes and distance of each.`,
+    cta: 'Open 3D terrain',
+    art: 'rover',
+    onClick: terrainReady ? () => transition(() => setView('terrain')) : null,
+    why: 'No ground-level 3D terrain was built for this pair. Only the featured sites and the listed targets have it.',
+  };
+  const groundTool: Tool = terrainReady
+    ? {
+        title: 'See the ground in 3D',
+        line: `Turn both places around as terrain at one scale: ${target.name} and this place.`,
+        cta: 'Open 3D terrain',
+        art: activity,
+        onClick: () => transition(() => setView('terrain')),
+      }
+    : {
+        title: 'See where it is in 3D',
+        line: 'The Earth globe, turned and brought down to this place. Ground-level terrain was not built for it.',
+        cta: 'Show on the globe',
+        art: activity,
+        onClick: () => backToEarth(),
+        why: roverTool.why,
+      };
+  const matchTools = activity === 'rover' ? { primary: roverTool, secondary: baseTool } : activity === 'base' ? { primary: baseTool, secondary: { ...groundTool, title: 'See the ground in 3D', art: 'rover' as const } } : { primary: groundTool, secondary: baseTool };
 
   // Pins for the home globes: every named place on the Moon and Mars.
   const heroPlaces = useMemo(
@@ -740,13 +935,25 @@ function Orbit({ data }: { data: DataBundle }) {
             setWorldPage(w);
             setView('world');
           }}
-          onPlace={(id) => {
-            pickPlace(id);
-            setSelected(null);
-            setView('orbit');
-            setStep(2);
-            setTab('setup');
+          onPick={(kind, id) => {
+            if (kind === 'place') pickPlace(id);
+            setHomePick({ kind, id });
+            setHomeActive(0);
           }}
+          pick={homePick}
+          earthPins={earthPins}
+          links={homeLinkList}
+          reverse={homeReverse && homeReverse.place ? homeReverse : null}
+          active={homeActiveIdx}
+          onActive={setHomeActive}
+          pair={homePair}
+          chips={homeChips}
+          presets={PRESETS}
+          presetId={presetId}
+          onPreset={choosePreset}
+          onOpenPair={openHomePair}
+          onAllMatches={homePlace && homeReady ? () => goToEarth() : null}
+          onClearPick={() => setHomePick(null)}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
           onMethod={() => setView('method')}
           onValidation={() => setView('validation')}
@@ -838,7 +1045,7 @@ function Orbit({ data }: { data: DataBundle }) {
           stability={
             stabSelected && stabNow && stabSelected.baseRank !== null
               ? {
-                  text: `Grid cell rank ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells with these weights. With each weight redrawn within ±${Math.round(stabNow.spread * 100)}% (${stabNow.draws} times), nine in ten ranks fall between ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')} and ${Math.round(stabSelected.rankP95 ?? 0).toLocaleString('en-US')}, and it is in the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of them.`,
+                  text: `Ranks ${stabSelected.baseRank.toLocaleString('en-US')} of ${stabNow.scoredCells.toLocaleString('en-US')} cells. Change every weight by up to ${Math.round(stabNow.spread * 100)}% and the rank stays between ${Math.round(stabSelected.rankP05 ?? 0).toLocaleString('en-US')} and ${Math.round(stabSelected.rankP95 ?? 0).toLocaleString('en-US')}. It reaches the top ${stabNow.topN} in ${Math.round(stabSelected.shareInTopN * 100)}% of ${stabNow.draws} tries.`
                 }
               : null
           }
@@ -848,8 +1055,9 @@ function Orbit({ data }: { data: DataBundle }) {
           saved={isSaved}
           onSave={toggleSaved}
           onBack={backToEarth}
+          tools={matchTools}
           actions={[
-            { label: 'View report', primary: true, onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },
+            { label: 'View report', onClick: flags.report ? () => setView('report') : null, why: 'not built yet' },
             {
               label: 'Download report',
               onClick: flags.report
@@ -860,12 +1068,6 @@ function Orbit({ data }: { data: DataBundle }) {
                 : null,
               why: 'not built yet',
             },
-            {
-              label: 'Open 3D terrain',
-              onClick: flags.terrain && earthExtract?.elevation && targetExtract?.elevation ? () => setView('terrain') : null,
-              why: !flags.terrain ? 'not built yet' : 'no terrain extract was built for one of the two places',
-            },
-            { label: 'Place a base', onClick: reconReady ? () => openRecon() : null, why: 'data/modules.json is not published with this build' },
             ...(namedHasPage && named ? [{ label: 'Site page', onClick: () => openSitePage(named.id) }] : []),
           ]}
         >
@@ -983,19 +1185,13 @@ function Orbit({ data }: { data: DataBundle }) {
             body={target.body}
             globe={
               <Suspense fallback={<p className="absolute left-5 top-5 text-[13px] text-muted" role="status">Loading globe</p>}>
-                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={select} focus={focus} active={showEarth} />
+                <GlobeView earth={earth} results={results} index={index} selected={selected} candidates={mapCandidates} sites={mapSites} onSelect={previewFromGlobe} focus={focus} links={topLinks} anchor={target.body === 'moon' || target.body === 'mars' ? { name: target.name.split(',')[0], body: target.body } : undefined} activeLink={Math.max(-1, topIdx.indexOf(preview ?? -1))} active={showEarth} />
               </Suspense>
             }
             controls={{
               presets: PRESETS,
               presetId,
-              onPreset: (id) => {
-                const p = PRESETS.find((x) => x.id === id);
-                if (!p) return;
-                setPresetId(id);
-                setWeights(p.weights);
-                setMatchMode('all');
-              },
+              onPreset: choosePreset,
               mode: matchMode,
               onMode: setMatchMode,
               purposeId,
@@ -1025,7 +1221,8 @@ function Orbit({ data }: { data: DataBundle }) {
             onIncludeLow={setIncludeLow}
             stability={stabNow}
             warnings={pointProfile?.notes ?? []}
-            onSelect={select}
+            onSelect={openFromGlobe}
+            strip={previewPair ? <HomePair pair={previewPair} chips={previewChips} active={Math.max(-1, topIdx.indexOf(preview ?? -1))} onActive={(i) => previewFromGlobe(topIdx[i])} presets={PRESETS} presetId={presetId} onPreset={choosePreset} onOpen={() => preview !== null && select(preview)} onAll={null} onClose={() => setPreview(null)} /> : undefined}
           />
         </>
       )}

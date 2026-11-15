@@ -177,9 +177,15 @@ interface Props {
   sites: SiteMarker[];
   onSelect: (index: number) => void;
   /** Change `seq` to fly the camera to a point. `arrive` starts far out and comes in, as when arriving from another world. */
-  focus: { lat: number; lon: number; seq: number; arrive?: boolean } | null;
+  focus: { lat: number; lon: number; seq: number; arrive?: boolean; close?: boolean } | null;
   /** False while another view covers the globe, so it stops drawing. */
   active: boolean;
+  /** Up to five Earth places joined to the target by arcs, strongest first. */
+  links?: { lat: number; lon: number; label: string }[];
+  /** The target the arcs start from. */
+  anchor?: { name: string; body: 'moon' | 'mars' };
+  /** The arc that is drawn brightest. -1 for none. */
+  activeLink?: number;
 }
 
 type Marker =
@@ -187,7 +193,13 @@ type Marker =
   | { kind: 'rank'; lat: number; lng: number; index: number; rank: number }
   | { kind: 'site'; lat: number; lng: number; index: number; name: string };
 
-export function GlobeView({ earth, results, index, selected, candidates, sites, onSelect, focus, active }: Props) {
+export function GlobeView({ earth, results, index, selected, candidates, sites, onSelect, focus, active, links = [], anchor, activeLink = 0 }: Props) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef(links);
+  linksRef.current = links;
+  const activeLinkRef = useRef(activeLink);
+  activeLinkRef.current = activeLink;
   const holder = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeInstance | null>(null);
   const texRef = useRef<{ canvas: HTMLCanvasElement; texture: CanvasTexture; rings: { ring: Ring; wraps: boolean }[] } | null>(null);
@@ -423,6 +435,10 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
       return;
     }
     const current = globe.pointOfView();
+    if (focus.close) {
+      globe.pointOfView({ lat: focus.lat, lng: focus.lon, altitude: Math.min(current.altitude, 0.55) }, reduced ? 0 : 900);
+      return;
+    }
     globe.pointOfView({ lat: focus.lat, lng: focus.lon, altitude: Math.min(current.altitude, 1.9) }, reduced ? 0 : 1100);
   }, [focus, reduced]);
 
@@ -431,6 +447,51 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     if (!globe) return;
     if (active) globe.resumeAnimation();
     else globe.pauseAnimation();
+  }, [active]);
+
+  // Arcs from the target chip to its best Earth places. Their ends follow the globe as it turns.
+  useEffect(() => {
+    if (!active) return;
+    let frame = 0;
+    const tick = () => {
+      frame = requestAnimationFrame(tick);
+      const globe = globeRef.current;
+      const svg = svgRef.current;
+      const chip = anchorRef.current;
+      if (!globe || !svg || !chip) return;
+      const pov = globe.pointOfView();
+      const rad = Math.PI / 180;
+      const ax = chip.offsetLeft + chip.offsetWidth;
+      const ay = chip.offsetTop + chip.offsetHeight / 2;
+      const groups = svg.querySelectorAll<SVGGElement>('[data-link]');
+      groups.forEach((g, i) => {
+        const l = linksRef.current[i];
+        if (!l) {
+          g.style.opacity = '0';
+          return;
+        }
+        // A point is on the near side when it is inside the cone the camera can see.
+        const cos = Math.sin(pov.lat * rad) * Math.sin(l.lat * rad) + Math.cos(pov.lat * rad) * Math.cos(l.lat * rad) * Math.cos((pov.lng - l.lon) * rad);
+        const c = globe.getScreenCoords(l.lat, l.lon, 0.004);
+        if (cos < 1 / (1 + pov.altitude) + 0.02 || !c) {
+          g.style.opacity = '0';
+          return;
+        }
+        const mx = (ax + c.x) / 2;
+        const my = (ay + c.y) / 2 - Math.hypot(c.x - ax, c.y - ay) * 0.2;
+        g.querySelector('path')?.setAttribute('d', `M${ax} ${ay} Q${mx.toFixed(1)} ${my.toFixed(1)} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`);
+        const t = 0.5 + 0.1 * (4 - i);
+        const lx = (1 - t) * (1 - t) * ax + 2 * (1 - t) * t * mx + t * t * c.x;
+        const ly = (1 - t) * (1 - t) * ay + 2 * (1 - t) * t * my + t * t * c.y;
+        g.querySelector('[data-tag]')?.setAttribute('transform', `translate(${lx.toFixed(1)} ${ly.toFixed(1)})`);
+        const dot = g.querySelector('circle');
+        dot?.setAttribute('cx', c.x.toFixed(1));
+        dot?.setAttribute('cy', c.y.toFixed(1));
+        g.style.opacity = String(i === activeLinkRef.current ? 1 : Math.max(0.3, 0.85 - i * 0.14));
+      });
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
   }, [active]);
 
   const zoom = (factor: number) => {
@@ -443,6 +504,33 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
   return (
     <section className="relative h-full min-h-0 w-full overflow-hidden bg-bg" aria-label="Globe with match score heatmap">
       <div ref={holder} className="absolute inset-0" />
+      {anchor && (
+        <div ref={anchorRef} className="absolute left-4 top-1/2 z-10 flex max-w-[180px] -translate-y-1/2 items-center gap-2 bg-bg py-1.5 pl-1.5 pr-3 sm:left-8">
+          <span
+            className="block h-9 w-9 shrink-0 rounded-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${import.meta.env.BASE_URL}textures/${anchor.body === 'moon' ? 'moon-wac-2048' : 'mars-viking-2048'}.jpg)` }}
+            aria-hidden="true"
+          />
+          <span className="min-w-0">
+            <span className="block text-[11px] leading-3 text-muted">{anchor.body === 'moon' ? 'On the Moon' : 'On Mars'}</span>
+            <span className="block truncate text-[13px] font-medium leading-4 text-text">{anchor.name}</span>
+          </span>
+        </div>
+      )}
+      <svg ref={svgRef} className="pointer-events-none absolute inset-0 z-[5] h-full w-full" aria-hidden="true">
+        {links.slice(0, 5).map((l, i) => (
+          <g key={`${l.lat},${l.lon}`} data-link="" style={{ opacity: 0 }}>
+            <path fill="none" stroke="#FFB000" strokeWidth={i === activeLink ? 2.4 : 1.4} strokeLinecap="round" />
+            <circle r="4" fill="#FFB000" />
+            <g data-tag="">
+              <rect x="-26" y="-11" width="52" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="12" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
+                {i + 1} · {l.label}
+              </text>
+            </g>
+          </g>
+        ))}
+      </svg>
       <div className="absolute bottom-3 left-3 bg-bg px-2 py-2">
         <p className="label mb-1.5">Match score, 0 to 100</p>
         <div className="flex items-end gap-px" aria-hidden="true">

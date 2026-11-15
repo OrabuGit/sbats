@@ -97,7 +97,7 @@ function Profile({ result, targetName }: { result: NonNullable<ReturnType<typeof
               <dd className="h-1.5 bg-line" role="meter" aria-label={`${d.label} similarity`} aria-valuemin={0} aria-valuemax={1} aria-valuenow={v ?? 0} aria-valuetext={v === null ? 'no data' : v.toFixed(2)}>
                 <div className="h-full bg-accent" style={{ width: `${(v ?? 0) * 100}%` }} />
               </dd>
-              <dd className={`num text-right ${v === null ? 'text-[10px] uppercase text-muted' : 'text-[12px] text-text'}`}>{v === null ? 'no data' : v.toFixed(2)}</dd>
+              <dd className={`num text-right ${v === null ? 'text-[11px] text-muted' : 'text-[12px] text-text'}`}>{v === null ? 'no data' : v.toFixed(2)}</dd>
             </div>
           );
         })}
@@ -436,7 +436,7 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
                     <td className="num py-2 pr-4 text-muted">{s.footprintKm} km</td>
                     <td className="py-2 pr-4 text-text">{best ? best.purpose : <span className="text-muted">no data</span>}</td>
                     <td className="py-2 pr-4 text-muted">{t?.name ?? 'no data'}</td>
-                    <td className={`num py-2 pr-4 text-right ${best ? 'text-[17px] font-semibold text-text' : 'text-[11px] uppercase text-muted'}`}>{best ? best.score.toFixed(0) : 'no data'}</td>
+                    <td className={`num py-2 pr-4 text-right ${best ? 'text-[17px] font-semibold text-text' : 'text-[12px] text-muted'}`}>{best ? best.score.toFixed(0) : 'no data'}</td>
                     <td className="py-1 text-right">
                       <button type="button" onClick={() => onSitePage(s.id)} className="tool">
                         Site page

@@ -1,3 +1,4 @@
+import { loadTexture } from '../lib/gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AmbientLight,
@@ -34,12 +35,43 @@ export interface HeroPlace {
   sub: string;
 }
 
+/** A named Earth site that can be pinned on the Earth globe. */
+export interface HeroSite {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  /** A site proposed by the team, drawn amber. */
+  proposed: boolean;
+}
+
+/** A link from the selected place to an Earth cell, strongest first. */
+export interface HeroLink {
+  lat: number;
+  lon: number;
+  score: number | null;
+}
+
+/** What is selected: a place on the Moon or Mars, or a site on Earth. */
+export type HeroPick = { kind: 'place' | 'site'; id: string } | null;
+
 interface Props {
   places: HeroPlace[];
+  sites: HeroSite[];
   /** Number of scored Earth cells, for the caption under Earth. */
   cells: number;
-  onPlace: (id: string) => void;
+  /** A pin was pressed. */
+  onPick: (kind: 'place' | 'site', id: string) => void;
   onWorld: (w: WorldId) => void;
+  pick: HeroPick;
+  /** Up to five links drawn from the selected place to Earth cells, or from a selected site to the target it most resembles. */
+  links: HeroLink[];
+  /** For a selected Earth site: the place on the Moon or Mars it most resembles. */
+  reverse: { place: string; score: number | null } | null;
+  /** The link shown in the strip. */
+  active: number;
+  /** The strip under the globes. */
+  children?: React.ReactNode;
 }
 
 const ORDER: WorldId[] = ['mars', 'earth', 'moon'];
@@ -57,10 +89,10 @@ interface Slot {
 }
 
 /** Where each globe sits, in canvas pixels from the top left. One function for the canvas and the labels. */
-export function layoutGlobes(w: number, h: number): Slot[] {
+export function layoutGlobes(w: number, h: number, reserve = 0): Slot[] {
   // The transparent navigation bar lies over the top of the canvas: keep the globes below it.
   const nav = w < 640 ? 56 : 72;
-  const uh = h - nav;
+  const uh = h - nav - reserve;
   if (w < 640) {
     const rE = Math.min(w * 0.27, uh * 0.225);
     return [
@@ -91,7 +123,7 @@ const toVec = (lat: number, lon: number): Vector3 => {
  * Mars and the Moon carry a pin for every named place. Sizes are not to scale: Earth is drawn larger
  * than its real ratio so the pins on the other two stay usable, and the radii are printed instead.
  */
-export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
+export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links, reverse, active, children }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const tip = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -99,10 +131,30 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const placesRef = useRef(places);
   placesRef.current = places;
-  const onPlaceRef = useRef(onPlace);
-  onPlaceRef.current = onPlace;
-  const slots = useMemo(() => (size.w > 0 ? layoutGlobes(size.w, size.h) : []), [size]);
-  const placeKey = places.map((p) => p.id).join('|');
+  const onPickRef = useRef(onPick);
+  onPickRef.current = onPick;
+  const sitesRef = useRef(sites);
+  sitesRef.current = sites;
+  const pickRef = useRef(pick);
+  pickRef.current = pick;
+  const linksRef = useRef(links);
+  linksRef.current = links;
+  const reverseRef = useRef(reverse);
+  reverseRef.current = reverse;
+  const activeRef = useRef(active);
+  activeRef.current = active;
+  // SVG nodes of the links, moved every frame with the globes they join.
+  const linkEls = useRef<(SVGGElement | null)[]>([]);
+  const markEl = useRef<SVGCircleElement>(null);
+  // Set by the effect below: turns a globe to face a point, or lets it spin again.
+  const focusApi = useRef<{ focus: (updates: { world: WorldId; lat: number; lon: number }[]) => void; release: () => void } | null>(null);
+  // On a wide screen the pair strip lies over the bottom of the canvas: the globes make room for it.
+  const reserve = pick && size.w >= 1024 ? 190 : 0;
+  const reserveRef = useRef(0);
+  reserveRef.current = reserve;
+  const relayout = useRef<() => void>(() => {});
+  const slots = useMemo(() => (size.w > 0 ? layoutGlobes(size.w, size.h, reserve) : []), [size, reserve]);
+  const placeKey = `${places.map((p) => p.id).join('|')}#${sites.map((p) => p.id).join('|')}`;
 
   useEffect(() => {
     const el = holder.current;
@@ -154,16 +206,19 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       vx: number; // spin velocity, rad/s
       vy: number; // pitch velocity
       slot: Slot;
+      /** Rotation the globe is easing towards, set while a pair is selected. */
+      focus: { x: number; y: number } | null;
     }
     const globes: Globe[] = ORDER.map((world) => {
       const group = new Group();
-      group.rotation.order = 'YXZ';
+      group.rotation.order = 'XYZ';
       group.rotation.x = TILT[world];
       group.rotation.y = world === 'earth' ? -2.0 : world === 'moon' ? 0.2 : 2.2;
       const mat = new MeshStandardMaterial({ roughness: 0.95, metalness: 0, color: new Color(0.92, 0.92, 0.92) });
       const sphere = new Mesh(geo, mat);
       group.add(sphere);
-      loader.load(
+      loadTexture(
+        loader,
         `${import.meta.env.BASE_URL}textures/${TEXTURE[world]}.jpg`,
         (tex) => {
           if (!alive) return;
@@ -174,38 +229,52 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
           loaded += 1;
           if (loaded === ORDER.length) setState('ready');
         },
-        undefined,
         () => alive && setState('error'),
       );
       scene.add(group);
-      return { world, group, vx: SPIN[world], vy: 0, slot: { world, cx: 0, cy: 0, r: 1 } };
+      return { world, group, vx: SPIN[world], vy: 0, slot: { world, cx: 0, cy: 0, r: 1 }, focus: null };
     });
     let loaded = 0;
 
-    // One marker per named place on Mars and the Moon.
+    // One marker per named place on Mars and the Moon, and one per featured site on Earth.
     const up = new Vector3(0, 1, 0);
     const hits: { mesh: Mesh; g: Globe }[] = [];
     const markers: { group: Group; g: Globe }[] = [];
-    for (const p of placesRef.current) {
-      const g = globes.find((x) => x.world === p.body);
+    const pins = [
+      ...placesRef.current.map((p) => ({ key: `place:${p.id}`, world: p.body as WorldId, lat: p.lat, lon: p.lon, strong: p.hasValues })),
+      ...sitesRef.current.map((p) => ({ key: `site:${p.id}`, world: 'earth' as WorldId, lat: p.lat, lon: p.lon, strong: p.proposed })),
+    ];
+    for (const p of pins) {
+      const g = globes.find((x) => x.world === p.world);
       if (!g) continue;
       const n = toVec(p.lat, p.lon);
       const pin = new Group();
       pin.position.copy(n.clone().multiplyScalar(1.002));
       pin.quaternion.copy(new Quaternion().setFromUnitVectors(up, n));
       const m = new Group();
-      if (p.hasValues) {
+      if (p.strong) {
         m.add(new Mesh(ringBig, amber), new Mesh(dome, amberDome));
       } else {
         m.add(new Mesh(ringSmall, white), new Mesh(dot, white));
       }
       const t = new Mesh(hit, ghost);
-      t.userData.placeId = p.id;
+      t.userData.pinKey = p.key;
       hits.push({ mesh: t, g });
       markers.push({ group: m, g });
       pin.add(m, t);
       g.group.add(pin);
     }
+    const pinInfo = (key: string | null) => {
+      if (!key) return null;
+      const [kind, ...rest] = key.split(':');
+      const id = rest.join(':');
+      if (kind === 'place') {
+        const p = placesRef.current.find((q) => q.id === id);
+        return p ? { world: p.body as WorldId, name: p.name, line: `${p.sub}${p.sub ? ' · ' : ''}${p.hasValues ? 'measured values' : 'no measured values yet'}` } : null;
+      }
+      const q = sitesRef.current.find((x) => x.id === id);
+      return q ? { world: 'earth' as WorldId, name: q.name.split(',')[0], line: q.proposed ? 'Proposed by the team' : 'Established analog site' } : null;
+    };
 
     const layout = () => {
       const w = el.clientWidth;
@@ -217,7 +286,7 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       camera.top = h / 2;
       camera.bottom = -h / 2;
       camera.updateProjectionMatrix();
-      const ss = layoutGlobes(w, h);
+      const ss = layoutGlobes(w, h, reserveRef.current);
       for (const g of globes) {
         const s = ss.find((x) => x.world === g.world)!;
         g.slot = s;
@@ -251,19 +320,19 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
         globes.map((g) => g.group),
         true,
       )[0];
-      const id = first?.object.userData.placeId;
+      const id = first?.object.userData.pinKey;
       return typeof id === 'string' ? id : null;
     };
     const showTip = (id: string | null, x: number, y: number) => {
       const t = tip.current;
       if (!t) return;
-      const p = id ? placesRef.current.find((q) => q.id === id) : null;
+      const p = pinInfo(id);
       if (!p) {
         t.style.opacity = '0';
         return;
       }
       t.querySelector('[data-n]')!.textContent = p.name;
-      t.querySelector('[data-s]')!.textContent = `${p.sub}${p.sub ? ' · ' : ''}${p.hasValues ? 'measured values' : 'no measured values yet'}`;
+      t.querySelector('[data-s]')!.textContent = p.line;
       t.style.opacity = '1';
       t.style.transform = `translate(${Math.round(x + 14)}px, ${Math.round(y - 12)}px)`;
     };
@@ -271,11 +340,12 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       const { x, y, w, h } = local(ev);
       // A pin stands out of the globe, so a press on one counts even just outside the disc.
       const pin = pinAt(x, y, w, h);
-      const g = globeAt(x, y) ?? (pin ? globes.find((q) => q.world === placesRef.current.find((p) => p.id === pin)?.body) : null) ?? null;
+      const g = globeAt(x, y) ?? (pin ? globes.find((q) => q.world === pinInfo(pin)?.world) : null) ?? null;
       if (!g) return;
       drag = { g, x, y, px: x, py: y, moved: 0, t: performance.now() };
       g.vx = 0;
       g.vy = 0;
+      g.focus = null;
       canvas.setPointerCapture(ev.pointerId);
     };
     const onMove = (ev: PointerEvent) => {
@@ -310,7 +380,10 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
       const { x, y, w, h } = local(ev);
       if (d.moved < 5) {
         const id = pinAt(x, y, w, h);
-        if (id) onPlaceRef.current(id);
+        if (id) {
+          const [kind, ...rest] = id.split(':');
+          onPickRef.current(kind === 'site' ? 'site' : 'place', rest.join(':'));
+        }
         d.g.vx = SPIN[d.g.world];
         return;
       }
@@ -324,6 +397,91 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
     canvas.addEventListener('pointercancel', onUp);
     canvas.addEventListener('pointerleave', onLeave);
 
+    // Where a point of a globe is on screen right now, and whether it faces the viewer.
+    const project = (world: WorldId, lat: number, lon: number) => {
+      const g = globes.find((q) => q.world === world)!;
+      const v = toVec(lat, lon).applyEuler(g.group.rotation);
+      return { x: g.slot.cx + v.x * g.slot.r, y: g.slot.cy - v.y * g.slot.r, front: v.z > 0.05 };
+    };
+    const pinWorld = (): WorldId | null => (pickRef.current ? (pickRef.current.kind === 'site' ? 'earth' : (placesRef.current.find((p) => p.id === pickRef.current!.id)?.body ?? null)) : null);
+    const placeLinks = () => {
+      const pk = pickRef.current;
+      const els = linkEls.current;
+      const hideAll = () => els.forEach((e) => e && (e.style.opacity = '0'));
+      if (!pk) {
+        hideAll();
+        if (markEl.current) markEl.current.style.opacity = '0';
+        return;
+      }
+      // The selected pin and the other end of each link.
+      const home = pk.kind === 'place' ? placesRef.current.find((p) => p.id === pk.id) : sitesRef.current.find((p) => p.id === pk.id);
+      if (!home) return hideAll();
+      const homeWorld = pinWorld()!;
+      const a = project(homeWorld, home.lat, home.lon);
+      if (markEl.current) {
+        markEl.current.setAttribute('cx', String(a.x));
+        markEl.current.setAttribute('cy', String(a.y));
+        markEl.current.style.opacity = a.front ? '1' : '0';
+      }
+      const ends: { lat: number; lon: number; world: WorldId }[] =
+        pk.kind === 'place'
+          ? linksRef.current.map((l) => ({ lat: l.lat, lon: l.lon, world: 'earth' as WorldId }))
+          : reverseRef.current
+            ? (() => {
+                const t = placesRef.current.find((p) => p.id === reverseRef.current!.place);
+                return t ? [{ lat: t.lat, lon: t.lon, world: t.body as WorldId }] : [];
+              })()
+            : [];
+      els.forEach((el, i) => {
+        if (!el) return;
+        const e = ends[i];
+        if (!e) {
+          el.style.opacity = '0';
+          return;
+        }
+        const b = project(e.world, e.lat, e.lon);
+        if (!a.front || !b.front) {
+          el.style.opacity = '0';
+          return;
+        }
+        // An arc that bows upward, higher the longer the link.
+        const mx = (a.x + b.x) / 2;
+        const my = (a.y + b.y) / 2 - Math.hypot(b.x - a.x, b.y - a.y) * 0.28;
+        const path = el.querySelector('path');
+        path?.setAttribute('d', `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
+        const tag = el.querySelector<SVGGElement>('[data-tag]');
+        // The label sits on the curve, a little short of the far end.
+        const t = ends.length > 1 ? 0.86 - i * 0.11 : 0.82;
+        const lx = (1 - t) * (1 - t) * a.x + 2 * (1 - t) * t * mx + t * t * b.x;
+        const ly = (1 - t) * (1 - t) * a.y + 2 * (1 - t) * t * my + t * t * b.y;
+        tag?.setAttribute('transform', `translate(${lx.toFixed(1)} ${ly.toFixed(1)})`);
+        const end = el.querySelector('circle');
+        end?.setAttribute('cx', b.x.toFixed(1));
+        end?.setAttribute('cy', b.y.toFixed(1));
+        el.style.opacity = String(i === activeRef.current ? 1 : Math.max(0.3, 0.85 - i * 0.14));
+      });
+    };
+    // Facing a point: spin about the poles, then tilt towards the viewer.
+    const faceOf = (lat: number, lon: number) => {
+      const v = toVec(lat, lon);
+      const rho = Math.hypot(v.x, v.z);
+      return { x: Math.max(-1.4, Math.min(1.4, Math.atan2(v.y, rho))), y: Math.atan2(-v.x, v.z) };
+    };
+    focusApi.current = {
+      focus: (updates) => {
+        for (const g of globes) {
+          const u = updates.find((x) => x.world === g.world);
+          g.focus = u ? faceOf(u.lat, u.lon) : null;
+          if (!u) g.vx = SPIN[g.world];
+        }
+      },
+      release: () => {
+        for (const g of globes) {
+          g.focus = null;
+          g.vx = SPIN[g.world];
+        }
+      },
+    };
     let last = performance.now();
     const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
@@ -337,15 +495,26 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
         if (drag?.g === g) continue;
         const rest = reduced ? 0 : SPIN[g.world];
         // A hovered pin holds its globe still so it can be clicked.
-        const hold = hovered && placesRef.current.find((p) => p.id === hovered)?.body === g.world;
+        const hold = (hovered && pinInfo(hovered)?.world === g.world) || g.focus !== null;
         g.group.rotation.y += (hold ? 0 : g.vx) * dt;
         g.group.rotation.x = Math.max(-1.45, Math.min(1.45, g.group.rotation.x + g.vy * dt));
         // Ease the speed back to rest and the pitch back to its tilt.
         g.vx += (rest - g.vx) * Math.min(1, dt * 1.6);
         g.vy *= Math.max(0, 1 - dt * 4);
+        if (g.focus) {
+          // Turn the short way round to the focus, easing out.
+          const dy = Math.atan2(Math.sin(g.focus.y - g.group.rotation.y), Math.cos(g.focus.y - g.group.rotation.y));
+          const k = reduced ? 1 : Math.min(1, dt * 4);
+          g.group.rotation.y += dy * k;
+          g.group.rotation.x += (g.focus.x - g.group.rotation.x) * k;
+          g.vx = 0;
+          g.vy = 0;
+        }
       }
+      placeLinks();
       draw();
     };
+    relayout.current = layout;
     const ro = new ResizeObserver(layout);
     ro.observe(el);
     const io = new IntersectionObserver((e) => (visible = e[0]?.isIntersecting ?? true));
@@ -378,6 +547,8 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
         m.map?.dispose();
         m.dispose();
       }
+      focusApi.current = null;
+      renderer.forceContextLoss();
       renderer.dispose();
       canvas.remove();
     };
@@ -385,6 +556,30 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeKey, reduced]);
 
+  // Turn the globes to face the selected pair; let them spin again when nothing is selected.
+  useEffect(() => {
+    const api = focusApi.current;
+    if (!api) return;
+    if (!pick) return api.release();
+    const ups: { world: WorldId; lat: number; lon: number }[] = [];
+    if (pick.kind === 'place') {
+      const home = places.find((p) => p.id === pick.id);
+      if (home) ups.push({ world: home.body, lat: home.lat, lon: home.lon });
+      const l = links[Math.min(active, links.length - 1)];
+      if (l) ups.push({ world: 'earth', lat: l.lat, lon: l.lon });
+    } else {
+      const home = sites.find((p) => p.id === pick.id);
+      if (home) ups.push({ world: 'earth', lat: home.lat, lon: home.lon });
+      const t = reverse ? places.find((p) => p.id === reverse.place) : null;
+      if (t) ups.push({ world: t.body, lat: t.lat, lon: t.lon });
+    }
+    api.focus(ups);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pick, links, reverse, active, placeKey, state]);
+  useEffect(() => relayout.current(), [reserve]);
+
+  const drawn: { score: number | null }[] = pick?.kind === 'place' ? links : pick?.kind === 'site' && reverse ? [reverse] : [];
+  linkEls.current.length = drawn.length;
   const count = (b: 'moon' | 'mars') => places.filter((p) => p.body === b).length;
   const caption = (w: WorldId) => (w === 'earth' ? `${cells.toLocaleString('en-US')} cells scored` : `${count(w)} named places`);
 
@@ -395,6 +590,27 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
           {state === 'loading' ? 'Loading globes' : 'Globes could not be drawn on this device'}
         </p>
       )}
+      <svg className="pointer-events-none absolute inset-0 z-[5] h-full w-full" aria-hidden="true">
+        <circle ref={markEl} r="15" fill="none" stroke="#FFB000" strokeWidth="2" style={{ opacity: 0 }} />
+        {drawn.map((l, i) => (
+          <g
+            key={i}
+            ref={(el) => {
+              linkEls.current[i] = el;
+            }}
+            style={{ opacity: 0 }}
+          >
+            <path fill="none" stroke="#FFB000" strokeWidth={i === active ? 2.4 : 1.4} strokeLinecap="round" />
+            <circle r="4" fill="#FFB000" />
+            <g data-tag="">
+              <rect x="-24" y="-11" width="48" height="22" fill="#0B0D0F" stroke="#FFB000" strokeWidth="1" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#D7DDE3" fontSize="12" fontWeight="600" fontFamily="Inter Variable, Inter, sans-serif">
+                {pick?.kind === 'place' ? `${i + 1} · ${l.score === null ? '-' : l.score.toFixed(0)}` : l.score === null ? '-' : l.score.toFixed(0)}
+              </text>
+            </g>
+          </g>
+        ))}
+      </svg>
       <div
         ref={tip}
         className="pointer-events-none absolute left-0 top-0 z-10 max-w-[260px] bg-bg px-2.5 py-1.5 opacity-0"
@@ -419,7 +635,7 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
           </span>
         </button>
       ))}
-      <div className="absolute bottom-4 left-4 hidden max-w-[80%] flex-wrap items-center gap-x-6 gap-y-1 text-[12px] text-muted sm:flex sm:left-8">
+      <div className={`absolute bottom-4 left-4 hidden max-w-[80%] flex-wrap items-center gap-x-6 gap-y-1 text-[12px] text-muted sm:left-8 ${pick ? '' : 'sm:flex'}`}>
         <span className="inline-flex items-center gap-2">
           <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true">
             <ellipse cx="11" cy="9" rx="10" ry="4" fill="none" stroke="#FFB000" strokeWidth="1.6" />
@@ -434,8 +650,9 @@ export function HeroGlobes({ places, cells, onPlace, onWorld }: Props) {
           </svg>
           Landing site or candidate region, no values yet
         </span>
-        <span>Drag a globe. Not to scale.</span>
+        <span>Click a pin to see its best matches. Drag a globe. Not to scale.</span>
       </div>
+      {children}
     </div>
   );
 }

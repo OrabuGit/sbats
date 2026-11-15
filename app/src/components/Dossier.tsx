@@ -90,7 +90,7 @@ function BareGroundNote({ k, landCover }: { k: KeyBreakdown; landCover: LandCove
     <div className="mt-2 border-l border-line pl-3">
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-[12px] text-text">Measured from</span>
-        <span className="num text-[11px] uppercase tracking-wider text-text">{b.source === 'ndvi' ? 'NDVI' : 'Land cover'}</span>
+        <span className="num text-[11px] text-text">{b.source === 'ndvi' ? 'NDVI' : 'Land cover'}</span>
       </div>
       <dl className="mt-1 grid grid-cols-[1fr_auto] gap-x-2 gap-y-1">
         <dt className="text-[12px] text-muted">Permanent snow and ice</dt>

@@ -187,7 +187,7 @@ export function LeftPanel({ presets, presetId, onPreset, weights, onWeight, meta
                     <input type="radio" name="purpose" value={p.id} checked={on} onChange={() => onPurpose(p.id)} className="sr-only" />
                     <span className="flex-1">
                       <span className={`block text-[14px] ${on ? 'font-medium' : ''}`}>{p.label}</span>
-                      <span className="num block text-[10px] uppercase tracking-wider text-muted">{p.dimensions.map(dimensionLabel).join(' · ')}</span>
+                      <span className="num block text-[10px] text-muted">{p.dimensions.map(dimensionLabel).join(' · ')}</span>
                     </span>
                   </label>
                 );
@@ -218,7 +218,7 @@ export function LeftPanel({ presets, presetId, onPreset, weights, onWeight, meta
             <h2 id="h-weights" className="label">
               Weights
             </h2>
-            <span className="num text-[10px] uppercase tracking-wider text-muted">{presetId === null ? 'custom' : 'shares of 1'}</span>
+            <span className="num text-[10px] text-muted">{presetId === null ? 'custom' : 'shares of 1'}</span>
           </div>
           <div className="tabs tabs-fill mt-1" role="group" aria-label="Mission preset">
             {presets.map((p) => (

@@ -95,6 +95,10 @@ button[aria-disabled='true'] {
 }
 
 .num {
+  font-variant-numeric: tabular-nums;
+}
+/* Cell codes and other identifiers keep the mono face. */
+.code {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
@@ -247,11 +251,10 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
   border: 2px solid var(--color-text);
 }
 .tm-name {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
   line-height: 16px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   white-space: nowrap;
   padding: 0 4px;
   color: var(--color-text);
@@ -434,7 +437,6 @@ input[type='range'].slider:focus-visible::-moz-range-thumb {
 }
 .kv dd {
   margin: 0;
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-size: 12px;
   text-align: right;
@@ -467,11 +469,9 @@ input[type='checkbox'].check:focus-visible {
 
 /* Instrument readout over the globe. */
 .readout {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  line-height: 18px;
   color: var(--color-muted);
 }
 .readout b {
@@ -628,4 +628,28 @@ h2,
 .link-rule:hover {
   text-decoration-thickness: 3px;
   color: var(--color-accent);
+}
+
+/* Screens cross-fade when the step changes (View Transitions API; browsers without it simply cut). */
+::view-transition-old(root) {
+  animation: vt-out 220ms ease both;
+}
+::view-transition-new(root) {
+  animation: vt-in 380ms ease 60ms both;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

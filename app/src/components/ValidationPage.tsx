@@ -30,7 +30,7 @@ function Stat({ label, value, sub, note }: { label: string; value: string; sub: 
     <div className="border-t border-line pt-3">
       <p className="label">{label}</p>
       <p className="num mt-2 text-[32px] font-semibold leading-none text-text">{value}</p>
-      <p className="num mt-1.5 text-[11px] uppercase tracking-wider text-muted">{sub}</p>
+      <p className="num mt-1.5 text-[11px] text-muted">{sub}</p>
       <p className="mt-2 text-[12px] text-text">{note}</p>
     </div>
   );

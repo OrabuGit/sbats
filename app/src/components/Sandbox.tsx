@@ -378,7 +378,7 @@ export const Sandbox = forwardRef<SandboxHandle, Props>(function Sandbox(
         <span className={`num block text-[13px] ${r.net === null ? 'text-muted' : 'text-text'}`}>
           {id === 'crew' ? (r.production === null ? 'no data' : `${n0(ev.crew)} / ${n0(r.production)}`) : signed(r.net)}
         </span>
-        <span className={`num block text-[10px] uppercase tracking-wider ${STATUS_CLASS[r.status]}`}>{STATUS_WORD[r.status]}</span>
+        <span className={`num block text-[10px] ${STATUS_CLASS[r.status]}`}>{STATUS_WORD[r.status]}</span>
       </td>
     );
     return (
