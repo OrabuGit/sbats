@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T05:01:34Z",
+  "generatedAt": "2026-11-15T06:49:20Z",
   "windowKm": 20.0,
   "pairs": [
    {
@@ -15,7 +15,7 @@
   "pairsNote": "Side-by-side pairs asked for by the team. They are for showing two places at one scale and are not analog scores.",
   "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
   "description": "Every extract covers the same ground area, so they can be shown side by side at one scale. Pixel size differs per dataset and is given per file; nothing is upsampled.",
-  "imageNote": "No Mars image was requested or built: image is null for Mars targets. A lunar image that is at least 95% near-black (permanent shadow) is null too."
+  "imageNote": "Mars images are daytime infrared (THEMIS), grey-scale. A lunar image that is at least 95% near-black (permanent shadow) is null."
  },
  "items": [
   {
@@ -147,6 +147,130 @@
    }
   },
   {
+   "id": "id-goa-pandan",
+   "name": "Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia",
+   "body": "earth",
+   "lat": -5.364,
+   "lon": 105.664,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/id-goa-pandan/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 3.0,
+    "max": 261.3,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S06_00_E105_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-goa-pandan/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_48MWV_20250408_0_L2A",
+    "date": "2025-04-08",
+    "sceneCloudPct": 35.9,
+    "clearShareInWindow": 0.686,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "id-kesaksak-lava-tube",
+   "name": "Kesaksak lava tube, Batur caldera, Bali, Indonesia",
+   "body": "earth",
+   "lat": -8.2403,
+   "lon": 115.3775,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/id-kesaksak-lava-tube/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 0.0,
+    "max": 2145.8,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S09_00_E115_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-kesaksak-lava-tube/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_50LLR_20251008_0_L2A",
+    "date": "2025-10-08",
+    "sceneCloudPct": 8.7,
+    "clearShareInWindow": 0.992,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "id-maros-pangkep-karst",
+   "name": "Maros-Pangkep karst caves, South Sulawesi, Indonesia",
+   "body": "earth",
+   "lat": -5.0031,
+   "lon": 119.6944,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/id-maros-pangkep-karst/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 0.0,
+    "max": 1346.7,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S06_00_E119_00_DEM",
+     "Copernicus_DSM_COG_10_S05_00_E119_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/id-maros-pangkep-karst/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_50MQV_20250905_0_L2A",
+    "date": "2025-09-05",
+    "sceneCloudPct": 0.4,
+    "clearShareInWindow": 0.975,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
    "id": "id-tambora-caldera",
    "name": "Mount Tambora caldera, Sumbawa, Indonesia",
    "body": "earth",
@@ -240,13 +364,13 @@
     "file": "extracts/moon-malapert-massif/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 250,
-    "pixelM": 80.0,
-    "min": 913.0,
-    "max": 5172.0,
+    "size": 1000,
+    "pixelM": 20.0,
+    "min": 909.5,
+    "max": 5173.5,
     "noDataShare": 0.0,
-    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
-    "nativePixelM": 80,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_20M",
+    "nativePixelM": 20,
     "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
     "badge": "Mission",
     "note": "Heights above a sphere of radius 1737.4 km."
@@ -275,13 +399,13 @@
     "file": "extracts/moon-mons-mouton/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 250,
-    "pixelM": 80.0,
-    "min": 4594.0,
-    "max": 6402.0,
+    "size": 1000,
+    "pixelM": 20.0,
+    "min": 4593.5,
+    "max": 6405.5,
     "noDataShare": 0.0,
-    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
-    "nativePixelM": 80,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_20M",
+    "nativePixelM": 20,
     "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
     "badge": "Mission",
     "note": "Heights above a sphere of radius 1737.4 km."
@@ -310,13 +434,13 @@
     "file": "extracts/moon-haworth/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 250,
-    "pixelM": 80.0,
-    "min": -4021.0,
-    "max": -1698.5,
+    "size": 1000,
+    "pixelM": 20.0,
+    "min": -4022.0,
+    "max": -1687.0,
     "noDataShare": 0.0,
-    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
-    "nativePixelM": 80,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_20M",
+    "nativePixelM": 20,
     "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
     "badge": "Mission",
     "note": "Heights above a sphere of radius 1737.4 km."
@@ -336,13 +460,13 @@
     "file": "extracts/moon-shackleton-rim/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 250,
-    "pixelM": 80.0,
-    "min": -2868.5,
-    "max": 1736.5,
+    "size": 1000,
+    "pixelM": 20.0,
+    "min": -2872.5,
+    "max": 1738.5,
     "noDataShare": 0.0,
-    "product": "LRO LOLA polar gridded DEM LDEM_80S_80M",
-    "nativePixelM": 80,
+    "product": "LRO LOLA polar gridded DEM LDEM_80S_20M",
+    "nativePixelM": 20,
     "attribution": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
     "badge": "Mission",
     "note": "Heights above a sphere of radius 1737.4 km."
@@ -408,18 +532,29 @@
     "file": "extracts/mars-jezero/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 43,
-    "pixelM": 463.0,
-    "min": -2690.0,
-    "max": -1777.0,
+    "size": 100,
+    "pixelM": 200.0,
+    "min": -2716.0,
+    "max": -1733.0,
     "noDataShare": 0.0,
-    "product": "MGS MOLA MEGDR 128 pixels per degree, megt44n000hb.img",
-    "nativePixelM": 463,
-    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "product": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2",
+    "nativePixelM": 200,
+    "attribution": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2 (Fergason, Hare and Laura 2018), USGS Astrogeology Science Center; HRSC data ESA/DLR/FU Berlin, MOLA data NASA/GSFC.",
     "badge": "Mission",
-    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+    "note": "Topography above the Mars areoid. 200 m pixels where HRSC stereo images exist; elsewhere the detail is that of MOLA (463 m), so some extracts look smoother than their pixel size suggests."
    },
-   "image": null
+   "image": {
+    "file": "extracts/mars-jezero/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12",
+    "nativePixelM": 100,
+    "attribution": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12 (Edwards et al. 2011). NASA/JPL-Caltech/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "noDataShare": 0.0,
+    "note": "Daytime thermal infrared brightness, not visible light: sunlit and warm surfaces are bright. Grey-scale; use it as surface texture, not as true colour."
+   }
   },
   {
    "id": "mars-gale",
@@ -432,18 +567,29 @@
     "file": "extracts/mars-gale/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 43,
-    "pixelM": 463.0,
-    "min": -4534.0,
-    "max": -2462.0,
+    "size": 100,
+    "pixelM": 200.0,
+    "min": -4583.0,
+    "max": -2439.0,
     "noDataShare": 0.0,
-    "product": "MGS MOLA MEGDR 128 pixels per degree, megt00n090hb.img",
-    "nativePixelM": 463,
-    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "product": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2",
+    "nativePixelM": 200,
+    "attribution": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2 (Fergason, Hare and Laura 2018), USGS Astrogeology Science Center; HRSC data ESA/DLR/FU Berlin, MOLA data NASA/GSFC.",
     "badge": "Mission",
-    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+    "note": "Topography above the Mars areoid. 200 m pixels where HRSC stereo images exist; elsewhere the detail is that of MOLA (463 m), so some extracts look smoother than their pixel size suggests."
    },
-   "image": null
+   "image": {
+    "file": "extracts/mars-gale/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12",
+    "nativePixelM": 100,
+    "attribution": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12 (Edwards et al. 2011). NASA/JPL-Caltech/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "noDataShare": 0.0,
+    "note": "Daytime thermal infrared brightness, not visible light: sunlit and warm surfaces are bright. Grey-scale; use it as surface texture, not as true colour."
+   }
   },
   {
    "id": "mars-arcadia-planitia",
@@ -456,18 +602,29 @@
     "file": "extracts/mars-arcadia-planitia/elevation.f32",
     "format": "float32 little-endian, row-major, north first, NaN = no data",
     "unit": "m",
-    "size": 43,
-    "pixelM": 463.0,
-    "min": -3960.0,
-    "max": -3914.0,
+    "size": 100,
+    "pixelM": 200.0,
+    "min": -4013.0,
+    "max": -3851.0,
     "noDataShare": 0.0,
-    "product": "MGS MOLA MEGDR 128 pixels per degree, megt44n180hb.img",
-    "nativePixelM": 463,
-    "attribution": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "product": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2",
+    "nativePixelM": 200,
+    "attribution": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2 (Fergason, Hare and Laura 2018), USGS Astrogeology Science Center; HRSC data ESA/DLR/FU Berlin, MOLA data NASA/GSFC.",
     "badge": "Mission",
-    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."
+    "note": "Topography above the Mars areoid. 200 m pixels where HRSC stereo images exist; elsewhere the detail is that of MOLA (463 m), so some extracts look smoother than their pixel size suggests."
    },
-   "image": null
+   "image": {
+    "file": "extracts/mars-arcadia-planitia/image.jpg",
+    "size": 200,
+    "pixelM": 100.0,
+    "bands": "grey",
+    "product": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12",
+    "nativePixelM": 100,
+    "attribution": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12 (Edwards et al. 2011). NASA/JPL-Caltech/Arizona State University; hosted by USGS Astrogeology.",
+    "badge": "Mission",
+    "noDataShare": 0.0,
+    "note": "Daytime thermal infrared brightness, not visible light: sunlit and warm surfaces are bright. Grey-scale; use it as surface texture, not as true colour."
+   }
   }
  ]
 }
