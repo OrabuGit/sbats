@@ -28,7 +28,7 @@ import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
 import type { KnownSitesFile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
-import { loadTargetMinerals, loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
+import { loadTargetEnvironment, loadTargetMinerals, loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
 import { decodeLayout, type SavedLayout } from './lib/simAdapter';
@@ -142,6 +142,7 @@ function Orbit({ data }: { data: DataBundle }) {
   const [placeId, setPlaceId] = useState<string | null>(null);
   const rovers = useAsync(() => loadExtra<RoversFile>('rovers.json'), 'rovers');
   const targetMinerals = useAsync(loadTargetMinerals, 'target-minerals');
+  const targetEnv = useAsync(loadTargetEnvironment, 'target-environment');
   const [scale, setScale] = useState<'grid' | 'site'>('grid');
   const [stab, setStab] = useState<{ key: string; result: StabilityResult } | null>(null);
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
@@ -489,9 +490,10 @@ function Orbit({ data }: { data: DataBundle }) {
             site: scale === 'site' && siteEntry ? (siteEntry as unknown as Parameters<typeof matchRecord>[0]['site']) : null,
             targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
             minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
+            environment: targetEnv.status === 'ready' ? targetEnv.value : null,
           })
         : null,
-    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows, targetMinerals],
+    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows, targetMinerals, targetEnv],
   );
 
   // Rank stability: 200 redraws of the weights, computed after the screen has settled (about 0.7 s).

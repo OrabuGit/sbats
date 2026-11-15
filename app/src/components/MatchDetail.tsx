@@ -73,6 +73,7 @@ function Side({ label, side }: { label: string; side: MatchSide }) {
         {!none && (side.scale === 'computed' ? <ComputedBadge /> : <SourceBadge badge={side.badge} source={side.source} />)}
         {side.scale && SCALE_TAG[side.scale] && <span className="num text-[10px] uppercase tracking-wider text-muted">{SCALE_TAG[side.scale]}</span>}
       </dd>
+      {side.note && <dd className="mt-0.5 text-[11px] leading-4 text-muted">{side.note}</dd>}
     </div>
   );
 }
@@ -296,6 +297,35 @@ export function MatchDetail({ cell, placeName, kindLabel, target, explained: e, 
                 <DimensionRow key={d.id} d={d} targetName={target.name} />
               ))}
             </ul>
+            {record.purposes.some((p) => p.extendedScore !== null) && (
+              <div className="mt-4 max-w-[560px]">
+                <h4 className="label">Purpose scores with the added dimensions, not validated</h4>
+                <table className="mt-2 w-full border-collapse text-left text-[13px]">
+                  <thead>
+                    <tr className="border-b border-line">
+                      <th scope="col" className="label py-1.5 font-normal">Purpose</th>
+                      <th scope="col" className="label py-1.5 text-right font-normal">Frozen score</th>
+                      <th scope="col" className="label py-1.5 text-right font-normal">With added</th>
+                      <th scope="col" className="label py-1.5 pl-4 font-normal">Added</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {record.purposes.map((p) => (
+                      <tr key={p.id} className="border-b border-line">
+                        <td className="py-1.5 text-text">{p.label}</td>
+                        <td className={`num py-1.5 text-right ${p.score === null ? 'text-muted' : 'text-text'}`}>{p.score === null ? 'no data' : p.score.toFixed(0)}</td>
+                        <td className={`num py-1.5 text-right ${p.extendedScore === null ? 'text-muted' : 'text-text'}`}>{p.extendedScore === null ? 'no data' : p.extendedScore.toFixed(0)}</td>
+                        <td className="py-1.5 pl-4 text-[12px] text-muted">{p.extraDimensions.length > 0 ? p.extraDimensions.join(', ') : 'none'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="mt-2 text-[11px] text-muted">
+                  Scores out of 100. An added dimension joins a purpose with the average weight of that purpose's own factors. No weight was fitted
+                  and nothing here has been validated. The all-round match is unchanged.
+                </p>
+              </div>
+            )}
           </section>
 
           <section className="border-b border-line px-4 py-6 sm:px-6" aria-labelledby="h-cannot">

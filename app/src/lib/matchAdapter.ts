@@ -9,12 +9,15 @@ import {
   earthPlaceFromCell,
   earthPlaceFromSite,
   emitFamilies,
+  extraRanges,
   sharedMinerals,
+  targetEnvironment,
   sitePosts,
   targetAtSiteWindow,
   type MatchRecord,
   type SharedMinerals,
   type SiteEntryLike,
+  type TargetEnvironmentFile,
   type TargetMineralsFile,
   type TargetWindowsFile,
 } from './match';
@@ -33,10 +36,13 @@ export type { KnownSite, KnownSitesFile } from './targets';
 
 /** Target terrain measured in windows the size of each site's footprint (Session C). null when not published. */
 export const loadTargetWindows = () => loadExtra<TargetWindowsFile>('target_windows.json');
+/** Wind, dust and ice at the targets (Session C). null when not published. */
+export const loadTargetEnvironment = () => loadExtra<TargetEnvironmentFile>('target_environment.json');
 /** Minerals reported at the targets and the mineral families used to compare them (Session C). null when not published. */
 export const loadTargetMinerals = () => loadExtra<TargetMineralsFile>('target_minerals.json');
 
 const rangesOf = new WeakMap<EarthFile, EarthRanges>();
+const extraRangesOf = new WeakMap<EarthFile, ReturnType<typeof extraRanges>>();
 const indexOf = new WeakMap<EarthFile, Map<string, ProfileIndex>>();
 const basisOf = new WeakMap<EarthFile, Map<string, StabilityBasis>>();
 
@@ -57,6 +63,8 @@ export interface RecordInput {
   targetWindows?: TargetWindowsFile | null;
   /** data/target_minerals.json. Minerals are compared at site scale only. */
   minerals?: TargetMineralsFile | null;
+  /** data/target_environment.json: wind, dust and ice at the targets. */
+  environment?: TargetEnvironmentFile | null;
 }
 
 /**
@@ -98,8 +106,23 @@ export function matchRecord(input: RecordInput): { record: MatchRecord; note: st
       }
     }
   }
+  let xr = extraRangesOf.get(earth);
+  if (!xr) extraRangesOf.set(earth, (xr = extraRanges(earth.cells)));
   const build = (table: LithologySimilarity | null) =>
-    buildMatchRecord({ target: used, place, ranges: ranges(earth), table, classes, index, terrainLikeForLike: like !== null, minerals: shared });
+    buildMatchRecord({
+      target: used,
+      place,
+      ranges: ranges(earth),
+      table,
+      classes,
+      index,
+      terrainLikeForLike: like !== null,
+      minerals: shared,
+      // Wind, dust and ice: the target side from target_environment.json, clamped to Earth's own range
+      // the way the frozen score clamps (a windless Moon is compared with Earth's calmest cell).
+      targetExtras: targetEnvironment(input.environment ?? null, target.id),
+      extraRanges: xr,
+    });
   try {
     return { record: build(lithology), note: null, minerals: shared };
   } catch (e) {
