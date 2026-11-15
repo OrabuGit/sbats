@@ -48,7 +48,7 @@ export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeature
                   aria-disabled={locked || undefined}
                   title={locked ? 'Open a match from the list first' : undefined}
                   onClick={() => !locked && onStep(n)}
-                  className={`flex min-w-11 items-center justify-center gap-2 border-b-2 px-2.5 pt-0.5 sm:px-4 ${
+                  className={`flex min-w-10 items-center justify-center gap-2 border-b-2 px-2 pt-0.5 sm:min-w-11 sm:px-4 ${
                     active ? 'border-accent text-text' : locked ? 'border-transparent text-line' : 'border-transparent text-muted hover:text-text'
                   }`}
                 >
@@ -60,7 +60,7 @@ export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeature
           })}
         </ol>
       </nav>
-      <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`tool border-b-2 pt-0.5 !px-3 ${featuredOpen ? 'border-accent !text-text' : 'border-transparent'}`}>
+      <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`tool hidden border-b-2 pt-0.5 !px-3 sm:inline-flex ${featuredOpen ? 'border-accent !text-text' : 'border-transparent'}`}>
         <MapPin size={14} aria-hidden="true" />
         <span className="hidden lg:inline">Featured sites</span>
       </button>

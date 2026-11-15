@@ -19,6 +19,7 @@ import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
+import { WorldPage } from './components/WorldPage';
 import { TerrainPage } from './components/TerrainPage';
 import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
@@ -584,10 +585,19 @@ function Orbit({ data }: { data: DataBundle }) {
       )}
 
       {view === 'world' && (
-        <main className="scroll min-h-0 flex-1 bg-panel p-6">
-          <p className="label">Not built yet</p>
-          <p className="mt-2 text-[14px] text-text">{view === 'world' ? `World page: ${worldPage}` : view}</p>
-        </main>
+        <WorldPage
+          world={worldPage}
+          onWorld={setWorldPage}
+          targets={targets}
+          onPlace={(id) => {
+            setTargetId(id);
+            setSelected(null);
+            setView('orbit');
+            setStep(2);
+            setTab('setup');
+          }}
+          onFind={() => pickWorld(worldPage)}
+        />
       )}
 
       {view === 'match' && selectedCell && explained && (
