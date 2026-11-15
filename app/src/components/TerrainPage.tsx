@@ -36,6 +36,12 @@ const profileOf = (r: RouteResult, floor: number): RouteProfile => {
   return { distKm: s.map((x) => x.distanceM / 1000), heightM: s.map((x) => (x.elevationM as number) - floor) };
 };
 const DRIVE_SECONDS = 12;
+/** A route across the middle of the square, in km from its centre. Lets a route be made without a pointer. */
+const EXAMPLE_ROUTE: RoutePoint[] = [
+  { x: -6, z: 3 },
+  { x: -1, z: -1 },
+  { x: 5, z: -3 },
+];
 const fx = (v: number | null | undefined, d: number) => (v === null || v === undefined ? 'no data' : v.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d }));
 
 /** Elevation along the route on both terrains, on one pair of axes. */
@@ -166,6 +172,9 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
           ))}
         </div>
         <span className="flex-1" />
+        <button type="button" onClick={() => change(EXAMPLE_ROUTE)} className="tool border-l border-line" title="Places a three-point route across the centre. The keyboard path to a route.">
+          Example route
+        </button>
         <button type="button" onClick={() => change(route.slice(0, -1))} disabled={route.length === 0} className="tool border-l border-line">
           <Undo2 size={14} aria-hidden="true" /> <span className="hidden sm:inline">Undo point</span>
         </button>
@@ -192,7 +201,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
           {earthName} and {targetName} at one scale
         </h2>
         <p className="mt-1 max-w-[72ch] text-[13px] text-muted">
-          Click the Earth terrain, on the left, to add waypoints. The same route is laid on the target at the same positions, so the two can be
+          Click the Earth terrain, on the left, to add waypoints, or press Example route. The same route is laid on the target at the same positions, so the two can be
           compared. Drag to turn both.
         </p>
       </header>

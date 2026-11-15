@@ -41,6 +41,8 @@ const GLOSSARY: [string, string][] = [
   ['All-round match', 'The match score with all six factors, at the weights of the mission preset.'],
   ['Purpose', 'One use of an analog site, such as rover mobility. A purpose score uses only the factors that use depends on.'],
   ['Analog profile', 'The similarity of a cell on five dimensions, each with its percentile among all Earth cells. No weights and no veto.'],
+  ['Verdict', 'A similarity read as matches (0.75 or more), partly (0.30 to 0.75) or does not match (below 0.30). A display rule: it changes no number.'],
+  ['Stability', 'How far a rank moves when every weight is redrawn within 25% of its value, 200 times.'],
   ['Coverage', 'The share of the weight that had data, from 0 to 1. It sets the confidence: high, medium or low.'],
   ['Footprint', 'The 2 to 5 km square around a featured site in which its fine-scale values are measured.'],
   ['Readiness', 'GREEN, AMBER or RED: whether a base layout keeps every resource balance at or above zero.'],
@@ -74,6 +76,36 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
             </div>
           ))}
         </dl>
+      </Section>
+
+      <Section id="m-data" title="Data in this build" wide>
+        <p className="max-w-[72ch]">
+          The Earth grid is <span className="num">{earth.meta.resolutionDeg}°</span>, about <span className="num">{Math.round(cellKm)} km</span> per
+          cell at the equator, with <span className="num">{earth.cells.length.toLocaleString('en-US')}</span> land cells. It was built on{' '}
+          <span className="num">{String(earth.meta.generatedAt).slice(0, 10)}</span>. The period of each dataset is part of its source line.
+        </p>
+        <DataTable caption="Earth measurements and their sources" headers={['Measurement', 'Unit', 'Source and period', 'Badge']} minWidth={760}>
+          {earth.meta.factors.map((f) => (
+            <tr key={f.key} className="border-b border-line">
+              <Td>{keyLabel(f.key, meta)}</Td>
+              <Td muted>{f.unit === '' ? 'none' : f.unit}</Td>
+              <Td muted>{f.source}</Td>
+              <Td>
+                <SourceBadge badge={f.badge} source={f.source} />
+              </Td>
+            </tr>
+          ))}
+          {earth.meta.landCover && (
+            <tr className="border-b border-line">
+              <Td>Permanent ice and barren shares</Td>
+              <Td muted>share, 0 to 1</Td>
+              <Td muted>{earth.meta.landCover.source}</Td>
+              <Td>
+                <SourceBadge badge="Measured" source={earth.meta.landCover.source} />
+              </Td>
+            </tr>
+          )}
+        </DataTable>
       </Section>
 
       <Section id="m-factors" title="Six factors" wide>
@@ -273,7 +305,7 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
         <p className="text-[13px] text-muted">Distances are great-circle distances between cell centres.</p>
       </Section>
 
-      <Section id="m-sites" title="Featured sites, best month and terrain">
+      <Section id="m-sites" title="Featured sites, verdicts, stability, routes and terrain">
         <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           <Rule name="Footprint" value="2 to 5 km">
             A featured site is measured again inside a small square: slope and roughness on the same 463 m posts as the grid, NDVI from
@@ -286,6 +318,20 @@ export function MethodPage({ earth, targets, lithology, listLimit, siteCount }: 
           <Rule name="Ground extracts" value="20 km">
             Every extract covers the same 20 km square, north up. Pixel size is 30 m on Earth, 80 m on the Moon and 463 m on Mars, and nothing
             is upsampled. Relief is shaded with one light on all three.
+          </Rule>
+          <Rule name="Verdict" value="0.75 and 0.30">
+            A similarity of 0.75 or more reads "matches", 0.30 to 0.75 "partly", below 0.30 "does not match". The cut-offs put the same,
+            related and unrelated rock class on the three verdicts. They are a display rule.
+          </Rule>
+          <Rule name="Stability" value="200 redraws">
+            Each weight is multiplied by a random factor between 0.75 and 1.25, the weights are renormalised and every cell is scored again,
+            200 times with a fixed seed. The app reports how much of the top 10 survives and where a cell's rank falls in nine redraws of ten.
+            No redraw is kept: the frozen weights are read, never changed.
+          </Rule>
+          <Rule name="Route" value="pixel size">
+            A route is straight legs between waypoints, sampled at the pixel size of the elevation grid (30 m on Earth, 60 to 80 m on the
+            Moon, 463 m on Mars). Slope is measured over that distance, so a coarser grid hides short steep steps. No driving time or energy
+            is shown.
           </Rule>
           <Rule name="3D terrain" value="1 : 1">
             No vertical exaggeration. Heights are measured from each place's own lowest point, because the datums differ. Modules are drawn

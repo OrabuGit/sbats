@@ -140,6 +140,35 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, onSi
           <Lines title="Falls short on" items={[...(finding?.short ?? []), ...(finding?.notScored ?? []).map((t) => `Not scored at all: ${t}`)]} empty="No written finding for this site." />
         </div>
 
+        <div className="mt-5 grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          <div>
+            <h4 className="label mb-1.5">Process and published basis</h4>
+            <p className="text-[13px] leading-5 text-text">
+              {scored?.rockType ? `Rock: ${scored.rockType}. ` : ''}
+              {analog ? analog.source : 'No published basis is recorded for this site.'} {analog && <SourceBadge badge="Literature" source={analog.source} />}
+            </p>
+            {analog?.note && <p className="mt-1.5 text-[12px] text-muted">{analog.note}</p>}
+          </div>
+          <div>
+            <h4 className="label mb-1.5">What a team could test here{target ? `, against ${target.name}` : ''}</h4>
+            {result ? (
+              <dl className="kv">
+                {PURPOSES.map((p) => {
+                  const v = result.site.purposes[p.id]?.score ?? null;
+                  return (
+                    <div key={p.id}>
+                      <dt>{p.label}</dt>
+                      <dd className={v === null ? '!text-muted' : ''}>{v === null ? 'no data' : `${v.toFixed(0)} / 100`}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            ) : (
+              <p className="text-[13px] text-muted">No data. No site-scale score was published for this site.</p>
+            )}
+          </div>
+        </div>
+
         {result && target && (
           <div className="mt-5 max-w-[420px]">
             <Profile result={result} targetName={target.name} />
