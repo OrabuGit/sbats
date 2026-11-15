@@ -393,10 +393,12 @@ enters the all-round score.
 66 places: 27 lunar and 10 Mars landing sites, 17 lunar and 12 Mars candidate regions. Each row has its citation, URL and the
 quoted line the coordinates were read from (`quote`). Built by `validation/build/make_known_sites.py`.
 
-Checked in the main session: the coordinates of Apollo 11, Chang'e 3, 4, 5 and 6, Chandrayaan-3, Viking 1 and 2,
-Pathfinder, Spirit, Opportunity, Curiosity, InSight, Perseverance and Zhurong agree with the values the team already
-held; Curiosity, Perseverance, Marius Hills, Shackleton and Arcadia AP-1 fall within 3 km of the curated targets.
-The other rows are check level B (sub-agent only). Please spot-check before the demo.
+Checked in the main session (check level A): all 27 lunar landing rows were found again, digit for digit, in
+NASA's two NSSDCA pages fetched on 2026-11-15 (the Apollo coordinates page and the table of spacecraft on the
+Moon). The Mars landing sites agree with the values the team already held for Viking 1 and 2, Pathfinder, Spirit,
+Opportunity, Curiosity, InSight, Perseverance and Zhurong. Curiosity, Perseverance, Marius Hills, Shackleton and
+Arcadia AP-1 fall within 3 km of the curated targets. The candidate regions are check level B (sub-agent only):
+please spot-check those before the demo.
 
 Decisions a human should make:
 
