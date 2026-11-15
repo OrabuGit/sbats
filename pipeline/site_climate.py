@@ -73,6 +73,8 @@ def fetch(points: list[tuple[float, float]]) -> dict:
 
 def build() -> dict:
     analogs = json.loads((DATA / "analogs.json").read_text())
+    from sites import EXTRA_SITES   # sites proposed by a team member that are not in analogs.json
+    analogs += [{"id": k, **v} for k, v in EXTRA_SITES.items()]
     d = fetch([(a["lat"], a["lon"]) for a in analogs])
     u = {p: d["params"][p]["units"] for p in d["params"]}
     assert u["T2M"] == "C" and u["T2M_RANGE"] == "C" and u["PRECTOTCORR"] == "mm/day" and u["ALLSKY_SFC_SW_DWN"] == "W m-2", u
@@ -104,7 +106,7 @@ def build() -> dict:
     return {
         "meta": {
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "description": ("Monthly climate normals for every site in analogs.json. Each value is that of the source "
+            "description": ("Monthly climate normals for every site in analogs.json and the extra sites of sites.json. Each value is that of the source "
                             "grid cell containing the site, not a measurement at the site."),
             "period": d["period"], "powerVersion": d["version"], "fields": fields,
         },

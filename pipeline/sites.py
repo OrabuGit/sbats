@@ -58,7 +58,64 @@ MAX_SCENE_CLOUD = 80                    # percent, scene-level filter before the
 SITE_CACHE = CACHE / "sites"
 SITE_CACHE.mkdir(exist_ok=True)
 
-COMPARISON_IDS = ["mauna-kea", "kilauea", "atacama-yungay", "haughton-crater", "lanzarote-timanfaya"]
+COMPARISON_IDS = ["mauna-kea", "kilauea", "atacama-yungay", "haughton-crater", "lanzarote-timanfaya",
+                  "dallol", "dasht-e-lut", "salar-de-uyuni", "tunupa-volcano"]
+
+# Sites proposed by a team member that are not in data/analogs.json (that file belongs to another
+# part of the project). Coordinates come from the source named in "coordinateSource"; nothing is typed
+# from memory. "candidate" = proposed new analog. "known" = already-known analog added for comparison,
+# not a new finding. How each position was fixed is logged in decisions/B.md.
+EXTRA_SITES = {
+    "id-tambora-caldera": {
+        "name": "Mount Tambora caldera, Sumbawa, Indonesia", "lat": -8.2438, "lon": 117.9918, "kind": "candidate",
+        "coordinateSource": ("Centre of the caldera rim traced on Copernicus DEM GLO-30 (highest point along 180 rays from the "
+                             "caldera floor). Smithsonian GVP volcano 264040 lists the volcano at 8.25 S, 118.0 E."),
+        "analogSource": None,
+    },
+    "id-batur-lava-fields": {
+        "name": "Mount Batur black lava fields, Bali, Indonesia", "lat": -8.2556, "lon": 115.3628, "kind": "candidate",
+        "coordinateSource": ("Centre of the bounding box of OpenStreetMap relation 19753621 (natural=bare_rock, 7.5 km2, "
+                             "version 3 of 2025-10-25), the mapped bare lava south-west of the Batur cone. (c) OpenStreetMap contributors, ODbL."),
+        "analogSource": None,
+    },
+    "dasht-e-lut": {
+        "name": "Dasht-e Lut (Lut Desert), Iran", "lat": 30.2639, "lon": 59.2411, "kind": "known",
+        "coordinateSource": "Wikidata Q767128 (Dasht-e Lut), coordinate statement, read 2026-11-15. One point in a desert of about 50,000 km2.",
+        "analogSource": ("Title of a conference abstract: 'Terrestrial analogs for Martian yardangs: the Argentinian Altiplano and the "
+                         "Lut Desert of Iran', Geological Society of America Abstracts with Programs 2017, doi:10.1130/abs/2017cd-292992"),
+    },
+    "salar-de-uyuni": {
+        "name": "Salar de Uyuni salt flat, Bolivia", "lat": -20.3333, "lon": -67.7, "kind": "known",
+        "coordinateSource": "Wikidata Q76122 (Salar de Uyuni), coordinate statement, read 2026-11-15. One point on a salt flat of about 10,000 km2.",
+        "analogSource": None,
+    },
+    "tunupa-volcano": {
+        "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia", "lat": -19.83, "lon": -67.64, "kind": "known",
+        "coordinateSource": "Wikidata Q849364 (Tunupa), coordinate statement, read 2026-11-15. Not listed in the Smithsonian GVP databases.",
+        "analogSource": None,
+    },
+}
+# Known problems with a site's values, written to the file as "caveat".
+CAVEATS = {
+    "salar-de-uyuni": ("The Copernicus DEM water body mask classes 96% of this footprint as water (the salt flat floods in the wet "
+                       "season) and Sentinel-2 classes most clear views of the salt as snow. Terrain on 463 m posts is therefore null, "
+                       "and slopeFine, roughnessFine, ndvi and bareFrac rest on the 4% of the footprint outside the mask. "
+                       "waterFrac here is not a measurement of open water."),
+    "id-batur-lava-fields": ("The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the "
+                             "footprint is ground outside the lava field."),
+}
+# Footprints a team member should check. The text says how the footprint was set.
+PROVISIONAL = {
+    "id-tambora-caldera": ("Square enclosing the caldera rim as traced on Copernicus DEM GLO-30: rim crest 3.1 to 4.2 km from its centre, "
+                           "7.1 km north-south by 7.4 km east-west. Smithsonian GVP describes a 6-km-wide, 1250-m-deep caldera."),
+    "id-batur-lava-fields": ("Square enclosing the bare-rock polygon mapped in OpenStreetMap (relation 19753621): 4.0 km north-south by "
+                             "3.2 km east-west. The square also holds ground outside the polygon. Smithsonian GVP confirms historical basaltic "
+                             "lava flows on the caldera floor but gives no outline."),
+    "dallol": "3 km square on the Smithsonian GVP coordinates of the Dallol crater (volcano 221041). The outline of the hydrothermal field was not mapped.",
+    "dasht-e-lut": "5 km sample at a single published point. The desert's yardang, sand sea and plateau zones were not told apart.",
+    "salar-de-uyuni": "5 km sample of the salt surface at a single published point.",
+    "tunupa-volcano": "5 km square on the summit coordinates. Entered separately from the salt flat because one small footprint cannot hold both.",
+}
 
 # Footprint: side of the square in km, and what it does and does not cover.
 FOOTPRINTS = {
@@ -73,6 +130,12 @@ FOOTPRINTS = {
     "atacama-yungay": (5.0, "Centred on the published approximate position (24 S, 70 W), not a surveyed station."),
     "haughton-crater": (5.0, "Central part of the 23 km impact structure only."),
     "lanzarote-timanfaya": (5.0, "Timanfaya lava field at the listed coordinates."),
+    "id-tambora-caldera": (7.4, "The whole summit caldera of Tambora, rim to rim, with a little of the outer slope in the corners of the square."),
+    "id-batur-lava-fields": (4.0, "Young bare lava flows on the caldera floor south-west of the Batur cone."),
+    "dallol": (3.0, "Dallol crater and hydrothermal field on the Danakil salt plain."),
+    "dasht-e-lut": (5.0, "One 5 km sample of the Lut Desert, not the whole desert."),
+    "salar-de-uyuni": (5.0, "One 5 km sample of the salt flat."),
+    "tunupa-volcano": (5.0, "Summit area of Tunupa volcano. The salt flat is outside it."),
 }
 
 # Smithsonian GVP volcano numbers, taken from the site's own citation in analogs.json
@@ -80,6 +143,7 @@ FOOTPRINTS = {
 GVP_NUMBER = {
     "id-kawah-ijen": 263350, "id-merapi": 263250, "id-kesaksak-lava-tube": 264010,
     "id-gua-lawa": 263180, "mauna-kea": 332030, "kilauea": 332010, "lanzarote-timanfaya": 383060,
+    "id-tambora-caldera": 264040, "id-batur-lava-fields": 264010, "dallol": 221041,
 }
 
 # Rock type stated in a paper about the feature itself, used only where no regional map and no
@@ -96,6 +160,7 @@ ROCK_TO_GLIM = {
     "Basalt / Picro-Basalt": 2, "basalt": 2, "mafic volcanic rocks": 2,
     "Andesite / Basaltic Andesite": 10,
     "Granite": 9,
+    "Trachybasalt / Tephrite Basanite": 2,
 }
 
 GDAL_ENV = dict(
@@ -364,6 +429,8 @@ def gvp_volcano(number: int) -> dict | None:
     if not d["features"]:
         return None
     p = d["features"][0]["properties"]
+    if str(p.get("Major_Rock_Type") or "").startswith("No Data"):
+        p["Major_Rock_Type"] = None   # the database says it has no rock type; that is a null, not a rock name
     return {k: p.get(k) for k in ("Volcano_Number", "Volcano_Name", "Primary_Volcano_Type", "Major_Rock_Type",
                                   "Latitude", "Longitude")}
 
@@ -410,11 +477,14 @@ def r(x, nd):
 
 def build() -> dict:
     analogs = {a["id"]: a for a in json.loads((DATA / "analogs.json").read_text())}
+    assert not set(analogs) & set(EXTRA_SITES), "an extra site is now in analogs.json: remove it from EXTRA_SITES"
+    analogs.update({k: {"id": k, **v} for k, v in EXTRA_SITES.items()})
     earth = json.loads((DATA / "earth.json").read_text())
     cells = {(c["lat"], c["lon"]): c for c in earth["cells"]}
     fsrc = {f["key"]: f["source"] for f in earth["meta"]["factors"]}
     classes = {k["code"]: k["label"] for f in earth["meta"]["factors"] if f["key"] == "lithology" for k in f["classes"]}
     ids = [i for i, a in analogs.items() if a["kind"] == "candidate"] + COMPARISON_IDS
+    assert all(analogs[i]["kind"] == "known" for i in COMPARISON_IDS)
     missing = [i for i in ids if i not in FOOTPRINTS or i not in analogs]
     assert not missing, f"no footprint or analogs.json entry for: {missing}"
     DEM_SRC = "Copernicus DEM GLO-30 (ESA), elevation and water body mask"
@@ -486,6 +556,13 @@ def build() -> dict:
         site = {
             "id": sid, "name": a["name"], "lat": lat, "lon": lon, "kind": a["kind"],
             "footprintKm": side, "footprintNote": fnote,
+            "footprintStatus": "provisional" if sid in PROVISIONAL else "set",
+            "footprintBasis": PROVISIONAL.get(sid),
+            "inAnalogsJson": sid not in EXTRA_SITES,
+            "coordinateSource": a.get("coordinateSource"),
+            "analogSource": a.get("analogSource") if sid in EXTRA_SITES else a.get("source"),
+            "proposedBy": "team member" if sid in PROVISIONAL else None,
+            "caveat": CAVEATS.get(sid),
             "values": vals,
             "gridCell": None if cell is None else {
                 "lat": cell["lat"], "lon": cell["lon"],
@@ -503,7 +580,9 @@ def build() -> dict:
     meta = {
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "description": ("Factors measured inside a small square footprint centred on each site, for the candidate sites of "
-                        "analogs.json and five well-known analogs. Every value carries its scale: site, volcano or grid."),
+                        "analogs.json, two more candidate sites proposed by a team member, and nine already-known analogs for "
+                        "comparison. Every value carries its scale: site, volcano or grid. kind 'known' means an already-known "
+                        "analog, not a new finding. footprintStatus 'provisional' means a team member should check the footprint."),
         "year": YEAR,
         "bareNdviThreshold": BARE_NDVI,
         "methods": {
