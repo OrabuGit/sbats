@@ -417,6 +417,118 @@ Owner: Session C. Hand-curated. It can only be written once Session B has publis
 - Every pair must be listed. A missing pair is an error caught by a unit test, not a silent default.
 - Session A renders the whole table, with justifications, on the Method page.
 
+## Files added by Session C on 2026-11-14 and 2026-11-15
+
+Owner of all of them: Session C. None is read by the all-round score. Longer descriptions and the
+functions that read them: `app/src/lib/sim/README.md`, `app/src/lib/targets/README.md`,
+`app/src/lib/match/README.md`, `app/src/lib/route/README.md`.
+
+### data/modules.json
+
+Numbers for the base simulation. Built by `validation/build/make_modules.py`.
+
+```
+{ "meta": { ... },
+  "crew":      { "<key>": Sourced },
+  "constants": { "<key>": Sourced },
+  "modules":   { "<habitat|solar|battery|greenhouse|iceMiner|landingPad>": { "label", "description", "params": { "<key>": Sourced } } },
+  "events":    { "<lunarNight|marsDustStorm>": { "label", "description", "body", "params": { "<key>": Sourced } } },
+  "sites":     { "<target id>": { "irradianceWm2", "litFraction", "longestDarkHours", "iceAvailability", "dustStormSolarFactor"?: Sourced } } }
+Sourced = { "value": number | null, "unit", "source": string | null, "badge": string | null, "note"?, "derived"?: true }
+```
+
+- `value: null` means no source was found: `source` and `badge` are then `null` too, and the UI shows "no data".
+- `derived: true` marks one multiplication or division of published numbers; the note shows the arithmetic.
+- `sites` has one entry for every target of `targets.json`.
+
+### data/known_sites.json
+
+Real places on the Moon and Mars a user can pick. Built by `validation/build/make_known_sites.py`.
+
+```
+{ "meta": { "generatedAt", "note", "coordinateConvention", "counts" },
+  "sites": [ { "id", "name", "body": "moon" | "mars", "lat", "lon",
+               "kind": "landing-site" | "candidate-region", "mission", "agency", "date", "status",
+               "source", "url", "access": "primary" | "secondary", "quote", "note",
+               "targetId": string | null, "targetDistanceKm": number | null } ] }
+```
+
+- `lon` is east-positive, -180 to 180. The source's own longitude is quoted in `note`.
+- `targetId` is the curated target of `targets.json` within 27.8 km, if any. Use
+  `targetFromKnownSite(site, ...)` (app/src/lib/targets) to turn a place into a target.
+- A candidate region's point is a published centre or site point, not a boundary.
+
+### data/target_windows.json
+
+Slope and roughness of every target in site-sized windows, for like-for-like site comparison.
+Built by `validation/build/make_target_windows.py` from `validation/target_terrain.py --posts`.
+
+```
+{ "meta": { "generatedAt", "note", "postM": 463, "terrainFraction", "slopeSigmaFloor", "roughnessSigmaFloor", "source": { "moon", "mars" }, "badge" },
+  "windows": { "<posts per side>": { "<target id>": { "slope": number | null, "roughness": number | null } } } }
+```
+
+- A window of N posts is N x 463 m on a side, centred on the target's coordinates. Sizes follow the
+  footprints of `sites.json`. Window 48 holds Shackleton only (rim to rim).
+- Never replaces the values of `targets.json`. Read with `targetAtSiteWindow` (app/src/lib/match).
+
+### data/target_minerals.json
+
+Minerals reported at the targets, and the families used to compare them with EMIT minerals in
+`sites.json`. Built by `validation/build/make_target_minerals.py`. Site-level only.
+
+```
+{ "meta": { "generatedAt", "note", "emitMinimumShare", "emitSource", "access" },
+  "families": [ { "id", "label", "emitPatterns": [ string ], "note": string | null } ],
+  "targets": { "<target id>": { "minerals": [ { "family", "name", "method": "in-place" | "orbital", "instrument",
+                                                "abundance": string | null, "source", "url", "badge", "access" } ],
+                                "note": string | null } } }
+```
+
+- `emitPatterns` are fragments of EMIT spectral-library names. A family with none cannot be identified
+  by EMIT and is "not comparable".
+- Every target of `targets.json` has an entry; one with no published minerals has an empty list and a note.
+
+### data/rovers.json
+
+Published slope limits and speeds for the route calculation. Built by `validation/build/make_rovers.py`.
+
+```
+{ "meta": { "generatedAt", "note", "energyNote", "notFound" },
+  "rovers": [ { "id", "name", "body": "moon" | "mars", "crewed": boolean,
+                "slopeLimit": Figure | null, "otherSlopeFigures": [ Figure ],
+                "speed": Figure | null, "otherSpeeds": [ Figure ], "energy": Figure | null } ] }
+Figure = { "value": number, "unit", "kind", "source", "url", "badge", "derived"?: true, "note"? }
+```
+
+- `slopeLimit.unit` is degrees; `speed.unit` is m per hour; `energy.unit` is Wh per km.
+- `energy` exists for the Apollo rover only and applies to a lunar route only.
+
+### data/benchmarks.json
+
+Established analogs and candidate sites scored the same way, for the Featured page.
+Built by `validation/benchmarks.ts` with `app/src/lib/match`.
+
+```
+{ "meta": { "generatedAt", "frozenAt", "note", "caveats": [ string ], "mineralsIncluded", "dimensions", "purposes", "targets" },
+  "groups": { "candidates", "known", "dimensionMean": { "<dimension>": { "candidates", "known" } },
+              "purposeMedian": { "<purpose>": { "candidates", "known" } }, "purposeBest": { ... } },
+  "sites": [ { "id", "name", "kind": "candidate" | "known", "lat", "lon", "footprintKm", "provisional", "rockName",
+               "bareShare", "caveat", "mineralsIdentified": [ string ] | null,
+               "results": [ { "target",
+                              "site": { "score", "scorePercentile", "dimensions": { "<id>": { "similarity", "verdict" } },
+                                        "purposes": { "<id>": number | null }, "terrainLikeForLike",
+                                        "minerals": { "similarity", "verdict", "shared", "targetOnly", "reason" } | null },
+                              "cell": { "score", "scorePercentile", "dimensions", "purposes" } } ],
+               "summary": { "<purpose>": { "best", "bestTarget", "median" } },
+               "dimensionMean": { "<dimension>": number | null } } ] }
+```
+
+- `site` is the site scale (footprint terrain, vegetation and rock; the cell's climate; target terrain in a
+  window of the site's size). `cell` is the site's 0.5 degree cell, as the global ranking sees it.
+- `summary.best` is the best of all targets and flatters; `median` is the typical target. Show both.
+- Show `meta.caveats` with the table.
+
 ## Missing values and confidence
 
 Approved by the team on 2026-11-14. Implemented in `/app/src/lib/scoring` (Session C), shown by Session A.
@@ -520,6 +632,8 @@ Rules:
 - Shared root files (`SOURCES.md`, `AI_USE.md`, `README.md`): append rows only, do not reorder or rewrite
   other sessions' rows. This keeps merges clean.
 - `data/modules.json` is not covered here. It is added to this document when the sandbox checkpoint starts.
+  Added 2026-11-15: see "Files added by Session C". Session C also owns `/app/src/lib/sim`, `/app/src/lib/targets`,
+  `/app/src/lib/match` and `/app/src/lib/route`, and the data files listed there.
 
 ## Changing the contract
 
