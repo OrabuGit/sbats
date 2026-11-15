@@ -256,9 +256,9 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     haloCanvas.width = haloCanvas.height = 256;
     {
       const g = haloCanvas.getContext('2d')!;
-      const grad = g.createRadialGradient(128, 128, 128 * 0.64, 128, 128, 128);
-      grad.addColorStop(0, 'rgba(255,255,255,0.34)');
-      grad.addColorStop(0.35, 'rgba(255,255,255,0.12)');
+      const grad = g.createRadialGradient(128, 128, 128 * 0.77, 128, 128, 128);
+      grad.addColorStop(0, 'rgba(255,255,255,0.09)');
+      grad.addColorStop(0.35, 'rgba(255,255,255,0.03)');
       grad.addColorStop(1, 'rgba(255,255,255,0)');
       g.fillStyle = grad;
       g.fillRect(0, 0, 256, 256);
@@ -331,7 +331,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         g.group.position.set(s.cx - w / 2, h / 2 - s.cy, 0);
       }
       for (const { m, g } of halos) {
-        m.scale.setScalar(g.slot.r * 3.1);
+        m.scale.setScalar(g.slot.r * 2.6);
         m.position.set(g.group.position.x, g.group.position.y, -g.slot.r * 1.2);
       }
       // A pin can be hit within 14 px whatever the size of its globe (the hit mesh has radius 0.05).

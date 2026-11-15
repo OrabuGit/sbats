@@ -1,4 +1,4 @@
-import { Bookmark, BookOpen, GraduationCap, MapPin, Play, Square } from 'lucide-react';
+import { Bookmark, BookOpen, GraduationCap, House, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
 import { Logo } from './Logo';
 
@@ -15,6 +15,8 @@ const NAV = 'inline-flex min-h-11 whitespace-nowrap items-center gap-2 px-2.5 te
 
 /** The right-hand navigation, the same on every page. Text only: no bar, no border. */
 export function NavRight({
+  onHome,
+  homeOpen = false,
   featuredOpen,
   onFeatured,
   methodOpen,
@@ -28,6 +30,9 @@ export function NavRight({
   demoLabel,
   onDemo,
 }: {
+  /** Goes to the landing page. Omitted on the landing page itself. */
+  onHome?: () => void;
+  homeOpen?: boolean;
   featuredOpen: boolean;
   onFeatured: () => void;
   methodOpen: boolean;
@@ -45,6 +50,12 @@ export function NavRight({
   return (
     <nav aria-label="Main" className="flex items-center">
       {demoLabel && <span className="mr-3 hidden max-w-[240px] truncate text-[12px] text-muted xl:inline">{demoLabel}</span>}
+      {onHome && (
+        <button type="button" onClick={onHome} aria-pressed={homeOpen} aria-label="Home" className={`${NAV} ${tone(homeOpen)}`}>
+          <House size={15} aria-hidden="true" />
+          <span className="hidden xl:inline">Home</span>
+        </button>
+      )}
       <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`${NAV} ${tone(featuredOpen)}`}>
         <MapPin size={15} aria-hidden="true" className="sm:hidden" />
         <span className="hidden sm:inline">Featured sites</span>
@@ -66,7 +77,7 @@ export function NavRight({
       </button>
       <button type="button" onClick={onDemo} aria-pressed={demoRunning} aria-label={demoRunning ? 'Stop demo' : 'Run demo'} className={`${NAV} ${tone(demoRunning)}`}>
         {demoRunning ? <Square size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-        <span className="hidden lg:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
+        <span className="hidden sm:inline">{demoRunning ? 'Stop demo' : 'Run demo'}</span>
       </button>
     </nav>
   );
@@ -117,7 +128,7 @@ export function TopBar({
           </ol>
         </nav>
       )}
-      <NavRight {...right} />
+      <NavRight {...right} onHome={onHome} />
     </header>
   );
 }

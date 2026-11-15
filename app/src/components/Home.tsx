@@ -200,6 +200,8 @@ export function Home(p: Props) {
       <HomeNav
         solid={solid}
         nav={{
+          homeOpen: true,
+          onHome: () => scroller.current?.scrollTo({ top: 0, behavior: 'smooth' }),
           featuredOpen: false,
           onFeatured: () => p.onFeatured(),
           methodOpen: false,

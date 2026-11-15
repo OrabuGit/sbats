@@ -937,7 +937,7 @@ function Orbit({ data }: { data: DataBundle }) {
         step={view === 'orbit' || view === 'match' ? step : null}
         onStep={onStep}
         canMatch={selected !== null}
-        onHome={() => setView('home')}
+        onHome={() => transition(() => setView('home'))}
         featuredOpen={view === 'featured'}
         onFeatured={() => setView('featured')}
         savedCount={saved.list.length}
