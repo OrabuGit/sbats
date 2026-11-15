@@ -33,7 +33,7 @@ import moon_shadow  # noqa: E402
 import moon_temperature  # noqa: E402
 import planet_geology  # noqa: E402
 import planet_terrain  # noqa: E402
-from common import DATA  # noqa: E402
+from common import AI_NOTE, DATA  # noqa: E402
 from planet_fetch import PLANET  # noqa: E402
 
 GRS_URL = "https://pds-geosciences.wustl.edu/ody/ody-m-grs-5-elements-v1/odgm_xxxx/data/smoothed/h2o_sr_5x5.tab"
@@ -42,6 +42,7 @@ GRS_URL = "https://pds-geosciences.wustl.edu/ody/ody-m-grs-5-elements-v1/odgm_xx
 COLUMNS = {
     "slope": ("int16", 100), "roughness": ("uint16", 10), "tempMean": ("int16", 100), "tempRange": ("int16", 100),
     "surfTempMean": ("int16", 100), "lithology": ("uint8", 1), "psrFrac": ("uint16", 1000), "waterH2O": ("uint16", 100),
+    "windSpeed": ("uint16", 100), "dustOpticalDepth": ("uint16", 1000),
 }
 DECIMALS = {k: len(str(v[1])) - 1 for k, v in COLUMNS.items()}
 
@@ -120,6 +121,8 @@ def build(body: str) -> dict:
         mlat, mlon, t, tr, ts = mars_climate.maps()
         layers.update(tempMean=nearest(mlat, mlon, t, lats, lons), tempRange=nearest(mlat, mlon, tr, lats, lons),
                       surfTempMean=nearest(mlat, mlon, ts, lats, lons), lithology=lith, waterH2O=grs_water(lats, lons))
+        elat, elon, wind, dust = mars_climate.env_maps()
+        layers.update(windSpeed=nearest(elat, elon, wind, lats, lons), dustOpticalDepth=nearest(elat, elon, dust, lats, lons))
         mcd = ("Mars Climate Database v6.2 (LMD / OU / IAA / ESA / CNES), climatology scenario with average solar forcing, "
                "maps on the database grid of about 3.8 by 5.6 degrees")
         mnote = "A climate model, not a measurement. Each cell takes the nearest map node; nothing is interpolated."
@@ -144,6 +147,11 @@ def build(body: str) -> dict:
              "note": ("Water-equivalent hydrogen as weight percent H2O, sensed to a few tens of centimetres. Each cell takes its "
                       "5 degree bin. Null poleward of the map's limit. This is not the SWIM ice map: the SWIM site could not be "
                       "reached when this file was built.")},
+            {"key": "windSpeed", "label": "Wind speed at 10 m", "unit": "m/s", "source": mcd, "badge": "Literature",
+             "note": mnote + " Horizontal wind speed 10 m above the surface, season-weighted mean of 12 diurnal-mean maps. Same height as Earth's windSpeed."},
+            {"key": "dustOpticalDepth", "label": "Dust optical depth of the air column (visible light)", "unit": "dimensionless",
+             "source": mcd, "badge": "Literature",
+             "note": mnote + " Monthly mean dust column visible optical depth, season-weighted mean of 12 maps. Compare with Earth's aod, which counts all aerosol, not dust alone."},
         ]
     keys = [f["key"] for f in factors]
     cells = []
@@ -161,11 +169,14 @@ def build(body: str) -> dict:
             cells.append(c)
     R = planet_terrain.BODIES[body]["radius"]
     absent = ({"precip": "No atmosphere, so no rain or snow: a fact, not missing data.",
-               "ndvi": "No vegetation.", "wind": "No atmosphere, so no wind and no airborne dust: a fact, not missing data."}
+               "ndvi": "No vegetation.", "windSpeed": "No atmosphere, so no wind (0 m/s): a fact, not missing data.",
+               "dustOpticalDepth": "No atmosphere, so no dust suspended in air (0): a fact, not missing data. Dust lofted by landers or electrostatics is not covered."}
               if body == "moon" else
-              {"precip": "No rain; see the target notes in targets.json for the literature value.", "ndvi": "No vegetation."})
+              {"precip": "No rain; see the target notes in targets.json for the literature value.", "ndvi": "No vegetation.",
+               "swimIce": "The SWIM subsurface ice maps were asked for but swim.psi.edu returned HTTP 523 on 2026-11-15; waterH2O is given instead."})
     return {
         "meta": {
+            "aiUse": AI_NOTE,
             "body": body, "resolutionDeg": cell, "cellKmAtEquator": round(2 * np.pi * R / 360 * cell / 1000, 1),
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "cellCount": len(cells),

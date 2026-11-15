@@ -13,11 +13,11 @@ upsampled to look finer than it is, and the pixel size is written to the index.
 
   Earth  elevation  Copernicus DEM GLO-30 (ESA)                          30 m
          image      Sentinel-2 L2A true colour, one scene (ESA)          10 m
-  Moon   elevation  LRO LOLA polar gridded DEM LDEM_80S_80M (NASA PDS)   80 m
+  Moon   elevation  LRO LOLA polar gridded DEM LDEM_80S_20M (NASA PDS)   20 m
                     away from the pole: LOLA LDEM_512 global grid          60 m
          image      LROC WAC global mosaic 100 m (NASA/GSFC/ASU, USGS)  100 m
-  Mars   elevation  MGS MOLA MEGDR 128 pixels per degree (NASA PDS)     463 m
-         image      none requested: null
+  Mars   elevation  MEX HRSC and MGS MOLA blended DEM v2 (USGS)          200 m
+         image      Mars Odyssey THEMIS daytime infrared mosaic (USGS)   100 m
 
 Elevation is resampled with nearest neighbour (each output pixel is one real sample).
 Images are resampled bilinearly, for display only.
@@ -44,7 +44,7 @@ from rasterio.warp import Resampling, reproject, transform as warp_transform
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from common import CACHE, DATA, USER_AGENT  # noqa: E402
+from common import AI_NOTE, CACHE, DATA, USER_AGENT  # noqa: E402
 import sites as S  # noqa: E402  (shared helpers: STAC search, GLO-30 names, GDAL settings)
 
 WINDOW_KM = 20.0
@@ -54,7 +54,7 @@ XCACHE = CACHE / "extracts"
 XCACHE.mkdir(exist_ok=True)
 
 # Featured Indonesian sites. Gua Lawa is the lava tube whose own coordinates are published.
-EARTH_SITES = ["id-kawah-ijen", "id-merapi", "id-gua-lawa", "id-tambora-caldera", "id-batur-lava-fields"]
+# Earth items: every candidate site of analogs.json (the featured Indonesian sites).
 
 # Side-by-side pairs asked for by the team, beyond the analogFor lists of analogs.json.
 PAIRS = {"id-tambora-caldera": "moon-shackleton-rim", "id-batur-lava-fields": "moon-marius-hills"}
@@ -62,7 +62,10 @@ PAIRS = {"id-tambora-caldera": "moon-shackleton-rim", "id-batur-lava-fields": "m
 MOON_R, MARS_R = 1_737_400.0, 3_396_000.0
 LOLA_URL = ("https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/"
             "ldem_80s_80m.img")
-LOLA_N, LOLA_SCALE_M, LOLA_CENTRE, LOLA_DN_TO_M = 7600, 80.0, 3799.5, 0.5   # from the PDS label
+LOLA_URL20 = LOLA_URL.replace("ldem_80s_80m.img", "ldem_80s_20m.img")
+LOLA_N, LOLA_SCALE_M, LOLA_CENTRE, LOLA_DN_TO_M = 30400, 20.0, 15199.5, 0.5   # LDEM_80S_20M, from the PDS label
+HRSC_URL = "https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif"
+THEMIS_URL = "https://planetarymaps.usgs.gov/mosaic/Mars_MO_THEMIS-IR-Day_mosaic_global_100m_v12.tif"
 LOLA_CYL = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img"
 LOLA512_PPD, LOLA512_LINES, LOLA512_SAMPLES = 512, 23040, 46080   # from the PDS labels: tiles of 45 x 90 degrees
 LOLA_POLAR_LIMIT = -82.0   # south of this the polar grid is used (it reaches 80 S; the window needs a margin)
@@ -76,6 +79,8 @@ ATTR = {
     "lola": "LRO LOLA gridded data record, NASA Planetary Data System Geosciences Node (Smith et al. 2010; Neumann 2009, LRO-L-LOLA-4-GDR-V1.0).",
     "wac": "LROC WAC Global Morphology Mosaic 100 m. NASA/GSFC/Arizona State University; hosted by USGS Astrogeology.",
     "mola": "MGS MOLA Mission Experiment Gridded Data Record, NASA Planetary Data System Geosciences Node (Smith et al. 2003, MGS-M-MOLA-5-MEGDR-L3-V1.0).",
+    "hrsc": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2 (Fergason, Hare and Laura 2018), USGS Astrogeology Science Center; HRSC data ESA/DLR/FU Berlin, MOLA data NASA/GSFC.",
+    "themis": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12 (Edwards et al. 2011). NASA/JPL-Caltech/Arizona State University; hosted by USGS Astrogeology.",
 }
 
 
@@ -88,6 +93,15 @@ def fetch_range(url: str, start: int, length: int) -> bytes:
             raise RuntimeError(f"expected {length} bytes (206), got {len(r.content)} ({r.status_code})")
         return r.content
     return S._retry(go)
+
+
+def fetch_range_parallel(url: str, start: int, length: int, parts: int = 8) -> bytes:
+    """One byte range fetched as several smaller ranges at once (the PDS server is slow per connection)."""
+    from concurrent.futures import ThreadPoolExecutor
+    step = -(-length // parts)
+    spans = [(start + k * step, min(step, length - k * step)) for k in range(parts) if k * step < length]
+    with ThreadPoolExecutor(parts) as ex:
+        return b"".join(ex.map(lambda sp: fetch_range(url, *sp), spans))
 
 
 def ortho(lat: float, lon: float, body: str) -> CRS:
@@ -239,7 +253,7 @@ def moon_elevation_global(lat: float, lon: float):
 def moon_elevation(lat: float, lon: float):
     if lat > LOLA_POLAR_LIMIT:
         return moon_elevation_global(lat, lon)
-    px = 80.0
+    px = 20.0
     n, dtr = grid(px)
     dst = ortho(lat, lon, "moon")
     stere = CRS.from_proj4(f"+proj=stere +lat_0=-90 +lon_0=0 +k=1 +x_0=0 +y_0=0 +R={MOON_R} +units=m +no_defs")
@@ -248,14 +262,14 @@ def moon_elevation(lat: float, lon: float):
     r0, r1 = math.floor(LOLA_CENTRE - Y.max() / LOLA_SCALE_M), math.ceil(LOLA_CENTRE - Y.min() / LOLA_SCALE_M) + 1
     if r0 < 0 or c0 < 0 or r1 > LOLA_N or c1 > LOLA_N:
         raise RuntimeError("window leaves the LOLA 80S grid")
-    raw = fetch_range(LOLA_URL, r0 * LOLA_N * 2, (r1 - r0) * LOLA_N * 2)
+    raw = fetch_range_parallel(LOLA_URL20, r0 * LOLA_N * 2, (r1 - r0) * LOLA_N * 2)
     src = np.frombuffer(raw, dtype="<i2").reshape(r1 - r0, LOLA_N)[:, c0:c1].astype(np.float32) * LOLA_DN_TO_M
     str_ = from_origin((c0 - 0.5 - LOLA_CENTRE) * LOLA_SCALE_M, (LOLA_CENTRE - (r0 - 0.5)) * LOLA_SCALE_M,
                        LOLA_SCALE_M, LOLA_SCALE_M)
     z = np.full((n, n), np.nan, np.float32)
     reproject(src, z, src_transform=str_, src_crs=stere, dst_transform=dtr, dst_crs=dst,
               resampling=Resampling.nearest, dst_nodata=np.nan)
-    return z, px, {"product": "LRO LOLA polar gridded DEM LDEM_80S_80M", "nativePixelM": 80,
+    return z, px, {"product": "LRO LOLA polar gridded DEM LDEM_80S_20M", "nativePixelM": 20,
                    "attribution": ATTR["lola"], "badge": "Mission",
                    "note": "Heights above a sphere of radius 1737.4 km."}
 
@@ -305,6 +319,41 @@ def mars_elevation(lat: float, lon: float):
                    "note": "Topography above the Mars areoid. 463 m pixels: far coarser than the Earth extract."}
 
 
+def _mars_warp(url: str, lat: float, lon: float, px: float, resampling):
+    n, dtr = grid(px)
+    dst = ortho(lat, lon, "mars")
+    def go():
+        with rasterio.Env(**S.GDAL_ENV), rasterio.open("/vsicurl/" + url) as ds:
+            with WarpedVRT(ds, crs=dst, transform=dtr, width=n, height=n, resampling=resampling) as vrt:
+                return vrt.read(1), ds.nodata
+    return S._retry(go)
+
+
+def mars_elevation_blend(lat: float, lon: float):
+    """HRSC and MOLA blended DEM, 200 m. Where HRSC stereo exists it is finer than MOLA; elsewhere it is MOLA."""
+    px = 200.0
+    a, nodata = _mars_warp(HRSC_URL, lat, lon, px, Resampling.nearest)
+    z = a.astype(np.float32)
+    if nodata is not None:
+        z[a == nodata] = np.nan
+    return z, px, {"product": "Mars MGS MOLA - MEX HRSC Blended DEM Global 200 m v2", "nativePixelM": 200,
+                   "attribution": ATTR["hrsc"], "badge": "Mission",
+                   "note": ("Topography above the Mars areoid. 200 m pixels where HRSC stereo images exist; elsewhere the "
+                            "detail is that of MOLA (463 m), so some extracts look smoother than their pixel size suggests.")}
+
+
+def mars_image(lat: float, lon: float):
+    px = 100.0
+    img, _ = _mars_warp(THEMIS_URL, lat, lon, px, Resampling.bilinear)
+    if (img == 0).mean() > 0.5:
+        return None, px, None
+    return img[None], px, {"product": "Mars Odyssey THEMIS Daytime Infrared Global Mosaic 100 m v12", "nativePixelM": 100,
+                           "attribution": ATTR["themis"], "badge": "Mission",
+                           "noDataShare": round(float((img == 0).mean()), 3),
+                           "note": ("Daytime thermal infrared brightness, not visible light: sunlit and warm surfaces are bright. "
+                                    "Grey-scale; use it as surface texture, not as true colour.")}
+
+
 # ---------------------------------------------------------------- write
 
 def save(item_id: str, z, zpx, zmeta, img, ipx, imeta) -> dict:
@@ -335,7 +384,7 @@ def build() -> dict:
     targets = json.loads((DATA / "targets.json").read_text())
     assert set(PAIRS.values()) <= {t["id"] for t in targets}, "a paired target is missing from targets.json"
     items = []
-    for sid in EARTH_SITES:
+    for sid in [i for i, a in analogs.items() if a["kind"] == "candidate"]:
         a = analogs[sid]
         print(f"[{sid}]")
         z, zpx, zm = earth_elevation(a["lat"], a["lon"])
@@ -349,13 +398,14 @@ def build() -> dict:
             z, zpx, zm = moon_elevation(t["lat"], t["lon"])
             img, ipx, im = moon_image(t["lat"], t["lon"])
         else:
-            z, zpx, zm = mars_elevation(t["lat"], t["lon"])
-            img, ipx, im = None, None, None
+            z, zpx, zm = mars_elevation_blend(t["lat"], t["lon"])
+            img, ipx, im = mars_image(t["lat"], t["lon"])
         items.append({"id": t["id"], "name": t["name"], "body": t["body"], "lat": t["lat"], "lon": t["lon"],
                       "pairedWith": [k for k, v in PAIRS.items() if v == t["id"]] or None,
                       **save(t["id"], z, zpx, zm, img, ipx, im)})
     return {
         "meta": {
+            "aiUse": AI_NOTE,
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "windowKm": WINDOW_KM,
             "pairs": [{"earth": k, "other": v} for k, v in PAIRS.items()],
@@ -364,8 +414,8 @@ def build() -> dict:
             "projection": "Local orthographic, centred on the item's lat/lon, north up. Pixel (0,0) is the north-west corner.",
             "description": ("Every extract covers the same ground area, so they can be shown side by side at one scale. "
                             "Pixel size differs per dataset and is given per file; nothing is upsampled."),
-            "imageNote": ("No Mars image was requested or built: image is null for Mars targets. A lunar image that is "
-                          f"at least {DARK_NULL:.0%} near-black (permanent shadow) is null too."),
+            "imageNote": ("Mars images are daytime infrared (THEMIS), grey-scale. A lunar image that is "
+                          f"at least {DARK_NULL:.0%} near-black (permanent shadow) is null."),
         },
         "items": items,
     }

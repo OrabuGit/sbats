@@ -40,7 +40,7 @@ from rasterio.transform import from_origin
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from planet_fetch import PLANET  # noqa: E402
+from planet_fetch import PLANET, fetch_parallel  # noqa: E402
 
 GEO = PLANET / "geo"
 FINE = 0.1
@@ -75,7 +75,29 @@ def mars_class(unit: str, desc: str) -> int | None:
     return None
 
 
+PACKAGES = {
+    "moon": ("https://asc-astropedia.s3.us-west-2.amazonaws.com/Moon/Geology/Unified_Geologic_Map_of_the_Moon_GIS_v2.zip",
+             "moon_geo.zip", "Shapefiles/GeoUnits."),
+    "mars": ("https://pubs.usgs.gov/sim/3292/downloads/sim3292_database.zip", "mars_geo.zip",
+             "SIM3292_Shapefiles/SIM3292_Global_Geology."),
+}
+
+
+def _ensure(body: str) -> None:
+    """Download the map's GIS package and unpack only the unit layer (the packages are 0.2 and 0.8 GB)."""
+    shp = MOON_SHP if body == "moon" else MARS_SHP
+    if shp.with_suffix(".shp").exists():
+        return
+    import zipfile
+    url, name, part = PACKAGES[body]
+    z = fetch_parallel(url, name, 8)
+    with zipfile.ZipFile(z) as zf:
+        zf.extractall(GEO / body, [n for n in zf.namelist() if part in n])
+    z.unlink()
+
+
 def _table(body: str):
+    _ensure(body)
     r = shapefile.Reader(str(MOON_SHP if body == "moon" else MARS_SHP))
     rows = []
     for sr in r.iterShapeRecords():
