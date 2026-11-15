@@ -156,3 +156,30 @@ contract and skips the checks for files that do not exist yet.
 The tests use `node:test` rather than Vitest so that nothing has to be added to `app/package.json`.
 `__tests__/node-shims.d.ts` declares the few Node functions they import, because the app's `tsconfig.json`
 loads only `vite/client` types. `__tests__/fixtures.ts` holds made-up numbers for tests only.
+
+## Rank stability (added 2026-11-15, changes no score)
+
+Does a place keep its rank when the weights are nudged? The preset weights are a judgement, so a rank
+that holds only for one exact set of weights means little.
+
+```ts
+import { stabilityBasis, rankStability, scoresFromBasis } from './lib/scoring';
+
+const basis = stabilityBasis(cells, prepared);            // once per target, about 50 ms for the Earth grid
+const result = rankStability(basis, PRESETS.base.weights, { follow: [cellIndex] });   // about 0.7 s
+result.summary           // one plain sentence
+result.meanTopNOverlap   // share of the top 10 that stays in the top 10, averaged over the redraws
+result.followed[0]       // { baseRank, bestRank, medianRank, worstRank, rankP05, rankP95, shareInTopN }
+```
+
+- 200 redraws, seed 20261115, each weight multiplied by a factor between 0.75 and 1.25 and then all
+  renormalised (`STABILITY_DRAWS`, `STABILITY_SEED`, `STABILITY_SPREAD`). The same seed gives the same
+  result on every machine.
+- `follow` is a list of cell indices; without it the top 10 cells are followed.
+- Each redraw scores every cell with the frozen formula. `scoresFromBasis` is a fast path for that:
+  the unit tests check it against `scoreCells` cell by cell, on every preset.
+- The frozen weights are read, never written. This is a check on the ranking, not a tuning tool: no
+  redraw is ever kept.
+
+Run it in a worker or after first paint: it is fast, but not free.
+

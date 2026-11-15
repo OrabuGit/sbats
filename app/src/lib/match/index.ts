@@ -9,6 +9,8 @@ export { EXTRA_DIMENSIONS, EXTRA_DIMENSION_IDS, compareExtra, extendedPurposeSco
 export type { ExtraDimensionDef } from './extras';
 export { CORE_KEYS, buildMatchRecord, sunElevations } from './record';
 export type { MatchInput } from './record';
+export { buildReport } from './report';
+export type { MatchReport, ReportCitation, ReportInput, ReportSection, ReportTable, ReportText, ValidationFigures } from './report';
 export type {
   EarthPlace,
   ExtraDimensionId,
