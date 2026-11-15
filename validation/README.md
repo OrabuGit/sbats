@@ -74,6 +74,7 @@ Each known site counts once. A site listed for several targets is split equally 
 | --- | --- | --- |
 | `target_terrain.py` | `slope` and `roughness` of every target from LOLA and MOLA, using `pipeline/terrain_metrics.py` | `pipeline/.venv/bin/python validation/target_terrain.py` |
 | `build/moon_temperature.py` | `tempMean` of the Moon targets from the Diviner Polar Resource Product | `python3 validation/build/moon_temperature.py` |
+| `build/moon_global_temperature.py` | `tempMean` and `tempRange` of a Moon target away from the poles (Marius Hills) from the Diviner Global Cumulative Products | `python3 validation/build/moon_global_temperature.py` |
 | `build/mars_temperature.py` | `tempMean` and `tempRange` of the Mars targets from the Mars Climate Database, and the REMS check at Gale | `python3 validation/build/mars_temperature.py` |
 | `build/mars_sunlight.py` | Sunlight, night length and dust-storm factor at the Mars targets, from the Mars Climate Database, for `data/modules.json` | `python3 validation/build/mars_sunlight.py` |
 | `build/make_modules.py` | `data/modules.json` from hand-entered, sourced values | `python3 validation/build/make_modules.py` |
@@ -82,7 +83,10 @@ Each known site counts once. A site listed for several targets is split equally 
 | `build/make_lithology.py` | `data/lithology_similarity.json` | `python3 validation/build/make_lithology.py` |
 | `build/make_review.py` | `data/REVIEW_ME.md` | `python3 validation/build/make_review.py` |
 
-The three measuring scripts read target coordinates from `data/targets.json` and write to `output/`.
+`target_terrain.py --only <id>` measures one target and keeps the others; `--posts 4 6 9 11 16` measures every
+target again in site-sized windows for the site-level report (see below).
+
+The measuring scripts read target coordinates from `data/targets.json` and write to `output/`.
 Their numbers are copied into `build/make_targets.py` by hand, so every change to a target value is a
 reviewed edit. They download only the bytes they need from NASA's Planetary Data System.
 

@@ -38,6 +38,8 @@ LEONE = "Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853"
 MAZARICO = "Mazarico et al. 2011, Icarus 211:1066, doi:10.1016/j.icarus.2010.10.030"
 PIQUEUX = "Piqueux et al. 2019, Geophysical Research Letters 46:14290, doi:10.1029/2019GL083947"
 BRAMSON = "Bramson et al. 2015, Geophysical Research Letters 42, doi:10.1002/2015GL064844; Golombek et al. 2021, LPSC abstract 2420"
+DIVINER_GCP = "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py)"
+HORVATH = "Horvath, Hayne and Paige 2022, Geophysical Research Letters 49:e2022GL099710, doi:10.1029/2022GL099710"
 SVS = "NASA Scientific Visualization Studio 30983 and JPL Opportunity status, 2018 global dust storm"
 
 REVIEW_ROWS = []  # (path, value, unit, source, check, kind, note) for data/REVIEW_ME.md
@@ -70,6 +72,23 @@ def moon_site(target, lit, lit_note, dark, dark_note, cold_trap_share, lit_check
         "litFraction": v(f"{p}.litFraction", lit, "fraction", LEONE if lit is not None else None, note=lit_note, check=lit_check),
         "longestDarkHours": v(f"{p}.longestDarkHours", dark, "hours", MAZARICO if dark is not None else None, note=dark_note, check=dark_check),
         "iceAvailability": v(f"{p}.iceAvailability", None, "fraction of nominal miner output", None, note=ice_note),
+    }
+
+
+def moon_low_latitude_site(target, noon_k, source_ice):
+    """A lunar site away from the poles (Marius Hills): a full day and night, and no surface ice."""
+    p = f"sites.{target}"
+    return {
+        "irradianceWm2": v(f"{p}.irradianceWm2", 1361.0, "W/m2", NSSDC_MOON,
+                           note="Sunlight at the Moon's distance on an array turned to face the Sun."),
+        "litFraction": v(f"{p}.litFraction", 0.5, "fraction", NSSDC_MOON, derived=True,
+                         note="Derived: away from the poles, open ground is in daylight for half of each lunar day of 29.53 Earth days (synodic period, NSSDC). Hills that shade the site are not modelled. Arrays on the surface; nothing inside the pit is lit."),
+        "longestDarkHours": v(f"{p}.longestDarkHours", 354, "hours", NSSDC_MOON, derived=True,
+                              note="Derived: half of the 29.53-day lunar day (29.53 x 24 / 2 = 354 hours). The same night the LRO lithograph rounds to 14 Earth days."),
+        "iceAvailability": v(f"{p}.iceAvailability", 0, "fraction of nominal miner output", source_ice,
+                             note=f"Inferred, not measured: Diviner measures the open surface here at {noon_k} K at midday, far above the 110 K below which "
+                                  "water ice stays put, and a model of a similar pit gives about 290 K in its shadowed interior (Horvath et al. 2022). "
+                                  "No one has looked for ice inside this pit."),
     }
 
 
@@ -206,6 +225,7 @@ def build():
         "moon-haworth": moon_site(
             "moon-haworth", None, "The crater floor is in permanent shadow. No published figure for the landing region beside it was found.",
             None, "No published longest dark period for the landing region was found.", 35.4),
+        "moon-marius-hills": moon_low_latitude_site("moon-marius-hills", 392, f"{DIVINER_GCP}; {HORVATH}"),
         "mars-jezero": mars_site("mars-jezero", 295.2, 0.501, 13.4, 0.170, 0, PIQUEUX,
                                  "Inferred, not measured at the site: shallow ground ice is reported at latitudes as low as 35 N and 45 S, and Jezero is at 18 N.", "B"),
         "mars-gale": mars_site("mars-gale", 318.7, 0.492, 13.4, 0.219, 0, PIQUEUX,

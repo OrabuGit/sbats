@@ -413,6 +413,38 @@
         "note": "No measurement of extractable ice exists for this site. Diviner shows 35.4% of the 55.6 km window never warms above 110 K, where water ice is stable (validation/build/moon_temperature.py). The one direct measurement of lunar polar water, 5.6 +/- 2.9% by mass, is from the LCROSS impact at Cabeus (Colaprete et al. 2010, Science), a different crater."
       }
     },
+    "moon-marius-hills": {
+      "irradianceWm2": {
+        "value": 1361.0,
+        "unit": "W/m2",
+        "source": "NASA NSSDCA Moon Fact Sheet",
+        "badge": "Literature",
+        "note": "Sunlight at the Moon's distance on an array turned to face the Sun."
+      },
+      "litFraction": {
+        "value": 0.5,
+        "unit": "fraction",
+        "source": "NASA NSSDCA Moon Fact Sheet",
+        "badge": "Literature",
+        "derived": true,
+        "note": "Derived: away from the poles, open ground is in daylight for half of each lunar day of 29.53 Earth days (synodic period, NSSDC). Hills that shade the site are not modelled. Arrays on the surface; nothing inside the pit is lit."
+      },
+      "longestDarkHours": {
+        "value": 354,
+        "unit": "hours",
+        "source": "NASA NSSDCA Moon Fact Sheet",
+        "badge": "Literature",
+        "derived": true,
+        "note": "Derived: half of the 29.53-day lunar day (29.53 x 24 / 2 = 354 hours). The same night the LRO lithograph rounds to 14 Earth days."
+      },
+      "iceAvailability": {
+        "value": 0,
+        "unit": "fraction of nominal miner output",
+        "source": "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py); Horvath, Hayne and Paige 2022, Geophysical Research Letters 49:e2022GL099710, doi:10.1029/2022GL099710",
+        "badge": "Literature",
+        "note": "Inferred, not measured: Diviner measures the open surface here at 392 K at midday, far above the 110 K below which water ice stays put, and a model of a similar pit gives about 290 K in its shadowed interior (Horvath et al. 2022). No one has looked for ice inside this pit."
+      }
+    },
     "mars-jezero": {
       "irradianceWm2": {
         "value": 295.2,

@@ -253,6 +253,70 @@
     ]
   },
   {
+    "id": "moon-marius-hills",
+    "name": "Marius Hills pit",
+    "body": "moon",
+    "lat": 14.091,
+    "lon": -56.77,
+    "summary": "A field of volcanic domes and cones in Oceanus Procellarum, with a pit 58 by 49 m wide and 40 m deep in the floor of a lava channel (Wagner and Robinson 2014, Icarus). Radar on the SELENE orbiter found echo patterns around the pit that fit intact lava tubes (Kaku et al. 2017, Geophysical Research Letters). It is not on NASA's list of landing regions: SBATS adds it as a candidate for a base sheltered in a lava tube. Whether the pit opens into a tube has not been confirmed.",
+    "values": {
+      "tempMean": {
+        "value": -54.6,
+        "sigma": 15.0,
+        "source": "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (Williams et al. 2017, Icarus 283:300): bolometric surface temperature by local time, over a 55.6 km window (validation/build/moon_global_temperature.py)",
+        "badge": "Mission",
+        "note": "Mean of the measured surface temperature over one lunar day (218.5 K). The polar targets carry a different statistic, a modelled annual mean at 2 cm depth, which at this latitude would be tens of kelvin warmer. Williams et al. 2017 report 215.5 K for the equator. This is the open surface, not the inside of the pit."
+      },
+      "tempRange": {
+        "value": 297.5,
+        "sigma": 5.0,
+        "source": "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (Williams et al. 2017, Icarus 283:300): bolometric surface temperature by local time, over a 55.6 km window (validation/build/moon_global_temperature.py)",
+        "badge": "Mission",
+        "note": "Highest minus lowest surface temperature over one lunar day of 29.53 Earth days (391.9 K at midday, 94.4 K before dawn). Far beyond any day-night range on Earth, so the score clamps it to Earth's largest."
+      },
+      "precip": {
+        "value": 0,
+        "sigma": 250.0,
+        "source": "NASA NSSDC Moon Fact Sheet: surface pressure 3 x 10^-15 bar, so no rain or snow can form",
+        "badge": "Literature"
+      },
+      "ndvi": {
+        "value": 0.05,
+        "sigma": 0.1,
+        "source": "NASA Earth Observatory, Measuring Vegetation (NDVI and EVI): NDVI of 0.1 and below is barren rock, sand or snow",
+        "badge": "Literature",
+        "note": "Reference value for bare ground on Earth's NDVI scale. Not measured on the Moon."
+      },
+      "slope": {
+        "value": 1.74,
+        "sigma": 1.0,
+        "source": "LRO LOLA global gridded DEM LDEM_512, 512 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "roughness": {
+        "value": 228.9,
+        "sigma": 114.5,
+        "source": "LRO LOLA global gridded DEM LDEM_512, 512 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)",
+        "badge": "Mission"
+      },
+      "lithology": {
+        "value": 2,
+        "sigma": null,
+        "source": "Besse et al. 2011, JGR 116:E00G13, doi:10.1029/2010JE003725 (mare basalts; domes and cones in a high-calcium pyroxene unit); Lawrence et al. 2013, JGR Planets 118:615, doi:10.1002/jgre.20060 (domes of blocky lava flows, not rich in silica)",
+        "badge": "Literature",
+        "note": "GLiM class 2, Basic volcanic rocks: mare basalt. Read in the two papers' abstracts."
+      }
+    },
+    "cannotCopy": [
+      "Gravity: 1.62 m/s2 at the lunar surface against 9.80 m/s2 on Earth, about one sixth (NASA NSSDC Moon Fact Sheet).",
+      "Vacuum: the surface pressure at night is about 3 x 10^-15 bar, effectively no atmosphere (NASA NSSDC Moon Fact Sheet).",
+      "Radiation: the Chang'e 4 lander measured an average dose equivalent of 1,369 microsieverts per day on the lunar surface, with no atmosphere or magnetic field to shield it (Zhang et al. 2020, Science Advances).",
+      "Day and night: one lunar day lasts 29.53 Earth days (NASA NSSDC Moon Fact Sheet). Diviner measures the surface here at about 392 K (119 C) at midday and 94 K (-179 C) before dawn (validation/build/moon_global_temperature.py). No place on Earth swings like that.",
+      "Shelter: a lunar pit or cave would give some protection from cosmic rays, solar radiation and micrometeorites (NASA release, 26 July 2022, on Horvath et al. 2022). An Earth lava tube sits under a thick atmosphere and has none of these to shield against, so a rehearsal there tests the layout, not the protection.",
+      "Inside the tube: no one has seen inside this pit. A model of a similar pit in Mare Tranquillitatis gives about 290 K (17 C) where the Sun never shines directly (Horvath et al. 2022, Geophysical Research Letters). Nothing has been measured or modelled for Marius Hills."
+    ]
+  },
+  {
     "id": "mars-jezero",
     "name": "Jezero crater",
     "body": "mars",

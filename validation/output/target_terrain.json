@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T11:07:27Z",
+  "generatedAt": "2026-11-15T04:49:07Z",
   "method": "55.6 km square window centred on the target, block-averaged to 120 x 120 pixels (about 463 m), then pipeline/terrain_metrics.py: slope = mean Horn slope in degrees, roughness = standard deviation of elevation in metres.",
   "lolaOrientationCheck": {
     "shackletonFloorM": -2787.5,
@@ -111,6 +111,21 @@
       "windowCentre": {
         "lat": 39.79688,
         "lon": -157.9
+      }
+    },
+    "moon-marius-hills": {
+      "slope": 1.7385386471574615,
+      "roughness": 228.9064535070577,
+      "validPixels": 14400,
+      "pixels": 14400,
+      "dxM": 463.33,
+      "dyM": 463.33,
+      "elevationMinM": -2317.2255859375,
+      "elevationMaxM": -843.431884765625,
+      "product": "LRO LOLA global gridded DEM 512 pixels per degree (59 m per pixel), ldem_512_00n_45n_270_360.img",
+      "windowCentre": {
+        "lat": 14.091,
+        "lon": -56.77
       }
     }
   }

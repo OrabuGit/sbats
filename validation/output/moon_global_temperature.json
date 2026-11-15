@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-11-15T04:49:02Z",
+  "source": "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (Williams et al. 2017, Icarus 283:300)",
+  "method": "Bolometric temperature of the 0.5 degree bins centred inside a 55.6 km square around the target, averaged per 0.25 h local-time step; tempMean is the mean of the 96 steps, tempRange the highest minus the lowest.",
+  "targets": {
+    "moon-marius-hills": {
+      "file": "global_cumul_avg_cyl_10n20n_002.tab",
+      "bins": 12,
+      "binCentres": [
+        [
+          -57.25,
+          13.25
+        ],
+        [
+          -57.25,
+          13.75
+        ],
+        [
+          -57.25,
+          14.25
+        ],
+        [
+          -57.25,
+          14.75
+        ],
+        [
+          -56.75,
+          13.25
+        ],
+        [
+          -56.75,
+          13.75
+        ],
+        [
+          -56.75,
+          14.25
+        ],
+        [
+          -56.75,
+          14.75
+        ],
+        [
+          -56.25,
+          13.25
+        ],
+        [
+          -56.25,
+          13.75
+        ],
+        [
+          -56.25,
+          14.25
+        ],
+        [
+          -56.25,
+          14.75
+        ]
+      ],
+      "observationsPerStepMin": 0,
+      "localTimeStepsFilled": 29,
+      "longestGapSteps": 2,
+      "tempMeanK": 218.5,
+      "tempMeanC": -54.6,
+      "tempMaxK": 391.9,
+      "tempMaxLocalTimeH": 12.38,
+      "tempMinK": 94.4,
+      "tempMinLocalTimeH": 4.88,
+      "tempRangeK": 297.5
+    }
+  }
+}

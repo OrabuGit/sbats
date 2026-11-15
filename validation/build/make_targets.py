@@ -16,6 +16,8 @@ from pathlib import Path
 # --------------------------------------------------------------------------------------------
 LOLA = "LRO LOLA polar gridded DEM LDEM_80S_80M (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)"
 MOLA = "MGS MOLA MEGDR 128 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)"
+LOLA_GLOBAL = "LRO LOLA global gridded DEM LDEM_512, 512 pixels per degree (NASA PDS), measured with pipeline/terrain_metrics.py over a 55.6 km window (validation/target_terrain.py)"
+DIVINER_GLOBAL = "LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (Williams et al. 2017, Icarus 283:300): bolometric surface temperature by local time, over a 55.6 km window (validation/build/moon_global_temperature.py)"
 DIVINER = "LRO Diviner Polar Resource Product, PDS LRO-L-DLRE-5-PRP-V2.0 (Paige et al. 2010, Science 330:479): mean of annual average temperature over a 55.6 km window (validation/build/moon_temperature.py)"
 MCD = "Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), climatology scenario, air temperature 2 m above the surface (validation/build/mars_temperature.py)"
 REMS = "Curiosity REMS daily minimum and maximum air temperature, sols 10 to 4995, NASA Mars weather feed (Centro de Astrobiologia) (validation/build/mars_temperature.py)"
@@ -124,6 +126,33 @@ def mars(id_, name, lat, lon, summary, temp_mean, temp_mean_note, temp_range, te
     }
 
 
+# Marius Hills is not at the pole, so its sentences about light and temperature differ.
+MARIUS_CANNOT_COPY = MOON_CANNOT_COPY[:3] + [
+    "Day and night: one lunar day lasts 29.53 Earth days (NASA NSSDC Moon Fact Sheet). Diviner measures the surface here at about 392 K (119 C) at midday and 94 K (-179 C) before dawn (validation/build/moon_global_temperature.py). No place on Earth swings like that.",
+    "Shelter: a lunar pit or cave would give some protection from cosmic rays, solar radiation and micrometeorites (NASA release, 26 July 2022, on Horvath et al. 2022). An Earth lava tube sits under a thick atmosphere and has none of these to shield against, so a rehearsal there tests the layout, not the protection.",
+    "Inside the tube: no one has seen inside this pit. A model of a similar pit in Mare Tranquillitatis gives about 290 K (17 C) where the Sun never shines directly (Horvath et al. 2022, Geophysical Research Letters). Nothing has been measured or modelled for Marius Hills.",
+]
+
+
+def moon_global(id_, name, lat, lon, summary, lith, lith_source, lith_note):
+    """A lunar target away from the poles. Measured values are filled in from MEASURED in main()."""
+    pending = "Not measured yet. Run validation/target_terrain.py and validation/build/moon_global_temperature.py."
+    return {
+        "id": id_, "name": name, "body": "moon", "lat": lat, "lon": lon, "summary": summary,
+        "values": {
+            "tempMean": v(None, None, None, None, pending),
+            "tempRange": v(None, None, None, None, pending),
+            "precip": v(0, SIGMA_PRECIP, PRECIP_MOON, "Literature"),
+            "ndvi": v(NDVI_BARE, SIGMA_NDVI, NDVI_SRC, "Literature",
+                      "Reference value for bare ground on Earth's NDVI scale. Not measured on the Moon."),
+            "slope": v(None, None, None, None, pending),
+            "roughness": v(None, None, None, None, pending),
+            "lithology": v(lith, None, lith_source, "Literature", lith_note),
+        },
+        "cannotCopy": MARIUS_CANNOT_COPY,
+    }
+
+
 HIGHLAND_NOTE = (
     "GLiM class 4, Basic plutonic rocks. Chosen by SBATS: lunar highland crust is anorthosite, a plutonic rock "
     "of calcium-rich feldspar. {detail}"
@@ -164,6 +193,13 @@ TARGETS = [
         lith=BASIC_PLUTONIC,
         lith_source="Haruyama et al. 2013, Geophysical Research Letters 40:3814, doi:10.1002/grl.50753 (purest anorthosite on the inner wall of Shackleton)",
         lith_note=HIGHLAND_NOTE.format(detail="Here the anorthosite was detected directly by the SELENE Multiband Imager."),
+    ),
+    moon_global(
+        "moon-marius-hills", "Marius Hills pit", 14.091, -56.77,
+        "A field of volcanic domes and cones in Oceanus Procellarum, with a pit 58 by 49 m wide and 40 m deep in the floor of a lava channel (Wagner and Robinson 2014, Icarus). Radar on the SELENE orbiter found echo patterns around the pit that fit intact lava tubes (Kaku et al. 2017, Geophysical Research Letters). It is not on NASA's list of landing regions: SBATS adds it as a candidate for a base sheltered in a lava tube. Whether the pit opens into a tube has not been confirmed.",
+        lith=BASIC_VOLCANIC,
+        lith_source="Besse et al. 2011, JGR 116:E00G13, doi:10.1029/2010JE003725 (mare basalts; domes and cones in a high-calcium pyroxene unit); Lawrence et al. 2013, JGR Planets 118:615, doi:10.1002/jgre.20060 (domes of blocky lava flows, not rich in silica)",
+        lith_note="GLiM class 2, Basic volcanic rocks: mare basalt. Read in the two papers' abstracts.",
     ),
     mars(
         "mars-jezero", "Jezero crater", 18.44, 77.45,
@@ -211,9 +247,19 @@ MEASURED = {
     "moon-mons-mouton": (-141.3, None, 9.42, 1018.6),
     "moon-haworth": (-211.9, None, 11.04, 1552.3),
     "moon-shackleton-rim": (-176.2, None, 10.78, 910.9),
+    "moon-marius-hills": (-54.6, 297.5, 1.74, 228.9),
     "mars-jezero": (-56.6, 48.8, 2.63, 287.4),
     "mars-gale": (-57.7, 62.1, 6.11, 1262.8),
     "mars-arcadia-planitia": (-74.5, 53.2, 0.27, 16.8),
+}
+
+
+# Notes for lunar targets measured with the global products (id: {key: note}).
+GLOBAL_MOON = {
+    "moon-marius-hills": {
+        "tempMean": "Mean of the measured surface temperature over one lunar day (218.5 K). The polar targets carry a different statistic, a modelled annual mean at 2 cm depth, which at this latitude would be tens of kelvin warmer. Williams et al. 2017 report 215.5 K for the equator. This is the open surface, not the inside of the pit.",
+        "tempRange": "Highest minus lowest surface temperature over one lunar day of 29.53 Earth days (391.9 K at midday, 94.4 K before dawn). Far beyond any day-night range on Earth, so the score clamps it to Earth's largest.",
+    },
 }
 
 
@@ -224,6 +270,16 @@ def main() -> None:
             continue
         temp_mean, temp_range, slope, roughness = m
         vals = t["values"]
+        if t["id"] in GLOBAL_MOON:
+            # Away from the poles: measured surface temperature by local time, and the global LOLA grid.
+            if temp_mean is not None:
+                vals["tempMean"] = v(temp_mean, SIGMA_TEMP_MEAN, DIVINER_GLOBAL, "Mission", GLOBAL_MOON[t["id"]]["tempMean"])
+            if temp_range is not None:
+                vals["tempRange"] = v(temp_range, SIGMA_TEMP_RANGE, DIVINER_GLOBAL, "Mission", GLOBAL_MOON[t["id"]]["tempRange"])
+            if slope is not None and roughness is not None:
+                vals["slope"] = v(slope, slope_sigma(slope), LOLA_GLOBAL, "Mission")
+                vals["roughness"] = v(roughness, roughness_sigma(roughness), LOLA_GLOBAL, "Mission")
+            continue
         if temp_mean is not None:
             vals["tempMean"].update({"value": temp_mean, "sigma": SIGMA_TEMP_MEAN,
                                      "source": DIVINER if t["body"] == "moon" else MCD,

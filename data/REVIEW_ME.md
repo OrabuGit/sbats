@@ -34,6 +34,10 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 6. Gale's day-night swing uses NASA's public REMS weather feed, which describes itself as an outreach product.
 7. `analogFor` in `analogs.json` was assigned by SBATS from each site's cited characteristic (see the comment
    block in validation/build/make_analogs.py). The sources name the body, not the target.
+8. Marius Hills (added 2026-11-15) is SBATS's own choice of a lava-tube target. It is not a NASA landing region,
+   the pit's link to an open tube is not confirmed, and its temperature is a different statistic from the polar
+   targets (measured surface mean against modelled mean at 2 cm depth). It has no known Earth analog listed, so
+   it takes no part in validation: the frozen validation numbers are those of the other seven targets.
 
 ## Coordinates
 
@@ -43,6 +47,7 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 | Mons Mouton | -84.6 | 31.0 | Centre of Mons Mouton, IAU Gazetteer feature 16070. | https://planetarynames.wr.usgs.gov/Feature/16070 | A | High |
 | Haworth | -87.45 | -5.17 | Centre of Haworth crater, IAU Gazetteer feature 14502 (LOLA 2011 control network). NASA publishes no coordinates for the Artemis 'Haworth' region, which lies beside the crater. | https://planetarynames.wr.usgs.gov/Feature/14502 | A | High for the crater, medium as a landing point |
 | Shackleton rim | -89.67 | 129.78 | Centre of Shackleton crater, IAU Gazetteer feature 5450, not a point on the rim. The rim is about 10 km away, well inside the 55.6 km window that every value is measured over. | https://planetarynames.wr.usgs.gov/Feature/5450 | A | High for the crater, medium as a rim point |
+| Marius Hills pit | 14.091 | -56.77 | The Marius Hills pit, 14.091 N 303.230 E, Wagner and Robinson 2014, Icarus 237:52, Table 2 (read in the open manuscript). The LROC pit atlas gives 14.0917, 303.2299. JAXA's 2017 release gives 14.100 N, 303.262 E, about 1 km away. 'Marius Hills' is an informal name with no IAU Gazetteer entry. | https://doi.org/10.1016/j.icarus.2014.04.002 | B | High |
 | Jezero crater | 18.44 | 77.45 | Perseverance landing point, 18.44 N 77.45 E, Rodriguez-Manfredi et al. 2023, Nature Geoscience. | https://doi.org/10.1038/s41561-022-01084-0 | A | High |
 | Gale crater | -4.6 | 137.4 | Curiosity landing point, 4.6 S 137.4 E, NASA MSL fact sheet. | https://solarsystem.nasa.gov/docs/MSL%20Fact%20Sheet%20REV-141119.pdf | A | High |
 | Arcadia Planitia (site AP-1) | 39.8 | -157.9 | Candidate landing site AP-1, 39.8 N 202.1 E (written here as -157.9), Golombek et al. 2021, LPSC abstract 2420, Table 1. The paper does not say whether latitude is planetocentric; at 0.5 degree resolution the difference does not matter. | https://www.hou.usra.edu/meetings/lpsc2021/pdf/2420.pdf | A | High |
@@ -97,6 +102,18 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 | `roughness` | 910.9 m | 455.4 | Mission | https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/ | A | High | Same run as slope. |
 | `lithology` | 4 GLiM code |  | Literature | https://doi.org/10.1002/grl.50753 | B | Medium | Anorthosite detected on the inner wall. Mapping anorthosite to GLiM 'Basic plutonic rocks' is SBATS's choice. |
 
+### Marius Hills pit (`moon-marius-hills`)
+
+| Factor | Value | Sigma | Badge | Source link | Check | Confidence | Comment |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `tempMean` | -54.6 C | 15.0 | Mission | https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/ | A | Medium to high | Computed by validation/build/moon_global_temperature.py from the Diviner Global Cumulative Products: mean of the measured surface temperature over the 96 local-time steps of one lunar day, 218.5 K. 29 of the 96 steps had no observation and were filled by straight-line interpolation (longest gap two steps). Cross-check: Williams et al. 2017 state 215.5 K for the equator. NOT THE SAME STATISTIC as the polar targets, which carry a modelled annual mean at 2 cm depth. The score clamps both to Earth's coldest cell (-54.5 C), so the difference does not change a score. It is the open surface, not the pit interior. |
+| `tempRange` | 297.5 C | 5.0 | Mission | https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/ | A | Medium | Same run as the mean: highest step 391.9 K (12.4 h local time) minus lowest 94.4 K (4.9 h). Williams et al. 2017 give 392.3 K and 94.3 K for the equator. A HUMAN SHOULD DECIDE whether a swing over a 29.5-day lunar day belongs in the same field as Earth's daily range. It is far beyond Earth's largest (19 C), so the score clamps it; the four polar targets have no value here. |
+| `precip` | 0 mm/year | 250.0 | Literature | https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html | A | High | Set to 0 by data/SCHEMA.md. The source shows why: there is no atmosphere. |
+| `ndvi` | 0.05 | 0.1 | Literature | https://science.nasa.gov/earth/earth-observatory/measuring-vegetation-ndvi-evi | A | Medium | Not a measurement on the Moon or Mars. NASA's page says NDVI of 0.1 and below is barren rock, sand or snow; 0.05 is the middle of that band, chosen by SBATS as the bare-ground reference. |
+| `slope` | 1.74 deg | 1.0 | Mission | https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ | A | High | Computed by validation/target_terrain.py from the LOLA 512 pixels per degree global grid (59 m), tile LDEM_512_00N_45N_270_360, block-averaged to 463 m like every other target. The two polar-grid targets re-measured in the same run reproduce their published values. |
+| `roughness` | 228.9 m | 114.5 | Mission | https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ | A | High | Same run as slope. Elevations in the window run from -2317 m to -843 m. |
+| `lithology` | 2 GLiM code |  | Literature | https://doi.org/10.1029/2010JE003725 | B | Medium to high | Mare basalt: Besse et al. 2011 ('mare basalts', domes and cones in a 'high-calcium pyroxene' unit) and Lawrence et al. 2013 (domes 'not rich in silica'). Abstracts only, read by a research agent. |
+
 ### Jezero crater (`mars-jezero`)
 
 | Factor | Value | Sigma | Badge | Source link | Check | Confidence | Comment |
@@ -146,6 +163,11 @@ Regenerate with `python3 validation/build/make_review.py` after changing `target
 | Shackleton rim point sunlit continuously for 240 days a year | https://doi.org/10.1016/j.icarus.2010.10.030 | B | Medium. From the abstract only. |
 | Artemis III candidate regions, 2022 list of 13 and 2024 list of 9 | https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/ | B | High |
 | Haworth 51 km wide, more than four billion years old | https://doi.org/10.1016/j.icarus.2015.03.016 | B | Medium. Age 4.18 billion years from crater counts (Tye et al. 2015). |
+| Marius Hills pit 58 by 49 m wide and 40 m deep | https://doi.org/10.1016/j.icarus.2014.04.002 | B | Medium. Wagner and Robinson 2014, Table 2, from LROC images at about 1 m. SOURCES DISAGREE: the discovery paper (Haruyama et al. 2009, doi:10.1029/2009GL040635) gives 65 m wide and 80 to 88 m deep from 10 m SELENE images; an early LROC post gives 34 m deep. |
+| Radar echo patterns around the pit that fit intact lava tubes | https://doi.org/10.1002/2017GL074998 | B | Medium. Kaku et al. 2017, abstract only. The '50 km tube' figure is in JAXA's press release, not the abstract, and is not used. Wagner and Robinson 2014 argue that mare pits are 'likely to be post-flow features rather than volcanic skylights', which is why the summary says the link to a tube is not confirmed. |
+| Marius Hills surface 392 K at midday and 94 K before dawn | https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/ | A | High. Computed here; matches Williams et al. 2017 for the equator. |
+| Pits give some protection from cosmic rays, solar radiation and micrometeorites | https://www.nasa.gov/solar-system/nasas-lro-finds-lunar-pits-harbor-comfortable-temperatures/ | B | Medium. NASA release of 26 July 2022. De Angelis et al. 2002 (doi:10.1269/jrr.43.S41) studied the radiation case; its dose figures could not be opened. |
+| About 290 K (17 C) in the shadowed part of a pit | https://doi.org/10.1029/2022GL099710 | A | Medium. Horvath et al. 2022, read in full. The figure is a model of the Mare Tranquillitatis pit, NOT Marius Hills. An older estimate for lunar caves is 253 K (Horz 1985, quoted by Wagner and Robinson 2014). |
 | Mars surface gravity 3.73 m/s2, Earth 9.82 m/s2 | https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html | A | High |
 | Mars mean surface pressure 6.36 mb; Earth 1014 mb | https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html and https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html | A | High |
 | 0.67 millisieverts per day on the surface of Mars (Curiosity RAD) | https://swri.org/node/9079 | B | Medium. Press release figure. Secondary sources quote 0.64 +/- 0.12 mSv/day from the paper (Hassler et al. 2014) for cosmic rays alone; the paper itself could not be opened. |
@@ -249,6 +271,8 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 | `modules.iceMiner.waterKgPerDay` | 66.7 | kg per day | Derived: 15 t of water collected and processed in 225 days (15,000 / 225). The study assumes 5% ice by mass and 75% extraction. | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
 | `modules.iceMiner.electrolysisKwhPerKgOxygen` | 8.31 | kWh per kg oxygen | Derived: the electrolysis subsystem draws approximately 20 kW and makes 13 t of oxygen in 225 days (20 kW x 24 h / 57.8 kg per day). | Kleinhenz and Paz 2020, Case Studies for Lunar ISRU Systems Utilizing Polar Water, AIAA ASCEND (NASA NTRS 20205007966) | A |
 | `events.marsDustStorm.durationDays` | 54 | days | Derived: the 2018 storm was first detected on 30 May and by 23 July more dust was falling out than being raised (54 days). Dust took until mid-September to clear. | NASA Scientific Visualization Studio 30983 and JPL Opportunity status, 2018 global dust storm | A |
+| `sites.moon-marius-hills.litFraction` | 0.5 | fraction | Derived: away from the poles, open ground is in daylight for half of each lunar day of 29.53 Earth days (synodic period, NSSDC). Hills that shade the site are not modelled. Arrays on the surface; nothing inside the pit is lit. | NASA NSSDCA Moon Fact Sheet | A |
+| `sites.moon-marius-hills.longestDarkHours` | 354 | hours | Derived: half of the 29.53-day lunar day (29.53 x 24 / 2 = 354 hours). The same night the LRO lithograph rounds to 14 Earth days. | NASA NSSDCA Moon Fact Sheet | A |
 
 ## Published values
 
@@ -281,6 +305,8 @@ working session; B = reported by a research sub-agent from a fetched page or abs
 | `sites.moon-malapert-massif.litFraction` | 0.82 | fraction | Leone et al. 2023, iScience 26:107853, doi:10.1016/j.isci.2023.107853 | A | Upper end of the published range for Malapert Massif (50% to 82%): assumes the arrays stand at the best-lit spot. |
 | `sites.moon-mons-mouton.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
 | `sites.moon-haworth.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. At the poles the Sun is on the horizon, so arrays stand upright. |
+| `sites.moon-marius-hills.irradianceWm2` | 1361.0 | W/m2 | NASA NSSDCA Moon Fact Sheet | A | Sunlight at the Moon's distance on an array turned to face the Sun. |
+| `sites.moon-marius-hills.iceAvailability` | 0 | fraction of nominal miner output | LRO Diviner Global Cumulative Products, PDS LRO-L-DLRE-5-GCP-V1.0 (validation/build/moon_global_temperature.py); Horvath, Hayne and Paige 2022, Geophysical Research Letters 49:e2022GL099710, doi:10.1029/2022GL099710 | A | Inferred, not measured: Diviner measures the open surface here at 392 K at midday, far above the 110 K below which water ice stays put, and a model of a similar pit gives about 290 K in its shadowed interior (Horvath et al. 2022). No one has looked for ice inside this pit. |
 | `sites.mars-jezero.irradianceWm2` | 295.2 | W/m2 | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Mean flux on flat ground while the Sun is up. |
 | `sites.mars-jezero.litFraction` | 0.501 | fraction | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Climate model, not a measurement. Mean over the Mars year, seasons weighted by their length. Share of local hours with any sunlight. |
 | `sites.mars-jezero.longestDarkHours` | 13.4 | hours | Mars Climate Database v6.2 (LMD/OU/IAA/ESA/CNES), incident solar flux on a horizontal surface (validation/build/mars_sunlight.py) | A | Longest night of the Mars year, from hourly model output: good to about an hour. |

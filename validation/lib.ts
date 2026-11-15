@@ -104,6 +104,12 @@ export interface Data {
   cells: EarthCell[];
   ranges: EarthRanges;
   targets: Target[];
+  /**
+   * The targets that take part in validation: those listed in `analogFor` by at least one known analog.
+   * A target with no known analog (Marius Hills, added 2026-11-15, after the freeze) has no positive
+   * case to test, so it is left out of every validation statistic and the frozen numbers stay as they were.
+   */
+  validationTargets: Target[];
   /** Known analogs and negative controls only. Candidate sites are never loaded here. */
   sites: Analog[];
   candidates: Analog[];
@@ -148,11 +154,18 @@ export function loadData(includeCandidates = false): Data {
     for (const id of a.analogFor) if (!targetIds.has(id)) fail(`analogs.json: "${a.id}" refers to unknown target "${id}"`);
   }
 
+  const listedByKnown = new Set(analogs.filter((a) => a.kind === 'known').flatMap((a) => a.analogFor));
+  const validationTargets = targets.filter((t) => listedByKnown.has(t.id));
+  if (validationTargets.length < targets.length) {
+    notes.push(`Left out of validation, because no known analog is listed for them: ${targets.filter((t) => !listedByKnown.has(t.id)).map((t) => t.id).join(', ')}.`);
+  }
+
   return {
     earth,
     cells,
     ranges,
     targets,
+    validationTargets,
     sites: analogs.filter((a) => a.kind === 'known' || a.kind === 'negative'),
     candidates: includeCandidates ? analogs.filter((a) => a.kind === 'candidate') : [],
     table,

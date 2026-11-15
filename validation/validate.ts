@@ -57,15 +57,15 @@ const statusNote =
 // ---------------------------------------------------------------------------------------------
 
 const wanted = frozen ? data.sites : data.sites.filter((s) => split.tuning.includes(s.id));
-const scored = scoreSites(wanted, data.targets, data, preset.weights);
+const scored = scoreSites(wanted, data.validationTargets, data, preset.weights);
 const setOf = (s: Site): 'tuning' | 'holdout' => (split.tuning.includes(s.id) ? 'tuning' : 'holdout');
 
 const sets: Record<string, SetMetrics> = {
-  tuning: metricsByBody(scored.sites.filter((s) => setOf(s) === 'tuning'), data.targets),
+  tuning: metricsByBody(scored.sites.filter((s) => setOf(s) === 'tuning'), data.validationTargets),
 };
 if (frozen) {
-  sets.holdout = metricsByBody(scored.sites.filter((s) => setOf(s) === 'holdout'), data.targets);
-  sets.all = metricsByBody(scored.sites, data.targets);
+  sets.holdout = metricsByBody(scored.sites.filter((s) => setOf(s) === 'holdout'), data.validationTargets);
+  sets.all = metricsByBody(scored.sites, data.validationTargets);
 }
 const headlineSet = frozen ? 'holdout' : 'tuning';
 const headline = (sets[headlineSet] as SetMetrics).overall;

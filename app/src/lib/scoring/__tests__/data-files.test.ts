@@ -56,7 +56,7 @@ const BADGES = ['Measured', 'Mission', 'Literature'];
 const skip = (what: string): void => console.log(`    (skipped: ${what})`);
 
 describe('data/targets.json', () => {
-  it('lists the seven DESIGN.md sites with unique kebab-case ids', () => {
+  it('lists the seven DESIGN.md sites and Marius Hills with unique kebab-case ids', () => {
     if (!targets) return skip('targets.json does not exist yet');
     const ids = targets.map((t) => t.id);
     equal(new Set(ids).size, ids.length);
@@ -69,10 +69,29 @@ describe('data/targets.json', () => {
         'mars-jezero',
         'moon-haworth',
         'moon-malapert-massif',
+        'moon-marius-hills',
         'moon-mons-mouton',
         'moon-shackleton-rim',
       ],
     );
+  });
+
+  it('carries measured mission values for Marius Hills, the lava-tube target added on 2026-11-15', () => {
+    if (!targets) return skip('targets.json does not exist yet');
+    const t = targets.find((x) => x.id === 'moon-marius-hills');
+    ok(t, 'moon-marius-hills is missing');
+    if (!t) return;
+    equal(t.body, 'moon');
+    // The pit, Wagner and Robinson 2014, Table 2: 14.091 N, 303.230 E.
+    equal(t.lat, 14.091);
+    equal(t.lon, -56.77);
+    for (const key of ['tempMean', 'tempRange', 'slope', 'roughness'] as const) {
+      ok(t.values[key].value !== null, `${key} must be measured`);
+      equal(t.values[key].badge, 'Mission', key);
+    }
+    // Mare basalt, not highland crust like the polar targets.
+    equal(t.values.lithology.value, 2);
+    ok(t.cannotCopy.join(' ').toLowerCase().includes('tube'), 'must say what an Earth lava tube cannot copy');
   });
 
   it('follows the contract for every target and every factor key', () => {
