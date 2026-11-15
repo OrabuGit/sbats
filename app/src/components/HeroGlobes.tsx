@@ -1,7 +1,12 @@
 import { loadTexture } from '../lib/gl';
+import { flags } from '../flags';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AmbientLight,
+  BufferAttribute,
+  BufferGeometry,
+  Points,
+  PointsMaterial,
   CanvasTexture,
   PlaneGeometry,
   CircleGeometry,
@@ -251,6 +256,30 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
     });
     let loaded = 0;
 
+    // An experiment (flags.stars): a faint starfield in three layers that twinkle slowly out of step.
+    const starLayers = flags.stars
+      ? [0, 1, 2].map((k) => {
+          const n = [140, 90, 40][k];
+          const pts = new Float32Array(n * 3);
+          // A fixed seed, so the sky is the same on every visit.
+          let seed = 7919 * (k + 1);
+          const rnd = () => ((seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296);
+          const unit = new Float32Array(n * 2);
+          for (let i = 0; i < n; i++) {
+            unit[i * 2] = rnd();
+            unit[i * 2 + 1] = rnd();
+          }
+          const geoS = new BufferGeometry();
+          geoS.setAttribute('position', new BufferAttribute(pts, 3));
+          const mat = new PointsMaterial({ color: 0xffffff, size: [1.2, 1.7, 2.3][k], sizeAttenuation: false, transparent: true, opacity: [0.35, 0.5, 0.7][k], depthWrite: false });
+          const obj = new Points(geoS, mat);
+          obj.renderOrder = -2;
+          obj.frustumCulled = false;
+          scene.add(obj);
+          return { obj, geoS, mat, unit, pts, base: [0.35, 0.5, 0.7][k], phase: k * 2.1 };
+        })
+      : [];
+
     // A soft white halo behind each world, so it stands out from the page. It is the one glow on the home page.
     const haloCanvas = document.createElement('canvas');
     haloCanvas.width = haloCanvas.height = 256;
@@ -329,6 +358,14 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
         g.slot = s;
         g.group.scale.setScalar(s.r);
         g.group.position.set(s.cx - w / 2, h / 2 - s.cy, 0);
+      }
+      for (const L of starLayers) {
+        for (let i = 0; i < L.unit.length / 2; i++) {
+          L.pts[i * 3] = (L.unit[i * 2] - 0.5) * w;
+          L.pts[i * 3 + 1] = (L.unit[i * 2 + 1] - 0.5) * h;
+          L.pts[i * 3 + 2] = -1500;
+        }
+        L.geoS.attributes.position.needsUpdate = true;
       }
       for (const { m, g } of halos) {
         m.scale.setScalar(g.slot.r * 2.6);
@@ -587,6 +624,7 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
           g.vy = 0;
         }
       }
+      for (const L of starLayers) L.mat.opacity = reduced ? L.base : L.base * (0.7 + 0.3 * Math.sin(now / 1800 + L.phase));
       placeLinks(now);
       draw();
     };
@@ -612,6 +650,10 @@ export function HeroGlobes({ places, sites, cells, onPick, onWorld, pick, links,
       haloGeo.dispose();
       haloMat.dispose();
       haloTex.dispose();
+      for (const L of starLayers) {
+        L.geoS.dispose();
+        L.mat.dispose();
+      }
       ringBig.dispose();
       ringSmall.dispose();
       dome.dispose();

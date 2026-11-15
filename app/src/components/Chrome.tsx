@@ -1,4 +1,4 @@
-import { Bookmark, BookOpen, GraduationCap, House, MapPin, Play, Square } from 'lucide-react';
+import { Bookmark, BookOpen, GraduationCap, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
 import { Logo } from './Logo';
 
@@ -52,8 +52,7 @@ export function NavRight({
       {demoLabel && <span className="mr-3 hidden max-w-[240px] truncate text-[12px] text-muted xl:inline">{demoLabel}</span>}
       {onHome && (
         <button type="button" onClick={onHome} aria-pressed={homeOpen} aria-label="Home" className={`${NAV} ${tone(homeOpen)}`}>
-          <House size={15} aria-hidden="true" />
-          <span className="hidden xl:inline">Home</span>
+          Home
         </button>
       )}
       <button type="button" onClick={onFeatured} aria-pressed={featuredOpen} aria-label="Featured sites" className={`${NAV} ${tone(featuredOpen)}`}>

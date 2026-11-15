@@ -34,4 +34,6 @@ export const flags = {
    * may be cloud. Turn on only when Session C confirms the rebuilt file.
    */
   indonesiaMinerals: true,
+  /** A faint starfield behind the worlds on the home page. An experiment: set to false to remove it. */
+  stars: true,
 } as const;

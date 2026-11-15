@@ -611,7 +611,8 @@ function Orbit({ data }: { data: DataBundle }) {
   const showWorld = view === 'orbit' && step === 2;
   const showEarth = view === 'orbit' && step === 3;
   const windowKm = extractIndex?.meta.windowKm ?? 20;
-  const earthExtract = extractIndex?.items.find((x) => x.id === named?.id) ?? null;
+  // A named site has its own extract; any other cell uses the one built for it under its cell code.
+  const earthExtract = extractIndex?.items.find((x) => x.id === (named?.id ?? (selectedCell ? siteCode(selectedCell) : ''))) ?? null;
   const targetExtract = extractIndex?.items.find((x) => x.id === target.id) ?? null;
 
   // A site page opens against the target the site is proposed for, when it has one.
