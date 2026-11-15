@@ -1,7 +1,7 @@
 {
   "status": "final",
   "statusNote": "Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.",
-  "generatedAt": "2026-11-15T04:53:08.382Z",
+  "generatedAt": "2026-11-15T06:07:25.739Z",
   "preset": "astrobiology",
   "weights": {
     "terrain": 0.1,
@@ -12,7 +12,7 @@
     "rockType": 0.3
   },
   "earth": {
-    "generatedAt": "2026-11-14T13:02:33Z",
+    "generatedAt": "2026-11-15T06:06:00Z",
     "resolutionDeg": 0.5,
     "cells": 91894,
     "terrain": {
@@ -311,7 +311,7 @@
   ],
   "warnings": [
     "On the hold-out set, Moon targets do worse: mean percentile 0.57 against 0.761.",
-    "earth.json was rebuilt (2026-11-14T13:02:33Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule."
+    "earth.json was rebuilt (2026-11-15T06:06:00Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule."
   ],
   "negativeControls": [
     {

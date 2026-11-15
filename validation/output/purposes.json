@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-15T04:53:11.828Z",
+  "generatedAt": "2026-11-15T06:07:31.536Z",
   "caveat": "Development numbers, not a clean test. All 28 known sites, including the 8 hold-out sites, had been scored and read before the dimensions and purposes were defined. Chance is a mean percentile of 0.5.",
   "frozenAt": "2026-11-14",
-  "earthGeneratedAt": "2026-11-14T13:02:33Z",
+  "earthGeneratedAt": "2026-11-15T06:06:00Z",
   "definitions": "validation/purposes/DEFINITIONS.md",
   "percentile": "Tie-fair (mid-rank) percentile: the share of Earth cells with a strictly lower value plus half of those exactly equal, averaged over the targets the site is an analog for. Chance is exactly 0.5. The first definition, \"beats or ties\", is kept in purposeBeatsOrTies and dimensionBeatsOrTies: it gave 0.96 to sites whose rock class is unrelated to the target.",
   "purposes": [

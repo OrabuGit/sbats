@@ -1,6 +1,6 @@
 # Site-level scores from fine-scale values
 
-Written 2026-11-15T04:55:10.469Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T04:43:34Z (Session B).
+Written 2026-11-15T06:07:36.986Z by validation/score_sites.ts. Site values: data/sites.json built 2026-11-15T06:06:23Z (Session B).
 Scoring values frozen 2026-11-14. Target windows: validation/output/target_terrain_windows.json (2026-11-15T04:50:09Z).
 
 Read this first:
@@ -257,7 +257,7 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
 ### Mount Tambora caldera, Sumbawa, Indonesia
 
-Footprint 7.4 km (provisional). The whole summit caldera of Tambora, rim to rim, with a little of the outer slope in the corners of the square. Terrain window: 16 x 16 posts of 463 m (255 land posts). Defined by Session B in pipeline/sites.py; not listed in data/analogs.json, so the global score does not rank it by name.
+Footprint 7.4 km (provisional). The whole summit caldera of Tambora, rim to rim, with a little of the outer slope in the corners of the square. Terrain window: 16 x 16 posts of 463 m (255 land posts).
 
 | Input | Site value | Scale | 0.5 degree cell |
 | --- | --- | --- | --- |
@@ -297,7 +297,7 @@ Purpose scores at site scale, 0 to 100. In brackets: the 0.5 degree cell.
 
 ### Mount Batur black lava fields, Bali, Indonesia
 
-Footprint 4 km (provisional). Young bare lava flows on the caldera floor south-west of the Batur cone. Terrain window: 9 x 9 posts of 463 m (81 land posts). Defined by Session B in pipeline/sites.py; not listed in data/analogs.json, so the global score does not rank it by name. Caveat from sites.json: The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the footprint is ground outside the lava field.
+Footprint 4 km (provisional). Young bare lava flows on the caldera floor south-west of the Batur cone. Terrain window: 9 x 9 posts of 463 m (81 land posts). Caveat from sites.json: The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the footprint is ground outside the lava field.
 
 | Input | Site value | Scale | 0.5 degree cell |
 | --- | --- | --- | --- |

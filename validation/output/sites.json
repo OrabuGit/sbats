@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-15T04:55:10.471Z",
+  "generatedAt": "2026-11-15T06:07:36.987Z",
   "frozenAt": "2026-11-14",
-  "sitesGeneratedAt": "2026-11-15T04:43:34Z",
-  "earthGeneratedAt": "2026-11-14T13:02:33Z",
+  "sitesGeneratedAt": "2026-11-15T06:06:23Z",
+  "earthGeneratedAt": "2026-11-15T06:06:00Z",
   "notPublished": [],
   "sites": [
     {
@@ -6416,7 +6416,7 @@
       "windowPosts": 16,
       "windowKm": 7.41,
       "terrainPixels": 255,
-      "inAnalogsJson": false,
+      "inAnalogsJson": true,
       "provisional": true,
       "caveat": null,
       "cell": {
@@ -7483,7 +7483,7 @@
       "windowPosts": 9,
       "windowKm": 4.17,
       "terrainPixels": 81,
-      "inAnalogsJson": false,
+      "inAnalogsJson": true,
       "provisional": true,
       "caveat": "The square is 16 km2 and the mapped bare-rock polygon inside it is 7.5 km2, so about half of the footprint is ground outside the lava field.",
       "cell": {

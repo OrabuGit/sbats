@@ -2,7 +2,7 @@
 
 **Development numbers, not a clean test. All 28 known sites, including the 8 hold-out sites, had been scored and read before the dimensions and purposes were defined. Chance is a mean percentile of 0.5.**
 
-Generated 2026-11-15T04:53:11.828Z by `npx tsx validation/purposes.ts`. Earth grid built 2026-11-14T13:02:33Z.
+Generated 2026-11-15T06:07:31.536Z by `npx tsx validation/purposes.ts`. Earth grid built 2026-11-15T06:06:00Z.
 The all-round score is the one frozen on 2026-11-14 and is not changed by this view. Definitions and the
 reason this view exists: `validation/purposes/DEFINITIONS.md`. Candidate sites are not part of this report.
 

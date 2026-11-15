@@ -1,6 +1,6 @@
 # Rank stability: does the top ten depend on the exact weights?
 
-Written 2026-11-15T05:54:36.853Z by `npx tsx validation/stability.ts`. Score frozen 2026-11-14; nothing here changes it.
+Written 2026-11-15T06:07:51.903Z by `npx tsx validation/stability.ts`. Score frozen 2026-11-14; nothing here changes it.
 
 Method: 200 redraws of the Base weights with seed 20261115. In each, every weight is multiplied by a random factor between 0.75 and 1.25, the six are renormalised to sum to 1, and all 91894 Earth cells are scored again with the frozen formula. No redraw is kept.
 

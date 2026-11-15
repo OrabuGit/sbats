@@ -2,8 +2,8 @@
 
 **Status: FINAL.** Sigmas and weights were frozen on 2026-11-14. The hold-out numbers are the honest ones: those sites were never used to tune.
 
-Generated 2026-11-15T04:53:05.838Z by `npx tsx validation/validate.ts rover`. Preset: Rover.
-Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-14T13:02:33Z.
+Generated 2026-11-15T06:07:23.057Z by `npx tsx validation/validate.ts rover`. Preset: Rover.
+Earth grid: 91894 land cells at 0.5 degrees, built 2026-11-15T06:06:00Z.
 Split: 24 tuning sites and 10 hold-out sites, seed 20261114 (validation/tuning/split.json).
 
 Numbers are reported as they came out. Indonesian candidate sites are not part of this report.
@@ -62,7 +62,7 @@ How to read the measures:
 ## Warnings
 
 - On the hold-out set, Moon targets do worse: mean percentile 0.633 against 0.792.
-- earth.json was rebuilt (2026-11-14T13:02:33Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule.
+- earth.json was rebuilt (2026-11-15T06:06:00Z) after the freeze (built 2026-11-14T11:56:02Z). The frozen values were not retuned, by rule.
 
 ## What was left out of the scores
 

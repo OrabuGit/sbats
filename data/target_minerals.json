@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generatedAt": "2026-11-15T05:45:39Z",
+  "generatedAt": "2026-11-15T06:07:20Z",
   "note": "Minerals reported at the targets in cited papers, and the mineral families used to compare them with NASA EMIT identifications at Earth sites (data/sites.json, mineralogy). Site-level result only, added after the freeze of 2026-11-14: never part of the all-round score. An EMIT identification is a spectral match in a 60 m pixel, not an abundance; a rover result is a laboratory measurement of one sample. A shared family is a pointer, not proof.",
   "emitMinimumShare": 0.01,
   "emitMinimumShareNote": "An EMIT family counts when it is matched in at least 1% of the clear pixels of the footprint. A display rule.",
