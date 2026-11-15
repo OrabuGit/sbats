@@ -13,24 +13,38 @@ const TEXTURE: Record<Body, { file: string; credit: string }> = {
 };
 const BODY_LABEL: Record<Body, string> = { moon: 'Moon', mars: 'Mars' };
 
+/** A named place on the Moon or Mars. `hasValues` is false when no measured values exist for it yet. */
+export interface GlobePlace {
+  id: string;
+  name: string;
+  body: 'moon' | 'mars';
+  lat: number;
+  lon: number;
+  hasValues: boolean;
+}
+
 interface Props {
   targets: Target[];
   targetId: string;
-  /** Selects a target without leaving step 1. */
+  /** Named places to mark. The selected one is `placeId`. */
+  places: GlobePlace[];
+  placeId: string | null;
+  /** Selects the first place of a world (the Moon and Mars tabs). */
   onTarget: (id: string) => void;
-  /** A marker was clicked: select that target and go on to Earth. */
+  /** A marker was clicked. */
   onPick: (id: string) => void;
   /** False while another view covers the globe, so it stops drawing. */
   active: boolean;
 }
 
 /** Step 1: the Moon or Mars as a globe, with the target sites as markers. */
-export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Props) {
+export function WorldGlobe({ targets, targetId, places, placeId, onTarget, onPick, active }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeInstance | null>(null);
   const pickRef = useRef(onPick);
   pickRef.current = onPick;
-  const target = targets.find((t) => t.id === targetId) ?? targets[0];
+  const fallback = targets.find((t) => t.id === targetId) ?? targets[0];
+  const target = places.find((p) => p.id === placeId) ?? fallback;
   const body: Body = target.body;
   const reduced = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const bodies = (['moon', 'mars'] as const).filter((b) => targets.some((t) => t.body === b));
@@ -50,18 +64,21 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
       .htmlAltitude(0.004)
       .htmlTransitionDuration(0)
       .htmlElement((d: object) => {
-        const t = d as Target & { on: boolean };
+        const t = d as GlobePlace & { on: boolean };
         const b = document.createElement('button');
         b.type = 'button';
-        b.tabIndex = -1; // the target list in the left panel is the keyboard path
-        b.className = `tm${t.on ? ' tm-on' : ''}`;
-        b.setAttribute('aria-label', `${t.name}: find analogs on Earth`);
+        b.tabIndex = -1; // the place list in the left panel is the keyboard path
+        b.className = `tm${t.on ? ' tm-on' : ''}${t.hasValues ? '' : ' tm-quiet'}`;
+        b.title = t.name;
+        b.setAttribute('aria-label', t.hasValues ? `${t.name}: find analogs on Earth` : `${t.name}: no measured values yet`);
         const dot = document.createElement('span');
         dot.className = 'tm-dot';
+        b.append(dot);
+        // The label shows for the selected place and on hover: dozens of labels would hide the surface.
         const name = document.createElement('span');
         name.className = 'tm-name';
         name.textContent = t.name;
-        b.append(dot, name);
+        b.append(name);
         b.addEventListener('click', (ev) => {
           ev.stopPropagation();
           pickRef.current(t.id);
@@ -97,10 +114,10 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
   useEffect(() => {
     const globe = globeRef.current;
     if (!globe) return;
-    globe.htmlElementsData(targets.filter((t) => t.body === body).map((t) => ({ ...t, on: t.id === target.id })));
+    globe.htmlElementsData(places.filter((t) => t.body === body).map((t) => ({ ...t, on: t.id === target.id })));
     // Close enough to tell neighbouring sites apart: the lunar targets are within a few degrees of each other.
     globe.pointOfView({ lat: target.lat, lng: target.lon, altitude: body === 'moon' ? 0.7 : 1.6 }, reduced ? 0 : 900);
-  }, [targets, body, target, reduced]);
+  }, [places, body, target, reduced]);
 
   useEffect(() => {
     const globe = globeRef.current;
@@ -130,7 +147,7 @@ export function WorldGlobe({ targets, targetId, onTarget, onPick, active }: Prop
             type="button"
             aria-pressed={b === body}
             onClick={() => {
-              const first = targets.find((t) => t.body === b);
+              const first = places.find((t) => t.body === b && t.hasValues) ?? places.find((t) => t.body === b);
               if (first && b !== body) onTarget(first.id);
             }}
             className="tab"

@@ -10,7 +10,6 @@ import { SourceBadge } from './Badges';
 interface Props {
   targets: Target[];
   targetId: string;
-  onTarget: (id: string) => void;
   presets: Preset[];
   presetId: string | null;
   onPreset: (id: string) => void;
@@ -25,6 +24,21 @@ interface Props {
   /** 2: pick a place (list, search, optional purpose). 3: the chosen place, ranking and weights. */
   step: 2 | 3;
   onChangePlace: () => void;
+  /** Named places for step 2, places with values first. */
+  places: PlaceRow[];
+  placeId: string | null;
+  onPlace: (id: string) => void;
+}
+
+export interface PlaceRow {
+  id: string;
+  name: string;
+  body: 'moon' | 'mars';
+  lat: number;
+  lon: number;
+  hasValues: boolean;
+  /** Mission or status, and date when there is one. */
+  sub: string;
 }
 
 export type MatchMode = 'all' | 'purpose';
@@ -37,10 +51,12 @@ const dimensionLabel = (id: string) => DIMENSIONS.find((d) => d.id === id)?.labe
 
 const BODY_LABEL = { moon: 'Moon', mars: 'Mars' } as const;
 
-export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace }: Props) {
+export function LeftPanel({ targets, targetId, presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace, places, placeId, onPlace }: Props) {
   const [query, setQuery] = useState('');
   const q = query.trim().toLowerCase();
-  const listed = targets.filter((t) => t.body === targets.find((x) => x.id === targetId)?.body && (q === '' || t.name.toLowerCase().includes(q)));
+  const body = (places.find((p) => p.id === placeId) ?? targets.find((x) => x.id === targetId))?.body;
+  const onBody = places.filter((p) => p.body === body);
+  const listed = onBody.filter((p) => q === '' || `${p.name} ${p.sub}`.toLowerCase().includes(q));
   const target = targets.find((t) => t.id === targetId) ?? targets[0];
   const total = FACTOR_IDS.reduce((a, id) => a + weights[id], 0) || 1;
   const unpublished = FACTOR_KEYS.filter((k) => target.values[k]?.value === null || target.values[k]?.value === undefined);
@@ -65,19 +81,28 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
               className="h-11 min-w-0 flex-1 bg-transparent text-[14px] text-text placeholder:text-muted focus:outline-none"
             />
             <span className="num text-[11px] text-muted">
-              {listed.length} of {targets.filter((t) => t.body === target.body).length}
+              {listed.length} of {onBody.length}
             </span>
           </label>
-          <fieldset>
-            <legend className="sr-only">Known base sites</legend>
+          <fieldset className="scroll max-h-[46vh]">
+            <legend className="sr-only">Named places</legend>
             {listed.map((t) => {
-              const on = t.id === target.id;
+              const on = t.id === placeId;
               return (
                 <label key={t.id} className={`row last:border-b-0 ${on ? 'row-on' : ''}`}>
-                  <input type="radio" name="target" value={t.id} checked={on} onChange={() => onTarget(t.id)} className="sr-only" />
-                  <span className={`flex-1 text-[14px] ${on ? 'font-medium' : ''}`}>{t.name}</span>
-                  <span className="num text-[11px] text-muted">
-                    {formatLat(t.lat, 1)} {formatLon(t.lon, 1)}
+                  <input type="radio" name="target" value={t.id} checked={on} onChange={() => onPlace(t.id)} className="sr-only" />
+                  <span className="min-w-0 flex-1">
+                    <span className={`block text-[14px] ${on ? 'font-medium' : ''} ${t.hasValues ? '' : 'text-muted'}`}>{t.name}</span>
+                    <span className="block text-[11px] text-muted">{t.sub}</span>
+                  </span>
+                  <span className="num shrink-0 text-right text-[11px] text-muted">
+                    {t.hasValues ? (
+                      <>
+                        {formatLat(t.lat, 1)} {formatLon(t.lon, 1)}
+                      </>
+                    ) : (
+                      'no values yet'
+                    )}
                   </span>
                 </label>
               );
@@ -85,9 +110,8 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
             {listed.length === 0 && <p className="px-4 py-3 text-[13px] text-muted">No place matches "{query}".</p>}
           </fieldset>
           <p className="border-t border-line px-4 py-3 text-[12px] text-muted">
-            {flags.anyPoint
-              ? 'Or click any point on the globe.'
-              : 'Only listed places can be picked. Measured values for an arbitrary point are not in the data yet.'}
+            <span className="num">{onBody.filter((p) => p.hasValues).length}</span> of <span className="num">{onBody.length}</span> places have measured values and can be
+            matched. {flags.anyPoint ? 'Or click any point on the globe.' : 'The others, and a click on any point, need the global grid of this world, which is not published yet.'}
           </p>
         </section>
       ) : (
@@ -104,6 +128,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
         </section>
       )}
 
+      {(step === 3 || places.find((p) => p.id === placeId)?.hasValues !== false) && (
       <section className="border-b border-line p-4" aria-label={`${target.name}: values`}>
         <p className="text-[13px] leading-5 text-text">{target.summary}</p>
         <dl className="kv mt-3">
@@ -128,6 +153,7 @@ export function LeftPanel({ targets, targetId, onTarget, presets, presetId, onPr
           </p>
         )}
       </section>
+      )}
 
       <section className="border-b border-line" aria-labelledby="h-mode">
         <h2 id="h-mode" className="label px-4 pb-1 pt-4">

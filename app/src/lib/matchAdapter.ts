@@ -8,10 +8,14 @@ import {
   buildReport,
   earthPlaceFromCell,
   earthPlaceFromSite,
+  emitFamilies,
+  sharedMinerals,
   sitePosts,
   targetAtSiteWindow,
   type MatchRecord,
+  type SharedMinerals,
   type SiteEntryLike,
+  type TargetMineralsFile,
   type TargetWindowsFile,
 } from './match';
 import { PRESETS, buildProfileIndex, computeEarthRanges, prepareTarget, rankStability, stabilityBasis } from './scoring';
@@ -21,13 +25,16 @@ import { loadExtra } from '../data/access';
 import type { EarthCell, EarthFile, LithologySimilarity, Target, Weights } from '../types';
 
 export { MATCH_AT, PARTLY_AT, VERDICT_LABEL, buildReport, measureRoute };
-export type { MatchRecord, RouteResult, ElevationTile, StabilityResult };
+export type { MatchRecord, RouteResult, ElevationTile, StabilityResult, SharedMinerals };
 export type { MatchDimension, MatchRow, MatchSide, Verdict as RecordVerdict } from './match';
 export type { MatchReport, ReportText } from './match/report';
 export type { CellStability } from './scoring';
+export type { KnownSite, KnownSitesFile } from './targets';
 
 /** Target terrain measured in windows the size of each site's footprint (Session C). null when not published. */
 export const loadTargetWindows = () => loadExtra<TargetWindowsFile>('target_windows.json');
+/** Minerals reported at the targets and the mineral families used to compare them (Session C). null when not published. */
+export const loadTargetMinerals = () => loadExtra<TargetMineralsFile>('target_minerals.json');
 
 const rangesOf = new WeakMap<EarthFile, EarthRanges>();
 const indexOf = new WeakMap<EarthFile, Map<string, ProfileIndex>>();
@@ -48,6 +55,8 @@ export interface RecordInput {
   /** The entry of data/sites.json for this place, to compare at footprint scale. */
   site?: SiteEntryLike | null;
   targetWindows?: TargetWindowsFile | null;
+  /** data/target_minerals.json. Minerals are compared at site scale only. */
+  minerals?: TargetMineralsFile | null;
 }
 
 /**
@@ -55,12 +64,24 @@ export interface RecordInput {
  * verdict and a one-line reason each. With `site`, terrain, vegetation and rock are the footprint's
  * and the target's terrain is measured in a window of the same size when that was published.
  */
-export function matchRecord(input: RecordInput): { record: MatchRecord; note: string | null } {
+export function matchRecord(input: RecordInput): { record: MatchRecord; note: string | null; minerals: SharedMinerals | null } {
   const { earth, lithology, target, cell, site } = input;
   const classes = earth.meta.factors.find((f) => f.key === 'lithology')?.classes;
   const like = site && input.targetWindows ? targetAtSiteWindow(target, sitePosts(site), input.targetWindows) : null;
   const used = like ?? target;
-  const place = site ? earthPlaceFromSite(site, cell, earth.meta) : earthPlaceFromCell(cell, earth.meta, { name: input.name });
+  const mf = input.minerals ?? null;
+  const place = site
+    ? earthPlaceFromSite(site, cell, earth.meta, mf ? { families: mf.families, emitMinimumShare: mf.meta.emitMinimumShare } : {})
+    : earthPlaceFromCell(cell, earth.meta, { name: input.name });
+  // Minerals: EMIT identifications in the site's footprint against minerals reported at the target.
+  let shared: SharedMinerals | null = null;
+  if (site && mf) {
+    try {
+      shared = sharedMinerals(emitFamilies(site.mineralogy ?? null, mf.families, mf.meta.emitMinimumShare), mf.targets[target.id]?.minerals, mf.families);
+    } catch {
+      shared = null;
+    }
+  }
   // Percentiles rank this place among all grid cells for the same target. They are left out when the
   // target was re-measured for a site window, because the grid was not scored against that.
   let index: ProfileIndex | null = null;
@@ -78,12 +99,12 @@ export function matchRecord(input: RecordInput): { record: MatchRecord; note: st
     }
   }
   const build = (table: LithologySimilarity | null) =>
-    buildMatchRecord({ target: used, place, ranges: ranges(earth), table, classes, index, terrainLikeForLike: like !== null });
+    buildMatchRecord({ target: used, place, ranges: ranges(earth), table, classes, index, terrainLikeForLike: like !== null, minerals: shared });
   try {
-    return { record: build(lithology), note: null };
+    return { record: build(lithology), note: null, minerals: shared };
   } catch (e) {
     // A rock class outside the similarity table: compare without rock type and say so.
-    return { record: build(null), note: `Rock type is left out: ${e instanceof Error ? e.message : String(e)}` };
+    return { record: build(null), note: `Rock type is left out: ${e instanceof Error ? e.message : String(e)}`, minerals: shared };
   }
 }
 

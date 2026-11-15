@@ -4,6 +4,7 @@ import { formatCoords, siteCode } from '../lib/geo';
 import { formatShare } from '../lib/format';
 import { DIMENSIONS, PURPOSES } from '../lib/scoringAdapter';
 import { useAsync } from '../lib/useAsync';
+import { loadExtra } from '../data/access';
 import { dataUrl, loadFindings, loadSiteScores, type ExtractIndex, type FeaturedSite, type Findings, type SiteScores, type SitesFile } from '../data/sites';
 import { ComputedBadge, ConfidenceBadge, SourceBadge, Tag } from './Badges';
 
@@ -27,6 +28,20 @@ const short = (name: string) => name.split(',')[0];
 const region = (name: string) => name.split(',').slice(1).join(',').trim();
 
 type Scored = SiteScores['sites'][number];
+
+/** data/benchmarks.json (Session C): proposed and established sites scored by one procedure, with group figures. */
+interface Benchmarks {
+  meta: { caveats: string[] };
+  groups: {
+    candidates: number;
+    known: number;
+    dimensionMean: Record<string, { candidates: number | null; known: number | null }>;
+    purposeMedian: Record<string, { candidates: number | null; known: number | null }>;
+    purposeBest: Record<string, { candidates: number | null; known: number | null }>;
+  };
+}
+const f2 = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : v.toFixed(2));
+const f0 = (v: number | null | undefined) => (v === null || v === undefined ? 'no data' : v.toFixed(0));
 
 /** The result to show for a site: against the target it is listed for, else the one it scores best against. */
 function pick(s: Scored | undefined, analog: Analog | undefined) {
@@ -218,6 +233,8 @@ function SiteArticle({ site, lead, image, finding, scored, analog, targets, onSi
 export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, target, earth, results, top, reason, onSitePage, onMatch, onCell }: Props) {
   const findings = useAsync(loadFindings, 'findings');
   const scores = useAsync(loadSiteScores, 'site-scores');
+  const bench = useAsync(() => loadExtra<Benchmarks>('benchmarks.json'), 'benchmarks');
+  const bm = bench.status === 'ready' ? bench.value : null;
   const fd = findings.status === 'ready' ? findings.value : null;
   const sc = scores.status === 'ready' ? scores.value : null;
   const findingOf = (id: string) => fd?.sections.find((s) => s.strong.length > 0 && id.includes(s.slug)) ?? null;
@@ -351,6 +368,67 @@ export function FeaturedPage({ sites, sitesState, extracts, analogs, targets, ta
           </table>
         </div>
         {scores.status === 'ready' && !sc && <p className="mt-2 text-[12px] text-muted">No data. Site-scale scores were not published with this build.</p>}
+
+        <h3 className="mt-8 text-[14px] font-semibold text-text">Proposed sites against the benchmarks</h3>
+        {bm ? (
+          <>
+            <p className="mt-1 max-w-[72ch] text-[13px] text-muted">
+              The {bm.groups.candidates} proposed sites and the {bm.groups.known} established sites, scored by one procedure at footprint scale, over all
+              targets. Similarity runs from 0 to 1 and purpose scores from 0 to 100.
+            </p>
+            <div className="mt-3 grid max-w-[1100px] gap-x-10 gap-y-6 md:grid-cols-2">
+              <table className="w-full border-collapse text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-line">
+                    <th scope="col" className="label py-2 font-normal">Mean similarity</th>
+                    <th scope="col" className="label py-2 text-right font-normal">Proposed</th>
+                    <th scope="col" className="label py-2 text-right font-normal">Established</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DIMENSIONS.map((d) => (
+                    <tr key={d.id} className="border-b border-line">
+                      <td className="py-2 text-text">{d.label}</td>
+                      <td className="num py-2 text-right text-text">{f2(bm.groups.dimensionMean[d.id]?.candidates)}</td>
+                      <td className="num py-2 text-right text-text">{f2(bm.groups.dimensionMean[d.id]?.known)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <table className="w-full border-collapse text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-line">
+                    <th scope="col" className="label py-2 font-normal">Purpose score, median and best target</th>
+                    <th scope="col" className="label py-2 text-right font-normal">Proposed</th>
+                    <th scope="col" className="label py-2 text-right font-normal">Established</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {PURPOSES.map((p) => (
+                    <tr key={p.id} className="border-b border-line">
+                      <td className="py-2 text-text">{p.label}</td>
+                      <td className="num py-2 text-right text-text">
+                        {f0(bm.groups.purposeMedian[p.id]?.candidates)} · {f0(bm.groups.purposeBest[p.id]?.candidates)}
+                      </td>
+                      <td className="num py-2 text-right text-text">
+                        {f0(bm.groups.purposeMedian[p.id]?.known)} · {f0(bm.groups.purposeBest[p.id]?.known)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <ul className="mt-3 max-w-[72ch] space-y-1">
+              {bm.meta.caveats.map((c) => (
+                <li key={c} className="text-[12px] text-muted">
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="mt-1 text-[13px] text-muted">{bench.status === 'loading' ? 'Loading benchmarks' : 'No data. data/benchmarks.json is not published with this build.'}</p>
+        )}
       </section>
 
       <section className="px-4 py-8 sm:px-6" aria-labelledby="h-scan">

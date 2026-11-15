@@ -2,7 +2,7 @@ import { ArrowLeft } from 'lucide-react';
 import type { CellSummary, EarthCell, EarthFile, Target } from '../types';
 import { downloadText, toCsv } from '../lib/download';
 import { siteCode } from '../lib/geo';
-import { buildReport, type CellStability, type MatchRecord, type ReportText, type RouteResult, type StabilityResult } from '../lib/matchAdapter';
+import { buildReport, type CellStability, type KnownSite, type MatchRecord, type SharedMinerals, type ReportText, type RouteResult, type StabilityResult } from '../lib/matchAdapter';
 import { useAsync } from '../lib/useAsync';
 import { loadFrozen, loadReport } from '../data/validation';
 
@@ -15,6 +15,9 @@ interface Props {
   stability: { result: StabilityResult; cell: CellStability | null } | null;
   /** Routes measured on the terrain page for this pair, if any. */
   routes: { label: string; result: RouteResult }[];
+  minerals: SharedMinerals | null;
+  /** The named place the target was picked from in step 2, if any. */
+  knownSite: KnownSite | null;
   results: CellSummary[];
   onBack: () => void;
 }
@@ -32,14 +35,14 @@ function Text({ t }: { t: ReportText }) {
 }
 
 /** A match as a document: readable on screen, printable, with numbered citations. Content from buildReport. */
-export function Report({ cell, target, earth, record, stability, routes, results, onBack }: Props) {
+export function Report({ cell, target, earth, record, stability, routes, minerals, knownSite, results, onBack }: Props) {
   const validation = useAsync(async () => {
     const [r, f] = await Promise.all([loadReport('base'), loadFrozen()]);
     const h = r?.sets.holdout.overall;
     if (!h || !f || h.rocAuc === null || h.top10Share === null || h.meanPercentile === null) return null;
     return { holdoutAuc: h.rocAuc, holdoutTop10: h.top10Share, holdoutMeanPercentile: h.meanPercentile, frozenAt: f.frozenAt };
   }, 'report-validation');
-  const report = buildReport({ record, stability, routes, validation: validation.status === 'ready' ? validation.value : null });
+  const report = buildReport({ record, minerals, knownSite, stability, routes, validation: validation.status === 'ready' ? validation.value : null });
   const base = `sbats-${slug(record.earth.name)}-${target.id}`;
 
   const matchCsv = () =>

@@ -509,3 +509,25 @@ input[type='checkbox'].check:focus-visible {
     margin: 16mm;
   }
 }
+
+/* A named place with no measured values yet: smaller and muted. */
+.tm-quiet .tm-dot {
+  width: 8px;
+  height: 8px;
+  border-width: 1px;
+  border-color: var(--color-muted);
+}
+.tm-quiet {
+  transform: translate(calc(50% - 4px), 0);
+}
+
+.tm .tm-name {
+  display: none;
+}
+.tm-on .tm-name,
+.tm:hover .tm-name {
+  display: block;
+}
+.tm:hover {
+  z-index: 2;
+}

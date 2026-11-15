@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import { loadData, type DataBundle } from './data/access';
+import { loadData, loadExtra, type DataBundle } from './data/access';
 import { FACTOR_IDS, FACTOR_KEYS, type FactorId, type Weights } from './types';
 import { PRESETS, PURPOSES, createScorer, purposeWeights, type PurposeId } from './lib/scoringAdapter';
 import { buildIndex, formatCoords, siteCode } from './lib/geo';
@@ -20,14 +20,15 @@ import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
 import { WorldPage } from './components/WorldPage';
-import { TerrainPage } from './components/TerrainPage';
+import { TerrainPage, type RoversFile } from './components/TerrainPage';
 import { Report } from './components/Report';
 import { FeaturedPage } from './components/FeaturedPage';
 import { MatchDetail } from './components/MatchDetail';
 import { WORLD_CREDIT, Worlds, type WorldId } from './components/Worlds';
 import { savedId, useSaved } from './lib/saved';
+import type { KnownSitesFile } from './lib/matchAdapter';
 import { getRoutes, routeKey } from './lib/layoutStore';
-import { loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
+import { loadTargetMinerals, loadTargetWindows, matchRecord, stability as rankStability, type StabilityResult } from './lib/matchAdapter';
 import { annualSolar, loadModules, loadSiteClimate } from './data/sandbox';
 import { useAsync } from './lib/useAsync';
 import { decodeLayout, type SavedLayout } from './lib/simAdapter';
@@ -137,6 +138,10 @@ function Orbit({ data }: { data: DataBundle }) {
   const extracts = useAsync(loadExtracts, 'extracts');
   const saved = useSaved();
   const targetWindows = useAsync(loadTargetWindows, 'target-windows');
+  const knownSites = useAsync(() => loadExtra<KnownSitesFile>('known_sites.json'), 'known-sites');
+  const [placeId, setPlaceId] = useState<string | null>(null);
+  const rovers = useAsync(() => loadExtra<RoversFile>('rovers.json'), 'rovers');
+  const targetMinerals = useAsync(loadTargetMinerals, 'target-minerals');
   const [scale, setScale] = useState<'grid' | 'site'>('grid');
   const [stab, setStab] = useState<{ key: string; result: StabilityResult } | null>(null);
   const fixtureAllowed = !import.meta.env.PROD || new URLSearchParams(window.location.search).has('sandbox');
@@ -238,19 +243,55 @@ function Orbit({ data }: { data: DataBundle }) {
     [index, select],
   );
 
+  // Step 2 places: the named places of known_sites.json, those with measured values first, then any
+  // target no named place points at. Until that file is published the targets themselves are the places.
+  const places = useMemo(() => {
+    const known = knownSites.status === 'ready' && knownSites.value ? knownSites.value.sites : [];
+    const linked = new Set(known.map((k) => k.targetId).filter(Boolean));
+    const rows = [
+      ...known.map((k) => ({
+        id: k.id,
+        name: k.name,
+        body: k.body,
+        lat: k.lat,
+        lon: k.lon,
+        hasValues: !!k.targetId && targets.some((t) => t.id === k.targetId),
+        targetId: k.targetId ?? null,
+        sub: [k.mission ?? k.status, k.date].filter(Boolean).join(' · '),
+        line: `${k.status.charAt(0).toUpperCase()}${k.status.slice(1)}${k.mission ? `, ${k.mission}` : ''}${k.date ? `, ${k.date}` : ''}.`,
+        source: k.source,
+        url: k.url || null,
+      })),
+      ...targets
+        .filter((t) => !linked.has(t.id))
+        .map((t) => ({ id: t.id, name: t.name, body: t.body, lat: t.lat, lon: t.lon, hasValues: true, targetId: t.id as string | null, sub: 'Base site in the data', line: '', source: '', url: null as string | null })),
+    ];
+    return rows.sort((a, b) => Number(b.hasValues) - Number(a.hasValues));
+  }, [knownSites, targets]);
+  const place = places.find((p) => p.id === placeId) ?? places.find((p) => p.targetId === targetId) ?? null;
+  const pickPlace = useCallback(
+    (id: string) => {
+      const p = places.find((x) => x.id === id);
+      if (!p) return;
+      setPlaceId(id);
+      if (p.targetId && p.hasValues) setTargetId(p.targetId);
+    },
+    [places],
+  );
+
   const pickWorld = useCallback(
     (w: WorldId) => {
       if (w === 'earth') return;
-      if (target.body !== w) {
-        const first = targets.find((t) => t.body === w);
-        if (first) setTargetId(first.id);
+      if (target.body !== w || (place && place.body !== w)) {
+        const first = places.find((p) => p.body === w && p.hasValues);
+        if (first) pickPlace(first.id);
       }
       setSelected(null);
       setView('orbit');
       setStep(2);
       setTab('setup');
     },
-    [target, targets],
+    [target, place, places, pickPlace],
   );
 
   const timers = useRef<number[]>([]);
@@ -447,9 +488,10 @@ function Orbit({ data }: { data: DataBundle }) {
             name: named?.name ?? siteCode(selectedCell),
             site: scale === 'site' && siteEntry ? (siteEntry as unknown as Parameters<typeof matchRecord>[0]['site']) : null,
             targetWindows: targetWindows.status === 'ready' ? targetWindows.value : null,
+            minerals: targetMinerals.status === 'ready' ? targetMinerals.value : null,
           })
         : null,
-    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows],
+    [selectedCell, earth, lithology, target, named, scale, siteEntry, targetWindows, targetMinerals],
   );
 
   // Rank stability: 200 redraws of the weights, computed after the screen has settled (about 0.7 s).
@@ -603,6 +645,8 @@ function Orbit({ data }: { data: DataBundle }) {
           record={match.record}
           stability={stabNow ? { result: stabNow, cell: stabSelected } : null}
           routes={earthExtract ? getRoutes(routeKey(earthExtract.id, target.id)) : []}
+          minerals={match.minerals}
+          knownSite={(knownSites.status === 'ready' && knownSites.value?.sites.find((k) => k.id === place?.id)) || null}
           results={results}
           onBack={() => setView('match')}
         />
@@ -615,7 +659,8 @@ function Orbit({ data }: { data: DataBundle }) {
           windowKm={windowKm}
           earthName={(named?.name ?? siteCode(selectedCell)).split(',')[0]}
           targetName={target.name}
-          slopeLimitDeg={modules.status === 'ready' && !modules.value.fixture ? (modules.value.file.modules.landingPad.params.maxSlopeDeg?.value ?? null) : null}
+          rovers={rovers.status === 'ready' ? rovers.value : null}
+          targetBody={target.body}
           onBack={() => setView('match')}
           onBase={reconReady ? () => openRecon() : null}
         />
@@ -788,7 +833,9 @@ function Orbit({ data }: { data: DataBundle }) {
             onChangePlace={() => onStep(2)}
             targets={targets}
             targetId={target.id}
-            onTarget={setTargetId}
+            places={places}
+            placeId={place?.id ?? null}
+            onPlace={pickPlace}
             presets={PRESETS}
             presetId={presetId}
             onPreset={(id) => {
@@ -824,7 +871,19 @@ function Orbit({ data }: { data: DataBundle }) {
             }
           >
             <div className={showEarth ? 'hidden' : 'h-full'}>
-              <WorldGlobe targets={targets} targetId={target.id} onTarget={setTargetId} onPick={goToEarth} active={showWorld} />
+              <WorldGlobe
+                targets={targets}
+                targetId={target.id}
+                places={places}
+                placeId={place?.id ?? null}
+                onTarget={pickPlace}
+                onPick={(id) => {
+                  const p = places.find((x) => x.id === id);
+                  pickPlace(id);
+                  if (p?.hasValues && p.targetId) goToEarth(p.targetId);
+                }}
+                active={showWorld}
+              />
             </div>
             <div className={showEarth ? 'h-full' : 'hidden'}>
               <GlobeView
@@ -856,7 +915,7 @@ function Orbit({ data }: { data: DataBundle }) {
           className={`scroll order-3 bg-panel lg:order-3 lg:block lg:min-h-0 lg:border-l lg:border-line ${tab === 'results' ? 'block' : 'hidden'}`}
         >
           {step === 2 ? (
-            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} />
+            <TargetBrief target={target} extract={targetExtract} extractsState={extracts.status} windowKm={windowKm} onFind={() => goToEarth()} place={place && place.id !== target.id ? place : null} />
           ) : (
             <CandidateList
               earth={earth}

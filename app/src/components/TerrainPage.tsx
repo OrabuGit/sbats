@@ -16,12 +16,25 @@ interface Props {
   earthName: string;
   targetName: string;
   /** Steepest slope a landing pad accepts in modules.json, used as the reference line for a route. null when unknown. */
-  slopeLimitDeg: number | null;
+  /** data/rovers.json: published slope limits and speeds, each with its source. null when not published. */
+  rovers: RoversFile | null;
+  targetBody: 'moon' | 'mars';
   onBack: () => void;
   onBase: (() => void) | null;
 }
 
 type Surface = 'image' | 'relief' | 'slope';
+interface Sourced {
+  value: number | null;
+  unit: string;
+  kind: string;
+  source: string;
+  badge?: 'Measured' | 'Mission' | 'Literature';
+}
+export interface RoversFile {
+  meta: { note: string; energyNote?: string };
+  rovers: { id: string; name: string; body: 'moon' | 'mars'; crewed: boolean; slopeLimit: Sourced | null; speed: Sourced | null }[];
+}
 interface RoutePoint {
   x: number;
   z: number;
@@ -81,7 +94,11 @@ function ProfileChart({ a, b, at }: { a: RouteProfile; b: RouteProfile; at: numb
 }
 
 /** Step 5, "Open 3D terrain": the Earth place and the target as terrain at one scale, with a route driven on both. */
-export function TerrainPage({ earth, target, windowKm, earthName, targetName, slopeLimitDeg, onBack, onBase }: Props) {
+export function TerrainPage({ earth, target, windowKm, earthName, targetName, rovers, targetBody, onBack, onBase }: Props) {
+  const usable = (rovers?.rovers ?? []).filter((r) => r.slopeLimit?.value != null);
+  const [roverId, setRoverId] = useState<string | null>(null);
+  const roverSpec = usable.find((r) => r.id === roverId) ?? usable.find((r) => r.body === targetBody) ?? usable[0] ?? null;
+  const slopeLimitDeg = roverSpec?.slopeLimit?.value ?? null;
   const [surface, setSurface] = useState<Surface>('image');
   const [route, setRoute] = useState<RoutePoint[]>([]);
   const [rover, setRover] = useState<number | null>(null);
@@ -99,12 +116,15 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
       const tile: ElevationTile = { size: el.size, pixelM: el.pixelM, data };
       const toTile = (p: RoutePoint) => ({ col: ((p.x + windowKm / 2) / windowKm) * (el.size - 1), row: ((p.z + windowKm / 2) / windowKm) * (el.size - 1) });
       try {
-        return measureRoute(tile, route.map(toTile), { limit: slopeLimitDeg === null ? null : { rover: 'Landing pad limit', limitDeg: slopeLimitDeg, kind: 'landing pad slope limit in data/modules.json', source: 'data/modules.json, landingPad.maxSlopeDeg' } });
+        return measureRoute(tile, route.map(toTile), {
+          limit: roverSpec?.slopeLimit && slopeLimitDeg !== null ? { rover: roverSpec.name, limitDeg: slopeLimitDeg, kind: roverSpec.slopeLimit.kind, source: roverSpec.slopeLimit.source } : null,
+          speed: roverSpec?.speed?.value != null ? { rover: roverSpec.name, metresPerHour: roverSpec.speed.value, kind: roverSpec.speed.kind, source: roverSpec.speed.source } : null,
+        });
       } catch {
         return null;
       }
     }) as [RouteResult | null, RouteResult | null];
-  }, [heights, route, earth, target, windowKm, slopeLimitDeg]);
+  }, [heights, route, earth, target, windowKm, slopeLimitDeg, roverSpec]);
   const profiles = useMemo(
     () => (measured && measured[0] && measured[1] ? ([profileOf(measured[0], earth.elevation!.min), profileOf(measured[1], target.elevation!.min)] as const) : null),
     [measured, earth, target],
@@ -271,6 +291,17 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
         </div>
 
         <div className="min-w-0">
+          <label className="mb-3 flex max-w-[460px] items-center justify-between gap-3 border-b border-line pb-2 text-[13px] text-text">
+            <span className="label">Rover</span>
+            <select value={roverSpec?.id ?? ''} onChange={(e) => setRoverId(e.target.value)} disabled={usable.length === 0} className="h-11 min-w-0 bg-panel text-[13px] text-text">
+              {usable.length === 0 && <option value="">no data</option>}
+              {usable.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}, {r.body === 'moon' ? 'Moon' : 'Mars'}, limit {r.slopeLimit?.value}°
+                </option>
+              ))}
+            </select>
+          </label>
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-[14px] font-semibold text-text">Route figures</h3>
             <ComputedBadge title="Computed in the browser by the route library from the elevation grids, sampled at each grid's own pixel size." />
@@ -298,6 +329,7 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
               {row('Steepest climb on the route', (f) => (f.maxUphillDeg === null ? 'no data' : `${fx(f.maxUphillDeg, 1)}°`))}
               {row('Steepest ground crossed', (f) => (f.maxTerrainSlopeDeg === null ? 'no data' : `${fx(f.maxTerrainSlopeDeg, 1)}°`))}
               {row(slopeLimitDeg === null ? 'Share above a slope limit' : `Share on ground steeper than ${slopeLimitDeg}°`, (f) => (f.shareAboveLimit === null ? 'no data' : `${fx(f.shareAboveLimit * 100, 0)}%`))}
+              {row('Driving time, lower bound', (f) => (f.drivingTimeH === null ? 'no data' : f.drivingTimeH < 1 ? `${fx(f.drivingTimeH * 60, 0)} min` : `${fx(f.drivingTimeH, 1)} h`))}
               {row('Slope measured over', (f) => `${fx(f.baselineM, 0)} m`)}
             </tbody>
           </table>
@@ -308,8 +340,10 @@ export function TerrainPage({ earth, target, windowKm, earthName, targetName, sl
               </li>
             ))}
             <li className="text-[11px] text-muted">
-              No driving time or energy is shown: data/rovers.json, with cited rover speeds and slope limits, is not published yet.{' '}
-              {slopeLimitDeg === null ? 'No slope limit is set.' : `The ${slopeLimitDeg}° limit is the landing pad slope limit in modules.json, used as a stand-in.`}
+              {roverSpec
+                ? `Slope limit: ${roverSpec.slopeLimit?.value}° (${roverSpec.slopeLimit?.kind}; ${roverSpec.slopeLimit?.source}).${roverSpec.speed?.value != null ? ` Speed: ${roverSpec.speed.value.toLocaleString('en-US')} m per hour (${roverSpec.speed.kind}; ${roverSpec.speed.source}).` : ' No published speed.'}`
+                : 'No data. data/rovers.json is not published with this build, so no slope limit or driving time is shown.'}{' '}
+              No energy figure is shown: no citable model of rover energy against slope was found.
             </li>
           </ul>
         </div>
