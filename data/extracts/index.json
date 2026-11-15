@@ -1,7 +1,7 @@
 {
  "meta": {
   "aiUse": "Built by pipeline code written with AI assistance (Claude Code), directed and reviewed by the team. See AI_USE.md.",
-  "generatedAt": "2026-11-15T06:49:20Z",
+  "generatedAt": "2026-11-15T12:52:34Z",
   "windowKm": 20.0,
   "pairs": [
    {
@@ -1823,6 +1823,173 @@
     "date": "2025-09-08",
     "sceneCloudPct": 3.5,
     "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "dallol",
+   "name": "Dallol, Danakil Depression, Ethiopia",
+   "body": "earth",
+   "lat": 14.242,
+   "lon": 40.3,
+   "matchedTargets": [
+    "mars-jezero",
+    "mars-gale"
+   ],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/dallol/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": -128.6,
+    "max": 189.4,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N14_00_E040_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/dallol/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_37PFR_20251203_0_L2A",
+    "date": "2025-12-03",
+    "sceneCloudPct": 0.0,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "dasht-e-lut",
+   "name": "Dasht-e Lut (Lut Desert), Iran",
+   "body": "earth",
+   "lat": 30.2639,
+   "lon": 59.2411,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/dasht-e-lut/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 478.9,
+    "max": 922.4,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_N30_00_E059_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/dasht-e-lut/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2B_40RGU_20250911_0_L2A",
+    "date": "2025-09-11",
+    "sceneCloudPct": 0,
+    "clearShareInWindow": 1.0,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "salar-de-uyuni",
+   "name": "Salar de Uyuni salt flat, Bolivia",
+   "body": "earth",
+   "lat": -20.3333,
+   "lon": -67.7,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/salar-de-uyuni/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 3644.4,
+    "max": 3850.7,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S21_00_W068_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/salar-de-uyuni/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_19KFT_20250407_0_L2A",
+    "date": "2025-04-07",
+    "sceneCloudPct": 0.3,
+    "clearShareInWindow": 0.983,
+    "nativePixelM": 10,
+    "attribution": "Contains modified Copernicus Sentinel data 2025.",
+    "badge": "Measured"
+   }
+  },
+  {
+   "id": "tunupa-volcano",
+   "name": "Tunupa volcano, north shore of Salar de Uyuni, Bolivia",
+   "body": "earth",
+   "lat": -19.83,
+   "lon": -67.64,
+   "matchedTargets": [],
+   "pairedWith": null,
+   "elevation": {
+    "file": "extracts/tunupa-volcano/elevation.f32",
+    "format": "float32 little-endian, row-major, north first, NaN = no data",
+    "unit": "m",
+    "size": 667,
+    "pixelM": 30.0,
+    "min": 3644.2,
+    "max": 5308.9,
+    "noDataShare": 0.0,
+    "product": "Copernicus DEM GLO-30",
+    "tiles": [
+     "Copernicus_DSM_COG_10_S20_00_W068_00_DEM"
+    ],
+    "nativePixelM": 30.9,
+    "attribution": "Copernicus DEM GLO-30. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+    "badge": "Measured",
+    "note": "Heights above the EGM2008 geoid. Sea is 0 m."
+   },
+   "image": {
+    "file": "extracts/tunupa-volcano/image.jpg",
+    "size": 2000,
+    "pixelM": 10.0,
+    "bands": "RGB",
+    "product": "Sentinel-2 L2A true colour image (TCI)",
+    "scene": "S2C_19KFU_20250328_1_L2A, S2C_19KFU_20250328_0_L2A",
+    "date": "2025-03-28",
+    "sceneCloudPct": 0.3,
+    "clearShareInWindow": 0.974,
     "nativePixelM": 10,
     "attribution": "Contains modified Copernicus Sentinel data 2025.",
     "badge": "Measured"

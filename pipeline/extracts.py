@@ -54,7 +54,9 @@ XCACHE = CACHE / "extracts"
 XCACHE.mkdir(exist_ok=True)
 
 # Featured Indonesian sites. Gua Lawa is the lava tube whose own coordinates are published.
-# Earth items: every candidate site of analogs.json (the featured Indonesian sites).
+# Earth items: every candidate site of analogs.json (the featured Indonesian sites), plus the known
+# comparison sites that appear in the home page story pairs (Dallol, Dasht-e Lut, Salar de Uyuni, Tunupa).
+STORY_SITES = ["dallol", "dasht-e-lut", "salar-de-uyuni", "tunupa-volcano"]
 
 # Side-by-side pairs asked for by the team, beyond the analogFor lists of analogs.json.
 PAIRS = {"id-tambora-caldera": "moon-shackleton-rim", "id-batur-lava-fields": "moon-marius-hills"}
@@ -378,13 +380,16 @@ def save(item_id: str, z, zpx, zmeta, img, ipx, imeta) -> dict:
     return out
 
 
-def build() -> dict:
+def build(only: set[str] | None = None) -> dict:
+    """only: build just these ids (the rest of an existing index.json is kept by main())."""
     analogs = {a["id"]: a for a in json.loads((DATA / "analogs.json").read_text())}
     analogs = S.merged_sites(analogs)
     targets = json.loads((DATA / "targets.json").read_text())
     assert set(PAIRS.values()) <= {t["id"] for t in targets}, "a paired target is missing from targets.json"
     items = []
-    for sid in [i for i, a in analogs.items() if a["kind"] == "candidate"]:
+    for sid in [i for i, a in analogs.items() if a["kind"] == "candidate" or i in STORY_SITES]:
+        if only and sid not in only:
+            continue
         a = analogs[sid]
         print(f"[{sid}]")
         z, zpx, zm = earth_elevation(a["lat"], a["lon"])
@@ -393,6 +398,8 @@ def build() -> dict:
                       "matchedTargets": a["analogFor"], "pairedWith": PAIRS.get(sid),
                       **save(sid, z, zpx, zm, img, ipx, im)})
     for t in targets:
+        if only is not None and t["id"] not in only:
+            continue
         print(f"[{t['id']}]")
         if t["body"] == "moon":
             z, zpx, zm = moon_elevation(t["lat"], t["lon"])
@@ -422,7 +429,14 @@ def build() -> dict:
 
 
 def main() -> None:
-    out = build()
+    only = set(sys.argv[1:]) or None      # e.g. `extracts.py dallol dasht-e-lut`: build these, keep the rest of the index
+    out = build(only)
+    if only:
+        old = json.loads((OUT / "index.json").read_text())
+        new = {i["id"]: i for i in out["items"]}
+        order = [i["id"] for i in old["items"]]
+        out["items"] = [new.get(i["id"], i) for i in old["items"]] + [i for i in out["items"] if i["id"] not in order]
+        out["meta"] = {**old["meta"], "generatedAt": out["meta"]["generatedAt"]}
     tmp = OUT / "index.json.tmp"
     tmp.write_text(json.dumps(out, ensure_ascii=False, indent=1, allow_nan=False))
     os.replace(tmp, OUT / "index.json")

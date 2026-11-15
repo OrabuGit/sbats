@@ -463,7 +463,9 @@ inside a small square footprint centred on the site's coordinates instead of ove
 Owner: Session B. Built by `pipeline/extracts.py`.
 
 Same-scale elevation and imagery for the split view and the 3D terrain view: every candidate site of
-`analogs.json` and every target of `targets.json`. `data/extracts/index.json`:
+`analogs.json`, the four comparison sites of the home page story pairs (`dallol`, `dasht-e-lut`, `salar-de-uyuni`,
+`tunupa-volcano`, added 2026-11-15) and every target of `targets.json`. Items named `SBATS-...` are cell-code
+extracts added by the app session and are not built by `extracts.py`. `data/extracts/index.json`:
 
 ```
 {
