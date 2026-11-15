@@ -4,6 +4,7 @@
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/500.css';
 @import '@fontsource/ibm-plex-mono/600.css';
+@import '@fontsource-variable/archivo/wdth.css';
 @import 'tailwindcss';
 
 /* UI tokens from DESIGN.md section 10. One accent. Green and red are for readiness only. */
@@ -18,6 +19,7 @@
   --color-fail: #ff4d4d;
 
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Archivo Variable', 'Inter', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   /* Corner radius never goes above 4px. */
@@ -530,4 +532,88 @@ input[type='checkbox'].check:focus-visible {
 }
 .tm:hover {
   z-index: 2;
+}
+
+
+/* ------------------------------------------------------------------------------------------
+   Display type. One typeface for headings (Archivo, with its width axis), Inter for sentences,
+   Plex Mono for numbers and codes. Wide and heavy for the largest sizes, narrower as they shrink.
+   ------------------------------------------------------------------------------------------ */
+h1,
+h2,
+.display {
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.08;
+}
+.display-xl {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+.display-l {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Home. Scroll-driven reveal: a block fades and rises once when it comes into view.
+   The observer adds .in. Without motion (reduced-motion) everything is simply there.
+   ------------------------------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+.bar-grow {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 90ms + 200ms);
+}
+.in .bar-grow,
+.bar-grow.in {
+  transform: scaleX(var(--to, 1));
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .bar-grow {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .bar-grow {
+    transform: scaleX(var(--to, 1)) !important;
+  }
+}
+
+/* The three worlds on the home page: each world's name is a real button under its globe. */
+.world-name:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* A text link with an underline that thickens on hover: the secondary action on the home page. */
+.link-rule {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+  transition: text-decoration-thickness 150ms ease, color 150ms ease;
+}
+.link-rule:hover {
+  text-decoration-thickness: 3px;
+  color: var(--color-accent);
 }

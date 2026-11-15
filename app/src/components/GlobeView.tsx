@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeInstance } from 'globe.gl';
-import { CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
+import { AdditiveBlending, CanvasTexture, Mesh, MeshBasicMaterial, NearestFilter, SRGBColorSpace, SphereGeometry, type Object3D, type Texture } from 'three';
 import SlippyMap from 'three-slippy-map-globe';
 import { feature } from 'topojson-client';
 import type { MultiPolygon, Polygon } from 'geojson';
@@ -10,36 +10,26 @@ import type { Analog, EarthFile, CellSummary } from '../types';
 import { formatCoords, type CellIndex } from '../lib/geo';
 import type { Candidate } from '../lib/rank';
 
-// Score classes. Six flat steps of the one accent colour over the land colour, so the map and
-// its legend use solid fills only (no gradients).
-const LAND = [26, 32, 38];
-const ACCENT = [255, 176, 0];
-const mix = (t: number) => `rgb(${LAND.map((l, i) => Math.round(l + (ACCENT[i] - l) * t)).join(',')})`;
-export const SCORE_CLASSES = [
-  { min: 0, label: '0', color: '#1E252C' },
-  { min: 20, label: '20', color: mix(0.26) },
-  { min: 35, label: '35', color: mix(0.42) },
-  { min: 50, label: '50', color: mix(0.6) },
-  { min: 65, label: '65', color: mix(0.8) },
-  { min: 80, label: '80', color: mix(1) },
-];
+// Match strength is shown by brightness. This is data, not decoration: a cell's light is a function of its
+// score, and the legend below prints the same function. The best cells also glow. Nothing else on the
+// map glows. Cells are added to the imagery (additive blending), so a higher score is simply more light.
+const AMBER = '255,176,0';
+/** Share of full brightness for a score from 0 to 100. */
+export const brightness = (score: number) => Math.pow(Math.max(0, Math.min(100, score)) / 100, 1.1);
+/** Cells from this score up carry a halo. The halo grows with the score. */
+export const GLOW_FROM = 35;
+export const SCORE_CLASSES = [0, 20, 35, 50, 65, 80, 100].map((min) => ({ min, label: String(min), b: brightness(min) }));
 const NO_DATA = '#2B333B';
 // Over the imagery the cells are slightly see-through, so relief and coastlines stay readable.
 // Cells below the first score step get only a thin dark veil.
-const CELL_ALPHA = 0.9;
-const LOW_ALPHA = 0.2;
 const NO_DATA_ALPHA = 0.8;
+const cellAlpha = (score: number) => 0.035 + 0.93 * brightness(score);
 /** Closest the camera comes, in globe radii above the surface: about 500 km, where the level 7 tiles are in use. */
 const MIN_ALTITUDE = 0.08;
 const OCEAN = '#0F1418';
 const LAND_FILL = '#161B20';
 const LAND_LINE = '#39434D';
 const GRATICULE = '#1A2128';
-
-function classColor(score: number): string {
-  for (let i = SCORE_CLASSES.length - 1; i >= 0; i--) if (score >= SCORE_CLASSES[i].min) return SCORE_CLASSES[i].color;
-  return SCORE_CLASSES[0].color;
-}
 
 type Ring = number[][];
 
@@ -316,7 +306,7 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     };
     const overlay = new Mesh(
       new SphereGeometry(GLOBE_RADIUS * 1.0012, 96, 48),
-      new MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false }),
+      new MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false, blending: AdditiveBlending }),
     );
     overlay.rotation.y = -Math.PI / 2; // same orientation as the library's globe
     overlay.raycast = () => {};
@@ -381,13 +371,35 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
     const cw = (res / 360) * w;
     const ch = (res / 180) * h;
     const pad = 0.35;
+    const glow: { x: number; y: number; score: number }[] = [];
     earth.cells.forEach((c, i) => {
       const r = results[i];
       const score = r ? r.score : null;
-      g.fillStyle = score === null ? NO_DATA : classColor(score);
-      g.globalAlpha = imagery === 0 ? 1 : score === null ? NO_DATA_ALPHA : score < SCORE_CLASSES[1].min ? LOW_ALPHA : CELL_ALPHA;
-      g.fillRect(((c.lon - res / 2 + 180) / 360) * w - pad, ((90 - c.lat - res / 2) / 180) * h - pad, cw + pad * 2, ch + pad * 2);
+      const x = ((c.lon - res / 2 + 180) / 360) * w - pad;
+      const y = ((90 - c.lat - res / 2) / 180) * h - pad;
+      if (score === null) {
+        g.fillStyle = NO_DATA;
+        g.globalAlpha = imagery === 0 ? 1 : NO_DATA_ALPHA * 0.5;
+        g.fillRect(x, y, cw + pad * 2, ch + pad * 2);
+        return;
+      }
+      g.fillStyle = `rgb(${AMBER})`;
+      g.globalAlpha = imagery === 0 ? 0.35 + 0.6 * brightness(score) : cellAlpha(score);
+      g.fillRect(x, y, cw + pad * 2, ch + pad * 2);
+      if (score >= GLOW_FROM) glow.push({ x, y, score });
     });
+    // Halos, brightest last. A blurred copy of the cell, so a strong cell spills a little light on its neighbours.
+    glow.sort((a, b) => a.score - b.score);
+    g.save();
+    g.globalAlpha = 1;
+    for (const c of glow) {
+      const t = (c.score - GLOW_FROM) / (100 - GLOW_FROM);
+      g.shadowColor = `rgba(${AMBER},${(0.35 + 0.5 * t).toFixed(2)})`;
+      g.shadowBlur = 6 + 16 * t;
+      g.fillStyle = `rgba(${AMBER},${(0.5 + 0.45 * brightness(c.score)).toFixed(2)})`;
+      g.fillRect(c.x, c.y, cw + pad * 2, ch + pad * 2);
+    }
+    g.restore();
     g.globalAlpha = 1;
     // The drawn coastline is only needed until the imagery, which has its own coasts, is in place.
     if (imagery === 0) drawOutlines(g, w, h, rings);
@@ -459,16 +471,24 @@ export function GlobeView({ earth, results, index, selected, candidates, sites, 
         <div className="flex items-end gap-px" aria-hidden="true">
           {SCORE_CLASSES.map((c) => (
             <div key={c.min} className="w-7">
-              <div className="h-2.5" style={{ background: c.color }} />
+              <div
+                className="h-3"
+                style={{
+                  background: `rgba(${AMBER},${(0.035 + 0.93 * c.b).toFixed(2)})`,
+                  // The same halo the map gives a cell of that score.
+                  boxShadow: c.min >= GLOW_FROM ? `0 0 ${Math.round(4 + 10 * ((c.min - GLOW_FROM) / (100 - GLOW_FROM)))}px rgba(${AMBER},${(0.35 + 0.5 * ((c.min - GLOW_FROM) / (100 - GLOW_FROM))).toFixed(2)})` : undefined,
+                }}
+              />
               <div className="num mt-1 text-[10px] leading-3 text-muted">{c.label}</div>
             </div>
           ))}
           <div className="ml-2 w-14">
-            <div className="h-2.5" style={{ background: NO_DATA }} />
+            <div className="h-3" style={{ background: NO_DATA }} />
             <div className="num mt-1 text-[10px] leading-3 text-muted">no data</div>
           </div>
         </div>
-        <p className="sr-only">Six steps from 0 to 100. Brighter amber is a closer match. Grey cells have no score.</p>
+        <p className="mt-1.5 text-[11px] text-muted">A cell&rsquo;s brightness is its match score. The best cells glow.</p>
+        <p className="sr-only">Seven steps from 0 to 100. Brighter, glowing amber is a closer match. Grey cells have no score.</p>
         <p className="readout mt-1.5 !text-[10px]">Imagery: NASA Blue Marble, GIBS</p>
       </div>
       <div className="absolute bottom-3 right-3 flex flex-col border border-line bg-panel">

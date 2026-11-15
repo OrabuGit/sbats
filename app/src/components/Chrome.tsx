@@ -1,5 +1,6 @@
 import { BookOpen, MapPin, Play, Square } from 'lucide-react';
 import { flags } from '../flags';
+import { Wordmark } from './Wordmark';
 
 export type Step = 1 | 2 | 3 | 4;
 
@@ -30,9 +31,8 @@ export function TopBar({ step, onStep, canMatch, onHome, featuredOpen, onFeature
   return (
     <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
       <h1 className="flex items-stretch border-r border-line">
-        <button type="button" onClick={onHome} aria-label="SBATS-26, home" className="flex items-center gap-2.5 px-3 hover:bg-bg sm:px-4">
-          <span className="block h-2.5 w-2.5 bg-accent" aria-hidden="true" />
-          <span className="num text-[13px] font-semibold tracking-[0.12em] text-text">SBATS-26</span>
+        <button type="button" onClick={onHome} aria-label="SBATS-26, home" className="flex items-center px-3 hover:bg-bg sm:px-4">
+          <Wordmark size={18} suffix={false} />
         </button>
       </h1>
       <nav aria-label="Steps" className="flex min-w-0 flex-1 items-stretch">

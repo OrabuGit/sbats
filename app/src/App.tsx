@@ -19,6 +19,7 @@ import { bestMonth } from './lib/bestMonth';
 import { flags } from './flags';
 import { Sandbox, type SandboxHandle } from './components/Sandbox';
 import { Home } from './components/Home';
+import { Wordmark } from './components/Wordmark';
 import { WorldPage } from './components/WorldPage';
 import { TerrainPage, type RoversFile } from './components/TerrainPage';
 import { Report } from './components/Report';
@@ -75,8 +76,9 @@ export default function App() {
       <div className="flex min-h-full flex-col lg:h-full">
         <header className="flex h-12 shrink-0 items-stretch border-b border-line bg-panel">
           <div className="flex items-center gap-2 border-r border-line px-3 sm:px-4">
-            <span className="block h-3 w-3 bg-accent" aria-hidden="true" />
-            <h1 className="num text-[14px] font-semibold tracking-[0.08em] text-text">SBATS-26</h1>
+            <h1 className="m-0">
+              <Wordmark size={20} />
+            </h1>
           </div>
         </header>
         <div className="flex min-h-0 flex-1 flex-col gap-px bg-line lg:grid lg:grid-cols-[320px_minmax(0,1fr)_380px]">
@@ -601,6 +603,18 @@ function Orbit({ data }: { data: DataBundle }) {
     });
   };
 
+  // Pins for the home globes: every named place on the Moon and Mars.
+  const heroPlaces = useMemo(
+    () => places.map((p) => ({ id: p.id, name: p.name, body: p.body, lat: p.lat, lon: p.lon, hasValues: !!p.targetId && targets.some((t) => t.id === p.targetId), sub: p.sub })),
+    [places, targets],
+  );
+  // A place picked on the home globes before the body grid had loaded gets its target as soon as the grid arrives.
+  useEffect(() => {
+    if (!placeId || pointProfile) return;
+    const p = places.find((x) => x.id === placeId);
+    if (p && !(p.targetId && targets.some((t) => t.id === p.targetId)) && gridOf(p.body) !== null) pickPlace(placeId);
+  }, [placeId, pointProfile, places, targets, gridOf, pickPlace]);
+
   const status =
     demo ??
     (view === 'home'
@@ -620,12 +634,13 @@ function Orbit({ data }: { data: DataBundle }) {
             : 'Reading');
 
   useEffect(() => {
-    const where = view === 'home' ? '' : view === 'match' && selectedCell ? `${named?.name.split(',')[0] ?? siteCode(selectedCell)} and ${target.name} · ` : view === 'orbit' && step >= 2 ? `${target.name} · ` : '';
+    const where = view === 'home' ? '' : view === 'match' && selectedCell ? `${named?.name.split(',')[0] ?? siteCode(selectedCell)} and ${target.name} · ` : view === 'orbit' && step >= 2 ? `${(step === 2 && place ? place.name : target.name)} · ` : '';
     document.title = `${where}SBATS-26`;
   }, [view, step, target, named, selectedCell]);
 
   return (
-    <div className="flex min-h-full flex-col lg:h-full">
+    <div className={view === 'home' ? 'flex h-full flex-col' : 'flex min-h-full flex-col lg:h-full'}>
+      {view !== 'home' && (
       <TopBar
         step={view === 'orbit' || view === 'match' ? step : null}
         onStep={onStep}
@@ -638,6 +653,7 @@ function Orbit({ data }: { data: DataBundle }) {
         methodOpen={infoOpen}
         onMethod={() => setView((v) => (v === 'method' || v === 'validation' || v === 'site' ? 'orbit' : 'method'))}
       />
+      )}
 
       {(data.warnings.length > 0 || saved.error) && (
         <div className="border-b border-line bg-panel px-4 py-2 text-[12px] text-accent" role="alert">
@@ -647,27 +663,35 @@ function Orbit({ data }: { data: DataBundle }) {
 
       {view === 'home' && (
         <Home
-          targets={targets}
-          cells={earth.cells.length}
-          siteCount={analogs.length}
+          earth={earth}
+          places={heroPlaces}
           sites={featuredSites}
           extracts={extractIndex}
           saved={saved.list}
+          demo={demo}
+          onDemo={runDemo}
           onFind={() => {
             setView('orbit');
             setStep(1);
           }}
-          onWorld={pickWorld}
-          onWorldPage={(w) => {
+          onWorld={(w: WorldId) => {
             setWorldPage(w);
             setView('world');
           }}
+          onPlace={(id) => {
+            pickPlace(id);
+            setSelected(null);
+            setView('orbit');
+            setStep(2);
+            setTab('setup');
+          }}
           onFeatured={(id) => (id ? openSitePage(id) : setView('featured'))}
+          onMethod={() => setView('method')}
+          onValidation={() => setView('validation')}
           onOpenSaved={(s) => {
             const i = index.nearest(s.lat, s.lon, 2);
             if (i < 0) return;
             if (s.targetPoint) {
-              // A saved match against a picked point: rebuild that target from the grid, which may still be loading.
               loadExtra<BodyGrid>(`${s.targetPoint.body}.json`).then((grid) => {
                 if (!grid || !s.targetPoint) return;
                 try {
@@ -1028,15 +1052,17 @@ function Orbit({ data }: { data: DataBundle }) {
       </div>
       )}
 
+      {view !== 'home' && (
       <StatusStrip
-        coords={selectedCell && view !== 'home' ? formatCoords(selectedCell.lat, selectedCell.lon) : null}
-        code={selectedCell && view !== 'home' ? siteCode(selectedCell) : null}
+        coords={selectedCell ? formatCoords(selectedCell.lat, selectedCell.lon) : null}
+        code={selectedCell ? siteCode(selectedCell) : null}
         cells={earth.cells.length}
         resolutionDeg={earth.meta.resolutionDeg}
         fixtureFiles={[...data.fixtureFiles.map((f) => `${f}.json`), ...(view === 'recon' && modules.status === 'ready' && modules.value.fixture ? ['modules.json'] : [])]}
         view={view}
         status={status}
       />
+      )}
     </div>
   );
 }

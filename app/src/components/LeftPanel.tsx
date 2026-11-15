@@ -50,7 +50,6 @@ const MODES: { id: MatchMode; label: string }[] = [
 
 const dimensionLabel = (id: string) => DIMENSIONS.find((d) => d.id === id)?.label ?? id;
 
-const BODY_LABEL = { moon: 'Moon', mars: 'Mars' } as const;
 
 export function LeftPanel({ presets, presetId, onPreset, weights, onWeight, meta, mode, onMode, purposeId, onPurpose, step, onChangePlace, places, placeId, onPlace, anyPoint, target }: Props) {
   const [query, setQuery] = useState('');
@@ -68,7 +67,7 @@ export function LeftPanel({ presets, presetId, onPreset, weights, onWeight, meta
       {step === 2 ? (
         <section className="border-b border-line" aria-labelledby="h-target">
           <h2 id="h-target" className="label px-4 pb-2 pt-4">
-            02 Place on {BODY_LABEL[target.body] === 'Moon' ? 'the Moon' : 'Mars'}
+            02 Place on {body === 'moon' ? 'the Moon' : 'Mars'}
           </h2>
           <label className="flex items-center gap-2 border-y border-line bg-bg px-4">
             <Search size={14} className="shrink-0 text-muted" aria-hidden="true" />

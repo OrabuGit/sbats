@@ -77,6 +77,7 @@ Add a row BEFORE a feature that uses the dataset is marked done.
 | d3-geo | ISC | Land test when generating UI fixtures (dev only) |
 | lucide-react | ISC | Icons |
 | Inter (via @fontsource/inter) | SIL Open Font License 1.1 | Sentence text |
+| Archivo variable, width and weight axes (via @fontsource-variable/archivo) | SIL Open Font License 1.1 | Headings, the wordmark and large numbers |
 | IBM Plex Mono (via @fontsource/ibm-plex-mono) | SIL Open Font License 1.1 | Numbers, labels and codes |
 | tsx (run with `npx tsx`, not installed in the app) | MIT | Runs the scoring unit tests and `validation/validate.ts` under Node |
 
