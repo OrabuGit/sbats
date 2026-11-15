@@ -197,6 +197,42 @@ Cautions, all of which apply:
   ground; Merapi 16%.
 - A family counts at 1% of clear pixels. Tambora's smectite, at 2%, is close to that line.
 
+## Wind, dust and ice (added after the freeze, cell scale)
+
+Tables: `validation/output/BENCHMARKS.md`. Earth side from Session B: NASA POWER wind speed at 10 m and
+aerosol optical depth at 550 nm, and the permafrost share of Obu et al. 2018, all for the 0.5 degree
+cell. Target side: the Mars Climate Database for Mars wind and dust, zero for the airless Moon, and
+the share of ice-stable ground at the lunar poles from Diviner. Tolerances were written down before any
+site was compared: a quarter of Earth's 5th-to-95th-percentile spread (wind 2.0 m/s, optical depth
+0.12), and 0.25 for the ice share. Not part of any score. Not validated.
+
+| Site | Wind, m/s | Aerosol optical depth | Wind like Jezero (5.1 m/s) | Haze like Jezero (0.48) |
+| --- | --- | --- | --- | --- |
+| Merapi | 3.3 | 0.38 | 0.69 | 0.71 |
+| Tambora caldera | 2.9 | 0.21 | 0.56 | 0.08 |
+| Batur lava fields | 3.0 | 0.22 | 0.59 | 0.10 |
+| Kawah Ijen | 2.4 | 0.24 | 0.42 | 0.14 |
+| Atacama, Yungay (known) | 3.6 | 0.04 | 0.76 | 0.00 |
+| Dallol (known) | 3.8 | 0.40 | 0.83 | 0.80 |
+
+Read with care:
+
+- **Wind speed is the easiest thing to match and the least useful.** Indonesian sites have light winds
+  of 2 to 4 m/s, about a tolerance below Jezero's and Arcadia's 4 to 5 m/s. But Mars air is about a
+  hundredth as dense as Earth's, so the same speed pushes far less. A wind match says nothing about
+  loads on a structure.
+- **The haze number matches Mars at Merapi, and the material does not.** An optical depth of 0.38 over
+  Central Java is close to Mars's 0.48. Over Java that haze is smoke, pollution and humid air; on Mars it
+  is mineral dust. The Earth product counts all particles and cannot tell them apart. Dallol, in a
+  desert, is the honest match on this dimension. Do not present Merapi as a dust analog.
+- **Gale's model wind (12.6 m/s) matches nowhere.** No site, known or candidate, comes close. That is a
+  coarse climate model at the foot of a crater wall; treat it as uncertain.
+- **Ice cannot be compared for any Indonesian site.** The permafrost map covers land north of 25 N
+  only, and the tropics have none. The lunar polar targets carry a share of ice-stable ground (0.5% to
+  35% of the window); Haughton, with permafrost under all of it, is the only site here that compares.
+- For the Moon, "no wind" and "no dust in the air" are matched by calm, clear places. That is true and
+  not very interesting: lunar dust is a hazard on the ground, which an optical depth does not describe.
+
 ## Beside the established analogs
 
 Tables: `validation/output/BENCHMARKS.md` and `data/benchmarks.json`, from

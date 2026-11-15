@@ -516,9 +516,9 @@ Value = { "value": number | null, "unit", "source": string | null, "badge": stri
 
 - `wind`: mean wind speed 10 m above the surface, m/s. `dust`: mean optical depth of the air column in
   visible light. `ice`: share of the ground where water ice is stable at or near the surface, 0 to 1.
-- For the Earth side to be compared, a cell or site needs the same three quantities in the same units
-  (for example NASA POWER `WS10M`, an aerosol optical depth at about 550 nm, and a permafrost or ground-ice
-  share). Until then the match record shows the target value and "no data" for the Earth place.
+- The Earth side is `windSpeed`, `aod` and `permafrostFrac` of `earth.json` cells and `sites.json` values
+  (Session B). `aod` counts all airborne particles, not dust alone, and is labelled so. `permafrostFrac` is
+  null south of 25 N: "not mapped", shown as "no data".
 - Read with `targetEnvironment(file, targetId)` (app/src/lib/match).
 
 ### data/rovers.json
@@ -550,8 +550,10 @@ Built by `validation/benchmarks.ts` with `app/src/lib/match`.
                "results": [ { "target",
                               "site": { "score", "scorePercentile", "dimensions": { "<id>": { "similarity", "verdict" } },
                                         "purposes": { "<id>": number | null }, "terrainLikeForLike",
+                                        "environment": { "<wind|dust|ice>": { "similarity", "verdict", "earth", "target", "reason" } },
+                                        "extendedPurposes": { "<id>": number | null },
                                         "minerals": { "similarity", "verdict", "shared", "targetOnly", "reason" } | null },
-                              "cell": { "score", "scorePercentile", "dimensions", "purposes" } } ],
+                              "cell": { "score", "scorePercentile", "dimensions", "purposes", "environment", "extendedPurposes" } } ],
                "summary": { "<purpose>": { "best", "bestTarget", "median" } },
                "dimensionMean": { "<dimension>": number | null },
                "process": { "text", "source", "links": [ { "target", "text", "source" } ], "differs" } | null,
@@ -562,6 +564,9 @@ Built by `validation/benchmarks.ts` with `app/src/lib/match`.
   window of the site's size). `cell` is the site's 0.5 degree cell, as the global ranking sees it.
 - `summary.best` is the best of all targets and flatters; `median` is the typical target. Show both.
 - Show `meta.caveats` with the table.
+- `environment` holds wind, dust (aerosol) and ice, added after the freeze: cell-scale values on both `site` and
+  `cell`. `extendedPurposes` blends them, and minerals, into a purpose score by the rule in app/src/lib/match;
+  show it beside `purposes`, never instead. `groups.environmentMean` compares the two groups.
 - `process` (candidates only) is the cited process the site stands for, copied from `analogs.json`, with the
   target process it links to and where the analogy breaks. `couldTest` and `cannotTest` are sentences built by
   fixed rules from measured values; `basis` names the files and keys behind each.

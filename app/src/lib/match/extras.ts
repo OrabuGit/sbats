@@ -6,6 +6,15 @@
 //   - They may enter a purpose score as an "extended" score, shown beside the frozen purpose score,
 //     by the blend rule below. Nothing about them has been validated.
 //
+// Tolerances, written down on 2026-11-15 before any site was compared on these dimensions:
+//   wind and dust  one quarter of the spread between the 5th and 95th percentile of Earth's land cells
+//                  (data/earth.json built 2026-11-15: wind 1.79 to 9.89 m/s, aerosol optical depth 0.00
+//                  to 0.48). The frozen temperature tolerances are a sixth to a quarter of Earth's range;
+//                  this is the same kind of rule, not a fitted number.
+//   ice            0.25: one quarter of the scale, which runs from 0 to 1.
+// A target value outside Earth's observed range is compared at the nearest value Earth offers, as in
+// the frozen score.
+//
 // Which purposes each belongs to, from first principles (one line each):
 //   minerals  geology, astrobiology, base: an instrument is tested on minerals, and life at its limits lives on them.
 //   ice       ice, astrobiology, base: ground ice is the resource itself, and where water is, life is looked for.
@@ -49,33 +58,33 @@ export const EXTRA_DIMENSIONS: readonly ExtraDimensionDef[] = [
   {
     id: 'ice',
     label: 'Ice and permafrost',
-    measures: 'Ground ice or permafrost at the place',
+    measures: 'Share of the ground that holds or can hold ice: permafrost on Earth, ice-stable ground at the target',
     kind: 'gaussian',
-    unit: '',
-    sigma: null,
-    sigmaReason: null,
+    unit: 'share of ground',
+    sigma: 0.25,
+    sigmaReason: 'One quarter of the scale, which runs from 0 to 1.',
     purposes: ['ice', 'astrobiology', 'base'],
     why: 'Ground ice is the resource itself, and where water is, life is looked for.',
   },
   {
     id: 'dust',
-    label: 'Dust',
-    measures: 'Dust in the air or on the ground',
+    label: 'Dust and aerosol',
+    measures: 'Optical depth of the air column in visible light: all aerosol on Earth, dust on Mars',
     kind: 'gaussian',
-    unit: '',
-    sigma: null,
-    sigmaReason: null,
+    unit: 'optical depth',
+    sigma: 0.12,
+    sigmaReason: "One quarter of the spread between the 5th and 95th percentile of Earth's land cells (0.00 to 0.48).",
     purposes: ['mobility', 'base'],
     why: 'Dust covers arrays, wears seals and hides the ground from cameras.',
   },
   {
     id: 'wind',
     label: 'Wind',
-    measures: 'Mean wind speed near the ground',
+    measures: 'Mean wind speed 10 m above the surface',
     kind: 'gaussian',
     unit: 'm/s',
-    sigma: null,
-    sigmaReason: null,
+    sigma: 2.0,
+    sigmaReason: "One quarter of the spread between the 5th and 95th percentile of Earth's land cells (1.79 to 9.89 m/s).",
     purposes: ['base'],
     why: 'Wind loads structures and moves dust. The Moon has none.',
   },
@@ -103,6 +112,19 @@ function side(v: ExtraValue | null | undefined): MatchSide {
   };
 }
 
+const MORE: Partial<Record<ExtraDimensionId, [string, string]>> = {
+  wind: ['windier', 'calmer'],
+  dust: ['hazier', 'clearer'],
+  ice: ['more frozen ground', 'less frozen ground'],
+};
+
+/** Prints a number of an extra dimension with its unit. */
+export function formatExtra(value: number, unit: string): string {
+  if (unit === 'share of ground') return `${Math.round(value * 1000) / 10}% of the ground`;
+  const text = Math.abs(value) >= 10 ? value.toFixed(1) : String(Math.round(value * 100) / 100);
+  return unit === '' ? text : `${text} ${unit}`;
+}
+
 function gaussian(a: number, b: number, sigma: number): number {
   return Math.exp(-0.5 * ((a - b) / sigma) ** 2);
 }
@@ -116,9 +138,10 @@ export function compareExtra(
   earth: ExtraValue | null | undefined,
   target: ExtraValue | null | undefined,
   shared?: SharedMinerals | null,
+  earthRange?: { min: number; max: number } | null,
 ): MatchDimension {
   const e = side(earth);
-  const t = side(target);
+  let t = side(target);
   let similarity: number | null = null;
   let reason: string;
 
@@ -138,9 +161,18 @@ export function compareExtra(
   } else if (def.sigma === null) {
     reason = `Both sides have a value, but no tolerance has been agreed for ${def.label.toLowerCase()}, so no similarity is given.`;
   } else if (typeof earth?.value === 'number' && typeof target?.value === 'number') {
-    similarity = gaussian(earth.value, target.value, def.sigma);
-    const diff = earth.value - target.value;
-    reason = `${def.label} ${e.text} against ${t.text}: ${Math.abs(diff) < 1e-9 ? 'the same' : `${diff > 0 ? 'higher' : 'lower'} than the target`}.`;
+    // A target beyond anything on Earth is compared at the nearest value Earth offers.
+    const clamped = earthRange ? Math.min(earthRange.max, Math.max(earthRange.min, target.value)) : target.value;
+    const isClamped = clamped !== target.value;
+    similarity = gaussian(earth.value, clamped, def.sigma);
+    const diff = earth.value - clamped;
+    const words = MORE[def.id] ?? ['higher', 'lower'];
+    const than = isClamped ? 'than the closest Earth gets to the target' : 'than the target';
+    if (isClamped) t = { ...t, text: `${t.text} (Earth's closest: ${formatExtra(clamped, def.unit)})` };
+    reason =
+      Math.abs(diff) < def.sigma / 20
+        ? `${def.label} ${e.text}: about the same as the target${isClamped ? "'s closest value on Earth" : ''}.`
+        : `${def.label} ${e.text} against ${formatExtra(clamped, def.unit)}: ${diff > 0 ? words[0] : words[1]} ${than}.`;
   } else {
     reason = `The ${def.label.toLowerCase()} values are not numbers and cannot be compared.`;
   }
@@ -209,17 +241,11 @@ export interface TargetEnvironmentFile {
   targets: Record<string, Partial<Record<'wind' | 'dust' | 'ice', EnvironmentValue>>>;
 }
 
-function printNumber(value: number, unit: string): string {
-  const text = Math.abs(value) >= 10 ? value.toFixed(1) : value.toFixed(2).replace(/\.?0+$/, '') || '0';
-  if (unit === 'share of ground') return `${Math.round(value * 1000) / 10}% of the ground`;
-  return unit === '' ? text : `${text} ${unit}`;
-}
-
 /** An environment value as one side of an extra dimension. `scale` says what it describes. */
 export function extraFromEnvironment(v: EnvironmentValue | null | undefined, scale: ExtraValue['scale']): ExtraValue | undefined {
   if (!v) return undefined;
   if (v.value === null) return { value: null, unit: v.unit, text: 'no data', source: null, badge: null, scale, ...(v.note ? { note: v.note } : {}) };
-  return { value: v.value, unit: v.unit, text: printNumber(v.value, v.unit), source: v.source, badge: v.badge, scale, ...(v.note ? { note: v.note } : {}) };
+  return { value: v.value, unit: v.unit, text: formatExtra(v.value, v.unit), source: v.source, badge: v.badge, scale, ...(v.note ? { note: v.note } : {}) };
 }
 
 /** The target-side wind, dust and ice values of one target, ready for `MatchInput.targetExtras`. */

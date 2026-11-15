@@ -17,6 +17,7 @@ import {
   emitFamilies,
   extendedPurposeScore,
   extraDimension,
+  extraRanges,
   familiesOfEmitName,
   familyOfEmitName,
   purposesOfExtra,
@@ -387,18 +388,96 @@ describe('Dimensions added after the freeze', () => {
     equal(compareExtra(wind, v(5), undefined).verdict, 'no-data');
   });
 
-  it('give no similarity while no tolerance has been agreed', () => {
-    const d = compareExtra(extraDimension('wind'), v(5), v(7));
+  it('give no similarity when a dimension has no tolerance', () => {
+    const d = compareExtra({ ...extraDimension('wind'), sigma: null }, v(5), v(7));
     equal(d.similarity, null);
     ok(d.reason.includes('no tolerance has been agreed'));
     equal(d.rows[0]?.earth.text, '5 m/s');
   });
 
-  it('use a Gaussian once a tolerance is set', () => {
-    const d = compareExtra({ ...extraDimension('wind'), sigma: 2 }, v(5), v(7));
-    ok(Math.abs((d.similarity as number) - Math.exp(-0.5)) < 1e-12);
+  it('carry a written-down tolerance and its reason', () => {
+    equal(extraDimension('wind').sigma, 2.0);
+    equal(extraDimension('dust').sigma, 0.12);
+    equal(extraDimension('ice').sigma, 0.25);
+    for (const id of ['wind', 'dust', 'ice'] as const) ok((extraDimension(id).sigmaReason ?? '').length > 20, id);
+    equal(extraDimension('minerals').sigma, null);
+  });
+
+  it('use a Gaussian with that tolerance', () => {
+    const d = compareExtra(extraDimension('wind'), v(5), v(7));
+    ok(Math.abs((d.similarity as number) - Math.exp(-0.5)) < 1e-12); // one tolerance away
     equal(d.verdict, 'partly');
-    equal(d.reason, 'Wind 5 m/s against 7 m/s: lower than the target.');
+    equal(d.reason, 'Wind 5 m/s against 7 m/s: calmer than the target.');
+    equal(compareExtra(extraDimension('wind'), v(7.05), v(7)).reason, 'Wind 7.05 m/s: about the same as the target.');
+    equal(compareExtra(extraDimension('wind'), v(12), v(7)).verdict, 'does-not-match');
+  });
+
+  it('compare a target beyond Earth\'s range at the nearest value Earth offers', () => {
+    // The Moon has no wind; the calmest Earth cell has 0.6 m/s.
+    const d = compareExtra(extraDimension('wind'), v(0.6), v(0), null, { min: 0.6, max: 16.9 });
+    equal(d.similarity, 1);
+    equal(d.rows[0]?.target.value, 0);
+    equal(d.rows[0]?.target.text, "0 m/s (Earth's closest: 0.6 m/s)");
+    equal(d.reason, "Wind 0.6 m/s: about the same as the target's closest value on Earth.");
+    const windy = compareExtra(extraDimension('wind'), v(6.6), v(0), null, { min: 0.6, max: 16.9 });
+    equal(windy.reason, 'Wind 6.6 m/s against 0.6 m/s: windier than the closest Earth gets to the target.');
+    ok((windy.similarity as number) < 0.02);
+  });
+});
+
+describe('The Earth side of wind, dust and ice', () => {
+  const metaExtra = { ...META, extraKeys: [
+    { key: 'windSpeed', source: 'POWER WS10M', badge: 'Measured' as const },
+    { key: 'aod', source: 'POWER AOD_55', badge: 'Measured' as const },
+    { key: 'permafrostFrac', source: 'Obu et al. 2018', badge: 'Literature' as const },
+  ] };
+  const withExtras = (over: Record<string, number | null>) => ({ ...cell(), windSpeed: 4.4, aod: 0.11, permafrostFrac: null, ...over }) as ReturnType<typeof cell>;
+
+  it('reads the three keys from a cell, with their sources, and treats null as not mapped', () => {
+    const place = earthPlaceFromCell(withExtras({}), metaExtra);
+    equal(place.extras.wind?.text, '4.4 m/s');
+    equal(place.extras.wind?.source, 'POWER WS10M');
+    equal(place.extras.dust?.text, '0.11 optical depth');
+    ok(place.extras.dust?.note?.includes('not dust alone'));
+    equal(place.extras.ice?.value, null);
+    equal(place.extras.ice?.text, 'no data');
+    equal(earthPlaceFromCell(withExtras({ permafrostFrac: 0.95 }), metaExtra).extras.ice?.text, '95% of the ground');
+    equal(place.extras.ice?.source, null);
+  });
+
+  it('leaves the dimensions out for a cell that has no such keys', () => {
+    deepEqual(earthPlaceFromCell(cell(), META).extras, {});
+  });
+
+  it('takes a site\'s own entries first, at grid scale, and the cell\'s otherwise', () => {
+    const own = earthPlaceFromSite({ ...SITE, values: { ...SITE.values, windSpeed: { value: 2.44, unit: 'm/s', scale: 'grid', source: 'site copy of POWER', badge: 'Measured' } } }, withExtras({}), metaExtra);
+    equal(own.extras.wind?.value, 2.44);
+    equal(own.extras.wind?.source, 'site copy of POWER');
+    equal(own.extras.wind?.scale, 'grid');
+    equal(own.extras.dust?.value, 0.11); // from the cell
+  });
+
+  it('finds Earth\'s observed range of each key', () => {
+    const r = extraRanges([withExtras({ windSpeed: 0.6 }), withExtras({ windSpeed: 16.9, permafrostFrac: 1 }), withExtras({ permafrostFrac: 0 })]);
+    deepEqual(r.wind, { min: 0.6, max: 16.9 });
+    deepEqual(r.ice, { min: 0, max: 1 });
+    deepEqual(extraRanges([cell()]), {});
+  });
+
+  it('compares both sides in the record and feeds the extended purpose scores, never the all-round score', () => {
+    const place = earthPlaceFromCell(withExtras({ windSpeed: 5, aod: 0.5 }), metaExtra);
+    const env = { wind: { value: 5.06, unit: 'm/s', text: '5.06 m/s', source: 'model', badge: 'Literature' as const, scale: 'target' as const }, dust: { value: 0.48, unit: 'optical depth', text: '0.48 optical depth', source: 'model', badge: 'Literature' as const, scale: 'target' as const } };
+    const r = record({ place, targetExtras: env });
+    equal(dim(r, 'wind').verdict, 'matches');
+    equal(dim(r, 'dust').verdict, 'matches');
+    equal(dim(r, 'ice').verdict, 'no-data');
+    const base = r.purposes.find((p) => p.id === 'base');
+    const mobility = r.purposes.find((p) => p.id === 'mobility');
+    deepEqual(base?.extraDimensions, ['dust', 'wind']);
+    deepEqual(mobility?.extraDimensions, ['dust']);
+    ok(base?.extendedScore !== null && mobility?.extendedScore !== null);
+    deepEqual(r.score, record().score);
+    deepEqual(r.purposes.map((p) => p.score), record().purposes.map((p) => p.score));
   });
 });
 

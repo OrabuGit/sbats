@@ -21,8 +21,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DIMENSIONS, PRESETS, PURPOSES, buildProfileIndex, nearestCell, prepareTarget, rankIn, scoreCells } from '../app/src/lib/scoring/index';
 import type { DimensionId, PurposeId, Target } from '../app/src/lib/scoring/index';
-import { buildMatchRecord, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, listLabels, sharedMinerals, sitePosts, targetAtSiteWindow } from '../app/src/lib/match/index';
-import type { ExtraValue, MatchRecord, SiteEntryLike, TargetMineralsFile, TargetWindowsFile, Verdict } from '../app/src/lib/match/index';
+import { buildMatchRecord, earthPlaceFromCell, earthPlaceFromSite, emitFamilies, extraRanges, listLabels, sharedMinerals, sitePosts, targetAtSiteWindow, targetEnvironment } from '../app/src/lib/match/index';
+import type { ExtraValue, MatchRecord, SiteEntryLike, TargetEnvironmentFile, TargetMineralsFile, TargetWindowsFile, Verdict } from '../app/src/lib/match/index';
 import { DATA, MAX_SNAP_KM, OUT, fail, loadData, loadFrozen, readJson } from './lib';
 
 interface SitesFile {
@@ -37,6 +37,9 @@ const sitesFile = readJson<SitesFile>(join(DATA, 'sites.json'));
 const windows = readJson<TargetWindowsFile>(join(DATA, 'target_windows.json'));
 const mineralsPath = join(DATA, 'target_minerals.json');
 const minerals = existsSync(mineralsPath) ? readJson<TargetMineralsFile>(mineralsPath) : null;
+const envPath = join(DATA, 'target_environment.json');
+const environment = existsSync(envPath) ? readJson<TargetEnvironmentFile>(envPath) : null;
+const ranges = extraRanges(data.cells);
 interface RoversFile {
   rovers: { id: string; name: string; body: string; slopeLimit: { value: number; kind: string; source: string } | null }[];
 }
@@ -78,6 +81,10 @@ interface Side {
   scorePercentile: number | null;
   dimensions: Record<DimensionId, { similarity: number | null; verdict: Verdict }>;
   purposes: Record<PurposeId, number | null>;
+  /** Wind, dust and ice: added after the freeze, never in `score`. Climate-like values of the 0.5 degree cell on both scales. */
+  environment: Record<'wind' | 'dust' | 'ice', { similarity: number | null; verdict: Verdict; earth: string; target: string; reason: string }>;
+  /** Purpose scores with the added dimensions blended in, where any has data. Not validated. */
+  extendedPurposes: Record<PurposeId, number | null>;
 }
 interface PairResult {
   target: string;
@@ -117,8 +124,20 @@ function side(record: MatchRecord, sorted: Float64Array): Side {
     dims[d.id] = { similarity: r3(m?.similarity ?? null), verdict: m?.verdict ?? 'no-data' };
   }
   const purposes = {} as Side['purposes'];
-  for (const p of record.purposes) purposes[p.id] = r1(p.score);
+  const extendedPurposes = {} as Side['extendedPurposes'];
+  for (const p of record.purposes) {
+    purposes[p.id] = r1(p.score);
+    extendedPurposes[p.id] = r1(p.extendedScore);
+  }
+  const environmentOut = {} as Side['environment'];
+  for (const id of ['wind', 'dust', 'ice'] as const) {
+    const m = record.dimensions.find((x) => x.id === id);
+    const row = m?.rows[0];
+    environmentOut[id] = { similarity: r3(m?.similarity ?? null), verdict: m?.verdict ?? 'no-data', earth: row?.earth.text ?? 'no data', target: row?.target.text ?? 'no data', reason: m?.reason ?? '' };
+  }
   return {
+    environment: environmentOut,
+    extendedPurposes,
     score: r1(record.score.value),
     scorePercentile: record.score.value === null ? null : r3(rankIn(sorted, record.score.value).midPercentile),
     dimensions: dims,
@@ -147,12 +166,14 @@ for (const s of sitesFile.sites) {
       targetMinerals && targetMinerals.length > 0
         ? { value: [...new Set(targetMinerals.map((m) => m.family))], unit: '', text: listLabels([...new Set(targetMinerals.map((m) => famLabel(m.family)))]), source: [...new Set(targetMinerals.map((m) => m.source))].join('; '), badge: 'Literature', scale: 'target' }
         : undefined;
+    const env = targetEnvironment(environment, pt.target.id);
     const siteRecord = buildMatchRecord({
       target: like ?? pt.target, place: sitePlace, ranges: data.ranges, table: data.table, classes, terrainLikeForLike: like !== null, generatedAt,
-      ...(targetExtra ? { targetExtras: { minerals: targetExtra } } : {}),
+      targetExtras: { ...env, ...(targetExtra ? { minerals: targetExtra } : {}) },
+      extraRanges: ranges,
       minerals: shared,
     });
-    const cellRecord = buildMatchRecord({ target: pt.target, place: cellPlace, ranges: data.ranges, table: data.table, classes, generatedAt });
+    const cellRecord = buildMatchRecord({ target: pt.target, place: cellPlace, ranges: data.ranges, table: data.table, classes, generatedAt, targetExtras: env, extraRanges: ranges });
     const m = siteRecord.dimensions.find((d) => d.id === 'minerals');
     results.push({
       target: pt.target.id,
@@ -255,6 +276,14 @@ const groups = {
   dimensionMean: Object.fromEntries(DIMENSIONS.map((d) => [d.id, { candidates: groupMean('candidate', (r) => r.dimensionMean[d.id]), known: groupMean('known', (r) => r.dimensionMean[d.id]) }])),
   purposeMedian: Object.fromEntries(PURPOSES.map((p) => [p.id, { candidates: r1(groupMean('candidate', (r) => r.summary[p.id].median)), known: r1(groupMean('known', (r) => r.summary[p.id].median)) }])),
   purposeBest: Object.fromEntries(PURPOSES.map((p) => [p.id, { candidates: r1(groupMean('candidate', (r) => r.summary[p.id].best)), known: r1(groupMean('known', (r) => r.summary[p.id].best)) }])),
+  /** Mean similarity over all targets with a value, for the dimensions added after the freeze. */
+  environmentMean: Object.fromEntries((['wind', 'dust', 'ice'] as const).map((id) => {
+    const of = (kind: 'candidate' | 'known'): number | null => groupMean(kind, (r) => {
+      const v = r.results.map((x) => x.site.environment[id].similarity).filter((x): x is number => x !== null);
+      return v.length > 0 ? v.reduce((a, b) => a + b, 0) / v.length : null;
+    });
+    return [id, { candidates: of('candidate'), known: of('known') }];
+  })),
 };
 
 const caveats = [
@@ -299,6 +328,18 @@ for (const d of DIMENSIONS) md.push(`| ${d.label} | ${f2(groups.dimensionMean[d.
 md.push('', 'Purpose scores, 0 to 100, mean over sites of the typical (median) target and of the best target:', '');
 md.push('| Purpose | Candidates, typical | Known, typical | Candidates, best | Known, best |', '| --- | --- | --- | --- | --- |');
 for (const p of PURPOSES) md.push(`| ${p.label} | ${f1(groups.purposeMedian[p.id]?.candidates ?? null)} | ${f1(groups.purposeMedian[p.id]?.known ?? null)} | ${f1(groups.purposeBest[p.id]?.candidates ?? null)} | ${f1(groups.purposeBest[p.id]?.known ?? null)} |`);
+md.push('', '## Wind, dust and ice (added after the freeze, never in the score)', '');
+md.push('Earth side: NASA POWER wind speed at 10 m and aerosol optical depth, and the permafrost share of Obu et al. 2018, all for the 0.5 degree cell. Target side: the Mars Climate Database for wind and dust on Mars, zero on the airless Moon, and the share of ice-stable ground from Diviner at the lunar poles (data/target_environment.json). Mean similarity over the targets that have a value:', '');
+md.push('| Dimension | Candidates | Known analogs |', '| --- | --- | --- |');
+for (const id of ['wind', 'dust', 'ice'] as const) md.push(`| ${id === 'wind' ? 'Wind' : id === 'dust' ? 'Dust and aerosol' : 'Ice and permafrost'} | ${f2(groups.environmentMean[id]?.candidates ?? null)} | ${f2(groups.environmentMean[id]?.known ?? null)} |`);
+md.push('', '| Site | Kind | Wind, m/s | Aerosol optical depth | Permafrost share | Wind against Jezero / Gale / the Moon | Dust against Jezero / Gale / the Moon |', '| --- | --- | --- | --- | --- | --- | --- |');
+for (const r of [...rows].sort((a, b) => a.kind.localeCompare(b.kind) || a.name.localeCompare(b.name))) {
+  const pick = (target: string): PairResult | undefined => r.results.find((x) => x.target === target);
+  const j = pick('mars-jezero');
+  const g = pick('mars-gale');
+  const m = pick('moon-shackleton-rim');
+  md.push(`| ${r.name} | ${r.kind} | ${j?.site.environment.wind.earth ?? ''} | ${j?.site.environment.dust.earth ?? ''} | ${m?.site.environment.ice.earth ?? ''} | ${f2(j?.site.environment.wind.similarity ?? null)} / ${f2(g?.site.environment.wind.similarity ?? null)} / ${f2(m?.site.environment.wind.similarity ?? null)} | ${f2(j?.site.environment.dust.similarity ?? null)} / ${f2(g?.site.environment.dust.similarity ?? null)} / ${f2(m?.site.environment.dust.similarity ?? null)} |`);
+}
 md.push('', '## Site by site', '');
 md.push(`| Site | Kind | ${DIMENSIONS.map((d) => d.label).join(' | ')} | ${PURPOSES.map((p) => `${p.label} (best / typical)`).join(' | ')} | Minerals identified |`);
 md.push(`| --- | --- | ${DIMENSIONS.map(() => '---').join(' | ')} | ${PURPOSES.map(() => '---').join(' | ')} | --- |`);

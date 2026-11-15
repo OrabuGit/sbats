@@ -88,11 +88,17 @@ Minerals, ice or permafrost, dust and wind were added after the score was frozen
 - Which purposes each belongs to is written in `extras.ts`, with a one-line reason, before any site
   was looked at: minerals in geology, astrobiology and base; ice in ice, astrobiology and base; dust
   in mobility and base; wind in base.
-- Ice, dust and wind have a target side (`data/target_environment.json`: Mars wind and dust from a climate
-  model, zero on the airless Moon, lunar ice stability from Diviner) and no Earth side yet. Pass
-  `targetExtras: targetEnvironment(envFile, target.id)` and the record shows the target value with its source
-  and says the Earth value is missing. They are compared once Session B publishes the Earth side and a
-  tolerance is written down (`sigma` in `EXTRA_DIMENSIONS`).
+- Wind, dust and ice are compared on both sides since 2026-11-15. Earth side: `windSpeed`, `aod` and
+  `permafrostFrac` of the Earth cell or site (read automatically by `earthPlaceFromCell` and
+  `earthPlaceFromSite` when `earth.meta.extraKeys` is passed in `meta`). Target side:
+  `targetExtras: targetEnvironment(envFile, target.id)` from `data/target_environment.json`. Pass
+  `extraRanges: extraRanges(earth.cells)` so a target beyond Earth's range (the windless Moon) is compared
+  at the nearest value Earth offers, as the frozen score does.
+- Their tolerances are in `EXTRA_DIMENSIONS` with the reason for each: wind 2.0 m/s, optical depth 0.12
+  (a quarter of the spread between the 5th and 95th percentile of Earth's land cells), ice share 0.25.
+  They were written down before any site was compared.
+- Show the notes. `aod` counts all airborne particles: smoke over Java matches Mars dust by number, not
+  by material. `permafrostFrac` is null south of 25 N: "no data", not zero.
 
 ## Minerals
 

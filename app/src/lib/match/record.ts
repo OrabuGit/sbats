@@ -56,6 +56,8 @@ export interface MatchInput {
   index?: ProfileIndex | null;
   /** Target-side values for dimensions added after the freeze. */
   targetExtras?: Partial<Record<ExtraDimensionId, ExtraValue>>;
+  /** Earth's observed range of wind, aerosol and permafrost (extraRanges over data/earth.json), for clamping. */
+  extraRanges?: Partial<Record<ExtraDimensionId, { min: number; max: number }>>;
   /** Result of sharedMinerals() for this pair, when both sides have minerals. */
   minerals?: SharedMinerals | null;
   /**
@@ -208,7 +210,7 @@ export function buildMatchRecord(input: MatchInput): MatchRecord {
     };
   });
 
-  const extraDims = EXTRA_DIMENSIONS.map((def) => compareExtra(def, place.extras[def.id], input.targetExtras?.[def.id], def.id === 'minerals' ? input.minerals : null));
+  const extraDims = EXTRA_DIMENSIONS.map((def) => compareExtra(def, place.extras[def.id], input.targetExtras?.[def.id], def.id === 'minerals' ? input.minerals : null, input.extraRanges?.[def.id] ?? null));
   const extraSims = extraDims.map((d) => ({ id: d.id as ExtraDimensionId, similarity: d.similarity }));
 
   const purposes: MatchPurpose[] = PURPOSES.map((p) => {

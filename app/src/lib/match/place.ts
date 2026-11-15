@@ -1,6 +1,7 @@
 // Builds an EarthPlace: the cell the scoring functions read, with the source of every value.
 
 import type { Badge, EarthCell, FactorKey, Target } from '../scoring/index';
+import { formatExtra } from './extras';
 import { emitFamilies, listLabels } from './minerals';
 import type { EmitMineralogy, MineralFamily } from './minerals';
 import type { EarthPlace, ExtraValue, ValueScale } from './types';
@@ -9,6 +10,46 @@ import type { EarthPlace, ExtraValue, ValueScale } from './types';
 export interface EarthMetaLike {
   factors: readonly { key: string; source: string; badge?: Badge | null }[];
   landCover?: { source: string } | null;
+  /** Session B's extra keys on every cell: windSpeed, aod, permafrostFrac. */
+  extraKeys?: readonly { key: string; label?: string; unit?: string; source: string; badge?: Badge | null; note?: string }[];
+}
+
+/** Which Earth key feeds which dimension added after the freeze, and how the value is named. */
+export const EARTH_EXTRA_KEYS = [
+  { id: 'wind', key: 'windSpeed', unit: 'm/s', what: null },
+  { id: 'dust', key: 'aod', unit: 'optical depth', what: 'All airborne particles (dust, smoke, sea salt, pollution), not dust alone. Values are rounded to 0.01, so the cleanest air reads 0.' },
+  { id: 'ice', key: 'permafrostFrac', unit: 'share of ground', what: 'Share of the land underlain by permafrost (modelled). Mapped north of 25 N only.' },
+] as const;
+
+/** Earth's observed range of each extra key, for clamping a target that lies beyond it. */
+export function extraRanges(cells: readonly EarthCell[]): Partial<Record<'wind' | 'dust' | 'ice', { min: number; max: number }>> {
+  const out: Partial<Record<'wind' | 'dust' | 'ice', { min: number; max: number }>> = {};
+  for (const def of EARTH_EXTRA_KEYS) {
+    let min = Infinity;
+    let max = -Infinity;
+    for (const c of cells) {
+      const v = (c as unknown as Record<string, unknown>)[def.key];
+      if (typeof v !== 'number' || !Number.isFinite(v)) continue;
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    if (min <= max) out[def.id] = { min, max };
+  }
+  return out;
+}
+
+function earthExtras(read: (key: string) => { value: number | null; source: string | null; badge: Badge | null; scale: ValueScale; present: boolean }): EarthPlace['extras'] {
+  const out: EarthPlace['extras'] = {};
+  for (const def of EARTH_EXTRA_KEYS) {
+    const r = read(def.key);
+    if (!r.present) continue;
+    const note = def.what ?? undefined;
+    out[def.id] =
+      r.value === null
+        ? { value: null, unit: def.unit, text: 'no data', source: null, badge: null, scale: r.scale, ...(note ? { note } : {}) }
+        : { value: r.value, unit: def.unit, text: formatExtra(r.value, def.unit), source: r.source, badge: r.badge, scale: r.scale, ...(note ? { note } : {}) };
+  }
+  return out;
 }
 
 const KEYS: readonly FactorKey[] = ['tempMean', 'tempRange', 'precip', 'ndvi', 'slope', 'roughness', 'lithology'];
@@ -38,7 +79,11 @@ export function earthPlaceFromCell(cell: EarthCell, meta: EarthMetaLike, options
     provenance: gridProvenance(meta),
     rockName: null,
     bareShare: null,
-    extras: {},
+    extras: earthExtras((key) => {
+      const raw = (cell as unknown as Record<string, unknown>)[key];
+      const info = meta.extraKeys?.find((k) => k.key === key);
+      return { value: typeof raw === 'number' && Number.isFinite(raw) ? raw : null, source: info?.source ?? null, badge: info?.badge ?? (info ? 'Measured' : null), scale: 'grid', present: raw !== undefined };
+    }),
     notes: ['Every value describes a 0.5 degree cell, about 55 km across, not a single feature inside it.'],
   };
 }
@@ -119,7 +164,14 @@ export function earthPlaceFromSite(
   if (site.caveat) notes.push(site.caveat);
   if (scaleOf(v.lithology) === 'volcano' && num(v.lithology) !== null) notes.push('The rock class is that of the whole volcano, not mapped inside the footprint.');
 
-  const extras: EarthPlace['extras'] = {};
+  // Wind, aerosol and permafrost: the site's own entries (grid scale), else the cell's.
+  const extras: EarthPlace['extras'] = earthExtras((key) => {
+    const sv = v[key];
+    if (sv) return { value: num(sv), source: sv.source, badge: sv.badge, scale: scaleOf(sv), present: true };
+    const raw = (gridCell as unknown as Record<string, unknown>)[key];
+    const info = meta.extraKeys?.find((k) => k.key === key);
+    return { value: typeof raw === 'number' && Number.isFinite(raw) ? raw : null, source: info?.source ?? null, badge: info?.badge ?? (info ? 'Measured' : null), scale: 'grid', present: raw !== undefined };
+  });
   if (options.families && site.mineralogy) {
     const summary = emitFamilies(site.mineralogy, options.families, options.emitMinimumShare);
     if (summary) {

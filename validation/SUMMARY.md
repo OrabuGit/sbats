@@ -81,7 +81,8 @@ poor match pulls the whole score down, on purpose: a base rehearsal needs everyt
   response, but they were not unseen.
 - Purpose rankings, site-scale scores, minerals and the comparison with established analogs were made
   after every site had been seen: development numbers, not tests.
-- Minerals, and any ice, dust or wind figure, were added after the freeze and are never in the score.
+- Minerals, wind, haze and permafrost were added after the freeze and are never in the score. The haze
+  figure counts all particles: Java's smoke matches Mars's dust by number, not by material.
 - Marius Hills was added after the freeze, has no known analog, and is in none of these numbers.
 
 Detail: `output/REPORT.md`, `tuning/FROZEN.md`, `output/PURPOSES.md`, `purposes/GEOLOGY.md`,

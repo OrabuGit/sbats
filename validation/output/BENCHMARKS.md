@@ -1,6 +1,6 @@
 # Benchmarks: established analogs and our candidates, scored the same way
 
-Written 2026-11-15T06:01:50.572Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
+Written 2026-11-15T06:10:37.386Z by `npx tsx validation/benchmarks.ts`. Data file for the app: `data/benchmarks.json`.
 
 - One procedure for every site: site-scale terrain, vegetation and rock; the 0.5 degree cell's temperature and rainfall; the target's terrain measured in a window of the site's size.
 - "Best" is the best of all targets, chosen after the fact, and flatters. "Median" is the typical target.
@@ -29,6 +29,36 @@ Purpose scores, 0 to 100, mean over sites of the typical (median) target and of 
 | Ice and resources | 0.0 | 5.9 | 0.0 | 7.9 |
 | Astrobiology | 0.0 | 12.7 | 0.0 | 14.8 |
 | Full base rehearsal | 0.0 | 12.3 | 0.1 | 18.9 |
+
+## Wind, dust and ice (added after the freeze, never in the score)
+
+Earth side: NASA POWER wind speed at 10 m and aerosol optical depth, and the permafrost share of Obu et al. 2018, all for the 0.5 degree cell. Target side: the Mars Climate Database for wind and dust on Mars, zero on the airless Moon, and the share of ice-stable ground from Diviner at the lunar poles (data/target_environment.json). Mean similarity over the targets that have a value:
+
+| Dimension | Candidates | Known analogs |
+| --- | --- | --- |
+| Wind | 0.49 | 0.36 |
+| Dust and aerosol | 0.20 | 0.39 |
+| Ice and permafrost | n/a | 0.43 |
+
+| Site | Kind | Wind, m/s | Aerosol optical depth | Permafrost share | Wind against Jezero / Gale / the Moon | Dust against Jezero / Gale / the Moon |
+| --- | --- | --- | --- | --- | --- | --- |
+| Goa Pandan basalt lava cave, East Lampung, Sumatra, Indonesia | candidate | 2.87 m/s | 0.35 optical depth | no data | 0.55 / 0.00 / 0.53 | 0.56 / 0.21 / 0.01 |
+| Gua Lawa lava tube, Purbalingga, Central Java, Indonesia | candidate | 2.6 m/s | 0.39 optical depth | no data | 0.47 / 0.00 / 0.61 | 0.76 / 0.36 / 0.01 |
+| Kawah Ijen, East Java, Indonesia | candidate | 2.44 m/s | 0.24 optical depth | no data | 0.42 / 0.00 / 0.66 | 0.14 / 0.03 / 0.14 |
+| Kesaksak lava tube, Batur caldera, Bali, Indonesia | candidate | 3.02 m/s | 0.22 optical depth | no data | 0.59 / 0.00 / 0.48 | 0.10 / 0.02 / 0.19 |
+| Maros-Pangkep karst caves, South Sulawesi, Indonesia | candidate | 3.6 m/s | 0.24 optical depth | no data | 0.77 / 0.00 / 0.33 | 0.14 / 0.03 / 0.14 |
+| Mount Batur black lava fields, Bali, Indonesia | candidate | 3.02 m/s | 0.22 optical depth | no data | 0.59 / 0.00 / 0.48 | 0.10 / 0.02 / 0.19 |
+| Mount Merapi and the Opak River, Central Java, Indonesia | candidate | 3.32 m/s | 0.38 optical depth | no data | 0.69 / 0.00 / 0.40 | 0.71 / 0.32 / 0.01 |
+| Mount Tambora caldera, Sumbawa, Indonesia | candidate | 2.89 m/s | 0.21 optical depth | no data | 0.56 / 0.00 / 0.52 | 0.08 / 0.01 / 0.22 |
+| Atacama Desert hyperarid core (Yungay), Chile | known | 3.56 m/s | 0.04 optical depth | no data | 0.76 / 0.00 / 0.33 | 0.00 / 0.00 / 0.95 |
+| Dallol, Danakil Depression, Ethiopia | known | 3.83 m/s | 0.4 optical depth | no data | 0.83 / 0.00 / 0.27 | 0.80 / 0.41 / 0.00 |
+| Dasht-e Lut (Lut Desert), Iran | known | 4.66 m/s | 0.32 optical depth | 0% of the ground | 0.98 / 0.00 / 0.13 | 0.41 / 0.13 / 0.03 |
+| Haughton impact structure, Devon Island, Canada | known | 4.32 m/s | 0.07 optical depth | 100% of the ground | 0.93 / 0.00 / 0.18 | 0.00 / 0.00 / 0.84 |
+| Kilauea, Hawaii, USA | known | 5.34 m/s | 0.1 optical depth | no data | 0.99 / 0.00 / 0.06 | 0.01 / 0.00 / 0.71 |
+| Mauna Kea, Hawaii, USA | known | 4.81 m/s | 0.1 optical depth | no data | 0.99 / 0.00 / 0.11 | 0.01 / 0.00 / 0.71 |
+| Salar de Uyuni salt flat, Bolivia | known | 3.1 m/s | 0.1 optical depth | no data | 0.62 / 0.00 / 0.46 | 0.01 / 0.00 / 0.71 |
+| Timanfaya, Lanzarote, Spain | known | 6.4 m/s | 0.27 optical depth | no data | 0.80 / 0.01 / 0.01 | 0.22 / 0.05 / 0.08 |
+| Tunupa volcano, north shore of Salar de Uyuni, Bolivia | known | 2.96 m/s | 0.1 optical depth | no data | 0.58 / 0.00 / 0.50 | 0.01 / 0.00 / 0.71 |
 
 ## Site by site
 
